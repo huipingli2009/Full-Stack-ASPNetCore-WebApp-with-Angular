@@ -28,7 +28,8 @@ namespace PHO_WebApp.Controllers
 
         public ActionResult Patient()
         {
-            return View("Patient");
+            //return View();
+            return RedirectToAction("GetPatients", "Patient");
         }
 
         public ActionResult Staff()
@@ -39,6 +40,7 @@ namespace PHO_WebApp.Controllers
         public ActionResult Population()
         {
             return View("Population");
+
         }
 
         public ActionResult Initiative()
