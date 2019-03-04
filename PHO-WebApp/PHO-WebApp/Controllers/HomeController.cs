@@ -12,19 +12,44 @@ namespace PHO_WebApp.Controllers
         {
             return View();
         }
-
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
-
             return View();
         }
-
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
-
             return View();
         }
+
+        public ActionResult Security()
+        {
+            return View("Security");
+        }
+
+        public ActionResult Patient()
+        {
+            return View("Patient");
+        }
+
+        public ActionResult Staff()
+        {
+            return View("Staff");
+        }
+
+        public ActionResult Population()
+        {
+            return View("Population");
+        }
+
+        public ActionResult Initiative()
+        {
+            return View("Initiative");
+        }
+
+        public ActionResult Content()
+        {
+            return View("Content");
+        }
+
     }
 }
