@@ -1,0 +1,49 @@
+﻿
+@{
+	ViewBag.Title = "GetPatients";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>GetPatients</h2>
+<h2>List of Patients</h2>
+<table id="dtBasicExample" class="table table-responsive table-hover table-bordered table-sm">
+	@*<caption style="text-emphasis-color">List of Patients</caption>*@
+	<thead class="black white-text">
+		<tr>
+			<th scope="col">First Name</th>
+			<th scope="col">Last Name</th>
+			<th scope="col">Date of Birth</th>
+			<th scope="col">Address</th>
+			<th scope="col">City</th>
+			<th scope="col">State</th>
+			<th scope="col">Zip</th>
+			<th scope="col">PtId</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+	<tbody class="table-striped ">
+		@{
+			foreach (System.Data.DataRow dr in ViewBag.patients.Rows)
+			{
+				<tr>
+					<td>@dr["FirstName"]</td>
+					<td>@dr["LastName"]</td>
+					<td>@dr["PersonDOB"]</td>
+					<td>@dr["AddressLine1"]</td>
+					<td>@dr["City"]</td>
+					<td>@dr["State_id"]</td>
+					<td>@dr["Zip"]</td>
+					<td>@dr["Id"]</td>
+					<td>
+						<a href="~/Patient/UpdatePatient?Id=@dr["Id"]">Update</a>
+						<a href="~/Patient/DeletePatient?Id=@dr["Id"]">Delete</a>
+					</td>
+				</tr>
+			}
+		}
+	</tbody>
+</table>
+</body>
+<a href="/Patient/AddPatient">Add Patient</a>
+</html>
+
