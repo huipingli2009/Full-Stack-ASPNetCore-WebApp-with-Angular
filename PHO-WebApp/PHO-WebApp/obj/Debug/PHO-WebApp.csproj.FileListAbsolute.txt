@@ -129,8 +129,12 @@ C:\Users\lis47\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\bin\Microsoft.AI.De
 C:\Users\lis47\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\bin\Microsoft.AI.ServerTelemetryChannel.xml
 C:\Users\lis47\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\bin\Microsoft.AI.WindowsServer.xml
 C:\Users\lis47\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\bin\Microsoft.AI.Web.xml
-C:\Users\lis47\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\obj\Debug\PHO-WebApp.csprojAssemblyReference.cache
 C:\Users\lis47\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\obj\Debug\PHO-WebApp.csproj.CoreCompileInputs.cache
 C:\Users\lis47\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\obj\Debug\PHO-WebApp.csproj.CopyComplete
 C:\Users\lis47\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\obj\Debug\PHO-WebApp.dll
 C:\Users\lis47\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\obj\Debug\PHO-WebApp.pdb
+C:\Users\lis47\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\bin\EntityFramework.dll
+C:\Users\lis47\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\bin\EntityFramework.SqlServer.dll
+C:\Users\lis47\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\bin\EntityFramework.xml
+C:\Users\lis47\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\bin\EntityFramework.SqlServer.xml
+C:\Users\lis47\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\obj\Debug\PHO-WebApp.csprojAssemblyReference.cache
