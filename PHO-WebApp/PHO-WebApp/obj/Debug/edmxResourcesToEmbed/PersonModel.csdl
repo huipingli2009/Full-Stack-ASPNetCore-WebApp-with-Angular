@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PHOPatientModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Patient">
+    <Key>
+      <PropertyRef Name="Id" />
+      <PropertyRef Name="PersonTypeId" />
+      <PropertyRef Name="FirstName" />
+      <PropertyRef Name="LastName" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="PersonTypeId" Type="Int32" Nullable="false" />
+    <Property Name="FirstName" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="MiddleName" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="Sex_Id" Type="Int32" />
+    <Property Name="LastName" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="PersonDOB" Type="DateTime" Precision="0" />
+    <Property Name="EmailAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SSN" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
+    <Property Name="AddressLine1" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="AddressLine2" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="City" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="State_Id" Type="Int32" />
+    <Property Name="Zip" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="Phone1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Phone2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CCHMCMrn" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="InsurerId" Type="Int32" />
+    <Property Name="PCPId" Type="Int32" />
+    <Property Name="ActiveFlag" Type="Boolean" />
+    <Property Name="DeletedFlag" Type="Boolean" />
+    <Property Name="CreatedById" Type="Int32" />
+    <Property Name="CreatedOnDate" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedById" Type="Int32" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+    <Property Name="DeletedById" Type="Int32" />
+    <Property Name="DeletedDate" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityContainer Name="PHOPersonEntities1" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Patients" EntityType="Self.Patient" />
+  </EntityContainer>
+</Schema>
