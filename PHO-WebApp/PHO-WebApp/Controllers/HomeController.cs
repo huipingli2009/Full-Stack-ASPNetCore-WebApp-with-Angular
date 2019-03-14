@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using PHO_WebApp.DataAccessLayer;
+using System.Data;
+
 
 namespace PHO_WebApp.Controllers
 {
     public class HomeController : Controller
     {
+        DataAccessLayer.DataDictionary records = new DataDictionary();
         public ActionResult Index()
         {
             return View();
@@ -51,6 +55,13 @@ namespace PHO_WebApp.Controllers
         public ActionResult Content()
         {
             return View("Content");
+        }
+        public ActionResult DataDictionary()
+        {
+            DataSet ds = records.GetDataDictionaryRecords();
+            ViewBag.DataDictionary = ds.Tables[0];
+
+            return View("DataDictionary");
         }
 
     }

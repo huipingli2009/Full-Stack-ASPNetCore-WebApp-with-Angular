@@ -154,10 +154,12 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
+    <Compile Include="DataAccessLayer\DataDictionary.cs" />
     <Compile Include="DataAccessLayer\Patients.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\DataDictionary.cs" />
     <Compile Include="Models\Patient.cs" />
     <Compile Include="Patient.cs">
       <DependentUpon>PersonModel.tt</DependentUpon>
@@ -225,6 +227,7 @@
     </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -247,9 +250,11 @@
     <Content Include="Views\Patient\AddPatient.cshtml" />
     <Content Include="Views\Patient\UpdatePatient.cshtml" />
     <Content Include="Views\Patient\GetPatients.cshtml" />
+    <Content Include="Views\Home\DataDictionary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\DataDictionary\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

@@ -1,0 +1,52 @@
+﻿
+@{
+	ViewBag.Title = "Data Dictionary";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Data Dictionary</h2>
+
+<h2>List of Data Dictionary Records</h2>
+<table id="dtBasicExample" class="table table-responsive table-hover table-bordered table-sm">	
+	<thead class="black white-text">
+		<tr>
+			<th scope="col">Database Name</th>
+			<th scope="col">Schema Name</th>
+			<th scope="col">Object Name</th>
+			<th scope="col">Object Type</th>
+			<th scope="col">Column Name</th>
+			<th scope="col">SQL Column Description </th>
+			<th scope="col">Is Nullable</th>
+			<th scope="col">Data Type</th>
+			<th scope="col">PHI Flag</th>
+			<th scope="col">Business Definition</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+	<tbody class="table-striped ">
+		@{
+			foreach (System.Data.DataRow dr in ViewBag.DataDictionary.Rows)
+			{
+				<tr>
+					<td>@dr["DatabaseName"]</td>
+					<td>@dr["SchemaName"]</td>
+					<td>@dr["ObjectName"]</td>
+					<td>@dr["ObjectType"]</td>
+					<td>@dr["ColumnName"]</td>
+					<td>@dr["SQLColumnDesc"]</td>
+					<td>@dr["IsNullable"]</td>
+					<td>@dr["DataType"]</td>
+					<td>@dr["PHIFlag"]</td>
+					<td>@dr["BusinessDefinition"]</td>
+
+					<td>				
+						<a href="http://www.tristatepho.org" />Edit
+					</td>
+				</tr>
+				}
+			}
+	</tbody>
+</table>
+@*</body>
+</html>*@
+
