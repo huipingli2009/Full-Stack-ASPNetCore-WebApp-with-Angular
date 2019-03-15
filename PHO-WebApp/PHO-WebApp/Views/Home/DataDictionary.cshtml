@@ -10,6 +10,7 @@
 <table id="dtBasicExample" class="table table-responsive table-hover table-bordered table-sm">	
 	<thead class="black white-text">
 		<tr>
+			<th scope="col">Item Id</th>
 			<th scope="col">Database Name</th>
 			<th scope="col">Schema Name</th>
 			<th scope="col">Object Name</th>
@@ -28,20 +29,43 @@
 			foreach (System.Data.DataRow dr in ViewBag.DataDictionary.Rows)
 			{
 				<tr>
-					<td>@dr["DatabaseName"]</td>
-					<td>@dr["SchemaName"]</td>
-					<td>@dr["ObjectName"]</td>
-					<td>@dr["ObjectType"]</td>
-					<td>@dr["ColumnName"]</td>
-					<td>@dr["SQLColumnDesc"]</td>
-					<td>@dr["IsNullable"]</td>
-					<td>@dr["DataType"]</td>
-					<td>@dr["PHIFlag"]</td>
-					<td>@dr["BusinessDefinition"]</td>
+					if (dr["skDataDictionary"] == ViewBag.SelectedID)
+					{
+						<td>@dr["skDataDictionary"]</td>
+						<td>@dr["DatabaseName"]</td>
+						<td>@dr["SchemaName"]</td>
+						<td>@dr["ObjectName"]</td>
+						<td>@dr["ObjectType"]</td>
+						<td>@dr["ColumnName"]</td>
+						<td>@dr["SQLColumnDesc"]</td>
+						<td>@dr["IsNullable"]</td>
+						<td>@dr["DataType"]</td>
+						<td>@dr["PHIFlag"]</td>
+						<td>@dr["BusinessDefinition"]</td>
 
-					<td>				
-						<a href="http://www.tristatepho.org" />Edit
-					</td>
+						<td>
+							<button type="submit" name="submit" value="Save">Save</button>
+							<button type="submit" name="submit" value="Cancel">Cancel</button>
+						</td>
+					}
+					else
+					{
+						<td>@dr["skDataDictionary"]</td>
+						<td>@dr["DatabaseName"]</td>
+						<td>@dr["SchemaName"]</td>
+						<td>@dr["ObjectName"]</td>
+						<td>@dr["ObjectType"]</td>
+						<td>@dr["ColumnName"]</td>
+						<td>@dr["SQLColumnDesc"]</td>
+						<td>@dr["IsNullable"]</td>
+						<td>@dr["DataType"]</td>
+						<td>@dr["PHIFlag"]</td>
+						<td>@dr["BusinessDefinition"]</td>
+
+						<td>
+							@Html.ActionLink("Edit", "Edit", new { id = dr["skDataDictionary"] })
+						</td>
+					}
 				</tr>
 				}
 			}
