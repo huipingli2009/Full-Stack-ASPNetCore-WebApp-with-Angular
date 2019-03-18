@@ -138,3 +138,7 @@ C:\Users\lis47\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\bin\EntityFramework
 C:\Users\lis47\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\bin\EntityFramework.xml
 C:\Users\lis47\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\bin\EntityFramework.SqlServer.xml
 C:\Users\lis47\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\obj\Debug\PHO-WebApp.csprojAssemblyReference.cache
+C:\Users\HAT7HM\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\bin\EntityFramework.dll
+C:\Users\HAT7HM\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\bin\EntityFramework.SqlServer.dll
+C:\Users\HAT7HM\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\bin\EntityFramework.xml
+C:\Users\HAT7HM\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\bin\EntityFramework.SqlServer.xml
