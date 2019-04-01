@@ -64,7 +64,7 @@ namespace PHO_WebApp.Controllers
 
         //    return View("DataDictionary");
         //}
-        
+
         public ActionResult DataDictionary(string DatabaseName, string SchemaName, string ObjectName, string ObjectType, string ColumnName, string SQLColumnDescription, string IsNullable, string DataType, string PHIFlag, string BusinessDefiniton)
         {
             //Build PHI Flag
@@ -102,6 +102,7 @@ namespace PHO_WebApp.Controllers
 
             return View("DataDictionary");
         }
+
         //public ActionResult UpdateDataDictionary(int id)
         //{
         //    return View("");

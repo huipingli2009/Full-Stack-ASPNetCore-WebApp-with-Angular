@@ -1,269 +1,245 @@
 ﻿@{
-	ViewBag.Title = "Data Dictionary";
-	Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Data Dictionary";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <html>
 <head>
-	<meta name="viewport" content="width=device-width" />
-	<title>Data Dictionary</title>	
+    <meta name="viewport" content="width=device-width" />
+    <title>Data Dictionary</title>
 </head>
 <body>
-	<h2>Data Dictionary</h2>
-	@Html.ActionLink("Update Data Dictionary", "DataDictionaryUpdate", "HomeController", new { @class = "btn btn-primary" })
+    <h2>Data Dictionary</h2>
+    @Html.ActionLink("Update Data Dictionary", "DataDictionaryUpdate", "HomeController", new { @class = "btn btn-primary" })
 
-	<h2>List of Data Dictionary Records</h2>
+    <h2>List of Data Dictionary Records</h2>
 
-	<table id="tblDataDictionary" class="table table-sm table-responsive table-condensed table-hover table-bordered table-striped">
-		@*<table id="tblDataDictionary" class="table">*@
+    <table id="tblDataDictionary" class="table table-sm table-responsive table-condensed table-hover table-bordered table-striped">
 
-		<thead class="black white-text">
-			<tr class="d-flex">
-				<th scope="col">Item Id</th>
-				<th scope="col">Database Name</th>
-				<th scope="col">SchemaName</th>
-				<th scope="col">ObjectName</th>
-				<th scope="col">Object Type</th>
-				<th scope="col">Column Name</th>
-				<th scope="col">SQLColumn Description </th>
-				<th scope="col">Nullable</th>
-				<th scope="col">Data Type</th>
-				<th scope="col">PHI Flag</th>
-				<th scope="col">Business Definition</th>
-				<th scope="col">Actions</th>
-			</tr>
-		</thead>
-	<tbody class="table-striped ">
-        @using (Html.BeginForm())
-        {
-            <tr>
-                <td>Filter</td>
-                <td>@Html.DropDownList("DatabaseName", ViewBag.DatabaseNameOptions as List<SelectListItem>)</td>
-                <td>@Html.TextBox("SchemaName")</td>
-                <td>@Html.TextBox("ObjectName")</td>
-                <td>@Html.TextBox("ObjectType")</td>
-                <td>@Html.TextBox("ColumnName")</td>
-                <td>@Html.TextBox("SQLColumnDescription")</td>
-                <td>@Html.DropDownList("IsNullable", ViewBag.IsNullableOptions as List<SelectListItem>)</td>
-                <td>@Html.TextBox("DataType")</td>
-                <td>@Html.DropDownList("PHIFlag", ViewBag.PHIOptions as List<SelectListItem>)</td>
-                <td>@Html.TextBox("BusinessDefinition")</td>
-                <td><input type="submit" value="Filter" /></td>
+
+        <thead class="black white-text">
+            <tr class="d-flex">
+                <th scope="col">Item Id</th>
+                <th scope="col">Database Name</th>
+                <th scope="col">SchemaName</th>
+                <th scope="col">ObjectName</th>
+                <th scope="col">Object Type</th>
+                <th scope="col">Column Name</th>
+                <th scope="col">SQLColumn Description </th>
+                <th scope="col">Nullable</th>
+                <th scope="col">Data Type</th>
+                <th scope="col">PHI Flag</th>
+                <th scope="col">Business Definition</th>
+                <th scope="col">Actions</th>
             </tr>
-        }
+        </thead>
+        <tbody class="table-striped table-bordered table-hover table-sm table-condensed">
+            @using (Html.BeginForm())
+            {
+                <tr>
+                    <td>Filter</td>
+                    <td>@Html.DropDownList("DatabaseName", ViewBag.DatabaseNameOptions as List<SelectListItem>)</td>
+                    <td>@Html.TextBox("SchemaName")</td>
+                    <td>@Html.TextBox("ObjectName")</td>
+                    <td>@Html.TextBox("ObjectType")</td>
+                    <td>@Html.TextBox("ColumnName")</td>
+                    <td>@Html.TextBox("SQLColumnDescription")</td>
+                    <td>@Html.DropDownList("IsNullable", ViewBag.IsNullableOptions as List<SelectListItem>)</td>
+                    <td>@Html.TextBox("DataType")</td>
+                    <td>@Html.DropDownList("PHIFlag", ViewBag.PHIOptions as List<SelectListItem>)</td>
+                    <td>@Html.TextBox("BusinessDefinition")</td>
+                    <td><input type="submit" value="Filter" /></td>
+                </tr>
+            }
+            @{ foreach (System.Data.DataRow dr in ViewBag.DataDictionary.Rows)
+            {                
+                    <tr>                            
+                        <td class="skDataDictionary">
+                            <span>@dr["skDataDictionary"]</span>
+                        </td>
+                        <td class="DatabaseName">
+                            <span>@dr["DatabaseName"]</span>
+                            @*<input type="text" value="@dr["DatabaseName"]" />*@
+                            @*<input type="text" id="txtDatabaseName" value="@dr["DatabaseName"]" style="display:none" />*@
+                        </td>
+                        <td class="SchemaName">
+                            <span>@dr["SchemaName"]</span>
+                            @*<input type="text" value="@dr["SchemaName"]">*@
+                            @*<input type="text" id="txtSchemaName" value="@dr["SchemaName"]" style="display:none" />*@
+                        </td>
+                        <td class="ObjectName">
+                            <span>@dr["ObjectName"]</span>
+                            @*<input type="text" value="@dr["ObjectName"]"/>*@
+                            @*<input type="text" id="txtObjectName" value="@dr["ObjectName"]" style="display:none" />*@
+                        </td>
+                        <td class="ObjectType">
+                            <span>@dr["ObjectType"]</span>
+                            @*<input type="text" value="@dr["ObjectType"]" />*@
+                            @*<input type="text" id="txtObjectType" value="@dr["ObjectType"]" style="display:none" />*@
+                        </td>
+                        <td class="ColumnName">
+                            <span style="width:unset">@dr["ColumnName"]</span>
+                            @*<input type="text" value="@dr["ObjectType"]" />*@
+                            @*<input type="text" id="txtColumnName" value="@dr["ColumnName"]" style="display:none" />*@
+                        </td>
+                        <td class="SQLColumnDesc">
+                            <span class="col-sm-push-11">@dr["SQLColumnDesc"]</span>
+                            @*<input type="text" value="@dr["ObjectType"]" />*@
+                            @*<input type="text" id="txtSQLColumnDesc" value="@dr["SQLColumnDesc"]" style="display:none" />*@
+                        </td>
+                        <td class="IsNullable">
+                            <span>@dr["IsNullable"]</span>
+                            @*<input type="text" value="@dr["ObjectType"]" />*@
+                            @*<input type="text" id="txtIsNullable" value="@dr["IsNullable"]" style="display:none" />*@
+                        </td>
+                        <td class="DataType">
+                            <span>@dr["DataType"]</span>
+                            @*<input type="text" value="@dr["ObjectType"]" />*@
+                            @*<input type="text" id="txtDataType" value="@dr["DataType"]" style="display:none" />*@
+                        </td>
+                        <td class="PHIFlag">
+                            <span id="PHIFlagId">@dr["PHIFlag"]</span>
+                            @*<input type="text" value="@dr["ObjectType"]" />*@
+                            @*<input type="text" id="txtPHIFlag" value="@dr["PHIFlag"]" style="display:none" />*@
+                            <select id="selPHIFlag" name="selPHIFlag" hidden>
+                                <option value="-1">-- please select --</option>
+                                <option value="1">True</option>
+                                <option value="0">False</option>
+                            </select>
+                        </td>
 
-		<tbody class="table-striped table-bordered table-hover table-sm table-condensed">
-			@{
+                        <td class="BusinessDefinition">
+                            <span>@dr["BusinessDefinition"]</span>
+                            <input type="text" id="txtBusinessDefinition" value="@dr["BusinessDefinition"]" style="display:none" />
+                        </td>
+                        <td colspan="3">
+                            <a class="Edit" id="btnEdit" href="javascript:;">Edit</a>
+                            <a class="Update" id="btnUpdate" href="javascript:;" style="display:none">Save</a>
+                            <a class="Cancel" id="btnCancel" href="javascript:;" style="display:none">Cancel</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+    <script type="text/javascript">
 
-		@{
-				foreach (System.Data.DataRow dr in ViewBag.DataDictionary.Rows)
-				{
-					@*== ViewBag.SelectedID)*@
-					<tr>
+        $(document).ready(function () {
+            // Handler for .ready() called.
+            var str;
+            $('[Class="Edit"]').click(function () {
+                //$("#PHIFlagId").hide();
+                //$("#selPHIFlag").show();
+                var row = $(this).closest("tr");
 
-					@if (dr["skDataDictionary"] == ViewBag.SelectedID)
-					{
-						<td>@dr["skDataDictionary"]</td>
-						<td>@dr["DatabaseName"]</td>
-						<td>@dr["SchemaName"]</td>
-						<td>@dr["ObjectName"]</td>
-						<td>@dr["ObjectType"]</td>
-						<td>@dr["ColumnName"]</td>
-						<td>@dr["SQLColumnDesc"]</td>
-						<td>@dr["IsNullable"]</td>
-						<td>@dr["DataType"]</td>
-						<td>@dr["PHIFlag"]</td>
-						<td>@dr["BusinessDefinition"]</td>
+                $("td", row).each(function () {
+                    //str = $(this).find(".PHIFlag").text();
+                    if ($(this).find("input").length > 0) {
+                        $(this).find("input").show();
+                        $(this).find("span").hide();
+                    }
 
-						<td>
-							<button type="submit" name="submit" value="Save">Save</button>
-							<button type="submit" name="submit" value="Cancel">Cancel</button>
-						<td class="skDataDictionary">
-							<span>@dr["skDataDictionary"]</span>
-						</td>
-						<td class="DatabaseName">
-							<span>@dr["DatabaseName"]</span>
-							@*<input type="text" value="@dr["DatabaseName"]" />*@
-							@*<input type="text" id="txtDatabaseName" value="@dr["DatabaseName"]" style="display:none" />*@
-						</td>
-						<td class="SchemaName">
-							<span>@dr["SchemaName"]</span>
-							@*<input type="text" value="@dr["SchemaName"]">*@
-							@*<input type="text" id="txtSchemaName" value="@dr["SchemaName"]" style="display:none" />*@
-						</td>
-						<td class="ObjectName">
-							<span>@dr["ObjectName"]</span>
-							@*<input type="text" value="@dr["ObjectName"]"/>*@
-							@*<input type="text" id="txtObjectName" value="@dr["ObjectName"]" style="display:none" />*@
-						</td>
-						<td class="ObjectType">
-							<span>@dr["ObjectType"]</span>
-							@*<input type="text" value="@dr["ObjectType"]" />*@
-							@*<input type="text" id="txtObjectType" value="@dr["ObjectType"]" style="display:none" />*@
-						</td>
-						<td class="ColumnName">
-							<span style="width:unset">@dr["ColumnName"]</span>
-							@*<input type="text" value="@dr["ObjectType"]" />*@
-							@*<input type="text" id="txtColumnName" value="@dr["ColumnName"]" style="display:none" />*@
-						</td>
-						<td class="SQLColumnDesc">
-							<span class="col-sm-push-11">@dr["SQLColumnDesc"]</span>
-							@*<input type="text" value="@dr["ObjectType"]" />*@
-							@*<input type="text" id="txtSQLColumnDesc" value="@dr["SQLColumnDesc"]" style="display:none" />*@
-						</td>
-						<td class="IsNullable">
-							<span>@dr["IsNullable"]</span>
-							@*<input type="text" value="@dr["ObjectType"]" />*@
-							@*<input type="text" id="txtIsNullable" value="@dr["IsNullable"]" style="display:none" />*@
-						</td>
-						<td class="DataType">
-							<span>@dr["DataType"]</span>
-							@*<input type="text" value="@dr["ObjectType"]" />*@
-							@*<input type="text" id="txtDataType" value="@dr["DataType"]" style="display:none" />*@
-						</td>
-						<td class="PHIFlag">
-							<span id="PHIFlagId">@dr["PHIFlag"]</span>
-							@*<input type="text" value="@dr["ObjectType"]" />*@
-							@*<input type="text" id="txtPHIFlag" value="@dr["PHIFlag"]" style="display:none" />*@
-							<select id="selPHIFlag" name="selPHIFlag" hidden>								
-								<option value="-1">-- please select --</option>
-								<option value="1">True</option>
-								<option value="0">False</option>
-							</select>
-						</td>					
+                    if ($(this).find("select").length > 0) {
+                        $(this).find("select").show();
+                        //$(this).find("#PHIFlagId").show();
+                        $(this).find("span").hide();
+                    }
+                });
+                row.find(".Update").show();
+                row.find(".Cancel").show();
+                $(this).hide();
+            });
 
-						<td class="BusinessDefinition">
-							<span>@dr["BusinessDefinition"]</span>
-							<input type="text" id="txtBusinessDefinition" value="@dr["BusinessDefinition"]" style="display:none" />
-						</td>
-						<td colspan="3">
-							<a class="Edit" id="btnEdit" href="javascript:;">Edit</a>
-							<a class="Update" id="btnUpdate" href="javascript:;" style="display:none">Save</a>
-							<a class="Cancel" id="btnCancel" href="javascript:;" style="display:none">Cancel</a>
-						</td>
-					</tr>
-				}
-			}
-		</tbody>
-	</table>
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-	<script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
-	<script type="text/javascript">
+            //Update event handler.
+            $('[Class="Update"]').click(function () {
+                var row = $(this).closest("tr");
+                $("td", row).each(function () {
 
-		$(document).ready(function () {
-			// Handler for .ready() called.
-			var str;
-			$('[Class="Edit"]').click(function () {
-				//$("#PHIFlagId").hide();
-				//$("#selPHIFlag").show();
-				var row = $(this).closest("tr");
-				
-				$("td", row).each(function () {	
-					//str = $(this).find(".PHIFlag").text();
-					if ($(this).find("input").length > 0) {
-						$(this).find("input").show();
-						$(this).find("span").hide();
-					}
+                    //$("select option").hide();
+                    if ($(this).find("input").length > 0) {
+                        var span = $(this).find("span");
+                        var input = $(this).find("input");
+                        span.html(input.val());
+                        span.show();
+                        input.hide();
+                    }
 
-					if ($(this).find("select").length > 0) {						
-						$(this).find("select").show();
-						//$(this).find("#PHIFlagId").show();
-						$(this).find("span").hide();
-					}				
-				});
-				row.find(".Update").show();
-				row.find(".Cancel").show();
-				$(this).hide();
-			});
+                    if ($(this).find("select").length > 0) {
+                        var span = $(this).find("span");
+                        var selectVal = $(this).find("select option:selected").text();
+                        var select = $(this).find("select");
+                        //check if user doesn't select true or false
+                        if (selectVal.length > 6) {
+                            span.html();
+                        }
+                        else {
+                            span.html(selectVal);
+                        }
+                        //span.html(selectVal);
+                        span.show();
+                        //selectVal.hide();
+                        select.hide();
+                    }
+                    ////$("select option:selected").wrap('span');
 
-			//Update event handler.
-			$('[Class="Update"]').click(function () {
-				var row = $(this).closest("tr");				
-				$("td", row).each(function () {								
-					
-					//$("select option").hide();
-					if ($(this).find("input").length > 0) {
-						var span = $(this).find("span");						
-						var input = $(this).find("input");
-						span.html(input.val());
-						span.show();
-						input.hide();						
-					}
+                });
+                row.find(".Edit").show();
+                row.find(".Cancel").hide();
 
-					if ($(this).find("select").length > 0) {
-						var span = $(this).find("span");
-						var selectVal = $(this).find("select option:selected").text();
-						var select = $(this).find("select");
-						//check if user doesn't select true or false
-						if (selectVal.length > 6) {							
-							span.html();							
-						}
-						else {
-							span.html(selectVal);							
-						}
-						//span.html(selectVal);	
-						span.show();
-						//selectVal.hide();
-						select.hide();
-					}
-						////$("select option:selected").wrap('span');									
-					
-				});
-				row.find(".Edit").show();
-				row.find(".Cancel").hide();
-				
-				$(this).hide();
-				//$("#selPHIFlag").hide();
+                $(this).hide();
+                //$("#selPHIFlag").hide();
 
-				var dd = {};
+                var dd = {};
 
-				dd.skDataDictionary = row.find(".skDataDictionary").find("span").html();
-				//dd.DatabaseName = row.find(".DatabaseName").find("span").html();
-				//dd/.SchemaName = row.find(".SchemaName").find("span").html();
-				//dd.ObjectName = row.find(".ObjectName").find("span").html();
-				//dd.ObjectType = row.find(".ObjectType").find("span").html();				
-				dd.PHIFlag = row.find(".PHIFlag").find("span").html();
-				dd.BusinessDefinition = row.find(".BusinessDefinition").find("span").html();
+                dd.skDataDictionary = row.find(".skDataDictionary").find("span").html();
+                //dd.DatabaseName = row.find(".DatabaseName").find("span").html();
+                //dd/.SchemaName = row.find(".SchemaName").find("span").html();
+                //dd.ObjectName = row.find(".ObjectName").find("span").html();
+                //dd.ObjectType = row.find(".ObjectType").find("span").html();
+                dd.PHIFlag = row.find(".PHIFlag").find("span").html();
+                dd.BusinessDefinition = row.find(".BusinessDefinition").find("span").html();
 
-				$.ajax({
-					type: "POST",
-					url: "/Home/UpdateDataDictionary",
-					data: '{dd:' + JSON.stringify(dd) + '}',
-					contentType: "application/json; charset=utf-8",
-					
-					dataType: "json"			
-					
-				});				
-			});
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/UpdateDataDictionary",
+                    data: '{dd:' + JSON.stringify(dd) + '}',
+                    contentType: "application/json; charset=utf-8",
 
-			//Cancel event handler.
-			$('[Class="Cancel"]').click(function () {
-				//alert('okay. I am here.');
-				var row = $(this).closest("tr");
-				$("td", row).each(function () {
-					if ($(this).find("input").length > 0) {
-						var span = $(this).find("span");
-						var input = $(this).find("input");
-						input.val(span.html());
-						span.show();
-						input.hide();
-					}
+                    dataType: "json"
 
-					if ($(this).find("select").length > 0) {						
-						var span = $(this).find("span");
-						var selectVal = $(this).find("select option:selected").text();
-						var select = $(this).find("select");
-						span.html();
-						span.show(selectVal);
-						//selectVal.hide();
-						select.hide();
-					}
-					
-				});
-				row.find(".Edit").show();
-				row.find(".Update").hide();
-				$(this).hide();
-			});
-		});	
+                });
+            });
+
+            //Cancel event handler.
+            $('[Class="Cancel"]').click(function () {
+                //alert('okay. I am here.');
+                var row = $(this).closest("tr");
+                $("td", row).each(function () {
+                    if ($(this).find("input").length > 0) {
+                        var span = $(this).find("span");
+                        var input = $(this).find("input");
+                        input.val(span.html());
+                        span.show();
+                        input.hide();
+                    }
+
+                    if ($(this).find("select").length > 0) {
+                        var span = $(this).find("span");
+                        var selectVal = $(this).find("select option:selected").text();
+                        var select = $(this).find("select");
+                        span.html();
+                        span.show(selectVal);
+                        //selectVal.hide();
+                        select.hide();
+                    }
+
+                });
+                row.find(".Edit").show();
+                row.find(".Update").hide();
+                $(this).hide();
+            });
+        });
 
 		//$(function () {
 		//	//Remove the dummy row if data present.
@@ -300,9 +276,6 @@
 		////	$("#tblDataDictionary").append(row);
 		////};
 
-	</script>
+    </script>
 </body>
 </html>
-
-
-
