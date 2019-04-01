@@ -1,0 +1,1847 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="PHOModelStoreContainer" CdmEntityContainer="PHOEntities">
+    <EntitySetMapping Name="AuditLogs">
+      <EntityTypeMapping TypeName="PHOModel.AuditLog">
+        <MappingFragment StoreEntitySet="AuditLog">
+          <ScalarProperty Name="AuditID" ColumnName="AuditID" />
+          <ScalarProperty Name="PageAccessed" ColumnName="PageAccessed" />
+          <ScalarProperty Name="PatientCSNViewed" ColumnName="PatientCSNViewed" />
+          <ScalarProperty Name="AuditDescription" ColumnName="AuditDescription" />
+          <ScalarProperty Name="DateStamp" ColumnName="DateStamp" />
+          <ScalarProperty Name="FormTypeID" ColumnName="FormTypeID" />
+          <ScalarProperty Name="User_ID" ColumnName="User_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="cfgMetaDatas">
+      <EntityTypeMapping TypeName="PHOModel.cfgMetaData">
+        <MappingFragment StoreEntitySet="cfgMetaData">
+          <ScalarProperty Name="MetaData_ID" ColumnName="MetaData_ID" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Text" ColumnName="Text" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DirectorDivisionAssignments">
+      <EntityTypeMapping TypeName="PHOModel.DirectorDivisionAssignment">
+        <MappingFragment StoreEntitySet="DirectorDivisionAssignment">
+          <ScalarProperty Name="DivisionDirectorID" ColumnName="DivisionDirectorID" />
+          <ScalarProperty Name="NetworkID" ColumnName="NetworkID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Division" ColumnName="Division" />
+          <ScalarProperty Name="RoleAssignment" ColumnName="RoleAssignment" />
+          <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+          <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+          <ScalarProperty Name="Active_Status" ColumnName="Active_Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="dtproperties">
+      <EntityTypeMapping TypeName="PHOModel.dtproperty">
+        <MappingFragment StoreEntitySet="dtproperties">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="objectid" ColumnName="objectid" />
+          <ScalarProperty Name="property" ColumnName="property" />
+          <ScalarProperty Name="value" ColumnName="value" />
+          <ScalarProperty Name="uvalue" ColumnName="uvalue" />
+          <ScalarProperty Name="lvalue" ColumnName="lvalue" />
+          <ScalarProperty Name="version" ColumnName="version" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ErrorLogs">
+      <EntityTypeMapping TypeName="PHOModel.ErrorLog">
+        <MappingFragment StoreEntitySet="ErrorLog">
+          <ScalarProperty Name="ErrorLogID" ColumnName="ErrorLogID" />
+          <ScalarProperty Name="ErrorPage" ColumnName="ErrorPage" />
+          <ScalarProperty Name="ErrorMethod" ColumnName="ErrorMethod" />
+          <ScalarProperty Name="ErrorMessage" ColumnName="ErrorMessage" />
+          <ScalarProperty Name="ErrorStackTrace" ColumnName="ErrorStackTrace" />
+          <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+          <ScalarProperty Name="FormTypeID" ColumnName="FormTypeID" />
+          <ScalarProperty Name="User_ID" ColumnName="User_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FormTypeColumnsMappings">
+      <EntityTypeMapping TypeName="PHOModel.FormTypeColumnsMapping">
+        <MappingFragment StoreEntitySet="FormTypeColumnsMapping">
+          <ScalarProperty Name="FormTypeColumnID" ColumnName="FormTypeColumnID" />
+          <ScalarProperty Name="QueryColumnName" ColumnName="QueryColumnName" />
+          <ScalarProperty Name="FormColumnDisplayName" ColumnName="FormColumnDisplayName" />
+          <ScalarProperty Name="FormTypeID" ColumnName="FormTypeID" />
+          <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+          <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+          <ScalarProperty Name="IsPrepopulatedField" ColumnName="IsPrepopulatedField" />
+          <ScalarProperty Name="IsFormDetailsViewField" ColumnName="IsFormDetailsViewField" />
+          <ScalarProperty Name="MetaDataFormTypeID" ColumnName="MetaDataFormTypeID" />
+          <ScalarProperty Name="MappingColumnName" ColumnName="MappingColumnName" />
+          <ScalarProperty Name="FormTypeGridViewOrder" ColumnName="FormTypeGridViewOrder" />
+          <ScalarProperty Name="FormTypeGridViewColumnType" ColumnName="FormTypeGridViewColumnType" />
+          <ScalarProperty Name="PrepopulatedDetailsOrder" ColumnName="PrepopulatedDetailsOrder" />
+          <ScalarProperty Name="IsEmailSubject" ColumnName="IsEmailSubject" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="lkAnswerOptions">
+      <EntityTypeMapping TypeName="PHOModel.lkAnswerOption">
+        <MappingFragment StoreEntitySet="lkAnswerOptions">
+          <ScalarProperty Name="AnswerOption_ID" ColumnName="AnswerOption_ID" />
+          <ScalarProperty Name="Label" ColumnName="Label" />
+          <ScalarProperty Name="Short_Desc" ColumnName="Short_Desc" />
+          <ScalarProperty Name="Long_Desc" ColumnName="Long_Desc" />
+          <ScalarProperty Name="Date_Created" ColumnName="Date_Created" />
+          <ScalarProperty Name="Date_Modified" ColumnName="Date_Modified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="lkForms">
+      <EntityTypeMapping TypeName="PHOModel.lkForm">
+        <MappingFragment StoreEntitySet="lkForms">
+          <ScalarProperty Name="Form_ID" ColumnName="Form_ID" />
+          <ScalarProperty Name="FormType_ID" ColumnName="FormType_ID" />
+          <ScalarProperty Name="Survey_Title" ColumnName="Survey_Title" />
+          <ScalarProperty Name="Flag_Active" ColumnName="Flag_Active" />
+          <ScalarProperty Name="Date_Created" ColumnName="Date_Created" />
+          <ScalarProperty Name="Date_Modified" ColumnName="Date_Modified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="lkFormTypes">
+      <EntityTypeMapping TypeName="PHOModel.lkFormType">
+        <MappingFragment StoreEntitySet="lkFormTypes">
+          <ScalarProperty Name="FormType_ID" ColumnName="FormType_ID" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Date_Created" ColumnName="Date_Created" />
+          <ScalarProperty Name="Date_Modified" ColumnName="Date_Modified" />
+          <ScalarProperty Name="SecurityTypeID" ColumnName="SecurityTypeID" />
+          <ScalarProperty Name="PreloadedTableName" ColumnName="PreloadedTableName" />
+          <ScalarProperty Name="FilterationColumn" ColumnName="FilterationColumn" />
+          <ScalarProperty Name="ColumnsToDisplay" ColumnName="ColumnsToDisplay" />
+          <ScalarProperty Name="ToolTipDescription" ColumnName="ToolTipDescription" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="lkQuestions">
+      <EntityTypeMapping TypeName="PHOModel.lkQuestion">
+        <MappingFragment StoreEntitySet="lkQuestions">
+          <ScalarProperty Name="Question_ID" ColumnName="Question_ID" />
+          <ScalarProperty Name="QuestionType_ID" ColumnName="QuestionType_ID" />
+          <ScalarProperty Name="Label" ColumnName="Label" />
+          <ScalarProperty Name="Flag_Required" ColumnName="Flag_Required" />
+          <ScalarProperty Name="Flag_Active" ColumnName="Flag_Active" />
+          <ScalarProperty Name="Date_Created" ColumnName="Date_Created" />
+          <ScalarProperty Name="Date_Modified" ColumnName="Date_Modified" />
+          <ScalarProperty Name="Label_Code" ColumnName="Label_Code" />
+          <ScalarProperty Name="Javascript" ColumnName="Javascript" />
+          <ScalarProperty Name="DependentQuestion" ColumnName="DependentQuestion" />
+          <ScalarProperty Name="IsEmailSubject" ColumnName="IsEmailSubject" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="lkQuestionTypes">
+      <EntityTypeMapping TypeName="PHOModel.lkQuestionType">
+        <MappingFragment StoreEntitySet="lkQuestionTypes">
+          <ScalarProperty Name="QuestionType_ID" ColumnName="QuestionType_ID" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Date_Created" ColumnName="Date_Created" />
+          <ScalarProperty Name="Date_Modified" ColumnName="Date_Modified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="lkReadmissionDays">
+      <EntityTypeMapping TypeName="PHOModel.lkReadmissionDay">
+        <MappingFragment StoreEntitySet="lkReadmissionDays">
+          <ScalarProperty Name="ReadmissionDaysID" ColumnName="ReadmissionDaysID" />
+          <ScalarProperty Name="ReadmissionDaysDescription" ColumnName="ReadmissionDaysDescription" />
+          <ScalarProperty Name="ReadmissionDaysCount" ColumnName="ReadmissionDaysCount" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="lkResponses">
+      <EntityTypeMapping TypeName="PHOModel.lkRespons">
+        <MappingFragment StoreEntitySet="lkResponses">
+          <ScalarProperty Name="Response_ID" ColumnName="Response_ID" />
+          <ScalarProperty Name="Question_ID" ColumnName="Question_ID" />
+          <ScalarProperty Name="Response_Text" ColumnName="Response_Text" />
+          <ScalarProperty Name="Date_Created" ColumnName="Date_Created" />
+          <ScalarProperty Name="Date_Modified" ColumnName="Date_Modified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="lkSections">
+      <EntityTypeMapping TypeName="PHOModel.lkSection">
+        <MappingFragment StoreEntitySet="lkSections">
+          <ScalarProperty Name="Section_ID" ColumnName="Section_ID" />
+          <ScalarProperty Name="Section_Desc" ColumnName="Section_Desc" />
+          <ScalarProperty Name="Date_Created" ColumnName="Date_Created" />
+          <ScalarProperty Name="Date_Modified" ColumnName="Date_Modified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="lkSecurityTypes">
+      <EntityTypeMapping TypeName="PHOModel.lkSecurityType">
+        <MappingFragment StoreEntitySet="lkSecurityTypes">
+          <ScalarProperty Name="SecurityTypeID" ColumnName="SecurityTypeID" />
+          <ScalarProperty Name="SecurityType" ColumnName="SecurityType" />
+          <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+          <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="lkStatus">
+      <EntityTypeMapping TypeName="PHOModel.lkStatu">
+        <MappingFragment StoreEntitySet="lkStatus">
+          <ScalarProperty Name="Status_ID" ColumnName="Status_ID" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Date_Created" ColumnName="Date_Created" />
+          <ScalarProperty Name="Date_Modified" ColumnName="Date_Modified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="lkUnits">
+      <EntityTypeMapping TypeName="PHOModel.lkUnit">
+        <MappingFragment StoreEntitySet="lkUnits">
+          <ScalarProperty Name="Unit_ID" ColumnName="Unit_ID" />
+          <ScalarProperty Name="Unit_EPIC_ID" ColumnName="Unit_EPIC_ID" />
+          <ScalarProperty Name="Unit_Name" ColumnName="Unit_Name" />
+          <ScalarProperty Name="Date_Created" ColumnName="Date_Created" />
+          <ScalarProperty Name="Date_Modified" ColumnName="Date_Modified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="lkUserRoles">
+      <EntityTypeMapping TypeName="PHOModel.lkUserRole">
+        <MappingFragment StoreEntitySet="lkUserRoles">
+          <ScalarProperty Name="UserRole_ID" ColumnName="UserRole_ID" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Date_Created" ColumnName="Date_Created" />
+          <ScalarProperty Name="Date_Modified" ColumnName="Date_Modified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="lkUsers">
+      <EntityTypeMapping TypeName="PHOModel.lkUser">
+        <MappingFragment StoreEntitySet="lkUsers">
+          <ScalarProperty Name="User_ID" ColumnName="User_ID" />
+          <ScalarProperty Name="User_Name" ColumnName="User_Name" />
+          <ScalarProperty Name="Date_Created" ColumnName="Date_Created" />
+          <ScalarProperty Name="Date_Modified" ColumnName="Date_Modified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="mFormSections">
+      <EntityTypeMapping TypeName="PHOModel.mFormSection">
+        <MappingFragment StoreEntitySet="mFormSections">
+          <ScalarProperty Name="FormSection_ID" ColumnName="FormSection_ID" />
+          <ScalarProperty Name="Form_ID" ColumnName="Form_ID" />
+          <ScalarProperty Name="Section_ID" ColumnName="Section_ID" />
+          <ScalarProperty Name="Order" ColumnName="Order" />
+          <ScalarProperty Name="Date_Created" ColumnName="Date_Created" />
+          <ScalarProperty Name="Date_Modified" ColumnName="Date_Modified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="mMetaDataFormTypes">
+      <EntityTypeMapping TypeName="PHOModel.mMetaDataFormType">
+        <MappingFragment StoreEntitySet="mMetaDataFormType">
+          <ScalarProperty Name="MetaDataFormTypeID" ColumnName="MetaDataFormTypeID" />
+          <ScalarProperty Name="MetaData_ID" ColumnName="MetaData_ID" />
+          <ScalarProperty Name="FormType_ID" ColumnName="FormType_ID" />
+          <ScalarProperty Name="FieldText" ColumnName="FieldText" />
+          <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+          <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="mQuestionAnswerOptions">
+      <EntityTypeMapping TypeName="PHOModel.mQuestionAnswerOption">
+        <MappingFragment StoreEntitySet="mQuestionAnswerOptions">
+          <ScalarProperty Name="QuestionAnswerOptions_ID" ColumnName="QuestionAnswerOptions_ID" />
+          <ScalarProperty Name="Question_ID" ColumnName="Question_ID" />
+          <ScalarProperty Name="AnswerOption_ID" ColumnName="AnswerOption_ID" />
+          <ScalarProperty Name="Order" ColumnName="Order" />
+          <ScalarProperty Name="Date_Created" ColumnName="Date_Created" />
+          <ScalarProperty Name="Date_Modified" ColumnName="Date_Modified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="mResponseAnswers">
+      <EntityTypeMapping TypeName="PHOModel.mResponseAnswer">
+        <MappingFragment StoreEntitySet="mResponseAnswers">
+          <ScalarProperty Name="ResponseAnswers_ID" ColumnName="ResponseAnswers_ID" />
+          <ScalarProperty Name="AnswerOption_ID" ColumnName="AnswerOption_ID" />
+          <ScalarProperty Name="Response_ID" ColumnName="Response_ID" />
+          <ScalarProperty Name="Date_Created" ColumnName="Date_Created" />
+          <ScalarProperty Name="Date_Modified" ColumnName="Date_Modified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="mSectionQuestions">
+      <EntityTypeMapping TypeName="PHOModel.mSectionQuestion">
+        <MappingFragment StoreEntitySet="mSectionQuestions">
+          <ScalarProperty Name="SectionQuestions_ID" ColumnName="SectionQuestions_ID" />
+          <ScalarProperty Name="Question_ID" ColumnName="Question_ID" />
+          <ScalarProperty Name="Section_ID" ColumnName="Section_ID" />
+          <ScalarProperty Name="Order" ColumnName="Order" />
+          <ScalarProperty Name="Date_Created" ColumnName="Date_Created" />
+          <ScalarProperty Name="Date_Modified" ColumnName="Date_Modified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="mUnitForms">
+      <EntityTypeMapping TypeName="PHOModel.mUnitForm">
+        <MappingFragment StoreEntitySet="mUnitForms">
+          <ScalarProperty Name="UnitForm_ID" ColumnName="UnitForm_ID" />
+          <ScalarProperty Name="Form_ID" ColumnName="Form_ID" />
+          <ScalarProperty Name="Date_Created" ColumnName="Date_Created" />
+          <ScalarProperty Name="Date_Modified" ColumnName="Date_Modified" />
+          <ScalarProperty Name="UnitFormTypeID" ColumnName="UnitFormTypeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="mUnitFormTypes">
+      <EntityTypeMapping TypeName="PHOModel.mUnitFormType">
+        <MappingFragment StoreEntitySet="mUnitFormType">
+          <ScalarProperty Name="UnitFormTypeID" ColumnName="UnitFormTypeID" />
+          <ScalarProperty Name="Unit_ID" ColumnName="Unit_ID" />
+          <ScalarProperty Name="FormType_ID" ColumnName="FormType_ID" />
+          <ScalarProperty Name="Date_Created" ColumnName="Date_Created" />
+          <ScalarProperty Name="Date_Modified" ColumnName="Date_Modified" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="mUnitUsers">
+      <EntityTypeMapping TypeName="PHOModel.mUnitUser">
+        <MappingFragment StoreEntitySet="mUnitUsers">
+          <ScalarProperty Name="UnitUser_ID" ColumnName="UnitUser_ID" />
+          <ScalarProperty Name="Date_Created" ColumnName="Date_Created" />
+          <ScalarProperty Name="Date_Modified" ColumnName="Date_Modified" />
+          <ScalarProperty Name="UnitFormTypeID" ColumnName="UnitFormTypeID" />
+          <ScalarProperty Name="UserFormTypeID" ColumnName="UserFormTypeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="mUserFormTypes">
+      <EntityTypeMapping TypeName="PHOModel.mUserFormType">
+        <MappingFragment StoreEntitySet="mUserFormType">
+          <ScalarProperty Name="UserFormTypeID" ColumnName="UserFormTypeID" />
+          <ScalarProperty Name="User_ID" ColumnName="User_ID" />
+          <ScalarProperty Name="FormType_ID" ColumnName="FormType_ID" />
+          <ScalarProperty Name="Date_Created" ColumnName="Date_Created" />
+          <ScalarProperty Name="Date_Modified" ColumnName="Date_Modified" />
+          <ScalarProperty Name="UserRole_ID" ColumnName="UserRole_ID" />
+          <ScalarProperty Name="Flag_Active" ColumnName="Flag_Active" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblFlaggedEvents">
+      <EntityTypeMapping TypeName="PHOModel.tblFlaggedEvent">
+        <MappingFragment StoreEntitySet="tblFlaggedEvents">
+          <ScalarProperty Name="FlaggedID" ColumnName="FlaggedID" />
+          <ScalarProperty Name="UserFormTypeID" ColumnName="UserFormTypeID" />
+          <ScalarProperty Name="Readmission_ID" ColumnName="Readmission_ID" />
+          <ScalarProperty Name="FormType_ID" ColumnName="FormType_ID" />
+          <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+          <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblFormResponses">
+      <EntityTypeMapping TypeName="PHOModel.tblFormRespons">
+        <MappingFragment StoreEntitySet="tblFormResponses">
+          <ScalarProperty Name="FormResponse_ID" ColumnName="FormResponse_ID" />
+          <ScalarProperty Name="Readmission_ID" ColumnName="Readmission_ID" />
+          <ScalarProperty Name="Form_ID" ColumnName="Form_ID" />
+          <ScalarProperty Name="Response_ID" ColumnName="Response_ID" />
+          <ScalarProperty Name="Date_Created" ColumnName="Date_Created" />
+          <ScalarProperty Name="Date_Modified" ColumnName="Date_Modified" />
+          <ScalarProperty Name="UserFormTypeID" ColumnName="UserFormTypeID" />
+          <ScalarProperty Name="FormType_ID" ColumnName="FormType_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblReadmissions">
+      <EntityTypeMapping TypeName="PHOModel.tblReadmission">
+        <MappingFragment StoreEntitySet="tblReadmissions">
+          <ScalarProperty Name="Readmission_ID" ColumnName="Readmission_ID" />
+          <ScalarProperty Name="Status_ID" ColumnName="Status_ID" />
+          <ScalarProperty Name="Index_CSN" ColumnName="Index_CSN" />
+          <ScalarProperty Name="MRN" ColumnName="MRN" />
+          <ScalarProperty Name="Patient_Name" ColumnName="Patient_Name" />
+          <ScalarProperty Name="Age_Yrs" ColumnName="Age_Yrs" />
+          <ScalarProperty Name="Index_Admit_Date" ColumnName="Index_Admit_Date" />
+          <ScalarProperty Name="Index_Discharge_Prov_ID" ColumnName="Index_Discharge_Prov_ID" />
+          <ScalarProperty Name="Index_Discharge_Prov_Name" ColumnName="Index_Discharge_Prov_Name" />
+          <ScalarProperty Name="Index_Admitting_Prov_ID" ColumnName="Index_Admitting_Prov_ID" />
+          <ScalarProperty Name="Index_Admitting_Prov_Name" ColumnName="Index_Admitting_Prov_Name" />
+          <ScalarProperty Name="Index_Discharge_Date" ColumnName="Index_Discharge_Date" />
+          <ScalarProperty Name="Index_Unit_ID" ColumnName="Index_Unit_ID" />
+          <ScalarProperty Name="Index_Unit_Name" ColumnName="Index_Unit_Name" />
+          <ScalarProperty Name="Index_Disposition" ColumnName="Index_Disposition" />
+          <ScalarProperty Name="Index_Hosp_Service" ColumnName="Index_Hosp_Service" />
+          <ScalarProperty Name="Index_LOS" ColumnName="Index_LOS" />
+          <ScalarProperty Name="Index_Payer" ColumnName="Index_Payer" />
+          <ScalarProperty Name="Index_Primary_DX_ID" ColumnName="Index_Primary_DX_ID" />
+          <ScalarProperty Name="Index_Primary_DX" ColumnName="Index_Primary_DX" />
+          <ScalarProperty Name="Index_Team" ColumnName="Index_Team" />
+          <ScalarProperty Name="Index_HSP_ACCOUNT_ID" ColumnName="Index_HSP_ACCOUNT_ID" />
+          <ScalarProperty Name="Readmit_CSN" ColumnName="Readmit_CSN" />
+          <ScalarProperty Name="Readmit_Date" ColumnName="Readmit_Date" />
+          <ScalarProperty Name="Readmit_Days_Post" ColumnName="Readmit_Days_Post" />
+          <ScalarProperty Name="Readmit_Admitting_Prov_ID" ColumnName="Readmit_Admitting_Prov_ID" />
+          <ScalarProperty Name="Readmit_Admitting_Prov_Name" ColumnName="Readmit_Admitting_Prov_Name" />
+          <ScalarProperty Name="Readmit_Discharge_Prov_ID" ColumnName="Readmit_Discharge_Prov_ID" />
+          <ScalarProperty Name="Readmit_Discharge_Prov_Name" ColumnName="Readmit_Discharge_Prov_Name" />
+          <ScalarProperty Name="Readmit_Discharge_Date" ColumnName="Readmit_Discharge_Date" />
+          <ScalarProperty Name="Readmit_Primary_DX_ID" ColumnName="Readmit_Primary_DX_ID" />
+          <ScalarProperty Name="Readmit_Primary_DX" ColumnName="Readmit_Primary_DX" />
+          <ScalarProperty Name="Readmit_Hosp_Service" ColumnName="Readmit_Hosp_Service" />
+          <ScalarProperty Name="Readmit_LOS" ColumnName="Readmit_LOS" />
+          <ScalarProperty Name="Readmit_Unit_ID" ColumnName="Readmit_Unit_ID" />
+          <ScalarProperty Name="Readmit_Unit_Name" ColumnName="Readmit_Unit_Name" />
+          <ScalarProperty Name="Readmit_Team" ColumnName="Readmit_Team" />
+          <ScalarProperty Name="Readmit_HSP_ACCOUNT_ID" ColumnName="Readmit_HSP_ACCOUNT_ID" />
+          <ScalarProperty Name="Date_Created" ColumnName="Date_Created" />
+          <ScalarProperty Name="Date_Modified" ColumnName="Date_Modified" />
+          <ScalarProperty Name="Date_Complete_Initial" ColumnName="Date_Complete_Initial" />
+          <ScalarProperty Name="Date_Complete" ColumnName="Date_Complete" />
+          <ScalarProperty Name="INCLUSION_RULE" ColumnName="INCLUSION_RULE" />
+          <ScalarProperty Name="UnitFormTypeID" ColumnName="UnitFormTypeID" />
+          <ScalarProperty Name="FormType_ID" ColumnName="FormType_ID" />
+          <ScalarProperty Name="ViewUnitFormTypeID" ColumnName="ViewUnitFormTypeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblUnplannedAdmitsfromSDS">
+      <EntityTypeMapping TypeName="PHOModel.tblUnplannedAdmitsfromSD">
+        <MappingFragment StoreEntitySet="tblUnplannedAdmitsfromSDS">
+          <ScalarProperty Name="Readmission_ID" ColumnName="Readmission_ID" />
+          <ScalarProperty Name="Status_ID" ColumnName="Status_ID" />
+          <ScalarProperty Name="UnitFormTypeID" ColumnName="UnitFormTypeID" />
+          <ScalarProperty Name="Index_CSN" ColumnName="Index_CSN" />
+          <ScalarProperty Name="MRN" ColumnName="MRN" />
+          <ScalarProperty Name="Patient_Name" ColumnName="Patient_Name" />
+          <ScalarProperty Name="Age_Yrs" ColumnName="Age_Yrs" />
+          <ScalarProperty Name="Index_Admit_Date" ColumnName="Index_Admit_Date" />
+          <ScalarProperty Name="Index_Discharge_Prov_ID" ColumnName="Index_Discharge_Prov_ID" />
+          <ScalarProperty Name="Index_Discharge_Prov_Name" ColumnName="Index_Discharge_Prov_Name" />
+          <ScalarProperty Name="Index_Admitting_Prov_ID" ColumnName="Index_Admitting_Prov_ID" />
+          <ScalarProperty Name="Index_Admitting_Prov_Name" ColumnName="Index_Admitting_Prov_Name" />
+          <ScalarProperty Name="Index_Discharge_Date" ColumnName="Index_Discharge_Date" />
+          <ScalarProperty Name="Index_Unit_ID" ColumnName="Index_Unit_ID" />
+          <ScalarProperty Name="Index_Unit_Name" ColumnName="Index_Unit_Name" />
+          <ScalarProperty Name="Index_Disposition" ColumnName="Index_Disposition" />
+          <ScalarProperty Name="Index_Hosp_Service" ColumnName="Index_Hosp_Service" />
+          <ScalarProperty Name="Index_LOS" ColumnName="Index_LOS" />
+          <ScalarProperty Name="Index_Payer" ColumnName="Index_Payer" />
+          <ScalarProperty Name="Index_Primary_DX_ID" ColumnName="Index_Primary_DX_ID" />
+          <ScalarProperty Name="Index_Primary_DX" ColumnName="Index_Primary_DX" />
+          <ScalarProperty Name="Index_Team" ColumnName="Index_Team" />
+          <ScalarProperty Name="Index_HSP_ACCOUNT_ID" ColumnName="Index_HSP_ACCOUNT_ID" />
+          <ScalarProperty Name="Readmit_CSN" ColumnName="Readmit_CSN" />
+          <ScalarProperty Name="Readmit_Date" ColumnName="Readmit_Date" />
+          <ScalarProperty Name="Readmit_Days_Post" ColumnName="Readmit_Days_Post" />
+          <ScalarProperty Name="Readmit_Admitting_Prov_ID" ColumnName="Readmit_Admitting_Prov_ID" />
+          <ScalarProperty Name="Readmit_Admitting_Prov_Name" ColumnName="Readmit_Admitting_Prov_Name" />
+          <ScalarProperty Name="Readmit_Discharge_Prov_ID" ColumnName="Readmit_Discharge_Prov_ID" />
+          <ScalarProperty Name="Readmit_Discharge_Prov_Name" ColumnName="Readmit_Discharge_Prov_Name" />
+          <ScalarProperty Name="Readmit_Discharge_Date" ColumnName="Readmit_Discharge_Date" />
+          <ScalarProperty Name="Readmit_Primary_DX_ID" ColumnName="Readmit_Primary_DX_ID" />
+          <ScalarProperty Name="Readmit_Primary_DX" ColumnName="Readmit_Primary_DX" />
+          <ScalarProperty Name="Readmit_Hosp_Service" ColumnName="Readmit_Hosp_Service" />
+          <ScalarProperty Name="Readmit_LOS" ColumnName="Readmit_LOS" />
+          <ScalarProperty Name="Readmit_Unit_ID" ColumnName="Readmit_Unit_ID" />
+          <ScalarProperty Name="Readmit_Unit_Name" ColumnName="Readmit_Unit_Name" />
+          <ScalarProperty Name="Readmit_Team" ColumnName="Readmit_Team" />
+          <ScalarProperty Name="Readmit_HSP_ACCOUNT_ID" ColumnName="Readmit_HSP_ACCOUNT_ID" />
+          <ScalarProperty Name="Date_Created" ColumnName="Date_Created" />
+          <ScalarProperty Name="Date_Modified" ColumnName="Date_Modified" />
+          <ScalarProperty Name="Date_Complete_Initial" ColumnName="Date_Complete_Initial" />
+          <ScalarProperty Name="Date_Complete" ColumnName="Date_Complete" />
+          <ScalarProperty Name="FormType_ID" ColumnName="FormType_ID" />
+          <ScalarProperty Name="INCLUSION_RULE" ColumnName="INCLUSION_RULE" />
+          <ScalarProperty Name="LOG_ID" ColumnName="LOG_ID" />
+          <ScalarProperty Name="SURGERY_DATE" ColumnName="SURGERY_DATE" />
+          <ScalarProperty Name="SCHED_START_TIME" ColumnName="SCHED_START_TIME" />
+          <ScalarProperty Name="PROC_NAME" ColumnName="PROC_NAME" />
+          <ScalarProperty Name="COMMENTS" ColumnName="COMMENTS" />
+          <ScalarProperty Name="PROV_ID" ColumnName="PROV_ID" />
+          <ScalarProperty Name="STAFF_NM" ColumnName="STAFF_NM" />
+          <ScalarProperty Name="SURG_PANEL_ROLE" ColumnName="SURG_PANEL_ROLE" />
+          <ScalarProperty Name="PAT_ID" ColumnName="PAT_ID" />
+          <ScalarProperty Name="ENCOUNTER_TYPE" ColumnName="ENCOUNTER_TYPE" />
+          <ScalarProperty Name="ADMSN_TIME" ColumnName="ADMSN_TIME" />
+          <ScalarProperty Name="ServiceID" ColumnName="ServiceID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblUnplannedReturnstoEDs">
+      <EntityTypeMapping TypeName="PHOModel.tblUnplannedReturnstoED">
+        <MappingFragment StoreEntitySet="tblUnplannedReturnstoED">
+          <ScalarProperty Name="Readmission_ID" ColumnName="Readmission_ID" />
+          <ScalarProperty Name="Status_ID" ColumnName="Status_ID" />
+          <ScalarProperty Name="UnitFormTypeID" ColumnName="UnitFormTypeID" />
+          <ScalarProperty Name="Index_CSN" ColumnName="Index_CSN" />
+          <ScalarProperty Name="MRN" ColumnName="MRN" />
+          <ScalarProperty Name="Patient_Name" ColumnName="Patient_Name" />
+          <ScalarProperty Name="Age_Yrs" ColumnName="Age_Yrs" />
+          <ScalarProperty Name="Index_Admit_Date" ColumnName="Index_Admit_Date" />
+          <ScalarProperty Name="Index_Discharge_Prov_ID" ColumnName="Index_Discharge_Prov_ID" />
+          <ScalarProperty Name="Index_Discharge_Prov_Name" ColumnName="Index_Discharge_Prov_Name" />
+          <ScalarProperty Name="Index_Admitting_Prov_ID" ColumnName="Index_Admitting_Prov_ID" />
+          <ScalarProperty Name="Index_Admitting_Prov_Name" ColumnName="Index_Admitting_Prov_Name" />
+          <ScalarProperty Name="Index_Discharge_Date" ColumnName="Index_Discharge_Date" />
+          <ScalarProperty Name="Index_Unit_ID" ColumnName="Index_Unit_ID" />
+          <ScalarProperty Name="Index_Unit_Name" ColumnName="Index_Unit_Name" />
+          <ScalarProperty Name="Index_Disposition" ColumnName="Index_Disposition" />
+          <ScalarProperty Name="Index_Hosp_Service" ColumnName="Index_Hosp_Service" />
+          <ScalarProperty Name="Index_LOS" ColumnName="Index_LOS" />
+          <ScalarProperty Name="Index_Payer" ColumnName="Index_Payer" />
+          <ScalarProperty Name="Index_Primary_DX_ID" ColumnName="Index_Primary_DX_ID" />
+          <ScalarProperty Name="Index_Primary_DX" ColumnName="Index_Primary_DX" />
+          <ScalarProperty Name="Index_Team" ColumnName="Index_Team" />
+          <ScalarProperty Name="Index_HSP_ACCOUNT_ID" ColumnName="Index_HSP_ACCOUNT_ID" />
+          <ScalarProperty Name="Readmit_CSN" ColumnName="Readmit_CSN" />
+          <ScalarProperty Name="Readmit_Date" ColumnName="Readmit_Date" />
+          <ScalarProperty Name="Readmit_Days_Post" ColumnName="Readmit_Days_Post" />
+          <ScalarProperty Name="Readmit_Admitting_Prov_ID" ColumnName="Readmit_Admitting_Prov_ID" />
+          <ScalarProperty Name="Readmit_Admitting_Prov_Name" ColumnName="Readmit_Admitting_Prov_Name" />
+          <ScalarProperty Name="Readmit_Discharge_Prov_ID" ColumnName="Readmit_Discharge_Prov_ID" />
+          <ScalarProperty Name="Readmit_Discharge_Prov_Name" ColumnName="Readmit_Discharge_Prov_Name" />
+          <ScalarProperty Name="Readmit_Discharge_Date" ColumnName="Readmit_Discharge_Date" />
+          <ScalarProperty Name="Readmit_Primary_DX_ID" ColumnName="Readmit_Primary_DX_ID" />
+          <ScalarProperty Name="Readmit_Primary_DX" ColumnName="Readmit_Primary_DX" />
+          <ScalarProperty Name="Readmit_Hosp_Service" ColumnName="Readmit_Hosp_Service" />
+          <ScalarProperty Name="Readmit_LOS" ColumnName="Readmit_LOS" />
+          <ScalarProperty Name="Readmit_Unit_ID" ColumnName="Readmit_Unit_ID" />
+          <ScalarProperty Name="Readmit_Unit_Name" ColumnName="Readmit_Unit_Name" />
+          <ScalarProperty Name="Readmit_Team" ColumnName="Readmit_Team" />
+          <ScalarProperty Name="Readmit_HSP_ACCOUNT_ID" ColumnName="Readmit_HSP_ACCOUNT_ID" />
+          <ScalarProperty Name="Date_Created" ColumnName="Date_Created" />
+          <ScalarProperty Name="Date_Modified" ColumnName="Date_Modified" />
+          <ScalarProperty Name="Date_Complete_Initial" ColumnName="Date_Complete_Initial" />
+          <ScalarProperty Name="Date_Complete" ColumnName="Date_Complete" />
+          <ScalarProperty Name="FormType_ID" ColumnName="FormType_ID" />
+          <ScalarProperty Name="INCLUSION_RULE" ColumnName="INCLUSION_RULE" />
+          <ScalarProperty Name="ADMISSION_TYPE" ColumnName="ADMISSION_TYPE" />
+          <ScalarProperty Name="Service_ID" ColumnName="Service_ID" />
+          <ScalarProperty Name="LOG_ID" ColumnName="LOG_ID" />
+          <ScalarProperty Name="SURGERY_DATE" ColumnName="SURGERY_DATE" />
+          <ScalarProperty Name="SCHED_START_TIME" ColumnName="SCHED_START_TIME" />
+          <ScalarProperty Name="PROC_NAME" ColumnName="PROC_NAME" />
+          <ScalarProperty Name="COMMENTS" ColumnName="COMMENTS" />
+          <ScalarProperty Name="PROV_ID" ColumnName="PROV_ID" />
+          <ScalarProperty Name="STAFF_NM" ColumnName="STAFF_NM" />
+          <ScalarProperty Name="SURG_PANEL_ROLE" ColumnName="SURG_PANEL_ROLE" />
+          <ScalarProperty Name="PAT_ID" ColumnName="PAT_ID" />
+          <ScalarProperty Name="ENCOUNTER_TYPE" ColumnName="ENCOUNTER_TYPE" />
+          <ScalarProperty Name="HOSP_ADMSN_TIME" ColumnName="HOSP_ADMSN_TIME" />
+          <ScalarProperty Name="ER_COMPLAINT" ColumnName="ER_COMPLAINT" />
+          <ScalarProperty Name="DIAGNOSIS_NAME" ColumnName="DIAGNOSIS_NAME" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblUnplannedReturnstoORs">
+      <EntityTypeMapping TypeName="PHOModel.tblUnplannedReturnstoOR">
+        <MappingFragment StoreEntitySet="tblUnplannedReturnstoOR">
+          <ScalarProperty Name="Readmission_ID" ColumnName="Readmission_ID" />
+          <ScalarProperty Name="Status_ID" ColumnName="Status_ID" />
+          <ScalarProperty Name="UnitFormTypeID" ColumnName="UnitFormTypeID" />
+          <ScalarProperty Name="Index_CSN" ColumnName="Index_CSN" />
+          <ScalarProperty Name="MRN" ColumnName="MRN" />
+          <ScalarProperty Name="Patient_Name" ColumnName="Patient_Name" />
+          <ScalarProperty Name="Age_Yrs" ColumnName="Age_Yrs" />
+          <ScalarProperty Name="Index_Admit_Date" ColumnName="Index_Admit_Date" />
+          <ScalarProperty Name="Index_Discharge_Prov_ID" ColumnName="Index_Discharge_Prov_ID" />
+          <ScalarProperty Name="Index_Discharge_Prov_Name" ColumnName="Index_Discharge_Prov_Name" />
+          <ScalarProperty Name="Index_Admitting_Prov_ID" ColumnName="Index_Admitting_Prov_ID" />
+          <ScalarProperty Name="Index_Admitting_Prov_Name" ColumnName="Index_Admitting_Prov_Name" />
+          <ScalarProperty Name="Index_Discharge_Date" ColumnName="Index_Discharge_Date" />
+          <ScalarProperty Name="Index_Unit_ID" ColumnName="Index_Unit_ID" />
+          <ScalarProperty Name="Index_Unit_Name" ColumnName="Index_Unit_Name" />
+          <ScalarProperty Name="Index_Disposition" ColumnName="Index_Disposition" />
+          <ScalarProperty Name="Index_Hosp_Service" ColumnName="Index_Hosp_Service" />
+          <ScalarProperty Name="Index_LOS" ColumnName="Index_LOS" />
+          <ScalarProperty Name="Index_Payer" ColumnName="Index_Payer" />
+          <ScalarProperty Name="Index_Primary_DX_ID" ColumnName="Index_Primary_DX_ID" />
+          <ScalarProperty Name="Index_Primary_DX" ColumnName="Index_Primary_DX" />
+          <ScalarProperty Name="Index_Team" ColumnName="Index_Team" />
+          <ScalarProperty Name="Index_HSP_ACCOUNT_ID" ColumnName="Index_HSP_ACCOUNT_ID" />
+          <ScalarProperty Name="Readmit_CSN" ColumnName="Readmit_CSN" />
+          <ScalarProperty Name="Readmit_Date" ColumnName="Readmit_Date" />
+          <ScalarProperty Name="Readmit_Days_Post" ColumnName="Readmit_Days_Post" />
+          <ScalarProperty Name="Readmit_Admitting_Prov_ID" ColumnName="Readmit_Admitting_Prov_ID" />
+          <ScalarProperty Name="Readmit_Admitting_Prov_Name" ColumnName="Readmit_Admitting_Prov_Name" />
+          <ScalarProperty Name="Readmit_Discharge_Prov_ID" ColumnName="Readmit_Discharge_Prov_ID" />
+          <ScalarProperty Name="Readmit_Discharge_Prov_Name" ColumnName="Readmit_Discharge_Prov_Name" />
+          <ScalarProperty Name="Readmit_Discharge_Date" ColumnName="Readmit_Discharge_Date" />
+          <ScalarProperty Name="Readmit_Primary_DX_ID" ColumnName="Readmit_Primary_DX_ID" />
+          <ScalarProperty Name="Readmit_Primary_DX" ColumnName="Readmit_Primary_DX" />
+          <ScalarProperty Name="Readmit_Hosp_Service" ColumnName="Readmit_Hosp_Service" />
+          <ScalarProperty Name="Readmit_LOS" ColumnName="Readmit_LOS" />
+          <ScalarProperty Name="Readmit_Unit_ID" ColumnName="Readmit_Unit_ID" />
+          <ScalarProperty Name="Readmit_Unit_Name" ColumnName="Readmit_Unit_Name" />
+          <ScalarProperty Name="Readmit_Team" ColumnName="Readmit_Team" />
+          <ScalarProperty Name="Readmit_HSP_ACCOUNT_ID" ColumnName="Readmit_HSP_ACCOUNT_ID" />
+          <ScalarProperty Name="Date_Created" ColumnName="Date_Created" />
+          <ScalarProperty Name="Date_Modified" ColumnName="Date_Modified" />
+          <ScalarProperty Name="Date_Complete_Initial" ColumnName="Date_Complete_Initial" />
+          <ScalarProperty Name="Date_Complete" ColumnName="Date_Complete" />
+          <ScalarProperty Name="FormType_ID" ColumnName="FormType_ID" />
+          <ScalarProperty Name="INCLUSION_RULE" ColumnName="INCLUSION_RULE" />
+          <ScalarProperty Name="ADMISSION_TYPE" ColumnName="ADMISSION_TYPE" />
+          <ScalarProperty Name="Service_ID" ColumnName="Service_ID" />
+          <ScalarProperty Name="LOG_ID" ColumnName="LOG_ID" />
+          <ScalarProperty Name="SURGERY_DATE" ColumnName="SURGERY_DATE" />
+          <ScalarProperty Name="SCHED_START_TIME" ColumnName="SCHED_START_TIME" />
+          <ScalarProperty Name="PROC_NAME" ColumnName="PROC_NAME" />
+          <ScalarProperty Name="COMMENTS" ColumnName="COMMENTS" />
+          <ScalarProperty Name="PROV_ID" ColumnName="PROV_ID" />
+          <ScalarProperty Name="STAFF_NM" ColumnName="STAFF_NM" />
+          <ScalarProperty Name="SURG_PANEL_ROLE" ColumnName="SURG_PANEL_ROLE" />
+          <ScalarProperty Name="PAT_ID" ColumnName="PAT_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="lkAnswerOptions1">
+      <EntityTypeMapping TypeName="PHOModel.lkAnswerOptions1">
+        <MappingFragment StoreEntitySet="lkAnswerOptions1">
+          <ScalarProperty Name="AnswerOptionId" ColumnName="AnswerOptionId" />
+          <ScalarProperty Name="Label" ColumnName="Label" />
+          <ScalarProperty Name="ShortDescription" ColumnName="ShortDescription" />
+          <ScalarProperty Name="LongDescription" ColumnName="LongDescription" />
+          <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+          <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="lkForms1">
+      <EntityTypeMapping TypeName="PHOModel.lkForms1">
+        <MappingFragment StoreEntitySet="lkForms1">
+          <ScalarProperty Name="FormId" ColumnName="FormId" />
+          <ScalarProperty Name="FormTypeId" ColumnName="FormTypeId" />
+          <ScalarProperty Name="Survey_Title" ColumnName="Survey_Title" />
+          <ScalarProperty Name="ActiveFlag" ColumnName="ActiveFlag" />
+          <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+          <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="lkFormTypes1">
+      <EntityTypeMapping TypeName="PHOModel.lkFormTypes1">
+        <MappingFragment StoreEntitySet="lkFormTypes1">
+          <ScalarProperty Name="FormTypeId" ColumnName="FormTypeId" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+          <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+          <ScalarProperty Name="SecurityTypeID" ColumnName="SecurityTypeID" />
+          <ScalarProperty Name="PreloadedTableName" ColumnName="PreloadedTableName" />
+          <ScalarProperty Name="FilterationColumn" ColumnName="FilterationColumn" />
+          <ScalarProperty Name="ColumnsToDisplay" ColumnName="ColumnsToDisplay" />
+          <ScalarProperty Name="ToolTipDescription" ColumnName="ToolTipDescription" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="lkInitiatives">
+      <EntityTypeMapping TypeName="PHOModel.lkInitiative">
+        <MappingFragment StoreEntitySet="lkInitiatives">
+          <ScalarProperty Name="InitiativeId" ColumnName="InitiativeId" />
+          <ScalarProperty Name="Initiative_EPICId" ColumnName="Initiative_EPICId" />
+          <ScalarProperty Name="InitiativeName" ColumnName="InitiativeName" />
+          <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+          <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="lkQuestions1">
+      <EntityTypeMapping TypeName="PHOModel.lkQuestions1">
+        <MappingFragment StoreEntitySet="lkQuestions1">
+          <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
+          <ScalarProperty Name="QuestionTypeId" ColumnName="QuestionTypeId" />
+          <ScalarProperty Name="Label" ColumnName="Label" />
+          <ScalarProperty Name="Flag_Required" ColumnName="Flag_Required" />
+          <ScalarProperty Name="ActiveFlag" ColumnName="ActiveFlag" />
+          <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+          <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+          <ScalarProperty Name="Label_Code" ColumnName="Label_Code" />
+          <ScalarProperty Name="Javascript" ColumnName="Javascript" />
+          <ScalarProperty Name="DependentQuestion" ColumnName="DependentQuestion" />
+          <ScalarProperty Name="IsEmailSubject" ColumnName="IsEmailSubject" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="lkQuestionTypes1">
+      <EntityTypeMapping TypeName="PHOModel.lkQuestionTypes1">
+        <MappingFragment StoreEntitySet="lkQuestionTypes1">
+          <ScalarProperty Name="QuestionTypeId" ColumnName="QuestionTypeId" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+          <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="lkReadmissionDays1">
+      <EntityTypeMapping TypeName="PHOModel.lkReadmissionDays1">
+        <MappingFragment StoreEntitySet="lkReadmissionDays1">
+          <ScalarProperty Name="ReadmissionDaysID" ColumnName="ReadmissionDaysID" />
+          <ScalarProperty Name="ReadmissionDaysDescription" ColumnName="ReadmissionDaysDescription" />
+          <ScalarProperty Name="ReadmissionDaysCount" ColumnName="ReadmissionDaysCount" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="lkResponses1">
+      <EntityTypeMapping TypeName="PHOModel.lkResponses1">
+        <MappingFragment StoreEntitySet="lkResponses1">
+          <ScalarProperty Name="ResponseId" ColumnName="ResponseId" />
+          <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
+          <ScalarProperty Name="Response_Text" ColumnName="Response_Text" />
+          <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+          <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="lkSections1">
+      <EntityTypeMapping TypeName="PHOModel.lkSections1">
+        <MappingFragment StoreEntitySet="lkSections1">
+          <ScalarProperty Name="SectionId" ColumnName="SectionId" />
+          <ScalarProperty Name="SectionDescription" ColumnName="SectionDescription" />
+          <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+          <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="lkSecurityTypes1">
+      <EntityTypeMapping TypeName="PHOModel.lkSecurityTypes1">
+        <MappingFragment StoreEntitySet="lkSecurityTypes1">
+          <ScalarProperty Name="SecurityTypeID" ColumnName="SecurityTypeID" />
+          <ScalarProperty Name="SecurityType" ColumnName="SecurityType" />
+          <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+          <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="lkStatus1">
+      <EntityTypeMapping TypeName="PHOModel.lkStatus1">
+        <MappingFragment StoreEntitySet="lkStatus1">
+          <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+          <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="lkUserRoles1">
+      <EntityTypeMapping TypeName="PHOModel.lkUserRoles1">
+        <MappingFragment StoreEntitySet="lkUserRoles1">
+          <ScalarProperty Name="UserRoleId" ColumnName="UserRoleId" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+          <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="mFormSections1">
+      <EntityTypeMapping TypeName="PHOModel.mFormSections1">
+        <MappingFragment StoreEntitySet="mFormSections1">
+          <ScalarProperty Name="FormSectionId" ColumnName="FormSectionId" />
+          <ScalarProperty Name="FormId" ColumnName="FormId" />
+          <ScalarProperty Name="SectionId" ColumnName="SectionId" />
+          <ScalarProperty Name="Order" ColumnName="Order" />
+          <ScalarProperty Name="DeletedFlag" ColumnName="DeletedFlag" />
+          <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+          <ScalarProperty Name="CreatedOnDate" ColumnName="CreatedOnDate" />
+          <ScalarProperty Name="ModifiedById" ColumnName="ModifiedById" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="DeletedById" ColumnName="DeletedById" />
+          <ScalarProperty Name="DeletedDate" ColumnName="DeletedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="mInitiativeForms">
+      <EntityTypeMapping TypeName="PHOModel.mInitiativeForm">
+        <MappingFragment StoreEntitySet="mInitiativeForms">
+          <ScalarProperty Name="InitiativeFormId" ColumnName="InitiativeFormId" />
+          <ScalarProperty Name="FormId" ColumnName="FormId" />
+          <ScalarProperty Name="InitiativeFormTypeID" ColumnName="InitiativeFormTypeID" />
+          <ScalarProperty Name="DeletedFlag" ColumnName="DeletedFlag" />
+          <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+          <ScalarProperty Name="CreatedOnDate" ColumnName="CreatedOnDate" />
+          <ScalarProperty Name="ModifiedById" ColumnName="ModifiedById" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="DeletedById" ColumnName="DeletedById" />
+          <ScalarProperty Name="DeletedDate" ColumnName="DeletedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="mInitiativeFormTypes">
+      <EntityTypeMapping TypeName="PHOModel.mInitiativeFormType">
+        <MappingFragment StoreEntitySet="mInitiativeFormType">
+          <ScalarProperty Name="InitiativeFormTypeID" ColumnName="InitiativeFormTypeID" />
+          <ScalarProperty Name="InitiativeId" ColumnName="InitiativeId" />
+          <ScalarProperty Name="FormTypeId" ColumnName="FormTypeId" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="DeletedFlag" ColumnName="DeletedFlag" />
+          <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+          <ScalarProperty Name="CreatedOnDate" ColumnName="CreatedOnDate" />
+          <ScalarProperty Name="ModifiedById" ColumnName="ModifiedById" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="DeletedById" ColumnName="DeletedById" />
+          <ScalarProperty Name="DeletedDate" ColumnName="DeletedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="mInitiativeUsers">
+      <EntityTypeMapping TypeName="PHOModel.mInitiativeUser">
+        <MappingFragment StoreEntitySet="mInitiativeUsers">
+          <ScalarProperty Name="InitiativeUserId" ColumnName="InitiativeUserId" />
+          <ScalarProperty Name="InitiativeFormTypeID" ColumnName="InitiativeFormTypeID" />
+          <ScalarProperty Name="UserFormTypeID" ColumnName="UserFormTypeID" />
+          <ScalarProperty Name="DeletedFlag" ColumnName="DeletedFlag" />
+          <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+          <ScalarProperty Name="CreatedOnDate" ColumnName="CreatedOnDate" />
+          <ScalarProperty Name="ModifiedById" ColumnName="ModifiedById" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="DeletedById" ColumnName="DeletedById" />
+          <ScalarProperty Name="DeletedDate" ColumnName="DeletedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="mMetaDataFormType1">
+      <EntityTypeMapping TypeName="PHOModel.mMetaDataFormType1">
+        <MappingFragment StoreEntitySet="mMetaDataFormType1">
+          <ScalarProperty Name="MetaDataFormTypeID" ColumnName="MetaDataFormTypeID" />
+          <ScalarProperty Name="MetaDataId" ColumnName="MetaDataId" />
+          <ScalarProperty Name="FormTypeId" ColumnName="FormTypeId" />
+          <ScalarProperty Name="FieldText" ColumnName="FieldText" />
+          <ScalarProperty Name="DeletedFlag" ColumnName="DeletedFlag" />
+          <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+          <ScalarProperty Name="CreatedOnDate" ColumnName="CreatedOnDate" />
+          <ScalarProperty Name="ModifiedById" ColumnName="ModifiedById" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="DeletedById" ColumnName="DeletedById" />
+          <ScalarProperty Name="DeletedDate" ColumnName="DeletedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="mQuestionAnswerOptions1">
+      <EntityTypeMapping TypeName="PHOModel.mQuestionAnswerOptions1">
+        <MappingFragment StoreEntitySet="mQuestionAnswerOptions1">
+          <ScalarProperty Name="QuestionAnswerOptionsId" ColumnName="QuestionAnswerOptionsId" />
+          <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
+          <ScalarProperty Name="AnswerOptionId" ColumnName="AnswerOptionId" />
+          <ScalarProperty Name="Order" ColumnName="Order" />
+          <ScalarProperty Name="DeletedFlag" ColumnName="DeletedFlag" />
+          <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+          <ScalarProperty Name="CreatedOnDate" ColumnName="CreatedOnDate" />
+          <ScalarProperty Name="ModifiedById" ColumnName="ModifiedById" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="DeletedById" ColumnName="DeletedById" />
+          <ScalarProperty Name="DeletedDate" ColumnName="DeletedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="mResponseAnswers1">
+      <EntityTypeMapping TypeName="PHOModel.mResponseAnswers1">
+        <MappingFragment StoreEntitySet="mResponseAnswers1">
+          <ScalarProperty Name="ResponseAnswersId" ColumnName="ResponseAnswersId" />
+          <ScalarProperty Name="AnswerOptionId" ColumnName="AnswerOptionId" />
+          <ScalarProperty Name="ResponseId" ColumnName="ResponseId" />
+          <ScalarProperty Name="DeletedFlag" ColumnName="DeletedFlag" />
+          <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+          <ScalarProperty Name="CreatedOnDate" ColumnName="CreatedOnDate" />
+          <ScalarProperty Name="ModifiedById" ColumnName="ModifiedById" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="DeletedById" ColumnName="DeletedById" />
+          <ScalarProperty Name="DeletedDate" ColumnName="DeletedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="mSectionQuestions1">
+      <EntityTypeMapping TypeName="PHOModel.mSectionQuestions1">
+        <MappingFragment StoreEntitySet="mSectionQuestions1">
+          <ScalarProperty Name="SectionQuestionsId" ColumnName="SectionQuestionsId" />
+          <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
+          <ScalarProperty Name="SectionId" ColumnName="SectionId" />
+          <ScalarProperty Name="Order" ColumnName="Order" />
+          <ScalarProperty Name="DeletedFlag" ColumnName="DeletedFlag" />
+          <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+          <ScalarProperty Name="CreatedOnDate" ColumnName="CreatedOnDate" />
+          <ScalarProperty Name="ModifiedById" ColumnName="ModifiedById" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="DeletedById" ColumnName="DeletedById" />
+          <ScalarProperty Name="DeletedDate" ColumnName="DeletedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="mUserFormType1">
+      <EntityTypeMapping TypeName="PHOModel.mUserFormType1">
+        <MappingFragment StoreEntitySet="mUserFormType1">
+          <ScalarProperty Name="UserFormTypeID" ColumnName="UserFormTypeID" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="FormTypeId" ColumnName="FormTypeId" />
+          <ScalarProperty Name="UserRoleId" ColumnName="UserRoleId" />
+          <ScalarProperty Name="ActiveFlag" ColumnName="ActiveFlag" />
+          <ScalarProperty Name="DeletedFlag" ColumnName="DeletedFlag" />
+          <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+          <ScalarProperty Name="CreatedOnDate" ColumnName="CreatedOnDate" />
+          <ScalarProperty Name="ModifiedById" ColumnName="ModifiedById" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="DeletedById" ColumnName="DeletedById" />
+          <ScalarProperty Name="DeletedDate" ColumnName="DeletedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblFormResponses1">
+      <EntityTypeMapping TypeName="PHOModel.tblFormResponses1">
+        <MappingFragment StoreEntitySet="tblFormResponses1">
+          <ScalarProperty Name="FormResponse_ID" ColumnName="FormResponse_ID" />
+          <ScalarProperty Name="Readmission_ID" ColumnName="Readmission_ID" />
+          <ScalarProperty Name="Form_ID" ColumnName="Form_ID" />
+          <ScalarProperty Name="Response_ID" ColumnName="Response_ID" />
+          <ScalarProperty Name="Date_Created" ColumnName="Date_Created" />
+          <ScalarProperty Name="Date_Modified" ColumnName="Date_Modified" />
+          <ScalarProperty Name="UserFormTypeID" ColumnName="UserFormTypeID" />
+          <ScalarProperty Name="FormType_ID" ColumnName="FormType_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Cohorts">
+      <EntityTypeMapping TypeName="PHOModel.Cohort">
+        <MappingFragment StoreEntitySet="Cohort">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="ShortName" ColumnName="ShortName" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="DeletedFlag" ColumnName="DeletedFlag" />
+          <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+          <ScalarProperty Name="CreatedOnDate" ColumnName="CreatedOnDate" />
+          <ScalarProperty Name="ModifiedById" ColumnName="ModifiedById" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="DeletedById" ColumnName="DeletedById" />
+          <ScalarProperty Name="DeletedDate" ColumnName="DeletedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Initiatives">
+      <EntityTypeMapping TypeName="PHOModel.Initiative">
+        <MappingFragment StoreEntitySet="Initiative">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="ShortName" ColumnName="ShortName" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="DeletedFlag" ColumnName="DeletedFlag" />
+          <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+          <ScalarProperty Name="CreatedOnDate" ColumnName="CreatedOnDate" />
+          <ScalarProperty Name="ModifiedById" ColumnName="ModifiedById" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="DeletedById" ColumnName="DeletedById" />
+          <ScalarProperty Name="DeletedDate" ColumnName="DeletedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Locations">
+      <EntityTypeMapping TypeName="PHOModel.Location">
+        <MappingFragment StoreEntitySet="Location">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="OrganizationId" ColumnName="OrganizationId" />
+          <ScalarProperty Name="LocationId" ColumnName="LocationId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
+          <ScalarProperty Name="AddressLine2" ColumnName="AddressLine2" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="StateId" ColumnName="StateId" />
+          <ScalarProperty Name="Zip" ColumnName="Zip" />
+          <ScalarProperty Name="Phone1" ColumnName="Phone1" />
+          <ScalarProperty Name="Phone2" ColumnName="Phone2" />
+          <ScalarProperty Name="ActiveFlag" ColumnName="ActiveFlag" />
+          <ScalarProperty Name="DeletedFlag" ColumnName="DeletedFlag" />
+          <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+          <ScalarProperty Name="ModifiedById" ColumnName="ModifiedById" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="DeletedById" ColumnName="DeletedById" />
+          <ScalarProperty Name="DeletedDate" ColumnName="DeletedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="mMemberships">
+      <EntityTypeMapping TypeName="PHOModel.mMembership">
+        <MappingFragment StoreEntitySet="mMembership">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="CohortId" ColumnName="CohortId" />
+          <ScalarProperty Name="PatientId" ColumnName="PatientId" />
+          <ScalarProperty Name="DeletedFlag" ColumnName="DeletedFlag" />
+          <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+          <ScalarProperty Name="CreatedOnDate" ColumnName="CreatedOnDate" />
+          <ScalarProperty Name="ModifiedById" ColumnName="ModifiedById" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="DeletedById" ColumnName="DeletedById" />
+          <ScalarProperty Name="DeletedDate" ColumnName="DeletedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="mParticipations">
+      <EntityTypeMapping TypeName="PHOModel.mParticipation">
+        <MappingFragment StoreEntitySet="mParticipation">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="CohortId" ColumnName="CohortId" />
+          <ScalarProperty Name="PracticeId" ColumnName="PracticeId" />
+          <ScalarProperty Name="InitiativeId" ColumnName="InitiativeId" />
+          <ScalarProperty Name="DeletedFlag" ColumnName="DeletedFlag" />
+          <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+          <ScalarProperty Name="CreatedOnDate" ColumnName="CreatedOnDate" />
+          <ScalarProperty Name="ModifiedById" ColumnName="ModifiedById" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="DeletedById" ColumnName="DeletedById" />
+          <ScalarProperty Name="DeletedDate" ColumnName="DeletedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Organizations">
+      <EntityTypeMapping TypeName="PHOModel.Organization">
+        <MappingFragment StoreEntitySet="Organization">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="ParentOrganizationId" ColumnName="ParentOrganizationId" />
+          <ScalarProperty Name="OrganizationTypeId" ColumnName="OrganizationTypeId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Short_Name" ColumnName="Short Name" />
+          <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
+          <ScalarProperty Name="AddressLine2" ColumnName="AddressLine2" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="StateId" ColumnName="StateId" />
+          <ScalarProperty Name="Zip" ColumnName="Zip" />
+          <ScalarProperty Name="Phone1" ColumnName="Phone1" />
+          <ScalarProperty Name="Phone2" ColumnName="Phone2" />
+          <ScalarProperty Name="ActiveFlag" ColumnName="ActiveFlag" />
+          <ScalarProperty Name="DeletedFlag" ColumnName="DeletedFlag" />
+          <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+          <ScalarProperty Name="CreatedOnDate" ColumnName="CreatedOnDate" />
+          <ScalarProperty Name="ModifiedById" ColumnName="ModifiedById" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="DeletedById" ColumnName="DeletedById" />
+          <ScalarProperty Name="DeletedDate" ColumnName="DeletedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrganizationTypes">
+      <EntityTypeMapping TypeName="PHOModel.OrganizationType">
+        <MappingFragment StoreEntitySet="OrganizationType">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="People">
+      <EntityTypeMapping TypeName="PHOModel.Person">
+        <MappingFragment StoreEntitySet="Person">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="PersonTypeId" ColumnName="PersonTypeId" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+          <ScalarProperty Name="Sex_Id" ColumnName="Sex_Id" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="PersonDOB" ColumnName="PersonDOB" />
+          <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+          <ScalarProperty Name="SSN" ColumnName="SSN" />
+          <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
+          <ScalarProperty Name="AddressLine2" ColumnName="AddressLine2" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="State_Id" ColumnName="State_Id" />
+          <ScalarProperty Name="Zip" ColumnName="Zip" />
+          <ScalarProperty Name="Phone1" ColumnName="Phone1" />
+          <ScalarProperty Name="Phone2" ColumnName="Phone2" />
+          <ScalarProperty Name="CCHMCMrn" ColumnName="CCHMCMrn" />
+          <ScalarProperty Name="InsurerId" ColumnName="InsurerId" />
+          <ScalarProperty Name="PCPId" ColumnName="PCPId" />
+          <ScalarProperty Name="NPI" ColumnName="NPI" />
+          <ScalarProperty Name="ActiveFlag" ColumnName="ActiveFlag" />
+          <ScalarProperty Name="DeletedFlag" ColumnName="DeletedFlag" />
+          <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+          <ScalarProperty Name="CreatedOnDate" ColumnName="CreatedOnDate" />
+          <ScalarProperty Name="ModifiedById" ColumnName="ModifiedById" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="DeletedById" ColumnName="DeletedById" />
+          <ScalarProperty Name="DeletedDate" ColumnName="DeletedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PersonTypes">
+      <EntityTypeMapping TypeName="PHOModel.PersonType">
+        <MappingFragment StoreEntitySet="PersonType">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tlkSexes">
+      <EntityTypeMapping TypeName="PHOModel.tlkSex">
+        <MappingFragment StoreEntitySet="tlkSex">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="ActiveFlag" ColumnName="ActiveFlag" />
+          <ScalarProperty Name="DeletedFlag" ColumnName="DeletedFlag" />
+          <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+          <ScalarProperty Name="CreatedOnDate" ColumnName="CreatedOnDate" />
+          <ScalarProperty Name="ModifiedById" ColumnName="ModifiedById" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="DeletedById" ColumnName="DeletedById" />
+          <ScalarProperty Name="DeletedDate" ColumnName="DeletedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tlkStates">
+      <EntityTypeMapping TypeName="PHOModel.tlkState">
+        <MappingFragment StoreEntitySet="tlkState">
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="ShortName" ColumnName="ShortName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="DeletedFlag" ColumnName="DeletedFlag" />
+          <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+          <ScalarProperty Name="CreatedOnDate" ColumnName="CreatedOnDate" />
+          <ScalarProperty Name="ModifiedById" ColumnName="ModifiedById" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="DeletedById" ColumnName="DeletedById" />
+          <ScalarProperty Name="DeletedDate" ColumnName="DeletedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DimDates">
+      <EntityTypeMapping TypeName="PHOModel.DimDate">
+        <MappingFragment StoreEntitySet="DimDate">
+          <ScalarProperty Name="DateKey" ColumnName="DateKey" />
+          <ScalarProperty Name="MonthKey" ColumnName="MonthKey" />
+          <ScalarProperty Name="SemiMonthKey" ColumnName="SemiMonthKey" />
+          <ScalarProperty Name="EndOfSurveyWeekKey" ColumnName="EndOfSurveyWeekKey" />
+          <ScalarProperty Name="WeekKey" ColumnName="WeekKey" />
+          <ScalarProperty Name="TxtDate" ColumnName="TxtDate" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="FullDate" ColumnName="FullDate" />
+          <ScalarProperty Name="ShortDate" ColumnName="ShortDate" />
+          <ScalarProperty Name="FullYear" ColumnName="FullYear" />
+          <ScalarProperty Name="QuarterNumber" ColumnName="QuarterNumber" />
+          <ScalarProperty Name="FiscalQuarterNumber" ColumnName="FiscalQuarterNumber" />
+          <ScalarProperty Name="FiscalYearNumber" ColumnName="FiscalYearNumber" />
+          <ScalarProperty Name="WeekNumber" ColumnName="WeekNumber" />
+          <ScalarProperty Name="WeekDayName" ColumnName="WeekDayName" />
+          <ScalarProperty Name="DayOfMonth" ColumnName="DayOfMonth" />
+          <ScalarProperty Name="MonthName" ColumnName="MonthName" />
+          <ScalarProperty Name="YearDay" ColumnName="YearDay" />
+          <ScalarProperty Name="txtFullDate" ColumnName="txtFullDate" />
+          <ScalarProperty Name="WeekDay" ColumnName="WeekDay" />
+          <ScalarProperty Name="MonthNumber" ColumnName="MonthNumber" />
+          <ScalarProperty Name="LastDayOfMonth" ColumnName="LastDayOfMonth" />
+          <ScalarProperty Name="MthYrName" ColumnName="MthYrName" />
+          <ScalarProperty Name="RunDate" ColumnName="RunDate" />
+          <ScalarProperty Name="WeeklyReportDate" ColumnName="WeeklyReportDate" />
+          <ScalarProperty Name="BiWeeklyReportDate" ColumnName="BiWeeklyReportDate" />
+          <ScalarProperty Name="YearMonth" ColumnName="YearMonth" />
+          <ScalarProperty Name="FiscalQtrMonth" ColumnName="FiscalQtrMonth" />
+          <ScalarProperty Name="BiWeeklyReportDateProcessingEnd" ColumnName="BiWeeklyReportDateProcessingEnd" />
+          <ScalarProperty Name="YearMonthProcessingEnd" ColumnName="YearMonthProcessingEnd" />
+          <ScalarProperty Name="FiscalQtrMonthProcessingEnd" ColumnName="FiscalQtrMonthProcessingEnd" />
+          <ScalarProperty Name="EndOfSurveyWeek" ColumnName="EndOfSurveyWeek" />
+          <ScalarProperty Name="QtrLabel" ColumnName="QtrLabel" />
+          <ScalarProperty Name="MonthlyReportDate" ColumnName="MonthlyReportDate" />
+          <ScalarProperty Name="EndOfSurveyWeekYear" ColumnName="EndOfSurveyWeekYear" />
+          <ScalarProperty Name="EndOfSurveyWeekMonth" ColumnName="EndOfSurveyWeekMonth" />
+          <ScalarProperty Name="EndOfSurveyWeekQtr" ColumnName="EndOfSurveyWeekQtr" />
+          <ScalarProperty Name="EndOfSurveyWeekFY" ColumnName="EndOfSurveyWeekFY" />
+          <ScalarProperty Name="EndOfSurveyWeekFYQTR" ColumnName="EndOfSurveyWeekFYQTR" />
+          <ScalarProperty Name="EndOfSurveyWeekWeekNum" ColumnName="EndOfSurveyWeekWeekNum" />
+          <ScalarProperty Name="SemiMonthlyLabel" ColumnName="SemiMonthlyLabel" />
+          <ScalarProperty Name="SemiMonthlyReportDate" ColumnName="SemiMonthlyReportDate" />
+          <ScalarProperty Name="WeekLabel" ColumnName="WeekLabel" />
+          <ScalarProperty Name="SamplingDate" ColumnName="SamplingDate" />
+          <ScalarProperty Name="HPCE_WeekDate" ColumnName="HPCE_WeekDate" />
+          <ScalarProperty Name="HPCE_WeekNumber" ColumnName="HPCE_WeekNumber" />
+          <ScalarProperty Name="WeekStartSunday" ColumnName="WeekStartSunday" />
+          <ScalarProperty Name="AsOfYesterday" ColumnName="AsOfYesterday" />
+          <ScalarProperty Name="AsOfLastWeek" ColumnName="AsOfLastWeek" />
+          <ScalarProperty Name="AsOfLastMonth" ColumnName="AsOfLastMonth" />
+          <ScalarProperty Name="LastWeek" ColumnName="LastWeek" />
+          <ScalarProperty Name="LastMonth" ColumnName="LastMonth" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="hxRedcap_2">
+      <EntityTypeMapping TypeName="PHOModel.hxRedcap_2">
+        <MappingFragment StoreEntitySet="hxRedcap_2">
+          <ScalarProperty Name="Redcap_ID" ColumnName="Redcap_ID" />
+          <ScalarProperty Name="Index_CSN_ID" ColumnName="Index_CSN_ID" />
+          <ScalarProperty Name="team_reviewing" ColumnName="team_reviewing" />
+          <ScalarProperty Name="review_date" ColumnName="review_date" />
+          <ScalarProperty Name="pt_name" ColumnName="pt_name" />
+          <ScalarProperty Name="mrn" ColumnName="mrn" />
+          <ScalarProperty Name="age" ColumnName="age" />
+          <ScalarProperty Name="cormorbities" ColumnName="cormorbities" />
+          <ScalarProperty Name="hosp_last_yr" ColumnName="hosp_last_yr" />
+          <ScalarProperty Name="total_hosp_enc" ColumnName="total_hosp_enc" />
+          <ScalarProperty Name="psych_type_review" ColumnName="psych_type_review" />
+          <ScalarProperty Name="index_admit_date" ColumnName="index_admit_date" />
+          <ScalarProperty Name="index_dc_date" ColumnName="index_dc_date" />
+          <ScalarProperty Name="gest_age_nicu" ColumnName="gest_age_nicu" />
+          <ScalarProperty Name="weight_nicu" ColumnName="weight_nicu" />
+          <ScalarProperty Name="index_payer" ColumnName="index_payer" />
+          <ScalarProperty Name="index_los" ColumnName="index_los" />
+          <ScalarProperty Name="index_attending" ColumnName="index_attending" />
+          <ScalarProperty Name="index_prim_dx" ColumnName="index_prim_dx" />
+          <ScalarProperty Name="behaviors" ColumnName="behaviors" />
+          <ScalarProperty Name="index_dc_unit" ColumnName="index_dc_unit" />
+          <ScalarProperty Name="index_dc_team" ColumnName="index_dc_team" />
+          <ScalarProperty Name="census_nicu" ColumnName="census_nicu" />
+          <ScalarProperty Name="pcp_name_nicu" ColumnName="pcp_name_nicu" />
+          <ScalarProperty Name="dc_checklist_comp" ColumnName="dc_checklist_comp" />
+          <ScalarProperty Name="checklist_not_comp_reason" ColumnName="checklist_not_comp_reason" />
+          <ScalarProperty Name="psych_dc_diag" ColumnName="psych_dc_diag" />
+          <ScalarProperty Name="psych_hosp_course" ColumnName="psych_hosp_course" />
+          <ScalarProperty Name="psych_social_note" ColumnName="psych_social_note" />
+          <ScalarProperty Name="dc_phone_call_comp" ColumnName="dc_phone_call_comp" />
+          <ScalarProperty Name="conf_dc_call" ColumnName="conf_dc_call" />
+          <ScalarProperty Name="concern_dc_call" ColumnName="concern_dc_call" />
+          <ScalarProperty Name="last_pews_dc" ColumnName="last_pews_dc" />
+          <ScalarProperty Name="safe_score_dc" ColumnName="safe_score_dc" />
+          <ScalarProperty Name="safe_score_mean" ColumnName="safe_score_mean" />
+          <ScalarProperty Name="safe_score_stdev" ColumnName="safe_score_stdev" />
+          <ScalarProperty Name="home_nurse_visit" ColumnName="home_nurse_visit" />
+          <ScalarProperty Name="num_home_visits" ColumnName="num_home_visits" />
+          <ScalarProperty Name="prim_care_office_visit" ColumnName="prim_care_office_visit" />
+          <ScalarProperty Name="num_prim_care_visit_1" ColumnName="num_prim_care_visit_1" />
+          <ScalarProperty Name="therapy_visit" ColumnName="therapy_visit" />
+          <ScalarProperty Name="therapy_number" ColumnName="therapy_number" />
+          <ScalarProperty Name="psychiatrist_visit" ColumnName="psychiatrist_visit" />
+          <ScalarProperty Name="psychiatrist_number" ColumnName="psychiatrist_number" />
+          <ScalarProperty Name="cco_visit" ColumnName="cco_visit" />
+          <ScalarProperty Name="cco_number" ColumnName="cco_number" />
+          <ScalarProperty Name="psych_patient_factor" ColumnName="psych_patient_factor" />
+          <ScalarProperty Name="psych_process_factor" ColumnName="psych_process_factor" />
+          <ScalarProperty Name="psych_tele_enc" ColumnName="psych_tele_enc" />
+          <ScalarProperty Name="readmit_date" ColumnName="readmit_date" />
+          <ScalarProperty Name="readmit_csn" ColumnName="readmit_csn" />
+          <ScalarProperty Name="readmit_days_post" ColumnName="readmit_days_post" />
+          <ScalarProperty Name="readmit_unit" ColumnName="readmit_unit" />
+          <ScalarProperty Name="readmit_los" ColumnName="readmit_los" />
+          <ScalarProperty Name="readmit_dx" ColumnName="readmit_dx" />
+          <ScalarProperty Name="behaviors_readmit" ColumnName="behaviors_readmit" />
+          <ScalarProperty Name="pirc_assessment" ColumnName="pirc_assessment" />
+          <ScalarProperty Name="parent_safety_plan" ColumnName="parent_safety_plan" />
+          <ScalarProperty Name="admit_rn_note" ColumnName="admit_rn_note" />
+          <ScalarProperty Name="psych_patient_factor_read" ColumnName="psych_patient_factor_read" />
+          <ScalarProperty Name="psych_process_factor_read" ColumnName="psych_process_factor_read" />
+          <ScalarProperty Name="readmit_details" ColumnName="readmit_details" />
+          <ScalarProperty Name="readmit_urgent" ColumnName="readmit_urgent" />
+          <ScalarProperty Name="interventions___1" ColumnName="interventions___1" />
+          <ScalarProperty Name="interventions___2" ColumnName="interventions___2" />
+          <ScalarProperty Name="interventions___3" ColumnName="interventions___3" />
+          <ScalarProperty Name="interventions___4" ColumnName="interventions___4" />
+          <ScalarProperty Name="interventions___5" ColumnName="interventions___5" />
+          <ScalarProperty Name="interventions___6" ColumnName="interventions___6" />
+          <ScalarProperty Name="interventions___7" ColumnName="interventions___7" />
+          <ScalarProperty Name="interventions___8" ColumnName="interventions___8" />
+          <ScalarProperty Name="interventions___9" ColumnName="interventions___9" />
+          <ScalarProperty Name="interventions___10" ColumnName="interventions___10" />
+          <ScalarProperty Name="interventions___11" ColumnName="interventions___11" />
+          <ScalarProperty Name="interventions___12" ColumnName="interventions___12" />
+          <ScalarProperty Name="readmission_category2_c8e" ColumnName="readmission_category2_c8e" />
+          <ScalarProperty Name="preventability_catego2_fac" ColumnName="preventability_catego2_fac" />
+          <ScalarProperty Name="preventable_notes" ColumnName="preventable_notes" />
+          <ScalarProperty Name="preventable_notes_3" ColumnName="preventable_notes_3" />
+          <ScalarProperty Name="dcattendfeedbackyn" ColumnName="dcattendfeedbackyn" />
+          <ScalarProperty Name="dcattendfeedback" ColumnName="dcattendfeedback" />
+          <ScalarProperty Name="readmitattendfeedbackyn" ColumnName="readmitattendfeedbackyn" />
+          <ScalarProperty Name="readmitattendfeedback" ColumnName="readmitattendfeedback" />
+          <ScalarProperty Name="dcreadmitnotify" ColumnName="dcreadmitnotify" />
+          <ScalarProperty Name="nicu_usnews" ColumnName="nicu_usnews" />
+          <ScalarProperty Name="parent_input_yn" ColumnName="parent_input_yn" />
+          <ScalarProperty Name="parent_input_text" ColumnName="parent_input_text" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
+          <ScalarProperty Name="readmission_review_complete" ColumnName="readmission_review_complete" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="rptMetaDatas">
+      <EntityTypeMapping TypeName="PHOModel.rptMetaData">
+        <MappingFragment StoreEntitySet="rptMetaData">
+          <ScalarProperty Name="Goal_ID" ColumnName="Goal_ID" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="LineNo" ColumnName="LineNo" />
+          <ScalarProperty Name="LineType" ColumnName="LineType" />
+          <ScalarProperty Name="OrgType" ColumnName="OrgType" />
+          <ScalarProperty Name="Unit_ID" ColumnName="Unit_ID" />
+          <ScalarProperty Name="Hospital_Service_ID" ColumnName="Hospital_Service_ID" />
+          <ScalarProperty Name="MeasureName" ColumnName="MeasureName" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+          <ScalarProperty Name="Flag_Active" ColumnName="Flag_Active" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tlkUnitMoveTracks">
+      <EntityTypeMapping TypeName="PHOModel.tlkUnitMoveTrack">
+        <MappingFragment StoreEntitySet="tlkUnitMoveTrack">
+          <ScalarProperty Name="Unit" ColumnName="Unit" />
+          <ScalarProperty Name="Unit_Label" ColumnName="Unit_Label" />
+          <ScalarProperty Name="Unit_Description" ColumnName="Unit_Description" />
+          <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+          <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+          <ScalarProperty Name="ICU" ColumnName="ICU" />
+          <ScalarProperty Name="CollegeHill" ColumnName="CollegeHill" />
+          <ScalarProperty Name="Liberty_Campus" ColumnName="Liberty_Campus" />
+          <ScalarProperty Name="Inpatient_Unit" ColumnName="Inpatient_Unit" />
+          <ScalarProperty Name="Inpatient_Convalescent_Hospital" ColumnName="Inpatient_Convalescent_Hospital" />
+          <ScalarProperty Name="Cost_Center" ColumnName="Cost_Center" />
+          <ScalarProperty Name="PMRS_Key" ColumnName="PMRS_Key" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tlkUnitMoveTrack_SAVE">
+      <EntityTypeMapping TypeName="PHOModel.tlkUnitMoveTrack_SAVE">
+        <MappingFragment StoreEntitySet="tlkUnitMoveTrack_SAVE">
+          <ScalarProperty Name="Unit" ColumnName="Unit" />
+          <ScalarProperty Name="Unit_Label" ColumnName="Unit_Label" />
+          <ScalarProperty Name="Unit_Description" ColumnName="Unit_Description" />
+          <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+          <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+          <ScalarProperty Name="ICU" ColumnName="ICU" />
+          <ScalarProperty Name="CollegeHill" ColumnName="CollegeHill" />
+          <ScalarProperty Name="Liberty_Campus" ColumnName="Liberty_Campus" />
+          <ScalarProperty Name="Inpatient_Unit" ColumnName="Inpatient_Unit" />
+          <ScalarProperty Name="Inpatient_Convalescent_Hospital" ColumnName="Inpatient_Convalescent_Hospital" />
+          <ScalarProperty Name="Cost_Center" ColumnName="Cost_Center" />
+          <ScalarProperty Name="PMRS_Key" ColumnName="PMRS_Key" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vw_lkForms">
+      <EntityTypeMapping TypeName="PHOModel.vw_lkForms">
+        <MappingFragment StoreEntitySet="vw_lkForms">
+          <ScalarProperty Name="FORM_ID" ColumnName="FORM_ID" />
+          <ScalarProperty Name="FORMTYPE_ID" ColumnName="FORMTYPE_ID" />
+          <ScalarProperty Name="SURVEY_TITLE" ColumnName="SURVEY_TITLE" />
+          <ScalarProperty Name="FLAG_ACTIVE" ColumnName="FLAG_ACTIVE" />
+          <ScalarProperty Name="DATE_CREATED" ColumnName="DATE_CREATED" />
+          <ScalarProperty Name="DATE_MODIFIED" ColumnName="DATE_MODIFIED" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vw_mUnitForms">
+      <EntityTypeMapping TypeName="PHOModel.vw_mUnitForms">
+        <MappingFragment StoreEntitySet="vw_mUnitForms">
+          <ScalarProperty Name="UNITFORM_ID" ColumnName="UNITFORM_ID" />
+          <ScalarProperty Name="UNIT_ID" ColumnName="UNIT_ID" />
+          <ScalarProperty Name="FORM_ID" ColumnName="FORM_ID" />
+          <ScalarProperty Name="DATE_CREATED" ColumnName="DATE_CREATED" />
+          <ScalarProperty Name="DATE_MODIFIED" ColumnName="DATE_MODIFIED" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vw_mUnitUsers">
+      <EntityTypeMapping TypeName="PHOModel.vw_mUnitUsers">
+        <MappingFragment StoreEntitySet="vw_mUnitUsers">
+          <ScalarProperty Name="UNITUSER_ID" ColumnName="UNITUSER_ID" />
+          <ScalarProperty Name="UNIT_ID" ColumnName="UNIT_ID" />
+          <ScalarProperty Name="USER_ID" ColumnName="USER_ID" />
+          <ScalarProperty Name="DATE_CREATED" ColumnName="DATE_CREATED" />
+          <ScalarProperty Name="DATE_MODIFIED" ColumnName="DATE_MODIFIED" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vw_tblFormResponses">
+      <EntityTypeMapping TypeName="PHOModel.vw_tblFormResponses">
+        <MappingFragment StoreEntitySet="vw_tblFormResponses">
+          <ScalarProperty Name="FORMRESPONSE_ID" ColumnName="FORMRESPONSE_ID" />
+          <ScalarProperty Name="READMISSION_ID" ColumnName="READMISSION_ID" />
+          <ScalarProperty Name="FORM_ID" ColumnName="FORM_ID" />
+          <ScalarProperty Name="RESPONSE_ID" ColumnName="RESPONSE_ID" />
+          <ScalarProperty Name="USER_ID" ColumnName="USER_ID" />
+          <ScalarProperty Name="DATE_CREATED" ColumnName="DATE_CREATED" />
+          <ScalarProperty Name="DATE_MODIFIED" ColumnName="DATE_MODIFIED" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vw_tblReadmissions">
+      <EntityTypeMapping TypeName="PHOModel.vw_tblReadmissions">
+        <MappingFragment StoreEntitySet="vw_tblReadmissions">
+          <ScalarProperty Name="READMISSION_ID" ColumnName="READMISSION_ID" />
+          <ScalarProperty Name="STATUS_ID" ColumnName="STATUS_ID" />
+          <ScalarProperty Name="UNIT_ID" ColumnName="UNIT_ID" />
+          <ScalarProperty Name="INDEX_CSN" ColumnName="INDEX_CSN" />
+          <ScalarProperty Name="MRN" ColumnName="MRN" />
+          <ScalarProperty Name="PATIENT_NAME" ColumnName="PATIENT_NAME" />
+          <ScalarProperty Name="AGE_YRS" ColumnName="AGE_YRS" />
+          <ScalarProperty Name="INDEX_ADMIT_DATE" ColumnName="INDEX_ADMIT_DATE" />
+          <ScalarProperty Name="INDEX_DISCHARGE_PROV_ID" ColumnName="INDEX_DISCHARGE_PROV_ID" />
+          <ScalarProperty Name="INDEX_DISCHARGE_PROV_NAME" ColumnName="INDEX_DISCHARGE_PROV_NAME" />
+          <ScalarProperty Name="INDEX_ADMITTING_PROV_ID" ColumnName="INDEX_ADMITTING_PROV_ID" />
+          <ScalarProperty Name="INDEX_ADMITTING_PROV_NAME" ColumnName="INDEX_ADMITTING_PROV_NAME" />
+          <ScalarProperty Name="INDEX_DISCHARGE_DATE" ColumnName="INDEX_DISCHARGE_DATE" />
+          <ScalarProperty Name="INDEX_UNIT_ID" ColumnName="INDEX_UNIT_ID" />
+          <ScalarProperty Name="INDEX_UNIT_NAME" ColumnName="INDEX_UNIT_NAME" />
+          <ScalarProperty Name="INDEX_DISPOSITION" ColumnName="INDEX_DISPOSITION" />
+          <ScalarProperty Name="INDEX_HOSP_SERVICE" ColumnName="INDEX_HOSP_SERVICE" />
+          <ScalarProperty Name="INDEX_LOS" ColumnName="INDEX_LOS" />
+          <ScalarProperty Name="INDEX_PAYER" ColumnName="INDEX_PAYER" />
+          <ScalarProperty Name="INDEX_PRIMARY_DX_ID" ColumnName="INDEX_PRIMARY_DX_ID" />
+          <ScalarProperty Name="INDEX_PRIMARY_DX" ColumnName="INDEX_PRIMARY_DX" />
+          <ScalarProperty Name="INDEX_TEAM" ColumnName="INDEX_TEAM" />
+          <ScalarProperty Name="INDEX_HSP_ACCOUNT_ID" ColumnName="INDEX_HSP_ACCOUNT_ID" />
+          <ScalarProperty Name="READMIT_CSN" ColumnName="READMIT_CSN" />
+          <ScalarProperty Name="READMIT_DATE" ColumnName="READMIT_DATE" />
+          <ScalarProperty Name="READMIT_DAYS_POST" ColumnName="READMIT_DAYS_POST" />
+          <ScalarProperty Name="READMIT_ADMITTING_PROV_ID" ColumnName="READMIT_ADMITTING_PROV_ID" />
+          <ScalarProperty Name="READMIT_ADMITTING_PROV_NAME" ColumnName="READMIT_ADMITTING_PROV_NAME" />
+          <ScalarProperty Name="READMIT_DISCHARGE_PROV_ID" ColumnName="READMIT_DISCHARGE_PROV_ID" />
+          <ScalarProperty Name="READMIT_DISCHARGE_PROV_NAME" ColumnName="READMIT_DISCHARGE_PROV_NAME" />
+          <ScalarProperty Name="READMIT_DISCHARGE_DATE" ColumnName="READMIT_DISCHARGE_DATE" />
+          <ScalarProperty Name="READMIT_PRIMARY_DX_ID" ColumnName="READMIT_PRIMARY_DX_ID" />
+          <ScalarProperty Name="READMIT_PRIMARY_DX" ColumnName="READMIT_PRIMARY_DX" />
+          <ScalarProperty Name="READMIT_HOSP_SERVICE" ColumnName="READMIT_HOSP_SERVICE" />
+          <ScalarProperty Name="READMIT_LOS" ColumnName="READMIT_LOS" />
+          <ScalarProperty Name="READMIT_UNIT_ID" ColumnName="READMIT_UNIT_ID" />
+          <ScalarProperty Name="READMIT_UNIT_NAME" ColumnName="READMIT_UNIT_NAME" />
+          <ScalarProperty Name="READMIT_TEAM" ColumnName="READMIT_TEAM" />
+          <ScalarProperty Name="READMIT_HSP_ACCOUNT_ID" ColumnName="READMIT_HSP_ACCOUNT_ID" />
+          <ScalarProperty Name="DATE_CREATED" ColumnName="DATE_CREATED" />
+          <ScalarProperty Name="DATE_MODIFIED" ColumnName="DATE_MODIFIED" />
+          <ScalarProperty Name="DATE_COMPLETE_INITIAL" ColumnName="DATE_COMPLETE_INITIAL" />
+          <ScalarProperty Name="DATE_COMPLETE" ColumnName="DATE_COMPLETE" />
+          <ScalarProperty Name="INCLUSION_RULE" ColumnName="INCLUSION_RULE" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vwDimResponses">
+      <EntityTypeMapping TypeName="PHOModel.vwDimRespons">
+        <MappingFragment StoreEntitySet="vwDimResponses">
+          <ScalarProperty Name="RESPONSE_ID" ColumnName="RESPONSE_ID" />
+          <ScalarProperty Name="ANSWER" ColumnName="ANSWER" />
+          <ScalarProperty Name="ANSWEROPTION_ID" ColumnName="ANSWEROPTION_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vwDimUsers">
+      <EntityTypeMapping TypeName="PHOModel.vwDimUser">
+        <MappingFragment StoreEntitySet="vwDimUsers">
+          <ScalarProperty Name="USER_ID" ColumnName="USER_ID" />
+          <ScalarProperty Name="USER_NAME" ColumnName="USER_NAME" />
+          <ScalarProperty Name="FLAG_ACTIVE" ColumnName="FLAG_ACTIVE" />
+          <ScalarProperty Name="TYPE" ColumnName="TYPE" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Insurers">
+      <EntityTypeMapping TypeName="PHOModel.Insurer">
+        <MappingFragment StoreEntitySet="Insurer">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="ParentOrganizationId" ColumnName="ParentOrganizationId" />
+          <ScalarProperty Name="OrganizationTypeId" ColumnName="OrganizationTypeId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Short_Name" ColumnName="Short Name" />
+          <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
+          <ScalarProperty Name="AddressLine2" ColumnName="AddressLine2" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="StateId" ColumnName="StateId" />
+          <ScalarProperty Name="Zip" ColumnName="Zip" />
+          <ScalarProperty Name="Phone1" ColumnName="Phone1" />
+          <ScalarProperty Name="Phone2" ColumnName="Phone2" />
+          <ScalarProperty Name="ActiveFlag" ColumnName="ActiveFlag" />
+          <ScalarProperty Name="DeletedFlag" ColumnName="DeletedFlag" />
+          <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+          <ScalarProperty Name="CreatedOnDate" ColumnName="CreatedOnDate" />
+          <ScalarProperty Name="ModifiedById" ColumnName="ModifiedById" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="DeletedById" ColumnName="DeletedById" />
+          <ScalarProperty Name="DeletedDate" ColumnName="DeletedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="IS_Staff">
+      <EntityTypeMapping TypeName="PHOModel.IS_Staff">
+        <MappingFragment StoreEntitySet="IS_Staff">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="PersonTypeId" ColumnName="PersonTypeId" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+          <ScalarProperty Name="Sex_Id" ColumnName="Sex_Id" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="PersonDOB" ColumnName="PersonDOB" />
+          <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+          <ScalarProperty Name="SSN" ColumnName="SSN" />
+          <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
+          <ScalarProperty Name="AddressLine2" ColumnName="AddressLine2" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="State_Id" ColumnName="State_Id" />
+          <ScalarProperty Name="Zip" ColumnName="Zip" />
+          <ScalarProperty Name="Phone1" ColumnName="Phone1" />
+          <ScalarProperty Name="Phone2" ColumnName="Phone2" />
+          <ScalarProperty Name="CCHMCMrn" ColumnName="CCHMCMrn" />
+          <ScalarProperty Name="InsurerId" ColumnName="InsurerId" />
+          <ScalarProperty Name="PCPId" ColumnName="PCPId" />
+          <ScalarProperty Name="NPI" ColumnName="NPI" />
+          <ScalarProperty Name="ActiveFlag" ColumnName="ActiveFlag" />
+          <ScalarProperty Name="DeletedFlag" ColumnName="DeletedFlag" />
+          <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+          <ScalarProperty Name="CreatedOnDate" ColumnName="CreatedOnDate" />
+          <ScalarProperty Name="ModifiedById" ColumnName="ModifiedById" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="DeletedById" ColumnName="DeletedById" />
+          <ScalarProperty Name="DeletedDate" ColumnName="DeletedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Patients">
+      <EntityTypeMapping TypeName="PHOModel.Patient">
+        <MappingFragment StoreEntitySet="Patient">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="PersonTypeId" ColumnName="PersonTypeId" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+          <ScalarProperty Name="Sex_Id" ColumnName="Sex_Id" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="PersonDOB" ColumnName="PersonDOB" />
+          <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+          <ScalarProperty Name="SSN" ColumnName="SSN" />
+          <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
+          <ScalarProperty Name="AddressLine2" ColumnName="AddressLine2" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="State_Id" ColumnName="State_Id" />
+          <ScalarProperty Name="Zip" ColumnName="Zip" />
+          <ScalarProperty Name="Phone1" ColumnName="Phone1" />
+          <ScalarProperty Name="Phone2" ColumnName="Phone2" />
+          <ScalarProperty Name="CCHMCMrn" ColumnName="CCHMCMrn" />
+          <ScalarProperty Name="InsurerId" ColumnName="InsurerId" />
+          <ScalarProperty Name="PCPId" ColumnName="PCPId" />
+          <ScalarProperty Name="NPI" ColumnName="NPI" />
+          <ScalarProperty Name="ActiveFlag" ColumnName="ActiveFlag" />
+          <ScalarProperty Name="DeletedFlag" ColumnName="DeletedFlag" />
+          <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+          <ScalarProperty Name="CreatedOnDate" ColumnName="CreatedOnDate" />
+          <ScalarProperty Name="ModifiedById" ColumnName="ModifiedById" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="DeletedById" ColumnName="DeletedById" />
+          <ScalarProperty Name="DeletedDate" ColumnName="DeletedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PHO_Staff">
+      <EntityTypeMapping TypeName="PHOModel.PHO_Staff">
+        <MappingFragment StoreEntitySet="PHO_Staff">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="PersonTypeId" ColumnName="PersonTypeId" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+          <ScalarProperty Name="Sex_Id" ColumnName="Sex_Id" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="PersonDOB" ColumnName="PersonDOB" />
+          <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+          <ScalarProperty Name="SSN" ColumnName="SSN" />
+          <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
+          <ScalarProperty Name="AddressLine2" ColumnName="AddressLine2" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="State_Id" ColumnName="State_Id" />
+          <ScalarProperty Name="Zip" ColumnName="Zip" />
+          <ScalarProperty Name="Phone1" ColumnName="Phone1" />
+          <ScalarProperty Name="Phone2" ColumnName="Phone2" />
+          <ScalarProperty Name="CCHMCMrn" ColumnName="CCHMCMrn" />
+          <ScalarProperty Name="InsurerId" ColumnName="InsurerId" />
+          <ScalarProperty Name="PCPId" ColumnName="PCPId" />
+          <ScalarProperty Name="NPI" ColumnName="NPI" />
+          <ScalarProperty Name="ActiveFlag" ColumnName="ActiveFlag" />
+          <ScalarProperty Name="DeletedFlag" ColumnName="DeletedFlag" />
+          <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+          <ScalarProperty Name="CreatedOnDate" ColumnName="CreatedOnDate" />
+          <ScalarProperty Name="ModifiedById" ColumnName="ModifiedById" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="DeletedById" ColumnName="DeletedById" />
+          <ScalarProperty Name="DeletedDate" ColumnName="DeletedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Practice_Staff">
+      <EntityTypeMapping TypeName="PHOModel.Practice_Staff">
+        <MappingFragment StoreEntitySet="Practice_Staff">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="PersonTypeId" ColumnName="PersonTypeId" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+          <ScalarProperty Name="Sex_Id" ColumnName="Sex_Id" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="PersonDOB" ColumnName="PersonDOB" />
+          <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+          <ScalarProperty Name="SSN" ColumnName="SSN" />
+          <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
+          <ScalarProperty Name="AddressLine2" ColumnName="AddressLine2" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="State_Id" ColumnName="State_Id" />
+          <ScalarProperty Name="Zip" ColumnName="Zip" />
+          <ScalarProperty Name="Phone1" ColumnName="Phone1" />
+          <ScalarProperty Name="Phone2" ColumnName="Phone2" />
+          <ScalarProperty Name="CCHMCMrn" ColumnName="CCHMCMrn" />
+          <ScalarProperty Name="InsurerId" ColumnName="InsurerId" />
+          <ScalarProperty Name="PCPId" ColumnName="PCPId" />
+          <ScalarProperty Name="NPI" ColumnName="NPI" />
+          <ScalarProperty Name="ActiveFlag" ColumnName="ActiveFlag" />
+          <ScalarProperty Name="DeletedFlag" ColumnName="DeletedFlag" />
+          <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+          <ScalarProperty Name="CreatedOnDate" ColumnName="CreatedOnDate" />
+          <ScalarProperty Name="ModifiedById" ColumnName="ModifiedById" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="DeletedById" ColumnName="DeletedById" />
+          <ScalarProperty Name="DeletedDate" ColumnName="DeletedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Providers">
+      <EntityTypeMapping TypeName="PHOModel.Provider">
+        <MappingFragment StoreEntitySet="Provider">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="PersonTypeId" ColumnName="PersonTypeId" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+          <ScalarProperty Name="Sex_Id" ColumnName="Sex_Id" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="PersonDOB" ColumnName="PersonDOB" />
+          <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+          <ScalarProperty Name="SSN" ColumnName="SSN" />
+          <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
+          <ScalarProperty Name="AddressLine2" ColumnName="AddressLine2" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="State_Id" ColumnName="State_Id" />
+          <ScalarProperty Name="Zip" ColumnName="Zip" />
+          <ScalarProperty Name="Phone1" ColumnName="Phone1" />
+          <ScalarProperty Name="Phone2" ColumnName="Phone2" />
+          <ScalarProperty Name="CCHMCMrn" ColumnName="CCHMCMrn" />
+          <ScalarProperty Name="InsurerId" ColumnName="InsurerId" />
+          <ScalarProperty Name="PCPId" ColumnName="PCPId" />
+          <ScalarProperty Name="NPI" ColumnName="NPI" />
+          <ScalarProperty Name="ActiveFlag" ColumnName="ActiveFlag" />
+          <ScalarProperty Name="DeletedFlag" ColumnName="DeletedFlag" />
+          <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+          <ScalarProperty Name="CreatedOnDate" ColumnName="CreatedOnDate" />
+          <ScalarProperty Name="ModifiedById" ColumnName="ModifiedById" />
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="DeletedById" ColumnName="DeletedById" />
+          <ScalarProperty Name="DeletedDate" ColumnName="DeletedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionName="PHOModel.Store.ufn_ReadmissionsPrior90Days" FunctionImportName="ufn_ReadmissionsPrior90Days">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="PHOModel.ufn_ReadmissionsPrior90Days_Result">
+          <ScalarProperty Name="STATUS_ID" ColumnName="STATUS_ID" />
+          <ScalarProperty Name="UNIT_ID" ColumnName="UNIT_ID" />
+          <ScalarProperty Name="UnitFormTypeID" ColumnName="UnitFormTypeID" />
+          <ScalarProperty Name="INDEX_CSN" ColumnName="INDEX_CSN" />
+          <ScalarProperty Name="MRN" ColumnName="MRN" />
+          <ScalarProperty Name="PATIENT_NAME" ColumnName="PATIENT_NAME" />
+          <ScalarProperty Name="AGE_YRS" ColumnName="AGE_YRS" />
+          <ScalarProperty Name="INDEX_ADMIT_DATE" ColumnName="INDEX_ADMIT_DATE" />
+          <ScalarProperty Name="INDEX_DISCHARGE_PROV_ID" ColumnName="INDEX_DISCHARGE_PROV_ID" />
+          <ScalarProperty Name="INDEX_DISCHARGE_PROV_NAME" ColumnName="INDEX_DISCHARGE_PROV_NAME" />
+          <ScalarProperty Name="INDEX_ADMITTING_PROV_ID" ColumnName="INDEX_ADMITTING_PROV_ID" />
+          <ScalarProperty Name="INDEX_ADMITTING_PROV_NAME" ColumnName="INDEX_ADMITTING_PROV_NAME" />
+          <ScalarProperty Name="INDEX_DISCHARGE_DATE" ColumnName="INDEX_DISCHARGE_DATE" />
+          <ScalarProperty Name="INDEX_UNIT_ID" ColumnName="INDEX_UNIT_ID" />
+          <ScalarProperty Name="INDEX_UNIT_NAME" ColumnName="INDEX_UNIT_NAME" />
+          <ScalarProperty Name="INDEX_DISPOSITION" ColumnName="INDEX_DISPOSITION" />
+          <ScalarProperty Name="INDEX_HOSP_SERVICE" ColumnName="INDEX_HOSP_SERVICE" />
+          <ScalarProperty Name="INDEX_LOS" ColumnName="INDEX_LOS" />
+          <ScalarProperty Name="INDEX_PAYER" ColumnName="INDEX_PAYER" />
+          <ScalarProperty Name="INDEX_PRIMARY_DX_ID" ColumnName="INDEX_PRIMARY_DX_ID" />
+          <ScalarProperty Name="INDEX_PRIMARY_DX" ColumnName="INDEX_PRIMARY_DX" />
+          <ScalarProperty Name="INDEX_TEAM" ColumnName="INDEX_TEAM" />
+          <ScalarProperty Name="INDEX_HSP_ACCOUNT_ID" ColumnName="INDEX_HSP_ACCOUNT_ID" />
+          <ScalarProperty Name="READMIT_CSN" ColumnName="READMIT_CSN" />
+          <ScalarProperty Name="READMIT_DATE" ColumnName="READMIT_DATE" />
+          <ScalarProperty Name="READMIT_DAYS_POST" ColumnName="READMIT_DAYS_POST" />
+          <ScalarProperty Name="READMIT_ADMITTING_PROV_ID" ColumnName="READMIT_ADMITTING_PROV_ID" />
+          <ScalarProperty Name="READMIT_ADMITTING_PROV_NAME" ColumnName="READMIT_ADMITTING_PROV_NAME" />
+          <ScalarProperty Name="READMIT_DISCHARGE_PROV_ID" ColumnName="READMIT_DISCHARGE_PROV_ID" />
+          <ScalarProperty Name="READMIT_DISCHARGE_PROV_NAME" ColumnName="READMIT_DISCHARGE_PROV_NAME" />
+          <ScalarProperty Name="READMIT_DISCHARGE_DATE" ColumnName="READMIT_DISCHARGE_DATE" />
+          <ScalarProperty Name="READMIT_PRIMARY_DX_ID" ColumnName="READMIT_PRIMARY_DX_ID" />
+          <ScalarProperty Name="READMIT_PRIMARY_DX" ColumnName="READMIT_PRIMARY_DX" />
+          <ScalarProperty Name="READMIT_HOSP_SERVICE" ColumnName="READMIT_HOSP_SERVICE" />
+          <ScalarProperty Name="READMIT_LOS" ColumnName="READMIT_LOS" />
+          <ScalarProperty Name="READMIT_UNIT_ID" ColumnName="READMIT_UNIT_ID" />
+          <ScalarProperty Name="READMIT_UNIT_NAME" ColumnName="READMIT_UNIT_NAME" />
+          <ScalarProperty Name="READMIT_TEAM" ColumnName="READMIT_TEAM" />
+          <ScalarProperty Name="READMIT_HSP_ACCOUNT_ID" ColumnName="READMIT_HSP_ACCOUNT_ID" />
+          <ScalarProperty Name="INCLUSION_RULE" ColumnName="INCLUSION_RULE" />
+          <ScalarProperty Name="DATE_CREATED" ColumnName="DATE_CREATED" />
+          <ScalarProperty Name="DATE_MODIFIED" ColumnName="DATE_MODIFIED" />
+          <ScalarProperty Name="DATE_COMPLETE" ColumnName="DATE_COMPLETE" />
+          <ScalarProperty Name="DATE_COMPLETE_INITIAL" ColumnName="DATE_COMPLETE_INITIAL" />
+          <ScalarProperty Name="FORMTYPE_ID" ColumnName="FORMTYPE_ID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="AssignUserUnit" FunctionName="PHOModel.Store.AssignUserUnit" />
+    <FunctionImportMapping FunctionImportName="CreateUser" FunctionName="PHOModel.Store.CreateUser" />
+    <FunctionImportMapping FunctionImportName="DeleteCheckboxListResponses" FunctionName="PHOModel.Store.DeleteCheckboxListResponses" />
+    <FunctionImportMapping FunctionImportName="dt_addtosourcecontrol" FunctionName="PHOModel.Store.dt_addtosourcecontrol" />
+    <FunctionImportMapping FunctionImportName="dt_addtosourcecontrol_u" FunctionName="PHOModel.Store.dt_addtosourcecontrol_u" />
+    <FunctionImportMapping FunctionImportName="dt_adduserobject" FunctionName="PHOModel.Store.dt_adduserobject" />
+    <FunctionImportMapping FunctionImportName="dt_adduserobject_vcs" FunctionName="PHOModel.Store.dt_adduserobject_vcs" />
+    <FunctionImportMapping FunctionImportName="dt_checkinobject" FunctionName="PHOModel.Store.dt_checkinobject" />
+    <FunctionImportMapping FunctionImportName="dt_checkinobject_u" FunctionName="PHOModel.Store.dt_checkinobject_u" />
+    <FunctionImportMapping FunctionImportName="dt_checkoutobject" FunctionName="PHOModel.Store.dt_checkoutobject" />
+    <FunctionImportMapping FunctionImportName="dt_checkoutobject_u" FunctionName="PHOModel.Store.dt_checkoutobject_u" />
+    <FunctionImportMapping FunctionImportName="dt_displayoaerror" FunctionName="PHOModel.Store.dt_displayoaerror" />
+    <FunctionImportMapping FunctionImportName="dt_displayoaerror_u" FunctionName="PHOModel.Store.dt_displayoaerror_u" />
+    <FunctionImportMapping FunctionImportName="dt_droppropertiesbyid" FunctionName="PHOModel.Store.dt_droppropertiesbyid" />
+    <FunctionImportMapping FunctionImportName="dt_dropuserobjectbyid" FunctionName="PHOModel.Store.dt_dropuserobjectbyid" />
+    <FunctionImportMapping FunctionImportName="dt_generateansiname" FunctionName="PHOModel.Store.dt_generateansiname" />
+    <FunctionImportMapping FunctionImportName="dt_getobjwithprop" FunctionName="PHOModel.Store.dt_getobjwithprop" />
+    <FunctionImportMapping FunctionImportName="dt_getobjwithprop_u" FunctionName="PHOModel.Store.dt_getobjwithprop_u" />
+    <FunctionImportMapping FunctionImportName="dt_getpropertiesbyid" FunctionName="PHOModel.Store.dt_getpropertiesbyid">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="PHOModel.dt_getpropertiesbyid_Result">
+          <ScalarProperty Name="property" ColumnName="property" />
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="value" ColumnName="value" />
+          <ScalarProperty Name="lvalue" ColumnName="lvalue" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="dt_getpropertiesbyid_u" FunctionName="PHOModel.Store.dt_getpropertiesbyid_u">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="PHOModel.dt_getpropertiesbyid_u_Result">
+          <ScalarProperty Name="property" ColumnName="property" />
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="uvalue" ColumnName="uvalue" />
+          <ScalarProperty Name="lvalue" ColumnName="lvalue" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="dt_getpropertiesbyid_vcs" FunctionName="PHOModel.Store.dt_getpropertiesbyid_vcs" />
+    <FunctionImportMapping FunctionImportName="dt_getpropertiesbyid_vcs_u" FunctionName="PHOModel.Store.dt_getpropertiesbyid_vcs_u" />
+    <FunctionImportMapping FunctionImportName="dt_isundersourcecontrol" FunctionName="PHOModel.Store.dt_isundersourcecontrol" />
+    <FunctionImportMapping FunctionImportName="dt_isundersourcecontrol_u" FunctionName="PHOModel.Store.dt_isundersourcecontrol_u" />
+    <FunctionImportMapping FunctionImportName="dt_removefromsourcecontrol" FunctionName="PHOModel.Store.dt_removefromsourcecontrol" />
+    <FunctionImportMapping FunctionImportName="dt_setpropertybyid" FunctionName="PHOModel.Store.dt_setpropertybyid" />
+    <FunctionImportMapping FunctionImportName="dt_setpropertybyid_u" FunctionName="PHOModel.Store.dt_setpropertybyid_u" />
+    <FunctionImportMapping FunctionImportName="dt_validateloginparams" FunctionName="PHOModel.Store.dt_validateloginparams" />
+    <FunctionImportMapping FunctionImportName="dt_validateloginparams_u" FunctionName="PHOModel.Store.dt_validateloginparams_u" />
+    <FunctionImportMapping FunctionImportName="dt_vcsenabled" FunctionName="PHOModel.Store.dt_vcsenabled" />
+    <FunctionImportMapping FunctionImportName="dt_verstamp006" FunctionName="PHOModel.Store.dt_verstamp006" />
+    <FunctionImportMapping FunctionImportName="dt_verstamp007" FunctionName="PHOModel.Store.dt_verstamp007" />
+    <FunctionImportMapping FunctionImportName="dt_whocheckedout" FunctionName="PHOModel.Store.dt_whocheckedout" />
+    <FunctionImportMapping FunctionImportName="dt_whocheckedout_u" FunctionName="PHOModel.Store.dt_whocheckedout_u" />
+    <FunctionImportMapping FunctionImportName="EnterAuditLog" FunctionName="PHOModel.Store.EnterAuditLog" />
+    <FunctionImportMapping FunctionImportName="EnterErrorLog" FunctionName="PHOModel.Store.EnterErrorLog" />
+    <FunctionImportMapping FunctionImportName="GetActiveUsers" FunctionName="PHOModel.Store.GetActiveUsers" />
+    <FunctionImportMapping FunctionImportName="GetCategoryDescription" FunctionName="PHOModel.Store.GetCategoryDescription">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="PHOModel.GetCategoryDescription_Result">
+          <ScalarProperty Name="AnswerOption_ID" ColumnName="AnswerOption_ID" />
+          <ScalarProperty Name="Long_Desc" ColumnName="Long_Desc" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetColumnMappingDetails" FunctionName="PHOModel.Store.GetColumnMappingDetails">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="PHOModel.GetColumnMappingDetails_Result">
+          <ScalarProperty Name="FormColumnDisplayName" ColumnName="FormColumnDisplayName" />
+          <ScalarProperty Name="MappingColumnName" ColumnName="MappingColumnName" />
+          <ScalarProperty Name="IsEmailSubject" ColumnName="IsEmailSubject" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetDirectorView" FunctionName="PHOModel.Store.GetDirectorView" />
+    <FunctionImportMapping FunctionImportName="GetDivisionDirectorDetails" FunctionName="PHOModel.Store.GetDivisionDirectorDetails">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="PHOModel.GetDivisionDirectorDetails_Result">
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Division" ColumnName="Division" />
+          <ScalarProperty Name="RoleAssignment" ColumnName="RoleAssignment" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetEventPrepopulatedDetails" FunctionName="PHOModel.Store.GetEventPrepopulatedDetails" />
+    <FunctionImportMapping FunctionImportName="GetEvents" FunctionName="PHOModel.Store.GetEvents" />
+    <FunctionImportMapping FunctionImportName="GetEventSubmissionDetails" FunctionName="PHOModel.Store.GetEventSubmissionDetails" />
+    <FunctionImportMapping FunctionImportName="GetFlaggedEvents" FunctionName="PHOModel.Store.GetFlaggedEvents" />
+    <FunctionImportMapping FunctionImportName="GetFormTypeDetails" FunctionName="PHOModel.Store.GetFormTypeDetails">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="PHOModel.GetFormTypeDetails_Result">
+          <ScalarProperty Name="FormType_ID" ColumnName="FormType_ID" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Date_Created" ColumnName="Date_Created" />
+          <ScalarProperty Name="Date_Modified" ColumnName="Date_Modified" />
+          <ScalarProperty Name="SecurityType" ColumnName="SecurityType" />
+          <ScalarProperty Name="PreloadedTableName" ColumnName="PreloadedTableName" />
+          <ScalarProperty Name="FilterationColumn" ColumnName="FilterationColumn" />
+          <ScalarProperty Name="ColumnsToDisplay" ColumnName="ColumnsToDisplay" />
+          <ScalarProperty Name="ToolTipDescription" ColumnName="ToolTipDescription" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetFormTypeDetailsGridviewColumns" FunctionName="PHOModel.Store.GetFormTypeDetailsGridviewColumns">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="PHOModel.GetFormTypeDetailsGridviewColumns_Result">
+          <ScalarProperty Name="MappingColumnName" ColumnName="MappingColumnName" />
+          <ScalarProperty Name="FormTypeGridViewColumnType" ColumnName="FormTypeGridViewColumnType" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetFormTypesForUser" FunctionName="PHOModel.Store.GetFormTypesForUser" />
+    <FunctionImportMapping FunctionImportName="GetHospitalServiceDetails" FunctionName="PHOModel.Store.GetHospitalServiceDetails" />
+    <FunctionImportMapping FunctionImportName="GetMetaData" FunctionName="PHOModel.Store.GetMetaData" />
+    <FunctionImportMapping FunctionImportName="GetPrepopulatedSections" FunctionName="PHOModel.Store.GetPrepopulatedSections">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="PHOModel.GetPrepopulatedSections_Result">
+          <ScalarProperty Name="FieldText" ColumnName="FieldText" />
+          <ScalarProperty Name="MetaDataFormTypeID" ColumnName="MetaDataFormTypeID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetQuestionOptions" FunctionName="PHOModel.Store.GetQuestionOptions" />
+    <FunctionImportMapping FunctionImportName="GetQuestions" FunctionName="PHOModel.Store.GetQuestions" />
+    <FunctionImportMapping FunctionImportName="GetReadmissiondays" FunctionName="PHOModel.Store.GetReadmissiondays" />
+    <FunctionImportMapping FunctionImportName="GetReadmissionReviewStatus" FunctionName="PHOModel.Store.GetReadmissionReviewStatus" />
+    <FunctionImportMapping FunctionImportName="GetResponseAnswers" FunctionName="PHOModel.Store.GetResponseAnswers" />
+    <FunctionImportMapping FunctionImportName="GetSearchDetails" FunctionName="PHOModel.Store.GetSearchDetails" />
+    <FunctionImportMapping FunctionImportName="GetSections" FunctionName="PHOModel.Store.GetSections" />
+    <FunctionImportMapping FunctionImportName="GetSurgeryYears" FunctionName="PHOModel.Store.GetSurgeryYears" />
+    <FunctionImportMapping FunctionImportName="GetUnitsDetails" FunctionName="PHOModel.Store.GetUnitsDetails" />
+    <FunctionImportMapping FunctionImportName="GetUserInformation" FunctionName="PHOModel.Store.GetUserInformation">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="PHOModel.GetUserInformation_Result">
+          <ScalarProperty Name="Network_ID" ColumnName="Network ID" />
+          <ScalarProperty Name="Full_Name" ColumnName="Full Name" />
+          <ScalarProperty Name="Email_Address" ColumnName="Email Address" />
+          <ScalarProperty Name="Role" ColumnName="Role" />
+          <ScalarProperty Name="Active_Status" ColumnName="Active Status" />
+          <ScalarProperty Name="Date_Created" ColumnName="Date_Created" />
+          <ScalarProperty Name="Date_Modified" ColumnName="Date_Modified" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetUserRole" FunctionName="PHOModel.Store.GetUserRole" />
+    <FunctionImportMapping FunctionImportName="InsertFlaggedEvents" FunctionName="PHOModel.Store.InsertFlaggedEvents" />
+    <FunctionImportMapping FunctionImportName="InsertResponses" FunctionName="PHOModel.Store.InsertResponses" />
+    <FunctionImportMapping FunctionImportName="ReassignUnit" FunctionName="PHOModel.Store.ReassignUnit" />
+    <FunctionImportMapping FunctionImportName="UpdateReadmissionStatus" FunctionName="PHOModel.Store.UpdateReadmissionStatus" />
+    <FunctionImportMapping FunctionImportName="UpdateResponses" FunctionName="PHOModel.Store.UpdateResponses" />
+    <FunctionImportMapping FunctionImportName="UpdateUserDetails" FunctionName="PHOModel.Store.UpdateUserDetails" />
+    <FunctionImportMapping FunctionImportName="usp_ReadmitEventReviewApp_Load" FunctionName="PHOModel.Store.usp_ReadmitEventReviewApp_Load" />
+    <FunctionImportMapping FunctionImportName="ValidateUser" FunctionName="PHOModel.Store.ValidateUser">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="PHOModel.ValidateUser_Result">
+          <ScalarProperty Name="UserFormTypeID" ColumnName="UserFormTypeID" />
+          <ScalarProperty Name="User_ID" ColumnName="User_ID" />
+          <ScalarProperty Name="FormType_ID" ColumnName="FormType_ID" />
+          <ScalarProperty Name="Date_Created" ColumnName="Date_Created" />
+          <ScalarProperty Name="Date_Modified" ColumnName="Date_Modified" />
+          <ScalarProperty Name="UserRole_ID" ColumnName="UserRole_ID" />
+          <ScalarProperty Name="Flag_Active" ColumnName="Flag_Active" />
+          <ScalarProperty Name="User_ID1" ColumnName="User_ID1" />
+          <ScalarProperty Name="User_Name" ColumnName="User_Name" />
+          <ScalarProperty Name="Date_Created1" ColumnName="Date_Created1" />
+          <ScalarProperty Name="Date_Modified1" ColumnName="Date_Modified1" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+  </EntityContainerMapping>
+</Mapping>
