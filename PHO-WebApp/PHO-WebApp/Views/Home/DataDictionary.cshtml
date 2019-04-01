@@ -7,6 +7,7 @@
 <h2>Data Dictionary</h2>
 
 <h2>List of Data Dictionary Records</h2>
+
 <table id="dtBasicExample" class="table table-responsive table-hover table-bordered table-sm">	
 	<thead class="black white-text">
 		<tr>
@@ -25,11 +26,29 @@
 		</tr>
 	</thead>
 	<tbody class="table-striped ">
+        @using (Html.BeginForm())
+        {
+            <tr>
+                <td>Filter</td>
+                <td>@Html.DropDownList("DatabaseName", ViewBag.DatabaseNameOptions as List<SelectListItem>)</td>
+                <td>@Html.TextBox("SchemaName")</td>
+                <td>@Html.TextBox("ObjectName")</td>
+                <td>@Html.TextBox("ObjectType")</td>
+                <td>@Html.TextBox("ColumnName")</td>
+                <td>@Html.TextBox("SQLColumnDescription")</td>
+                <td>@Html.DropDownList("IsNullable", ViewBag.IsNullableOptions as List<SelectListItem>)</td>
+                <td>@Html.TextBox("DataType")</td>
+                <td>@Html.DropDownList("PHIFlag", ViewBag.PHIOptions as List<SelectListItem>)</td>
+                <td>@Html.TextBox("BusinessDefinition")</td>
+                <td><input type="submit" value="Filter" /></td>
+            </tr>
+        }
+
 		@{
 			foreach (System.Data.DataRow dr in ViewBag.DataDictionary.Rows)
 			{
 				<tr>
-					if (dr["skDataDictionary"] == ViewBag.SelectedID)
+					@if (dr["skDataDictionary"] == ViewBag.SelectedID)
 					{
 						<td>@dr["skDataDictionary"]</td>
 						<td>@dr["DatabaseName"]</td>
