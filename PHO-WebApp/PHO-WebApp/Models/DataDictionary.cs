@@ -5,6 +5,9 @@ using System.Web;
 
 namespace PHO_WebApp.Models
 {
+    using System;
+    using System.Collections.Generic;
+
     public class DataDictionary
     {
         public int skDataDictionary { get; set; }
