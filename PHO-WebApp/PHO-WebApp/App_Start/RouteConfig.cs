@@ -25,6 +25,12 @@ namespace PHO_WebApp
                defaults: new { controller = "Patient", action = "GetPatients", id = UrlParameter.Optional }
            );
 
+            routes.MapRoute(
+               name: "DataDictionary",
+               url: "DataDictionary",
+               defaults: new { controller = "Home", action = "DataDictionary", }
+           );
+
         }
     }
 }
