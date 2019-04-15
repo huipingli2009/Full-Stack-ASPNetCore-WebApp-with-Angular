@@ -110,6 +110,7 @@
 			}
 		</tbody>
 	</table>
+	<script type="text/javascript" src="http://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"></script>
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 	<script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
 	<script type="text/javascript">
@@ -117,6 +118,22 @@
 		$(document).ready(function () {
 			// Handler for .ready() called.
 			var str;
+
+			//$("tblDataDictionary").Datatable({
+			//	"fnInitComplete": function (oSettings, json) {
+			//		addSearchControls(json);
+			//	}
+
+			//});
+			////add serch controls at the top
+			//function addSearchControls(json) {
+			//	$('#tblDataDictionary thead').append('#tblDataDictionary thead tr:first').clone();
+			//	$('#tblDataDictionary thead tr:eq(1) th').each(function (index) {
+			//		$(this).replaceWith('<th><input type="text" placeholder="Search  ' + $(this).html.text() + '" </input></th>');
+			//		var searchControl = $("#tblDataDictionary thead tr:eq(1) th:eq("+ index + ") input");
+			//	});
+
+			//}
 			$('[Class="Edit"]').click(function () {
 				//$("#PHIFlagId").hide();
 				//$("#selPHIFlag").show();
