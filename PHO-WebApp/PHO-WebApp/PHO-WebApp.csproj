@@ -161,6 +161,7 @@
     </Compile>
     <Compile Include="Models\DataDictionary.cs" />
     <Compile Include="Models\Patient.cs" />
+    <Compile Include="Models\UserDetails.cs" />
     <Compile Include="Patient.cs">
       <DependentUpon>PersonModel.tt</DependentUpon>
     </Compile>
@@ -245,12 +246,12 @@
     <Content Include="Views\Home\Staff.cshtml" />
     <Content Include="Views\Home\Initiative.cshtml" />
     <Content Include="Views\Home\Content.cshtml" />
-    <Content Include="Views\Login\Login.cshtml" />
     <Content Include="Views\Person\Patients.cshtml" />
     <Content Include="Views\Patient\AddPatient.cshtml" />
     <Content Include="Views\Patient\UpdatePatient.cshtml" />
     <Content Include="Views\Patient\GetPatients.cshtml" />
     <Content Include="Views\Home\DataDictionary.cshtml" />
+    <Content Include="Views\Login\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
