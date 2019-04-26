@@ -28,7 +28,8 @@ namespace PHO_WebApp.Controllers
 
         public ActionResult Security()
         {
-            return View("Security");
+            //return View("Security");
+            return RedirectToAction("Login", "Login");
         }
 
         public ActionResult Patient()
@@ -128,9 +129,13 @@ namespace PHO_WebApp.Controllers
             //DataSet dsNew = records.RefreshDataDictionary();
             records.RefreshDataDictionary();
             DataSet ds = records.GetDataDictionaryRecords();
-            ViewBag.DataDictionary = ds.Tables[0];
+            ViewBag.DataDictionary = ds.Tables[0];            
 
-            return View("DataDictionary");           
+            //Response.Redirect(Url.Action("DataDictionary", "HomeController"));
+            //return View("");
+
+            return View("DataDictionary");
+
         }
     }
 }

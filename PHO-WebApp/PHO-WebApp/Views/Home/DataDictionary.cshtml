@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
 	ViewBag.Title = "Data Dictionary";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -8,16 +9,18 @@
 	<title>Data Dictionary</title>
 </head>
 <body>
-	<h2>Data Dictionary</h2>
-	@Html.ActionLink("Update Data Dictionary", "DataDictionaryUpdate", "HomeController", new { @class = "btn btn-primary" })
-	<div class="form-group pull-right">
-		<h2>Live Search and Filter</h2>
-		<input text="" class="form-control search" />
+	<h2>List of Data Dictionary Records</h2>
+	<div style="">
+		@Html.ActionLink("Refresh Metadata", "DataDictionaryUpdate", "HomeController", new { @class = "btn btn-primary" })
 	</div>
 
-	<h2>List of Data Dictionary Records</h2>
+	@*<h2>List of Data Dictionary Records</h2>*@
+	<div class="form-group pull-left" style="float:right">
+		<h3>Live Search</h3>
+		<input text="" class="form-control search" />
+	</div>
 	<table id="tblDataDictionary" class="table table-sm table-responsive table-condensed table-hover table-bordered table-striped">
-		@*<table id="tblDataDictionary" class="table">*@
+
 
 		<thead class="black white-text">
 			<tr class="d-flex">
@@ -36,12 +39,26 @@
 			</tr>
 		</thead>
 		<tbody class="table-striped table-bordered table-hover table-sm table-condensed">
-			@{
-				foreach (System.Data.DataRow dr in ViewBag.DataDictionary.Rows)
+			@using (Html.BeginForm())
+			{
+				<tr>
+					<td>Filter</td>
+					<td>@Html.DropDownList("DatabaseName", ViewBag.DatabaseNameOptions as List<SelectListItem>)</td>
+					<td>@Html.TextBox("SchemaName")</td>
+					<td>@Html.TextBox("ObjectName")</td>
+					<td>@Html.TextBox("ObjectType")</td>
+					<td>@Html.TextBox("ColumnName")</td>
+					<td>@Html.TextBox("SQLColumnDescription")</td>
+					<td>@Html.DropDownList("IsNullable", ViewBag.IsNullableOptions as List<SelectListItem>)</td>
+					<td>@Html.TextBox("DataType")</td>
+					<td>@Html.DropDownList("PHIFlag", ViewBag.PHIOptions as List<SelectListItem>)</td>
+					<td>@Html.TextBox("BusinessDefinition")</td>
+					<td><input type="submit" value="Filter" /></td>
+				</tr>
+			}
+			@{ foreach (System.Data.DataRow dr in ViewBag.DataDictionary.Rows)
 				{
-					@*== ViewBag.SelectedID)*@
 					<tr>
-
 						<td class="skDataDictionary">
 							<span>@dr["skDataDictionary"]</span>
 						</td>
@@ -110,7 +127,6 @@
 			}
 		</tbody>
 	</table>
-	<script type="text/javascript" src="http://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"></script>
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 	<script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
 	<script type="text/javascript">
@@ -118,22 +134,6 @@
 		$(document).ready(function () {
 			// Handler for .ready() called.
 			var str;
-
-			//$("tblDataDictionary").Datatable({
-			//	"fnInitComplete": function (oSettings, json) {
-			//		addSearchControls(json);
-			//	}
-
-			//});
-			////add serch controls at the top
-			//function addSearchControls(json) {
-			//	$('#tblDataDictionary thead').append('#tblDataDictionary thead tr:first').clone();
-			//	$('#tblDataDictionary thead tr:eq(1) th').each(function (index) {
-			//		$(this).replaceWith('<th><input type="text" placeholder="Search  ' + $(this).html.text() + '" </input></th>');
-			//		var searchControl = $("#tblDataDictionary thead tr:eq(1) th:eq("+ index + ") input");
-			//	});
-
-			//}
 			$('[Class="Edit"]').click(function () {
 				//$("#PHIFlagId").hide();
 				//$("#selPHIFlag").show();
@@ -264,47 +264,41 @@
 			});
 		});
 
+				//$(function () {
+				//	//Remove the dummy row if data present.
+				//	if ($("#tblDataDictionary tr").length > 2) {
+				//		$("#tblDataDictionary tr:eq(1)").remove();
+				//	} else {
+				//		var row = $("#tblDataDictionary tr:last-child");
+				//		row.find(".Edit").hide();
 
-			//$(function () {
-			//	//Remove the dummy row if data present.
-			//	if ($("#tblDataDictionary tr").length > 2) {
-			//		$("#tblDataDictionary tr:eq(1)").remove();
-			//	} else {
-			//		var row = $("#tblDataDictionary tr:last-child");
-			//		row.find(".Edit").hide();
+				//		row.find("span").html('&nbsp;');
+				//	}
+				//});
+				////function AppendRow(row, skDataDictionary, DatabaseName, SchemaName) {
+				////	//Bind CustomerId.
+				////	$(".skDataDictionary", row).find("span").html(skDataDictionary);
 
-			//		row.find("span").html('&nbsp;');
-			//	}
-			//});
-			////function AppendRow(row, skDataDictionary, DatabaseName, SchemaName) {
-			////	//Bind CustomerId.
-			////	$(".skDataDictionary", row).find("span").html(skDataDictionary);
+				////	//Bind Name.
+				////	$(".DatabaseName", row).find("span").html(DatabaseName);
+				////	$(".DatabaseName", row).find("input").val(DatabaseName);
 
-			////	//Bind Name.
-			////	$(".DatabaseName", row).find("span").html(DatabaseName);
-			////	$(".DatabaseName", row).find("input").val(DatabaseName);
+				////	//Bind Country.
+				////	$(".SchemaName", row).find("span").html(SchemaName);
+				////	$(".SchemaName", row).find("input").val(SchemaName);
 
-			////	//Bind Country.
-			////	$(".SchemaName", row).find("span").html(SchemaName);
-			////	$(".SchemaName", row).find("input").val(SchemaName);
+				////	//Bind Country.
+				////	$(".ObjectName", row).find("span").html(ObjectName);
+				////	$(".ObjectName", row).find("input").val(ObjectName);
 
-			////	//Bind Country.
-			////	$(".ObjectName", row).find("span").html(ObjectName);
-			////	$(".ObjectName", row).find("input").val(ObjectName);
+				////	//Bind Country.
+				////	$(".ObjectType", row).find("span").html(ObjectType);
+				////	$(".ObjectType", row).find("input").val(ObjectType);
 
-			////	//Bind Country.
-			////	$(".ObjectType", row).find("span").html(ObjectType);
-			////	$(".ObjectType", row).find("input").val(ObjectType);
-
-			////	row.find(".Edit").show();
-			////	$("#tblDataDictionary").append(row);
-			////};
+				////	row.find(".Edit").show();
+				////	$("#tblDataDictionary").append(row);
+				////};
 
 	</script>
 </body>
 </html>
-
-
-
-
-
