@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using PHO_WebApp.DataAccessLayer;
 using System.Data;
+using PHO_WebApp.Models;
 //using PHO_WebApp.Models;
 
 
@@ -12,7 +13,21 @@ namespace PHO_WebApp.Controllers
 {
     public class HomeController : Controller
     {
-        DataAccessLayer.DataDictionary records = new DataDictionary();
+        Models.UserDetails user = null;
+        DataAccessLayer.DataDictionary records = new DataAccessLayer.DataDictionary();
+
+        public bool IsLoggedIn()
+        {
+            bool returnValue = false;
+
+            if (Session["UserDetails"] != null)
+            {
+                returnValue = true;
+            }
+
+            return returnValue;
+        }
+
         public ActionResult Index()
         {
             return View();
@@ -132,5 +147,17 @@ namespace PHO_WebApp.Controllers
 
             return View("DataDictionary");           
         }
+
+        public ActionResult LoggedInAs()
+        {
+            if (Session["UserDetails"] != null)
+            {
+                this.user = (Models.UserDetails)Session["UserDetails"];
+            }
+            ViewBag.UserName = this.user.UserName;
+                
+            return LoggedInAs();
+        }
+        
     }
 }
