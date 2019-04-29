@@ -9,7 +9,10 @@ namespace PHO_WebApp.Models
 {
     public class UserDetails
     {
+        public int Id { get; set; } //Id in [PHO].[reg].[Login]
+
         public int PersonId { get; set; } //PersonId in [PHO].[reg].[Login], similar to user id
+        
 
         [Required(ErrorMessage = "User name is required.")]
         public string UserName { get; set; }

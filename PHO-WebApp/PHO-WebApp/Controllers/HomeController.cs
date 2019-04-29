@@ -30,7 +30,7 @@ namespace PHO_WebApp.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            return View("Index");
         }
         public ActionResult About()
         {
@@ -163,6 +163,11 @@ namespace PHO_WebApp.Controllers
                 
             return LoggedInAs();
         }
-        
+
+        public ActionResult Login()
+        {
+            return RedirectToAction("Index", "Home");
+        }
+
     }
 }

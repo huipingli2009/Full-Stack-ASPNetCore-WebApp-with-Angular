@@ -14,8 +14,10 @@ namespace PHO_WebApp.DataAccessLayer
     {
         SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["con"].ConnectionString);
 
-        public int GetUserLogin(string username, string password)
+        public int? GetUserLogin(string username, string password)
         {
+            int? returnValue = null;
+
             SqlCommand com = new SqlCommand("spGetActiveLogin", con);
             com.CommandType = CommandType.StoredProcedure;
 
@@ -32,14 +34,48 @@ namespace PHO_WebApp.DataAccessLayer
             //com.Parameters.AddWithValue("@Password", password);
 
             //Output Parameter
-            SqlParameter parameterUserId = new SqlParameter("@UserId", SqlDbType.Int, 4);
+            SqlParameter parameterUserId = new SqlParameter("@LoginId", SqlDbType.Int, 4);
             parameterUserId.Direction = System.Data.ParameterDirection.Output;
             com.Parameters.Add(parameterUserId);
 
             con.Open();
             com.ExecuteNonQuery();
             con.Close();
-            return int.Parse(parameterUserId.Value.ToString());            
+            if (parameterUserId != null)
+            {
+                returnValue = int.Parse(parameterUserId.Value.ToString());
+            }
+
+            return returnValue;
+        }
+
+        public UserDetails GetPersonLoginForLoginId(int loginId)
+        {
+            UserDetails returnObject = null;
+                        
+            SqlCommand com = new SqlCommand("spGetPersonLoginForLoginId", con);
+            com.CommandType = CommandType.StoredProcedure;
+
+            // Add Parameters to SPROC
+            SqlParameter parameterLoginId = new SqlParameter("@LoginId", SqlDbType.Int);
+            parameterLoginId.Value = loginId;
+            com.Parameters.Add(parameterLoginId);
+
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+
+            da.Fill(ds);
+
+            //Fill Model
+            if (ds != null && ds.Tables != null && ds.Tables.Count > 0 && ds.Tables[0].Rows != null)
+            {
+                returnObject = new UserDetails();
+                returnObject.Id = int.Parse(ds.Tables[0].Rows[0][0].ToString());
+                returnObject.PersonId = int.Parse(ds.Tables[0].Rows[0][1].ToString());
+                returnObject.UserName = ds.Tables[0].Rows[0][2].ToString();
+            }
+
+            return returnObject;
         }
 
     }
