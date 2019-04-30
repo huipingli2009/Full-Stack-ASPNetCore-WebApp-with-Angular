@@ -31,6 +31,14 @@ namespace PHO_WebApp
                defaults: new { controller = "Home", action = "DataDictionary", }
            );
 
+            routes.MapRoute(
+               name: "Home",
+               url: "Home",
+               defaults: new { controller = "Home", action = "Index", }
+           );
+
+
+
         }
     }
 }

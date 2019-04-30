@@ -289,9 +289,7 @@
     <Content Include="Views\Patient\AddPatient.cshtml" />
     <Content Include="Views\Patient\UpdatePatient.cshtml" />
     <Content Include="Views\Patient\GetPatients.cshtml" />
-    <Content Include="Views\Login\Login.cshtml" />
     <Content Include="Views\Home\DataDictionary.cshtml" />
-
     <Content Include="Views\Login\Login.cshtml" />
     <Content Include="Views\Shared\LoggedInAs.cshtml" />
     <Content Include="Scripts\umd\popper.min.js.map" />
@@ -303,6 +301,7 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="Views\Shared\LoginForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

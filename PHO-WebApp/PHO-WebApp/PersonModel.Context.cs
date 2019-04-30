@@ -26,5 +26,7 @@ namespace PHO_WebApp
         }
     
         public virtual DbSet<Patient> Patients { get; set; }
+
+        public System.Data.Entity.DbSet<PHO_WebApp.Models.UserDetails> UserDetails { get; set; }
     }
 }

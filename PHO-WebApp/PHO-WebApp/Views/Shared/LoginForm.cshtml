@@ -1,0 +1,67 @@
+﻿@model PHO_WebApp.Models.UserDetails
+
+<div id="login-div">
+    @if (Session["UserDetails"] == null)
+    {
+        using (Html.BeginForm("Login", "Login", FormMethod.Post))
+        {
+            <table>
+                <tr>
+                    <td></td>
+                    <td style="text-decoration:underline">PHO Member login</td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(model => model.UserName)</td>
+                    <td>@Html.EditorFor(model => model.UserName)</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        @Html.ValidationMessageFor(model => model.UserName)
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(model => model.Password)</td>
+                    <td>@Html.EditorFor(model => model.Password)</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>@Html.ValidationMessageFor(model => model.Password)</td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <label class="field-validation-error">@Html.DisplayFor(model => model.LoginError)</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="submit" name="Login" value="Submit" />
+                        <input type="reset" name="name" value="Clear" />
+                    </td>
+                </tr>
+            </table>
+        }
+    }
+    else
+    {
+        using (Html.BeginForm("Logout", "Login", FormMethod.Post))
+        {
+            <table>
+                <tr>
+                    <td style="text-decoration:underline">PHO Member login</td>
+                </tr>
+                <tr>
+                    <td>Logged in as: @Model.UserName</td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="submit" name="Logout" value="Logout" />
+                    </td>
+                </tr>
+            </table>
+        }
+    }
+
+</div>
+

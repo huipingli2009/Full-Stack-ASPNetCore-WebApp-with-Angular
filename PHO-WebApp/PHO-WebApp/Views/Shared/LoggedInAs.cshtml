@@ -1,13 +1,13 @@
 ﻿@model PHO_WebApp.Models.UserDetails
     @{
-        if (ViewBag.UserName != null)
+        if (Model != null && Model.UserName != null)
         {
-            string loginText = "Logged in as" + ViewBag.UserName + " Logout.";
-            <li>Logged in as: @ViewBag.UserName  @Html.ActionLink(loginText, "Logout", "LoginController")</li>
+            string loginText = "Logged in (" + Model.UserName + ") - Logout.";
+            <li>@Html.ActionLink(loginText, "Logout", "Login")</li>
         }
         else
         {
-            <li>@Html.ActionLink("Login", "LoginForm", "LoginController")</li>
+            <li>@Html.ActionLink("Login", "Index", "Home")</li>
         }
     }
 
