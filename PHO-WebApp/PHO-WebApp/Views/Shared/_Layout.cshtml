@@ -21,15 +21,22 @@
             <div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
 					<li>@Html.ActionLink("Home", "Index", "Home")</li>
-					<li>@Html.ActionLink("Security", "Security", "Home")</li>
-					<li>@Html.ActionLink("Patient", "Patient", "Home")</li>
-					<li>@Html.ActionLink("Staff", "Staff", "Home")</li>
-					<li>@Html.ActionLink("Population", "Population", "Home")</li>
-					<li>@Html.ActionLink("Initiative", "Initiative", "Home")</li>
-					<li>@Html.ActionLink("Content", "Content", "Home")</li>					
-					<li>@Html.ActionLink("Data Dictionary", "DataDictionary", "Home")</li>
+                    @{
+                        if (Session["UserDetails"] != null)
+                        {
+                            @*<li>@Html.ActionLink("Patient", "Patient", "Home")</li>
+                            <li>@Html.ActionLink("Staff", "Staff", "Home")</li>
+                            <li>@Html.ActionLink("Population", "Population", "Home")</li>
+                            <li>@Html.ActionLink("Initiative", "Initiative", "Home")</li>
+                            <li>@Html.ActionLink("Content", "Content", "Home")</li>*@
+                            <li>@Html.ActionLink("Data Dictionary", "DataDictionary", "Home")</li>
+                        }
+                    }
+			        @Html.Action("LoggedInAs", "Login");
+                    @*@Html.Partial("LoggedInAs")*@
 				</ul>
             </div>
+            
         </div>
     </div>
     <div class="container body-content">

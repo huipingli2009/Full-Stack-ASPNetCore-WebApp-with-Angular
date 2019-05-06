@@ -1,0 +1,13 @@
+﻿@model PHO_WebApp.Models.UserDetails
+    @{
+        if (Model != null && Model.UserName != null)
+        {
+            string loginText = "Logged in (" + Model.UserName + ") - Logout.";
+            <li>@Html.ActionLink(loginText, "Logout", "Login")</li>
+        }
+        else
+        {
+            <li>@Html.ActionLink("Login", "Index", "Home")</li>
+        }
+    }
+

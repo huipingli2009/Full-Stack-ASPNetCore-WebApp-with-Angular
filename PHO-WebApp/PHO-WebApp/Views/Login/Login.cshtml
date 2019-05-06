@@ -1,20 +1,73 @@
-﻿
+﻿@model  PHO_WebApp.Models.UserDetails
 @{
-    Layout = null;
+	Layout = null;
 }
 
 <!DOCTYPE html>
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Login</title>
+	<meta name="viewport" content="width=device-width" />
+	<title>Login</title>
+	<style>
+		#login-div {
+			position: absolute;
+			left: 40%;
+			top: 40%;
+			border: 1px solid #0026ff;
+			padding: 10px 10px;
+		}
+
+		.field-validation-error {
+			color: red;
+		}
+	</style>
 </head>
 <body>
-	<div>
-		Enter User Name: <input id="txtUserName" type="text" /></br>
-		Enter Password: <input id="txtPassword" type="text" /></br>
-		<input id="btnLogin" type="button" value="Submit" />
+	<div id="login-div">
+		@using (Html.BeginForm("Login", "Login", FormMethod.Post))
+		{
+			<table>
+				<tr>
+					<td></td>
+					<td style="text-decoration:underline">PHO Member login</td>
+				</tr>
+				<tr>
+					<td>@Html.LabelFor(model => model.UserName)</td>
+					<td>@Html.EditorFor(model => model.UserName)</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						@Html.ValidationMessageFor(model => model.UserName)
+					</td>
+				</tr>
+				<tr>
+					<td>@Html.LabelFor(model => model.Password)</td>
+					<td>@Html.EditorFor(model => model.Password)</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>@Html.ValidationMessageFor(model => model.Password)</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<label class="field-validation-error">@Html.DisplayFor(model => model.LoginError)</label>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<input type="submit" name="Login" value="Submit" />
+						<input type="reset" name="name" value="Clear" />
+					</td>
+				</tr>
+			</table>
+		}
 	</div>
+	@*<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+	<script src="~/Scripts/jquery.validate.min.js"></script>
+	<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>*@
 </body>
 </html>
+

@@ -1,17 +1,77 @@
-﻿using System;
+﻿using PHO_WebApp.DataAccessLayer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Data;
 
 namespace PHO_WebApp.Controllers
 {
     public class LoginController : Controller
     {
         // GET: Login
+
+        DataAccessLayer.LoginDAL userLogin = new LoginDAL();
+
         public ActionResult Login()
         {
+            if (Session["UserDetails"] != null)
+            {
+                return View("Login", (Models.UserDetails)Session["UserDetails"]);
+            }
+            else
+            {
+                return View("Login");
+            }
+        }
+        [HttpPost]
+        public ActionResult Login(FormCollection fc)
+        {
+            int? id = userLogin.GetUserLogin(fc["UserName"], fc["Password"]);
+           
+            if (id.HasValue && id.Value > 0)
+            {
+                Models.UserDetails userDetails = userLogin.GetPersonLoginForLoginId(id.Value);
+                Session["UserDetails"] = userDetails;
+                return RedirectToAction("Index", "Home", new { area = "Home" });
+            }
+            else
+            {
+                ViewData["message"] = "Login failed!";
+            }
+      
             return View();
+        }
+
+        public ActionResult Logout()
+        {
+            Session["UserDetails"] = null;
+            return RedirectToAction("Index", "Home");
+        }
+
+        [ChildActionOnly]
+        public ActionResult LoggedInAs()
+        {
+            if (Session["UserDetails"] != null)
+            {
+                return PartialView("LoggedInAs", (Models.UserDetails)Session["UserDetails"]);
+            }
+
+            return PartialView("LoggedInAs");
+        }
+
+        [ChildActionOnly]
+        public ActionResult LoginForm()
+        {
+            if (Session["UserDetails"] != null)
+            {
+                return PartialView("LoginForm", (Models.UserDetails)Session["UserDetails"]);
+            }
+            else
+            {
+                return PartialView("LoginForm");
+            }
         }
     }
 }

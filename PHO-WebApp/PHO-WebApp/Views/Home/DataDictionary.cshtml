@@ -1,19 +1,26 @@
-﻿@{
+﻿
+@{
 	ViewBag.Title = "Data Dictionary";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <html>
 <head>
 	<meta name="viewport" content="width=device-width" />
-	<title>Data Dictionary</title>	
+	<title>Data Dictionary</title>
 </head>
 <body>
-	<h2>Data Dictionary</h2>
-	@Html.ActionLink("Update Data Dictionary", "DataDictionaryUpdate", "HomeController", new { @class = "btn btn-primary" })
-
 	<h2>List of Data Dictionary Records</h2>
+	<div style="">
+		@Html.ActionLink("Refresh Metadata", "DataDictionaryUpdate", "HomeController", new { @class = "btn btn-primary" })
+	</div>
+
+	@*<h2>List of Data Dictionary Records</h2>*@
+	<div class="form-group pull-left" style="float:right">
+		<h3>Live Search</h3>
+		<input text="" class="form-control search" />
+	</div>
 	<table id="tblDataDictionary" class="table table-sm table-responsive table-condensed table-hover table-bordered table-striped">
-		@*<table id="tblDataDictionary" class="table">*@
+
 
 		<thead class="black white-text">
 			<tr class="d-flex">
@@ -32,12 +39,26 @@
 			</tr>
 		</thead>
 		<tbody class="table-striped table-bordered table-hover table-sm table-condensed">
-			@{
-				foreach (System.Data.DataRow dr in ViewBag.DataDictionary.Rows)
+			@using (Html.BeginForm())
+			{
+				<tr>
+					<td>Filter</td>
+					<td>@Html.DropDownList("DatabaseName", ViewBag.DatabaseNameOptions as List<SelectListItem>)</td>
+					<td>@Html.TextBox("SchemaName")</td>
+					<td>@Html.TextBox("ObjectName")</td>
+					<td>@Html.TextBox("ObjectType")</td>
+					<td>@Html.TextBox("ColumnName")</td>
+					<td>@Html.TextBox("SQLColumnDescription")</td>
+					<td>@Html.DropDownList("IsNullable", ViewBag.IsNullableOptions as List<SelectListItem>)</td>
+					<td>@Html.TextBox("DataType")</td>
+					<td>@Html.DropDownList("PHIFlag", ViewBag.PHIOptions as List<SelectListItem>)</td>
+					<td>@Html.TextBox("BusinessDefinition")</td>
+					<td><input type="submit" value="Filter" /></td>
+				</tr>
+			}
+			@{ foreach (System.Data.DataRow dr in ViewBag.DataDictionary.Rows)
 				{
-					@*== ViewBag.SelectedID)*@
 					<tr>
-
 						<td class="skDataDictionary">
 							<span>@dr["skDataDictionary"]</span>
 						</td>
@@ -85,12 +106,12 @@
 							<span id="PHIFlagId">@dr["PHIFlag"]</span>
 							@*<input type="text" value="@dr["ObjectType"]" />*@
 							@*<input type="text" id="txtPHIFlag" value="@dr["PHIFlag"]" style="display:none" />*@
-							<select id="selPHIFlag" name="selPHIFlag" hidden>								
+							<select id="selPHIFlag" name="selPHIFlag" hidden>
 								<option value="-1">-- please select --</option>
 								<option value="1">True</option>
 								<option value="0">False</option>
 							</select>
-						</td>					
+						</td>
 
 						<td class="BusinessDefinition">
 							<span>@dr["BusinessDefinition"]</span>
@@ -117,19 +138,19 @@
 				//$("#PHIFlagId").hide();
 				//$("#selPHIFlag").show();
 				var row = $(this).closest("tr");
-				
-				$("td", row).each(function () {	
+
+				$("td", row).each(function () {
 					//str = $(this).find(".PHIFlag").text();
 					if ($(this).find("input").length > 0) {
 						$(this).find("input").show();
 						$(this).find("span").hide();
 					}
 
-					if ($(this).find("select").length > 0) {						
+					if ($(this).find("select").length > 0) {
 						$(this).find("select").show();
 						//$(this).find("#PHIFlagId").show();
 						$(this).find("span").hide();
-					}				
+					}
 				});
 				row.find(".Update").show();
 				row.find(".Cancel").show();
@@ -138,16 +159,16 @@
 
 			//Update event handler.
 			$('[Class="Update"]').click(function () {
-				var row = $(this).closest("tr");				
-				$("td", row).each(function () {								
-					
+				var row = $(this).closest("tr");
+				$("td", row).each(function () {
+
 					//$("select option").hide();
 					if ($(this).find("input").length > 0) {
-						var span = $(this).find("span");						
+						var span = $(this).find("span");
 						var input = $(this).find("input");
 						span.html(input.val());
 						span.show();
-						input.hide();						
+						input.hide();
 					}
 
 					if ($(this).find("select").length > 0) {
@@ -155,23 +176,23 @@
 						var selectVal = $(this).find("select option:selected").text();
 						var select = $(this).find("select");
 						//check if user doesn't select true or false
-						if (selectVal.length > 6) {							
-							span.html();							
+						if (selectVal.length > 6) {
+							span.html();
 						}
 						else {
-							span.html(selectVal);							
+							span.html(selectVal);
 						}
-						//span.html(selectVal);	
+						//span.html(selectVal);
 						span.show();
 						//selectVal.hide();
 						select.hide();
 					}
-						////$("select option:selected").wrap('span');									
-					
+					////$("select option:selected").wrap('span');
+
 				});
 				row.find(".Edit").show();
 				row.find(".Cancel").hide();
-				
+
 				$(this).hide();
 				//$("#selPHIFlag").hide();
 
@@ -181,7 +202,7 @@
 				//dd.DatabaseName = row.find(".DatabaseName").find("span").html();
 				//dd/.SchemaName = row.find(".SchemaName").find("span").html();
 				//dd.ObjectName = row.find(".ObjectName").find("span").html();
-				//dd.ObjectType = row.find(".ObjectType").find("span").html();				
+				//dd.ObjectType = row.find(".ObjectType").find("span").html();
 				dd.PHIFlag = row.find(".PHIFlag").find("span").html();
 				dd.BusinessDefinition = row.find(".BusinessDefinition").find("span").html();
 
@@ -190,10 +211,10 @@
 					url: "/Home/UpdateDataDictionary",
 					data: '{dd:' + JSON.stringify(dd) + '}',
 					contentType: "application/json; charset=utf-8",
-					
-					dataType: "json"			
-					
-				});				
+
+					dataType: "json"
+
+				});
 			});
 
 			//Cancel event handler.
@@ -209,7 +230,7 @@
 						input.hide();
 					}
 
-					if ($(this).find("select").length > 0) {						
+					if ($(this).find("select").length > 0) {
 						var span = $(this).find("span");
 						var selectVal = $(this).find("select option:selected").text();
 						var select = $(this).find("select");
@@ -218,52 +239,66 @@
 						//selectVal.hide();
 						select.hide();
 					}
-					
+
 				});
 				row.find(".Edit").show();
 				row.find(".Update").hide();
 				$(this).hide();
 			});
-		});	
 
-		//$(function () {
-		//	//Remove the dummy row if data present.
-		//	if ($("#tblDataDictionary tr").length > 2) {
-		//		$("#tblDataDictionary tr:eq(1)").remove();
-		//	} else {
-		//		var row = $("#tblDataDictionary tr:last-child");
-		//		row.find(".Edit").hide();
+			//search and filter function
+			$('.search').on('keyup', function () {
+				var serachTerm = $(this).val().toLowerCase();
 
-		//		row.find("span").html('&nbsp;');
-		//	}
-		//});
-		////function AppendRow(row, skDataDictionary, DatabaseName, SchemaName) {
-		////	//Bind CustomerId.
-		////	$(".skDataDictionary", row).find("span").html(skDataDictionary);
+				$('#tblDataDictionary tbody tr').each(function () {
+					var str = $(this).text().toLowerCase();
 
-		////	//Bind Name.
-		////	$(".DatabaseName", row).find("span").html(DatabaseName);
-		////	$(".DatabaseName", row).find("input").val(DatabaseName);
+					if (str.indexOf(serachTerm) == -1) {
+						$(this).hide();
+					}
+					else {
+						$(this).show();
+					}
+				});
 
-		////	//Bind Country.
-		////	$(".SchemaName", row).find("span").html(SchemaName);
-		////	$(".SchemaName", row).find("input").val(SchemaName);
+			});
+		});
 
-		////	//Bind Country.
-		////	$(".ObjectName", row).find("span").html(ObjectName);
-		////	$(".ObjectName", row).find("input").val(ObjectName);
+				//$(function () {
+				//	//Remove the dummy row if data present.
+				//	if ($("#tblDataDictionary tr").length > 2) {
+				//		$("#tblDataDictionary tr:eq(1)").remove();
+				//	} else {
+				//		var row = $("#tblDataDictionary tr:last-child");
+				//		row.find(".Edit").hide();
 
-		////	//Bind Country.
-		////	$(".ObjectType", row).find("span").html(ObjectType);
-		////	$(".ObjectType", row).find("input").val(ObjectType);
+				//		row.find("span").html('&nbsp;');
+				//	}
+				//});
+				////function AppendRow(row, skDataDictionary, DatabaseName, SchemaName) {
+				////	//Bind CustomerId.
+				////	$(".skDataDictionary", row).find("span").html(skDataDictionary);
 
-		////	row.find(".Edit").show();
-		////	$("#tblDataDictionary").append(row);
-		////};
+				////	//Bind Name.
+				////	$(".DatabaseName", row).find("span").html(DatabaseName);
+				////	$(".DatabaseName", row).find("input").val(DatabaseName);
+
+				////	//Bind Country.
+				////	$(".SchemaName", row).find("span").html(SchemaName);
+				////	$(".SchemaName", row).find("input").val(SchemaName);
+
+				////	//Bind Country.
+				////	$(".ObjectName", row).find("span").html(ObjectName);
+				////	$(".ObjectName", row).find("input").val(ObjectName);
+
+				////	//Bind Country.
+				////	$(".ObjectType", row).find("span").html(ObjectType);
+				////	$(".ObjectType", row).find("input").val(ObjectType);
+
+				////	row.find(".Edit").show();
+				////	$("#tblDataDictionary").append(row);
+				////};
 
 	</script>
 </body>
 </html>
-
-
-
