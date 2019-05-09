@@ -73,13 +73,15 @@ namespace PHO_WebApp.Controllers
         {
             return View("Content");
         }
-        //public ActionResult DataDictionary()
+        //public ActionResult DataDictionaryAll()
         //{
         //    DataSet ds = records.GetDataDictionaryRecords();
         //    ViewBag.DataDictionary = ds.Tables[0];
 
+        //    //return View("DataDictionary");
+        //    Response.Redirect(Url.Action("DataDictionary", "HomeController"));
         //    return View("DataDictionary");
-        //}
+        //}   
 
         public ActionResult DataDictionary(string DatabaseName, string SchemaName, string ObjectName, string ObjectType, string ColumnName, string SQLColumnDescription, string IsNullable, string DataType, string PHIFlag, string BusinessDefiniton)
         {
@@ -144,13 +146,12 @@ namespace PHO_WebApp.Controllers
             //DataSet dsNew = records.RefreshDataDictionary();
             records.RefreshDataDictionary();
             DataSet ds = records.GetDataDictionaryRecords();
-            ViewBag.DataDictionary = ds.Tables[0];            
+            ViewBag.DataDictionary = ds.Tables[0];
 
-            //Response.Redirect(Url.Action("DataDictionary", "HomeController"));
-            //return View("");
+            Response.Redirect(Url.Action("DataDictionary", "Home"));
+            return View("");
 
-            return View("DataDictionary");
-
+            //return View("DataDictionary");
         }
 
         public ActionResult LoggedInAs()
