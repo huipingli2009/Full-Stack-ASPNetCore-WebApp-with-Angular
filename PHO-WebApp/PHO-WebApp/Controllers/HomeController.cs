@@ -73,30 +73,12 @@ namespace PHO_WebApp.Controllers
         {
             return View("Content");
         }
-        //public ActionResult DataDictionaryAll()
-        //{
-        //    DataSet ds = records.GetDataDictionaryRecords();
-        //    ViewBag.DataDictionary = ds.Tables[0];
 
-        //    //return View("DataDictionary");
-        //    Response.Redirect(Url.Action("DataDictionary", "HomeController"));
-        //    return View("DataDictionary");
-        //}   
 
-        public ActionResult DataDictionary(string DatabaseName, string SchemaName, string ObjectName, string ObjectType, string ColumnName, string SQLColumnDescription, string IsNullable, string DataType, string PHIFlag, string BusinessDefiniton)
+        public ActionResult DataDictionary()
         {
-            //Build PHI Flag
-            bool? bPHIFlag = null;
-            if (!string.IsNullOrWhiteSpace(PHIFlag))
-            {
-                if (PHIFlag == "1")
-                    bPHIFlag = true;
-                if (PHIFlag == "0")
-                    bPHIFlag = false;
-            }
-
             //Execute Query
-            DataSet ds = records.GetDataDictionaryRecordsWithSearchCriteria(DatabaseName, SchemaName, ObjectName, ObjectType, ColumnName, SQLColumnDescription, IsNullable, DataType, bPHIFlag, BusinessDefiniton);
+            DataSet ds = records.GetDataDictionaryRecords();
             ViewBag.DataDictionary = ds.Tables[0];
 
             //Build drop down lists

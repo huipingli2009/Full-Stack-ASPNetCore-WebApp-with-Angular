@@ -17,7 +17,7 @@
 	@*<h2>List of Data Dictionary Records</h2>*@
 	<div class="form-group pull-left" style="float:right">
 		<h3>Live Search</h3>
-		<input text="" class="form-control search" />
+		<input text="" class="form-control search" id="search" />
 	</div>
 	<table id="tblDataDictionary" class="table table-sm table-responsive table-condensed table-hover table-bordered table-striped">
 
@@ -41,24 +41,24 @@
 		<tbody class="table-striped table-bordered table-hover table-sm table-condensed">
 			@using (Html.BeginForm())
 			{
-				<tr>
+				<tr class="filterRow">
 					<td>Filter</td>
-					<td>@Html.DropDownList("DatabaseName", ViewBag.DatabaseNameOptions as List<SelectListItem>)</td>
-					<td>@Html.TextBox("SchemaName")</td>
-					<td>@Html.TextBox("ObjectName")</td>
-					<td>@Html.TextBox("ObjectType")</td>
-					<td>@Html.TextBox("ColumnName")</td>
-					<td>@Html.TextBox("SQLColumnDescription")</td>
-					<td>@Html.DropDownList("IsNullable", ViewBag.IsNullableOptions as List<SelectListItem>)</td>
-					<td>@Html.TextBox("DataType")</td>
-					<td>@Html.DropDownList("PHIFlag", ViewBag.PHIOptions as List<SelectListItem>)</td>
-					<td>@Html.TextBox("BusinessDefinition")</td>
-					<td><input type="submit" value="Filter" /></td>
+					<td>@Html.DropDownList("DatabaseName", ViewBag.DatabaseNameOptions as List<SelectListItem>, new { id = "DatabaseNameFilter", @class = "DatabaseNameFilter" })</td>
+					<td>@Html.TextBox("SchemaName", null, new { id = "SchemaNameFilter", @class="SchemaNameFilter"})</td>
+					<td>@Html.TextBox("ObjectName", null, new { id = "ObjectNameFilter", @class = "ObjectNameFilter" })</td>
+					<td>@Html.TextBox("ObjectType", null, new { id = "ObjectTypeFilter", @class = "ObjectTypeFilter" })</td>
+					<td>@Html.TextBox("ColumnName", null, new { id = "ColumnNameFilter", @class = "ColumnNameFilter" })</td>
+					<td>@Html.TextBox("SQLColumnDescription", null, new { id = "SQLColumnFilter", @class = "SQLColumnFilter" })</td>
+					<td>@Html.DropDownList("IsNullable", ViewBag.IsNullableOptions as List<SelectListItem>, new { id = "IsNullableFilter", @class = "IsNullableFilter" })</td>
+					<td>@Html.TextBox("DataType", null, new { id = "DataTypeFilter", @class = "DataTypeFilter" })</td>
+					<td>@Html.DropDownList("PHIFlag", ViewBag.PHIOptions as List<SelectListItem>, new { id = "PHIFlagFilter", @class = "PHIFlagFilter" })</td>
+					<td>@Html.TextBox("BusinessDefinition", null, new { id = "BusinessDefinitionFilter", @class = "BusinessDefinitionFilter" })</td>
+					<td></td>
 				</tr>
 			}
 			@{ foreach (System.Data.DataRow dr in ViewBag.DataDictionary.Rows)
 				{
-					<tr>
+					<tr class="contentRow">
 						<td class="skDataDictionary">
 							<span>@dr["skDataDictionary"]</span>
 						</td>
@@ -247,22 +247,126 @@
 			});
 
 			//search and filter function
-			$('.search').on('keyup', function () {
-				var serachTerm = $(this).val().toLowerCase();
+			//$('.search').on('keyup', function () {
+			//	var serachTerm = $(this).val().toLowerCase();
 
-				$('#tblDataDictionary tbody tr').each(function () {
-					var str = $(this).text().toLowerCase();
+			//	$('#tblDataDictionary tbody tr').each(function () {
+			//		var str = $(this).text().toLowerCase();
 
-					if (str.indexOf(serachTerm) == -1) {
-						$(this).hide();
-					}
-					else {
-						$(this).show();
-					}
-				});
+			//		if (str.indexOf(serachTerm) == -1) {
+			//			$(this).hide();
+			//		}
+			//		else {
+			//			$(this).show();
+			//		}
+   //             });                                             
+   //         });
 
-			});
-		});
+            //Event Handler assignment
+            $('.search').on('change keyup copy paste cut', null, FilterAllColumns);
+            $('.DatabaseNameFilter').on('change keyup copy paste cut', null, FilterAllColumns);
+            $('.SchemaNameFilter').on('change keyup copy paste cut click', null, FilterAllColumns);
+            $('.ObjectNameFilter').on('keyup', null, FilterAllColumns);
+            $('.ObjectTypeFilter').on('keyup', null, FilterAllColumns);
+            $('.ColumnNameFilter').on('keyup', null, FilterAllColumns);
+            $('.SQLColumnFilter').on('keyup', null, FilterAllColumns);
+            $('.IsNullableFilter').on('change', null, FilterAllColumns);
+            $('.DataTypeFilter').on('keyup', null, FilterAllColumns);
+            $('.PHIFlagFilter').on('change', null, FilterAllColumns);
+            $('.BusinessDefinitionFilter').on('keyup', null, FilterAllColumns);
+
+
+        }); //End of the whole "document ready" event script
+
+        function ShowAllRows()
+        {
+            $('#tblDataDictionary tbody tr').each(function () {
+                $(this).show();
+            });    
+        }
+
+        function FilterAllColumns() {
+
+            //First, we have to show every row. Because we'll gradually hide rows for each filter.
+            ShowAllRows();
+
+            //Now we can filter based on each filter field, in turn.
+            if ($('.search').val()) {
+                SearchTable('#search', '#tblDataDictionary tr.contentRow');
+            }
+            if ($('.DatabaseNameFilter').val()) {
+                FilterByColumn('#DatabaseNameFilter', '#tblDataDictionary td.DatabaseName');
+            }
+            if ($('.SchemaNameFilter').val()) {
+                FilterByColumn('#SchemaNameFilter', '#tblDataDictionary td.SchemaName');
+            }
+            if ($('.ObjectNameFilter').val()) {
+                FilterByColumn('#ObjectNameFilter', '#tblDataDictionary td.ObjectName');
+            }
+            if ($('.ObjectTypeFilter').val()) {
+                FilterByColumn('#ObjectTypeFilter', '#tblDataDictionary td.ObjectType');
+            }
+            if ($('.ColumnNameFilter').val()) {
+                FilterByColumn('#ColumnNameFilter', '#tblDataDictionary td.ColumnName');
+            }
+            if ($('.SQLColumnFilter').val()) {
+                FilterByColumn('#SQLColumnFilter', '#tblDataDictionary td.SQLColumnDescription');
+            }
+            if ($('.IsNullableFilter').val()) {
+                FilterByColumn('#IsNullableFilter', '#tblDataDictionary td.IsNullable');
+            }
+            if ($('.DataTypeFilter').val()) {
+                FilterByColumn('#DataTypeFilter', '#tblDataDictionary td.DataType');
+            }
+            if ($('.PHIFlagFilter').val()) {
+                FilterByColumn('#PHIFlagFilter', '#tblDataDictionary td.PHIFlag');
+            }
+            if ($('.BusinessDefinitionFilter').val()) {
+                FilterByColumn('#BusinessDefinitionFilter', '#tblDataDictionary td.BusinessDefinition');
+            }
+        }
+
+
+        function SearchTable(searchID, classLookup) {
+            var searchValue = $(searchID).val().toLowerCase().trim();
+            $(classLookup).each(function () {
+                var str = $(this).text().toLowerCase().trim();
+                if (str.search(searchValue) == -1) {
+                    $(this).hide();
+                }
+            });
+        }
+
+        function FilterByColumn(searchID, classLookup) {
+            var searchValue = $(searchID).val().toLowerCase().trim();
+
+            $(classLookup).each(function () {
+                var str = $(this).text().toLowerCase().trim();
+                //alert('str: ' + str + ' searchValue: ' + searchValue + '');
+                //alert(str.search(searchValue));
+                //return false;
+                if (str.search(searchValue) == -1) {
+                    $(this).parent().hide();
+                }
+
+
+            });
+        }
+
+        //function FilterByColumn(event) {
+        //    var searchValue = $(event.data.searchID).val().toLowerCase().trim();
+
+        //    $(event.data.classLookup).each(function () {
+        //        var str = $(this).text().toLowerCase().trim();
+        //        //alert('str: ' + str + ' searchValue: ' + searchValue + '')
+        //        //alert(str.search(searchValue));
+        //        if (str.search(searchValue) == -1) {
+        //            $(this).parent().hide();
+        //        }
+
+
+        //    });
+        //}
 
 				//$(function () {
 				//	//Remove the dummy row if data present.
