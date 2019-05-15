@@ -2,7 +2,7 @@
     @{
         if (Model != null && Model.UserName != null)
         {
-            string loginText = "Logged in (" + Model.UserName + ") - Logout.";
+            string loginText = "Welcome " + Model.UserName + "! - Logout";
             <li>@Html.ActionLink(loginText, "Logout", "Login")</li>
         }
         else
