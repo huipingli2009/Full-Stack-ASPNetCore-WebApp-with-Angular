@@ -208,7 +208,7 @@
 
 				$.ajax({
 					type: "POST",
-					url: "/Home/UpdateDataDictionary",
+					url: '@Url.Action("UpdateDataDictionary", "Home")', 
 					data: '{dd:' + JSON.stringify(dd) + '}',
 					contentType: "application/json; charset=utf-8",
 
@@ -265,15 +265,15 @@
             //Event Handler assignment
             $('.search').on('change keyup copy paste cut', null, FilterAllColumns);
             $('.DatabaseNameFilter').on('change keyup copy paste cut', null, FilterAllColumns);
-            $('.SchemaNameFilter').on('change keyup copy paste cut click', null, FilterAllColumns);
-            $('.ObjectNameFilter').on('keyup', null, FilterAllColumns);
-            $('.ObjectTypeFilter').on('keyup', null, FilterAllColumns);
-            $('.ColumnNameFilter').on('keyup', null, FilterAllColumns);
-            $('.SQLColumnFilter').on('keyup', null, FilterAllColumns);
-            $('.IsNullableFilter').on('change', null, FilterAllColumns);
-            $('.DataTypeFilter').on('keyup', null, FilterAllColumns);
-            $('.PHIFlagFilter').on('change', null, FilterAllColumns);
-            $('.BusinessDefinitionFilter').on('keyup', null, FilterAllColumns);
+            $('.SchemaNameFilter').on('change keyup copy paste cut', null, FilterAllColumns);
+            $('.ObjectNameFilter').on('change keyup copy paste cut', null, FilterAllColumns);
+            $('.ObjectTypeFilter').on('change keyup copy paste cut', null, FilterAllColumns);
+            $('.ColumnNameFilter').on('change keyup copy paste cut', null, FilterAllColumns);
+            $('.SQLColumnFilter').on('change keyup copy paste cut', null, FilterAllColumns);
+            $('.IsNullableFilter').on('change keyup copy paste cut', null, FilterAllColumns);
+            $('.DataTypeFilter').on('change keyup copy paste cut', null, FilterAllColumns);
+            $('.PHIFlagFilter').on('change keyup copy paste cut', null, FilterAllColumns);
+            $('.BusinessDefinitionFilter').on('change keyup copy paste cut', null, FilterAllColumns);
 
 
         }); //End of the whole "document ready" event script
