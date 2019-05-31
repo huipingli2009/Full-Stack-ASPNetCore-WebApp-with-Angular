@@ -9,124 +9,127 @@
 	<title>Data Dictionary</title>
 </head>
 <body>
-	<h2>List of Data Dictionary Records</h2>
-	<div style="">
-		@Html.ActionLink("Refresh Metadata", "DataDictionaryUpdate", "HomeController", new { @class = "btn btn-primary" })
-	</div>
+    <div class="container table-container">
+        <h2>List of Data Dictionary Records</h2>
+        <div style="">
+            @Html.ActionLink("Refresh Metadata", "DataDictionaryUpdate", "HomeController", new { @class = "btn btn-primary" })
+        </div>
 
-	@*<h2>List of Data Dictionary Records</h2>*@
-	<div class="form-group pull-left" style="float:right">
-		<h3>Live Search</h3>
-		<input text="" class="form-control search" id="search" />
-	</div>
-	<table id="tblDataDictionary" class="table table-sm table-responsive table-condensed table-hover table-bordered table-striped">
+        @*<h2>List of Data Dictionary Records</h2>*@
+        <div class="form-group pull-left" style="float:right">
+            <h3>Live Search</h3>
+            <input text="" class="form-control search" id="search" />
+        </div>
+        <table id="tblDataDictionary" class="table table-sm table-responsive table-condensed table-hover table-bordered table-striped">
 
 
-		<thead class="black white-text">
-			<tr class="d-flex">
-				<th scope="col">Item Id</th>
-				<th scope="col">Database Name</th>
-				<th scope="col">SchemaName</th>
-				<th scope="col">ObjectName</th>
-				<th scope="col">Object Type</th>
-				<th scope="col">Column Name</th>
-				<th scope="col">SQLColumn Description </th>
-				<th scope="col">Nullable</th>
-				<th scope="col">Data Type</th>
-				<th scope="col">PHI Flag</th>
-				<th scope="col">Business Definition</th>
-				<th scope="col">Actions</th>
-			</tr>
-		</thead>
-		<tbody class="table-striped table-bordered table-hover table-sm table-condensed">
-			@using (Html.BeginForm())
-			{
-				<tr class="filterRow">
-					<td>Filter</td>
-					<td>@Html.DropDownList("DatabaseName", ViewBag.DatabaseNameOptions as List<SelectListItem>, new { id = "DatabaseNameFilter", @class = "DatabaseNameFilter" })</td>
-					<td>@Html.TextBox("SchemaName", null, new { id = "SchemaNameFilter", @class="SchemaNameFilter"})</td>
-					<td>@Html.TextBox("ObjectName", null, new { id = "ObjectNameFilter", @class = "ObjectNameFilter" })</td>
-					<td>@Html.TextBox("ObjectType", null, new { id = "ObjectTypeFilter", @class = "ObjectTypeFilter" })</td>
-					<td>@Html.TextBox("ColumnName", null, new { id = "ColumnNameFilter", @class = "ColumnNameFilter" })</td>
-					<td>@Html.TextBox("SQLColumnDescription", null, new { id = "SQLColumnFilter", @class = "SQLColumnFilter" })</td>
-					<td>@Html.DropDownList("IsNullable", ViewBag.IsNullableOptions as List<SelectListItem>, new { id = "IsNullableFilter", @class = "IsNullableFilter" })</td>
-					<td>@Html.TextBox("DataType", null, new { id = "DataTypeFilter", @class = "DataTypeFilter" })</td>
-					<td>@Html.DropDownList("PHIFlag", ViewBag.PHIOptions as List<SelectListItem>, new { id = "PHIFlagFilter", @class = "PHIFlagFilter" })</td>
-					<td>@Html.TextBox("BusinessDefinition", null, new { id = "BusinessDefinitionFilter", @class = "BusinessDefinitionFilter" })</td>
-					<td></td>
-				</tr>
-			}
-			@{ foreach (System.Data.DataRow dr in ViewBag.DataDictionary.Rows)
-				{
-					<tr class="contentRow">
-						<td class="skDataDictionary">
-							<span>@dr["skDataDictionary"]</span>
-						</td>
-						<td class="DatabaseName">
-							<span>@dr["DatabaseName"]</span>
-							@*<input type="text" value="@dr["DatabaseName"]" />*@
-							@*<input type="text" id="txtDatabaseName" value="@dr["DatabaseName"]" style="display:none" />*@
-						</td>
-						<td class="SchemaName">
-							<span>@dr["SchemaName"]</span>
-							@*<input type="text" value="@dr["SchemaName"]">*@
-							@*<input type="text" id="txtSchemaName" value="@dr["SchemaName"]" style="display:none" />*@
-						</td>
-						<td class="ObjectName">
-							<span>@dr["ObjectName"]</span>
-							@*<input type="text" value="@dr["ObjectName"]"/>*@
-							@*<input type="text" id="txtObjectName" value="@dr["ObjectName"]" style="display:none" />*@
-						</td>
-						<td class="ObjectType">
-							<span>@dr["ObjectType"]</span>
-							@*<input type="text" value="@dr["ObjectType"]" />*@
-							@*<input type="text" id="txtObjectType" value="@dr["ObjectType"]" style="display:none" />*@
-						</td>
-						<td class="ColumnName">
-							<span style="width:unset">@dr["ColumnName"]</span>
-							@*<input type="text" value="@dr["ObjectType"]" />*@
-							@*<input type="text" id="txtColumnName" value="@dr["ColumnName"]" style="display:none" />*@
-						</td>
-						<td class="SQLColumnDesc">
-							<span class="col-sm-push-11">@dr["SQLColumnDesc"]</span>
-							@*<input type="text" value="@dr["ObjectType"]" />*@
-							@*<input type="text" id="txtSQLColumnDesc" value="@dr["SQLColumnDesc"]" style="display:none" />*@
-						</td>
-						<td class="IsNullable">
-							<span>@dr["IsNullable"]</span>
-							@*<input type="text" value="@dr["ObjectType"]" />*@
-							@*<input type="text" id="txtIsNullable" value="@dr["IsNullable"]" style="display:none" />*@
-						</td>
-						<td class="DataType">
-							<span>@dr["DataType"]</span>
-							@*<input type="text" value="@dr["ObjectType"]" />*@
-							@*<input type="text" id="txtDataType" value="@dr["DataType"]" style="display:none" />*@
-						</td>
-						<td class="PHIFlag">
-							<span id="PHIFlagId">@dr["PHIFlag"]</span>
-							@*<input type="text" value="@dr["ObjectType"]" />*@
-							@*<input type="text" id="txtPHIFlag" value="@dr["PHIFlag"]" style="display:none" />*@
-							<select id="selPHIFlag" name="selPHIFlag" hidden>
-								<option value="-1">-- please select --</option>
-								<option value="1">True</option>
-								<option value="0">False</option>
-							</select>
-						</td>
+            <thead class="black white-text">
+                <tr class="d-flex">
+                    <th scope="col">Item Id</th>
+                    <th scope="col">Database Name</th>
+                    <th scope="col">SchemaName</th>
+                    <th scope="col">ObjectName</th>
+                    <th scope="col">Object Type</th>
+                    <th scope="col">Column Name</th>
+                    <th scope="col">SQLColumn Description </th>
+                    <th scope="col">Nullable</th>
+                    <th scope="col">Data Type</th>
+                    <th scope="col">PHI Flag</th>
+                    <th scope="col">Business Definition</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="table-striped table-bordered table-hover table-sm table-condensed">
+                @using (Html.BeginForm())
+                {
+                    <tr class="filterRow">
+                        <td>Filter</td>
+                        <td>@Html.DropDownList("DatabaseName", ViewBag.DatabaseNameOptions as List<SelectListItem>, new { id = "DatabaseNameFilter", @class = "DatabaseNameFilter" })</td>
+                        <td>@Html.TextBox("SchemaName", null, new { id = "SchemaNameFilter", @class = "SchemaNameFilter", size = "20" })</td>
+                        <td>@Html.TextBox("ObjectName", null, new { id = "ObjectNameFilter", @class = "ObjectNameFilter", size = "20" })</td>
+                        <td>@Html.TextBox("ObjectType", null, new { id = "ObjectTypeFilter", @class = "ObjectTypeFilter", size = "20" })</td>
+                        <td>@Html.TextBox("ColumnName", null, new { id = "ColumnNameFilter", @class = "ColumnNameFilter", size = "20" })</td>
+                        <td>@Html.TextBox("SQLColumnDescription", null, new { id = "SQLColumnFilter", @class = "SQLColumnFilter", size = "20" })</td>
+                        <td>@Html.DropDownList("IsNullable", ViewBag.IsNullableOptions as List<SelectListItem>, new { id = "IsNullableFilter", @class = "IsNullableFilter" })</td>
+                        <td>@Html.TextBox("DataType", null, new { id = "DataTypeFilter", @class = "DataTypeFilter", size = "20" })</td>
+                        <td>@Html.DropDownList("PHIFlag", ViewBag.PHIOptions as List<SelectListItem>, new { id = "PHIFlagFilter", @class = "PHIFlagFilter" })</td>
+                        <td>@Html.TextBox("BusinessDefinition", null, new { id = "BusinessDefinitionFilter", @class = "BusinessDefinitionFilter", size = "20" })</td>
+                        <td></td>
+                    </tr>
+                }
+                @{ foreach (System.Data.DataRow dr in ViewBag.DataDictionary.Rows)
+                    {
+                        <tr class="contentRow">
+                            <td class="skDataDictionary">
+                                <span>@dr["skDataDictionary"]</span>
+                            </td>
+                            <td class="DatabaseName">
+                                <span>@dr["DatabaseName"]</span>
+                                @*<input type="text" value="@dr["DatabaseName"]" />*@
+                                @*<input type="text" id="txtDatabaseName" value="@dr["DatabaseName"]" style="display:none" />*@
+                            </td>
+                            <td class="SchemaName">
+                                <span>@dr["SchemaName"]</span>
+                                @*<input type="text" value="@dr["SchemaName"]">*@
+                                @*<input type="text" id="txtSchemaName" value="@dr["SchemaName"]" style="display:none" />*@
+                            </td>
+                            <td class="ObjectName">
+                                <span>@dr["ObjectName"]</span>
+                                @*<input type="text" value="@dr["ObjectName"]"/>*@
+                                @*<input type="text" id="txtObjectName" value="@dr["ObjectName"]" style="display:none" />*@
+                            </td>
+                            <td class="ObjectType">
+                                <span>@dr["ObjectType"]</span>
+                                @*<input type="text" value="@dr["ObjectType"]" />*@
+                                @*<input type="text" id="txtObjectType" value="@dr["ObjectType"]" style="display:none" />*@
+                            </td>
+                            <td class="ColumnName">
+                                <span style="width:unset">@dr["ColumnName"]</span>
+                                @*<input type="text" value="@dr["ObjectType"]" />*@
+                                @*<input type="text" id="txtColumnName" value="@dr["ColumnName"]" style="display:none" />*@
+                            </td>
+                            <td class="SQLColumnDesc">
+                                <span class="col-sm-push-11">@dr["SQLColumnDesc"]</span>
+                                @*<input type="text" value="@dr["ObjectType"]" />*@
+                                @*<input type="text" id="txtSQLColumnDesc" value="@dr["SQLColumnDesc"]" style="display:none" />*@
+                            </td>
+                            <td class="IsNullable">
+                                <span>@dr["IsNullable"]</span>
+                                @*<input type="text" value="@dr["ObjectType"]" />*@
+                                @*<input type="text" id="txtIsNullable" value="@dr["IsNullable"]" style="display:none" />*@
+                            </td>
+                            <td class="DataType">
+                                <span>@dr["DataType"]</span>
+                                @*<input type="text" value="@dr["ObjectType"]" />*@
+                                @*<input type="text" id="txtDataType" value="@dr["DataType"]" style="display:none" />*@
+                            </td>
+                            <td class="PHIFlag">
+                                <span id="PHIFlagId">@dr["PHIFlag"]</span>
+                                @*<input type="text" value="@dr["ObjectType"]" />*@
+                                @*<input type="text" id="txtPHIFlag" value="@dr["PHIFlag"]" style="display:none" />*@
+                                <select id="selPHIFlag" name="selPHIFlag" hidden>
+                                    <option value="-1">-- please select --</option>
+                                    <option value="1">True</option>
+                                    <option value="0">False</option>
+                                </select>
+                            </td>
 
-						<td class="BusinessDefinition">
-							<span>@dr["BusinessDefinition"]</span>
-							<input type="text" id="txtBusinessDefinition" value="@dr["BusinessDefinition"]" style="display:none" />
-						</td>
-						<td colspan="3">
-							<a class="Edit" id="btnEdit" href="javascript:;">Edit</a>
-							<a class="Update" id="btnUpdate" href="javascript:;" style="display:none">Save</a>
-							<a class="Cancel" id="btnCancel" href="javascript:;" style="display:none">Cancel</a>
-						</td>
-					</tr>
-				}
-			}
-		</tbody>
-	</table>
+                            <td class="BusinessDefinition">
+                                <span>@dr["BusinessDefinition"]</span>
+                                <input type="text" id="txtBusinessDefinition" value="@dr["BusinessDefinition"]" style="display:none" />
+                            </td>
+                            <td colspan="3">
+                                <a class="Edit" id="btnEdit" href="javascript:;">Edit</a>
+                                <a class="Update" id="btnUpdate" href="javascript:;" style="display:none">Save</a>
+                                <a class="Cancel" id="btnCancel" href="javascript:;" style="display:none">Cancel</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+	
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 	<script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
 	<script type="text/javascript">

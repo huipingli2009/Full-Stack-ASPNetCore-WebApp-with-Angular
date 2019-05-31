@@ -3,11 +3,11 @@
         if (Model != null && Model.UserName != null)
         {
             string loginText = "Welcome " + Model.UserName + "! - Logout";
-            <li>@Html.ActionLink(loginText, "Logout", "Login")</li>
+            @Html.ActionLink(loginText, "Logout", "Login", new { @class = "Header-nav-item" })
         }
         else
         {
-            <li>@Html.ActionLink("Login", "Index", "Home")</li>
+            @Html.ActionLink("Login", "Index", "Home", new { @class = "Header-nav-item" })
         }
     }
 
