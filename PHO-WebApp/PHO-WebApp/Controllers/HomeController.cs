@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using PHO_WebApp.DataAccessLayer;
 using System.Data;
 using PHO_WebApp.Models;
+using Newtonsoft.Json;
 //using PHO_WebApp.Models;
 
 
@@ -15,6 +16,8 @@ namespace PHO_WebApp.Controllers
     {
         Models.UserDetails user = null;
         DataAccessLayer.DataDictionary records = new DataAccessLayer.DataDictionary();
+        //DataAccessLayer.CohortDAL cohortRecords = new CohortDAL();
+
 
         public bool IsLoggedIn()
         {
@@ -151,6 +154,44 @@ namespace PHO_WebApp.Controllers
         {
             return RedirectToAction("Index", "Home");
         }
+
+        //for other purpose
+        //public string Cohort()
+        //{
+        //    //return View("");
+        //return "This site is currently under construction!";           
+        //}   
+
+        //public ActionResult Cohort()
+        //{
+        //    return View();
+        //}
+        //public ActionResult DisplayCohort()
+        //{
+        //    DataSet ds = cohortRecords.getAllActiveCohortRecords();
+        //    string jsonresult=  JsonConvert.SerializeObject(ds.Tables[0]);
+        //    //foreach(var a in ds)
+        //    //      {
+
+        //    //  }
+        //    //  ViewBag.Cohort = ds.Tables[0];
+        //    //  return Json(new { Name = "bar", ShortName = "Blech",Description= "testDes", Owner ="est",ModifiedDate = "tes" }, JsonRequestBehavior.AllowGet);
+        //    //  return View();
+        //    //return Json(
+        //    //   jsonresult
+        //    //    , JsonRequestBehavior.AllowGet);
+        //    return Json(JsonConvert.SerializeObject(new { item = ds.Tables[0] }), JsonRequestBehavior.AllowGet);
+        //    //JsonRequestBehavior.AllowGet);
+
+
+        //    //      { "data": "Id" },
+        //    //{ "data": "Name" },
+        //    //{ "data": "ShortName" },
+        //    //{ "data": "Description"},
+        //    //{ "data": "Owner"},
+        //    //{ "data": "ModifiedDate"}
+
+        //}
 
     }
 }

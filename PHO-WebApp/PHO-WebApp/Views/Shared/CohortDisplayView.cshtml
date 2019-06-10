@@ -1,0 +1,27 @@
+﻿@Model  PHO_WebApp.Models.Cohorts
+<div class="table-responsive">
+	<table id="tblCohort" class="table table-sm table-responsive-md table-condensed table-hover table-bordered table-striped">
+
+		@{ foreach (System.Data.DataRow dr in ViewBag.Cohort.Rows)
+			{
+				<tr class="active">
+					@*<td><input id="Button1" type="button" value="Select" class="btn btn-indigo btn-sm m-0" /></td>*@
+					<td>
+						<button type="button" class="btn btn-primary">Select</button>
+					</td>
+					<td>
+						<text class="" style=""> Cohort Name:</text> <span>@dr["Name"]</span>
+					</td>
+					<td>Abbr:  <span>@dr["ShortName"]</span></td>
+					<td>Updated on:  <span>@dr["ModifiedDate"]</span></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td colspan="2">Cohort description:  <span>@dr["Description"]</span></td>
+					<td>Owner:  <span>@dr["Owner"]</span></td>
+				</tr>
+			}
+		}
+
+	</table>
+</div>

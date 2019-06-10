@@ -1,0 +1,40 @@
+﻿@model List<PHO_WebApp.Models.Cohort>
+@{
+	ViewBag.Title = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>PHO Cohorts</h2>
+@*<div class="form-group pull-left" style="float:right">
+		<h3>Live Search</h3>
+		<input text="" class="form-control search" id="search" />
+</div>*@
+
+<div>
+	<table>
+		<tr>			
+				<h3>Live Search</h3>
+				<input text="" class="form-control search" id="search" />
+			
+		</tr>
+		<tr>
+			<td>
+				@foreach (var item in Model)
+				{
+					@Html.Partial("CohortDisplay", item);
+					<div></div>
+
+				}
+			</td>
+			<td></td>
+		</tr>
+		<tr>&nbsp;</tr>
+	</table>
+</div>
+
+
+
+	
+
+
+

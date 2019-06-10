@@ -37,6 +37,17 @@ namespace PHO_WebApp
                defaults: new { controller = "Home", action = "Index", }
            );
 
+          //  routes.MapRoute(
+          //    name: "Cohort",
+          //    url: "Cohort",
+          //    defaults: new { controller = "Cohort", action = "CohortDisplay", }
+          //);
+
+            routes.MapRoute(
+             name: "Cohort",
+             url: "Cohort",
+             defaults: new { controller = "Cohort", action = "CohortDisplay", }
+         );
 
 
         }

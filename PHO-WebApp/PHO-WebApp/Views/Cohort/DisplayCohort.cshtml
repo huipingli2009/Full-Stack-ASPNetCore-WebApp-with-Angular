@@ -1,0 +1,54 @@
+﻿
+@{
+	ViewBag.Title = "DisplayCohort";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>Cohort</title>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+	<script type="text/javascript">
+
+	</script>
+	
+</head>
+<body>
+	<h2>List of PHO Cohorts</h2>
+	<div class="form-group pull-left" style="float:right">
+		<h2>Search</h2>
+		<input text="" class="form-control search" id="search" />
+	</div>
+	<div class="table-responsive">
+		<table id="tblCohort" class="table table-sm table-responsive-md table-condensed table-hover table-bordered table-striped">
+
+			@{ foreach (System.Data.DataRow dr in ViewBag.Cohort.Rows)
+				{
+					<tr class="active">
+						@*<td><input id="Button1" type="button" value="Select" class="btn btn-indigo btn-sm m-0" /></td>*@
+						@*<td>
+							<button type="button" class="btn btn-primary">Select</button>
+						</td>*@
+						<td>
+							<text class="" style=""> Cohort Name:</text> <span>@dr["Name"]</span>
+						</td>
+						<td>Abbr:  <span>@dr["ShortName"]</span></td>
+						<td>Updated on:  <span>@dr["ModifiedDate"]</span></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td colspan="2">Cohort description:  <span>@dr["Description"]</span></td>
+						<td>Owner:  <span>@dr["Owner"]</span></td>
+					</tr>
+				}
+			}
+
+		</table>
+	</div>
+</body>
+</html>
+
