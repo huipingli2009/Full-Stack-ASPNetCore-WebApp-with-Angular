@@ -1,7 +1,5 @@
 ﻿body {
-    /*font-family: Arial,Helvetica,sans-serif;
-    font-size: 16px;*/
-    font-family: Arvo;
+    font-family: 'Nunito Sans', sans-serif;
     font-weight: 400;
     font-style: normal;
     font-size: 15.25px;
@@ -9,13 +7,18 @@
     line-height: 1.6em;
     text-transform: none;
     color: #767474;
-    padding-top: 150px;
+    padding-top: 2px;
 }
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 500;
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 
@@ -41,16 +44,22 @@ textarea {
     color: #fff;
 }
 
+.pho-scrollable-content html {
+    height:100%; 
+    max-height:100%;
+}
 
 .content-footer {
     /*background-color: #91d6ac !important;*/
 }
 
-
-
-
-element.style {
+th.pho-table-data {
+    background-color: rgba(145, 214, 172, 0.30);
 }
+tr.pho-table-data:nth-child(even) {
+    background-color: rgba(145, 214, 172, 0.30);
+}
+
 
 .tweak-footer-show .Footer {
     display: block;
@@ -106,6 +115,7 @@ element.style {
 
 .img-top1 {
     overflow: hidden;
+    position: relative;
 }
 .table-container {
     overflow: scroll;
@@ -113,28 +123,29 @@ element.style {
 
 .text-block {
     position: absolute;
-    top: 140px;
-    left: 100px;
+    top: 2px;
+    left: 30px;
     background-color: transparent;
     color: white;
     padding-left: 20px;
     padding-right: 20px;
+    font-family: nunito-sans !important;
 }
 
-.
 
 .Header-nav {
     white-space: nowrap;
     line-height: 1em;
-    font-family: Arvo;
+    font-family: 'Arvo', serif;
     font-weight: 400;
     font-style: normal;
-    font-size: 16px;
+    font-size: 14px;
     letter-spacing: 0em;
     text-transform: none;
     border-bottom: none;
-    margin-top:20px;
+    margin-top: 2px;
 }
+
 .Header-nav-item {
     -webkit-transition: color 170ms ease-in-out, background-color 170ms ease-in-out;
     -moz-transition: color 170ms ease-in-out, background-color 170ms ease-in-out;
@@ -155,11 +166,19 @@ a:hover {
 
 .Header-nav-item {
     display: inline;
-    vertical-align: middle
-    
+    vertical-align: middle;
+    font-family: 'Arvo', serif !important;
 }
 
 .Header-nav-item a
 {
     line-height: 50px;
+}
+
+
+.table-structure tr {
+    border-top: none !important;
+    border-bottom: none !important;
+    border-left: none !important;
+    border-right: none !important;
 }

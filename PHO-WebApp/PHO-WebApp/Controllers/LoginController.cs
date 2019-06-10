@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Data;
+using PHO_WebApp.Models;
 
 namespace PHO_WebApp.Controllers
 {
@@ -26,22 +27,25 @@ namespace PHO_WebApp.Controllers
             }
         }
         [HttpPost]
-        public ActionResult Login(FormCollection fc)
+        public ActionResult Login(UserDetails userDetails)
         {
-            int? id = userLogin.GetUserLogin(fc["UserName"], fc["Password"]);
-           
-            if (id.HasValue && id.Value > 0)
+            if (ModelState.IsValid)
             {
-                Models.UserDetails userDetails = userLogin.GetPersonLoginForLoginId(id.Value);
-                Session["UserDetails"] = userDetails;
-                return RedirectToAction("DataDictionary", "Home", new { area = "Home" });
-            }
-            else
-            {
-                ViewData["message"] = "Login failed!";
+                int? id = userLogin.GetUserLogin(userDetails.UserName, userDetails.Password);
+
+                if (id.HasValue && id.Value > 0)
+                {
+                    userDetails = userLogin.GetPersonLoginForLoginId(id.Value);
+                    Session["UserDetails"] = userDetails;
+                    return RedirectToAction("DataDictionary", "Home", new { area = "Home" });
+                }
+                else
+                {
+                    ViewData["message"] = "Login failed!";
+                }
             }
       
-            return View();
+            return View(userDetails);
         }
 
         public ActionResult Logout()
