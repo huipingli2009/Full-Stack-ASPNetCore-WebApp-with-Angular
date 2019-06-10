@@ -6,21 +6,18 @@
     <title>@ViewBag.Title - PHO Prototype</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <link href="https://fonts.googleapis.com/css?family=Arvo|Nunito+Sans&display=swap" rel="stylesheet">
+
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("PHO", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-				<ul class="nav navbar-nav">
-					<li>@Html.ActionLink("Home", "Index", "Home")</li>
+
+    <div class="container navbar navbar-default navbar-static-top Header--top Header-nav">
+        <div class="navbar-header top-left">
+            <img class="header-branding-logo" src="~/Images/TSCHS_LOGO_CMYK.jpg" style="width:225px; height:67px"  />
+        </div>
+            <nav class="Header-nav Header-nav--primary top-right" data-nc-container="top-right">
+				<div class="nav navbar-nav">
+					@Html.ActionLink("Home", "Index", "Home", new { @class = "Header-nav-item" })
                     @{
                         if (Session["UserDetails"] != null)
                         {
@@ -29,21 +26,20 @@
                             <li>@Html.ActionLink("Population", "Population", "Home")</li>
                             <li>@Html.ActionLink("Initiative", "Initiative", "Home")</li>
                             <li>@Html.ActionLink("Content", "Content", "Home")</li>*@
-                            <li>@Html.ActionLink("Data Dictionary", "DataDictionary", "Home")</li>
+                            @Html.ActionLink("Data Dictionary", "DataDictionary", "Home", new { @class = "Header-nav-item" })
                         }
                     }
-			        @Html.Action("LoggedInAs", "Login");
+			        @Html.Action("LoggedInAs", "Login")
                     @*@Html.Partial("LoggedInAs")*@
-				</ul>
-            </div>
+				</div>
+            </nav>
             
-        </div>
     </div>
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - PHO Prototype</p>
+        <footer class="content-footer">
+            <p>&copy; @DateTime.Now.Year - PHO Web app</p>
         </footer>
     </div>
 
@@ -52,3 +48,56 @@
     @RenderSection("scripts", required: false)
 </body>
 </html>
+
+@*
+    <header class="Header Header--top" id="yui_3_17_2_1_1558622187040_962">
+    <div class="Header-inner Header-inner--top" data-nc-group="top" data-nc-collapse="" id="yui_3_17_2_1_1558622187040_961">
+        <div data-nc-container="top-left">
+
+
+
+            <a href="/" class="Header-branding sqs-frontend-overlay-editor-widget-host" data-nc-element="branding" data-content-field="site-title">
+
+
+                <img src="//static1.squarespace.com/static/5c82a6f22727be5e5907c624/t/5c99145de4966b8838b208ef/1558105778216/?format=1500w" alt="Tri-State Child Health Services" class="Header-branding-logo">
+
+
+            </a>
+        </div>
+        <div data-nc-container="top-center">
+
+
+        </div>
+        <div data-nc-container="top-right" id="yui_3_17_2_1_1558622187040_960">
+
+
+
+            <div class="Header-search" data-nc-element="search">
+                <form class="Header-search-form" action="/search" method="get">
+                    <input class="Header-search-form-input" name="q" type="text" spellcheck="false" value="" autocomplete="off" placeholder="Search">
+                    <button class="Header-search-form-submit" type="submit" data-test="template-search">
+                        <svg class="Icon Icon--search--small" viewBox="0 0 15 15">
+                            <use xlink:href="/assets/ui-icons.svg#search-icon--small"></use>
+                        </svg>
+                        <svg class="Icon Icon--search" viewBox="0 0 20 20">
+                            <use xlink:href="/assets/ui-icons.svg#search-icon"></use>
+                        </svg>
+                    </button>
+                </form>
+            </div><nav class="Header-nav Header-nav--primary sqs-frontend-overlay-editor-widget-host" data-nc-element="primary-nav" data-content-field="navigation" id="yui_3_17_2_1_1558622187040_522">
+
+                <div class="Header-nav-inner">
+                    <a href="/about-us" class="Header-nav-item">About Us</a><a href="/governance2" class="Header-nav-item">Governance</a><a href="/member-hightlights" class="Header-nav-item">For Patients</a><a href="/for-providers" class="Header-nav-item">For Providers</a><a href="/map" class="Header-nav-item">Contact</a>
+                </div>
+
+            </nav><nav class="Header-nav Header-nav--secondary sqs-frontend-overlay-editor-widget-host" data-nc-element="secondary-nav" data-content-field="navigation" id="yui_3_17_2_1_1558622187040_525">
+
+                <div class="Header-nav-inner">
+                    <a href="/map" target="_blank" class="Header-nav-item">Find a Doctor</a>
+                </div>
+
+            </nav>
+        </div>
+    </div>
+</header>
+    *@

@@ -10,13 +10,16 @@
 	<meta name="viewport" content="width=device-width" />
 	<title>Login</title>
 	<style>
-		#login-div {
-			position: absolute;
-			left: 40%;
-			top: 40%;
-			border: 1px solid #0026ff;
-			padding: 10px 10px;
-		}
+        #login-div {
+            position: absolute;
+            left: 40%;
+            top: 40%;
+            padding: 10px 10px;
+            border-top: none !important;
+            border-bottom: none !important;
+            border-left: none !important;
+            border-right: none !important;
+        }
 
 		.field-validation-error {
 			color: red;
@@ -24,51 +27,8 @@
 	</style>
 </head>
 <body>
-	<div id="login-div">
-		@using (Html.BeginForm("Login", "Login", FormMethod.Post))
-		{
-			<table>
-				<tr>
-					<td></td>
-					<td style="text-decoration:underline">PHO Member login</td>
-				</tr>
-				<tr>
-					<td>@Html.LabelFor(model => model.UserName)</td>
-					<td>@Html.EditorFor(model => model.UserName)</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td>
-						@Html.ValidationMessageFor(model => model.UserName)
-					</td>
-				</tr>
-				<tr>
-					<td>@Html.LabelFor(model => model.Password)</td>
-					<td>@Html.EditorFor(model => model.Password)</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td>@Html.ValidationMessageFor(model => model.Password)</td>
-				</tr>
-				<tr>
-					<td colspan="2">
-						<label class="field-validation-error">@Html.DisplayFor(model => model.LoginError)</label>
-					</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td>
-						<input type="submit" name="Login" value="Submit" />
-						<input type="reset" name="name" value="Clear" />
-					</td>
-				</tr>
-			</table>
-		}
-	</div>
-	@*<script type="text/javascript" src="~/Scripts/jquery-3.3.1.min.js"></script>
-	<script type="text/javascript" src="~/Scripts/jquery.validate.min.js"></script>
-	<script type="text/javascript" src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>*@
-	
+    @{@Html.Action("LoginForm", "Login");}
+
 </body>
 </html>
 
