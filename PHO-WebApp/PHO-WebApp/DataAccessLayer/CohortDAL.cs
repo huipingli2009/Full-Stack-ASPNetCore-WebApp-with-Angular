@@ -53,6 +53,7 @@ namespace PHO_WebApp.DataAccessLayer
                 c.Owner = ds.Tables[0].Rows[i]["Owner"].ToString();
                 Cohorts.Add(c);
             }
+
             return Cohorts;
         }
 

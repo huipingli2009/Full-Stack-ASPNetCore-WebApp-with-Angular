@@ -9,7 +9,7 @@ namespace PHO_WebApp.Models
     using System;
     using System.Collections.Generic;
 
-    public class Cohort 
+    public class Cohort
     {
         public int id { get; set; }
         public string Name { get; set; }
@@ -24,14 +24,16 @@ namespace PHO_WebApp.Models
         public string DeletedFlag { get; set; }
         public string CreatedById { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:mm/dd/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
         public DateTime CreatedOnDate { get; set; }
 
         public string ModifiedById { get; set; }
-        [DisplayFormat(DataFormatString = "{0:mm/dd/yyyy}", ApplyFormatInEditMode = true)]
+
+        [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
         public DateTime ModifiedDate { get; set; }
+
         public string DeletedById { get; set; }
-        [DisplayFormat(DataFormatString = "{0:mm/dd/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
         public DateTime DeletedDate { get; set; }
 
         //public List<Cohort> ShowallCohort { get; set; }

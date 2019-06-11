@@ -1,40 +1,73 @@
 ﻿@model List<PHO_WebApp.Models.Cohort>
 @{
-	ViewBag.Title = "Index";
-	Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>PHO Cohorts</h2>
-@*<div class="form-group pull-left" style="float:right">
-		<h3>Live Search</h3>
-		<input text="" class="form-control search" id="search" />
-</div>*@
+<div class="row">
+    <div class="col-md-6" style="float:left">
+        <h2>PHO Cohorts</h2>
+        @Html.ActionLink("+ New", "AddCohort", "CohortController", new { @class = "btn btn-primary" })
+    </div>
+
+    <div class="col-md-6" style="float:right">
+        <h3>Search</h3>
+        <input text="" class="form-control search" id="search" />
+    </div>
+
+
+</div>
 
 <div>
-	<table>
-		<tr>			
-				<h3>Live Search</h3>
-				<input text="" class="form-control search" id="search" />
-			
-		</tr>
-		<tr>
-			<td>
-				@foreach (var item in Model)
-				{
-					@Html.Partial("CohortDisplay", item);
-					<div></div>
-
-				}
-			</td>
-			<td></td>
-		</tr>
-		<tr>&nbsp;</tr>
-	</table>
+    <table id="tblCohort">
+        <tr>
+            <td>
+                @foreach (var item in Model)
+                {
+                    @Html.Partial("Display", item);
+                    
+                }
+            </td>
+            <td></td>
+        </tr>
+        <tr>&nbsp;</tr>
+    </table>
 </div>
 
 
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+<script type="text/javascript">
 
-	
+	$(document).ready(function () {
+		// Handler for .ready() called.
+			
+        //Event Handler assignment
+        $('.search').on('change keyup copy paste cut', null, function () { SearchTable('#search', '.contentRow') });
+            
+
+    }); //End of the whole "document ready" event script
+    
+    function SearchTable(searchID, classLookup) {
+        var searchValue = $(searchID).val().toLowerCase().trim();
+        $(classLookup).each(function () {
+            var str = $(this).text().toLowerCase().trim();
+            if (str.search(searchValue) == -1) {
+                $(this).hide();
+            }
+            else {
+                $(this).show();
+            }
+        });
+    }
+
+        
+
+</script>
+
+
+
+
 
 
 

@@ -300,10 +300,7 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Shared\LoginForm.cshtml" />
     <Content Include="Views\Home\Cohort.cshtml" />
-    <Content Include="Views\Cohort\CohortView.cshtml" />
-    <Content Include="Views\Cohort\DisplayCohort.cshtml" />
-    <Content Include="Views\Shared\CohortDisplayView.cshtml" />
-    <Content Include="Views\Cohort\CohortDisplay.cshtml" />
+    <Content Include="Views\Cohort\Display.cshtml" />
     <Content Include="Views\Cohort\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
