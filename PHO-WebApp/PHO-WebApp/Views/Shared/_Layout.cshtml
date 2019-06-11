@@ -16,22 +16,18 @@
             <img class="header-branding-logo" src="~/Images/TSCHS_LOGO_CMYK.jpg" style="width:225px; height:67px"  />
         </div>
             <nav class="Header-nav Header-nav--primary top-right" data-nc-container="top-right">
-				<div class="nav navbar-nav">
-					@Html.ActionLink("Home", "Index", "Home", new { @class = "Header-nav-item" })
+                <div class="nav navbar-nav">
+                    @Html.RouteLink("Home", "Home", null, new { @class = "Header-nav-item" })
                     @{
                         if (Session["UserDetails"] != null)
                         {
-                            @*<li>@Html.ActionLink("Patient", "Patient", "Home")</li>
-                            <li>@Html.ActionLink("Staff", "Staff", "Home")</li>
-                            <li>@Html.ActionLink("Population", "Population", "Home")</li>
-                            <li>@Html.ActionLink("Initiative", "Initiative", "Home")</li>
-                            <li>@Html.ActionLink("Content", "Content", "Home")</li>*@
-                            @Html.ActionLink("Data Dictionary", "DataDictionary", "Home", new { @class = "Header-nav-item" })
+                            @Html.RouteLink("Data Dictionary", "DataDictionary", null, new { @class = "Header-nav-item" })
+                            @Html.RouteLink("Cohorts", "Cohort", null, new { @class = "Header-nav-item" })
                         }
                     }
-			        @Html.Action("LoggedInAs", "Login")
+                    @Html.Action("LoggedInAs", "Login")
                     @*@Html.Partial("LoggedInAs")*@
-				</div>
+                </div>
             </nav>
             
     </div>

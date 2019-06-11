@@ -12,12 +12,12 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6" style="float:left">
-                <h2>List of Data Dictionary Records</h2>
+                <h2>Data Dictionary</h2>
                 @Html.ActionLink("Refresh Metadata", "DataDictionaryUpdate", "HomeController", new { @class = "btn btn-primary" })
             </div>
 
             <div class="col-md-6" style="float:right">
-                <h3>Live Search</h3>
+                <h3>Search</h3>
                 <input text="" class="form-control search" id="search" />
             </div>
 
@@ -364,56 +364,6 @@
 
             });
         }
-
-        //function FilterByColumn(event) {
-        //    var searchValue = $(event.data.searchID).val().toLowerCase().trim();
-
-        //    $(event.data.classLookup).each(function () {
-        //        var str = $(this).text().toLowerCase().trim();
-        //        //alert('str: ' + str + ' searchValue: ' + searchValue + '')
-        //        //alert(str.search(searchValue));
-        //        if (str.search(searchValue) == -1) {
-        //            $(this).parent().hide();
-        //        }
-
-
-        //    });
-        //}
-
-				//$(function () {
-				//	//Remove the dummy row if data present.
-				//	if ($("#tblDataDictionary tr").length > 2) {
-				//		$("#tblDataDictionary tr:eq(1)").remove();
-				//	} else {
-				//		var row = $("#tblDataDictionary tr:last-child");
-				//		row.find(".Edit").hide();
-
-				//		row.find("span").html('&nbsp;');
-				//	}
-				//});
-				////function AppendRow(row, skDataDictionary, DatabaseName, SchemaName) {
-				////	//Bind CustomerId.
-				////	$(".skDataDictionary", row).find("span").html(skDataDictionary);
-
-				////	//Bind Name.
-				////	$(".DatabaseName", row).find("span").html(DatabaseName);
-				////	$(".DatabaseName", row).find("input").val(DatabaseName);
-
-				////	//Bind Country.
-				////	$(".SchemaName", row).find("span").html(SchemaName);
-				////	$(".SchemaName", row).find("input").val(SchemaName);
-
-				////	//Bind Country.
-				////	$(".ObjectName", row).find("span").html(ObjectName);
-				////	$(".ObjectName", row).find("input").val(ObjectName);
-
-				////	//Bind Country.
-				////	$(".ObjectType", row).find("span").html(ObjectType);
-				////	$(".ObjectType", row).find("input").val(ObjectType);
-
-				////	row.find(".Edit").show();
-				////	$("#tblDataDictionary").append(row);
-				////};
 
 	</script>
 </body>

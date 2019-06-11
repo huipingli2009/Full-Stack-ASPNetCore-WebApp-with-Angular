@@ -37,7 +37,7 @@ namespace PHO_WebApp.Controllers
                 {
                     userDetails = userLogin.GetPersonLoginForLoginId(id.Value);
                     Session["UserDetails"] = userDetails;
-                    return RedirectToAction("DataDictionary", "Home", new { area = "Home" });
+                    return RedirectToAction("Index", "Home", new { area = "Home" });
                 }
                 else
                 {

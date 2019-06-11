@@ -24,7 +24,8 @@ namespace PHO_WebApp.Controllers
         public ActionResult Index()
         {
             List<Cohort> CohortNew = new List<Cohort>();
-            CohortNew = cohortRecords.getAllActiveCohortRecords();
+            CohortNew = cohortRecords.getAllActiveCohortRecords().OrderByDescending(c => c.ModifiedDate).ToList();
+
 
             //var results = cohortRecords.getAllActiveCohortRecords();
             //return View(results);
