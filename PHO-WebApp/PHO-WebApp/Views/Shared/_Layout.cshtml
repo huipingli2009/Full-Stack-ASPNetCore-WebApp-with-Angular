@@ -16,18 +16,19 @@
             <img class="header-branding-logo" src="~/Images/TSCHS_LOGO_CMYK.jpg" style="width:225px; height:67px"  />
         </div>
             <nav class="Header-nav Header-nav--primary top-right" data-nc-container="top-right">
-                <div class="nav navbar-nav">
-                    @Html.RouteLink("Home", "Home", null, new { @class = "Header-nav-item" })
-                    @{
-                        if (Session["UserDetails"] != null)
-                        {
-                            @Html.RouteLink("Data Dictionary", "DataDictionary", null, new { @class = "Header-nav-item" })
-                            @Html.RouteLink("Cohorts", "Cohort", null, new { @class = "Header-nav-item" })
-                        }
-                    }
-                    @Html.Action("LoggedInAs", "Login")
-                    @*@Html.Partial("LoggedInAs")*@
-                </div>
+				<div class="nav navbar-nav">
+					@Html.RouteLink("Home", "Home", null, new { @class = "Header-nav-item" })
+					@{
+						if (Session["UserDetails"] != null)
+						{
+							@Html.RouteLink("Data Dictionary", "DataDictionary", null, new { @class = "Header-nav-item" })
+							@Html.RouteLink("Cohorts", "Cohort", null, new { @class = "Header-nav-item" })
+							@Html.RouteLink("Initiave", "Initiave", null, new { @class = "Header-nav-item" })
+						}
+					}
+					@Html.Action("LoggedInAs", "Login")
+					@*@Html.Partial("LoggedInAs")*@
+				</div>
             </nav>
             
     </div>

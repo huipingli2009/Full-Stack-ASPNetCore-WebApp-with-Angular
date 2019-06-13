@@ -11,20 +11,7 @@ namespace PHO_WebApp.DataAccessLayer
 {
     public class CohortDAL
     {
-        SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["con"].ConnectionString);
-
-        //public DataSet getAllActiveCohortRecords()
-        //{
-        //    SqlCommand com = new SqlCommand("spGetCohortRecords",con);
-        //    com.CommandType = CommandType.StoredProcedure;
-
-        //    SqlDataAdapter da = new SqlDataAdapter(com);
-        //    DataSet ds = new DataSet();
-        //    //List<Cohort> Cohorts = new List<Cohort>();
-        //    //Cohorts = ds.Tables[0].
-        //    da.Fill(ds);
-        //    return ds;
-        //}
+        SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["con"].ConnectionString);       
 
         public List<Cohort> getAllActiveCohortRecords()
         {
