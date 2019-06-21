@@ -22,7 +22,6 @@ namespace PHO_WebApp.Controllers
             List<Cohort> CohortNew = new List<Cohort>();
             CohortNew = cohortRecords.getAllActiveCohortRecords().OrderByDescending(c => c.ModifiedDate).ToList();
 
-
             //var results = cohortRecords.getAllActiveCohortRecords();
             //return View(results);
             return View(CohortNew);
@@ -31,6 +30,40 @@ namespace PHO_WebApp.Controllers
         public PartialViewResult CohortDisplay()
         {
             return PartialView("CohortDisplay");
+        }
+
+        public ActionResult CreateCohortPartial()
+        {
+            Cohort model = new Cohort();
+
+            return PartialView("CohortModal", model);
+        }
+
+        public ActionResult EditCohortPartial(int CohortId)
+        {
+            Cohort model = this.cohortRecords.GetCohort(CohortId);
+
+            return PartialView("CohortModal", model);
+        }
+
+        [HttpPost]
+        public ActionResult Save(Cohort model, string CohortStatusListItems)
+        {
+            if (ModelState.IsValid)
+            {
+                //Do some stuff
+                if (model.id > 0)
+                {
+                    //Update
+                    cohortRecords.UpdateCohort(model);
+                }
+                else
+                {
+                    //Insert
+                    cohortRecords.InsertCohort(model);
+                }
+            }
+            return RedirectToAction("Index");
         }
     }
 

@@ -20,9 +20,14 @@ namespace PHO_WebApp.Models
         public string Exceptions { get; set; }
         public string DataSources { get; set; }
         public string Lookback { get; set; }
+        public string Calculations { get; set; }
+        public string Limitations { get; set; }
         public string Owner { get; set; }
         public string DeletedFlag { get; set; }
         public string CreatedById { get; set; }
+        public int Status { get; set; }
+
+        public string StatusName { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
         public DateTime CreatedOnDate { get; set; }
@@ -35,6 +40,8 @@ namespace PHO_WebApp.Models
         public string DeletedById { get; set; }
         [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
         public DateTime DeletedDate { get; set; }
+
+        public List<CohortStatus> AllStatuses { get; set; }
 
         //public List<Cohort> ShowallCohort { get; set; }
     }

@@ -42,7 +42,7 @@ namespace PHO_WebApp.DataAccessLayer
             com.ExecuteNonQuery();
             con.Close();
 
-            if (parameterUserId != null && parameterUserId.Value != null)
+            if (parameterUserId != null && parameterUserId.Value != null && !string.IsNullOrWhiteSpace(parameterUserId.Value.ToString()))
             {
                 returnValue = int.Parse(parameterUserId.Value.ToString());
             }
