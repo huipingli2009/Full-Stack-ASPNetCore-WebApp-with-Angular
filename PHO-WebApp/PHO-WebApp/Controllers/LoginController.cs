@@ -26,6 +26,7 @@ namespace PHO_WebApp.Controllers
                 return View("Login");
             }
         }
+
         [HttpPost]
         public ActionResult Login(UserDetails userDetails)
         {
