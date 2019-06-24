@@ -32,16 +32,17 @@ namespace PHO_WebApp.Controllers
             return PartialView("CohortDisplay");
         }
 
-        public ActionResult CreateCohortPartial()
+        public ActionResult CohortPartial(int CohortId)
         {
-            Cohort model = new Cohort();
-
-            return PartialView("CohortModal", model);
-        }
-
-        public ActionResult EditCohortPartial(int CohortId)
-        {
-            Cohort model = this.cohortRecords.GetCohort(CohortId);
+            Cohort model = null;
+            if (CohortId > 0)
+            {
+                model = this.cohortRecords.GetCohort(CohortId);
+            }
+            else
+            {
+                model = this.cohortRecords.CreateCohortModel();
+            }
 
             return PartialView("CohortModal", model);
         }

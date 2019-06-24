@@ -3,64 +3,68 @@
 <div style="position:relative">
     @using (Html.BeginForm("Save", "Cohort", FormMethod.Post))
     {
-        <table class="contentRow" style="width:750px;">
-            <tr>
-                @*Hidden fields*@
-                <td colspan="4">
-                    @Html.HiddenFor(m => Model.id)
-                </td>
-            </tr>
-            <tr>
-                <td>Name: </td>
-                <td>@Html.EditorFor(m => Model.Name)</td>
-                <td>Owner: </td>
-                <td>@Html.EditorFor(m => Model.Owner)</td>
-            </tr>
-            <tr>
-                <td>Abbr Name: </td>
-                <td>@Html.EditorFor(m => Model.ShortName)</td>
-                <td>Status: </td>
-                <td>
-                    @Html.DropDownListFor(
-                    x => x.Status,
-                    new SelectList(Model.AllStatuses, "Id", "Name"),
-                    "-- Select Status --",
-                    new
-                    {
-                    id = "StatusDropdownList"
-                    }
-                    )
-                </td>
-            </tr>
-            <tr>
-                <td>Description: </td>
-                <td colspan="3">@Html.TextAreaFor(m => Model.Description, new { style = "width:600px; resize:none; overflow-y:scroll; height:200px; max-height: 200px;", cols = "60", maxlength = "500" })</td>
-            </tr>
-            <tr>
-                <td>Details: </td>
-                <td colspan="3">@Html.TextAreaFor(m => Model.Details, new { @style = "resize:none; overflow-y:scroll;", maxlength = "8000", @rows = "10", @cols="65" })</td>
-            </tr>
-            <tr>
-                <td>Calculations: </td>
-                <td colspan="3">@Html.TextAreaFor(m => Model.Calculations, new { style = "width:600px; resize:none; overflow-y:scroll; height:200px; max-height: 200px;", cols = "60", maxlength = "500" })</td>
-            </tr>
-            <tr>
-                <td>Limitations: </td>
-                <td colspan="3">@Html.TextAreaFor(m => Model.Limitations, new { style = "width:600px; resize:none; overflow-y:scroll; height:200px; max-height: 200px;", cols = "60", maxlength = "500" })</td>
-            </tr>
-            <tr>
-                <td>Exceptions: </td>
-                <td colspan="3">@Html.TextAreaFor(m => Model.Exceptions, new { style = "width:600px; resize:none; overflow-y:scroll; height:200px; max-height: 200px;", cols = "60", maxlength = "500" })</td>
-            </tr>
-            <tr>
-                <td>Datasources: </td>
-                <td colspan="3">@Html.TextAreaFor(m => Model.DataSources, new { style = "width:600px; resize:none; overflow-y:scroll; height:200px; max-height: 200px;", cols = "60", maxlength = "300" })</td>
-            </tr>
-            <tr>
-                <td>Lookback: </td>
-                <td colspan="3">@Html.TextAreaFor(m => Model.Lookback, new { style = "width:600px; resize:none; overflow-y:scroll; height:200px; max-height: 200px;", cols = "60", maxlength = "500" })</td>
-            </tr>
-        </table>
+    <table class="contentRow" style="width:750px;">
+        <tr>
+            @*Hidden fields*@
+            <td colspan="4">
+                @Html.HiddenFor(m => Model.id)
+            </td>
+        </tr>
+        <tr>
+            <td>Name: </td>
+            <td>@Html.EditorFor(m => Model.Name)</td>
+            <td>Owner: </td>
+            <td>@Html.EditorFor(m => Model.Owner)</td>
+        </tr>
+        <tr>
+            <td>Abbr Name: </td>
+            <td>@Html.EditorFor(m => Model.ShortName)</td>
+            <td>Status: </td>
+            <td>
+                @Html.DropDownListFor(
+                x => x.Status,
+                new SelectList(Model.AllStatuses, "Id", "Name"),
+                "-- Select Status --",
+                new
+                {
+                id = "StatusDropdownList"
+                }
+                )
+            </td>
+        </tr>
+        <tr>
+            <td>Description: </td>
+            <td colspan="3">@Html.TextAreaFor(m => Model.Description, new { @style = "resize:none; overflow-y:scroll;", maxlength = "500", @rows = "10", @cols = "67" })</td>
+        </tr>
+        <tr>
+            <td>Details: </td>
+            <td colspan="3">@Html.TextAreaFor(m => Model.Details, new { @style = "resize:none; overflow-y:scroll;", maxlength = "8000", @rows = "10", @cols = "67" })</td>
+        </tr>
+        <tr>
+            <td>Calculations: </td>
+            <td colspan="3">@Html.TextAreaFor(m => Model.Calculations, new { @style = "resize:none; overflow-y:scroll;", maxlength = "500", @rows = "10", @cols = "67" })</td>
+        </tr>
+        <tr>
+            <td>Limitations: </td>
+            <td colspan="3">@Html.TextAreaFor(m => Model.Limitations, new { @style = "resize:none; overflow-y:scroll;", maxlength = "500", @rows = "10", @cols = "67" })</td>
+        </tr>
+        <tr>
+            <td>Exceptions: </td>
+            <td colspan="3">@Html.TextAreaFor(m => Model.Exceptions, new { @style = "resize:none; overflow-y:scroll;", maxlength = "500", @rows = "10", @cols = "67" })</td>
+        </tr>
+        <tr>
+            <td>Datasources: </td>
+            <td colspan="3">@Html.TextAreaFor(m => Model.DataSources, new { @style = "resize:none; overflow-y:scroll;", maxlength = "300", @rows = "10", @cols = "67" })</td>
+        </tr>
+        <tr>
+            <td>Lookback: </td>
+            <td colspan="3">@Html.TextAreaFor(m => Model.Lookback, new { @style = "resize:none; overflow-y:scroll;", maxlength = "500", @rows = "10", @cols = "67" })</td>
+        </tr>
+        <tr>
+            <td>SQL: </td>
+            <td colspan="3">@Html.TextAreaFor(m => Model.SQL, new { @style = "resize:none; overflow-y:scroll;", maxlength = "500", @rows = "10", @cols = "67", @readonly=true })</td>
+        </tr>
+    </table>
         <div style="position:absolute; bottom:3px; right:3px;">
             <input type="submit" name="Login" value="Submit" class="btn btn-primary" />
         </div>

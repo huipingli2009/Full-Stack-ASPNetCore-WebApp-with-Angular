@@ -54,6 +54,16 @@ namespace PHO_WebApp.DataAccessLayer
 
             return returnObject;
         }
+
+        public Cohort CreateCohortModel()
+        {
+            Cohort returnObject = new Cohort();
+
+            returnObject.AllStatuses = this.GetCohortStatuses();
+
+            return returnObject;
+        }
+
         public List<CohortStatus> GetCohortStatuses()
         {
             List<CohortStatus> returnObject = null;
@@ -95,6 +105,7 @@ namespace PHO_WebApp.DataAccessLayer
             c.DataSources = dr["DataSources"].ToString();
             c.Lookback = dr["Lookback"].ToString();
             c.StatusName = dr["StatusName"].ToString();
+            c.SQL = dr["SQL"].ToString();
             if (!string.IsNullOrWhiteSpace(dr["Status"].ToString()))
             {
                 c.Status = int.Parse(dr["Status"].ToString());
