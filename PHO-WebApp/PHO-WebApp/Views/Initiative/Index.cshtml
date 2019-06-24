@@ -1,0 +1,76 @@
+﻿@model List<PHO_WebApp.Models.Initiative>
+@{
+	ViewBag.Title = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>PHO Initiatives</h2>
+<div class="row">
+	<table>
+		<tr>
+			<td>
+				<div class="col-md-6" style="float:left">
+					<h3>Search</h3>
+				</div>
+			</td>
+			<td>
+				<input text="" class="form-control search" id="search" />
+			</td>
+			<td colspan="4" align="right">
+				<div class="col-md-6" style="float:right">
+					@Html.ActionLink("+ New", "AddInitiative", "InitiativeController", new { @class = "btn btn-primary" })
+				</div>
+			</td>
+		</tr>
+	</table>
+	@*<div class="col-md-6" style="float:left">
+			<h3>Search</h3>
+			<input text="" class="form-control search" id="search" />
+		</div>
+		<div class="col-md-6" style="float:right">
+			@Html.ActionLink("+ New", "AddInitiative", "InitiativeController", new { @class = "btn btn-primary" })
+		</div>*@
+</div>
+
+<div>
+	<table id="tblInitiative">
+		<tr>
+			<td>
+				@foreach (var item in Model)
+				{
+					@Html.Partial("_InitiativeDisplay", item);
+
+				}
+			</td>
+			<td></td>
+		</tr>
+		<tr>&nbsp;</tr>
+	</table>
+</div>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		// Handler for .ready() called.
+
+		//Event Handler assignment
+		$('.search').on('change keyup copy paste cut', null, function () { SearchTable('#search', '.InitiativeRecord') });
+
+
+	}); //End of the whole "document ready" event script
+
+	function SearchTable(searchID, classLookup) {
+		var searchValue = $(searchID).val().toLowerCase().trim();
+		$(classLookup).each(function () {
+			var str = $(this).text().toLowerCase().trim();
+			if (str.search(searchValue) == -1) {
+				$(this).hide();
+			}
+			else {
+				$(this).show();
+			}
+		});
+	}
+</script>

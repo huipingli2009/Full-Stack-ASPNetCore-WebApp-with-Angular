@@ -154,11 +154,13 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\CohortController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InitiativeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
     <Compile Include="DataAccessLayer\CohortDAL.cs" />
     <Compile Include="DataAccessLayer\DataDictionary.cs" />
+    <Compile Include="DataAccessLayer\InitiativeDAL.cs" />
     <Compile Include="DataAccessLayer\LoginDAL.cs" />
     <Compile Include="DataAccessLayer\Patients.cs" />
     <Compile Include="Global.asax.cs">
@@ -167,6 +169,7 @@
     <Compile Include="Models\CohortList.cs" />
     <Compile Include="Models\Cohort.cs" />
     <Compile Include="Models\DataDictionary.cs" />
+    <Compile Include="Models\Initiative.cs" />
     <Compile Include="Models\Patient.cs" />
     <Compile Include="Models\UserDetails.cs" />
     <Compile Include="Patient.cs">
@@ -200,6 +203,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Images\14_Park Shoot_tm_239.jpg" />
+    <Content Include="Images\pdf_icon.png" />
     <Content Include="Images\TSCHS_LOGO_CMYK.jpg" />
     <Content Include="PersonModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -302,6 +306,8 @@
     <Content Include="Views\Home\Cohort.cshtml" />
     <Content Include="Views\Cohort\Display.cshtml" />
     <Content Include="Views\Cohort\Index.cshtml" />
+    <Content Include="Views\Initiative\_InitiativeDisplay.cshtml" />
+    <Content Include="Views\Initiative\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
