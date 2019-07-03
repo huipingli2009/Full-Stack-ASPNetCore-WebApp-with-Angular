@@ -32,6 +32,7 @@ namespace PHO_WebApp.Controllers
             return PartialView("CohortDisplay");
         }
 
+        //Load the partial view. Takes a CohortID as a parameter, -1 means new.
         public ActionResult CohortPartial(int CohortId)
         {
             Cohort model = null;
@@ -47,6 +48,7 @@ namespace PHO_WebApp.Controllers
             return PartialView("CohortModal", model);
         }
 
+        //Post to save Cohort model
         [HttpPost]
         public ActionResult Save(Cohort model, string CohortStatusListItems)
         {
@@ -63,8 +65,11 @@ namespace PHO_WebApp.Controllers
                     //Insert
                     cohortRecords.InsertCohort(model);
                 }
+
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+
+            return View();
         }
     }
 

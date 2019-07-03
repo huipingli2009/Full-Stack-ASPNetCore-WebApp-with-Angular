@@ -12,8 +12,13 @@ namespace PHO_WebApp.Models
     public class Cohort
     {
         public int id { get; set; }
+
+        [Required(ErrorMessage = "Required")]
         public string Name { get; set; }
+        
         public string ShortName { get; set; }
+
+        [Required(ErrorMessage = "Required")]
         public string Description { get; set; }
         public string Details { get; set; }
         public string SQL { get; set; }
@@ -22,9 +27,15 @@ namespace PHO_WebApp.Models
         public string Lookback { get; set; }
         public string Calculations { get; set; }
         public string Limitations { get; set; }
+
+        [Required(ErrorMessage = "Required")]
         public string Owner { get; set; }
+
         public string DeletedFlag { get; set; }
+
         public string CreatedById { get; set; }
+
+        [Required(ErrorMessage = "Required")]
         public int Status { get; set; }
 
         public string StatusName { get; set; }
@@ -38,6 +49,7 @@ namespace PHO_WebApp.Models
         public DateTime ModifiedDate { get; set; }
 
         public string DeletedById { get; set; }
+
         [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
         public DateTime DeletedDate { get; set; }
 

@@ -1,13 +1,33 @@
 ﻿@model PHO_WebApp.Models.UserDetails
-    @{
-        if (Model != null && Model.UserName != null)
-        {
-            string loginText = "Welcome " + Model.UserName + "! - Logout";
-            @Html.ActionLink(loginText, "Logout", "Login", new { @class = "Header-nav-item" })
+
+@if (Model != null && Model.UserName != null)
+{
+    string loginText = "Welcome " + Model.UserName + "! - Logout";
+    @Html.ActionLink(loginText, "Logout", "Login", new { @class = "Header-nav-item" })
+}
+else
+{
+    @:<a href='javascript:showLogonDialog();' class="Header-nav-item">Log In</a>
+    <script type="text/javascript">
+
+        function showLogonDialog() {
+            if( $("#dlgLogin").length == 0 ){
+                // ajax load
+                $('#divLogon').load("@Url.Action("OpenLogin", "Login")");
+            } else {
+                // clear username & password fields
+                $('#username,#password').val('');
+
+                // reopen the login dialog which was previously rendered
+                $("#dlgLogin").dialog("open");
+            }
         }
-        else
-        {
-            @Html.RouteLink("Login", "Login", null, new { @class = "Header-nav-item" })
-        }
-    }
+    </script>
+    <div id='divLogon'>
+    </div>
+}
+
+
+
+
 

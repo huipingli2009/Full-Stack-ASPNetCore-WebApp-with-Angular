@@ -55,15 +55,6 @@ namespace PHO_WebApp.DataAccessLayer
             return returnObject;
         }
 
-        public Cohort CreateCohortModel()
-        {
-            Cohort returnObject = new Cohort();
-
-            returnObject.AllStatuses = this.GetCohortStatuses();
-
-            return returnObject;
-        }
-
         public List<CohortStatus> GetCohortStatuses()
         {
             List<CohortStatus> returnObject = null;
@@ -88,6 +79,16 @@ namespace PHO_WebApp.DataAccessLayer
 
             return returnObject;
         }
+        
+        public Cohort CreateCohortModel()
+        {
+            Cohort returnObject = new Cohort();
+
+            returnObject.AllStatuses = this.GetCohortStatuses();
+
+            return returnObject;
+        }
+
         public Cohort CreateCohortModel(DataRow dr)
         {
             Cohort c = new Cohort();

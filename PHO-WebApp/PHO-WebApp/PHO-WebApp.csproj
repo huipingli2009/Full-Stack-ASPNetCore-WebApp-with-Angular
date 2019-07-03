@@ -172,6 +172,7 @@
     <Compile Include="Models\DataDictionary.cs" />
     <Compile Include="Models\Initiative.cs" />
     <Compile Include="Models\Patient.cs" />
+    <Compile Include="Models\StaffType.cs" />
     <Compile Include="Models\UserDetails.cs" />
     <Compile Include="Patient.cs">
       <DependentUpon>PersonModel.tt</DependentUpon>
@@ -292,10 +293,12 @@
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />
@@ -354,6 +357,7 @@
     <Content Include="Views\Cohort\CohortModal.cshtml" />
     <Content Include="Views\Initiative\_InitiativeDisplay.cshtml" />
     <Content Include="Views\Initiative\Index.cshtml" />
+    <Content Include="Views\Shared\LoginDialog.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -22,5 +22,9 @@ namespace PHO_WebApp.Models
         public string Password { get; set; }
 
         public string LoginError { get; set; }
+
+        public int StaffTypeId { get; set; }
+
+        public List<StaffType> AllStaffTypes { get; set; }
     }
 }
