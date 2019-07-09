@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using PHO_WebApp.Controllers;
+@using PHO_WebApp.Models;
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -10,6 +13,7 @@
     <script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
     @RenderSection("scripts", required: false)
     <link href="https://fonts.googleapis.com/css?family=Arvo|Nunito+Sans&display=swap" rel="stylesheet">
 </head>
@@ -23,7 +27,7 @@
             <div class="nav navbar-nav">
                 @Html.RouteLink("Home", "Home", null, new { @class = "Header-nav-item" })
                 @{
-                    if (Session["UserDetails"] != null)
+                    if (@SharedLogic.IsAuthenticated(new StaffTypeEnum[] { StaffTypeEnum.CCHMC_IS, StaffTypeEnum.PHO_Staff }, Session["UserDetails"]))
                     {
                         @Html.RouteLink("Data Dictionary", "DataDictionary", null, new { @class = "Header-nav-item" })
                         @Html.RouteLink("Cohorts", "Cohort", null, new { @class = "Header-nav-item" })

@@ -14,7 +14,7 @@ namespace PHO_WebApp.DataAccessLayer
     {
         SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["con"].ConnectionString);
 
-        public int? GetUserLogin(string username, string password)
+        public int? GetUserLogin(string username)
         {
             int? returnValue = null;
 
@@ -26,9 +26,9 @@ namespace PHO_WebApp.DataAccessLayer
             parameterUserName.Value = username;
             com.Parameters.Add(parameterUserName);
 
-            SqlParameter parameterPassword = new SqlParameter("@Password", SqlDbType.NVarChar, 50);
-            parameterPassword.Value = password;
-            com.Parameters.Add(parameterPassword);
+            //SqlParameter parameterPassword = new SqlParameter("@Password", SqlDbType.NVarChar, 50);
+            //parameterPassword.Value = password;
+            //com.Parameters.Add(parameterPassword);
 
             //com.Parameters.AddWithValue("@UserName", username);
             //com.Parameters.AddWithValue("@Password", password);
@@ -70,13 +70,84 @@ namespace PHO_WebApp.DataAccessLayer
             //Fill Model
             if (ds != null && ds.Tables != null && ds.Tables.Count > 0 && ds.Tables[0].Rows != null)
             {
-                returnObject = new UserDetails();
-                returnObject.Id = int.Parse(ds.Tables[0].Rows[0][0].ToString());
-                returnObject.PersonId = int.Parse(ds.Tables[0].Rows[0][1].ToString());
-                returnObject.UserName = ds.Tables[0].Rows[0][2].ToString();
+                returnObject = CreateUserDetailsModel(ds.Tables[0].Rows[0]);
             }
 
             return returnObject;
+        }
+
+
+
+        public UserDetails CreateUserDetailsModel()
+        {
+            UserDetails ud = new UserDetails();
+            
+            ud.AllStaffTypes = GetStaffTypes();
+            ud.StaffTypeId = -1;
+            return ud;
+        }
+
+        public UserDetails CreateUserDetailsModel(DataRow dr)
+        {
+            UserDetails ud = new UserDetails();
+            if (dr["LoginId"] != null && !string.IsNullOrWhiteSpace(dr["LoginId"].ToString()))
+            {
+                ud.Id = int.Parse(dr["LoginId"].ToString());
+            }
+            if (dr["PersonId"] != null && !string.IsNullOrWhiteSpace(dr["PersonId"].ToString()))
+            {
+                ud.Id = int.Parse(dr["PersonId"].ToString());
+            }
+
+            ud.UserName = dr["UserName"].ToString();
+            ud.Password = dr["Password"].ToString();
+
+            if (dr["StaffTypeId"] != null && !string.IsNullOrWhiteSpace(dr["StaffTypeId"].ToString()))
+            {
+                ud.StaffTypeId = int.Parse(dr["StaffTypeId"].ToString());
+            }
+
+            ud.AllStaffTypes = GetStaffTypes();
+
+            return ud;
+        }
+
+
+        public List<StaffType> GetStaffTypes()
+        {
+            List<StaffType> returnObject = null;
+
+            SqlCommand com = new SqlCommand("spGetStaffTypes", con);
+            com.CommandType = CommandType.StoredProcedure;
+
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            //Cohorts = ds.Tables[0].
+            da.Fill(ds);
+
+            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+            {
+                if (returnObject == null)
+                {
+                    returnObject = new List<StaffType>();
+                }
+                StaffType c = CreateStaffTypeModel(ds.Tables[0].Rows[i]);
+                returnObject.Add(c);
+            }
+
+            return returnObject;
+        }
+
+        public StaffType CreateStaffTypeModel(DataRow dr)
+        {
+            StaffType c = new StaffType();
+            if (dr["Id"] != null && !string.IsNullOrWhiteSpace(dr["Id"].ToString()))
+            {
+                c.Id = int.Parse(dr["Id"].ToString());
+            }
+            c.Name = dr["Name"].ToString();
+
+            return c;
         }
 
     }

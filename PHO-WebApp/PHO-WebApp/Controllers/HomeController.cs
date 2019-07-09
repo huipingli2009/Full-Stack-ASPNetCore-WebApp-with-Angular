@@ -31,6 +31,28 @@ namespace PHO_WebApp.Controllers
             return returnValue;
         }
 
+        public bool IsAuthenticated(StaffTypeEnum[] authorizedStaffTypes)
+        {
+            bool returnValue = false;
+
+            if (Session["UserDetails"] != null)
+            {
+                UserDetails user = (UserDetails)Session["UserDetails"];
+                if (user.StaffTypeId > 0)
+                {
+                    foreach(StaffTypeEnum stafftype in authorizedStaffTypes)
+                    {
+                        if (user.StaffTypeId == (int)stafftype)
+                        {
+                            returnValue = true;
+                        }
+                    }
+                }
+            }
+
+            return returnValue;
+        }
+
         public ActionResult Index()
         {
             return View("Index");
