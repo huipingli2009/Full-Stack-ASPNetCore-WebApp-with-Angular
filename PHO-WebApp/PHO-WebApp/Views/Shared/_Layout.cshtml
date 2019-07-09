@@ -27,7 +27,7 @@
             <div class="nav navbar-nav">
                 @Html.RouteLink("Home", "Home", null, new { @class = "Header-nav-item" })
                 @{
-                    if (((HomeController)this.ViewContext.Controller).IsAuthenticated(new StaffTypeEnum[] { StaffTypeEnum.CCHMC_IS, StaffTypeEnum.PHO_Staff }))
+                    if (@SharedLogic.IsAuthenticated(new StaffTypeEnum[] { StaffTypeEnum.CCHMC_IS, StaffTypeEnum.PHO_Staff }, Session["UserDetails"]))
                     {
                         @Html.RouteLink("Data Dictionary", "DataDictionary", null, new { @class = "Header-nav-item" })
                         @Html.RouteLink("Cohorts", "Cohort", null, new { @class = "Header-nav-item" })
