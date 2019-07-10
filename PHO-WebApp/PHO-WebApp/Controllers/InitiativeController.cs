@@ -6,11 +6,9 @@ using System.Web.Mvc;
 using PHO_WebApp.DataAccessLayer;
 using System.Data;
 using PHO_WebApp.Models;
-<<<<<<< HEAD
+
 using Newtonsoft.Json;
-=======
-//comment
->>>>>>> 9120deb61fe913d7275025be59357947a47c3366
+
 
 namespace PHO_WebApp.Controllers
 {
