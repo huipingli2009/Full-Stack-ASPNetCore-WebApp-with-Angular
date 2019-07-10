@@ -15,8 +15,6 @@
         <h3>Search</h3>
         <input text="" class="form-control search" id="search" />
     </div>
-
-
 </div>
 
 <div>
@@ -70,7 +68,7 @@
         $('.btnDetail').click(function () {
             var $buttonClicked = $(this);
             var id = $buttonClicked.attr('data-id');
-            $('#dialogedit').data('id', id).dialog('open');
+			$('#dialogedit').data('id', id).dialog('open');
         });
     
     

@@ -27,10 +27,10 @@ namespace PHO_WebApp.Controllers
             return View(CohortNew);
         }
 
-        public PartialViewResult CohortDisplay()
-        {
-            return PartialView("CohortDisplay");
-        }
+        //public PartialViewResult CohortDisplay()
+        //{
+        //    return PartialView("CohortDisplay");
+        //}
 
         public ActionResult CohortPartial(int CohortId)
         {
@@ -63,8 +63,11 @@ namespace PHO_WebApp.Controllers
                     //Insert
                     cohortRecords.InsertCohort(model);
                 }
+
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            return View();
+           
         }
     }
 
