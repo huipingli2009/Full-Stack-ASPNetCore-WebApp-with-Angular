@@ -171,6 +171,7 @@
     <Compile Include="Models\CohortStatus.cs" />
     <Compile Include="Models\DataDictionary.cs" />
     <Compile Include="Models\Initiative.cs" />
+    <Compile Include="Models\InitiativeStatus.cs" />
     <Compile Include="Models\Patient.cs" />
     <Compile Include="Models\StaffType.cs" />
     <Compile Include="Models\UserDetails.cs" />
@@ -359,6 +360,7 @@
     <Content Include="Views\Initiative\_InitiativeDisplay.cshtml" />
     <Content Include="Views\Initiative\Index.cshtml" />
     <Content Include="Views\Shared\LoginDialog.cshtml" />
+    <Content Include="Views\Initiative\_InitiativePartialPath.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

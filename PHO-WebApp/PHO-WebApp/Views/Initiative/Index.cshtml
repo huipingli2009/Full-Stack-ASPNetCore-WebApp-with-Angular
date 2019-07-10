@@ -18,18 +18,13 @@
 			</td>
 			<td colspan="4" align="right">
 				<div class="col-md-6" style="float:right">
-					@Html.ActionLink("+ New", "AddInitiative", "InitiativeController", new { @class = "btn btn-primary" })
+					@*@Html.ActionLink("+ New", "SaveInitiative", "InitiativeController", new { @class = "btn btn-primary" })*@
+					<input type="button" class="btn btn-primary" id="addnew" value="+ New" />
 				</div>
 			</td>
 		</tr>
 	</table>
-	@*<div class="col-md-6" style="float:left">
-			<h3>Search</h3>
-			<input text="" class="form-control search" id="search" />
-		</div>
-		<div class="col-md-6" style="float:right">
-			@Html.ActionLink("+ New", "AddInitiative", "InitiativeController", new { @class = "btn btn-primary" })
-		</div>*@
+	
 </div>
 
 <div>
@@ -48,16 +43,21 @@
 	</table>
 </div>
 
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+<div id="dialognew" style="height:700px; max-height:700px; overflow: scroll; background-color:white;">Loading...</div>
+<div id="dialogedit" style="height:700px; max-height:80%; overflow: scroll; background-color:white;">Loading...</div>
 
 <script type="text/javascript">
 	$(document).ready(function () {
 		// Handler for .ready() called.
 
 		//Event Handler assignment
-		$('.search').on('change keyup copy paste cut', null, function () { SearchTable('#search', '.InitiativeRecord') });
+		$('.search').on('change keyup copy paste cut', null, function () { SearchTable('#search', '.InitiativeRecord') });		
 
+		////reload the partialview
+		//$('#dialogedit').change(function () {
+
+
+		//})
 
 	}); //End of the whole "document ready" event script
 
@@ -73,4 +73,62 @@
 			}
 		});
 	}
+	
+	$('.btnDetail').click(function () {
+		
+		var $buttonClicked = $(this);
+		var id = $buttonClicked.attr('data-id');
+
+		//
+		//$('#dialogedit').change(function () {
+
+		//})
+
+		//
+		$('#dialogedit').data('id', id).dialog('open');		
+	});
+
+	$('#addnew').click(function () {		
+		$('#dialognew').dialog('open');
+	});
+	
+	$(function () {
+		$('#dialogedit').dialog({
+			autoOpen: false,
+			width: 800,
+			height: 600,
+			overflow: scroll,
+			resizable: false,
+			title: 'Edit Initiative',
+			modal: true,
+			open: function (event, ui) {
+				var id = $(this).data('id');
+				$(this).load("@Url.Action("InitiativePartialPath")/?InitiativeId=" + id);			
+				
+				if ($(this).closest('.ui-dialog').offset().top < 80) {
+					$(this).closest('.ui-dialog').css({ 'top': '80px' });
+				}
+			}			
+		});
+	})
+
+	$(function () {
+		$('#dialognew').dialog({
+			autoOpen: false,
+			width: 800,
+			height: 600,
+			overflow: scroll,
+			resizable: false,
+			title: 'Add Initiative',
+			modal: true,
+			open: function (event, ui) {
+				//var id = $(this).data('id');
+				$(this).load("@Url.Action("InitiativePartialPath")/?InitiativeId=-1");
+				
+				if ($(this).closest('.ui-dialog').offset().top < 80) {
+					$(this).closest('.ui-dialog').css({ 'top': '80px' });
+				}
+			}			
+		});
+	})
 </script>
