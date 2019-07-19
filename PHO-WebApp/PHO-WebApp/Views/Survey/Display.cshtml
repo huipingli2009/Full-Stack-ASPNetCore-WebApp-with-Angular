@@ -1,0 +1,25 @@
+﻿@model PHO_WebApp.Models.SurveyForm
+@{
+    ViewBag.Title = "Display";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Survey - @Model.Survey_Title</h2>
+
+@foreach (var item in Model.FormSections)
+{
+    foreach (var section in item.Sections)
+    {
+        <div>
+            <h4>@section.SectionDescription</h4>            
+        </div>
+        <div>
+            @*@Html.Action("DisplaySection", "Survey", new { id = section.SectionId })*@
+            @Html.Partial("DisplayQuestions", section);
+        </div>
+        <br />
+        <hr />
+    }
+
+}
+

@@ -158,11 +158,13 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
+    <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="DataAccessLayer\CohortDAL.cs" />
     <Compile Include="DataAccessLayer\DataDictionary.cs" />
     <Compile Include="DataAccessLayer\InitiativeDAL.cs" />
     <Compile Include="DataAccessLayer\LoginDAL.cs" />
     <Compile Include="DataAccessLayer\Patients.cs" />
+    <Compile Include="DataAccessLayer\SurveyDAL.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -174,6 +176,7 @@
     <Compile Include="Models\InitiativeStatus.cs" />
     <Compile Include="Models\Patient.cs" />
     <Compile Include="Models\StaffType.cs" />
+    <Compile Include="Models\SurveyForm.cs" />
     <Compile Include="Models\UserDetails.cs" />
     <Compile Include="Patient.cs">
       <DependentUpon>PersonModel.tt</DependentUpon>
@@ -361,6 +364,9 @@
     <Content Include="Views\Initiative\Index.cshtml" />
     <Content Include="Views\Shared\LoginDialog.cshtml" />
     <Content Include="Views\Initiative\_InitiativePartialPath.cshtml" />
+    <Content Include="Views\Survey\Index.cshtml" />
+    <Content Include="Views\Survey\Display.cshtml" />
+    <Content Include="Views\Survey\DisplayQuestions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

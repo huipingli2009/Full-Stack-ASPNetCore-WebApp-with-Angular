@@ -30,5 +30,34 @@ namespace PHO_WebApp
             return returnValue;
         }
 
+        public static int ParseNumeric(string value)
+        {
+            int returnValue = -1;
+
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                Int32.TryParse(value, out returnValue);
+            }
+
+            return returnValue;
+        }
+
+        public static int? ParseNumericNullable(string value)
+        {
+            int? returnValue = new int?();
+
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                int holder = -1;
+                int.TryParse(value, out holder);
+                if (holder > -1)
+                {
+                    returnValue = holder;
+                }
+            }
+
+            return returnValue;
+        }
+
     }
 }

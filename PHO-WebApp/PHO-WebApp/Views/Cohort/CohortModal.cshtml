@@ -94,7 +94,8 @@
             <tr>
                 <td>SQL: </td>
                 <td colspan="3">
-                    @Html.TextAreaFor(m => Model.SQL, new { @style = "resize:none; overflow-y:scroll;", maxlength = "500", @rows = "10", @cols = "67", @readonly = true })
+                    @Html.TextAreaFor(m => Model.SQL, new { @style = "resize:none; overflow-y:scroll;", maxlength = "8000", @rows = "10", @cols = "67" })
+                    @Html.ValidationMessageFor(Model => Model.SQL, null, new { @class = "validationText" })
                 </td>
             </tr>
         </table>
@@ -104,6 +105,19 @@
 
     }
 </div>
+
+<script type="text/javascript">
+
+    $(document).ready(function ()
+    {
+        $.validator.setDefaults({
+            ignore: ':hidden, [readonly=readonly]'
+        });
+    }
+
+
+
+</script>
 
 
 

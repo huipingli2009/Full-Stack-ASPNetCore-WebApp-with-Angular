@@ -1,0 +1,20 @@
+﻿@model List<PHO_WebApp.Models.SurveySummary>
+@{
+    ViewBag.Title = "Surveys";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Available Surveys</h2>
+
+<div>
+    <br />
+    @foreach (var item in Model)
+    {
+        <hr />
+        <div>
+            <h4>@Html.ActionLink(item.Survey_Title, "ViewSurvey", new { id = item.FormId })</h4>
+            <p><i>@item.Description</i></p>
+        </div>
+        <br />
+    }
+</div>
