@@ -196,7 +196,7 @@ namespace PHO_WebApp.DataAccessLayer
             {
                 c.QuestionTypeId = QuestionTypeId.Value;
             }
-
+            c.QuestionType = QuestionType;
             c.Flag_Required = Flag_Required;
             c.QuestionLabel = QuestionLabel;
             c.LabelCode = LabelCode;

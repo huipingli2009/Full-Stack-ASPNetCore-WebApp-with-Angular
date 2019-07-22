@@ -11,7 +11,7 @@
     foreach (var section in item.Sections)
     {
         <div>
-            <h4>@section.SectionDescription</h4>            
+            <h4>@Html.Label(section.SectionDescription)</h4>            
         </div>
         <div>
             @*@Html.Action("DisplaySection", "Survey", new { id = section.SectionId })*@
