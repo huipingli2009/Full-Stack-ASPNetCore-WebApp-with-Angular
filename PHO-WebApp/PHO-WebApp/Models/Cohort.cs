@@ -18,7 +18,7 @@ namespace PHO_WebApp.Models
         
         public string ShortName { get; set; }
 
-        [Required(ErrorMessage = "Required")]
+        [Required(ErrorMessage = "Description can't be blank")]
         public string Description { get; set; }
         public string Details { get; set; }
         public string SQL { get; set; }

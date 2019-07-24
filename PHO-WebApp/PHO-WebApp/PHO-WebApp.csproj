@@ -156,12 +156,14 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InitiativeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\MeasureController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
     <Compile Include="DataAccessLayer\CohortDAL.cs" />
     <Compile Include="DataAccessLayer\DataDictionary.cs" />
     <Compile Include="DataAccessLayer\InitiativeDAL.cs" />
     <Compile Include="DataAccessLayer\LoginDAL.cs" />
+    <Compile Include="DataAccessLayer\MeasureDAL.cs" />
     <Compile Include="DataAccessLayer\Patients.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -172,6 +174,7 @@
     <Compile Include="Models\DataDictionary.cs" />
     <Compile Include="Models\Initiative.cs" />
     <Compile Include="Models\InitiativeStatus.cs" />
+    <Compile Include="Models\Measure.cs" />
     <Compile Include="Models\Patient.cs" />
     <Compile Include="Models\StaffType.cs" />
     <Compile Include="Models\UserDetails.cs" />
@@ -361,6 +364,10 @@
     <Content Include="Views\Initiative\Index.cshtml" />
     <Content Include="Views\Shared\LoginDialog.cshtml" />
     <Content Include="Views\Initiative\_InitiativePartialPath.cshtml" />
+    <Content Include="Views\_MeasureDisplay.cshtml" />
+    <Content Include="Views\Measure\_MeasureDisplay.cshtml" />
+    <Content Include="Views\Measure\Index.cshtml" />
+    <Content Include="Views\Measure\_QIMeasurePath.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
