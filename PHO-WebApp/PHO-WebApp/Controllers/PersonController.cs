@@ -8,7 +8,7 @@ using PHO_WebApp.DataAccessLayer;
 
 namespace PHO_WebApp.Controllers
 {
-    public class PersonController : Controller
+    public class PersonController : BaseController
     {
         private PHOPersonEntities1 db = new PHOPersonEntities1();
         // GET: Person
