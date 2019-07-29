@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace PHO_WebApp.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         Models.UserDetails user = null;
         DataAccessLayer.DataDictionary records = new DataAccessLayer.DataDictionary();

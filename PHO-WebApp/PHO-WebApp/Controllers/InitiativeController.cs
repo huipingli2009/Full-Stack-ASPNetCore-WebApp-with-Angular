@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace PHO_WebApp.Controllers
 {
-    public class InitiativeController : Controller
+    public class InitiativeController : BaseController
     {
         DataAccessLayer.InitiativeDAL initiativeRecords = new InitiativeDAL();
         // GET: Initiative

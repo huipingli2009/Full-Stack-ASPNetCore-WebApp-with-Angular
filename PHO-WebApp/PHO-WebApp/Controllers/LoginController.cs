@@ -10,7 +10,7 @@ using System.Security.Cryptography;
 
 namespace PHO_WebApp.Controllers
 {
-    public class LoginController : Controller
+    public class LoginController : BaseController
     {
         // GET: Login
 
@@ -43,8 +43,9 @@ namespace PHO_WebApp.Controllers
                     {
                         UserDetails savedUserDetails = userLogin.GetPersonLoginForLoginId(id.Value);
                         VerifyPassword(savedUserDetails.Password, password);
+                        savedUserDetails.SessionId = this.Session.SessionID;
                         Session["UserDetails"] = savedUserDetails;
-                        //return RedirectToAction("Index", "Home", new { area = "Home" });
+                        SharedLogic.LogAudit(savedUserDetails, "LoginController", "SubmitLoginPartial", "Successful login. Username: " + savedUserDetails.UserName);
                     }
                     else
                     {
@@ -53,11 +54,18 @@ namespace PHO_WebApp.Controllers
                 }
                 catch (UnauthorizedAccessException)
                 {
+                    SharedLogic.LogAudit(null, "LoginController", "SubmitLoginPartial", "User unsuccessfully attempted to login. Bad password / login combination.");
                     return Json(new { Success = false });
                 }
+                //catch (Exception ex)
+                //{
+                //    SharedLogic.LogError(null, "LoginController", "SubmitLoginPartial", ex);
+                //    return Json(new { Success = false });
+                //}
 
             }
 
+            
             return Json(new { Success = true });
         }
 

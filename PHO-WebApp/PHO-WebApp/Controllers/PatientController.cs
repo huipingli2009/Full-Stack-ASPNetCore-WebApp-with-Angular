@@ -5,7 +5,7 @@ using System.Web.Mvc;
 
 namespace PHO_WebApp.Controllers
 {
-    public class PatientController : Controller
+    public class PatientController : BaseController
     {       
         DataAccessLayer.Patients pts = new Patients();
         

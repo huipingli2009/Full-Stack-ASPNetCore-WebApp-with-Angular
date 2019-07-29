@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace PHO_WebApp.Controllers
 {
-    public class CohortController : Controller
+    public class CohortController : BaseController
     {
         DataAccessLayer.CohortDAL cohortRecords = new CohortDAL();
      

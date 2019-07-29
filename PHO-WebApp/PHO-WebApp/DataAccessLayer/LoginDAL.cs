@@ -92,11 +92,11 @@ namespace PHO_WebApp.DataAccessLayer
             UserDetails ud = new UserDetails();
             if (dr["LoginId"] != null && !string.IsNullOrWhiteSpace(dr["LoginId"].ToString()))
             {
-                ud.Id = int.Parse(dr["LoginId"].ToString());
+                ud.LoginId = int.Parse(dr["LoginId"].ToString());
             }
             if (dr["PersonId"] != null && !string.IsNullOrWhiteSpace(dr["PersonId"].ToString()))
             {
-                ud.Id = int.Parse(dr["PersonId"].ToString());
+                ud.StaffId = int.Parse(dr["PersonId"].ToString());
             }
 
             ud.UserName = dr["UserName"].ToString();
