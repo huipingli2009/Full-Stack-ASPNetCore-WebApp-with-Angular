@@ -38,8 +38,8 @@
 
 <script type="text/javascript">
 
-	$(document).ready(function () {
-		// Handler for .ready() called.
+       $(document).ready(function () {
+              // Handler for .ready() called.
 
         //Event Handler assignment
         $('.search').on('change keyup copy paste cut', null, function () { SearchTable('#search', '.contentRow') });
@@ -68,10 +68,10 @@
         $('.btnDetail').click(function () {
             var $buttonClicked = $(this);
             var id = $buttonClicked.attr('data-id');
-			$('#dialogedit').data('id', id).dialog('open');
+                     $('#dialogedit').data('id', id).dialog('open');
         });
-    
-    
+
+
         $(function () {
             $('#dialognew').dialog({
                 autoOpen: false,
@@ -81,8 +81,12 @@
                 resizable: false,
                 title: 'New Cohort',
                 modal: true,
-                open: function (event, ui) {                   
-                    $(this).load("@Url.Action("CohortPartial")/?CohortId=-1");
+                open: function (event, ui) {
+                                  $(this).load("@Url.Action("CohortPartial")/?CohortId=-1");
+
+                                  if ($(this).closest('.ui-dialog').offset().top < 80) {
+                                         $(this).closest('.ui-dialog').css({ 'top': '80px' });
+                                  }
                 }
             });
         });
@@ -90,7 +94,7 @@
         $(function () {
             $('#dialogedit').dialog({
                 autoOpen: false,
-                width: 800,  
+                width: 800,
                 height: 700,
                 overflow: scroll,
                 resizable: false,
@@ -98,18 +102,18 @@
                 modal: true,
                 open: function (event, ui) {
                     var id = $(this).data('id');
-                    $(this).load("@Url.Action("CohortPartial")/?CohortId=" + id);
-                }
+                                  $(this).load("@Url.Action("CohortPartial")/?CohortId=" + id);
+
+                                  if ($(this).closest('.ui-dialog').offset().top < 80) {
+                                         $(this).closest('.ui-dialog').css({ 'top': '80px' });
+                                  }
+                           },
+                           close: function(event, ui){
+                                  window.location.reload(true);
+                           }
             });
         });
 
 
 
 </script>
-
-
-
-
-
-
-

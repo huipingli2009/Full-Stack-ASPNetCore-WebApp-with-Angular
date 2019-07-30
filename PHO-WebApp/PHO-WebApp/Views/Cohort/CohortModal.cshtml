@@ -9,7 +9,7 @@
 <div style="position:relative">
     @using (Html.BeginForm("Save", "Cohort", FormMethod.Post))
     {
-        <table class="contentRow" style="width:750px; border-spacing:10px;">
+        <table class="contentRow" style="width:700px; border-spacing:10px;">
             <tr>
                 @*Hidden fields*@
                 <td colspan="4">
@@ -18,20 +18,20 @@
                     @Html.AntiForgeryToken()
                 </td>
             </tr>
-            <tr >
+            <tr>
                 <td>Name: </td>
                 <td>@Html.EditorFor(m => Model.Name)  @Html.ValidationMessageFor(Model => Model.Name, null, new { @class = "validationText" })</td>
                 <td>Owner: </td>
                 <td>@Html.EditorFor(m => Model.Owner)  @Html.ValidationMessageFor(Model => Model.Owner, null, new { @class = "validationText" })</td>
             </tr>
-            <tr >
+            <tr>
                 <td>Abbr Name: </td>
                 <td>@Html.EditorFor(m => Model.ShortName)  @Html.ValidationMessageFor(Model => Model.ShortName, null, new { @class = "validationText" })</td>
                 <td>Status: </td>
                 <td>
                     @Html.DropDownListFor(
                     x => x.Status,
-                    new SelectList(Model.AllStatuses, "Id", "Name"),
+                     new SelectList(Model.AllStatuses, "Id", "Name"),
                     "-- Select Status --",
                     new
                     {
@@ -42,69 +42,68 @@
                     @Html.ValidationMessageFor(Model => Model.Status, null, new { @class = "validationText" })
                 </td>
             </tr>
-            <tr >
+            <tr>
                 <td>Description: </td>
-                <td colspan="3">
-                    @Html.TextAreaFor(m => Model.Description, new { @style = "resize:none; overflow-y:scroll;", maxlength = "500", @rows = "5", @cols = "67" })
+                <td colspan="6">
+                    @Html.TextAreaFor(m => Model.Description, new { @style = "resize:none; overflow-y:scroll;", maxlength = "500", @rows = "5", @cols = "76" })
                     @Html.ValidationMessageFor(Model => Model.Description, null, new { @class = "validationText" })
                 </td>
             </tr>
-            <tr >
+            <tr>
                 <td>Details: </td>
-                <td colspan="3">
-                    @Html.TextAreaFor(m => Model.Details, new { @style = "resize:none; overflow-y:scroll;", maxlength = "8000", @rows = "10", @cols = "67" })
+                <td colspan="6">
+                    @Html.TextAreaFor(m => Model.Details, new { @style = "resize:none; overflow-y:scroll;", maxlength = "8000", @rows = "10", @cols = "76" })
                     @Html.ValidationMessageFor(Model => Model.Details, null, new { @class = "validationText" })
                 </td>
             </tr>
-            <tr >
+            <tr>
                 <td>Calculations: </td>
-                <td colspan="3">
-                    @Html.TextAreaFor(m => Model.Calculations, new { @style = "resize:none; overflow-y:scroll;", maxlength = "500", @rows = "2", @cols = "67" })
+                <td colspan="6">
+                    @Html.TextAreaFor(m => Model.Calculations, new { @style = "resize:none; overflow-y:scroll;", maxlength = "500", @rows = "2", @cols = "76" })
                     @Html.ValidationMessageFor(Model => Model.Calculations, null, new { @class = "validationText" })
                 </td>
             </tr>
-            <tr >
+            <tr>
                 <td>Limitations: </td>
-                <td colspan="3">
-                    @Html.TextAreaFor(m => Model.Limitations, new { @style = "resize:none; overflow-y:scroll;", maxlength = "500", @rows = "2", @cols = "67" })
+                <td colspan="6">
+                    @Html.TextAreaFor(m => Model.Limitations, new { @style = "resize:none; overflow-y:scroll;", maxlength = "500", @rows = "2", @cols = "76" })
                     @Html.ValidationMessageFor(Model => Model.Limitations, null, new { @class = "validationText" })
                 </td>
             </tr>
-            <tr >
+            <tr>
                 <td>Exceptions: </td>
-                <td colspan="3">
-                    @Html.TextAreaFor(m => Model.Exceptions, new { @style = "resize:none; overflow-y:scroll;", maxlength = "500", @rows = "2", @cols = "67" })
+                <td colspan="6">
+                    @Html.TextAreaFor(m => Model.Exceptions, new { @style = "resize:none; overflow-y:scroll;", maxlength = "500", @rows = "2", @cols = "76" })
                     @Html.ValidationMessageFor(Model => Model.Exceptions, null, new { @class = "validationText" })
                 </td>
             </tr>
-            <tr >
+            <tr>
                 <td>Datasources: </td>
-                <td colspan="3">
-                    @Html.TextAreaFor(m => Model.DataSources, new { @style = "resize:none; overflow-y:scroll;", maxlength = "300", @rows = "2", @cols = "67" })
+                <td colspan="6">
+                    @Html.TextAreaFor(m => Model.DataSources, new { @style = "resize:none; overflow-y:scroll;", maxlength = "300", @rows = "2", @cols = "76" })
                     @Html.ValidationMessageFor(Model => Model.DataSources, null, new { @class = "validationText" })
                 </td>
             </tr>
-            <tr >
+            <tr>
                 <td>Lookback: </td>
-                <td colspan="3">
-                    @Html.TextAreaFor(m => Model.Lookback, new { @style = "resize:none; overflow-y:scroll;", maxlength = "500", @rows = "2", @cols = "67" })
+                <td colspan="6">
+                    @Html.TextAreaFor(m => Model.Lookback, new { @style = "resize:none; overflow-y:scroll;", maxlength = "500", @rows = "2", @cols = "76" })
                     @Html.ValidationMessageFor(Model => Model.Lookback, null, new { @class = "validationText" })
                 </td>
             </tr>
             <tr>
                 <td>SQL: </td>
-                <td colspan="3">
-                    @Html.TextAreaFor(m => Model.SQL, new { @style = "resize:none; overflow-y:scroll;", maxlength = "8000", @rows = "10", @cols = "67", @readonly = true })
+                <td colspan="6">
+                    @Html.TextAreaFor(m => Model.SQL, new { @style = "resize:none; overflow-y:scroll;", maxlength = "500", @rows = "10", @cols = "76", @readonly = true })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" align="right">
+                    <input type="submit" name="Login" value="Submit" class="btn btn-primary" />
                 </td>
             </tr>
         </table>
-        <div style="position:absolute; bottom:3px; right:3px;">
-            <input type="submit" name="Login" value="Submit" class="btn btn-primary" />
-        </div>
-
     }
 </div>
-
-
 
 

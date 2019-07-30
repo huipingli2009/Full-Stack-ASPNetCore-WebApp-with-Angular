@@ -10,7 +10,7 @@ namespace PHO_WebApp.Controllers
     {
         protected override void OnException(ExceptionContext filterContext)
         {
-            filterContext.ExceptionHandled = true;
+            //filterContext.ExceptionHandled = true;
 
             //Log the error!!
             string controllerName = filterContext.RouteData.Values["controller"].ToString();
