@@ -11,14 +11,24 @@ namespace PHO_WebApp.Models
     public class Initiative
     {
         public int id { get; set; }
+
+        [Required(ErrorMessage = "Required")]
         public string Name { get; set; }
+
         public string ShortName { get; set; }
+
+        [Required(ErrorMessage = "Description can't be blank")]
         public string Description { get; set; }
+
         public string Details { get; set; }
+
+        [Required(ErrorMessage = "Required")]
         public string Owner { get; set; }
         public string PrimaryAim { get; set; }
         public string SecondaryAim { get; set; }
         public string EvidenceGuidelines { get; set; }
+
+        [Required(ErrorMessage = "Required")]
         public int Status { get; set; }
         public string StatusDesc { get; set; }
         public int CreatedById { get; set; }

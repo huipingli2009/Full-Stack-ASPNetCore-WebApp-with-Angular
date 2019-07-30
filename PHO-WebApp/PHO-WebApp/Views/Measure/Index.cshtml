@@ -1,36 +1,36 @@
-﻿@model List<PHO_WebApp.Models.Cohort>
+﻿@model List<PHO_WebApp.Models.Measure>
+
 @{
-    ViewBag.Title = "Cohorts";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewBag.Title = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="row">
-    <div class="col-md-6" style="float:left">
-        <h2>PHO Cohorts</h2>
-        @*@Html.ActionLink("+ New", "AddCohort", "CohortController", new { @class = "btn btn-primary", @id = "addnew" })*@
-        <input type="button" class="btn btn-primary" id="addnew" value="+ New" />
-    </div>
+	<div class="col-md-6" style="float:left">
+		<h2>PHO QI Measures</h2>
+		<input type="button" class="btn btn-primary" id="addnew" value="+ New" />
+	</div>
 
-    <div class="col-md-6" style="float:right">
-        <h3>Search</h3>
-        <input text="" class="form-control search" id="search" />
-    </div>
+	<div class="col-md-6" style="float:right">
+		<h3>Search</h3>
+		<input text="" class="form-control search" id="search" />
+	</div>
 </div>
 
 <div>
-    <table id="tblCohort">
-        <tr>
-            <td>
-                @foreach (var item in Model)
-                {
-                    @Html.Partial("Display", item);
+	<table id="tblQIMeasures">
+		<tr>
+			<td>
+				@foreach (var item in Model)
+				{
+					@Html.Partial("_MeasureDisplay", item);
 
-                }
-            </td>
-            <td></td>
-        </tr>
-        <tr>&nbsp;</tr>
-    </table>
+				}
+			</td>
+			<td></td>
+		</tr>
+		<tr>&nbsp;</tr>
+	</table>
 </div>
 
 <div id="dialognew" style="height:700px; max-height:700px; overflow: scroll; background-color:white;">Loading...</div>
@@ -42,7 +42,7 @@
 		// Handler for .ready() called.
 
         //Event Handler assignment
-        $('.search').on('change keyup copy paste cut', null, function () { SearchTable('#search', '.contentRow') });
+		$('.search').on('change keyup copy paste cut', null, function () { SearchTable('#search', '.QIMeasures') });
 
 
     }); //end of document.ready
@@ -68,10 +68,10 @@
         $('.btnDetail').click(function () {
             var $buttonClicked = $(this);
             var id = $buttonClicked.attr('data-id');
-			$('#dialogedit').data('id', id).dialog('open');
+			$('#dialogedit').data('id', id).dialog('open');			
         });
-    
-    
+
+
         $(function () {
             $('#dialognew').dialog({
                 autoOpen: false,
@@ -79,43 +79,40 @@
                 height: 700,
                 overflow: scroll,
                 resizable: false,
-                title: 'New Cohort',
+                title: 'Create New QI Measures',
                 modal: true,
-                open: function (event, ui) {                   
-					$(this).load("@Url.Action("CohortPartial")/?CohortId=-1");
+                open: function (event, ui) {
+					$(this).load("@Url.Action("QIMeasurePath")/?MeasureRecordId=-1");	
 
 					if ($(this).closest('.ui-dialog').offset().top < 80) {
 						$(this).closest('.ui-dialog').css({ 'top': '80px' });
 					}
-                }
+				}				
             });
         });
 
         $(function () {
             $('#dialogedit').dialog({
                 autoOpen: false,
-                width: 800,  
+                width: 800,
                 height: 700,
                 overflow: scroll,
                 resizable: false,
-                title: 'Edit Cohort',
+                title: 'Edit QI Measures',
                 modal: true,
                 open: function (event, ui) {
                     var id = $(this).data('id');
-					$(this).load("@Url.Action("CohortPartial")/?CohortId=" + id);
+					$(this).load("@Url.Action("QIMeasurePath")/?MeasureRecordId=" + id);
 
 					if ($(this).closest('.ui-dialog').offset().top < 80) {
 						$(this).closest('.ui-dialog').css({ 'top': '80px' });
 					}
 				},
-				close: function(event, ui){
-					window.location.reload(true);
+				close: function (event, ui) {
+					window.location.reload(true);					
 				}
             });
         });
-
-
-
 </script>
 
 

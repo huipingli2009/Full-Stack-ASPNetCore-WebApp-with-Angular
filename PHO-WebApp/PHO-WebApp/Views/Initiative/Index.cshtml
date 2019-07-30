@@ -4,27 +4,16 @@
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>PHO Initiatives</h2>
 <div class="row">
-	<table>
-		<tr>
-			<td>
-				<div class="col-md-6" style="float:left">
-					<h3>Search</h3>
-				</div>
-			</td>
-			<td>
-				<input text="" class="form-control search" id="search" />
-			</td>
-			<td colspan="4" align="right">
-				<div class="col-md-6" style="float:right">
-					@*@Html.ActionLink("+ New", "SaveInitiative", "InitiativeController", new { @class = "btn btn-primary" })*@
-					<input type="button" class="btn btn-primary" id="addnew" value="+ New" />
-				</div>
-			</td>
-		</tr>
-	</table>
-	
+	<div class="col-md-6" style="float:left">
+		<h2>PHO Initiatives</h2>	
+		<input type="button" class="btn btn-primary" id="addnew" value="+ New" />
+	</div>
+
+	<div class="col-md-6" style="float:right">
+		<h3>Search</h3>
+		<input text="" class="form-control search" id="search" />
+	</div>
 </div>
 
 <div>
@@ -44,7 +33,7 @@
 </div>
 
 <div id="dialognew" style="height:700px; max-height:700px; overflow: scroll; background-color:white;">Loading...</div>
-<div id="dialogedit" style="height:700px; max-height:80%; overflow: scroll; background-color:white;">Loading...</div>
+<div id="dialogedit" style="height:700px; max-height:700px; overflow: scroll; background-color:white;">Loading...</div>
 
 <script type="text/javascript">
 	$(document).ready(function () {
@@ -52,13 +41,7 @@
 
 		//Event Handler assignment
 		$('.search').on('change keyup copy paste cut', null, function () { SearchTable('#search', '.InitiativeRecord') });		
-
-		////reload the partialview
-		//$('#dialogedit').change(function () {
-
-
-		//})
-
+		
 	}); //End of the whole "document ready" event script
 
 	function SearchTable(searchID, classLookup) {
@@ -79,12 +62,6 @@
 		var $buttonClicked = $(this);
 		var id = $buttonClicked.attr('data-id');
 
-		//
-		//$('#dialogedit').change(function () {
-
-		//})
-
-		//
 		$('#dialogedit').data('id', id).dialog('open');		
 	});
 
@@ -96,9 +73,9 @@
 		$('#dialogedit').dialog({
 			autoOpen: false,
 			width: 800,
-			height: 600,
+			height: 800,
 			overflow: scroll,
-			resizable: false,
+			resizable: true,
 			title: 'Edit Initiative',
 			modal: true,
 			open: function (event, ui) {
@@ -108,7 +85,10 @@
 				if ($(this).closest('.ui-dialog').offset().top < 80) {
 					$(this).closest('.ui-dialog').css({ 'top': '80px' });
 				}
-			}			
+			},
+			close: function (event, ui) {
+				window.location.reload(true);
+			}
 		});
 	})
 
@@ -116,7 +96,7 @@
 		$('#dialognew').dialog({
 			autoOpen: false,
 			width: 800,
-			height: 600,
+			height: 800,
 			overflow: scroll,
 			resizable: false,
 			title: 'Add Initiative',
@@ -128,7 +108,11 @@
 				if ($(this).closest('.ui-dialog').offset().top < 80) {
 					$(this).closest('.ui-dialog').css({ 'top': '80px' });
 				}
-			}			
+			},
+			close: function (event, ui) {
+				window.location.reload(true);
+			}
+			
 		});
 	})
 </script>

@@ -53,8 +53,11 @@ namespace PHO_WebApp
             defaults: new { controller = "Initiative", action = "Index", id = UrlParameter.Optional }
            );
 
-
-
+            routes.MapRoute(
+            name: "Measure",
+            url: "Measure",
+            defaults: new { controller = "Measure", action = "Index", id = UrlParameter.Optional }
+           );
         }
     }
 }

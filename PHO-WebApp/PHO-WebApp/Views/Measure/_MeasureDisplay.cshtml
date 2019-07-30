@@ -1,0 +1,34 @@
+﻿@model PHO_WebApp.Models.Measure
+
+<table width="100%" class="QIMeasures">
+	<thead style="border-top: 1px solid #808080">
+		<tr><th colspan="6"> </th></tr>
+		<tr><th colspan="6"> </th></tr>
+		<tr><th colspan="6"> </th></tr>
+	</thead>
+	<tr>&nbsp;</tr>
+	<tr>&nbsp;</tr>
+	<tr>
+		<td valign="top" style="font-weight:bold; width:120px; max-width:120px;">Measure Name:</td>
+		<td valign="top" style="width:300px; max-width:300px;" colspan="3"><a data-id='@Model.MeasureId' class="btnDetail">@Model.MeasureName</a></td>
+		<td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Frequency: </td>
+		<td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(model => model.Frequency)</td>
+	</tr>
+	<tr>
+		<td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Status: </td>
+		<td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(model => model.StatusDesc)</td>
+		<td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Owner:</td>
+		<td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(model => model.Owner)</td>
+		<td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Updated On:</td>
+		<td valign="top" style="width:120px; max-width:120px;">@Html.DisplayFor(model => model.ModifiedDate)</td>
+	</tr>
+	<tr>
+		<td valign="top" style="font-weight:bold; width:120px; max-width:120px;">Measure Desc:</td>
+		<td valign="top" colspan="5">@Html.DisplayFor(model => model.MeasureDesc)</td>
+	</tr>
+	<tr>&nbsp;</tr>
+</table>
+
+
+
+
