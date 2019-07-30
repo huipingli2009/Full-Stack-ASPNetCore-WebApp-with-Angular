@@ -152,6 +152,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CohortController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InitiativeController.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="Controllers\MeasureController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
+    <Compile Include="DataAccessLayer\AuditDAL.cs" />
     <Compile Include="DataAccessLayer\CohortDAL.cs" />
     <Compile Include="DataAccessLayer\DataDictionary.cs" />
     <Compile Include="DataAccessLayer\InitiativeDAL.cs" />
@@ -364,6 +366,7 @@
     <Content Include="Views\Initiative\Index.cshtml" />
     <Content Include="Views\Shared\LoginDialog.cshtml" />
     <Content Include="Views\Initiative\_InitiativePartialPath.cshtml" />
+    <Content Include="Views\Base\Error.cshtml" />
     <Content Include="Views\_MeasureDisplay.cshtml" />
     <Content Include="Views\Measure\_MeasureDisplay.cshtml" />
     <Content Include="Views\Measure\Index.cshtml" />
