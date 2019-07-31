@@ -1,6 +1,8 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
+@using PHO_WebApp.Models;
+
 <div class="container img-top1">
     <img src="~/Images/PortalHomeIMG.JPG" style="height:692px" />
     <div class="text-block" style="width:400px; overflow-wrap:normal">
@@ -11,10 +13,10 @@
 
 
 @*<div class="jumbotron content-div2">
-    <h1>PHO - Home Page</h1>
-    <p class="lead">This would be the splash page for the PHO Web Application in MVC. We could add partial views to this page that enable the user to login or access content, similar to the what we're doing today on the Portal.</p>
-    
-</div>*@
+        <h1>PHO - Home Page</h1>
+        <p class="lead">This would be the splash page for the PHO Web Application in MVC. We could add partial views to this page that enable the user to login or access content, similar to the what we're doing today on the Portal.</p>
+
+    </div>*@
 
 <div class="row">
     <div class="col-md-4">
@@ -22,18 +24,33 @@
         <p>
             A cohort is a group of patients that meet a set of criteria in order to participate in a QI Initiative. A cohort can be used when automating QI measures or for ad-hoc analysis. It can also be used to filter data collections from EPIC.
         </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+        <p>
+            @if (SharedLogic.IsAuthenticated(new StaffTypeEnum[] { StaffTypeEnum.CCHMC_IS, StaffTypeEnum.PHO_Staff }, Session["UserDetails"]))
+            {
+                @Html.RouteLink("Learn more", "Cohort", null, new { @class = "btn btn-default" })
+            }
+        </p>
     </div>
     <div class="col-md-4">
         <h2>What is an Initiative?</h2>
         <p>
             An initiative is a focused effort to improve the outcome of patients usually based on condition. Typically, an initiative includes quality improvement. measures in order to track patient improvement over time.
         </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+        <p>
+            @if (SharedLogic.IsAuthenticated(new StaffTypeEnum[] { StaffTypeEnum.CCHMC_IS, StaffTypeEnum.PHO_Staff }, Session["UserDetails"]))
+            {
+                @Html.RouteLink("Learn more", "Initiative", null, new { @class = "btn btn-default" })
+            }
+        </p>
     </div>
     <div class="col-md-4">
         <h2>What is a Measure?</h2>
         <p>All quality improvement requires measurement. A standard run chart is often used to measure the performance of a process or outcome over time. A median or mean is used to monitor for average improvement and control limits are used to measure normal variation</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+        <p>
+            @if (SharedLogic.IsAuthenticated(new StaffTypeEnum[] { StaffTypeEnum.CCHMC_IS, StaffTypeEnum.PHO_Staff }, Session["UserDetails"]))
+            {
+                @Html.RouteLink("Learn more", "Measure", null, new { @class = "btn btn-default" })
+            }
+        </p>
     </div>
 </div>
