@@ -87,7 +87,7 @@ tr.pho-table-data:nth-child(even) {
     right: 0;
     left: 0;
     top: 0;
-    z-index: 1030;
+    z-index:0 !important;
 }
 
 .Header-inner--top {
