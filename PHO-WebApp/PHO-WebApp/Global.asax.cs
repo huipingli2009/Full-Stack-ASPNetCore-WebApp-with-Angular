@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using PHO_WebApp.Models;
 
 namespace PHO_WebApp
 {
@@ -16,6 +17,16 @@ namespace PHO_WebApp
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+        }
+
+        void Session_Start(object sender, EventArgs e)
+        {
+            // your code here, it will be executed upon session start
+            UserDetails userDetails = new UserDetails();
+            userDetails.SessionId = Session.SessionID;
+            Session["UserDetails"] = userDetails;
+
+            SharedLogic.LogAudit(userDetails, "Session_Start", "Global.asax.cs", "Session Started");
         }
     }
 }

@@ -6,15 +6,18 @@ using System.Web.Mvc;
 using PHO_WebApp.DataAccessLayer;
 using System.Data;
 using PHO_WebApp.Models;
+using Newtonsoft.Json;
 //using PHO_WebApp.Models;
 
 
 namespace PHO_WebApp.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         Models.UserDetails user = null;
         DataAccessLayer.DataDictionary records = new DataAccessLayer.DataDictionary();
+        //DataAccessLayer.CohortDAL cohortRecords = new CohortDAL();
+
 
         public bool IsLoggedIn()
         {
@@ -23,6 +26,28 @@ namespace PHO_WebApp.Controllers
             if (Session["UserDetails"] != null)
             {
                 returnValue = true;
+            }
+
+            return returnValue;
+        }
+
+        public bool IsAuthenticated(StaffTypeEnum[] authorizedStaffTypes)
+        {
+            bool returnValue = false;
+
+            if (Session["UserDetails"] != null)
+            {
+                UserDetails user = (UserDetails)Session["UserDetails"];
+                if (user.StaffTypeId > 0)
+                {
+                    foreach(StaffTypeEnum stafftype in authorizedStaffTypes)
+                    {
+                        if (user.StaffTypeId == (int)stafftype)
+                        {
+                            returnValue = true;
+                        }
+                    }
+                }
             }
 
             return returnValue;
@@ -73,28 +98,12 @@ namespace PHO_WebApp.Controllers
         {
             return View("Content");
         }
-        //public ActionResult DataDictionary()
-        //{
-        //    DataSet ds = records.GetDataDictionaryRecords();
-        //    ViewBag.DataDictionary = ds.Tables[0];
 
-        //    return View("DataDictionary");
-        //}
 
-        public ActionResult DataDictionary(string DatabaseName, string SchemaName, string ObjectName, string ObjectType, string ColumnName, string SQLColumnDescription, string IsNullable, string DataType, string PHIFlag, string BusinessDefiniton)
+        public ActionResult DataDictionary()
         {
-            //Build PHI Flag
-            bool? bPHIFlag = null;
-            if (!string.IsNullOrWhiteSpace(PHIFlag))
-            {
-                if (PHIFlag == "1")
-                    bPHIFlag = true;
-                if (PHIFlag == "0")
-                    bPHIFlag = false;
-            }
-
             //Execute Query
-            DataSet ds = records.GetDataDictionaryRecordsWithSearchCriteria(DatabaseName, SchemaName, ObjectName, ObjectType, ColumnName, SQLColumnDescription, IsNullable, DataType, bPHIFlag, BusinessDefiniton);
+            DataSet ds = records.GetDataDictionaryRecords();
             ViewBag.DataDictionary = ds.Tables[0];
 
             //Build drop down lists
@@ -144,13 +153,12 @@ namespace PHO_WebApp.Controllers
             //DataSet dsNew = records.RefreshDataDictionary();
             records.RefreshDataDictionary();
             DataSet ds = records.GetDataDictionaryRecords();
-            ViewBag.DataDictionary = ds.Tables[0];            
+            ViewBag.DataDictionary = ds.Tables[0];
 
-            //Response.Redirect(Url.Action("DataDictionary", "HomeController"));
-            //return View("");
+            Response.Redirect(Url.Action("DataDictionary", "Home"));
+            return View("");
 
-            return View("DataDictionary");
-
+            //return View("DataDictionary");
         }
 
         public ActionResult LoggedInAs()
@@ -168,6 +176,7 @@ namespace PHO_WebApp.Controllers
         {
             return RedirectToAction("Index", "Home");
         }
+
 
     }
 }

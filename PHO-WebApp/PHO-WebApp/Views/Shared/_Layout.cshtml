@@ -1,54 +1,55 @@
-﻿<!DOCTYPE html>
+﻿@using PHO_WebApp.Controllers;
+@using PHO_WebApp.Models;
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - PHO Prototype</title>
+    <title>@ViewBag.Title - PHO Registry</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @RenderSection("scripts", required: false)
+    <link href="https://fonts.googleapis.com/css?family=Arvo|Nunito+Sans&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("PHO", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-				<ul class="nav navbar-nav">
-					<li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    @{
-                        if (Session["UserDetails"] != null)
-                        {
-                            @*<li>@Html.ActionLink("Patient", "Patient", "Home")</li>
-                            <li>@Html.ActionLink("Staff", "Staff", "Home")</li>
-                            <li>@Html.ActionLink("Population", "Population", "Home")</li>
-                            <li>@Html.ActionLink("Initiative", "Initiative", "Home")</li>
-                            <li>@Html.ActionLink("Content", "Content", "Home")</li>*@
-                            <li>@Html.ActionLink("Data Dictionary", "DataDictionary", "Home")</li>
-                        }
-                    }
-			        @Html.Action("LoggedInAs", "Login");
-                    @*@Html.Partial("LoggedInAs")*@
-				</ul>
-            </div>
-            
+
+    <div class="container navbar navbar-default navbar-static-top Header--top Header-nav">
+        <div class="navbar-header top-left">
+            <img class="header-branding-logo" src="~/Images/TSCHS_LOGO_CMYK.jpg" style="width:225px; height:67px" />
         </div>
+        <nav class="Header-nav Header-nav--primary top-right" data-nc-container="top-right">
+			<div class="nav navbar-nav">
+				@Html.RouteLink("Home", "Home", null, new { @class = "Header-nav-item" })
+				@{
+					if (@SharedLogic.IsAuthenticated(new StaffTypeEnum[] { StaffTypeEnum.CCHMC_IS, StaffTypeEnum.PHO_Staff }, Session["UserDetails"]))
+					{
+						@Html.RouteLink("Data Dictionary", "DataDictionary", null, new { @class = "Header-nav-item" })
+						@Html.RouteLink("Cohorts", "Cohort", null, new { @class = "Header-nav-item" })
+						@Html.RouteLink("Initiatives", "Initiative", null, new { @class = "Header-nav-item" })
+						@Html.RouteLink("QI Measures", "Measure", null, new { @class = "Header-nav-item" })
+					}
+				}
+				@Html.Action("LoggedInAs", "Login")
+				@*@Html.Partial("LoggedInAs")*@
+			</div>
+        </nav>
+
     </div>
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - PHO Prototype</p>
+        <footer class="content-footer">
+            <p>&copy; @DateTime.Now.Year - PHO Web app</p>
         </footer>
     </div>
-
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+    <div id='divLogon' style='z-index:10000'>
+    </div>
 </body>
 </html>
+

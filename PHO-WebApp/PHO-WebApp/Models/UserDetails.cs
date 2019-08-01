@@ -9,10 +9,9 @@ namespace PHO_WebApp.Models
 {
     public class UserDetails
     {
-        public int Id { get; set; } //Id in [PHO].[reg].[Login]
+        public int LoginId { get; set; }
 
-        public int PersonId { get; set; } //PersonId in [PHO].[reg].[Login], similar to user id
-        
+        public int StaffId { get; set; }                
 
         [Required(ErrorMessage = "User name is required.")]
         public string UserName { get; set; }
@@ -22,5 +21,11 @@ namespace PHO_WebApp.Models
         public string Password { get; set; }
 
         public string LoginError { get; set; }
+
+        public int StaffTypeId { get; set; }
+
+        public List<StaffType> AllStaffTypes { get; set; }
+
+        public string SessionId { get; set; }
     }
 }
