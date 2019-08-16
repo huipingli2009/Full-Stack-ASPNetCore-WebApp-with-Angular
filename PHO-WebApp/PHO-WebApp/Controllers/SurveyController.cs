@@ -33,5 +33,24 @@ namespace PHO_WebApp.Controllers
             return View("DisplaySection", model);
         }
 
+        [HttpPost]
+        public ActionResult Save(SurveyForm model)
+        {
+            if (ModelState.IsValid && model != null && model.Responses != null)
+            {
+                foreach(Response response in model.Responses)
+                {
+                    int responseId = records.InsertSurveyResponse(response);
+
+                    if(response.ResponseAnswer != null)
+                    {
+                        response.ResponseAnswer.ResponseId = responseId;
+                        records.InsertSurveyResponseAnswer(response.ResponseAnswer);
+                    }
+                }
+            }
+            return View("SurveyCompleted");
+        }
+
     }
 }

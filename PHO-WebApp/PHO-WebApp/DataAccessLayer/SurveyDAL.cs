@@ -51,7 +51,7 @@ namespace PHO_WebApp.DataAccessLayer
 
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
-            //Cohorts = ds.Tables[0].
+            
             da.Fill(ds);
 
             if (ds != null && ds.Tables != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -62,7 +62,7 @@ namespace PHO_WebApp.DataAccessLayer
                 int sectionId = 0;
                 int sectionQuestionId = 0;
                 int questionId = 0;
-                //int questionAnswerOptionsId = 0;
+                int questionAnswerOptionsId = 0;
 
                 foreach (DataRow r in ds.Tables[0].Rows)
                 {
@@ -107,11 +107,26 @@ namespace PHO_WebApp.DataAccessLayer
                             SharedLogic.ParseNumeric(r["QuestionId"].ToString()), 
                             SharedLogic.ParseNumeric(r["QuestionTypeId"].ToString()), 
                             r["QuestionType"].ToString(), 
-                            r["Flag_Required"].ToString(),
+                            Convert.ToBoolean(r["Flag_Required"].ToString()),
                             r["QuestionLabel"].ToString(),
                             r["Label_Code"].ToString(), 
                             r["Javascript"].ToString());
-                        returnObject.LastFormSection.LastSection.LastSectionQuestion.Questions.Add(newQ);
+                        returnObject.LastFormSection.LastSection.LastSectionQuestion.Question = newQ;
+                    }
+                    if (r["QuestionAnswerOptionsId"] != null && !string.IsNullOrWhiteSpace(r["QuestionAnswerOptionsId"].ToString()) && questionAnswerOptionsId != SharedLogic.ParseNumeric(r["QuestionAnswerOptionsId"].ToString()))
+                    {
+                        questionAnswerOptionsId = SharedLogic.ParseNumeric(r["QuestionAnswerOptionsId"].ToString());
+                        QuestionAnswerOption newQAO = CreateQuestionAnswerOption(
+                            SharedLogic.ParseNumeric(r["QuestionId"].ToString()),
+                            SharedLogic.ParseNumeric(r["QuestionAnswerOptionsId"].ToString()),
+                            SharedLogic.ParseNumeric(r["AnswerOptionId"].ToString()),
+                            SharedLogic.ParseNumeric(r["QuestionAnswerOptionOrder"].ToString()),
+                            r["AnswerOptionLabel"].ToString());
+                        if (returnObject.LastFormSection.LastSection.LastSectionQuestion.Question.QuestionAnswerOptions == null)
+                        {
+                            returnObject.LastFormSection.LastSection.LastSectionQuestion.Question.QuestionAnswerOptions = new List<QuestionAnswerOption>();
+                        }
+                        returnObject.LastFormSection.LastSection.LastSectionQuestion.Question.QuestionAnswerOptions.Add(newQAO);
                     }
                 }
 
@@ -119,6 +134,77 @@ namespace PHO_WebApp.DataAccessLayer
             }
 
             return returnObject;
+        }
+
+
+        public int InsertSurveyResponse(Response model)
+        {
+            int returnValue = 0;
+
+            SqlCommand com = new SqlCommand("spInsertSurveyResponse", con);
+            com.CommandType = CommandType.StoredProcedure;
+
+            com.Parameters.Add("@QuestionId", SqlDbType.Int);
+            com.Parameters.Add("@ResponseText", SqlDbType.VarChar);
+
+            if (model.QuestionId > 0)
+            {
+                com.Parameters["@QuestionId"].Value = model.QuestionId;
+            }
+            else
+            {
+                com.Parameters["@QuestionId"].Value = DBNull.Value;
+            }
+
+            if (!string.IsNullOrWhiteSpace(model.Response_Text))
+            {
+                com.Parameters["@ResponseText"].Value = model.Response_Text;
+            }
+            else
+            {
+                com.Parameters["@ResponseText"].Value = DBNull.Value;
+            }
+            
+            con.Open();
+            returnValue = (Int32)com.ExecuteScalar();
+            con.Close();
+
+            return returnValue;
+        }
+
+
+        public int InsertSurveyResponseAnswer(ResponseAnswer model)
+        {
+            int returnValue = 0;
+
+            SqlCommand com = new SqlCommand("spInsertSurveyResponseAnswer", con);
+            com.CommandType = CommandType.StoredProcedure;
+
+            com.Parameters.Add("@ResponseId", SqlDbType.Int);
+            com.Parameters.Add("@AnswerOptionId", SqlDbType.Int);
+
+            if (model.ResponseId > 0)
+            {
+                com.Parameters["@ResponseId"].Value = model.ResponseId;
+            }
+            else
+            {
+                com.Parameters["@ResponseId"].Value = DBNull.Value;
+            }
+            if (model.AnswerOptionId > 0)
+            {
+                com.Parameters["@AnswerOptionId"].Value = model.AnswerOptionId;
+            }
+            else
+            {
+                com.Parameters["@AnswerOptionId"].Value = DBNull.Value;
+            }
+
+            con.Open();
+            returnValue = (Int32)com.ExecuteScalar();
+            con.Close();
+
+            return returnValue;
         }
 
 
@@ -185,7 +271,7 @@ namespace PHO_WebApp.DataAccessLayer
             return c;
         }
 
-        public Question CreateQuestionModel(int? QuestionId, int? QuestionTypeId, string QuestionType, string Flag_Required, string QuestionLabel, string LabelCode, string Javascript)
+        public Question CreateQuestionModel(int? QuestionId, int? QuestionTypeId, string QuestionType, bool Flag_Required, string QuestionLabel, string LabelCode, string Javascript)
         {
             Question c = new Question();
             if (QuestionId.HasValue)
@@ -202,7 +288,43 @@ namespace PHO_WebApp.DataAccessLayer
             c.LabelCode = LabelCode;
             c.Javascript = Javascript;
 
+            c.Response = CreateResponseModel(QuestionId, string.Empty, Flag_Required);
+
+            if (c.IsListQuestionType)
+            {
+                c.Response.ResponseAnswer = CreateResponseAnswerModel(0, 0);
+            }
+
             return c;
+        }
+
+        public Response CreateResponseModel(int? QuestionId, string Response_Text, bool required)
+        {
+            Response r = new Response();
+            r.QuestionId = QuestionId.Value;
+            r.Response_Text = Response_Text;
+            r.Required = required;
+            return r;
+        }
+
+        public ResponseAnswer CreateResponseAnswerModel(int? ResponseId, int? AnswerOptionId)
+        {
+            ResponseAnswer r = new ResponseAnswer();
+            r.ResponseId = AnswerOptionId.Value;
+            r.AnswerOptionId = AnswerOptionId.Value;
+            return r;
+        }
+
+        public QuestionAnswerOption CreateQuestionAnswerOption(int? QuestionId, int? QuestionAnswerOptionsId, int? AnswerOptionId, int? order, string label)
+        {
+            QuestionAnswerOption qao = new QuestionAnswerOption();
+
+            qao.QuestionAnswerOptionId = QuestionAnswerOptionsId.Value;
+            qao.QuestionId = QuestionId.Value;
+            qao.AnswerOptionId = AnswerOptionId.Value;
+            qao.QuestionAnswerOptionLabel = label;
+
+            return qao;
         }
 
 

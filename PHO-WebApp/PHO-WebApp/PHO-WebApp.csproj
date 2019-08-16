@@ -366,7 +366,11 @@
     <Content Include="Views\Initiative\_InitiativePartialPath.cshtml" />
     <Content Include="Views\Survey\Index.cshtml" />
     <Content Include="Views\Survey\Display.cshtml" />
-    <Content Include="Views\Survey\DisplayQuestions.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\FormSection.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\SectionQuestion.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Question.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Section.cshtml" />
+    <Content Include="Views\Survey\SurveyCompleted.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

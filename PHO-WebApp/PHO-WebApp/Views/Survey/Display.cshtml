@@ -1,4 +1,5 @@
-﻿@model PHO_WebApp.Models.SurveyForm
+﻿@using PHO_WebApp.Models;
+@model PHO_WebApp.Models.SurveyForm
 @{
     ViewBag.Title = "Display";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,20 +7,15 @@
 
 <h2>Survey - @Model.Survey_Title</h2>
 
-@foreach (var item in Model.FormSections)
+@using (Html.BeginForm("Save", "Survey", FormMethod.Post))
 {
-    foreach (var section in item.Sections)
+    @Html.HiddenFor(m => Model.FormId);
+    for (var i = 0; i < Model.FormSections.Count(); i++)
     {
-        <div>
-            <h4>@Html.Label(section.SectionDescription)</h4>            
-        </div>
-        <div>
-            @*@Html.Action("DisplaySection", "Survey", new { id = section.SectionId })*@
-            @Html.Partial("DisplayQuestions", section);
-        </div>
-        <br />
-        <hr />
+        @Html.EditorFor(model => Model.FormSections[i])
     }
 
+    <input type="submit" name="Login" value="Submit" class="btn btn-primary" />
 }
+
 
