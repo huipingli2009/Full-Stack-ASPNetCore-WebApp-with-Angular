@@ -1,0 +1,11 @@
+﻿@using PHO_WebApp.Models;
+@model PHO_WebApp.Models.FormSection
+@{
+    Layout = null;
+}
+
+@Html.HiddenFor(m => m.FormSectionId)
+@for (var i = 0; i < Model.Sections.Count(); i++)
+{
+    @Html.EditorFor(m => m.Sections[i])
+}
