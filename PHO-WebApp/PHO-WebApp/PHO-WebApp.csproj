@@ -161,12 +161,14 @@
     <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
     <Compile Include="DataAccessLayer\AuditDAL.cs" />
+    <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="DataAccessLayer\CohortDAL.cs" />
     <Compile Include="DataAccessLayer\DataDictionary.cs" />
     <Compile Include="DataAccessLayer\InitiativeDAL.cs" />
     <Compile Include="DataAccessLayer\LoginDAL.cs" />
     <Compile Include="DataAccessLayer\MeasureDAL.cs" />
     <Compile Include="DataAccessLayer\Patients.cs" />
+    <Compile Include="DataAccessLayer\SurveyDAL.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -179,6 +181,7 @@
     <Compile Include="Models\Measure.cs" />
     <Compile Include="Models\Patient.cs" />
     <Compile Include="Models\StaffType.cs" />
+    <Compile Include="Models\SurveyForm.cs" />
     <Compile Include="Models\UserDetails.cs" />
     <Compile Include="Patient.cs">
       <DependentUpon>PersonModel.tt</DependentUpon>
@@ -371,6 +374,13 @@
     <Content Include="Views\Measure\_MeasureDisplay.cshtml" />
     <Content Include="Views\Measure\Index.cshtml" />
     <Content Include="Views\Measure\_QIMeasurePath.cshtml" />
+    <Content Include="Views\Survey\Index.cshtml" />
+    <Content Include="Views\Survey\Display.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\FormSection.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\SectionQuestion.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Question.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Section.cshtml" />
+    <Content Include="Views\Survey\SurveyCompleted.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
