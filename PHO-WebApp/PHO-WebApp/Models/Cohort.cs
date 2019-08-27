@@ -46,7 +46,7 @@ namespace PHO_WebApp.Models
         public string ModifiedById { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
-        public DateTime ModifiedDate { get; set; }
+        public DateTime?ModifiedDate { get; set; }
 
         public string DeletedById { get; set; }
 

@@ -27,5 +27,7 @@ namespace PHO_WebApp.Models
         public List<StaffType> AllStaffTypes { get; set; }
 
         public string SessionId { get; set; }
+
+        public int PracticeId { get; set; }
     }
 }

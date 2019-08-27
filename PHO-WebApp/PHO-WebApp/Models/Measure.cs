@@ -45,5 +45,12 @@ namespace PHO_WebApp.Models
 
         //use initiative status table as we have some contents
         public List<InitiativeStatus> AllInitiativeStatuses { get; set; }
+
+        //use data from spGetMeasureInfoFromFactAggregate at PHO_DW
+        [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
+        public DateTime?LastMeasureDate { get; set;}
+
+        [DisplayFormat]
+        public string MeasureValue { get; set;}        
     }
 }

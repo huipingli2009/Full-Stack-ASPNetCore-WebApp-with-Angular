@@ -18,7 +18,9 @@ namespace PHO_WebApp.DataAccessLayer
         {
             int? returnValue = null;
 
+            //SqlCommand com = new SqlCommand("spGetActiveLogin", con);
             SqlCommand com = new SqlCommand("spGetActiveLogin", con);
+
             com.CommandType = CommandType.StoredProcedure;
 
             // Add Parameters to SPROC
@@ -38,6 +40,11 @@ namespace PHO_WebApp.DataAccessLayer
             parameterUserId.Direction = System.Data.ParameterDirection.Output;
             com.Parameters.Add(parameterUserId);
 
+            ////Output Parameter
+            //SqlParameter parameterPracticeId = new SqlParameter("@PracticeId", SqlDbType.Int, 4);
+            //parameterPracticeId.Direction = System.Data.ParameterDirection.Output;
+            //com.Parameters.Add(parameterPracticeId);
+
             con.Open();
             com.ExecuteNonQuery();
             con.Close();
@@ -50,14 +57,16 @@ namespace PHO_WebApp.DataAccessLayer
             return returnValue;
         }
 
+        //public UserDetails GetPersonLoginForLoginId(int loginId)
         public UserDetails GetPersonLoginForLoginId(int loginId)
         {
             UserDetails returnObject = null;
                         
             SqlCommand com = new SqlCommand("spGetPersonLoginForLoginId", con);
+            //SqlCommand com = new SqlCommand("spGetPersonLoginForLoginId_new", con);
             com.CommandType = CommandType.StoredProcedure;
 
-            // Add Parameters to SPROC
+            //// Add Parameters to SPROC
             SqlParameter parameterLoginId = new SqlParameter("@LoginId", SqlDbType.Int);
             parameterLoginId.Value = loginId;
             com.Parameters.Add(parameterLoginId);
@@ -106,6 +115,11 @@ namespace PHO_WebApp.DataAccessLayer
             {
                 ud.StaffTypeId = int.Parse(dr["StaffTypeId"].ToString());
             }
+
+            //if (dr["PracticeId"] != null && !string.IsNullOrWhiteSpace(dr["PracticeId"].ToString()))
+            //{
+            //    ud.PracticeId = int.Parse(dr["PracticeId"].ToString());
+            //}
 
             ud.AllStaffTypes = GetStaffTypes();
 

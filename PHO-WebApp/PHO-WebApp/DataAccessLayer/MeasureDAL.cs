@@ -15,8 +15,22 @@ namespace PHO_WebApp.DataAccessLayer
 
         public List<Measure> getAllMeasures()
         {
-            SqlCommand com = new SqlCommand("spGetAllQIMeasures", con);
+           
+            int userId = 0;
+
+            userId = (int)System.Web.HttpContext.Current.Session["UserId"];
+        
+
+
+            //userId = Session["UserDetails"]
+            //SqlCommand com = new SqlCommand("spGetAllQIMeasures", con);
+            SqlCommand com = new SqlCommand("QI_Summary", con);
             com.CommandType = CommandType.StoredProcedure;
+
+            //newly added
+            com.Parameters.Add(new SqlParameter("@userID", userId));
+
+
 
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
@@ -42,29 +56,109 @@ namespace PHO_WebApp.DataAccessLayer
             }
             c.MeasureName = dr["MeasureName"].ToString();           
             c.MeasureDesc = dr["MeasureDesc"].ToString();
-            c.Frequency = dr["Frequency"].ToString();            
+
+            //c.MeasureFrequency = dr["MeasureFrequency"].ToString();
+            c.Frequency = dr["Frequency"].ToString();
+            //c.StatusDesc = dr["StatusDesc"].ToString();
             c.StatusDesc = dr["StatusDesc"].ToString();
             c.Numerator = dr["Numerator"].ToString();
-            c.Denominator = dr["Denominator"].ToString();           
-            c.SQL = dr["SQL"].ToString();
+            c.Denominator = dr["Denominator"].ToString();
+            //c.SQL = dr["SQL"].ToString();
+            c.SQL = "";
             c.Factor = dr["Factor"].ToString();
-            
 
-            if (!string.IsNullOrWhiteSpace(dr["Status"].ToString()))
+
+            //if (!string.IsNullOrWhiteSpace(dr["Status"].ToString()))
+            //{
+            //    c.Status = int.Parse(dr["Status"].ToString());
+            //}
+            if (!string.IsNullOrWhiteSpace(dr["StatusDesc"].ToString()))
             {
-                c.Status = int.Parse(dr["Status"].ToString());
+                c.StatusDesc = dr["StatusDesc"].ToString();
             }
-          
+
             if (dr["EffectiveDate"].ToString() != "")
             {
                 c.EffectiveDate = Convert.ToDateTime(dr["EffectiveDate"].ToString());
-            }           
+            }
+            else
+            {
+                c.EffectiveDate = null;
+            }
+          
 
             if (dr["ModifiedDate"].ToString() != "")
             {
                 c.ModifiedDate = Convert.ToDateTime(dr["ModifiedDate"].ToString());
             }
+
+            if (dr["LastMeasureDate"].ToString() != "")
+            {
+                c.LastMeasureDate = Convert.ToDateTime(dr["LastMeasureDate"].ToString());
+            }
             
+            c.MeasureValue = string.Format("{0:#.##}", Double.Parse(dr["MeasureValue"].ToString()));
+
+            c.Owner = dr["Owner"].ToString();
+
+            c.AllInitiativeStatuses = this.GetInitiativeStatuses();
+
+            return c;
+        }
+
+        public Measure CreateMeasureModelById(DataRow dr)
+        {
+            Measure c = new Measure();
+
+            if (dr["MeasureId"] != null && !string.IsNullOrWhiteSpace(dr["MeasureId"].ToString()))
+            {
+                c.MeasureId = int.Parse(dr["MeasureId"].ToString());
+            }
+            c.MeasureName = dr["MeasureName"].ToString();
+            c.MeasureDesc = dr["MeasureDesc"].ToString();
+
+            //c.MeasureFrequency = dr["MeasureFrequency"].ToString();
+            c.Frequency = dr["Frequency"].ToString();
+            //c.StatusDesc = dr["StatusDesc"].ToString();
+            c.StatusDesc = dr["StatusDesc"].ToString();
+            c.Numerator = dr["Numerator"].ToString();
+            c.Denominator = dr["Denominator"].ToString();
+            //c.SQL = dr["SQL"].ToString();
+            c.SQL = "";
+            c.Factor = dr["Factor"].ToString();
+
+
+            if (!string.IsNullOrWhiteSpace(dr["Status"].ToString()))
+            {
+                c.Status = int.Parse(dr["Status"].ToString());
+            }
+            if (!string.IsNullOrWhiteSpace(dr["StatusDesc"].ToString()))
+            {
+                c.StatusDesc = dr["StatusDesc"].ToString();
+            }
+
+            if (dr["EffectiveDate"].ToString() != "")
+            {
+                c.EffectiveDate = Convert.ToDateTime(dr["EffectiveDate"].ToString());
+            }
+            else
+            {
+                c.EffectiveDate = null;
+            }
+
+
+            if (dr["ModifiedDate"].ToString() != "")
+            {
+                c.ModifiedDate = Convert.ToDateTime(dr["ModifiedDate"].ToString());
+            }
+
+            //if (dr["LastMeasureDate"].ToString() != "")
+            //{
+            //    c.LastMeasureDate = Convert.ToDateTime(dr["LastMeasureDate"].ToString());
+            //}
+
+            //c.MeasureValue = string.Format("{0:#.##}", Double.Parse(dr["MeasureValue"].ToString()));
+
             c.Owner = dr["Owner"].ToString();
 
             c.AllInitiativeStatuses = this.GetInitiativeStatuses();
@@ -86,7 +180,7 @@ namespace PHO_WebApp.DataAccessLayer
 
             if(ds.Tables[0].Rows.Count > 0)
             {
-                m = CreateMeasureModel(ds.Tables[0].Rows[0]);
+                m = CreateMeasureModelById(ds.Tables[0].Rows[0]);
             }
 
             return m;

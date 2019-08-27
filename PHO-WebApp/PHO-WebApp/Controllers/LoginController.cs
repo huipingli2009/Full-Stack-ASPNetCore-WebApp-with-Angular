@@ -44,6 +44,7 @@ namespace PHO_WebApp.Controllers
                         UserDetails savedUserDetails = userLogin.GetPersonLoginForLoginId(id.Value);
                         VerifyPassword(savedUserDetails.Password, password);
                         savedUserDetails.SessionId = this.Session.SessionID;
+                        Session["UserId"] = id;
                         Session["UserDetails"] = savedUserDetails;
                         SharedLogic.LogAudit(savedUserDetails, "LoginController", "SubmitLoginPartial", "Successful login. Username: " + savedUserDetails.UserName);
                     }
