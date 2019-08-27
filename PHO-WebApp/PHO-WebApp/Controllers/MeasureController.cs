@@ -5,17 +5,37 @@ using System.Web;
 using System.Web.Mvc;
 using PHO_WebApp.DataAccessLayer;
 using PHO_WebApp.Models;
+using System.Dynamic;   //new reference
 
 namespace PHO_WebApp.Controllers
 {
     public class MeasureController : Controller
     {
         DataAccessLayer.MeasureDAL MD = new MeasureDAL();
+        DataAccessLayer.LoginDAL UL = new LoginDAL();
+        DataAccessLayer.QualityImprovementDAL QIDAL = new QualityImprovementDAL();
         // GET: Measure
         public ActionResult Index()
         {
             List<Measure> AllMeasureRecords = new List<Measure>();
             AllMeasureRecords = MD.getAllMeasures();
+
+            ////New development secion starts here ----------------------
+            //int loginId = 2;
+            //var model = new MeasurePracticeUserModels();
+            //model.MeasureDetail = MD.getAllMeasures();
+            //model.QualityImprovementDetail = QIDAL.getAllQualityImprovementsForPractice(loginId);
+
+
+
+            ////model.UD = UL.GetPersonLoginForLoginId(loginId);
+            ////model.UD = UL.GetPersonLoginForLoginId_new();
+            //return View(model);
+
+            ////New development secion ends here ----------------------
+
+            //List<Measure> AllMeasureRecords = new List<Measure>();
+            //AllMeasureRecords = MD.getAllMeasures();
             return View(AllMeasureRecords);
         }
 

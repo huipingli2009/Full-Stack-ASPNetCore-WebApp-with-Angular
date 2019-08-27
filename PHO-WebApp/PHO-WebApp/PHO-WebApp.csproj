@@ -158,8 +158,10 @@
     <Compile Include="Controllers\InitiativeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MeasureController.cs" />
+    <Compile Include="Controllers\MeasureQualityImprovementController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
+    <Compile Include="Controllers\QualityImprovementsController.cs" />
     <Compile Include="DataAccessLayer\AuditDAL.cs" />
     <Compile Include="DataAccessLayer\CohortDAL.cs" />
     <Compile Include="DataAccessLayer\DataDictionary.cs" />
@@ -167,6 +169,7 @@
     <Compile Include="DataAccessLayer\LoginDAL.cs" />
     <Compile Include="DataAccessLayer\MeasureDAL.cs" />
     <Compile Include="DataAccessLayer\Patients.cs" />
+    <Compile Include="DataAccessLayer\QualityImprovementDAL.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -177,7 +180,11 @@
     <Compile Include="Models\Initiative.cs" />
     <Compile Include="Models\InitiativeStatus.cs" />
     <Compile Include="Models\Measure.cs" />
+    <Compile Include="Models\MeasurePracticeUserModels.cs" />
+    <Compile Include="Models\Measures.cs" />
     <Compile Include="Models\Patient.cs" />
+    <Compile Include="Models\QualityContext.cs" />
+    <Compile Include="Models\QualityImprovement.cs" />
     <Compile Include="Models\StaffType.cs" />
     <Compile Include="Models\UserDetails.cs" />
     <Compile Include="Patient.cs">
@@ -268,6 +275,7 @@
     </Content>
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <EntityDeploy Include="PersonModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -371,10 +379,17 @@
     <Content Include="Views\Measure\_MeasureDisplay.cshtml" />
     <Content Include="Views\Measure\Index.cshtml" />
     <Content Include="Views\Measure\_QIMeasurePath.cshtml" />
+    <Content Include="Views\QualityImprovements\Create.cshtml" />
+    <Content Include="Views\QualityImprovements\Delete.cshtml" />
+    <Content Include="Views\QualityImprovements\Details.cshtml" />
+    <Content Include="Views\QualityImprovements\Edit.cshtml" />
+    <Content Include="Views\QualityImprovements\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\DataDictionary\" />
+    <Folder Include="Views\MeasurePracticeUser\" />
+    <Folder Include="Views\MeasureQualityImprovement\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
