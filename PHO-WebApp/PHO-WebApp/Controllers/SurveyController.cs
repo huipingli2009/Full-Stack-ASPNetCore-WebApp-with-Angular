@@ -21,15 +21,26 @@ namespace PHO_WebApp.Controllers
             return View(model);
         }
 
-        public ActionResult ViewSurvey(int id)
+        public ActionResult CompleteNewSurvey(int id)
         {
-            SurveyForm model = records.GetSurveyQuestions(id);
+            SurveyForm model = records.LoadSurveyQuestions(id, 0);
             return View("Display", model);
+        }
+        public ActionResult LoadExistingSurvey(int id)
+        {
+            SurveyForm model = records.LoadSurveyQuestions(id, 0);
+            return View("Display", model);
+        }
+        public ActionResult ViewSurveyDetails(int id)
+        {
+            SurveySummary model = records.GetSurveySummary(id);
+            ViewBag.CompletedSurveys = new DataTable();
+            return View("Details", model);
         }
 
         public ActionResult DisplaySection(int id)
         {
-            SurveyForm model = records.GetSurveyQuestions(id);
+            SurveyForm model = records.LoadSurveyQuestions(id, 0);
             return View("DisplaySection", model);
         }
 
@@ -38,18 +49,28 @@ namespace PHO_WebApp.Controllers
         {
             if (ModelState.IsValid && model != null && model.Responses != null)
             {
-                foreach(Response response in model.Responses)
+                if (model.FormResponseId < 1)
                 {
-                    int responseId = records.InsertSurveyResponse(response);
+                    model.FormResponseId = records.InsertSurveyFormResponse(model.FormId, 0, false);
+                }
 
-                    if(response.ResponseAnswer != null)
+                foreach(QuestionResponse response in model.Responses)
+                {
+                    int responseId = records.InsertSurveyResponse(response, model.FormResponseId);
+
+                    if(response.IsListQuestionType && response.ResponseAnswer != null && response.ResponseAnswer.AnswerOptionId > 0)
                     {
                         response.ResponseAnswer.ResponseId = responseId;
                         records.InsertSurveyResponseAnswer(response.ResponseAnswer);
                     }
                 }
+
+                return View("SurveyCompleted");
             }
-            return View("SurveyCompleted");
+            else
+            {
+                return View(model);
+            }
         }
 
     }

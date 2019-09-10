@@ -1,0 +1,70 @@
+﻿@using PHO_WebApp.Models;
+@model PHO_WebApp.Models.SurveySummary
+@{
+    ViewBag.Title = "Display";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    HtmlHelper.ClientValidationEnabled = false;
+}
+
+<h2>@Model.Survey_Title - Details</h2>
+<p><i>@Model.Description</i></p>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6" style="float:left">
+            <h2>Completed Data Collections</h2>
+        </div>
+
+        <div class="col-md-6" style="float:right">
+            <h3>Search</h3>
+            <input text="" class="form-control search" id="search" />
+        </div>
+
+
+    </div>
+
+    <br />
+    <br />
+    <div>
+
+        <table id="tblCompleted" class="table table-sm table-responsive table-condensed table-hover table-bordered table-striped" style="border:hidden;">
+
+
+            <thead class="black white-text">
+                <tr class="d-flex pho-table-data" style="border:hidden;">
+                    <th class="pho-table-data" scope="col" style="border:hidden;">Collection Id</th>
+                    <th class="pho-table-data" scope="col" style="border:hidden;">Collected On</th>
+                    <th class="pho-table-data" scope="col" style="border:hidden;">Collected By</th>
+                </tr>
+            </thead>
+            <tbody class="table-striped table-bordered table-hover table-sm table-condensed">
+               
+                @{ foreach (System.Data.DataRow dr in ViewBag.CompletedSurveys.Rows)
+                    {
+                        <tr class="contentRow pho-table-data" style="border:hidden;">
+                            <td class="skDataDictionary" style="border:hidden;">
+                                <span>@dr["CollectionId"]</span>
+                            </td>
+                            <td class="DatabaseName" style="border:hidden;">
+                                <span>@dr["CollectedOn"]</span>
+                                @*<input type="text" value="@dr["DatabaseName"]" />*@
+                                @*<input type="text" id="txtDatabaseName" value="@dr["DatabaseName"]" style="display:none" />*@
+                            </td>
+                            <td class="SchemaName" style="border:hidden;">
+                                <span>@dr["CollectedBy"]</span>
+                                @*<input type="text" value="@dr["SchemaName"]">*@
+                                @*<input type="text" id="txtSchemaName" value="@dr["SchemaName"]" style="display:none" />*@
+                            </td>
+                            
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+

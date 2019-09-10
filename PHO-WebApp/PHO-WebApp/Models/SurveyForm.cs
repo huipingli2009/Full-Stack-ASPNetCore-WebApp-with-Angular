@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
+using FluentValidation;
+using FluentValidation.Mvc;
 
 namespace PHO_WebApp.Models
 {
@@ -22,6 +24,10 @@ namespace PHO_WebApp.Models
         private string _description;
         private string _survey_Title;
         private int _formId;
+        private int _totalResponses;
+        private int _completedResponses;
+        private int _inprogressResponses;
+        private List<SurveyFormResponse> _recentInProgress;
 
         [Key]
         public int FormId
@@ -39,6 +45,30 @@ namespace PHO_WebApp.Models
             get { return _description; }
             set { _description = value; }
         }
+
+        public int TotalResponses
+        {
+            get { return _totalResponses; }
+            set { _totalResponses = value; }
+        }
+
+        public int CompletedResponses
+        {
+            get { return _completedResponses; }
+            set { _completedResponses = value; }
+        }
+
+        public int InProgressResponses
+        {
+            get { return _inprogressResponses; }
+            set { _inprogressResponses = value; }
+        }
+
+        public List<SurveyFormResponse> RecentInProgress
+        {
+            get { return _recentInProgress; }
+            set { _recentInProgress = value; }
+        }
     }
 
     public class SurveyForm
@@ -46,12 +76,20 @@ namespace PHO_WebApp.Models
         private List<FormSection> _FormSections; 
         private string _survey_Title;
         private int _formId;
+        private int _formResponseId;
 
         public int FormId
         {
             get { return _formId; }
             set { _formId = value; }
         }
+        
+        public int FormResponseId
+        {
+            get { return _formResponseId; }
+            set { _formResponseId = value; }
+        }
+
         public string Survey_Title
         {
             get { return _survey_Title; }
@@ -88,11 +126,11 @@ namespace PHO_WebApp.Models
             }
         }
 
-        public List<Response> Responses
+        public List<QuestionResponse> Responses
         {
             get
             {
-                List<Response> responses = new List<Response>();
+                List<QuestionResponse> responses = new List<QuestionResponse>();
 
                 if (this.FormSections != null && this.FormSections.Count > 0)
                 {
@@ -106,9 +144,9 @@ namespace PHO_WebApp.Models
                                 {
                                     foreach(SectionQuestion sq in s.SectionQuestions)
                                     {
-                                        if (sq.Question != null && sq.Question.Response != null)
+                                        if (sq.Question != null)
                                         {
-                                            responses.Add(sq.Question.Response);
+                                            responses.Add(sq.Question);
                                         }
                                     }
                                 }
@@ -120,6 +158,7 @@ namespace PHO_WebApp.Models
                 return responses;
             }
         }
+
     }
     public class FormSection
     {
@@ -215,7 +254,7 @@ namespace PHO_WebApp.Models
     }
     public class SectionQuestion
     {
-        public Question _Question;
+        public QuestionResponse _Question;
         private int _sectionQuestionId;
         private int _order;
 
@@ -230,13 +269,13 @@ namespace PHO_WebApp.Models
             set { _order = value; }
         }
         //public List<Question> Questions = new List<Question>();
-        public Question Question
+        public QuestionResponse Question
         {
             get
             {
                 if (this._Question == null)
                 {
-                    this._Question = new Question();
+                    this._Question = new QuestionResponse();
                 }
                 return this._Question;
             }
@@ -246,7 +285,61 @@ namespace PHO_WebApp.Models
             }
         }
     }
-    public class Question
+
+    public class SurveyFormResponse
+    {
+        private int _formResponseId;
+        private int _formId;
+        private DateTime _dateCreated;
+        private DateTime _dateModfied;
+        private DateTime _dateCompleted;
+        private bool _completed;
+        private int _PercentCompleted;
+
+        public int FormResponseId
+        {
+            get { return _formResponseId; }
+            set { _formResponseId = value; }
+        }
+
+        public int FormId
+        {
+            get { return _formId; }
+            set { _formId = value; }
+        }
+
+        public DateTime DateCreated
+        {
+            get { return _dateCreated; }
+            set { _dateCreated = value; }
+        }
+
+        public DateTime DateModified
+        {
+            get { return _dateModfied; }
+            set { _dateModfied = value; }
+        }
+
+        public DateTime DateCompleted
+        {
+            get { return _dateCompleted; }
+            set { _dateCompleted = value; }
+        }
+
+        public bool Completed
+        {
+            get { return _completed; }
+            set { _completed = value; }
+        }
+        public int PercentCompleted
+        {
+            get { return _PercentCompleted; }
+            set { _PercentCompleted = value; }
+        }
+    }
+
+    [FluentValidation.Attributes.Validator(typeof(ResponseValidator))]
+    public class QuestionResponse
     {
         private string _javascript;
         private string _labelCode;
@@ -256,8 +349,14 @@ namespace PHO_WebApp.Models
         private string _questionType;
         private int _questionTypeId;
         private int _questionId;
-        private Response _response;
+        private string _response_Text;
+        private ResponseAnswer _responseAnswer;
         private List<QuestionAnswerOption> _questionAnswerOptions;
+
+        //response
+        private int _responseId;
+        private int _formResponseId;
+               
 
         public int QuestionId
         {
@@ -268,6 +367,16 @@ namespace PHO_WebApp.Models
         {
             get { return _questionTypeId; }
             set { _questionTypeId = value; }
+        }
+        public int FormResponseId
+        {
+            get { return _formResponseId; }
+            set { _formResponseId = value; }
+        }
+        public int ResponseId
+        {
+            get { return _responseId; }
+            set { _responseId = value; }
         }
         public string QuestionType
         {
@@ -306,12 +415,19 @@ namespace PHO_WebApp.Models
             set { _questionAnswerOptions = value; }
         }
 
-        public Response Response
+        public string Response_Text
         {
-            get { return _response; }
-            set { _response = value; }
+            get { return _response_Text; }
+            set
+            {
+                _response_Text = value;
+            }
+        }
 
-            
+        public ResponseAnswer ResponseAnswer
+        {
+            get { return _responseAnswer; }
+            set { _responseAnswer = value; }
         }
 
         public bool IsListQuestionType
@@ -338,46 +454,33 @@ namespace PHO_WebApp.Models
         }
     }
 
-    public class Response
-    {
-        private int _QuestionId;
-        private string _response_Text;
-        private ResponseAnswer _responseAnswer;
-        private bool _required;
+    //[FluentValidation.Attributes.Validator(typeof(ResponseValidator))]
+    //public class Response
+    //{
+    //    private int _QuestionId;
+    //    private string _response_Text;
+    //    private ResponseAnswer _responseAnswer;
+    //    private bool _required;
 
-        public int QuestionId
-        {
-            get { return _QuestionId; }
-            set { _QuestionId = value; }
-        }
+    //    public int QuestionId
+    //    {
+    //        get { return _QuestionId; }
+    //        set { _QuestionId = value; }
+    //    }
 
-        [RequiredIf("Required", true, "*")]
-        public string Response_Text
-        {
-            get { return _response_Text; }
-            set
-            {
-                _response_Text = value;
-            }
-        }
 
-        public ResponseAnswer ResponseAnswer
-        {
-            get { return _responseAnswer; }
-            set { _responseAnswer = value; }
-        }
+    //    public bool Required
+    //    {
+    //        get { return _required; }
+    //        set { _required = value; }
+    //    }
 
-        public bool Required
-        {
-            get { return _required; }
-            set { _required = value; }
-        }
-
-    }
+    //}
     public class ResponseAnswer
     {
         private int _ResponseId;
         private int _AnswerOptionId;
+        private int _ResponseAnswersId;
 
         public int ResponseId
         {
@@ -388,6 +491,12 @@ namespace PHO_WebApp.Models
         {
             get { return _AnswerOptionId; }
             set { _AnswerOptionId = value; }
+        }
+
+        public int ResponseAnswersId
+        {
+            get { return _ResponseAnswersId; }
+            set { _ResponseAnswersId = value; }
         }
     }
 
@@ -425,32 +534,24 @@ namespace PHO_WebApp.Models
         }
     }
 
-
-
-    public class RequiredIfAttribute : ValidationAttribute
+    public class ResponseValidator : AbstractValidator<QuestionResponse>
     {
-        private String PropertyName { get; set; }
-        private String ErrorMessage { get; set; }
-        private Object DesiredValue { get; set; }
-
-        public RequiredIfAttribute(String propertyName, Object desiredvalue, String errormessage)
+        public ResponseValidator()
         {
-            this.PropertyName = propertyName;
-            this.DesiredValue = desiredvalue;
-            this.ErrorMessage = errormessage;
-        }
+            RuleFor(x => x.Response_Text).NotEmpty();
 
-        protected override ValidationResult IsValid(object value, ValidationContext context)
-        {
-            Object instance = context.ObjectInstance;
-            Type type = instance.GetType();
-            Object proprtyvalue = type.GetProperty(PropertyName).GetValue(instance, null);
-            if (proprtyvalue.ToString() == DesiredValue.ToString() && value == null)
-            {
-                return new ValidationResult(ErrorMessage);
-            }
-            return ValidationResult.Success;
+            When(x => x.Flag_Required==true, () => {
+                RuleFor(x => x.Response_Text).NotEmpty().WithMessage("Required");
+
+                When(x => x.IsListQuestionType, () =>
+                {
+                    RuleFor(x => x.ResponseAnswer).NotNull().WithMessage("Required");
+                    RuleFor(x => x.ResponseAnswer.AnswerOptionId).NotNull().NotEmpty().WithMessage("Required");
+                });
+            });
         }
     }
+
+    
 }
 

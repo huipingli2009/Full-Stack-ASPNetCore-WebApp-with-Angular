@@ -102,5 +102,38 @@ namespace PHO_WebApp
             return returnValue;
         }
 
+        public static DateTime ParseDateTime(string value)
+        {
+            DateTime returnValue = new DateTime();
+
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                DateTime holder;
+                DateTime.TryParse(value, out holder);
+                if (holder != null)
+                {
+                    returnValue = holder;
+                }
+            }
+
+            return returnValue;
+        }
+        public static DateTime? ParseDateTimeNullable(string value)
+        {
+            DateTime? returnValue = new DateTime?();
+
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                DateTime holder;
+                DateTime.TryParse(value, out holder);
+                if (holder != null)
+                {
+                    returnValue = holder;
+                }
+            }
+
+            return returnValue;
+        }
+
     }
 }

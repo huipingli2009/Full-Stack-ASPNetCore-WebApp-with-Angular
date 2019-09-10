@@ -21,10 +21,81 @@
 
     <div class="container navbar navbar-default navbar-static-top Header--top Header-nav">
         <div class="navbar-header top-left">
-            <img class="header-branding-logo" src="~/Images/TSCHS_LOGO_CMYK.jpg" style="width:225px; height:67px" />
+            <a href="@Url.Action("Index", "Home")"><img class="header-branding-logo" src="~/Images/TSCHS_LOGO_CMYK.jpg" style="width:225px; height:67px" /></a>
         </div>
         <nav class="Header-nav Header-nav--primary top-right" data-nc-container="top-right">
-            <div class="nav navbar-nav">
+            <ul class="nav navbar-nav">
+                @{
+                    if (@SharedLogic.IsAuthenticated(new StaffTypeEnum[] { StaffTypeEnum.CCHMC_IS, StaffTypeEnum.PHO_Staff }, Session["UserDetails"]))
+                    {
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                Quality Improvement
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.RouteLink("Initiatives", "Initiative", null, new {  })</li>
+                                <li>@Html.RouteLink("Cohorts", "Cohort", null, new {  })</li>
+                                <li>@Html.RouteLink("Measures", "Measure", null, new {  })</li>
+                                <li><a href="#">Charts</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                Data Collection Tools
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.RouteLink("Patient Surveys", "Survey", null, new {  })</li>
+                                <li>@Html.RouteLink("Practice Surveys", "Survey", null, new {  })</li>
+                                <li><a href="#">Audits &amp; Forms</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                Resources
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Quarterly Reports</a></li>
+                                <li><a href="#">PHO Communication</a></li>
+                                <li><a href="#">Publications &amp; Research</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                My Practice
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Patients</a></li>
+                                <li><a href="#">Staff</a></li>
+                                <li><a href="#">Alerts &amp; Subscriptions</a></li>
+                                <li><a href="#">Practice Info</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                Admin
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Practice Admin</a></li>
+                                <li><a href="#">QI Admin</a></li>
+                                <li><a href="#">User Admin</a></li>
+                                <li><a href="#">Alert Admin</a></li>
+                                <li>@Html.RouteLink("Data Dictionary", "DataDictionary", null, new {  })</li>
+                            </ul>
+                        </li>
+
+                    }
+                }
+                <li>@Html.Action("LoggedInAs", "Login")</li>
+                @*@Html.Partial("LoggedInAs")*@
+            </ul>
+
+
+            @*<div class="nav navbar-nav">
                 @Html.RouteLink("Home", "Home", null, new { @class = "Header-nav-item" })
                 @{
                     if (@SharedLogic.IsAuthenticated(new StaffTypeEnum[] { StaffTypeEnum.CCHMC_IS, StaffTypeEnum.PHO_Staff }, Session["UserDetails"]))
@@ -37,8 +108,7 @@
                     }
                 }
                 @Html.Action("LoggedInAs", "Login")
-                @*@Html.Partial("LoggedInAs")*@
-            </div>
+            </div>*@
         </nav>
 
     </div>

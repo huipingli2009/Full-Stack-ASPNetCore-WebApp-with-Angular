@@ -1,0 +1,85 @@
+﻿@using PHO_WebApp.Models;
+@model PHO_WebApp.Models.QuestionResponse
+
+@{
+    Layout = null;
+}
+
+@Html.HiddenFor(m => m.QuestionId)
+@Html.HiddenFor(m => m.ResponseAnswer.ResponseId)
+@if (Model.QuestionType.ToUpper() == "TEXTBOX")
+{
+    <tr>
+        <td>@Html.Label(Model.QuestionLabel.ToString())</td>
+        <td>
+            @Html.TextBoxFor(q => q.Response_Text)
+            @Html.ValidationMessageFor(q => q.Response_Text, null, new { @class = "validationText" })
+        </td>
+    </tr>
+}
+@if (Model.QuestionType.ToUpper() == "TEXTBOXNUMERIC")
+{
+    <tr>
+        <td> @Html.Label(Model.QuestionLabel.ToString()) </td>
+        <td>
+            @Html.TextBoxFor(q => q.Response_Text, new { @type = "number" })
+            @Html.ValidationMessageFor(q => q.Response_Text, null, new { @class = "validationText" }) 
+        </td>
+    </tr>
+}
+@if (Model.QuestionType.ToUpper() == "TEXTBOXDATE")
+{
+    <tr>
+        <td> @Html.Label(Model.QuestionLabel.ToString()) </td>
+        <td>
+            @Html.TextBoxFor(q => q.Response_Text, new { @type = "date" })
+            @Html.ValidationMessageFor(q => q.Response_Text, null, new { @class = "validationText" }) 
+        </td>
+    </tr>
+}
+@if (Model.QuestionType.ToUpper() == "TEXTBOXTELEPHONE")
+{
+    <tr>
+        <td>@Html.Label(Model.QuestionLabel.ToString())</td>
+        <td>
+            @Html.TextBoxFor(q => q.Response_Text, new { @type = "tel", @pattern= "[0-9]{3}-[0-9]{2}-[0-9]{3}" })
+            @Html.ValidationMessageFor(q => q.Response_Text, null, new { @class = "validationText" })
+        </td>
+    </tr>
+}
+@if (Model.QuestionType.ToUpper() == "DROPDOWNLIST" && Model.ResponseAnswer != null)
+{
+    <tr>
+        <td>@Html.Label(Model.QuestionLabel.ToString())</td>
+        <td>
+            @Html.DropDownListFor(
+            x => x.ResponseAnswer.AnswerOptionId,
+            new SelectList(Model.QuestionAnswerOptions, "QuestionAnswerOptionId", "QuestionAnswerOptionLabel"),
+            "-- Select Severity --",
+            new
+            {
+            id = "SeverityDropdownList"
+            }
+            )
+            @Html.ValidationMessageFor(x => x.ResponseAnswer.AnswerOptionId, null, new { @class = "validationText" })
+        </td>
+    </tr>
+}
+@if (Model.QuestionType.ToUpper() == "RADIOBUTTONLIST" && Model.ResponseAnswer != null)
+{
+    <tr>
+        <td>@Html.Label(Model.QuestionLabel.ToString())</td>
+        <td>
+            @foreach (QuestionAnswerOption q in Model.QuestionAnswerOptions)
+            {
+                <div>
+                    <label>
+                        @Html.RadioButtonFor(m => m.ResponseAnswer.AnswerOptionId, q.QuestionAnswerOptionId)
+                        @q.QuestionAnswerOptionId
+                    </label>
+                </div>
+            }
+            @Html.ValidationMessageFor(m => m.ResponseAnswer.AnswerOptionId, null, new { @class = "validationText" })
+        </td>
+    </tr>
+}
