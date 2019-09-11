@@ -34,7 +34,8 @@ namespace PHO_WebApp.Controllers
         public ActionResult ViewSurveyDetails(int id)
         {
             SurveySummary model = records.GetSurveySummary(id);
-            ViewBag.CompletedSurveys = new DataTable();
+            ViewBag.CompletedSurveys = records.GetSurveyResponses(id, true);
+            ViewBag.InProgressSurveys = records.GetSurveyResponses(id, false);
             return View("Details", model);
         }
 
