@@ -24,7 +24,7 @@ namespace PHO_WebApp.DataAccessLayer
 
             //userId = Session["UserDetails"]
             //SqlCommand com = new SqlCommand("spGetAllQIMeasures", con);
-            SqlCommand com = new SqlCommand("QI_Summary", con);
+            SqlCommand com = new SqlCommand("spQI_Summary", con);
             com.CommandType = CommandType.StoredProcedure;
 
             //newly added
@@ -98,7 +98,7 @@ namespace PHO_WebApp.DataAccessLayer
             }
             
             c.MeasureValue = string.Format("{0:#.##}", Double.Parse(dr["MeasureValue"].ToString()));
-
+            c.LastNetworkValue = dr["LastNetworkValue"].ToString();
             c.Owner = dr["Owner"].ToString();
 
             c.AllInitiativeStatuses = this.GetInitiativeStatuses();
