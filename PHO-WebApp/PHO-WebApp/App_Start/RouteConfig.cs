@@ -48,6 +48,12 @@ namespace PHO_WebApp
            );
 
             routes.MapRoute(
+               name: "CreateLogin",
+               url: "Login",
+               defaults: new { controller = "Login", action = "LoginForm", id = UrlParameter.Optional }
+           );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }

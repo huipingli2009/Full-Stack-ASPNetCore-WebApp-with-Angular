@@ -51,6 +51,9 @@ namespace PHO_WebApp.Models
         public DateTime?LastMeasureDate { get; set;}
 
         [DisplayFormat]
-        public string MeasureValue { get; set;}        
+        public string MeasureValue { get; set;}
+
+        [DisplayFormat]
+        public string LastNetworkValue { get; set; }
     }
 }

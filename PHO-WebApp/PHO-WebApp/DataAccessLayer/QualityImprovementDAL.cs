@@ -16,7 +16,7 @@ namespace PHO_WebApp.DataAccessLayer
 
         public List<QualityImprovement> getAllQualityImprovementsForPractice(int userId)
         {
-            SqlCommand com = new SqlCommand("QI_Summary", con);
+            SqlCommand com = new SqlCommand("spQI_Summary", con);
             com.CommandType = CommandType.StoredProcedure;
 
             //Add practice Id parameter

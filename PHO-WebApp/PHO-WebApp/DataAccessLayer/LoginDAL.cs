@@ -164,5 +164,31 @@ namespace PHO_WebApp.DataAccessLayer
             return c;
         }
 
+        public void RegisterUser(UserDetails UD)
+        {
+            SqlCommand com = new SqlCommand("spInsertLogin", con);
+            com.CommandType = CommandType.StoredProcedure;
+
+            com.Parameters.Add("@UserName", SqlDbType.VarChar);
+            if (!String.IsNullOrWhiteSpace(UD.UserName))
+            {
+                com.Parameters["@UserName"].Value = UD.UserName;
+            }
+            else
+            {
+                com.Parameters["@UserName"].Value = DBNull.Value;
+            }
+
+            com.Parameters.Add("@Password", SqlDbType.VarChar);
+            if (!String.IsNullOrWhiteSpace(UD.Password))
+            {
+                com.Parameters["@Password"].Value = UD.Password;
+            }
+            else
+            {
+                com.Parameters["@Passwordc"].Value = DBNull.Value;
+            }          
+
+        }        
     }
 }
