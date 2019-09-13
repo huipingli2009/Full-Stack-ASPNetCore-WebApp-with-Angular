@@ -38,7 +38,7 @@ namespace PHO_WebApp.DataAccessLayer
                             SharedLogic.ParseNumeric(r["CompletedResponses"].ToString()),
                             SharedLogic.ParseNumeric(r["InProgressResponses"].ToString()));
 
-                    summary.RecentInProgress = GetSurveyResponses(formId, false);
+                    summary.RecentInProgress = GetSurveyResponses(formId, false).OrderByDescending(c => c.DateModified).Take(5).ToList();
 
                     returnObject.Add(summary);
                 }
@@ -182,7 +182,7 @@ namespace PHO_WebApp.DataAccessLayer
                         //new form
                         formId = SharedLogic.ParseNumeric(r["FormId"].ToString());
                         //Create new SurveyForm model
-                        returnObject = CreateSurveyFormModel((int?)r["FormId"], r["Survey_Title"].ToString());
+                        returnObject = CreateSurveyFormModel((int?)r["FormId"], (int?)r["FormResponseID"], r["Survey_Title"].ToString());
 
                     }
                     if (formSectionId != SharedLogic.ParseNumeric(r["FormSectionId"].ToString()))
@@ -251,11 +251,22 @@ namespace PHO_WebApp.DataAccessLayer
         }
 
 
-        public int InsertSurveyFormResponse(int FormId, int PercentCompleted, bool Completed)
+        public int SaveSurveyFormResponse(int FormId, int FormResponseId, int PercentCompleted, bool Completed)
         {
             int returnValue = 0;
 
-            SqlCommand com = new SqlCommand("spInsertSurveyFormResponse", con);
+            SqlCommand com = null;
+            if (FormResponseId > 0)
+            {
+                com = new SqlCommand("spUpdateSurveyFormResponse", con);
+                com.Parameters.Add("@FormResponseId", SqlDbType.Int);
+                com.Parameters["@FormResponseId"].Value = FormResponseId;
+            }
+            else
+            {
+                com = new SqlCommand("spInsertSurveyFormResponse", con);
+            }
+
             com.CommandType = CommandType.StoredProcedure;
 
             com.Parameters.Add("@FormId", SqlDbType.Int);
@@ -274,11 +285,11 @@ namespace PHO_WebApp.DataAccessLayer
 
             if (PercentCompleted > 0)
             {
-                com.Parameters["@PercentCompleted"].Value = FormId;
+                com.Parameters["@PercentComplete"].Value = FormId;
             }
             else
             {
-                com.Parameters["@PercentCompleted"].Value = 0;
+                com.Parameters["@PercentComplete"].Value = 0;
             }
 
             if (Completed)
@@ -288,22 +299,33 @@ namespace PHO_WebApp.DataAccessLayer
             }
             else
             {
-                com.Parameters["@Completed"].Value = DBNull.Value;
+                com.Parameters["@Completed"].Value = 0;
                 com.Parameters["@DateCompleted"].Value = DBNull.Value;
             }
 
             con.Open();
-            returnValue = (Int32)com.ExecuteScalar();
+            object obj = com.ExecuteScalar();
+            returnValue = (Int32)obj;
             con.Close();
 
             return returnValue;
         }
 
-        public int InsertSurveyResponse(QuestionResponse model, int FormResponseId)
+        public int SaveSurveyResponse(QuestionResponse model, int FormResponseId)
         {
             int returnValue = 0;
 
-            SqlCommand com = new SqlCommand("spInsertSurveyResponse", con);
+            SqlCommand com = null;
+            if (model.ResponseId > 0)
+            {
+                com = new SqlCommand("spUpdateSurveyResponse", con);
+                com.Parameters.Add("@ResponseId", SqlDbType.Int);
+                com.Parameters["@ResponseId"].Value = model.ResponseId;
+            }
+            else
+            {
+                com = new SqlCommand("spInsertSurveyResponse", con);
+            }
             com.CommandType = CommandType.StoredProcedure;
 
             com.Parameters.Add("@QuestionId", SqlDbType.Int);
@@ -338,18 +360,29 @@ namespace PHO_WebApp.DataAccessLayer
             }
 
             con.Open();
-            returnValue = (Int32)com.ExecuteScalar();
+            object obj = com.ExecuteScalar();
+            returnValue = (Int32)obj;
             con.Close();
 
             return returnValue;
         }
 
 
-        public int InsertSurveyResponseAnswer(ResponseAnswer model)
+        public int SaveSurveyResponseAnswer(ResponseAnswer model)
         {
             int returnValue = 0;
 
-            SqlCommand com = new SqlCommand("spInsertSurveyResponseAnswer", con);
+            SqlCommand com = null;
+            if (model.ResponseAnswersId > 0)
+            {
+                com = new SqlCommand("spUpdateSurveyResponseAnswer", con);
+                com.Parameters.Add("@ResponseAnswersId", SqlDbType.Int);
+                com.Parameters["@ResponseAnswersId"].Value = model.ResponseAnswersId;
+            }
+            else
+            {
+                com = new SqlCommand("spInsertSurveyResponseAnswer", con);
+            }
             com.CommandType = CommandType.StoredProcedure;
 
             com.Parameters.Add("@ResponseId", SqlDbType.Int);
@@ -397,12 +430,16 @@ namespace PHO_WebApp.DataAccessLayer
         }
 
 
-        public SurveyForm CreateSurveyFormModel(int? SurveyFormId, string Survey_Title)
+        public SurveyForm CreateSurveyFormModel(int? SurveyFormId, int? FormResponseId, string Survey_Title)
         {
             SurveyForm c = new SurveyForm();
             if (SurveyFormId.HasValue)
             {
                 c.FormId = SurveyFormId.Value;
+            }
+            if (FormResponseId.HasValue)
+            {
+                c.FormResponseId = FormResponseId.Value;
             }
             c.Survey_Title = Survey_Title;
 

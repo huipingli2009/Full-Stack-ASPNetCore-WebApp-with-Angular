@@ -33,7 +33,7 @@
                         @foreach (var res in item.RecentInProgress)
                         {
                             <tr>
-                                <td>@Html.ActionLink(res.FormResponseId.ToString(), "LoadExistingSurvey", new { id = res.FormResponseId.ToString() })</td>
+                                <td>@Html.ActionLink(res.FormResponseId.ToString(), "LoadExistingSurvey", new { id = res.FormId, formResponseId = res.FormResponseId.ToString() })</td>
                                 <td>
                                     @if (res.DateCreated > DateTime.Now.AddYears(-20))
                                     {
@@ -46,7 +46,7 @@
                                         @res.DateModified.ToShortDateString();
                                     }
                                 </td>
-                                <td>@res.PercentCompleted &nbsp; &#37;</td>
+                                <td>@res.PercentCompleted &#37;</td>
                             </tr>
                         }
                     </table>

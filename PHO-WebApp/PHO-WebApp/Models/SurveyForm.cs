@@ -126,6 +126,24 @@ namespace PHO_WebApp.Models
             }
         }
 
+        public int PercentComplete
+        {
+            get
+            {
+                int total = 0;
+                int complete = 0;
+                foreach(QuestionResponse resp in this.Responses)
+                {
+                    total++;
+                    if (!string.IsNullOrWhiteSpace(resp.Response_Text) || (resp.ResponseAnswer != null && resp.ResponseAnswer.AnswerOptionId > 0))
+                    {
+                        complete++;
+                    }
+                }
+                return (int)Math.Round(((double)complete / total) * 100, 0);
+            }
+        }
+
         public List<QuestionResponse> Responses
         {
             get
@@ -158,6 +176,7 @@ namespace PHO_WebApp.Models
                 return responses;
             }
         }
+
 
     }
     public class FormSection
@@ -337,7 +356,7 @@ namespace PHO_WebApp.Models
             set { _PercentCompleted = value; }
         }
     }
-
+    
     [FluentValidation.Attributes.Validator(typeof(ResponseValidator))]
     public class QuestionResponse
     {
@@ -476,6 +495,7 @@ namespace PHO_WebApp.Models
     //    }
 
     //}
+
     public class ResponseAnswer
     {
         private int _ResponseId;
@@ -538,16 +558,14 @@ namespace PHO_WebApp.Models
     {
         public ResponseValidator()
         {
-            RuleFor(x => x.Response_Text).NotEmpty();
-
             When(x => x.Flag_Required==true, () => {
                 RuleFor(x => x.Response_Text).NotEmpty().WithMessage("Required");
+            });
 
-                When(x => x.IsListQuestionType, () =>
-                {
-                    RuleFor(x => x.ResponseAnswer).NotNull().WithMessage("Required");
-                    RuleFor(x => x.ResponseAnswer.AnswerOptionId).NotNull().NotEmpty().WithMessage("Required");
-                });
+            When(x => (x.Flag_Required==true && x.IsListQuestionType == true), () =>
+            {
+                //RuleFor(x => x.ResponseAnswer).NotNull().WithMessage("Required");
+                //RuleFor(x => x.ResponseAnswer.AnswerOptionId).NotNull().NotEmpty().WithMessage("Required");
             });
         }
     }

@@ -4,7 +4,9 @@
     Layout = null;
 }
 
+
 @Html.HiddenFor(model => model.SectionId)
+@Html.HiddenFor(model => model.SectionDescription)
 <div>
     <h4>@Html.Label(Model.SectionDescription)</h4>
 </div>

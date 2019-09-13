@@ -5,15 +5,24 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     HtmlHelper.ClientValidationEnabled = false;
 }
-<h4>@Html.ActionLink("Back", "Index")</h4>
+
+@if (ViewBag.Message != null)
+{
+    <p><b>@ViewBag.Message</b></p>
+    <br />
+}
+
+<h4>@Html.ActionLink("Back to Data Collection Summary", "Index")</h4>
 <h2>@Model.Survey_Title - Details</h2>
+
 <p><i>@Model.Description</i></p>
+
 <p>
     <b>Total Responses:</b> @Model.TotalResponses &nbsp; &nbsp; &nbsp; &#124;&nbsp;&nbsp;&nbsp;
     <b>Total Completed:</b> @Model.CompletedResponses &nbsp; &nbsp; &nbsp; &#124;&nbsp;&nbsp;&nbsp;
     <b>Total In Progress:</b> @Model.InProgressResponses
-
 </p>
+
 <div class="container">
     <div class="row">
         <div class="col-md-6" style="float:left">
@@ -50,21 +59,23 @@
                     {
                         <tr class="contentRow pho-table-data" style="border:hidden;">
                             <td class="FormResponseId" style="border:hidden;">
-                                <span>@row.FormResponseId.ToString()</span>
+                                <span>
+                                    @Html.ActionLink(row.FormResponseId.ToString(), "LoadExistingSurvey", new { id = row.FormId, formResponseId = row.FormResponseId.ToString() })
+                                </span>
                             </td>
                             <td class="DateCreated" style="border:hidden;">
-                                <span>@row.DateCreated.ToShortDateString()</span>
+                                <span>@row.DateCreated.ToString("G")</span>
                             </td>
                             <td class="DateModified" style="border:hidden;">
                                 <span>
-                                    @row.DateModified.ToShortDateString()
+                                    @row.DateModified.ToString("G")
                                 </span>
                             </td>
                             <td class="DateCompleted" style="border:hidden;">
-                                <span>@row.DateCompleted.ToShortDateString()</span>
+                                <span>@row.DateCompleted.ToString("G")</span>
                             </td>
                             <td class="PercentCompleted" style="border:hidden;">
-                                <span>@row.PercentCompleted.ToString()</span>
+                                <span>@row.PercentCompleted.ToString()  &#37;</span>
                             </td>
                             <td class="Completed" style="border:hidden;">
                                 <span>@row.Completed.ToString()</span>
@@ -99,21 +110,23 @@
                     {
                         <tr class="contentRow pho-table-data" style="border:hidden;">
                             <td class="FormResponseId" style="border:hidden;">
-                                <span>@row.FormResponseId.ToString()</span>
+                                <span>
+                                    @Html.ActionLink(row.FormResponseId.ToString(), "LoadExistingSurvey", new { id = row.FormId, formResponseId = row.FormResponseId.ToString() })
+                                </span>
                             </td>
                             <td class="DateCreated" style="border:hidden;">
-                                <span>@row.DateCreated.ToShortDateString()</span>
+                                <span>@row.DateCreated.ToString("G")</span>
                             </td>
                             <td class="DateModified" style="border:hidden;">
                                 <span>
-                                    @row.DateModified.ToShortDateString()
+                                    @row.DateModified.ToString("G")
                                 </span>
                             </td>
                             <td class="DateCompleted" style="border:hidden;">
-                                <span>@row.DateCompleted.ToShortDateString()</span>
+                                <span>@row.DateCompleted.ToString("G")</span>
                             </td>
                             <td class="PercentCompleted" style="border:hidden;">
-                                <span>@row.PercentCompleted.ToString()</span>
+                                <span>@row.PercentCompleted.ToString()  &#37;</span>
                             </td>
                             <td class="Completed" style="border:hidden;">
                                 <span>@row.Completed.ToString()</span>

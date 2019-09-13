@@ -26,16 +26,21 @@ namespace PHO_WebApp.Controllers
             SurveyForm model = records.LoadSurveyQuestions(id, 0);
             return View("Display", model);
         }
-        public ActionResult LoadExistingSurvey(int id)
+        public ActionResult LoadExistingSurvey(int id, int formResponseId)
         {
-            SurveyForm model = records.LoadSurveyQuestions(id, 0);
+            SurveyForm model = records.LoadSurveyQuestions(id, formResponseId);
             return View("Display", model);
         }
-        public ActionResult ViewSurveyDetails(int id)
+        public ActionResult ViewSurveyDetails(int id, string message)
         {
             SurveySummary model = records.GetSurveySummary(id);
             ViewBag.CompletedSurveys = records.GetSurveyResponses(id, true);
             ViewBag.InProgressSurveys = records.GetSurveyResponses(id, false);
+
+            if (!string.IsNullOrWhiteSpace(message))
+            {
+                ViewBag.Message = message;
+            }
             return View("Details", model);
         }
 
@@ -50,27 +55,30 @@ namespace PHO_WebApp.Controllers
         {
             if (ModelState.IsValid && model != null && model.Responses != null)
             {
-                if (model.FormResponseId < 1)
-                {
-                    model.FormResponseId = records.InsertSurveyFormResponse(model.FormId, 0, false);
-                }
+                SaveForm(model);
 
-                foreach(QuestionResponse response in model.Responses)
-                {
-                    int responseId = records.InsertSurveyResponse(response, model.FormResponseId);
-
-                    if(response.IsListQuestionType && response.ResponseAnswer != null && response.ResponseAnswer.AnswerOptionId > 0)
-                    {
-                        response.ResponseAnswer.ResponseId = responseId;
-                        records.InsertSurveyResponseAnswer(response.ResponseAnswer);
-                    }
-                }
-
-                return View("SurveyCompleted");
+                return ViewSurveyDetails(model.FormId, "Data collection was saved successfully. ID = " + model.FormResponseId.ToString());
             }
             else
             {
-                return View(model);
+                return View("Display", model);
+            }
+        }
+
+
+        public void SaveForm(SurveyForm model)
+        {
+            model.FormResponseId = records.SaveSurveyFormResponse(model.FormId, model.FormResponseId, model.PercentComplete, false);
+
+            foreach (QuestionResponse response in model.Responses)
+            {
+                int responseId = records.SaveSurveyResponse(response, model.FormResponseId);
+
+                if (response.IsListQuestionType && response.ResponseAnswer != null && response.ResponseAnswer.AnswerOptionId > 0)
+                {
+                    response.ResponseAnswer.ResponseId = responseId;
+                    records.SaveSurveyResponseAnswer(response.ResponseAnswer);
+                }
             }
         }
 
