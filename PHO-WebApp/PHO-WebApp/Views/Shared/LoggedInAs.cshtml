@@ -2,12 +2,17 @@
 
 @if (Model != null && Model.UserName != null)
 {
-    string loginText = "Welcome " + Model.UserName + "! - Logout";
-    @Html.ActionLink(loginText, "Logout", "Login", new { @class = "Header-nav-item" })
+    string loginText = "Welcome, " + Model.UserName;
+    <ul style="list-style-type: none;">
+        <li>@Html.Label(loginText)</li>
+        <li>@Html.ActionLink("Log out", "Logout", "Login", null)</li>
+    </ul>
+    
+    
 }
 else
 {
-    @:<a href='javascript:showLogonDialog();' class="Header-nav-item">Log In</a>
+    @:<a href='javascript:showLogonDialog();'>Log In</a>
     <script type="text/javascript">
 
         function showLogonDialog() {

@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Display";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    HtmlHelper.ClientValidationEnabled = false;
 }
 
 <h2>Survey - @Model.Survey_Title</h2>
@@ -10,6 +11,9 @@
 @using (Html.BeginForm("Save", "Survey", FormMethod.Post))
 {
     @Html.HiddenFor(m => Model.FormId);
+    @Html.HiddenFor(m => Model.FormResponseId);
+    @Html.ValidationSummary();
+
     for (var i = 0; i < Model.FormSections.Count(); i++)
     {
         @Html.EditorFor(model => Model.FormSections[i])

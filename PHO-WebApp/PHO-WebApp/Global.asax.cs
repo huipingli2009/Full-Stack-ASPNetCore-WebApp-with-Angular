@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using PHO_WebApp.Models;
+using FluentValidation.Mvc;
 
 namespace PHO_WebApp
 {
@@ -17,6 +18,8 @@ namespace PHO_WebApp
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            FluentValidationModelValidatorProvider.Configure();
         }
 
         void Session_Start(object sender, EventArgs e)

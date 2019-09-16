@@ -10,7 +10,7 @@ namespace PHO_WebApp.Controllers
     {
         protected override void OnException(ExceptionContext filterContext)
         {
-            //filterContext.ExceptionHandled = true;
+            filterContext.ExceptionHandled = true;
 
             //Log the error!!
             string controllerName = filterContext.RouteData.Values["controller"].ToString();
@@ -19,7 +19,7 @@ namespace PHO_WebApp.Controllers
             SharedLogic.LogError(Session["UserDetails"], controllerName, actionName, filterContext.Exception);
 
             //Redirect or return a view, but not both.
-            //filterContext.Result = RedirectToAction("Error", "Base");
+            filterContext.Result = RedirectToAction("Error", "Base");
             // OR 
             //filterContext.Result = new ViewResult
             //{
