@@ -177,6 +177,24 @@ namespace PHO_WebApp.Models
             }
         }
 
+        //TH 9/16/2019
+        //there's an issue with MVC and how it tries to bind the model after postback. Select lists confuse it, and cause a binder error when you try to store
+        //values in a hidden field. But without a hidden field, the select lists won't populate after a postback. So, to make a long story short - the select lists
+        //must be refreshed after postback to the controller. It's crude, but this is the workaround for now.
+        public void RefreshListFields(SurveyForm cachedSurvey)
+        {
+            foreach(QuestionResponse respCurrent in this.Responses)
+            {
+                foreach(QuestionResponse respCached in cachedSurvey.Responses)
+                {
+                    if (respCurrent.IsListQuestionType && respCurrent.QuestionId == respCached.QuestionId)
+                    {
+                        respCurrent.QuestionAnswerOptions = respCached.QuestionAnswerOptions;
+                    }
+                }
+            }
+        }
+
 
     }
     public class FormSection

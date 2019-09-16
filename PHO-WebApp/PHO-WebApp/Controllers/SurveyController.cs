@@ -24,11 +24,13 @@ namespace PHO_WebApp.Controllers
         public ActionResult CompleteNewSurvey(int id)
         {
             SurveyForm model = records.LoadSurveyQuestions(id, 0);
+            Session["CachedSurvey_" + id.ToString() + "_0"] = model;
             return View("Display", model);
         }
         public ActionResult LoadExistingSurvey(int id, int formResponseId)
         {
             SurveyForm model = records.LoadSurveyQuestions(id, formResponseId);
+            Session["CachedSurvey_" + id.ToString() + "_" + formResponseId.ToString()] = model;
             return View("Display", model);
         }
         public ActionResult ViewSurveyDetails(int id, string message)
@@ -61,6 +63,11 @@ namespace PHO_WebApp.Controllers
             }
             else
             {
+                if (Session["CachedSurvey_" + model.FormId.ToString() + "_" + model.FormResponseId.ToString()] != null)
+                {
+                    SurveyForm cachedSurvey = (SurveyForm)Session["CachedSurvey_" + model.FormId.ToString() + "_" + model.FormResponseId.ToString()];
+                    model.RefreshListFields(cachedSurvey);
+                }
                 return View("Display", model);
             }
         }

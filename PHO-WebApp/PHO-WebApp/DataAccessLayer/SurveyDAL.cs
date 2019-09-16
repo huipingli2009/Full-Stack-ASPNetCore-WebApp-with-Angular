@@ -182,7 +182,7 @@ namespace PHO_WebApp.DataAccessLayer
                         //new form
                         formId = SharedLogic.ParseNumeric(r["FormId"].ToString());
                         //Create new SurveyForm model
-                        returnObject = CreateSurveyFormModel((int?)r["FormId"], (int?)r["FormResponseID"], r["Survey_Title"].ToString());
+                        returnObject = CreateSurveyFormModel(formId, SharedLogic.ParseNumeric(r["FormResponseID"].ToString()), r["Survey_Title"].ToString());
 
                     }
                     if (formSectionId != SharedLogic.ParseNumeric(r["FormSectionId"].ToString()))
@@ -430,16 +430,20 @@ namespace PHO_WebApp.DataAccessLayer
         }
 
 
-        public SurveyForm CreateSurveyFormModel(int? SurveyFormId, int? FormResponseId, string Survey_Title)
+        public SurveyForm CreateSurveyFormModel(int SurveyFormId, int FormResponseId, string Survey_Title)
         {
             SurveyForm c = new SurveyForm();
-            if (SurveyFormId.HasValue)
+            if (SurveyFormId > 0)
             {
-                c.FormId = SurveyFormId.Value;
+                c.FormId = SurveyFormId;
             }
-            if (FormResponseId.HasValue)
+            if (FormResponseId > 0)
             {
-                c.FormResponseId = FormResponseId.Value;
+                c.FormResponseId = 0;
+            }
+            else
+            {
+                c.FormResponseId = 0;
             }
             c.Survey_Title = Survey_Title;
 

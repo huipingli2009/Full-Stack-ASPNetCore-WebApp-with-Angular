@@ -8,14 +8,14 @@
 @Html.HiddenFor(m => m.QuestionId)
 @if (Model.ResponseAnswer != null)
 {
-    @Html.HiddenFor(m => m.ResponseAnswer)
     @Html.HiddenFor(m => m.ResponseAnswer.ResponseId)
     @Html.HiddenFor(m => m.ResponseAnswer.ResponseAnswersId)
+    @Html.HiddenFor(m => m.ResponseAnswer.AnswerOptionId)
 }
 
 @Html.HiddenFor(m => m.QuestionType)
+@Html.HiddenFor(m => m.QuestionTypeId)
 @Html.HiddenFor(m => m.QuestionLabel)
-@Html.HiddenFor(m => m.QuestionAnswerOptions)
 @Html.HiddenFor(m => m.Flag_Required)
 
 
