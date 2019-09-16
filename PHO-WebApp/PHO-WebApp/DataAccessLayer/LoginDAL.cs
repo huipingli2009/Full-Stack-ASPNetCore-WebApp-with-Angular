@@ -6,6 +6,7 @@ using PHO_WebApp.Models;
 using System.Data.SqlClient;
 using System.Data;
 using System.Configuration;
+using System.Security.Cryptography;
 
 
 namespace PHO_WebApp.DataAccessLayer
@@ -84,8 +85,6 @@ namespace PHO_WebApp.DataAccessLayer
 
             return returnObject;
         }
-
-
 
         public UserDetails CreateUserDetailsModel()
         {
@@ -169,6 +168,21 @@ namespace PHO_WebApp.DataAccessLayer
             SqlCommand com = new SqlCommand("spInsertLogin", con);
             com.CommandType = CommandType.StoredProcedure;
 
+            com.Parameters.Add("@StaffId", SqlDbType.Int);
+
+            //replace this part with coding when we have Create Staff part done
+            //Create Staff is the prior step before creating user login per system design
+            com.Parameters["@StaffId"].Value = 4;   //practice staff type id = 4
+
+            //if (!String.IsNullOrWhiteSpace(UD.UserName))
+            //{
+            //    com.Parameters["@StaffId"].Value = UD.UserName;
+            //}
+            //else
+            //{
+            //    com.Parameters["@StaffId"].Value = DBNull.Value;
+            //}
+
             com.Parameters.Add("@UserName", SqlDbType.VarChar);
             if (!String.IsNullOrWhiteSpace(UD.UserName))
             {
@@ -182,13 +196,52 @@ namespace PHO_WebApp.DataAccessLayer
             com.Parameters.Add("@Password", SqlDbType.VarChar);
             if (!String.IsNullOrWhiteSpace(UD.Password))
             {
-                com.Parameters["@Password"].Value = UD.Password;
+                com.Parameters["@Password"].Value = HashAndSaltPassword(UD.Password);
             }
             else
             {
-                com.Parameters["@Passwordc"].Value = DBNull.Value;
-            }          
+                com.Parameters["@Password"].Value = DBNull.Value;
+            }
+            
+            com.Parameters.Add("@CreatedByPersonId", SqlDbType.Int);
+            if (!String.IsNullOrWhiteSpace(HttpContext.Current.Session["UserId"].ToString()))
+            {
+                com.Parameters["@CreatedByPersonId"].Value = int.Parse(HttpContext.Current.Session["UserId"].ToString());
+            }
+            else
+            {
+                com.Parameters["@CreatedByPersonId"].Value = DBNull.Value;
+            }
 
-        }        
+            con.Open();
+            com.ExecuteNonQuery();
+            con.Close();
+        }
+
+        private string HashAndSaltPassword(string plainTextPassword)
+        {
+            string ReturnValue = string.Empty;
+
+            byte[] salt;
+            new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
+
+            var pbkdf2 = new Rfc2898DeriveBytes(plainTextPassword, salt, 10000);
+
+            byte[] hash = pbkdf2.GetBytes(20);
+
+            byte[] hashBytes = new byte[36];
+
+            Array.Copy(salt, 0, hashBytes, 0, 16);
+            Array.Copy(hash, 0, hashBytes, 16, 20);
+
+            string savedPasswordHash = Convert.ToBase64String(hashBytes);
+
+            if (!string.IsNullOrWhiteSpace(savedPasswordHash))
+            {
+                ReturnValue = savedPasswordHash;
+            }
+
+            return ReturnValue;
+        }
     }
 }

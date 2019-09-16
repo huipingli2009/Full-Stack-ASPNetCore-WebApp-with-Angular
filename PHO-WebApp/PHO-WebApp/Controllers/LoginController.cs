@@ -26,9 +26,7 @@ namespace PHO_WebApp.Controllers
             {
                 return View("Login");
             }
-        }
-
-    
+        }    
 
         [HttpPost]
         public ActionResult SubmitLoginPartial(string username, string password)
@@ -65,7 +63,6 @@ namespace PHO_WebApp.Controllers
                 //}
 
             }
-
             
             return Json(new { Success = true });
         }
@@ -171,7 +168,7 @@ namespace PHO_WebApp.Controllers
                     //update method here
                 }
                 else
-                {
+                {                    
                     userLogin.RegisterUser(model);
                 }
             }
@@ -179,7 +176,8 @@ namespace PHO_WebApp.Controllers
             {
 
             }
-            return View();
+            //return View();
+            return RedirectToAction("Index", "Home");            
         }
 
         //public async Task<ActionResult> Register(RegisterViewModel model)

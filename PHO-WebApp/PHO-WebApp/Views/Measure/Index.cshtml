@@ -36,6 +36,7 @@
 
 <div id="dialognew" style="height:700px; max-height:700px; overflow: scroll; background-color:white;">Loading...</div>
 <div id="dialogedit" style="height:700px; max-height:700px; overflow: scroll; background-color:white;">Loading...</div>
+<div id="dialogPopUp" style="height:700px; max-height:700px; overflow: scroll; background-color:white;">Loading...</div>
 
 <script type="text/javascript">
 
@@ -70,8 +71,11 @@
             var $buttonClicked = $(this);
             var id = $buttonClicked.attr('data-id');
 			$('#dialogedit').data('id', id).dialog('open');
-        });
+		});
 
+		$('#dialogPopUp').click(function () {
+			$('#dialogPopUp').dialog('open');
+		});
 
         $(function () {
             $('#dialognew').dialog({
@@ -89,7 +93,24 @@
 						$(this).closest('.ui-dialog').css({ 'top': '80px' });
 					}
 				}
-            });
+			});
+			
+			$('#dialogPopUp').dialog({
+                autoOpen: false,
+                width: 800,
+                height: 700,
+                overflow: scroll,
+                resizable: false,
+                title: 'PDF Report',
+                modal: true,
+                open: function (event, ui) {
+					$(this).load("@Url.Action("QIMeasurePath")/?MeasureRecordId=-1");
+
+					if ($(this).closest('.ui-dialog').offset().top < 80) {
+						$(this).closest('.ui-dialog').css({ 'top': '80px' });
+					}
+				}
+			});
         });
 
         $(function () {
