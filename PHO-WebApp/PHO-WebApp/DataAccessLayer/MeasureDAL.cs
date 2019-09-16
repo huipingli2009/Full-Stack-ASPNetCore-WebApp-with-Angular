@@ -98,7 +98,7 @@ namespace PHO_WebApp.DataAccessLayer
             }
             
             c.MeasureValue = string.Format("{0:#.##}", Double.Parse(dr["MeasureValue"].ToString()));
-            c.LastNetworkValue = dr["LastNetworkValue"].ToString();
+            c.LastNetworkValue = string.Format("{0:#.##}", Double.Parse(dr["LastNetworkValue"].ToString()));
             c.Owner = dr["Owner"].ToString();
 
             c.AllInitiativeStatuses = this.GetInitiativeStatuses();

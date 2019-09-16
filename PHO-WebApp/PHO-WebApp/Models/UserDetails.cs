@@ -11,14 +11,21 @@ namespace PHO_WebApp.Models
     {
         public int LoginId { get; set; }
 
-        public int StaffId { get; set; }                
+        public int StaffId { get; set; }
 
-        [Required(ErrorMessage = "User name is required.")]
+        [Required(ErrorMessage = "User name is required.")]        
+              
         public string UserName { get; set; }
 
         [DataType(DataType.Password)]
         [Required(ErrorMessage = "Password is required.")]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         public string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm password")]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }
 
         public string LoginError { get; set; }
 
