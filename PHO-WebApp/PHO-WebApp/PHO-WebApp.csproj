@@ -67,6 +67,18 @@
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.ReportViewer.Common, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Report.Viewer.11.0.0.0\lib\net\Microsoft.ReportViewer.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Report.Viewer.11.0.0.0\lib\net\Microsoft.ReportViewer.ProcessingObjectModel.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Report.Viewer.11.0.0.0\lib\net\Microsoft.ReportViewer.WebForms.DLL</HintPath>
+    </Reference>
+    <Reference Include="ReportViewerForMvc, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\ReportViewerForMvc.1.1.1\lib\net45\ReportViewerForMvc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -167,8 +179,10 @@
     <Compile Include="Controllers\InitiativeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MeasureController.cs" />
+    <Compile Include="Controllers\MeasureQualityImprovementController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
+    <Compile Include="Controllers\QualityImprovementsController.cs" />
     <Compile Include="DataAccessLayer\AuditDAL.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="DataAccessLayer\CohortDAL.cs" />
@@ -178,6 +192,7 @@
     <Compile Include="DataAccessLayer\MeasureDAL.cs" />
     <Compile Include="DataAccessLayer\Patients.cs" />
     <Compile Include="DataAccessLayer\SurveyDAL.cs" />
+    <Compile Include="DataAccessLayer\QualityImprovementDAL.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -188,7 +203,11 @@
     <Compile Include="Models\Initiative.cs" />
     <Compile Include="Models\InitiativeStatus.cs" />
     <Compile Include="Models\Measure.cs" />
+    <Compile Include="Models\MeasurePracticeUserModels.cs" />
+    <Compile Include="Models\Measures.cs" />
     <Compile Include="Models\Patient.cs" />
+    <Compile Include="Models\QualityContext.cs" />
+    <Compile Include="Models\QualityImprovement.cs" />
     <Compile Include="Models\StaffType.cs" />
     <Compile Include="Models\SurveyForm.cs" />
     <Compile Include="Models\UserDetails.cs" />
@@ -211,6 +230,13 @@
       <DependentUpon>PersonModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\ReportTemplate.aspx.cs">
+      <DependentUpon>ReportTemplate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\ReportTemplate.aspx.designer.cs">
+      <DependentUpon>ReportTemplate.aspx</DependentUpon>
+    </Compile>
     <Compile Include="SharedLogic\SharedLogic.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -281,6 +307,7 @@
     </Content>
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <EntityDeploy Include="PersonModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -289,6 +316,8 @@
     <Content Include="PersonModel.edmx.diagram">
       <DependentUpon>PersonModel.edmx</DependentUpon>
     </Content>
+    <Content Include="Reports\ReportTemplate.aspx" />
+    <Content Include="ReportViewerWebForm.aspx" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\dtBasicExample.js" />
@@ -391,11 +420,19 @@
     <Content Include="Views\Shared\EditorTemplates\QuestionResponse.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Section.cshtml" />
     <Content Include="Views\Survey\SurveyCompleted.cshtml" />
+    <Content Include="Views\QualityImprovements\Create.cshtml" />
+    <Content Include="Views\QualityImprovements\Delete.cshtml" />
+    <Content Include="Views\QualityImprovements\Details.cshtml" />
+    <Content Include="Views\QualityImprovements\Edit.cshtml" />
+    <Content Include="Views\QualityImprovements\Index.cshtml" />
+    <Content Include="Views\Login\Register.cshtml" />
     <Content Include="Views\Survey\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\DataDictionary\" />
+    <Folder Include="Views\MeasurePracticeUser\" />
+    <Folder Include="Views\MeasureQualityImprovement\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
