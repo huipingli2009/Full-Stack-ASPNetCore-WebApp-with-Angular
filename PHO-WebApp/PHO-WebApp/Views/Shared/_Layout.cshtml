@@ -15,7 +15,8 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")
     @RenderSection("scripts", required: false)
-    <link href="https://fonts.googleapis.com/css?family=Arvo|Nunito+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Arvo|Nunito+Sans|Avenir&display=swap" rel="stylesheet">
+
 </head>
 <body>
 
@@ -35,7 +36,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a href="#">Network Dashboard</a></li>
-                                <li><a href="#">Practice Dashboard</a></li>
+                                <li>@Html.RouteLink("Practice Dashboard", "PracticeDashboard", null, new { })</li>
                                 <li><a href="#">Quarterly Reports</a></li>
                                 <li>@Html.RouteLink("Initiatives", "Initiative", null, new { })</li>
                                 <li>@Html.RouteLink("Cohorts", "Cohort", null, new { })</li>

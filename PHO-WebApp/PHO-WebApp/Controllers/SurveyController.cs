@@ -17,7 +17,7 @@ namespace PHO_WebApp.Controllers
         // GET: Survey
         public ActionResult Index()
         {
-            List<SurveySummary> model = records.GetSurveySummaries();
+            List<SurveySummary> model = records.GetSurveySummaries(7);
             return View(model);
         }
 

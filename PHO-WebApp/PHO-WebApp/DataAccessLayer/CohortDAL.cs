@@ -89,34 +89,110 @@ namespace PHO_WebApp.DataAccessLayer
             return returnObject;
         }
 
+        public Cohort CreateCohortModel(object Id,
+            object Name,
+            object ShortName,
+            object Description,
+            object Details,
+            object Calculations,
+            object Limitations,
+            object Exceptions,
+            object DataSources,
+            object Lookback,
+            object StatusName,
+            object SQL,
+            object Status,
+            object ModifiedDate, 
+            object Owner)
+        {
+            Cohort c = this.CreateCohortModel();
+            if (Id != null)
+            {
+                c.id = SharedLogic.ParseNumeric(Id.ToString());
+            }
+            if (Name != null)
+            {
+                c.Name = Name.ToString();
+            }
+            if (ShortName != null)
+            {
+                c.ShortName = ShortName.ToString();
+            }
+            if (Description != null)
+            {
+                c.Description = Description.ToString();
+            }
+            if (Details != null)
+            {
+                c.Details = Details.ToString();
+            }
+            if (Calculations != null)
+            {
+                c.Calculations = Calculations.ToString();
+            }
+            if (Limitations != null)
+            {
+                c.Limitations = Limitations.ToString();
+            }
+            if (Exceptions != null)
+            {
+                c.Exceptions = Exceptions.ToString();
+            }
+            if (DataSources != null)
+            {
+                c.DataSources = DataSources.ToString();
+            }
+            if (Lookback != null)
+            {
+                c.Lookback = Lookback.ToString();
+            }
+            if (SQL != null)
+            {
+                c.SQL = SQL.ToString();
+            }
+            if (Status != null)
+            {
+                c.Status = SharedLogic.ParseNumeric(Status.ToString());
+            }
+            if (ModifiedDate != null)
+            {
+                c.ModifiedDate = SharedLogic.ParseDateTimeNullable(ModifiedDate.ToString());
+            }
+            if (Owner != null)
+            {
+                c.Owner = Owner.ToString();
+            }
+            
+            return c;
+        }
+
         public Cohort CreateCohortModel(DataRow dr)
         {
-            Cohort c = new Cohort();
-            if (dr["Id"] != null && !string.IsNullOrWhiteSpace(dr["Id"].ToString()))
-            {
-                c.id = int.Parse(dr["Id"].ToString());
-            }
-            c.Name = dr["Name"].ToString();
-            c.ShortName = dr["ShortName"].ToString();
-            c.Description = dr["Description"].ToString();
-            c.Details = dr["Details"].ToString();
-            c.Calculations = dr["Calculations"].ToString();
-            c.Limitations = dr["Limitations"].ToString();
-            c.Exceptions = dr["Exceptions"].ToString();
-            c.DataSources = dr["DataSources"].ToString();
-            c.Lookback = dr["Lookback"].ToString();
-            c.StatusName = dr["StatusName"].ToString();
-            c.SQL = dr["SQL"].ToString();
-            if (!string.IsNullOrWhiteSpace(dr["Status"].ToString()))
-            {
-                c.Status = int.Parse(dr["Status"].ToString());
-            }
-            if (dr["ModifiedDate"].ToString() != "")
-            {
-                c.ModifiedDate = Convert.ToDateTime(dr["ModifiedDate"].ToString());
-            }
-            c.AllStatuses = this.GetCohortStatuses();
-            c.Owner = dr["Owner"].ToString();
+            Cohort c = CreateCohortModel((string)dr["Id"], dr["Name"], dr["ShortName"], dr["Description"], dr["Details"], dr["Calculations"], dr["Limitations"], dr["Exceptions"], dr["DataSources"], dr["Lookback"], dr["StatusName"], dr["SQL"], dr["Status"], dr["ModifiedDate"], dr["Owner"]);
+            //if (dr["Id"] != null && !string.IsNullOrWhiteSpace(dr["Id"].ToString()))
+            //{
+            //    c.id = int.Parse(dr["Id"].ToString());
+            //}
+            //c.Name = dr["Name"].ToString();
+            //c.ShortName = dr["ShortName"].ToString();
+            //c.Description = dr["Description"].ToString();
+            //c.Details = dr["Details"].ToString();
+            //c.Calculations = dr["Calculations"].ToString();
+            //c.Limitations = dr["Limitations"].ToString();
+            //c.Exceptions = dr["Exceptions"].ToString();
+            //c.DataSources = dr["DataSources"].ToString();
+            //c.Lookback = dr["Lookback"].ToString();
+            //c.StatusName = dr["StatusName"].ToString();
+            //c.SQL = dr["SQL"].ToString();
+            //if (!string.IsNullOrWhiteSpace(dr["Status"].ToString()))
+            //{
+            //    c.Status = int.Parse(dr["Status"].ToString());
+            //}
+            //if (dr["ModifiedDate"].ToString() != "")
+            //{
+            //    c.ModifiedDate = Convert.ToDateTime(dr["ModifiedDate"].ToString());
+            //}
+            //c.Owner = dr["Owner"].ToString();
 
             return c;
         }

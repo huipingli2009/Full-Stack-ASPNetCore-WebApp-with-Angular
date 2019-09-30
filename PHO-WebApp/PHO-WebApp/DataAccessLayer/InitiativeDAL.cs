@@ -142,9 +142,80 @@ namespace PHO_WebApp.DataAccessLayer
             return c;
         }
 
+        public Initiative CreateInitiativeModel(
+            object Id, 
+            object Name, 
+            object ShortName, 
+            object Description, 
+            object Details, 
+            object PrimaryAim, 
+            object SecondaryAim, 
+            object EvidencegGuidelines, 
+            object Status, 
+            object StatusDesc, 
+            object ModifiedDate, 
+            object Owner)
+        {
+            Initiative c = CreateInitiativeModel();
+            if (Id != null)
+            {
+                c.id = SharedLogic.ParseNumeric(Id.ToString());
+            }
+            if (Name != null)
+            {
+                c.Name = Name.ToString();
+            }
+            if (ShortName != null)
+            {
+                c.ShortName = ShortName.ToString();
+            }
+            if (Description != null)
+            {
+                c.Description = Description.ToString();
+            }
+            if (Details != null)
+            {
+                c.Details = Details.ToString();
+            }
+            if (StatusDesc != null)
+            {
+                c.StatusDesc = StatusDesc.ToString();
+            }
+            if (ModifiedDate != null)
+            {
+                c.ModifiedDate = SharedLogic.ParseDateTimeNullable(ModifiedDate.ToString());
+            }
+            if (Owner != null)
+            {
+                c.Owner = Owner.ToString();
+            }
+
+            if (Status != null)
+            {
+                c.Status = SharedLogic.ParseNumeric(Status.ToString());
+            }
+
+            if (PrimaryAim != null)
+            {
+                c.PrimaryAim = PrimaryAim.ToString();
+            }
+
+            if (SecondaryAim != null)
+            {
+                c.SecondaryAim = SecondaryAim.ToString();
+            }
+
+            if (EvidencegGuidelines != null)
+            {
+                c.EvidenceGuidelines = EvidencegGuidelines.ToString();
+            }
+
+            return c;
+        }
+
         public Initiative CreateInitiativeModel(DataRow dr)
         {
-            Initiative c = new Initiative();
+            Initiative c = CreateInitiativeModel(dr["Id"], dr["Name"], dr["ShortName"], dr["Description"], dr["Details"], dr["PrimaryAim"], dr["SecondaryAim"], dr["EvidenceGuidelines"], dr["Status"], dr["StatusDesc"], dr["ModifiedDate"], dr["Owner"]);
             if (dr["Id"] != null && !string.IsNullOrWhiteSpace(dr["Id"].ToString()))
             {
                 c.id = int.Parse(dr["Id"].ToString());
@@ -160,14 +231,14 @@ namespace PHO_WebApp.DataAccessLayer
 
             if (!string.IsNullOrWhiteSpace(dr["Status"].ToString()))
             {
-                c.Status = int.Parse(dr["Status"].ToString());               
+                c.Status = int.Parse(dr["Status"].ToString());
             }
-           
+
             if (dr["ModifiedDate"].ToString() != "")
             {
                 c.ModifiedDate = Convert.ToDateTime(dr["ModifiedDate"].ToString());
             }
-          
+
             c.AllInitiativeStatuses = this.GetInitiativeStatuses();
             c.Owner = dr["Owner"].ToString();
 

@@ -20,22 +20,15 @@ namespace PHO_WebApp.Controllers
             int userId = 2;
 
             //get all QuealityImprovements
-            List<QualityImprovement> QI = new List<QualityImprovement>();
-            QI = QIDAL.getAllQualityImprovementsForPractice(userId);
-
-
-
+            QualityImprovement QI = QIDAL.getAllQualityImprovementsForPractice(userId);
+                       
             MeasurePracticeUserModels model = new MeasurePracticeUserModels();
             model.MeasureDetail = new Measure();
-            model.QualityImprovementDetail = new QualityImprovement();
-
-           
+            model.QualityImprovementDetail = new QualityImprovement();                     
 
             //get QualityImprovementDetail first before moving to next level
             QIDAL.getAllQualityImprovementsForPractice(userId);
             
-
-
             return View(model);
         }
     }

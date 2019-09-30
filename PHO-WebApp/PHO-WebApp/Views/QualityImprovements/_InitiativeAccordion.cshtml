@@ -1,0 +1,49 @@
+﻿@model List<PHO_WebApp.Models.Initiative>
+
+<div class="wrapper center-block">
+    <div class="panel-group" id="accordionInitiative" role="tablist" aria-multiselectable="true">
+
+        @for (var i = 0; i < Model.Count(); i++)
+        {
+            <div class="panel panel-default">
+                <div class="panel-heading-initiative" role="tab" id="@("headingInitiative"+i.ToString())">
+                    <h4 class="panel-title">
+                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="@("#collapseInitiative"+i.ToString())" aria-expanded="true" aria-controls="@("collapse"+i.ToString())">
+                            @Model[i].Name
+                        </a>
+                    </h4>
+                </div>
+                <div id="@("collapseInitiative"+i.ToString())" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="@("headingInitiative"+i.ToString())">
+                    <div class="panel-body form-inline">
+                        <div class="form-group" style="padding: 2px 5px 2px 5px;">
+                            <label class="dashboard-label dashboard-initiative" for="@("ABBR"+i.ToString())">ABBR:</label>
+                            <input class="dashboard-input" type="text" id="@("ABBR"+i.ToString())" readonly value="@Model[i].ShortName">
+                        </div>
+                        <div class="form-group" style="padding: 2px 5px 2px 5px;">
+                            <label class="dashboard-label dashboard-initiative" for="@("Owner"+i.ToString())">Owner:</label>
+                            <input class="dashboard-input" type="text" id="@("Owner"+i.ToString())" readonly value="@Model[i].Owner">
+                        </div>
+                        <div class="form-group" style="padding: 2px 5px 2px 5px; outline: none;">
+                            <label class="dashboard-label dashboard-initiative" for="@("Status"+i.ToString())">Status:</label>
+                            <input class="dashboard-input" type="text" id="@("Status"+i.ToString())" readonly value="@Model[i].StatusDesc">
+                        </div>
+                        <div class="form-group" style="padding: 2px 5px 2px 5px; outline: none;">
+                            <label class="dashboard-label dashboard-initiative" for="@("DocMgr"+i.ToString())">Doc Mgr:</label>
+                            <input class="dashboard-input" type="text" id="@("DocMgr"+i.ToString())" readonly value="@Model[i].Owner" />
+                        </div>
+                        <div class="form-group" style="padding: 2px 5px 2px 5px; ">
+                            <label class="dashboard-label dashboard-initiative" for="@("Desc"+i.ToString())">Description:</label>
+                            <textarea class="dashboard-input" id="@("Desc"+i.ToString())" cols="75" rows="4" readonly>@Model[i].Description</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        }
+
+    </div>
+</div>
+
+
+
