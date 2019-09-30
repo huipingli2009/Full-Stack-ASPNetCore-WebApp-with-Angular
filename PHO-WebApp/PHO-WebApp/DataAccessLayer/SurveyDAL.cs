@@ -13,12 +13,14 @@ namespace PHO_WebApp.DataAccessLayer
     {
         SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["con"].ConnectionString);
 
-        public List<SurveySummary> GetSurveySummaries()
+        public List<SurveySummary> GetSurveySummaries(int practiceId)
         {
             List<SurveySummary> returnObject = new List<SurveySummary>();
 
             SqlCommand com = new SqlCommand("spGetSurveySummaries", con);
             com.CommandType = CommandType.StoredProcedure;
+
+            com.Parameters.Add(new SqlParameter("@PracticeId", practiceId));
 
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();

@@ -21,10 +21,9 @@ namespace PHO_WebApp.Controllers
         public ActionResult Index()
         {
             int userId = 2;
-            List<QualityImprovement> QI = new List<QualityImprovement>();
-            QI = QIDAL.getAllQualityImprovementsForPractice(userId);
+            QualityImprovement QI = QIDAL.getAllQualityImprovementsForPractice(userId);
             //return View(db.QualityImprovements.ToList());
-            return View(QI.ToList());
+            return View(QI);
         }
 
         // GET: QualityImprovements/Details/5
@@ -129,6 +128,13 @@ namespace PHO_WebApp.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public ActionResult PracticeDashboard()
+        {
+            int userId = 2;
+            QualityImprovement QI = QIDAL.getAllQualityImprovementsForPractice(userId);
+            return View("PracticeDashboard", QI);
         }
     }
 }

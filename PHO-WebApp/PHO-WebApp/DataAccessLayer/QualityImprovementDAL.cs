@@ -14,7 +14,7 @@ namespace PHO_WebApp.DataAccessLayer
     {
         SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["con"].ConnectionString);
 
-        public List<QualityImprovement> getAllQualityImprovementsForPractice(int userId)
+        public QualityImprovement getAllQualityImprovementsForPractice(int userId)
         {
             SqlCommand com = new SqlCommand("spQI_Summary", con);
             com.CommandType = CommandType.StoredProcedure;
@@ -30,12 +30,56 @@ namespace PHO_WebApp.DataAccessLayer
 
             List<QualityImprovement> QualityImprovementRecords = new List<QualityImprovement>();
 
+            DataAccessLayer.SurveyDAL SurveyDAL = new SurveyDAL();
+            DataAccessLayer.CohortDAL CohortDAL = new CohortDAL();
+            DataAccessLayer.InitiativeDAL InitDAL = new InitiativeDAL();
+
+            //track various ids
+            int initiativeId = 0;
+            int cohortId = 0;
+            int practiceId = 0;
+
+            QualityImprovement QIC = new QualityImprovement();
+
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
             {
-                QualityImprovement QIC = CreateQualityImprovementModel(ds.Tables[0].Rows[i]);
-                QualityImprovementRecords.Add(QIC);
+                //Set the practiceID
+                if (ds.Tables[0].Rows[i]["PracticeID"] != null)
+                {
+                    practiceId = SharedLogic.ParseNumeric(ds.Tables[0].Rows[i]["PracticeID"].ToString());
+                    QIC.PracticeId = practiceId;                    
+                }
+
+                //Pull Init
+                if (ds.Tables[0].Rows[i]["InitiativeId"] != null)
+                {
+                    int curInitiativeId = SharedLogic.ParseNumeric(ds.Tables[0].Rows[i]["InitiativeId"].ToString());
+
+                    if (curInitiativeId != initiativeId)
+                    {
+                        initiativeId = curInitiativeId;
+                        Initiative intObj = InitDAL.CreateInitiativeModel(ds.Tables[0].Rows[i]["InitiativeId"], ds.Tables[0].Rows[i]["Initiative"], ds.Tables[0].Rows[i]["Initiative"], ds.Tables[0].Rows[i]["InitiativeDesc"], null, null, null, null, null, ds.Tables[0].Rows[i]["InitiativeStatus"], null, ds.Tables[0].Rows[i]["InitiativeOwner"]);
+                        QIC.Initiatives.Add(intObj);
+                    }
+                }
+                //Pull Cohort
+                if (ds.Tables[0].Rows[i]["CohortId"] != null)
+                {
+                    int curCohortId = SharedLogic.ParseNumeric(ds.Tables[0].Rows[i]["CohortId"].ToString());
+
+                    if (curCohortId != cohortId)
+                    {
+                        cohortId = curCohortId;
+                        Cohort cohortObj = CohortDAL.CreateCohortModel(ds.Tables[0].Rows[i]["CohortId"], ds.Tables[0].Rows[i]["Cohort"], ds.Tables[0].Rows[i]["Cohort"], ds.Tables[0].Rows[i]["CohortDesc"],  null, null, null, null, ds.Tables[0].Rows[i]["CohortDataSources"], ds.Tables[0].Rows[i]["CohortLookback"], ds.Tables[0].Rows[i]["CohortStatus"], null, null, null, null);
+                        QIC.Cohorts.Add(cohortObj);
+                    }
+                }
+
+                //Survey Summaries
+                QIC.SurveySummaries = SurveyDAL.GetSurveySummaries(practiceId);
             }
-            return QualityImprovementRecords;
+
+            return QIC;
         }
 
         public QualityImprovement CreateQualityImprovementModel(DataRow dr)
@@ -59,8 +103,8 @@ namespace PHO_WebApp.DataAccessLayer
                 QI.MeasureId = int.Parse(dr["MeasureId"].ToString());
                 QI.MeasureName = dr["MeasureName"].ToString();
                 QI.MeasureDesc = dr["MeasureDesc"].ToString();
-                QI.MeasureStatus  = dr["MeasureStatus"].ToString();
-                QI.MeasureFrequency = dr["MeasureFrequency"].ToString();
+                //QI.MeasureStatus  = dr["MeasureStatus"].ToString();
+                //QI.MeasureFrequency = dr["MeasureFrequency"].ToString();
                 QI.MeasureNumeratorDesc = dr["Numerator"].ToString();
                 QI.MeasureDenominatorDesc = dr["Denominator"].ToString();
 

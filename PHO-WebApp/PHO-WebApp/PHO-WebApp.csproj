@@ -329,10 +329,11 @@
     <Content Include="Scripts\esm\popper.js.map" />
     <Content Include="Scripts\esm\popper-utils.min.js.map" />
     <Content Include="Scripts\esm\popper-utils.js.map" />
+    <Content Include="Reports\PDFChart_AnnualMtg.pdf" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Reports\PDFChart_AnnualMtg.pdf" />
+    <Content Include="fonts\ArcherBold.otf" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
@@ -428,10 +429,14 @@
     <Content Include="Views\QualityImprovements\Index.cshtml" />
     <Content Include="Views\Login\Register.cshtml" />
     <Content Include="Views\Survey\Details.cshtml" />
+    <Content Include="Views\QualityImprovements\PracticeDashboard.cshtml" />
+    <Content Include="Views\QualityImprovements\_InitiativeAccordion.cshtml" />
+    <Content Include="Views\QualityImprovements\_CohortAccordion.cshtml" />
+    <Content Include="Views\QualityImprovements\_SurveyAccordion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\DataDictionary\" />
+    <Folder Include="Views\DataGovernance\" />
     <Folder Include="Views\MeasurePracticeUser\" />
     <Folder Include="Views\MeasureQualityImprovement\" />
   </ItemGroup>

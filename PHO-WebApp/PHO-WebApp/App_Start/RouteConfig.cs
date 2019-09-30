@@ -18,6 +18,12 @@ namespace PHO_WebApp
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+             name: "PracticeDashboard",
+             url: "PracticeDashboard",
+             defaults: new { controller = "QualityImprovements", action = "PracticeDashboard", id = UrlParameter.Optional }
+            );
+
+            routes.MapRoute(
              name: "Survey",
              url: "Survey",
              defaults: new { controller = "Survey", action = "Index", id = UrlParameter.Optional }

@@ -9,6 +9,57 @@ namespace PHO_WebApp.Models
 {
     public class QualityImprovement
     {
+        private List<Cohort> _Cohorts;
+        private List<Initiative> _Initiatives;
+        private List<SurveySummary> _SurveySummaries;
+
+        public List<Cohort> Cohorts
+        {
+            get
+            {
+                if (_Cohorts == null)
+                {
+                    _Cohorts = new List<Cohort>();
+                }
+                return _Cohorts;
+            }
+            set
+            {
+                _Cohorts = value;
+            }
+        }
+        public List<Initiative> Initiatives
+        {
+            get
+            {
+                if (_Initiatives == null)
+                {
+                    _Initiatives = new List<Initiative>();
+                }
+                return _Initiatives;
+            }
+            set
+            {
+                _Initiatives = value;
+            }
+        }
+        public List<SurveySummary> SurveySummaries
+        {
+            get
+            {
+                if (_SurveySummaries == null)
+                {
+                    _SurveySummaries = new List<SurveySummary>();
+                }
+                return _SurveySummaries;
+            }
+            set
+            {
+                _SurveySummaries = value;
+            }
+        }
+
+
         public int Id { get; set; }
         public int PracticeId { get; set; }
         public string PracticeName { get; set; }
