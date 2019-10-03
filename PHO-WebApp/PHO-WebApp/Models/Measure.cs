@@ -8,6 +8,19 @@ namespace PHO_WebApp.Models
 {
     public class Measure
     {
+        private Chart _chart;
+
+        public Chart Chart
+        {
+            get
+            {
+                if (_chart == null) { _chart = new Chart(); }
+                return _chart;
+            }
+            set { _chart = value; }
+
+        }
+
         public int MeasureId { get; set; }
         //public int MeasureId { get; set; }
 
@@ -24,6 +37,8 @@ namespace PHO_WebApp.Models
         public string SQL { get; set; }
         public string Numerator { get; set; }
         public string Denominator { get; set; }
+        public string NumeratorFactValue { get; set; }
+        public string DenominatorFactValue { get; set; }
 
         public string Factor { get; set; }
 

@@ -231,7 +231,7 @@ x
 
 .panel-heading-initiative a:before {
     font-family: 'Glyphicons Halflings';
-    content: "\e114";
+    content: "\e080";
     color: #A57CB7;
     padding: 0px 5px 0px 5px;
     float: left;
@@ -239,7 +239,7 @@ x
 }
 .panel-heading-cohort a:before {
     font-family: 'Glyphicons Halflings';
-    content: "\e114";
+    content: "\e080";
     color: #4C9E45;
     padding: 0px 5px 0px 5px;
     float: left;
@@ -247,16 +247,17 @@ x
 }
 .panel-heading-survey a:before {
     font-family: 'Glyphicons Halflings';
-    content: "\e114";
+    content: "\e080";
     color: #E73F50;
     padding: 0px 5px 0px 5px;
     float: left;
     transition: all 0.4s;
 }
 
-.panel-heading .accordion-toggle.collapsed:after {
+
+.panel-heading-survey.collapsed:after {
     /* symbol for "collapsed" panels */
-    content: "\e080"; /* adjust as needed, taken from bootstrap.css */
+    content: "\e114"; /* adjust as needed, taken from bootstrap.css */
 }
 
 @font-face {
@@ -297,8 +298,3 @@ x
     margin: -10px;
 }
 
-.panel-heading.active a:before {
-    -webkit-transform: rotate(180deg);
-    -moz-transform: rotate(180deg);
-    transform: rotate(180deg);
-} 

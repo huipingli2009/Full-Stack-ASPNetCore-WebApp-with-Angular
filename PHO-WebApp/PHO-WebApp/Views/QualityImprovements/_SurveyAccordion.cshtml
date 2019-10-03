@@ -8,81 +8,66 @@
             <div class="panel panel-default">
                 <div class="panel-heading-survey" role="tab" id="@("headingSurvey"+i.ToString())">
                     <h4 class="panel-title">
-                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="@("#collapseSurvey"+i.ToString())" aria-expanded="true" aria-controls="@("collapse"+i.ToString())">
+                        <a role="button" class="collapsed" data-toggle="collapse" data-parent="#accordionSurvey" href="@("#collapseSurvey"+i.ToString())" aria-expanded="true" aria-controls="@("collapse"+i.ToString())">
                             @Model[i].Survey_Title
                         </a>
 
                     </h4>
-                    
+
                 </div>
-                <div id="@("collapseSurvey"+i.ToString())" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="@("headingSurvey"+i.ToString())">
-                    <div>
-                        <div>
-                            @Html.ActionLink("Details", "ViewSurveyDetails", new { id = Model[i].FormId })
+                <div id="@("collapseSurvey"+i.ToString())" class="panel-collapse collapse" role="tabpanel" aria-labelledby="@("headingSurvey"+i.ToString())">
+                    <div style="padding-left:10px">
+                        <div style="float:left; padding-left:10px"><i>@Model[i].Description</i></div><br />
+                        <div style="float:left; padding-left:10px">
+                            @Html.ActionLink("Details", "ViewSurveyDetails", "Survey", new { id = Model[i].FormId }, null)
                             &nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;
                             <a href="@Url.Action("CompleteNewSurvey", "Survey", new { id = Model[i].FormId })"><img class="" src="~/Images/addnew.jpg" style="width:20px; height:20px" /></a>
-                        </div>
-                        <p><i>@Model[i].Description</i></p>
-                        <div>
+                        </div><br />
+                        <div style="float:left; padding-left:10px">
                             <p>
-                                <b>Total Responses: </b>@Model[i].TotalResponses &nbsp; &nbsp; &nbsp; &#124;&nbsp;&nbsp;&nbsp;
-                                <b>Total Completed: </b>@Model[i].CompletedResponses &nbsp; &nbsp; &nbsp; &#124;&nbsp;&nbsp;&nbsp;
-                                <b>Total In Progress: </b>@Model[i].InProgressResponses
+                                <label class="dashboard-label dashboard-survey">Total Responses: </label>&nbsp;<b>@Model[i].TotalResponses </b>&nbsp; &nbsp; &nbsp; &#124;&nbsp;&nbsp;&nbsp;
+                                <label class="dashboard-label dashboard-survey">Total Completed: </label>&nbsp;<b>@Model[i].CompletedResponses</b>&nbsp; &nbsp; &nbsp; &#124;&nbsp;&nbsp;&nbsp;
+                                <label class="dashboard-label dashboard-survey">Total In Progress: </label>&nbsp;<b>@Model[i].InProgressResponses</b>
 
                             </p>
-                            <p><b>Collections In Progress</b></p>
-                            <table width="700">
-                                <tr>
-                                    <td><b>Id</b></td>
-                                    <td><b>Created</b></td>
-                                    <td><b>Modified</b></td>
-                                    <td><b>Percent Complete</b></td>
-                                </tr>
-                                @foreach (var res in Model[i].RecentInProgress)
-                                {
-                                    <tr>
-                                        <td>@Html.ActionLink(res.FormResponseId.ToString(), "LoadExistingSurvey", new { id = res.FormId, formResponseId = res.FormResponseId.ToString() })</td>
-                                        <td>
-                                            @if (res.DateCreated > DateTime.Now.AddYears(-20))
-                                            {
-                                                @res.DateCreated.ToShortDateString();
-                                            }
-                                        </td>
-                                        <td>
-                                            @if (res.DateModified > DateTime.Now.AddYears(-20))
-                                            {
-                                                @res.DateModified.ToShortDateString();
-                                            }
-                                        </td>
-                                        <td>@res.PercentCompleted &#37;</td>
-                                    </tr>
-                                }
-                            </table>
+                            <p><label class="dashboard-label dashboard-survey">Collections In Progress</label></p>
+                            <div style="float:left; padding-left:10px">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="dashboard-label dashboard-survey">#</th>
+                                            <th scope="col" class="dashboard-label dashboard-survey">Created</th>
+                                            <th scope="col" class="dashboard-label dashboard-survey">Modified</th>
+                                            <th scope="col" class="dashboard-label dashboard-survey">Percent Complete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var res in Model[i].RecentInProgress)
+                                        {
+                                            <tr>
+                                                <th scope="row">@Html.ActionLink(res.FormResponseId.ToString(), "LoadExistingSurvey", "Survey", new { id = res.FormId, formResponseId = res.FormResponseId.ToString() }, null)</th>
+                                                <td>
+                                                    @if (res.DateCreated > DateTime.Now.AddYears(-20))
+                                                    {
+                                                        @res.DateCreated.ToShortDateString();
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if (res.DateModified > DateTime.Now.AddYears(-20))
+                                                    {
+                                                        @res.DateModified.ToShortDateString();
+                                                    }
+                                                </td>
+                                                <td>@res.PercentCompleted &#37;</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+
+                            </div>
                         </div>
                     </div>
-    
-                    @*<div class="panel-body form-inline">
-                        <div class="form-group" style="padding: 2px 5px 2px 5px;">
-                            <label class="dashboard-label dashboard-survey" for="@("ABBR"+i.ToString())">ABBR:</label>
-                            <input class="dashboard-input" type="text" id="@("ABBR"+i.ToString())" readonly value="">
-                        </div>
-                        <div class="form-group" style="padding: 2px 5px 2px 5px;">
-                            <label class="dashboard-label dashboard-survey" for="@("Owner"+i.ToString())">Owner:</label>
-                            <input class="dashboard-input" type="text" id="@("Owner"+i.ToString())" readonly value="">
-                        </div>
-                        <div class="form-group" style="padding: 2px 5px 2px 5px; outline: none;">
-                            <label class="dashboard-label dashboard-survey" for="@("Status"+i.ToString())">Status:</label>
-                            <input class="dashboard-input" type="text" id="@("Status"+i.ToString())" readonly value="">
-                        </div>
-                        <div class="form-group" style="padding: 2px 5px 2px 5px; outline: none;">
-                            <label class="dashboard-label dashboard-survey" for="@("DocMgr"+i.ToString())">Doc Mgr:</label>
-                            <input class="dashboard-input" type="text" id="@("DocMgr"+i.ToString())" readonly value="" />
-                        </div>
-                        <div class="form-group" style="padding: 2px 5px 2px 5px; ">
-                            <label class="dashboard-label dashboard-survey" for="@("Desc"+i.ToString())">Description:</label>
-                            <textarea class="dashboard-input" id="@("Desc"+i.ToString())" cols="75" rows="4" readonly></textarea>
-                        </div>
-                    </div>*@
+
                 </div>
             </div>
 

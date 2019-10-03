@@ -21,7 +21,7 @@ namespace PHO_WebApp
                 }
                 dal.LogAudit(user, controller, action, message);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 string msg = ex.Message;
             }
@@ -42,7 +42,7 @@ namespace PHO_WebApp
                 {
                     innerMessage = ex.InnerException.Message;
                 }
-             
+
                 dal.LogError(user, controller, action, ex.Message, innerMessage, ex.StackTrace);
             }
             catch (Exception e)
@@ -132,6 +132,37 @@ namespace PHO_WebApp
                 }
             }
 
+            return returnValue;
+        }
+
+        public static decimal ParseDecimal(string value)
+        {
+            decimal returnValue = new decimal();
+
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                decimal holder;
+                decimal.TryParse(value, out holder);
+                if (holder > -1)
+                {
+                    returnValue = holder;
+                }
+            }
+            return returnValue;
+        }
+        public static decimal? ParseDecimalNullable(string value)
+        {
+            decimal? returnValue = new decimal?();
+
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                decimal holder;
+                decimal.TryParse(value, out holder);
+                if (holder > -1)
+                {
+                    returnValue = holder;
+                }
+            }
             return returnValue;
         }
 

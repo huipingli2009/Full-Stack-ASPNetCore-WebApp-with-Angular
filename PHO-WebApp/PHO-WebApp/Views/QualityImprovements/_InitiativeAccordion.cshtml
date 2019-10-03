@@ -8,16 +8,16 @@
             <div class="panel panel-default">
                 <div class="panel-heading-initiative" role="tab" id="@("headingInitiative"+i.ToString())">
                     <h4 class="panel-title">
-                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="@("#collapseInitiative"+i.ToString())" aria-expanded="true" aria-controls="@("collapse"+i.ToString())">
+                        <a role="button" class="collapse" data-toggle="collapse" data-parent="#accordion" href="@("#collapseInitiative"+i.ToString())" aria-expanded="true" aria-controls="@("collapse"+i.ToString())">
                             @Model[i].Name
                         </a>
                     </h4>
                 </div>
-                <div id="@("collapseInitiative"+i.ToString())" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="@("headingInitiative"+i.ToString())">
+                <div id="@("collapseInitiative"+i.ToString())" class="panel-collapse collapse" role="tabpanel" aria-labelledby="@("headingInitiative"+i.ToString())">
                     <div class="panel-body form-inline">
                         <div class="form-group" style="padding: 2px 5px 2px 5px;">
                             <label class="dashboard-label dashboard-initiative" for="@("ABBR"+i.ToString())">ABBR:</label>
-                            <input class="dashboard-input" type="text" id="@("ABBR"+i.ToString())" readonly value="@Model[i].ShortName">
+                            @Html.ActionLink(Model[i].ShortName, "Index", "Initiative", null, new { @id = "ABBR" + i.ToString() })
                         </div>
                         <div class="form-group" style="padding: 2px 5px 2px 5px;">
                             <label class="dashboard-label dashboard-initiative" for="@("Owner"+i.ToString())">Owner:</label>

@@ -154,6 +154,10 @@ namespace PHO_WebApp.DataAccessLayer
             {
                 c.Status = SharedLogic.ParseNumeric(Status.ToString());
             }
+            if (StatusName != null)
+            {
+                c.StatusName = StatusName.ToString();
+            }
             if (ModifiedDate != null)
             {
                 c.ModifiedDate = SharedLogic.ParseDateTimeNullable(ModifiedDate.ToString());
@@ -168,7 +172,7 @@ namespace PHO_WebApp.DataAccessLayer
 
         public Cohort CreateCohortModel(DataRow dr)
         {
-            Cohort c = CreateCohortModel((string)dr["Id"], dr["Name"], dr["ShortName"], dr["Description"], dr["Details"], dr["Calculations"], dr["Limitations"], dr["Exceptions"], dr["DataSources"], dr["Lookback"], dr["StatusName"], dr["SQL"], dr["Status"], dr["ModifiedDate"], dr["Owner"]);
+            Cohort c = CreateCohortModel(dr["Id"], dr["Name"], dr["ShortName"], dr["Description"], dr["Details"], dr["Calculations"], dr["Limitations"], dr["Exceptions"], dr["DataSources"], dr["Lookback"], dr["StatusName"], dr["SQL"], dr["Status"], dr["ModifiedDate"], dr["Owner"]);
             //if (dr["Id"] != null && !string.IsNullOrWhiteSpace(dr["Id"].ToString()))
             //{
             //    c.id = int.Parse(dr["Id"].ToString());
