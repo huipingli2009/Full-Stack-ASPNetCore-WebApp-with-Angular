@@ -54,6 +54,15 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="FluentValidation, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7de548da2fbae0f0, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentValidation.8.4.0\lib\net45\FluentValidation.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentValidation.Mvc, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7de548da2fbae0f0, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentValidation.Mvc5.8.4.0\lib\net45\FluentValidation.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentValidation.ValidatorAttribute, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7de548da2fbae0f0, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentValidation.ValidatorAttribute.8.4.0\lib\net45\FluentValidation.ValidatorAttribute.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
@@ -287,6 +296,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Images\14_Park Shoot_tm_239.jpg" />
+    <Content Include="Images\addnew.jpg" />
     <Content Include="Images\PortalHomeIMG.JPG" />
     <Content Include="Images\pdf_icon.png" />
     <Content Include="Images\TSCHS_LOGO_CMYK.jpg" />
@@ -328,6 +338,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="fonts\ArcherBold.otf" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
@@ -413,7 +424,7 @@
     <Content Include="Views\Survey\Display.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\FormSection.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\SectionQuestion.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\Question.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\QuestionResponse.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Section.cshtml" />
     <Content Include="Views\Survey\SurveyCompleted.cshtml" />
     <Content Include="Views\QualityImprovements\Create.cshtml" />
@@ -422,6 +433,11 @@
     <Content Include="Views\QualityImprovements\Edit.cshtml" />
     <Content Include="Views\QualityImprovements\Index.cshtml" />
     <Content Include="Views\Login\Register.cshtml" />
+    <Content Include="Views\Survey\Details.cshtml" />
+    <Content Include="Views\QualityImprovements\PracticeDashboard.cshtml" />
+    <Content Include="Views\QualityImprovements\_InitiativeAccordion.cshtml" />
+    <Content Include="Views\QualityImprovements\_CohortAccordion.cshtml" />
+    <Content Include="Views\QualityImprovements\_SurveyAccordion.cshtml" />
     <Content Include="Views\Staffs\Create.cshtml" />
     <Content Include="Views\Staffs\Delete.cshtml" />
     <Content Include="Views\Staffs\Details.cshtml" />
@@ -431,7 +447,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\DataDictionary\" />
+    <Folder Include="Views\DataGovernance\" />
     <Folder Include="Views\MeasurePracticeUser\" />
     <Folder Include="Views\MeasureQualityImprovement\" />
   </ItemGroup>
