@@ -266,10 +266,11 @@ table {
   .navbar {
     display: none;
   }
-  .table td,
-  .table th {
-    background-color: #fff !important;
-  }
+	.table td,
+	.table th {
+		/*background-color: #fff !important;*/
+		background-color: #0000FF !important;
+	}
   .btn > .caret,
   .dropup > .btn > .caret {
     border-top-color: #000 !important;

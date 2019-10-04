@@ -54,7 +54,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 }
 
 .content-footer {
-    /*background-color: #91d6ac !important;*/
+    background-color: #91d6ac !important;
 }
 
 .validationText {
@@ -190,3 +190,23 @@ a:hover {
     border-left: none !important;
     border-right: none !important;
 }
+.thead th {
+	background-color: #0000FF !important;
+	color:black;
+}
+.pretty-table_head {
+	background-color: #3f87a6;
+	color: #fff;
+	padding: 5px;
+}
+.pretty-table-body-font{
+	font-size: 15px;
+}
+
+tbody tr:nth-child(odd) {
+	background: #eee;
+}
+
+
+
+

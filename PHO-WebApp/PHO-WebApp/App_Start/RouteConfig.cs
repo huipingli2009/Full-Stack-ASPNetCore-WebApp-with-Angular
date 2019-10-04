@@ -66,10 +66,16 @@ namespace PHO_WebApp
            );
 
             routes.MapRoute(
-          name: "Measure",
-          url: "Measure",
-          defaults: new { controller = "Measure", action = "Index", id = UrlParameter.Optional }
-         );
+            name: "Measure",
+            url: "Measure",
+            defaults: new { controller = "Measure", action = "Index", id = UrlParameter.Optional }
+           );
+
+            routes.MapRoute(
+            name: "Staff",
+            url: "Staff",
+            defaults: new { controller = "Staffs", action = "Index", id = UrlParameter.Optional }
+           );
 
         }
     }

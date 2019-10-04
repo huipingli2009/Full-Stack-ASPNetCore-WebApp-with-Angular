@@ -173,7 +173,9 @@
     <Compile Include="Controllers\MeasureQualityImprovementController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
+    <Compile Include="Controllers\PracticeAdminController.cs" />
     <Compile Include="Controllers\QualityImprovementsController.cs" />
+    <Compile Include="Controllers\StaffsController.cs" />
     <Compile Include="DataAccessLayer\AuditDAL.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="DataAccessLayer\CohortDAL.cs" />
@@ -182,6 +184,7 @@
     <Compile Include="DataAccessLayer\LoginDAL.cs" />
     <Compile Include="DataAccessLayer\MeasureDAL.cs" />
     <Compile Include="DataAccessLayer\Patients.cs" />
+    <Compile Include="DataAccessLayer\StaffDAL.cs" />
     <Compile Include="DataAccessLayer\SurveyDAL.cs" />
     <Compile Include="DataAccessLayer\QualityImprovementDAL.cs" />
     <Compile Include="Global.asax.cs">
@@ -199,6 +202,7 @@
     <Compile Include="Models\Patient.cs" />
     <Compile Include="Models\QualityContext.cs" />
     <Compile Include="Models\QualityImprovement.cs" />
+    <Compile Include="Models\Staff.cs" />
     <Compile Include="Models\StaffType.cs" />
     <Compile Include="Models\SurveyForm.cs" />
     <Compile Include="Models\UserDetails.cs" />
@@ -229,6 +233,7 @@
       <DependentUpon>ReportTemplate.aspx</DependentUpon>
     </Compile>
     <Compile Include="SharedLogic\SharedLogic.cs" />
+    <Compile Include="ViewModel\PracticeAdmin.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -319,10 +324,10 @@
     <Content Include="Scripts\esm\popper.js.map" />
     <Content Include="Scripts\esm\popper-utils.min.js.map" />
     <Content Include="Scripts\esm\popper-utils.js.map" />
+    <Content Include="Reports\PDFChart_AnnualMtg.pdf" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Reports\PDFChart_AnnualMtg.pdf" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
@@ -417,6 +422,12 @@
     <Content Include="Views\QualityImprovements\Edit.cshtml" />
     <Content Include="Views\QualityImprovements\Index.cshtml" />
     <Content Include="Views\Login\Register.cshtml" />
+    <Content Include="Views\Staffs\Create.cshtml" />
+    <Content Include="Views\Staffs\Delete.cshtml" />
+    <Content Include="Views\Staffs\Details.cshtml" />
+    <Content Include="Views\Staffs\Edit.cshtml" />
+    <Content Include="Views\Staffs\Index.cshtml" />
+    <Content Include="Views\PracticeAdmin\GetPracticeStaff.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
