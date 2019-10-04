@@ -54,7 +54,7 @@ namespace PHO_WebApp.DataAccessLayer
             {
                 c.MeasureId = int.Parse(dr["MeasureId"].ToString());
             }
-            c.MeasureName = dr["MeasureName"].ToString();           
+            c.MeasureName = dr["MeasureName"].ToString();
             c.MeasureDesc = dr["MeasureDesc"].ToString();
 
             //c.MeasureFrequency = dr["MeasureFrequency"].ToString();
@@ -85,7 +85,7 @@ namespace PHO_WebApp.DataAccessLayer
             {
                 c.EffectiveDate = null;
             }
-          
+
 
             if (dr["ModifiedDate"].ToString() != "")
             {
@@ -96,7 +96,7 @@ namespace PHO_WebApp.DataAccessLayer
             {
                 c.LastMeasureDate = Convert.ToDateTime(dr["LastMeasureDate"].ToString());
             }
-            
+
             c.MeasureValue = string.Format("{0:#.##}", Double.Parse(dr["MeasureValue"].ToString()));
             c.LastNetworkValue = string.Format("{0:#.##}", Double.Parse(dr["LastNetworkValue"].ToString()));
             c.Owner = dr["Owner"].ToString();
@@ -105,65 +105,149 @@ namespace PHO_WebApp.DataAccessLayer
 
             return c;
         }
+        public Measure CreateMeasureModel(object Id,
+            object Name,
+            object Description,
+            object Frequency,
+            object Status,
+            object StatusDescription,
+            object Numerator,
+            object Denominator,
+            object NumeratorFactValue,
+            object DenominatorFactValue,
+            object Factor,
+            object EffectiveDate,
+            object ModifiedDate,
+            object SQL,
+            object LastMeasureDate,
+            object LastMeasureValue,
+            object LastNetworkValue,
+            object Owner)
+        {
+            Measure c = CreateMeasureModel();
+            if (Id != null)
+            {
+                c.MeasureId = SharedLogic.ParseNumeric(Id.ToString());
+            }
+            if (Name != null)
+            {
+                c.MeasureName = Name.ToString();
+            }
+            if (Description != null)
+            {
+                c.MeasureDesc = Description.ToString();
+            }
+            if (Frequency != null)
+            {
+                c.Frequency = Frequency.ToString();
+            }
+            if (StatusDescription != null)
+            {
+                c.StatusDesc = StatusDescription.ToString();
+            }
+            if (Numerator != null)
+            {
+                c.Numerator = Numerator.ToString();
+            }
+            if (Denominator != null)
+            {
+                c.Denominator = Denominator.ToString();
+            }
+            if (NumeratorFactValue != null)
+            {
+                c.NumeratorFactValue = NumeratorFactValue.ToString();
+            }
+            if (DenominatorFactValue != null)
+            {
+                c.DenominatorFactValue = DenominatorFactValue.ToString();
+            }
+            if (Factor != null)
+            {
+                c.Factor = Factor.ToString();
+            }
+            if (LastMeasureDate != null)
+            {
+                c.LastMeasureDate = SharedLogic.ParseDateTimeNullable(LastMeasureDate.ToString());
+            }
+            if (LastMeasureValue != null)
+            {
+                c.MeasureValue = Decimal.Round(SharedLogic.ParseDecimal(LastMeasureValue.ToString()), 3).ToString();
+            }
+            if (LastNetworkValue != null)
+            {
+                c.LastNetworkValue = Decimal.Round(SharedLogic.ParseDecimal(LastNetworkValue.ToString()), 3).ToString();
+            }
+            if (SQL != null)
+            {
+                c.SQL = SQL.ToString();
+            }
+            if (Status != null)
+            {
+                c.Status = SharedLogic.ParseNumeric(Status.ToString());
+            }
+            if (EffectiveDate != null)
+            {
+                c.EffectiveDate = SharedLogic.ParseDateTimeNullable(EffectiveDate.ToString());
+            }
+            if (ModifiedDate != null)
+            {
+                c.ModifiedDate = SharedLogic.ParseDateTimeNullable(ModifiedDate.ToString());
+            }
+            if (Owner != null)
+            {
+                c.Owner = Owner.ToString();
+            }
+
+            return c;
+        }
+
+
+        public Chart CreateChartModel(object Id,
+            object Type,
+            object Description,
+            object URL)
+        {
+            Chart c = new Chart();
+            if (Id != null)
+            {
+                c.Id = SharedLogic.ParseNumeric(Id.ToString());
+            }
+            if (Type != null)
+            {
+                c.Type = Type.ToString();
+            }
+            if (Description != null)
+            {
+                c.Description = Description.ToString();
+            }
+            if (URL != null)
+            {
+                c.URL = URL.ToString();
+            }
+            return c;
+        }
 
         public Measure CreateMeasureModelById(DataRow dr)
         {
-            Measure c = new Measure();
-
-            if (dr["MeasureId"] != null && !string.IsNullOrWhiteSpace(dr["MeasureId"].ToString()))
-            {
-                c.MeasureId = int.Parse(dr["MeasureId"].ToString());
-            }
-            c.MeasureName = dr["MeasureName"].ToString();
-            c.MeasureDesc = dr["MeasureDesc"].ToString();
-
-            //c.MeasureFrequency = dr["MeasureFrequency"].ToString();
-            c.Frequency = dr["Frequency"].ToString();
-            //c.StatusDesc = dr["StatusDesc"].ToString();
-            c.StatusDesc = dr["StatusDesc"].ToString();
-            c.Numerator = dr["Numerator"].ToString();
-            c.Denominator = dr["Denominator"].ToString();
-            //c.SQL = dr["SQL"].ToString();
-            c.SQL = "";
-            c.Factor = dr["Factor"].ToString();
-
-
-            if (!string.IsNullOrWhiteSpace(dr["Status"].ToString()))
-            {
-                c.Status = int.Parse(dr["Status"].ToString());
-            }
-            if (!string.IsNullOrWhiteSpace(dr["StatusDesc"].ToString()))
-            {
-                c.StatusDesc = dr["StatusDesc"].ToString();
-            }
-
-            if (dr["EffectiveDate"].ToString() != "")
-            {
-                c.EffectiveDate = Convert.ToDateTime(dr["EffectiveDate"].ToString());
-            }
-            else
-            {
-                c.EffectiveDate = null;
-            }
-
-
-            if (dr["ModifiedDate"].ToString() != "")
-            {
-                c.ModifiedDate = Convert.ToDateTime(dr["ModifiedDate"].ToString());
-            }
-
-            //if (dr["LastMeasureDate"].ToString() != "")
-            //{
-            //    c.LastMeasureDate = Convert.ToDateTime(dr["LastMeasureDate"].ToString());
-            //}
-
-            //c.MeasureValue = string.Format("{0:#.##}", Double.Parse(dr["MeasureValue"].ToString()));
-
-            c.Owner = dr["Owner"].ToString();
-
-            c.AllInitiativeStatuses = this.GetInitiativeStatuses();
-
-            return c;
+            return CreateMeasureModel(dr["MeasureId"]
+                , dr["MeasureName"]
+                , dr["MeasureDesc"]
+                , dr["Frequency"]
+                , dr["Status"]
+                , dr["StatusDesc"]
+                , dr["Numerator"]
+                , dr["Denominator"]
+                , null
+                , null
+                , dr["Factor"]
+                , dr["EffectiveDate"]
+                , dr["ModifiedDate"]
+                , dr["SQL"]
+                , dr["LastMeasureDate"]
+                , dr["MeasureValue"]
+                , dr["LastNetworkValue"]
+                , dr["Owner"]);
+                       
         }
         public Measure getQIMeasureById(int id)
         {

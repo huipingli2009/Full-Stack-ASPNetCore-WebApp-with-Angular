@@ -33,13 +33,21 @@ namespace PHO_WebApp.DataAccessLayer
             DataAccessLayer.SurveyDAL SurveyDAL = new SurveyDAL();
             DataAccessLayer.CohortDAL CohortDAL = new CohortDAL();
             DataAccessLayer.InitiativeDAL InitDAL = new InitiativeDAL();
+            DataAccessLayer.MeasureDAL MeasureDAL = new MeasureDAL();
 
             //track various ids
             int initiativeId = 0;
             int cohortId = 0;
             int practiceId = 0;
+            int measureId = 0;
+            int chartId = 0;
+
 
             QualityImprovement QIC = new QualityImprovement();
+            Cohort cohortObj;
+            Initiative intObj;
+            Measure measureObj;
+            Chart chartObj;
 
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
             {
@@ -47,7 +55,15 @@ namespace PHO_WebApp.DataAccessLayer
                 if (ds.Tables[0].Rows[i]["PracticeID"] != null)
                 {
                     practiceId = SharedLogic.ParseNumeric(ds.Tables[0].Rows[i]["PracticeID"].ToString());
-                    QIC.PracticeId = practiceId;                    
+                    QIC.PracticeId = practiceId;
+
+                    //Practice Name
+                    if (ds.Tables[0].Rows[i]["PracticeName"] != null)
+                    {
+                        string practiceName = ds.Tables[0].Rows[i]["PracticeName"].ToString();
+                        QIC.PracticeName = practiceName;
+
+                    }
                 }
 
                 //Pull Init
@@ -58,10 +74,11 @@ namespace PHO_WebApp.DataAccessLayer
                     if (curInitiativeId != initiativeId)
                     {
                         initiativeId = curInitiativeId;
-                        Initiative intObj = InitDAL.CreateInitiativeModel(ds.Tables[0].Rows[i]["InitiativeId"], ds.Tables[0].Rows[i]["Initiative"], ds.Tables[0].Rows[i]["Initiative"], ds.Tables[0].Rows[i]["InitiativeDesc"], null, null, null, null, null, ds.Tables[0].Rows[i]["InitiativeStatus"], null, ds.Tables[0].Rows[i]["InitiativeOwner"]);
+                        intObj = InitDAL.CreateInitiativeModel(ds.Tables[0].Rows[i]["InitiativeId"], ds.Tables[0].Rows[i]["Initiative"], ds.Tables[0].Rows[i]["Initiative"], ds.Tables[0].Rows[i]["InitiativeDesc"], null, null, null, null, null, ds.Tables[0].Rows[i]["InitiativeStatus"], null, ds.Tables[0].Rows[i]["InitiativeOwner"]);
                         QIC.Initiatives.Add(intObj);
                     }
                 }
+
                 //Pull Cohort
                 if (ds.Tables[0].Rows[i]["CohortId"] != null)
                 {
@@ -70,8 +87,58 @@ namespace PHO_WebApp.DataAccessLayer
                     if (curCohortId != cohortId)
                     {
                         cohortId = curCohortId;
-                        Cohort cohortObj = CohortDAL.CreateCohortModel(ds.Tables[0].Rows[i]["CohortId"], ds.Tables[0].Rows[i]["Cohort"], ds.Tables[0].Rows[i]["Cohort"], ds.Tables[0].Rows[i]["CohortDesc"],  null, null, null, null, ds.Tables[0].Rows[i]["CohortDataSources"], ds.Tables[0].Rows[i]["CohortLookback"], ds.Tables[0].Rows[i]["CohortStatus"], null, null, null, null);
+                        cohortObj = CohortDAL.CreateCohortModel(ds.Tables[0].Rows[i]["CohortId"], ds.Tables[0].Rows[i]["Cohort"], ds.Tables[0].Rows[i]["CohortAbbr"], ds.Tables[0].Rows[i]["CohortDesc"], null, null, null, null, ds.Tables[0].Rows[i]["CohortDataSources"], ds.Tables[0].Rows[i]["CohortLookback"], ds.Tables[0].Rows[i]["CohortStatus"], null, null, null, ds.Tables[0].Rows[i]["CohortOwner"]);
                         QIC.Cohorts.Add(cohortObj);
+                    }
+                }
+
+                //Pull Measure
+                if (ds.Tables[0].Rows[i]["MeasureId"] != null)
+                {
+                    int curMeasureId = SharedLogic.ParseNumeric(ds.Tables[0].Rows[i]["MeasureId"].ToString());
+
+                    if (curMeasureId != measureId)
+                    {
+                        measureId = curMeasureId;
+                        measureObj = MeasureDAL.CreateMeasureModel(ds.Tables[0].Rows[i]["MeasureId"]
+                            , ds.Tables[0].Rows[i]["MeasureName"]
+                            , ds.Tables[0].Rows[i]["MeasureDesc"]
+                            , ds.Tables[0].Rows[i]["Frequency"]
+                            , null
+                            , ds.Tables[0].Rows[i]["StatusDesc"]
+                            , ds.Tables[0].Rows[i]["Numerator"]
+                            , ds.Tables[0].Rows[i]["Denominator"]
+                            , ds.Tables[0].Rows[i]["MeasureNumeratorValue"]
+                            , ds.Tables[0].Rows[i]["MeasureDenominatorValue"]
+                            , ds.Tables[0].Rows[i]["Factor"]
+                            , ds.Tables[0].Rows[i]["EffectiveDate"]
+                            , ds.Tables[0].Rows[i]["ModifiedDate"]
+                            , null
+                            , ds.Tables[0].Rows[i]["LastMeasureDate"]
+                            , ds.Tables[0].Rows[i]["MeasureValue"]
+                            , ds.Tables[0].Rows[i]["LastNetworkValue"]
+                            , ds.Tables[0].Rows[i]["Owner"]);
+                        QIC.Cohorts[QIC.Cohorts.Count - 1].Measures.Add(measureObj);
+                    }
+                }
+
+                //Pull Chart
+                if (ds.Tables[0].Rows[i]["ChartId"] != null)
+                {
+                    int curChartId = SharedLogic.ParseNumeric(ds.Tables[0].Rows[i]["ChartId"].ToString());
+
+                    if (curChartId != chartId)
+                    {
+                        chartId = curChartId;
+                        chartObj = MeasureDAL.CreateChartModel(ds.Tables[0].Rows[i]["ChartId"]
+                            , ds.Tables[0].Rows[i]["ChartType"]
+                            , ds.Tables[0].Rows[i]["ChartDesc"]
+                            , ds.Tables[0].Rows[i]["URL"]);
+
+                        if (QIC.Cohorts[QIC.Cohorts.Count - 1].Measures.Count > 0)
+                        {
+                            QIC.Cohorts[QIC.Cohorts.Count - 1].Measures[QIC.Cohorts[QIC.Cohorts.Count - 1].Measures.Count - 1].Chart = chartObj;
+                        }
                     }
                 }
 

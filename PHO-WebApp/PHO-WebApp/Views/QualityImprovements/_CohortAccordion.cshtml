@@ -1,4 +1,5 @@
 ﻿@model List<PHO_WebApp.Models.Cohort>
+@using PHO_WebApp.Models;
 
 <div class="wrapper center-block">
     <div class="panel-group" id="accordionCohort" role="tablist" aria-multiselectable="true">
@@ -8,16 +9,16 @@
             <div class="panel panel-default">
                 <div class="panel-heading-cohort" role="tab" id="@("headingCohort"+i.ToString())">
                     <h4 class="panel-title">
-                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="@("#collapseCohort"+i.ToString())" aria-expanded="true" aria-controls="@("collapse"+i.ToString())">
+                        <a role="button" data-toggle="collapse" data-parent="#accordionCohort" href="@("#collapseCohort"+i.ToString())" aria-expanded="true" aria-controls="@("collapse"+i.ToString())">
                             @Model[i].Name
                         </a>
                     </h4>
                 </div>
-                <div id="@("collapseCohort"+i.ToString())" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="@("headingCohort"+i.ToString())">
+                <div id="@("collapseCohort"+i.ToString())" class="panel-collapse collapse" role="tabpanel" aria-labelledby="@("headingCohort"+i.ToString())">
                     <div class="panel-body form-inline">
                         <div class="form-group" style="padding: 2px 5px 2px 5px;">
                             <label class="dashboard-label dashboard-cohort" for="@("ABBR"+i.ToString())">ABBR:</label>
-                            <input class="dashboard-input" type="text" id="@("ABBR"+i.ToString())" readonly value="@Model[i].ShortName">
+                            @Html.ActionLink(Model[i].ShortName, "Index", "Cohort", null, new { @id = "ABBR"+i.ToString() })
                         </div>
                         <div class="form-group" style="padding: 2px 5px 2px 5px;">
                             <label class="dashboard-label dashboard-cohort" for="@("Owner"+i.ToString())">Owner:</label>
@@ -32,9 +33,58 @@
                             <input class="dashboard-input" type="text" id="@("DocMgr"+i.ToString())" readonly value="@Model[i].Owner" />
                         </div>
                         <div class="form-group" style="padding: 2px 5px 2px 5px; ">
-                            <label class="dashboard-label dashboard-cohort" for="@("Desc"+i.ToString())">Description:</label>
-                            <textarea class="dashboard-input" id="@("Desc"+i.ToString())" cols="75" rows="4" readonly>@Model[i].Description</textarea>
+                            <label class="dashboard-label dashboard-cohort" for="@(" Desc"+i.ToString())">Description:</label>
+                            <textarea class="dashboard-input" id="@(" Desc"+i.ToString())" cols="75" rows="4" readonly>@Model[i].Description</textarea>
                         </div>
+                        @if (Model[i].Measures != null && Model[i].Measures.Count > 0)
+                        {
+                        <h4 class="dashboard-label dashboard-cohort">Measures</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="dashboard-label dashboard-cohort">Name</th>
+                                        <th scope="col" class="dashboard-label dashboard-cohort">Description</th>
+                                        <th scope="col" class="dashboard-label dashboard-cohort">My Practice vs Network</th>
+                                        <th scope="col" class="dashboard-label dashboard-cohort">Chart</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (var m = 0; m < Model[i].Measures.Count; m++)
+                                    {
+                                        <tr>
+                                            <th scope="row">@Html.ActionLink(Model[i].Measures[m].MeasureName, "Index", "Measure")</th>
+                                            <td>
+                                                @if (Model[i].Measures[m].MeasureDesc.Length > 50)
+                                                {
+                                                    <label class="dashboard-input" title="@Model[i].Measures[m].MeasureDesc" id="@("Cohort"+i.ToString()+"MeasureDesc"+m.ToString())">
+                                                        @(Model[i].Measures[m].MeasureDesc.Substring(0, 47) + "...")
+                                                    </label>
+                                                    
+                                                }
+                                                else
+                                                {
+                                                    <label class="dashboard-input" id="@("Cohort"+i.ToString()+"MeasureDesc"+m.ToString())">@Model[i].Measures[m].MeasureDesc</label>
+                                                }
+                                            </td>
+                                            <td>
+                                                <label class="dashboard-input" title="@("Numerator: " + Model[i].Measures[m].Numerator + "; Denominator: " + Model[i].Measures[m].Denominator)" id="@("Cohort"+i.ToString()+"MeasureValues"+m.ToString())">@(Model[i].Measures[m].MeasureValue + "  /  " + Model[i].Measures[m].LastNetworkValue)</label>
+                                            </td>
+                                            <td>
+                                                @if (Model[i].Measures[m].Chart != null && !string.IsNullOrWhiteSpace(Model[i].Measures[m].Chart.URL))
+                                                {
+                                                    <a href="@Model[i].Measures[m].Chart.URL" target="_blank">@(Model[i].Measures[m].Chart.Type + " as of " + @Model[i].Measures[m].LastMeasureDate.Value.ToShortDateString())</a>
+                                                }
+                                            </td>
+                                        </tr>
+
+
+                                    }
+
+                                </tbody>
+                            </table>
+                            
+                        }
+
                     </div>
                 </div>
             </div>

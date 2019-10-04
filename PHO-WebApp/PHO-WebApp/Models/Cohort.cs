@@ -56,6 +56,19 @@ namespace PHO_WebApp.Models
         public List<CohortStatus> AllStatuses { get; set; }
 
         //public List<Cohort> ShowallCohort { get; set; }
+        private List<Measure> _Measures;
+
+        public List<Measure> Measures
+        {
+            get {
+                if (_Measures == null)
+                {
+                    _Measures = new List<Measure>();
+                }
+                return _Measures;
+            }
+            set { _Measures = value; }
+        }
     }
 
 }
