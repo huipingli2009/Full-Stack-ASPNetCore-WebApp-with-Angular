@@ -298,3 +298,21 @@ x
     margin: -10px;
 }
 
+.thead th {
+    background-color: #0000FF !important;
+    color: black;
+}
+
+.pretty-table_head {
+    background-color: #3f87a6;
+    color: #fff;
+    padding: 5px;
+}
+
+.pretty-table-body-font {
+    font-size: 15px;
+}
+
+tbody tr:nth-child(odd) {
+    background: #eee;
+} 
