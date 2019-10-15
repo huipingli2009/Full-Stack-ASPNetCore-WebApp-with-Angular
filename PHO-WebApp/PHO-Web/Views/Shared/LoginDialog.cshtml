@@ -1,0 +1,73 @@
+﻿@model PHO_WebApp.Models.UserDetails
+
+
+<div id='dlgLogin'>
+    <table>
+        <tr>
+            <td><b>User Name</b></td>
+            <td>@Html.EditorFor(model => model.UserName, new { id = "username" })</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                @Html.ValidationMessageFor(model => model.UserName)
+            </td>
+        </tr>
+        <tr>
+            <td><b>Password</b></td>
+            <td>@Html.EditorFor(model => model.Password, new { id = "password" })</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>@Html.ValidationMessageFor(model => model.Password)</td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div id="divLoginError" class="validationText">
+                    
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#dlgLogin").dialog({
+            modal: true,
+            autoOpen: true,
+            title: 'Log In',
+            width: 400,
+            resizable: false,
+            buttons: {
+                Login: function () {
+                    $("#divLoginError").text("");
+                    if (($('#UserName').val().length > 0) && ($('#Password').val().length > 0))
+                    {
+                        // perform login
+                        $.post("@Url.Action("SubmitLoginPartial", "Login")",
+				        {
+                            username: $('#UserName').val(),
+                            password: $('#Password').val()
+				        },
+				        function( data, status, xhr ) {
+                            if(data.Success){
+                                $('#dlgLogin').dialog("close");
+                                location.reload();
+                            } else {
+                                // do something else
+                                $("#divLoginError").text("Username and password were not recognized. Please try again.");
+                            }
+				        });
+                    }
+                    else
+                    {
+                        $("#divLoginError").text("Please enter user name and password.");
+                    }
+                },
+                Cancel: function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+    });
+</script>

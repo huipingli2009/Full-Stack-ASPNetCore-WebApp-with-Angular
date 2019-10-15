@@ -1,0 +1,118 @@
+﻿@model List<PHO_WebApp.Models.Initiative>
+@{
+	ViewBag.Title = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+	<div class="col-md-6" style="float:left">
+		<h2>PHO Initiatives</h2>	
+		<input type="button" class="btn btn-primary" id="addnew" value="+ New" />
+	</div>
+
+	<div class="col-md-6" style="float:right">
+		<h3>Search</h3>
+		<input text="" class="form-control search" id="search" />
+	</div>
+</div>
+
+<div>
+	<table id="tblInitiative">
+		<tr>
+			<td>
+				@foreach (var item in Model)
+				{
+					@Html.Partial("_InitiativeDisplay", item);
+
+				}
+			</td>
+			<td></td>
+		</tr>
+		<tr>&nbsp;</tr>
+	</table>
+</div>
+
+<div id="dialognew" style="height:700px; max-height:700px; overflow: scroll; background-color:white;">Loading...</div>
+<div id="dialogedit" style="height:700px; max-height:700px; overflow: scroll; background-color:white;">Loading...</div>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		// Handler for .ready() called.
+
+		//Event Handler assignment
+		$('.search').on('change keyup copy paste cut', null, function () { SearchTable('#search', '.InitiativeRecord') });		
+		
+	}); //End of the whole "document ready" event script
+
+	function SearchTable(searchID, classLookup) {
+		var searchValue = $(searchID).val().toLowerCase().trim();
+		$(classLookup).each(function () {
+			var str = $(this).text().toLowerCase().trim();
+			if (str.search(searchValue) == -1) {
+				$(this).hide();
+			}
+			else {
+				$(this).show();
+			}
+		});
+	}
+	
+	$('.btnDetail').click(function () {
+		
+		var $buttonClicked = $(this);
+		var id = $buttonClicked.attr('data-id');
+
+		$('#dialogedit').data('id', id).dialog('open');		
+	});
+
+	$('#addnew').click(function () {		
+		$('#dialognew').dialog('open');
+	});
+	
+	$(function () {
+		$('#dialogedit').dialog({
+			autoOpen: false,
+			width: 800,
+			height: 800,
+			overflow: scroll,
+			resizable: true,
+			title: 'Edit Initiative',
+			modal: true,
+			open: function (event, ui) {
+				var id = $(this).data('id');
+				$(this).load("@Url.Action("InitiativePartialPath")/?InitiativeId=" + id);			
+				
+				if ($(this).closest('.ui-dialog').offset().top < 80) {
+					$(this).closest('.ui-dialog').css({ 'top': '80px' });
+				}
+			},
+			close: function (event, ui) {
+				window.location.reload(true);
+			}
+		});
+	})
+
+	$(function () {
+		$('#dialognew').dialog({
+			autoOpen: false,
+			width: 800,
+			height: 800,
+			overflow: scroll,
+			resizable: false,
+			title: 'Add Initiative',
+			modal: true,
+			open: function (event, ui) {
+				//var id = $(this).data('id');
+				$(this).load("@Url.Action("InitiativePartialPath")/?InitiativeId=-1");
+				
+				if ($(this).closest('.ui-dialog').offset().top < 80) {
+					$(this).closest('.ui-dialog').css({ 'top': '80px' });
+				}
+			},
+			close: function (event, ui) {
+				window.location.reload(true);
+			}
+			
+		});
+	})
+</script>

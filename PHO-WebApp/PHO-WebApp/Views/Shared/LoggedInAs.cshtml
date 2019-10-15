@@ -1,19 +1,20 @@
 ﻿@model PHO_WebApp.Models.UserDetails
+<div class="pho-login navbar-nav mb-lg-0" style="float:right;">
+    @if (Model != null && Model.UserName != null)
+    {
+        string loginText = "Welcome, " + Model.UserName;
 
-@if (Model != null && Model.UserName != null)
-{
-    string loginText = "Welcome, " + Model.UserName;
-    <ul style="list-style-type: none;">
-        <li>@Html.Label(loginText)</li>
-        <li>@Html.ActionLink("Log out", "Logout", "Login", null)</li>
-    </ul>
+        <div>
+            <span>@Html.Label(loginText) | @Html.ActionLink("Log out", "Logout", "Login", null)</span>
+        </div>
     
-    
-}
-else
-{
-    @:<a href='javascript:showLogonDialog();'>Log In</a>
-    <script type="text/javascript">
+        @*<div class="pho-login-practice">ESD Pediatric Group</div>*@
+        
+    }
+    else
+    {
+        @:<a href='javascript:showLogonDialog();'>Log In</a>
+        <script type="text/javascript">
 
         function showLogonDialog() {
             if( $("#dlgLogin").length == 0 ){
@@ -27,8 +28,13 @@ else
                 $("#dlgLogin").dialog("open");
             }
         }
-    </script>
-}
+        </script>
+    }
+
+
+</div>
+
+
 
 
 

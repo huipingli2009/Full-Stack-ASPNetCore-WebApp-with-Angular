@@ -54,8 +54,8 @@ namespace PHO_WebApp.Models
         //practice location, not required       
         public int PracticelocationId { get; set; }
 
-        public string ActiveFlag { get; set; }
-        public string DeletedFlag { get; set; }
+        public bool ActiveFlag { get; set; }
+        public bool DeletedFlag { get; set; }
 
         public int StaffTypeId { get; set; }
         public string StaffPosition { get; set; }
@@ -75,5 +75,52 @@ namespace PHO_WebApp.Models
         //public string StaffId { get; set; }
         //public string StaffId { get; set; }
         //public int StaffId { get; set; }
+
+        public Staff()
+        {
+            
+        }
+        public Staff(int staffId, int staffTypeId, string firstName, string lastName)
+        {
+            this.StaffId = staffId;
+            this.StaffTypeId = staffTypeId;
+            this.FirstName = firstName;
+            this.LastName = lastName;
+        }
+
+        public string LookupDisplayText
+        {
+            get
+            {
+                string returnValue = string.Empty;
+
+                if (!string.IsNullOrEmpty(this.LastName))
+                {
+                    returnValue += this.LastName;
+                    if (!string.IsNullOrEmpty(this.FirstName))
+                    {
+                        returnValue += ", ";
+                        returnValue += this.FirstName;
+
+                    }
+
+
+                    if (!string.IsNullOrEmpty(this.StaffPosition))
+                    {
+                        returnValue += " ";
+                        returnValue += this.StaffPosition;
+                    }
+
+                    if (this.StaffId > 0)
+                    {
+                        returnValue += " ID: ";
+                        returnValue += this.StaffId.ToString();
+                    }
+                }
+
+                return returnValue;
+
+            }
+        }
     }   
 }

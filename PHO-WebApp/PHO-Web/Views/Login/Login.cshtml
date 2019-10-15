@@ -1,0 +1,36 @@
+﻿@model  PHO_WebApp.Models.UserDetails
+@{
+	Layout = null;
+}
+
+//switch to Huiping as author
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>Login</title>
+	<style>
+        #login-div {
+            position: absolute;
+            left: 40%;
+            top: 40%;
+            padding: 10px 10px;
+            border-top: none !important;
+            border-bottom: none !important;
+            border-left: none !important;
+            border-right: none !important;
+        }
+
+		.field-validation-error {
+			color: red;
+		}
+	</style>
+</head>
+<body>
+    @{@Html.Action("LoginForm", "Login");}
+
+</body>
+</html>
+

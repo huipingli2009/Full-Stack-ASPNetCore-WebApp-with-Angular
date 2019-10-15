@@ -153,3 +153,8 @@ C:\Users\lis47\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\bin\Microsoft.Repor
 C:\Users\lis47\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\bin\Microsoft.ReportViewer.WebForms.DLL
 C:\Users\lis47\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\bin\ReportViewerForMvc.dll
 C:\Users\HAT7HM\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\obj\Debug\PHO-WebApp.csprojAssemblyReference.cache
+C:\Users\HAT7HM\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\bin\Microsoft.ReportViewer.Common.dll
+C:\Users\HAT7HM\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\bin\Microsoft.ReportViewer.ProcessingObjectModel.DLL
+C:\Users\HAT7HM\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\bin\Microsoft.ReportViewer.WebForms.DLL
+C:\Users\HAT7HM\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\bin\ReportViewerForMvc.dll
+C:\Users\HAT7HM\Source\Repos\PHO-WebApp\PHO-WebApp\PHO-WebApp\bin\WebActivatorEx.dll

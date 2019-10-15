@@ -1,0 +1,78 @@
+﻿
+@{
+	ViewBag.Title = "AddPatient";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+@*<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>AddPatient</title>
+	<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+</head>*@
+<body>
+	<h2>Add New Patient:</h2>
+	<div>
+		<form method="post">
+			<div class="form-group">
+				<label class="col-sm-3 control-label">First Name:</label>
+				<div>
+					<input type="text" name="txtFirstName" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-3 control-label">Last Name:</label>
+				<div>
+					<input type="text" name="txtLastName" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-3 control-label">Date of Birth:</label>
+				<div>
+					<input type="text" name="txtPersonDOB" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-3 control-label">Address:</label>
+				<div>
+					<input type="text" name="txtAddress" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-3 control-label">City:</label>
+				<div>
+					<input type="text" name="txtCity" />
+				</div>
+			</div>
+
+			@*<div class="form-group">
+				<label class="col-sm-3 control-label">State:</label>
+				<div>
+					<input type="text" name="txtStateId" />
+				</div>
+			</div>*@
+
+			<div class="form-group">
+				<label class="col-sm-3 control-label">Zip code:</label>
+				<div>
+					<input type="text" name="txtZip" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div>
+					<input type="submit" value="Submit" class="btn btn-primary" />
+					<input type="submit" value="Reset" class="btn btn-primary" />
+					<input type="submit" value="Cancel" class="btn btn-primary" />
+				</div>
+			</div>
+		</form>
+	</div>	
+</body>
+@*</html>*@

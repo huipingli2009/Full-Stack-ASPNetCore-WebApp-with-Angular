@@ -1,0 +1,91 @@
+﻿
+@{
+	ViewBag.Title = "UpPatient";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+@*<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>UpdatePatient</title>
+</head>*@
+<body>
+	<h2>Update Patient Page: </h2>
+	<div>
+		@{ 
+			foreach (System.Data.DataRow dr in ViewBag.patient.Rows)
+			{
+		<form method="post">
+			<div class="form-group">
+				<label class="col-sm-3 control-label">First Name:</label>
+				<div>
+					<input type="text" value="@dr["id"]" name="txtId" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">First Name:</label>
+				<div>
+					<input type="text" value="@dr["FirstName"]" name="txtFirstName" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-3 control-label">Last Name:</label>
+				<div>
+					<input type="text" value="@dr["LastName"]" name="txtLastName" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-3 control-label">Date of Birth:</label>
+				<div>
+					<input type="text" value="@dr["PersonDOB"]" name="txtDOB" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-3 control-label">Address:</label>
+				<div>
+					<input type="text" value="@dr["AddressLine1"]" name="txtAddressLine1" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-3 control-label">City:</label>
+				<div>
+					<input type="text" value="@dr["City"]" name="txtCity" />
+				</div>
+			</div>
+
+			@*<div class="form-group">
+			<label class="col-sm-3 control-label">State:</label>
+			<div>
+				<input type="text" name="txtStateId" />
+			</div>
+		</div>*@
+
+			<div class="form-group">
+				<label class="col-sm-3 control-label">Zip code:</label>
+				<div>
+					<input type="text" value="@dr["Zip"]" name="txtZip" />
+				</div>
+			</div>
+			<div class="form-group">
+				<div>
+					<input type="submit" value="Save" class="btn btn-primary" />
+					<input type="submit" value="Cancel" class="btn btn-primary" />
+				</div>
+			</div>
+		</form>
+
+			}
+
+		}
+		
+	</div>
+	
+</body>
+@*</html>*@
+

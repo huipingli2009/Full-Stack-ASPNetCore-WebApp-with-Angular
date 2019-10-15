@@ -1,0 +1,36 @@
+﻿@model PHO_WebApp.Models.UserDetails
+
+@if (Model != null && Model.UserName != null)
+{
+    string loginText = "Welcome, " + Model.UserName;
+    <ul style="list-style-type: none;">
+        <li>@Html.Label(loginText)</li>
+        <li>@Html.ActionLink("Log out", "Logout", "Login", null)</li>
+    </ul>
+    
+    
+}
+else
+{
+    @:<a href='javascript:showLogonDialog();'>Log In</a>
+    <script type="text/javascript">
+
+        function showLogonDialog() {
+            if( $("#dlgLogin").length == 0 ){
+                // ajax load
+                $('#divLogon').load("@Url.Action("OpenLogin", "Login")");
+            } else {
+                // clear username & password fields
+                $('#username,#password').val('');
+
+                // reopen the login dialog which was previously rendered
+                $("#dlgLogin").dialog("open");
+            }
+        }
+    </script>
+}
+
+
+
+
+

@@ -29,18 +29,58 @@ namespace PHO_WebApp.DataAccessLayer
 
             SqlParameter parameterPracticeId = new SqlParameter("@PracticeId", SqlDbType.Int);
             parameterPracticeId.Value = practiceId;
-            com.Parameters.Add(parameterPracticeId);                
+            com.Parameters.Add(parameterPracticeId);
 
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
 
-            da.Fill(ds); 
+            da.Fill(ds);
 
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
             {
                 Staff staff = CreateStaffModel(ds.Tables[0].Rows[i]);
                 practiceStaffList.Add(staff);
             }
+
+            return practiceStaffList;
+        }
+
+        public List<Staff> getPracticeProviders()
+        {
+            //TODO:
+            //This method should return a list of active staff for a practice, but only providers. Stafftype=1. Right now it returns a fake/static 3 providers.
+            //It should call a view or stored procedure to return live data.
+
+            List<Staff> practiceStaffList = new List<Staff>();
+
+            //REPLACE ME - static, faked staff objects
+            practiceStaffList.Add(new Staff(666, 1, "Bob", "Funland"));
+            practiceStaffList.Add(new Staff(667, 1, "Kim", "Darby"));
+            practiceStaffList.Add(new Staff(668, 1, "George", "Smiley"));
+
+            //SqlCommand com = new SqlCommand("spGetPracticeStaff", con);
+            //com.CommandType = CommandType.StoredProcedure;
+
+            ////Session["UserDetails"]
+            //int practiceId = 7;
+
+            ////need later
+            //string tx = HttpContext.Current.Session["UserDetails"].ToString();
+
+            //SqlParameter parameterPracticeId = new SqlParameter("@PracticeId", SqlDbType.Int);
+            //parameterPracticeId.Value = practiceId;
+            //com.Parameters.Add(parameterPracticeId);
+
+            //SqlDataAdapter da = new SqlDataAdapter(com);
+            //DataSet ds = new DataSet();
+
+            //da.Fill(ds);
+
+            //for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+            //{
+            //    Staff staff = CreateStaffModel(ds.Tables[0].Rows[i]);
+            //    practiceStaffList.Add(staff);
+            //}
 
             return practiceStaffList;
         }

@@ -31,11 +31,12 @@ namespace PHO_WebApp
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
+                      "~/Content/fontawesome.min.css",
                       "~/Content/site.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include("~/Scripts/bootstrap.js", "~/Scripts/respond.js", "~/Scripts/DataTables/jQuery.dataTables.min.js"));
 
-            bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/themes/base/jquery-ui.css", "~/Content/bootstrap.css", "~/Content/site.css", "~/Content/DataTables/css/jquery.dataTables.min.css"));
+            bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/themes/base/jquery-ui.css", "~/Content/fontawesome.min.css", "~/Content/solid.css", "~/Content/bootstrap.css", "~/Content/site.css", "~/Content/DataTables/css/jquery.dataTables.min.css"));
         }
     }
 }

@@ -248,6 +248,9 @@ namespace PHO_WebApp.Models
         private List<SectionQuestion> _SectionQuestions;
         private int _sectionId;
         private string _sectionDescription;
+        private bool _Repeatable;
+        private bool _PatientLink;
+        private bool _ProviderLink;
 
         public int SectionId
         {
@@ -287,6 +290,24 @@ namespace PHO_WebApp.Models
                     return null;
                 }
             }
+        }
+
+        public bool Repeatable
+        {
+            get { return this._Repeatable; }
+            set { this._Repeatable = value; }
+        }
+
+        public bool PatientLink
+        {
+            get { return this._PatientLink; }
+            set { this._PatientLink = value; }
+        }
+
+        public bool ProviderLink
+        {
+            get { return this._ProviderLink; }
+            set { this._ProviderLink = value; }
         }
     }
     public class SectionQuestion

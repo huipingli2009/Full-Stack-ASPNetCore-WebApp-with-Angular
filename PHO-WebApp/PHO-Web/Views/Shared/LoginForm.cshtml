@@ -1,0 +1,83 @@
+﻿@model PHO_WebApp.Models.UserDetails
+@Styles.Render("~/Content/css")
+@Scripts.Render("~/bundles/modernizr")
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+@Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+
+<div id="login-div">
+    @if (Session["UserDetails"] == null)
+    {
+        using (Ajax.BeginForm("SubmitLoginPartial", "Login", new AjaxOptions { HttpMethod = "POST", OnSuccess="OnSuccess", OnFailure="OnFailure", UpdateTargetId="divLoginError" }))
+        {
+            <div>
+                <h3>PHO Member Login</h3>
+            </div>
+            <table>
+                <tr>
+                    <td><b>User Name</b></td>
+                    <td>@Html.EditorFor(model => model.UserName)</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        @Html.ValidationMessageFor(model => model.UserName)
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Password</b></td>
+                    <td>@Html.EditorFor(model => model.Password)</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>@Html.ValidationMessageFor(model => model.Password)</td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div id="divLoginError">
+                            <label class="field-validation-error">@Html.DisplayFor(model => model.LoginError)</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="submit" name="Login" value="Submit" class="btn btn-primary" />
+                        <input type="reset" name="name" value="Clear" class="btn" />
+                    </td>
+                </tr>
+            </table>
+        }
+        <script type="text/javascript">
+            function OnSuccess(response) {
+                $('#dialog').dialog('open');
+            }
+            function OnFailure(response) {
+                alert(response.LoginError);
+            }
+        </script>
+    }
+    else
+    {
+        using (Html.BeginForm("Logout", "Login", FormMethod.Post))
+        {
+            <table>
+                <tr>
+                    <td style="text-decoration:underline">PHO Member login</td>
+                </tr>
+                <tr>
+                    <td>Logged in as: @Model.UserName</td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="submit" name="Logout" value="Logout" class="btn" />
+                    </td>
+                </tr>
+            </table>
+        }
+    }
+
+</div>
+
