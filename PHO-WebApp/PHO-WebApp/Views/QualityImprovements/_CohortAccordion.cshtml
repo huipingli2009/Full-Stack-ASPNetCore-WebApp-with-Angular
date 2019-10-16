@@ -1,5 +1,4 @@
 ﻿@model List<PHO_WebApp.Models.Cohort>
-@using PHO_WebApp.Models;
 
 <div class="wrapper center-block">
     <div class="accordion" id="accordionCohort" role="tablist" aria-multiselectable="true">
@@ -34,7 +33,6 @@
                         </div>
                     </div>
                     <div class="form-row panel-body">
-
                         <div class="form-group" style="padding: 2px 5px 2px 5px; ">
                             <label class="dashboard-label dashboard-cohort" style="justify-content:flex-start" for="@(" Desc"+i.ToString())">Description:</label>
                             <textarea class="dashboard-input" id="@(" Desc"+i.ToString())" cols="75" rows="4" readonly>@Model[i].Description</textarea>

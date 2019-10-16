@@ -13,11 +13,11 @@
 @* Begin Patient Lookup *@
 <p>
     <i>This section requires a link to an existing physician.</i>
-    
+    <strong id="sectionPhysicianLink" style="font-weight:bold"></strong>
 </p>
 
 <p>
-    <a class="btn btn-primary" data-toggle="collapse" href="@("#LinkPanel" + Model.SectionId)" role="button" aria-expanded="false" aria-controls="@("LinkPanel" + Model.SectionId)">Lookup Physician</a>
+    <a class="btn btn-primary" data-toggle="collapse" href="@("#LinkPanel" + Model.SectionId)" role="button" aria-expanded="false" aria-controls="@("LinkPanel" + Model.SectionId)">Physician Lookup</a>
 </p>
 <div class="row" style="margin-bottom:5px;">
     <div class="col">
@@ -25,14 +25,14 @@
             <div class="card card-body">
                 
                 <div class="input-group">
-                    <strong>Physician Lookup</strong><strong id="sectionPhysicianLink" style="font-weight:bold"></strong><br />
+                    <label for="txtPhysician">Physician Lookup: </label>
                     <input type="text" id="txtPhysician" name="PhysicianName" style="font-style:italic" placeholder="Enter search term here" />
                     <input type="hidden" id="hfPhysician" name="PhysicianId" />
-                    <div class="input-group-append">
+                    @*<div class="input-group-append">
                         <button class="btn btn-secondary" type="button">
                             <i class="fa fa-search"></i>
                         </button>
-                    </div>
+                    </div>*@
                 </div>
             </div>
         </div>
@@ -71,18 +71,17 @@
             })
         },
         select: function (event, ui) {
-            showLabel(ui.item + '');
-
+            showLabel(ui.item.label + '');
+            hidePhysicianLink();
             $("#hfPhysician").val(ui.item.value);
-            return false;
         }
         });
 
         function showLabel(display) {
             $('#sectionPhysicianLink').text(display);
         }
-        function hidePhysicianLink(display) {
-            $('#LinkPanel').collapse();
+        function hidePhysicianLink() {
+            $('@("#LinkPanel" + Model.SectionId)').collapse();
         }
 });
 </script>
