@@ -11,13 +11,13 @@ namespace PHO_WebApp.Models
         public int Id { get; set; }
         public int StaffId { get; set; }
 
-        [Required(ErrorMessage = "First Name can't be blank")]
+        //[Required(ErrorMessage = "First Name can't be blank")]
         public string FirstName { get; set; }
 
-        [Required(ErrorMessage = "Last Name can't be blank")]
+        //[Required(ErrorMessage = "Last Name can't be blank")]
         public string LastName { get; set; }
 
-        [Required(ErrorMessage = "Email can't be blank")]
+        //[Required(ErrorMessage = "Email can't be blank")]
         public string EmailAddress { get; set; }
 
         public string AddressLine1 { get; set; }
@@ -34,19 +34,20 @@ namespace PHO_WebApp.Models
         public string InterventionContact { get; set; }
 
         public int StateId { get; set; }
+        public int ?NPI { get; set; }
 
 
         [DataType(DataType.PhoneNumber)]
         [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Not a valid phone number")]
-        [Required(ErrorMessage = "Phone number can't be blank")]
+        //[Required(ErrorMessage = "Phone number can't be blank")]
         public string Phone { get; set; }
 
         //Position will replace role for staff. Hence position id here 
-        [Required(ErrorMessage = "Position can't be blank")]
+        //[Required(ErrorMessage = "Position can't be blank")]
         public string PositionId { get; set; }
 
         //staff credential
-        [Required(ErrorMessage = "Credential can't be blank")]
+        //[Required(ErrorMessage = "Credential can't be blank")]
         public int CredId { get; set; }
 
         public string CredName { get; set; }

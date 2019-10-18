@@ -78,10 +78,16 @@ namespace PHO_WebApp
            );
 
             routes.MapRoute(
+          name: "PracticeAdmin",
+          url: "PracticeAdmin",
+          defaults: new { controller = "PracticeAdmin", action = "GetPracticeStaff", id = UrlParameter.Optional }
+         );
+
+            routes.MapRoute(
             name: "Staff",
             url: "Staff",
             defaults: new { controller = "Staffs", action = "Index", id = UrlParameter.Optional }
-           );
+           );          
 
         }
     }
