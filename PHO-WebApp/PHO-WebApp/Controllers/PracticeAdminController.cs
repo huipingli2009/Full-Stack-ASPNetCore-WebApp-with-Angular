@@ -13,11 +13,13 @@ namespace PHO_WebApp.Controllers
         //StaffDAL SD = new StaffDAL();
        
         // GET: PracticeAdmin
-        public ActionResult GetPracticeStaff ()
+        public ActionResult GetPracticeStaff()
         {
             PracticeAdmin pracAdmin = new PracticeAdmin();
             //pracAdmin.PracStaff = SD.getPracticeStaffs();
             pracAdmin.HandleRequest();
+
+            ModelState.Clear();
             return View(pracAdmin);
         }
 
@@ -25,6 +27,21 @@ namespace PHO_WebApp.Controllers
         public ActionResult Create()
         {
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult GetPracticeStaff(PracticeAdmin vmPracAdmin)
+        {
+            vmPracAdmin.IsValid = ModelState.IsValid;
+            // Handle action by user
+            vmPracAdmin.HandleRequest();
+            // Rebind controls
+            if (vmPracAdmin.IsValid)
+            {
+                ModelState.Clear();
+            }          
+
+            return View(vmPracAdmin);
         }
 
         //// POST: Staffs/Create
