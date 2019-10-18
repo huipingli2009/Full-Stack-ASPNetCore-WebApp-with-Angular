@@ -18,9 +18,9 @@ namespace PHO_WebApp.Controllers
 
         public ActionResult Login()
         {
-            if (Session["UserDetails"] != null)
+            if (SavedUserDetails != null)
             {
-                return View("Login", (Models.UserDetails)Session["UserDetails"]);
+                return View("Login", SavedUserDetails);
             }
             else
             {

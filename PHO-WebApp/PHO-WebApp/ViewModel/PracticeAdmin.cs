@@ -16,7 +16,7 @@ namespace PHO_WebApp.ViewModel
             EventCommand = "StaffList";
         }
         public List<Staff> PracStaff { get; set; }
-        //public UserDetails UserLogin { get; set; }
+        public UserDetails UserLogin { get; set; }
 
         public string EventCommand { get; set; }
 
@@ -34,7 +34,9 @@ namespace PHO_WebApp.ViewModel
         private void GetStaffs()
         {
             StaffDAL std = new StaffDAL();
-            PracStaff = std.getPracticeStaffs(); 
+
+            //hardcoding this for a jif. Need to pull practiceId from either local property or controller layer
+            PracStaff = std.getPracticeStaffs(7); 
         }
     }
 }

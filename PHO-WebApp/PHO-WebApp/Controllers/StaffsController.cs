@@ -11,7 +11,7 @@ using PHO_WebApp.DataAccessLayer;
 
 namespace PHO_WebApp.Controllers
 {
-    public class StaffsController : Controller
+    public class StaffsController : BaseController
     {
         private QualityContext db = new QualityContext();
         StaffDAL SD = new StaffDAL();
@@ -19,7 +19,7 @@ namespace PHO_WebApp.Controllers
         // GET: Staffs
         public ActionResult Index()
         {
-            return View(SD.getPracticeStaffs());
+            return View(SD.getPracticeStaffs(PracticeId));
         }
 
         // GET: Staffs/Details/5
@@ -126,14 +126,14 @@ namespace PHO_WebApp.Controllers
             base.Dispose(disposing);
         }
         
-        public JsonResult GetPhysicians(string term = "")
+        public JsonResult GetPhysicianLinks(string term = "")
         {
             List<Staff> staffList = new List<Staff>();
 
             //TODO: Add logic to cache and retrieve providers instead of loading them from DB everytime. Instead, check cache for providers. If exists, return from cache. If not, load from DB and then cache.
 
             //Get fresh from DAL
-            staffList = SD.getPracticeProviders();
+            staffList = SD.getPracticeProviders(PracticeId);
 
             //use where linq where clause to filter by term
             var physicianList = staffList.Where(c => c.DeletedFlag == false)

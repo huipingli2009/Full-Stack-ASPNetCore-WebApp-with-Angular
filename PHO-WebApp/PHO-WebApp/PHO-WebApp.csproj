@@ -486,6 +486,7 @@
     <Content Include="Views\Staffs\Edit.cshtml" />
     <Content Include="Views\Staffs\Index.cshtml" />
     <Content Include="Views\PracticeAdmin\GetPracticeStaff.cshtml" />
+    <Content Include="Views\Survey\_PhysicianLink.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

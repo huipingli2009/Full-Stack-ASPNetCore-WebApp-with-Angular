@@ -132,6 +132,7 @@ namespace PHO_WebApp.Controllers
 
         public ActionResult PracticeDashboard()
         {
+            //TO DO: Pull userid out of state
             int userId = 2;
             QualityImprovement QI = QIDAL.getAllQualityImprovementsForPractice(userId);
             return View("PracticeDashboard", QI);

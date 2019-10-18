@@ -14,18 +14,13 @@ namespace PHO_WebApp.DataAccessLayer
     {
         SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["con"].ConnectionString);
 
-        public List<Staff> getPracticeStaffs()
+        public List<Staff> getPracticeStaffs(int practiceId)
         {
             List<Staff> practiceStaffList = new List<Staff>();
 
             SqlCommand com = new SqlCommand("spGetPracticeStaff", con);
             com.CommandType = CommandType.StoredProcedure;
 
-            //Session["UserDetails"]
-            int practiceId = 7;
-
-            //need later
-            string tx = HttpContext.Current.Session["UserDetails"].ToString();
 
             SqlParameter parameterPracticeId = new SqlParameter("@PracticeId", SqlDbType.Int);
             parameterPracticeId.Value = practiceId;
@@ -45,42 +40,13 @@ namespace PHO_WebApp.DataAccessLayer
             return practiceStaffList;
         }
 
-        public List<Staff> getPracticeProviders()
+        public List<Staff> getPracticeProviders(int practiceId)
         {
-            //TODO:
-            //This method should return a list of active staff for a practice, but only providers. Stafftype=1. Right now it returns a fake/static 3 providers.
-            //It should call a view or stored procedure to return live data.
+            List<Staff> practiceStaffList = getPracticeStaffs(practiceId);
 
-            List<Staff> practiceStaffList = new List<Staff>();
-
-            //REPLACE ME - static, faked staff objects
-            practiceStaffList.Add(new Staff(666, 1, "Bob", "Funland"));
-            practiceStaffList.Add(new Staff(667, 1, "Kim", "Darby"));
-            practiceStaffList.Add(new Staff(668, 1, "George", "Smiley"));
-
-            //SqlCommand com = new SqlCommand("spGetPracticeStaff", con);
-            //com.CommandType = CommandType.StoredProcedure;
-
-            ////Session["UserDetails"]
-            //int practiceId = 7;
-
-            ////need later
-            //string tx = HttpContext.Current.Session["UserDetails"].ToString();
-
-            //SqlParameter parameterPracticeId = new SqlParameter("@PracticeId", SqlDbType.Int);
-            //parameterPracticeId.Value = practiceId;
-            //com.Parameters.Add(parameterPracticeId);
-
-            //SqlDataAdapter da = new SqlDataAdapter(com);
-            //DataSet ds = new DataSet();
-
-            //da.Fill(ds);
-
-            //for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-            //{
-            //    Staff staff = CreateStaffModel(ds.Tables[0].Rows[i]);
-            //    practiceStaffList.Add(staff);
-            //}
+            practiceStaffList.Where(c => c.DeletedFlag == false)
+                            .Where(c => c.StaffTypeId == (int)StaffTypeEnum.Provider)
+                            .Distinct().ToList();
 
             return practiceStaffList;
         }

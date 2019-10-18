@@ -10,35 +10,8 @@
 <div>
     <h4>@Html.Label(Model.SectionDescription)</h4>
 </div>
-@* Begin Patient Lookup *@
-<p>
-    <i>This section requires a link to an existing physician.</i>
-    <strong id="sectionPhysicianLink" style="font-weight:bold"></strong>
-</p>
 
-<p>
-    <a class="btn btn-primary" data-toggle="collapse" href="@("#LinkPanel" + Model.SectionId)" role="button" aria-expanded="false" aria-controls="@("LinkPanel" + Model.SectionId)">Physician Lookup</a>
-</p>
-<div class="row" style="margin-bottom:5px;">
-    <div class="col">
-        <div class="collapse" id="@("LinkPanel" + Model.SectionId)">
-            <div class="card card-body">
-                
-                <div class="input-group">
-                    <label for="txtPhysician">Physician Lookup: </label>
-                    <input type="text" id="txtPhysician" name="PhysicianName" style="font-style:italic" placeholder="Enter search term here" />
-                    <input type="hidden" id="hfPhysician" name="PhysicianId" />
-                    @*<div class="input-group-append">
-                        <button class="btn btn-secondary" type="button">
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </div>*@
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@*End Patient Lookup*@
+@Html.Partial("_PhysicianLink", Model)
 
 <table style="width:1000px; max-width:1000px">
     @for (var i = 0; i < Model.SectionQuestions.Count(); i++)
@@ -48,40 +21,3 @@
 </table>
 <br />
 <hr />
-
-<script>
-    $(document).ready(function () {
-        $("#txtPhysician").autocomplete({
-        source: function (request, response) {
-            $.ajax({
-                url: '@Url.Action("GetPhysicians", "Staffs")',
-                datatype: "json",
-                data: {
-                    term: request.term
-                },
-                success: function (data) {
-                    response($.map(data, function (item) {
-                        return {
-                            label: item.label,
-                            value: item.val,
-                            staffId: item.val
-                        }
-                    }))
-                }
-            })
-        },
-        select: function (event, ui) {
-            showLabel(ui.item.label + '');
-            hidePhysicianLink();
-            $("#hfPhysician").val(ui.item.value);
-        }
-        });
-
-        function showLabel(display) {
-            $('#sectionPhysicianLink').text(display);
-        }
-        function hidePhysicianLink() {
-            $('@("#LinkPanel" + Model.SectionId)').collapse();
-        }
-});
-</script>
