@@ -15,33 +15,39 @@ namespace PHO_WebApp.DataAccessLayer
     {
         SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["con"].ConnectionString);
 
-        public List<Staff> getPracticeStaffs()
+        public List<Staff> getPracticeStaffs(int practiceId)
         {
             List<Staff> practiceStaffList = new List<Staff>();
 
             SqlCommand com = new SqlCommand("spGetPracticeStaffs", con);
             com.CommandType = CommandType.StoredProcedure;
 
-            //Session["UserDetails"]
-            int practiceId = 7;
-
-            //need later
-            string tx = HttpContext.Current.Session["UserDetails"].ToString();
 
             SqlParameter parameterPracticeId = new SqlParameter("@PracticeId", SqlDbType.Int);
             parameterPracticeId.Value = practiceId;
-            com.Parameters.Add(parameterPracticeId);                
+            com.Parameters.Add(parameterPracticeId);
 
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
 
-            da.Fill(ds); 
+            da.Fill(ds);
 
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
             {
                 Staff staff = CreateStaffModel(ds.Tables[0].Rows[i]);
                 practiceStaffList.Add(staff);
             }
+
+            return practiceStaffList;
+        }
+
+        public List<Staff> getPracticeProviders(int practiceId)
+        {
+            List<Staff> practiceStaffList = getPracticeStaffs(practiceId);
+
+            practiceStaffList.Where(c => c.DeletedFlag == false)
+                            .Where(c => c.StaffTypeId == (int)StaffTypeEnum.Provider)
+                            .Distinct().ToList();
 
             return practiceStaffList;
         }
