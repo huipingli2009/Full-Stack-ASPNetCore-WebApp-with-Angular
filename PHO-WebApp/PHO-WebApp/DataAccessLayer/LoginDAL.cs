@@ -115,10 +115,15 @@ namespace PHO_WebApp.DataAccessLayer
                 ud.StaffTypeId = int.Parse(dr["StaffTypeId"].ToString());
             }
 
-            //if (dr["PracticeId"] != null && !string.IsNullOrWhiteSpace(dr["PracticeId"].ToString()))
-            //{
-            //    ud.PracticeId = int.Parse(dr["PracticeId"].ToString());
-            //}
+            if (dr["PracticeId"] != null && !string.IsNullOrWhiteSpace(dr["PracticeId"].ToString()))
+            {
+                ud.PracticeId = int.Parse(dr["PracticeId"].ToString());
+            }
+
+            if (dr["PracticeName"] != null && !string.IsNullOrWhiteSpace(dr["PracticeName"].ToString()))
+            {
+                ud.PracticeName = dr["PracticeName"].ToString();
+            }
 
             ud.AllStaffTypes = GetStaffTypes();
 

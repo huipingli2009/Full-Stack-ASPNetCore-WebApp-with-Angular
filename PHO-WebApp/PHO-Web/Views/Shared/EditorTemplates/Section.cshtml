@@ -1,0 +1,20 @@
+﻿@using PHO_WebApp.Models;
+@model PHO_WebApp.Models.Section
+@{
+    Layout = null;
+}
+
+
+@Html.HiddenFor(model => model.SectionId)
+@Html.HiddenFor(model => model.SectionDescription)
+<div>
+    <h4>@Html.Label(Model.SectionDescription)</h4>
+</div>
+<table style="width:1000px; max-width:1000px">
+    @for (var i = 0; i < Model.SectionQuestions.Count(); i++)
+    {
+        @Html.EditorFor(model => Model.SectionQuestions[i])
+    }
+</table>
+<br />
+<hr />

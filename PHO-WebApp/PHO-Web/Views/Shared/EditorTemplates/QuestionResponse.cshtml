@@ -1,0 +1,99 @@
+﻿@using PHO_WebApp.Models;
+@model PHO_WebApp.Models.QuestionResponse
+
+@{
+    Layout = null;
+}
+
+@Html.HiddenFor(m => m.QuestionId)
+@if (Model.ResponseAnswer != null)
+{
+    @Html.HiddenFor(m => m.ResponseAnswer.ResponseId)
+    @Html.HiddenFor(m => m.ResponseAnswer.ResponseAnswersId)
+    @Html.HiddenFor(m => m.ResponseAnswer.AnswerOptionId)
+}
+
+@Html.HiddenFor(m => m.QuestionType)
+@Html.HiddenFor(m => m.QuestionTypeId)
+@Html.HiddenFor(m => m.QuestionLabel)
+@Html.HiddenFor(m => m.Flag_Required)
+
+
+@if (Model.QuestionType.ToUpper() == "TEXTBOX")
+
+{
+    <tr>
+        <td style="width:500px">@Html.Label(Model.QuestionLabel.ToString())</td>
+        <td style="width:500px">
+            @Html.TextBoxFor(q => q.Response_Text, new { style = "width: 500px;" })
+            @Html.ValidationMessageFor(q => q.Response_Text, null, new { @class = "validationText" })
+        </td>
+    </tr>
+}
+@if (Model.QuestionType.ToUpper() == "TEXTBOXNUMERIC")
+{
+    <tr>
+        <td style="width:500px"> @Html.Label(Model.QuestionLabel.ToString()) </td>
+        <td style="width:500px">
+            @Html.TextBoxFor(q => q.Response_Text, new { @type = "number", style = "width: 500px;" })
+            @Html.ValidationMessageFor(q => q.Response_Text, null, new { @class = "validationText" })
+        </td>
+    </tr>
+}
+@if (Model.QuestionType.ToUpper() == "TEXTBOXDATE")
+{
+    <tr>
+        <td style="width:500px"> @Html.Label(Model.QuestionLabel.ToString()) </td>
+        <td style="width:500px">
+            @Html.TextBoxFor(q => q.Response_Text, new { @type = "date", style = "width: 500px;" })
+            @Html.ValidationMessageFor(q => q.Response_Text, null, new { @class = "validationText" })
+        </td>
+    </tr>
+}
+@if (Model.QuestionType.ToUpper() == "TEXTBOXTELEPHONE")
+{
+    <tr>
+        <td style="width:500px">@Html.Label(Model.QuestionLabel.ToString())</td>
+        <td style="width:500px">
+            @Html.TextBoxFor(q => q.Response_Text, new { @type = "tel", style = "width: 500px" })
+            @Html.ValidationMessageFor(q => q.Response_Text, null, new { @class = "validationText" })
+        </td>
+    </tr>
+}
+@if (Model.QuestionType.ToUpper() == "DROPDOWNLIST" && Model.ResponseAnswer != null)
+{
+    <tr>
+        <td style="width:500px">@Html.Label(Model.QuestionLabel.ToString())</td>
+        <td style="width:500px">
+            @Html.DropDownListFor(
+            x => x.ResponseAnswer.AnswerOptionId,
+            new SelectList(Model.QuestionAnswerOptions, "QuestionAnswerOptionId", "QuestionAnswerOptionLabel"),
+            "-- Select Value --",
+            new
+            {
+            id = "DropdownList",
+            style = "width: 500px"
+            }
+            )
+            @Html.ValidationMessageFor(x => x.ResponseAnswer.AnswerOptionId, null, new { @class = "validationText" })
+        </td>
+    </tr>
+}
+@if (Model.QuestionType.ToUpper() == "RADIOBUTTONLIST" && Model.ResponseAnswer != null)
+{
+    <tr>
+        <td style="width:500px">@Html.Label(Model.QuestionLabel.ToString())</td>
+        <td style="width:500px">
+            @foreach (QuestionAnswerOption q in Model.QuestionAnswerOptions)
+            {
+                <div>
+                    <label>
+                        @Html.RadioButtonFor(m => m.ResponseAnswer.AnswerOptionId, q.QuestionAnswerOptionId, new { style = "width: 500px;" })
+                        @q.QuestionAnswerOptionId
+                    </label>
+                </div>
+            }
+            @Html.ValidationMessageFor(m => m.ResponseAnswer.AnswerOptionId, null, new { @class = "validationText" })
+        </td>
+    </tr>
+}

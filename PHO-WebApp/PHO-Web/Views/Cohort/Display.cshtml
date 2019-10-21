@@ -1,0 +1,30 @@
+﻿@model PHO_WebApp.Models.Cohort
+
+<table width="100%" class="contentRow">
+    <thead style="border-top: 1px solid #808080">
+        <tr><th colspan="6"> </th></tr>
+        <tr><th colspan="6"> </th></tr>
+        <tr><th colspan="6"> </th></tr>
+    </thead>
+    <tr>&nbsp;</tr>
+    <tr>&nbsp;</tr>
+    <tr>
+        <td valign="top" style="font-weight:bold; width:120px; max-width:120px;">Cohort Name:</td>
+        <td valign="top" style="width:300px; max-width:300px;" colspan="3"><a data-id='@Model.id' class="btnDetail">@Model.Name ( Cohort Id = @Model.id )</a></td>
+        <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">ABBR: </td>
+        <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(model => model.ShortName)</td>
+    </tr>
+    <tr>
+        <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Status: </td>
+        <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(model => model.StatusName)</td>
+        <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Owner:</td>
+        <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(model => model.Owner)</td>
+        <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Updated On:</td>
+        <td valign="top" style="width:120px; max-width:120px;">@Html.DisplayFor(model => model.ModifiedDate)</td>
+    </tr>
+    <tr>
+        <td valign="top" style="font-weight:bold; width:120px; max-width:120px;">Cohort Desc:</td>
+        <td valign="top" colspan="5">@Html.DisplayFor(model => model.Description)</td>
+    </tr>
+    <tr>&nbsp;</tr>
+</table>

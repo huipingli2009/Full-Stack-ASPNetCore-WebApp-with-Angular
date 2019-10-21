@@ -1,0 +1,74 @@
+﻿@model PHO_WebApp.Models.Initiative
+
+@Styles.Render("~/Content/css")
+@Scripts.Render("~/bundles/modernizr")
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+@Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+
+<div style="position:relative">
+	@using (Html.BeginForm("SaveInitiative", "Initiative", FormMethod.Post))
+	{
+		<table class="contentRow" style="width:700px;border-spacing:10px;">
+			<tr>
+				@*Hidden fields*@
+				<td colspan="4">
+					@Html.HiddenFor(m => Model.id)
+				</td>
+			</tr>
+			<tr>
+				<td>Name: </td>
+				<td>@Html.EditorFor(m => Model.Name)  @Html.ValidationMessageFor(Model => Model.Name, null, new { @class = "validationText" })</td>
+				<td>Owner: </td>				
+				<td>@Html.EditorFor(m => Model.Owner)  @Html.ValidationMessageFor(Model => Model.Owner, null, new { @class = "validationText" })</td>
+			</tr>
+			<tr>
+				<td>Abbr Name: </td>
+				<td>@Html.EditorFor(m => Model.ShortName)</td>
+				<td>Status:</td>
+				<td>
+					@Html.DropDownListFor(c => c.Status, new SelectList(Model.AllInitiativeStatuses, "id", "Name"), "-- Select Status --", new { id = "StatusDropdownList" })
+					@Html.ValidationMessageFor(Model => Model.Status, null, new { @class = "validationText" })
+				</td>
+			</tr>
+			<tr>
+				<td>Description: </td>
+				<td colspan="6">
+					@Html.TextAreaFor(m => Model.Description, new { @style = "resize:none; overflow-y:scroll;", maxlength = "500", @rows = "3", @cols = "76" })
+					@Html.ValidationMessageFor(Model => Model.Description, null, new { @class = "validationText" })
+				</td>			
+			</tr>
+			<tr>
+				<td>Details: </td>
+				<td colspan="6">@Html.TextAreaFor(m => Model.Details, new { @style = "resize:none; overflow-y:scroll;", maxlength = "8000", @rows = "6", @cols = "76" })</td>
+			</tr>
+			<tr>
+				<td>Primary Aim: </td>
+				<td colspan="6">@Html.TextAreaFor(m => Model.PrimaryAim, new { @style = "resize:none; overflow-y:scroll;", maxlength = "500", @rows = "4", @cols = "76" })</td>
+			</tr>
+			<tr>
+				<td>Secondary Aim: </td>
+				<td colspan="6">@Html.TextAreaFor(m => Model.SecondaryAim, new { @style = "resize:none; overflow-y:scroll;", maxlength = "500", @rows = "4", @cols = "76" })</td>
+			</tr>
+			<tr>
+				<td>Evidence Guidelines: </td>
+				<td colspan="6">@Html.TextAreaFor(m => Model.EvidenceGuidelines, new { @style = "resize:none; overflow-y:scroll;", maxlength = "500", @rows = "4", @cols = "76" })</td>
+			</tr>			
+			<tr>
+				<td>&nbsp;</td>
+				<td colspan="4" align="right">
+					<input type="submit" name="SaveInitiativeRecord" value="Submit" class="btn btn-primary" />
+				</td>
+			</tr>
+		</table>
+		@*<br />	
+		<div style="position:absolute; bottom:3px;right:3px;">
+			<input type="submit" name="SaveInitiativeRecord" value="Submit" class="btn btn-primary" />
+		</div>*@
+	}
+</div>
+
+
+

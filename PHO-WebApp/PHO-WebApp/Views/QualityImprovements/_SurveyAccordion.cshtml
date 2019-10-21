@@ -1,14 +1,14 @@
 ﻿@model List<PHO_WebApp.Models.SurveySummary>
 
 <div class="wrapper center-block">
-    <div class="panel-group" id="accordionSurvey" role="tablist" aria-multiselectable="true">
+    <div class="accordion" id="accordionSurvey" role="tablist" aria-multiselectable="true">
 
         @for (var i = 0; i < Model.Count(); i++)
         {
-            <div class="panel panel-default">
-                <div class="panel-heading-survey" role="tab" id="@("headingSurvey"+i.ToString())">
+            <div class="card">
+                <div class="card-header panel-heading-survey" role="tab" id="@("headingSurvey"+i.ToString())">
                     <h4 class="panel-title">
-                        <a role="button" class="collapsed" data-toggle="collapse" data-parent="#accordionSurvey" href="@("#collapseSurvey"+i.ToString())" aria-expanded="true" aria-controls="@("collapse"+i.ToString())">
+                        <a role="button" data-toggle="collapse" data-parent="#accordionSurvey" href="@("#collapseSurvey"+i.ToString())" aria-expanded="true" aria-controls="@("collapse"+i.ToString())">
                             @Model[i].Survey_Title
                         </a>
 

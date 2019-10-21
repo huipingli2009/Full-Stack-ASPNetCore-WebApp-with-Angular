@@ -18,6 +18,17 @@ namespace PHO_WebApp.Models
         TextBoxNumeric = 6,
         Calculated = 7
     }
+    public enum PropagationTypeEnum
+    {
+        Static = 1,
+        Dynamic = 2
+    }
+    public enum PhysicianLinkTypeEnum
+    {
+        None = 1,
+        Allowed = 2,
+        Required = 3
+    }
 
     public class SurveySummary
     {
@@ -248,6 +259,8 @@ namespace PHO_WebApp.Models
         private List<SectionQuestion> _SectionQuestions;
         private int _sectionId;
         private string _sectionDescription;
+        private int _PhysicianLinkTypeId;
+        private int _PropagationTypeId;
 
         public int SectionId
         {
@@ -285,6 +298,48 @@ namespace PHO_WebApp.Models
                 else
                 {
                     return null;
+                }
+            }
+        }
+
+
+        public int PhysicianLinkTypeId
+        {
+            get { return this._PhysicianLinkTypeId; }
+            set { this._PhysicianLinkTypeId = value; }
+        }
+        public int PropagationTypeId
+        {
+            get { return this._PropagationTypeId; }
+            set { this._PropagationTypeId = value; }
+        }
+
+        public PhysicianLinkTypeEnum PhysicianLinkType
+        {
+            get
+            {
+                if (PhysicianLinkTypeId > 0)
+                {
+                    return (PhysicianLinkTypeEnum)Enum.Parse(typeof(PhysicianLinkTypeEnum), PhysicianLinkTypeId.ToString().ToUpper());
+                }
+                else
+                {
+                    return PhysicianLinkTypeEnum.None;
+                }
+            }
+        }
+
+        public PropagationTypeEnum PropagationType
+        {
+            get
+            {
+                if (PropagationTypeId > 0)
+                {
+                    return (PropagationTypeEnum)Enum.Parse(typeof(PropagationTypeEnum), PropagationTypeId.ToString().ToUpper());
+                }
+                else
+                {
+                    return PropagationTypeEnum.Static;
                 }
             }
         }
@@ -393,7 +448,8 @@ namespace PHO_WebApp.Models
         //response
         private int _responseId;
         private int _formResponseId;
-               
+        private int _PhysicianStaffId;
+
 
         public int QuestionId
         {
@@ -488,6 +544,12 @@ namespace PHO_WebApp.Models
 
                 return returnValue;
             }
+        }
+
+        public int PhysicianStaffId
+        {
+            get { return _PhysicianStaffId; }
+            set { _PhysicianStaffId = value; }
         }
     }
 

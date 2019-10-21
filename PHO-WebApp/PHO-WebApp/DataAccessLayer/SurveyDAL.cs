@@ -202,7 +202,10 @@ namespace PHO_WebApp.DataAccessLayer
                         sectionId = SharedLogic.ParseNumeric(r["SectionId"].ToString());
                         Section newS = CreateSectionModel(
                             SharedLogic.ParseNumeric(r["SectionId"].ToString()),
-                            r["SectionDescription"].ToString());
+                            r["SectionDescription"].ToString(),
+                            SharedLogic.ParseNumericNullable(r["PropagationTypeId"].ToString()),
+                            SharedLogic.ParseNumericNullable(r["PhysicianLinkTypeId"].ToString())
+                            );
                         returnObject.LastFormSection.Sections.Add(newS);
                     }
                     if (sectionQuestionId != SharedLogic.ParseNumeric(r["SectionQuestionsId"].ToString()))
@@ -465,7 +468,7 @@ namespace PHO_WebApp.DataAccessLayer
             return c;
         }
 
-        public Section CreateSectionModel(int? SectionId, string SectionDescription)
+        public Section CreateSectionModel(int? SectionId, string SectionDescription, int? PropagationTypeId, int? SectionPhysicianLinkTypeId)
         {
             Section c = new Section();
             if (SectionId.HasValue)
@@ -473,6 +476,14 @@ namespace PHO_WebApp.DataAccessLayer
                 c.SectionId = SectionId.Value;
             }
             c.SectionDescription = SectionDescription;
+            if (PropagationTypeId.HasValue)
+            {
+                c.PropagationTypeId = PropagationTypeId.Value;
+            }
+            if (SectionPhysicianLinkTypeId.HasValue)
+            {
+                c.PhysicianLinkTypeId = SectionPhysicianLinkTypeId.Value;
+            }
 
             return c;
         }
