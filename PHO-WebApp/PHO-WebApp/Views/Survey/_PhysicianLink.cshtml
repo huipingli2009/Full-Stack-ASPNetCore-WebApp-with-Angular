@@ -2,10 +2,12 @@
 @{
     Layout = null;
 }
+
+@* Begin Physician Lookup *@
+
 @if (Model.PhysicianLinkType == PHO_WebApp.Models.PhysicianLinkTypeEnum.Allowed
-    || Model.PhysicianLinkType == PHO_WebApp.Models.PhysicianLinkTypeEnum.Required)
+|| Model.PhysicianLinkType == PHO_WebApp.Models.PhysicianLinkTypeEnum.Required)
 {
-    @* Begin Physician Lookup *@
     <p>
         <i>This section requires a link to an existing physician.</i>
         <strong id="sectionPhysicianLink" style="font-weight:bold"></strong>
@@ -34,6 +36,8 @@
         </div>
     </div>
     @*End Physician Lookup*@
+
+
 
 
     <script>
