@@ -45,19 +45,19 @@
 				<div class="panel-body">
 					<!--Begin message area-->
 					@*if (!Model.IsValid)
-					{
-					<div class="alert alert-danger alert-dismissable" role="alert">
-						<button type="button" class="close" data-dismiss="alert">
-							<span area-hidden="true">
-								&times;
-							</span>
-							<span class="sr-only">Close</span>
-						</button>
-						@Html.ValidationSummary(true)
-					</div>
-					}*@
+		{
+		<div class="alert alert-danger alert-dismissable" role="alert">
+			<button type="button" class="close" data-dismiss="alert">
+				<span area-hidden="true">
+					&times;
+				</span>
+				<span class="sr-only">Close</span>
+			</button>
+			@Html.ValidationSummary(true)
+		</div>
+		}*@
 					<!--End message area-->
-					
+
 					<div class="form-group">
 						@Html.LabelFor(m => m.Entity.FirstName, "First Name")
 						@Html.TextBoxFor(m => m.Entity.FirstName, new { @class = "form-control" })
@@ -83,8 +83,21 @@
 						@Html.TextBoxFor(m => m.Entity.AddressLine2, new { @class = "form-control" })
 					</div>
 					<div class="form-group">
+						@Html.LabelFor(m => m.Entity.City, "City")
+						@Html.TextBoxFor(m => m.Entity.City, new { @class = "form-control" })
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(m => m.Entity.State, "State")
+						@Html.TextBoxFor(m => m.Entity.State, new { @class = "form-control" })
+					</div>
+					<div class="form-group">
 						@Html.LabelFor(m => m.Entity.NPI, "NPI")
 						@Html.TextBoxFor(m => m.Entity.NPI, new { @class = "form-control" })
+					</div>
+
+					<div class="form-group">
+						@Html.LabelFor(m => m.Entity.PracticelocationId, "PracticeLocationId")
+						@Html.TextBoxFor(m => m.Entity.PracticelocationId, new { @class = "form-control" })
 					</div>
 				</div>
 				<div class="panel-footer">
