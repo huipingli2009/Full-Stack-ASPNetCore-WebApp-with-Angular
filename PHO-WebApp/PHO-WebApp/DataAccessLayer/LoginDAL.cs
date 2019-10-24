@@ -25,7 +25,7 @@ namespace PHO_WebApp.DataAccessLayer
             com.CommandType = CommandType.StoredProcedure;
 
             // Add Parameters to SPROC
-            SqlParameter parameterUserName= new SqlParameter("@UserName", SqlDbType.NVarChar, 50);
+            SqlParameter parameterUserName = new SqlParameter("@UserName", SqlDbType.NVarChar, 50);
             parameterUserName.Value = username;
             com.Parameters.Add(parameterUserName);
 
@@ -62,7 +62,7 @@ namespace PHO_WebApp.DataAccessLayer
         public UserDetails GetPersonLoginForLoginId(int loginId)
         {
             UserDetails returnObject = null;
-                        
+
             SqlCommand com = new SqlCommand("spGetPersonLoginForLoginId", con);
             //SqlCommand com = new SqlCommand("spGetPersonLoginForLoginId_new", con);
             com.CommandType = CommandType.StoredProcedure;
@@ -89,7 +89,7 @@ namespace PHO_WebApp.DataAccessLayer
         public UserDetails CreateUserDetailsModel()
         {
             UserDetails ud = new UserDetails();
-            
+
             ud.AllStaffTypes = GetStaffTypes();
             ud.StaffTypeId = -1;
             return ud;
@@ -115,10 +115,15 @@ namespace PHO_WebApp.DataAccessLayer
                 ud.StaffTypeId = int.Parse(dr["StaffTypeId"].ToString());
             }
 
-            //if (dr["PracticeId"] != null && !string.IsNullOrWhiteSpace(dr["PracticeId"].ToString()))
-            //{
-            //    ud.PracticeId = int.Parse(dr["PracticeId"].ToString());
-            //}
+            if (dr["PracticeId"] != null && !string.IsNullOrWhiteSpace(dr["PracticeId"].ToString()))
+            {
+                ud.PracticeId = int.Parse(dr["PracticeId"].ToString());
+            }
+
+            if (dr["PracticeName"] != null && !string.IsNullOrWhiteSpace(dr["PracticeName"].ToString()))
+            {
+                ud.PracticeName = dr["PracticeName"].ToString();
+            }
 
             ud.AllStaffTypes = GetStaffTypes();
 
@@ -202,7 +207,7 @@ namespace PHO_WebApp.DataAccessLayer
             {
                 com.Parameters["@Password"].Value = DBNull.Value;
             }
-            
+
             com.Parameters.Add("@CreatedByPersonId", SqlDbType.Int);
             if (!String.IsNullOrWhiteSpace(HttpContext.Current.Session["UserId"].ToString()))
             {

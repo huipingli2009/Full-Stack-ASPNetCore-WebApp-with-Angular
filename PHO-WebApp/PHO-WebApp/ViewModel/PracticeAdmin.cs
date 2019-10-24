@@ -19,7 +19,8 @@ namespace PHO_WebApp.ViewModel
         public PracticeAdmin()
         {
             Init();
-            PracStaff = new List<Staff>();             
+            PracStaff = new List<Staff>();
+            Entity = new Staff();
         }
 
         public List<Staff> PracStaff { get; set; }
@@ -82,9 +83,12 @@ namespace PHO_WebApp.ViewModel
         {
             PracticeAdmin vmPA = new PracticeAdmin();
 
+            //added here for testing purpose
+            IsValid = true;
+
             if (IsValid)
             {
-                if(Mode == "AddStaff")
+                if (Mode == "AddStaff")
                 {
                     vmPA.Insert(Entity);
                     //Insert(vmPA);
@@ -96,6 +100,7 @@ namespace PHO_WebApp.ViewModel
                 }
             }
             else
+
             {
                 if (Mode == "AddStaff")
                 {
@@ -234,16 +239,16 @@ namespace PHO_WebApp.ViewModel
 
                 case "savestaff":
                     SaveStaff();
-                    if(IsValid)
-                    {
+                    //if(IsValid)
+                    //{
                         GetStaffs();
-                    }                   
+                    //}                   
                     break;
                 case "deletestaff":
                     DeleteStaff();
                     break;
                 case "cancel":
-                    CancelMode();
+                    ListMode();
                     GetStaffs();
                     break;
 
@@ -319,7 +324,15 @@ namespace PHO_WebApp.ViewModel
                 com.Parameters["@Phone"].Value = DBNull.Value;
             }
 
-            com.Parameters["@NPI"].Value = model.NPI;
+            //com.Parameters["@NPI"].Value = model.NPI;
+            if (!String.IsNullOrWhiteSpace(model.NPI.ToString()))
+            {
+                com.Parameters["@NPI"].Value = model.NPI;
+            }
+            else
+            {
+                com.Parameters["@NPI"].Value = DBNull.Value;
+            }
 
             //com.Parameters["@CreatedById"].Value = model.NPI;
 

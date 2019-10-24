@@ -10,19 +10,30 @@
 <!DOCTYPE html>
 
 <html>
-<head>
+<head>`	
 	<meta name="viewport" content="width=device-width" />
 	<title>Index</title>
 	<link href="~/Content/Site.css" rel="stylesheet" />
 	<script type="text/javascript">		
 		$(document).ready(function() {
 			$("[data-pdsa-action]").on("click", function(e) {
+				e.preventDefault();
 
-			e.preventDefault();
+				$("#EventCommand").val($(this).data("pdsa-action"));
+				$("#EventArgument").val($(this).data("pdsa-val"));
+				$("form").submit();
+			});
 
-			$("#EventCommand").val($(this).data("pdsa-action"));
-			$("#EventArgument").val($(this).data("pdsa-val"));
-			$("form").submit();
+			$("#Delete").on("click", function (e) {
+
+				alert('It is me!');
+				e.preventDefault();
+
+				var choice = confirm($(this).attr('data-confirm'));
+
+				if (choice) {
+					window.location.href = $(this).attr('href');
+				}
 			});
 		});
 	</script>
@@ -46,37 +57,41 @@
 					<!--Begin message area-->
 					@*if (!Model.IsValid)
 		{
-		<div class="alert alert-danger alert-dismissable" role="alert">
-			<button type="button" class="close" data-dismiss="alert">
-				<span area-hidden="true">
-					&times;
-				</span>
-				<span class="sr-only">Close</span>
-			</button>
-			@Html.ValidationSummary(true)
-		</div>
+			<div class="alert alert-danger alert-dismissable" role="alert">
+				<button type="button" class="close" data-dismiss="alert">
+					<span area-hidden="true">
+						&times;
+					</span>
+					<span class="sr-only">Close</span>
+				</button>
+				@Html.ValidationSummary(true)
+			</div>
 		}*@
-					<!--End message area-->
-
+					<!--End message area-->					
 					<div class="form-group">
 						@Html.LabelFor(m => m.Entity.FirstName, "First Name")
 						@Html.TextBoxFor(m => m.Entity.FirstName, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.Entity.FirstName, null, new { @class = "validationText" })
 					</div>
 					<div class="form-group">
 						@Html.LabelFor(m => m.Entity.LastName, "Last Name")
 						@Html.TextBoxFor(m => m.Entity.LastName, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.Entity.LastName, null, new { @class = "validationText" })
 					</div>
 					<div class="form-group">
 						@Html.LabelFor(m => m.Entity.EmailAddress, "Email")
 						@Html.TextBoxFor(m => m.Entity.EmailAddress, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.Entity.EmailAddress, null, new { @class = "validationText" })
 					</div>
 					<div class="form-group">
 						@Html.LabelFor(m => m.Entity.Phone, "Phone Number")
 						@Html.TextBoxFor(m => m.Entity.Phone, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.Entity.Phone, null, new { @class = "validationText" })
 					</div>
 					<div class="form-group">
 						@Html.LabelFor(m => m.Entity.AddressLine1, "AddressLine1")
 						@Html.TextBoxFor(m => m.Entity.AddressLine1, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.Entity.AddressLine1, null, new { @class = "validationText" })
 					</div>
 					<div class="form-group">
 						@Html.LabelFor(m => m.Entity.AddressLine2, "AddressLine2")
@@ -85,28 +100,34 @@
 					<div class="form-group">
 						@Html.LabelFor(m => m.Entity.City, "City")
 						@Html.TextBoxFor(m => m.Entity.City, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.Entity.City, null, new { @class = "validationText" })
 					</div>
 					<div class="form-group">
 						@Html.LabelFor(m => m.Entity.State, "State")
 						@Html.TextBoxFor(m => m.Entity.State, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.Entity.State, null, new { @class = "validationText" })
 					</div>
 					<div class="form-group">
 						@Html.LabelFor(m => m.Entity.NPI, "NPI")
 						@Html.TextBoxFor(m => m.Entity.NPI, new { @class = "form-control" })
 					</div>
 
-					<div class="form-group">
-						@Html.LabelFor(m => m.Entity.PracticelocationId, "PracticeLocationId")
-						@Html.TextBoxFor(m => m.Entity.PracticelocationId, new { @class = "form-control" })
-					</div>
+					@*<div class="form-group">
+			@Html.LabelFor(m => m.Entity.PracticelocationId, "PracticeLocationId")
+			@Html.TextBoxFor(m => m.Entity.PracticelocationId, new { @class = "form-control" })
+		</div>
+		<div>
+			@Html.DropDownListFor(m => m.Entity.PracticelocationId, new SelectList(Model.AllInitiativeStatuses, "id", "Name"), "-- Select Status --", new { id = "StatusDropdownList" })
+
+		</div>*@
 				</div>
 				<div class="panel-footer">
 					<div class="row">
 						<div class="col-sm-12">
 							<btn id="btnSave" class="btn btn-sm btn-primary" data-pdsa-action="SaveStaff">
 								<i class="glyphicon glyphicon-save"></i>&nbsp;Save
-							</btn>
-							<btn id="btnCancel" class="btn btn-sm btn-primary" formnovalidate data-pdsa-action="Cancel">
+							</btn>							
+							<btn id="btnCancel" class="btn btn-sm btn-primary was-validated" data-pdsa-action="Cancel">
 								<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;Cancel
 							</btn>
 						</div>
@@ -242,9 +263,9 @@
 									@Html.DisplayFor(modelItem => item.Zip)
 								</td>*@
 
-							<td>
-								<a href="#" data-pdsa-action="DeleteStaff" data-pdsa-val="@item.Id" class="btn btn-default btn-sm btn-link"
-								   onclick="return confirm('Are you sure you want to delete this staff from your practice?);">
+							<td class="pdsa-action-button-column">
+								<a href="#" id="Delete" data-pdsa-action="DeleteStaff" data-pdsa-val="@item.Id" class="btn btn-default btn-sm btn-link"
+								   data-confirm="return confirm('Are you sure you want to delete this staff from your practice?);">
 									<i class="glyphicon glyphicon-trash"></i>
 								</a>								
 							</td>

@@ -36,5 +36,6 @@ namespace PHO_WebApp.Models
         public string SessionId { get; set; }
 
         public int PracticeId { get; set; }
+        public string PracticeName { get; set; }
     }
 }

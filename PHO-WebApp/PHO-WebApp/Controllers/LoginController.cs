@@ -16,17 +16,17 @@ namespace PHO_WebApp.Controllers
 
         DataAccessLayer.LoginDAL userLogin = new LoginDAL();
 
-        public ActionResult Login()
+       public ActionResult Login()
         {
-            if (Session["UserDetails"] != null)
+            if (SavedUserDetails != null)
             {
-                return View("Login", (Models.UserDetails)Session["UserDetails"]);
+                return View("Login", SavedUserDetails);
             }
             else
             {
                 return View("Login");
             }
-        }    
+        } 
 
         [HttpPost]
         public ActionResult SubmitLoginPartial(string username, string password)
