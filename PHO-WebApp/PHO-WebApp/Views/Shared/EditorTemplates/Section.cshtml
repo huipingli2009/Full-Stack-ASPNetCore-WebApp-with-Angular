@@ -11,7 +11,7 @@
     <h4>@Html.Label(Model.SectionDescription)</h4>
 </div>
 
-@*@Html.Partial("_PhysicianLink", Model)*@
+@Html.Partial("_PhysicianLink", Model)
 
 <table style="width:1000px; max-width:1000px">
     @for (var i = 0; i < Model.SectionQuestions.Count(); i++)

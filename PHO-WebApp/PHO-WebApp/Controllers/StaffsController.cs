@@ -139,8 +139,8 @@ namespace PHO_WebApp.Controllers
             var physicianList = staffList.Where(c => c.DeletedFlag == false)
                             .Where(c => c.LookupDisplayText.ToUpper()
                             .Contains(term.ToUpper()))
-                            .Where(c => c.StaffTypeId == (int)StaffTypeEnum.Provider)
-                            .Select(c => new { label = c.LookupDisplayText, val = c.StaffId })
+                            //.Where(c => c.StaffTypeId == (int)StaffTypeEnum.Provider)
+                            .Select(c => new { label = c.LookupDisplayText, val = c.Id })
                             .Distinct().ToList();
             return Json(physicianList, JsonRequestBehavior.AllowGet);
         }

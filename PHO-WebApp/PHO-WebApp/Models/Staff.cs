@@ -9,7 +9,7 @@ namespace PHO_WebApp.Models
     public class Staff
     {
         public int Id { get; set; }
-        public int StaffId { get; set; }
+        
 
         //[Required(ErrorMessage = "First Name can't be blank")]
         public string FirstName { get; set; }
@@ -83,7 +83,7 @@ namespace PHO_WebApp.Models
         }
         public Staff(int staffId, int staffTypeId, string firstName, string lastName)
         {
-            this.StaffId = staffId;
+            this.Id = staffId;
             this.StaffTypeId = staffTypeId;
             this.FirstName = firstName;
             this.LastName = lastName;
@@ -112,10 +112,10 @@ namespace PHO_WebApp.Models
                         returnValue += this.StaffPosition;
                     }
 
-                    if (this.StaffId > 0)
+                    if (this.Id > 0)
                     {
                         returnValue += " ID: ";
-                        returnValue += this.StaffId.ToString();
+                        returnValue += this.Id.ToString();
                     }
                 }
 

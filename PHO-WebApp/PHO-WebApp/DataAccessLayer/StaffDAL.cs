@@ -58,9 +58,7 @@ namespace PHO_WebApp.DataAccessLayer
 
             SqlCommand com = new SqlCommand("spGetPracticeStaff", con);
             com.CommandType = CommandType.StoredProcedure;
-
-            //Session["UserDetails"]
-            int practiceId = 7;
+                        
 
             //need later
             string tx = HttpContext.Current.Session["UserDetails"].ToString();
@@ -88,12 +86,12 @@ namespace PHO_WebApp.DataAccessLayer
 
             if (dr["Id"] != null && !string.IsNullOrWhiteSpace(dr["Id"].ToString()))
             {
-                s.Id = int.Parse(dr["Id"].ToString());
+                s.Id = SharedLogic.ParseNumeric(dr["Id"].ToString());
             }
 
             if (dr["StaffTypeId"] != null && !string.IsNullOrWhiteSpace(dr["StaffTypeId"].ToString()))
             {
-                s.StaffTypeId = int.Parse(dr["StaffTypeId"].ToString());
+                s.StaffTypeId = SharedLogic.ParseNumeric(dr["StaffTypeId"].ToString());
             }
 
             s.FirstName = dr["FirstName"].ToString();
@@ -112,7 +110,7 @@ namespace PHO_WebApp.DataAccessLayer
             s.QI_Team = dr["QI_Team"].ToString();
             s.PracticeManager = dr["PracticeManager"].ToString();
             s.InterventionContact = dr["Intervention_Contact"].ToString();
-            //s.StateId = int.Parse(dr["StateId"].ToString());
+            //s.StateId = SharedLogic.ParseNumeric(dr["StateId"].ToString());
 
             s.Phone = dr["Phone"].ToString();
 
@@ -121,20 +119,20 @@ namespace PHO_WebApp.DataAccessLayer
            
             if(!string.IsNullOrEmpty(dr["NPI"].ToString()))
             { 
-                s.NPI = int.Parse(dr["NPI"].ToString());
+                s.NPI = SharedLogic.ParseNumeric(dr["NPI"].ToString());
             }
             else
             {
                 s.NPI = null;
             }
 
-            //s.PracticelocationId = int.Parse(dr["PracticelocationId"].ToString());
+            //s.PracticelocationId = SharedLogic.ParseNumeric(dr["PracticelocationId"].ToString());
             //s.ActiveFlag = dr["ActiveFlag"].ToString();
             //s.CreatedOnDate = DateTime.Parse(dr["CreatedOnDate"].ToString());           
 
             //if (!string.IsNullOrWhiteSpace(dr["Status"].ToString()))
             //{
-            //    c.Status = int.Parse(dr["Status"].ToString());
+            //    c.Status = SharedLogic.ParseNumeric(dr["Status"].ToString());
             //}
             //if (!string.IsNullOrWhiteSpace(dr["StatusDesc"].ToString()))
             //{
@@ -233,7 +231,7 @@ namespace PHO_WebApp.DataAccessLayer
 
             if (!String.IsNullOrWhiteSpace(HttpContext.Current.Session["UserId"].ToString()))
             {
-                com.Parameters["@CreatedById"].Value = int.Parse(HttpContext.Current.Session["UserId"].ToString());
+                com.Parameters["@CreatedById"].Value = SharedLogic.ParseNumeric(HttpContext.Current.Session["UserId"].ToString());
             }
             else
             {
