@@ -279,7 +279,7 @@ namespace PHO_WebApp.ViewModel
 
             //replace this part with coding when we have Create Staff part done
             //Create Staff is the prior step before creating user login per system design
-            com.Parameters["@PracticeId"].Value = 7;   //practice staff type id = 4           
+            com.Parameters["@PracticeId"].Value = int.Parse(HttpContext.Current.Session["PracticeId"].ToString()); ;   //practice staff type id = 4           
 
             //hard code for practice staff. Will be replaced with Staff Type look ups
             com.Parameters["@StaffTypeId"].Value = 5;

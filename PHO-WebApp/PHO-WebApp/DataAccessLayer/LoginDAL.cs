@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Configuration;
 using System.Security.Cryptography;
+using PHO_WebApp.Controllers;
 
 
 namespace PHO_WebApp.DataAccessLayer
@@ -96,7 +97,8 @@ namespace PHO_WebApp.DataAccessLayer
         }
 
         public UserDetails CreateUserDetailsModel(DataRow dr)
-        {
+        {  
+
             UserDetails ud = new UserDetails();
             if (dr["LoginId"] != null && !string.IsNullOrWhiteSpace(dr["LoginId"].ToString()))
             {

@@ -8,6 +8,7 @@ using System.Data;
 using PHO_WebApp.Models;
 using System.Security.Cryptography;
 using PHO_WebApp.ViewModel;
+using PHO_WebApp.Controllers;
 
 namespace PHO_WebApp.DataAccessLayer
 {
@@ -22,8 +23,11 @@ namespace PHO_WebApp.DataAccessLayer
             SqlCommand com = new SqlCommand("spGetPracticeStaffs", con);
             com.CommandType = CommandType.StoredProcedure;
 
+            //HttpContext.Current.Session["UserId"].ToString()
             //Session["UserDetails"]
-            int practiceId = 7;
+
+            //int practiceId = 7;
+            int practiceId = int.Parse(HttpContext.Current.Session["PracticeId"].ToString());
 
             //need later
             string tx = HttpContext.Current.Session["UserDetails"].ToString();
@@ -54,7 +58,7 @@ namespace PHO_WebApp.DataAccessLayer
             com.CommandType = CommandType.StoredProcedure;
 
             //Session["UserDetails"]
-            int practiceId = 7;
+            int practiceId = int.Parse(HttpContext.Current.Session["PracticeId"].ToString()); ;
 
             //need later
             string tx = HttpContext.Current.Session["UserDetails"].ToString();
@@ -180,7 +184,7 @@ namespace PHO_WebApp.DataAccessLayer
 
             //replace this part with coding when we have Create Staff part done
             //Create Staff is the prior step before creating user login per system design
-            com.Parameters["@PracticeId"].Value = 7;   //practice staff type id = 4           
+            com.Parameters["@PracticeId"].Value = int.Parse(HttpContext.Current.Session["PracticeId"].ToString()); ;   //practice staff type id = 4           
 
             //hard code for practice staff. Will be replaced with Staff Type look ups
             com.Parameters["@StaffTypeId"].Value = 5;
