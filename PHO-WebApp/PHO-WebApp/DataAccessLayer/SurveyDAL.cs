@@ -202,9 +202,11 @@ namespace PHO_WebApp.DataAccessLayer
                         sectionId = SharedLogic.ParseNumeric(r["SectionId"].ToString());
                         Section newS = CreateSectionModel(
                             SharedLogic.ParseNumeric(r["SectionId"].ToString()),
+                            r["SectionHeader"].ToString(),
                             r["SectionDescription"].ToString(),
                             SharedLogic.ParseNumericNullable(r["PropagationTypeId"].ToString()),
-                            SharedLogic.ParseNumericNullable(r["PhysicianLinkTypeId"].ToString())
+                            SharedLogic.ParseNumericNullable(r["PhysicianLinkTypeId"].ToString()),
+                            "10000" + ds.Tables[0].Rows.IndexOf(r).ToString()
                             );
                         returnObject.LastFormSection.Sections.Add(newS);
                     }
@@ -256,7 +258,7 @@ namespace PHO_WebApp.DataAccessLayer
         }
 
 
-        public int SaveSurveyFormResponse(int FormId, int FormResponseId, int PercentCompleted, bool Completed)
+        public int SaveSurveyFormResponse(int FormId, int FormResponseId, int PercentCompleted, bool Completed, int PracticeId)
         {
             int returnValue = 0;
 
@@ -276,8 +278,18 @@ namespace PHO_WebApp.DataAccessLayer
 
             com.Parameters.Add("@FormId", SqlDbType.Int);
             com.Parameters.Add("@PercentComplete", SqlDbType.Int);
+            com.Parameters.Add("@PracticeID", SqlDbType.Int);
             com.Parameters.Add("@Completed", SqlDbType.Bit);
             com.Parameters.Add("@DateCompleted", SqlDbType.DateTime);
+
+            if (PracticeId > 0)
+            {
+                com.Parameters["@PracticeID"].Value = PracticeId;
+            }
+            else
+            {
+                com.Parameters["@PracticeID"].Value = DBNull.Value;
+            }
 
             if (FormId > 0)
             {
@@ -335,6 +347,7 @@ namespace PHO_WebApp.DataAccessLayer
 
             com.Parameters.Add("@QuestionId", SqlDbType.Int);
             com.Parameters.Add("@FormResponseId", SqlDbType.Int);
+            com.Parameters.Add("@PhysicianStaffId", SqlDbType.Int);
             com.Parameters.Add("@ResponseText", SqlDbType.VarChar);
 
             if (FormResponseId > 0)
@@ -353,6 +366,14 @@ namespace PHO_WebApp.DataAccessLayer
             else
             {
                 com.Parameters["@QuestionId"].Value = DBNull.Value;
+            }
+            if (model.PhysicianStaffId > 0)
+            {
+                com.Parameters["@PhysicianStaffId"].Value = model.PhysicianStaffId;
+            }
+            else
+            {
+                com.Parameters["@PhysicianStaffId"].Value = DBNull.Value;
             }
 
             if (!string.IsNullOrWhiteSpace(model.Response_Text))
@@ -409,6 +430,7 @@ namespace PHO_WebApp.DataAccessLayer
             {
                 com.Parameters["@AnswerOptionId"].Value = DBNull.Value;
             }
+            
 
             con.Open();
             returnValue = (Int32)com.ExecuteScalar();
@@ -468,14 +490,24 @@ namespace PHO_WebApp.DataAccessLayer
             return c;
         }
 
-        public Section CreateSectionModel(int? SectionId, string SectionDescription, int? PropagationTypeId, int? SectionPhysicianLinkTypeId)
+        public Section CreateSectionModel(int? SectionId, string SectionHeader, string SectionDescription, int? PropagationTypeId, int? SectionPhysicianLinkTypeId, string uniqueId)
         {
             Section c = new Section();
+
+            c.PhysicianLinkUniqueId = "a" + uniqueId;
+            
             if (SectionId.HasValue)
             {
                 c.SectionId = SectionId.Value;
             }
-            c.SectionDescription = SectionDescription;
+            if (!string.IsNullOrWhiteSpace(SectionHeader))
+            {
+                c.SectionHeader = SectionHeader;
+            }
+            if (!string.IsNullOrWhiteSpace(SectionDescription))
+            {
+                c.SectionDescription = SectionDescription;
+            }
             if (PropagationTypeId.HasValue)
             {
                 c.PropagationTypeId = PropagationTypeId.Value;

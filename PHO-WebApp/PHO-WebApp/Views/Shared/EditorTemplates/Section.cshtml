@@ -7,9 +7,16 @@
 
 @Html.HiddenFor(model => model.SectionId)
 @Html.HiddenFor(model => model.SectionDescription)
+@Html.HiddenFor(model => model.SectionHeader)
+@Html.HiddenFor(model => model.PhysicianLinkUniqueId)
 <div>
-    <h4>@Html.Label(Model.SectionDescription)</h4>
+    <h4>@Html.Label(Model.SectionHeader)</h4>
 </div>
+
+@if (!string.IsNullOrWhiteSpace(Model.SectionDescription))
+{
+    <p><i>@(Model.SectionDescription)</i></p>
+}
 
 @Html.Partial("_PhysicianLink", Model)
 
@@ -21,3 +28,4 @@
 </table>
 <br />
 <hr />
+

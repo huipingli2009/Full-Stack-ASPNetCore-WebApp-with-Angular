@@ -22,4 +22,43 @@
     <input type="submit" name="Login" value="Submit" class="btn btn-primary" />
 }
 
+<script type="text/javascript">
+
+    function registerPhysicianLinkAutocomplete(uniqueId) {
+        $("#txtPhysician_" + uniqueId).autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Url.Action("GetPhysicianLinks", "Staffs")',
+                    datatype: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.label,
+                                value: item.val
+                            }
+                        }))
+                    }
+                })
+            },
+            select: function (event, ui) {
+                showPhysicianLinkLabel(uniqueId, 'Linked: ' + ui.item.label);
+                togglePhysicianLink(uniqueId);
+                $("#PhysicianStaffId_" + uniqueId).val(ui.item.value);
+            }
+        });
+    }
+
+    
+    function showPhysicianLinkLabel(uniqueId, display) {
+        $('#lblPhysicianLinkDisplay_' + uniqueId).text(display);
+    }
+    function togglePhysicianLink(uniqueId) {
+        $('#PhysicianLinkPanel_' + uniqueId + '_Set').collapse("toggle");
+        $('#PhysicianLinkPanel_' + uniqueId + '_Display').collapse("toggle");
+    }
+</script>
+
 
