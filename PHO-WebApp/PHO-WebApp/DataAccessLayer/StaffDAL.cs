@@ -8,7 +8,6 @@ using System.Data;
 using PHO_WebApp.Models;
 using System.Security.Cryptography;
 using PHO_WebApp.ViewModel;
-using PHO_WebApp.Controllers;
 
 namespace PHO_WebApp.DataAccessLayer
 {
@@ -16,36 +15,39 @@ namespace PHO_WebApp.DataAccessLayer
     {
         SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["con"].ConnectionString);
 
-        public List<Staff> getPracticeStaffs()
+        public List<Staff> getPracticeStaffs(int practiceId)
         {
             List<Staff> practiceStaffList = new List<Staff>();
 
             SqlCommand com = new SqlCommand("spGetPracticeStaffs", con);
             com.CommandType = CommandType.StoredProcedure;
 
-            //HttpContext.Current.Session["UserId"].ToString()
-            //Session["UserDetails"]
-
-            //int practiceId = 7;
-            int practiceId = int.Parse(HttpContext.Current.Session["PracticeId"].ToString());
-
-            //need later
-            string tx = HttpContext.Current.Session["UserDetails"].ToString();
 
             SqlParameter parameterPracticeId = new SqlParameter("@PracticeId", SqlDbType.Int);
             parameterPracticeId.Value = practiceId;
-            com.Parameters.Add(parameterPracticeId);                
+            com.Parameters.Add(parameterPracticeId);
 
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
 
-            da.Fill(ds); 
+            da.Fill(ds);
 
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
             {
                 Staff staff = CreateStaffModel(ds.Tables[0].Rows[i]);
                 practiceStaffList.Add(staff);
             }
+
+            return practiceStaffList;
+        }
+
+        public List<Staff> getPracticeProviders(int practiceId)
+        {
+            List<Staff> practiceStaffList = getPracticeStaffs(practiceId);
+
+            practiceStaffList.Where(c => c.DeletedFlag == false)
+                            .Where(c => c.StaffTypeId == (int)StaffTypeEnum.Provider)
+                            .Distinct().ToList();
 
             return practiceStaffList;
         }
@@ -58,7 +60,7 @@ namespace PHO_WebApp.DataAccessLayer
             com.CommandType = CommandType.StoredProcedure;
 
             //Session["UserDetails"]
-            int practiceId = int.Parse(HttpContext.Current.Session["PracticeId"].ToString()); ;
+            int practiceId = 7;
 
             //need later
             string tx = HttpContext.Current.Session["UserDetails"].ToString();
@@ -184,7 +186,7 @@ namespace PHO_WebApp.DataAccessLayer
 
             //replace this part with coding when we have Create Staff part done
             //Create Staff is the prior step before creating user login per system design
-            com.Parameters["@PracticeId"].Value = int.Parse(HttpContext.Current.Session["PracticeId"].ToString()); ;   //practice staff type id = 4           
+            com.Parameters["@PracticeId"].Value = 7;   //practice staff type id = 4           
 
             //hard code for practice staff. Will be replaced with Staff Type look ups
             com.Parameters["@StaffTypeId"].Value = 5;
