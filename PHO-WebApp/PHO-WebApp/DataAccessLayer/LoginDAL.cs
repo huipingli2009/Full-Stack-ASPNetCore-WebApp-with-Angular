@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Configuration;
 using System.Security.Cryptography;
+using PHO_WebApp.Controllers;
 
 
 namespace PHO_WebApp.DataAccessLayer
@@ -25,7 +26,7 @@ namespace PHO_WebApp.DataAccessLayer
             com.CommandType = CommandType.StoredProcedure;
 
             // Add Parameters to SPROC
-            SqlParameter parameterUserName= new SqlParameter("@UserName", SqlDbType.NVarChar, 50);
+            SqlParameter parameterUserName = new SqlParameter("@UserName", SqlDbType.NVarChar, 50);
             parameterUserName.Value = username;
             com.Parameters.Add(parameterUserName);
 
@@ -62,7 +63,7 @@ namespace PHO_WebApp.DataAccessLayer
         public UserDetails GetPersonLoginForLoginId(int loginId)
         {
             UserDetails returnObject = null;
-                        
+
             SqlCommand com = new SqlCommand("spGetPersonLoginForLoginId", con);
             //SqlCommand com = new SqlCommand("spGetPersonLoginForLoginId_new", con);
             com.CommandType = CommandType.StoredProcedure;
@@ -89,14 +90,15 @@ namespace PHO_WebApp.DataAccessLayer
         public UserDetails CreateUserDetailsModel()
         {
             UserDetails ud = new UserDetails();
-            
+
             ud.AllStaffTypes = GetStaffTypes();
             ud.StaffTypeId = -1;
             return ud;
         }
 
         public UserDetails CreateUserDetailsModel(DataRow dr)
-        {
+        {  
+
             UserDetails ud = new UserDetails();
             if (dr["LoginId"] != null && !string.IsNullOrWhiteSpace(dr["LoginId"].ToString()))
             {
@@ -207,7 +209,7 @@ namespace PHO_WebApp.DataAccessLayer
             {
                 com.Parameters["@Password"].Value = DBNull.Value;
             }
-            
+
             com.Parameters.Add("@CreatedByPersonId", SqlDbType.Int);
             if (!String.IsNullOrWhiteSpace(HttpContext.Current.Session["UserId"].ToString()))
             {

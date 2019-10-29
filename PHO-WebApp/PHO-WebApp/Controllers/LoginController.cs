@@ -16,7 +16,7 @@ namespace PHO_WebApp.Controllers
 
         DataAccessLayer.LoginDAL userLogin = new LoginDAL();
 
-        public ActionResult Login()
+       public ActionResult Login()
         {
             if (SavedUserDetails != null)
             {
@@ -26,7 +26,7 @@ namespace PHO_WebApp.Controllers
             {
                 return View("Login");
             }
-        }    
+        } 
 
         [HttpPost]
         public ActionResult SubmitLoginPartial(string username, string password)
@@ -43,6 +43,7 @@ namespace PHO_WebApp.Controllers
                         VerifyPassword(savedUserDetails.Password, password);
                         savedUserDetails.SessionId = this.Session.SessionID;
                         Session["UserId"] = id;
+                        Session["PracticeId"] = savedUserDetails.PracticeId;
                         Session["UserDetails"] = savedUserDetails;
                         SharedLogic.LogAudit(savedUserDetails, "LoginController", "SubmitLoginPartial", "Successful login. Username: " + savedUserDetails.UserName);
                     }

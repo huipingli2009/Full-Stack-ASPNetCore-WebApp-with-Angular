@@ -11,19 +11,26 @@ namespace PHO_WebApp.Models
         public int Id { get; set; }
         public int StaffId { get; set; }
 
-        //[Required(ErrorMessage = "First Name can't be blank")]
+        [Required(ErrorMessage = "*")]
         public string FirstName { get; set; }
 
-        //[Required(ErrorMessage = "Last Name can't be blank")]
+        [Required(ErrorMessage = "*")]
         public string LastName { get; set; }
 
-        //[Required(ErrorMessage = "Email can't be blank")]
+        [Required(ErrorMessage = "*")]
         public string EmailAddress { get; set; }
 
+        [Required(ErrorMessage = "*")]
         public string AddressLine1 { get; set; }
         public string AddressLine2 { get; set; }
+
+        [Required(ErrorMessage = "*")]
         public string City { get; set; }
+
+        [Required(ErrorMessage = "*")]
         public string State { get; set; }
+
+        [Required(ErrorMessage = "*")]
         public string Zip { get; set; }
 
         public string RegistryAccess { get; set; }
@@ -34,11 +41,12 @@ namespace PHO_WebApp.Models
         public string InterventionContact { get; set; }
 
         public int StateId { get; set; }
+       
         public int ?NPI { get; set; }
 
 
-        [DataType(DataType.PhoneNumber)]
-        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Not a valid phone number")]
+        //[DataType(DataType.PhoneNumber)]
+        //[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Not a valid phone number")]
         //[Required(ErrorMessage = "Phone number can't be blank")]
         public string Phone { get; set; }
 
@@ -63,12 +71,12 @@ namespace PHO_WebApp.Models
 
         public string CreatedbyId { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
+        //[DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
         public DateTime? CreatedOnDate { get; set; }
 
         public string ModifiedbyId { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
+        //[DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
         public DateTime? ModifiedDate { get; set; }
 
         public StaffTypeEnum StaffTypeEnum { get; set; }
