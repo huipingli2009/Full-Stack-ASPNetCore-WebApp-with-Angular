@@ -11,7 +11,7 @@ using PHO_WebApp.DataAccessLayer;
 
 namespace PHO_WebApp.Controllers
 {
-    public class QualityImprovementsController : Controller
+    public class QualityImprovementsController : BaseController
     {
         private QualityContext db = new QualityContext();
 
@@ -132,9 +132,8 @@ namespace PHO_WebApp.Controllers
 
         public ActionResult PracticeDashboard()
         {
-            //TO DO: Pull userid out of state
-            int userId = 2;
-            QualityImprovement QI = QIDAL.getAllQualityImprovementsForPractice(userId);
+            
+            QualityImprovement QI = QIDAL.getAllQualityImprovementsForPractice(SavedUserDetails.LoginId);
             return View("PracticeDashboard", QI);
         }
     }
