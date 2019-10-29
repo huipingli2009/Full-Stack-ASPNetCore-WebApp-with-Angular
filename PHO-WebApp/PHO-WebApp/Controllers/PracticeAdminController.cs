@@ -8,7 +8,7 @@ using PHO_WebApp.ViewModel;
 
 namespace PHO_WebApp.Controllers
 {
-    public class PracticeAdminController : Controller
+    public class PracticeAdminController : BaseController
     {
         //StaffDAL SD = new StaffDAL();
        
@@ -16,6 +16,7 @@ namespace PHO_WebApp.Controllers
         public ActionResult GetPracticeStaff()
         {
             PracticeAdmin pracAdmin = new PracticeAdmin();
+            pracAdmin.UserLogin = SavedUserDetails;
             //pracAdmin.PracStaff = SD.getPracticeStaffs();
             pracAdmin.HandleRequest();
 

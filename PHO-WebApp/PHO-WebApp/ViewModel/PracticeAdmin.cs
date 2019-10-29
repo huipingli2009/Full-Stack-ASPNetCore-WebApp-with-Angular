@@ -261,7 +261,7 @@ namespace PHO_WebApp.ViewModel
             StaffDAL std = new StaffDAL();
 
             //hardcoding this for a jif. Need to pull practiceId from either local property or controller layer
-            PracStaff = std.getPracticeStaffs(7); 
+            PracStaff = std.getPracticeStaffs(UserLogin.PracticeId); 
         }
 
         public void Insert(Staff model)
