@@ -206,7 +206,36 @@ namespace PHO_WebApp.Models
             }
         }
 
+        public void AssignPhysicianLinkKeys(Dictionary<string, string> dictionary)
+        {
+            foreach (KeyValuePair<string, string> entry in dictionary)
+            {
+                // do something with entry.Value or entry.Key
+                string uniqueId = entry.Key.Replace("PhysicianStaffId_", "");
+                string PhysicianStaffId = entry.Value;
 
+                foreach(FormSection fs in FormSections)
+                {
+                    if (fs.Sections != null)
+                    {
+                        foreach(Section s in fs.Sections)
+                        {
+                            if (s.PhysicianLinkUniqueId == uniqueId)
+                            {
+                                if (!string.IsNullOrWhiteSpace(PhysicianStaffId))
+                                {
+                                    s.PhysicianStaffId = SharedLogic.ParseNumeric(PhysicianStaffId);
+                                }
+                                else
+                                {
+                                    s.PhysicianStaffId = 0;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     public class FormSection
     {
@@ -259,19 +288,41 @@ namespace PHO_WebApp.Models
         private List<SectionQuestion> _SectionQuestions;
         private int _sectionId;
         private string _sectionDescription;
+        private string _sectionHeader;
+
+        //special behavior keys
         private int _PhysicianLinkTypeId;
         private int _PropagationTypeId;
+        private int _PhysicianStaffId;
+        private string _PhysicianLinkUniqueId;
+
+        public Section()
+        {
+
+        }
 
         public int SectionId
         {
             get { return _sectionId; }
             set { _sectionId = value; }
         }
+        public string SectionHeader
+        {
+            get { return _sectionHeader; }
+            set { _sectionHeader = value; }
+        }
         public string SectionDescription
         {
             get { return _sectionDescription; }
             set { _sectionDescription = value; }
         }
+        public string PhysicianLinkUniqueId
+        {
+            get { return _PhysicianLinkUniqueId; }
+            set { _PhysicianLinkUniqueId = value; }
+        }
+
+
         public List<SectionQuestion> SectionQuestions
         {
             get
@@ -312,6 +363,12 @@ namespace PHO_WebApp.Models
         {
             get { return this._PropagationTypeId; }
             set { this._PropagationTypeId = value; }
+        }
+
+        public int PhysicianStaffId
+        {
+            get { return _PhysicianStaffId; }
+            set { _PhysicianStaffId = value; }
         }
 
         public PhysicianLinkTypeEnum PhysicianLinkType

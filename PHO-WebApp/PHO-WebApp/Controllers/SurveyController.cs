@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace PHO_WebApp.Controllers
 {
-    public class SurveyController : Controller
+    public class SurveyController : BaseController
     {
         DataAccessLayer.SurveyDAL records = new DataAccessLayer.SurveyDAL();
 
@@ -53,10 +53,16 @@ namespace PHO_WebApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Save(SurveyForm model)
+        public ActionResult Save(FormCollection fc, SurveyForm model)
         {
             if (ModelState.IsValid && model != null && model.Responses != null)
             {
+                Dictionary<string, string> dictionary = fc.AllKeys
+                    .Where(k => k.StartsWith("PhysicianStaffId"))
+                    .ToDictionary(k => k, k => fc[k]);
+
+                model.AssignPhysicianLinkKeys(dictionary);
+
                 SaveForm(model);
 
                 return ViewSurveyDetails(model.FormId, "Data collection was saved successfully. ID = " + model.FormResponseId.ToString());
@@ -75,18 +81,49 @@ namespace PHO_WebApp.Controllers
 
         public void SaveForm(SurveyForm model)
         {
-            model.FormResponseId = records.SaveSurveyFormResponse(model.FormId, model.FormResponseId, model.PercentComplete, false);
-
-            foreach (QuestionResponse response in model.Responses)
+            if (model != null && model.Responses != null)
             {
-                int responseId = records.SaveSurveyResponse(response, model.FormResponseId);
+                model.FormResponseId = records.SaveSurveyFormResponse(model.FormId, model.FormResponseId, model.PercentComplete, false, PracticeId);
 
-                if (response.IsListQuestionType && response.ResponseAnswer != null && response.ResponseAnswer.AnswerOptionId > 0)
+
+                //Make sure an assigned staffID for the section is saved to the response as well
+                if (model.FormSections != null)
                 {
-                    response.ResponseAnswer.ResponseId = responseId;
-                    records.SaveSurveyResponseAnswer(response.ResponseAnswer);
+                    foreach (FormSection fs in model.FormSections)
+                    {
+                        if (fs.Sections != null)
+                        {
+                            foreach(Section s in fs.Sections)
+                            {
+                                if (s.SectionQuestions != null && s.PhysicianStaffId > 0)
+                                {
+                                    foreach(SectionQuestion sq in s.SectionQuestions)
+                                    {
+                                        if (sq.Question != null)
+                                        {
+                                            sq.Question.PhysicianStaffId = s.PhysicianStaffId;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+                //Save the responses
+                foreach (QuestionResponse response in model.Responses)
+                {
+                    int responseId = records.SaveSurveyResponse(response, model.FormResponseId);
+
+                    if (response.IsListQuestionType && response.ResponseAnswer != null && response.ResponseAnswer.AnswerOptionId > 0)
+                    {
+                        response.ResponseAnswer.ResponseId = responseId;
+                        records.SaveSurveyResponseAnswer(response.ResponseAnswer);
+                    }
                 }
             }
+            
         }
 
 

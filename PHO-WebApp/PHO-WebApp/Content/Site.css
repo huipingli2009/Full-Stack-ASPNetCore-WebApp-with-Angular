@@ -195,18 +195,24 @@ x
 }
 
 .panel-heading-initiative a:before {
+    font-family:"FontAwesome";
+    content: "\f105";
     color: #A57CB7;
     padding: 0px 5px 0px 5px;
     float: left;
     transition: all 0.4s;
 }
-.panel-heading-cohort a:before {    
+.panel-heading-cohort a:before {
+    font-family: "FontAwesome";
+    content: "\f105";
     color: #4C9E45;
     padding: 0px 5px 0px 5px;
     float: left;
     transition: all 0.4s;
 }
 .panel-heading-survey a:before {
+    font-family: "FontAwesome";
+    content: "\f105";
     color: #E73F50;
     padding: 0px 5px 0px 5px;
     float: left;

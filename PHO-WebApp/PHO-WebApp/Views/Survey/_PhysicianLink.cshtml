@@ -8,28 +8,31 @@
 @if (Model.PhysicianLinkType == PHO_WebApp.Models.PhysicianLinkTypeEnum.Allowed
 || Model.PhysicianLinkType == PHO_WebApp.Models.PhysicianLinkTypeEnum.Required)
 {
-    <p>
-        <i>This section requires a link to an existing physician.</i>
-        <strong id="sectionPhysicianLink" style="font-weight:bold"></strong>
-    </p>
 
-    <p>
-        <a class="btn btn-primary" data-toggle="collapse" href="@("#LinkPanel" + Model.SectionId)" role="button" aria-expanded="false" aria-controls="@("LinkPanel" + Model.SectionId)">Physician Lookup</a>
-    </p>
+    @*<p>
+        
+    </p>*@
     <div class="row" style="margin-bottom:5px;">
         <div class="col">
-            <div class="collapse" id="@("LinkPanel" + Model.SectionId)">
+            <div id="@("LinkPanel_" + Model.PhysicianLinkUniqueId)">
                 <div class="card card-body">
-
-                    <div class="input-group">
+                    <p>
+                        <h5>Physician Link</h5>
+                        <i>Requires a link to an existing practice physician. Select a physician below.</i>                        
+                    </p>
+                    <div class="input-group collapse show" id="@("PhysicianLinkPanel_" + Model.PhysicianLinkUniqueId + "_Set")">
                         <label for="txtPhysician">Physician Lookup: </label>
-                        <input type="text" id="txtPhysician" name="PhysicianName" style="font-style:italic" placeholder="Enter search term here" />
-                        <input type="hidden" id="hfPhysician" name="PhysicianId" />
-                        @*<div class="input-group-append">
-                                <button class="btn btn-secondary" type="button">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </div>*@
+                        <input type="text" id="@("txtPhysician_" + Model.PhysicianLinkUniqueId)" name="PhysicianName" style="font-style:italic" placeholder="Enter search term here" />
+                        <div class="input-group-append">
+                            <button class="btn btn-secondary" type="button">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                        <input type="hidden" name="@("PhysicianStaffId_" + Model.PhysicianLinkUniqueId)" id="@("PhysicianStaffId_" + Model.PhysicianLinkUniqueId)" value="@(Model.PhysicianStaffId)"  />
+                    </div>
+                    <div class="input-group collapse"  id="@("PhysicianLinkPanel_" + Model.PhysicianLinkUniqueId + "_Display")">
+                        <strong id="@("lblPhysicianLinkDisplay_" + Model.PhysicianLinkUniqueId)" style="font-weight:bold"></strong>&nbsp;
+                        <a class="btn btn-primary" data-toggle="collapse" onclick="@("togglePhysicianLink('" + Model.PhysicianLinkUniqueId + "')")" href="#" role="button" aria-expanded="false" aria-controls="@("LinkPanel_" + Model.PhysicianLinkUniqueId)">Reset</a>
                     </div>
                 </div>
             </div>
@@ -40,41 +43,11 @@
 
 
 
-    <script>
-    $(document).ready(function () {
-        $("#txtPhysician").autocomplete({
-        source: function (request, response) {
-            $.ajax({
-                url: '@Url.Action("GetPhysicianLinks", "Staffs")',
-                datatype: "json",
-                data: {
-                    term: request.term
-                },
-                success: function (data) {
-                    response($.map(data, function (item) {
-                        return {
-                            label: item.label,
-                            value: item.val,
-                            staffId: item.val
-                        }
-                    }))
-                }
-            })
-        },
-        select: function (event, ui) {
-            showLabel(ui.item.label + '');
-            hidePhysicianLink();
-            $("#hfPhysician").val(ui.item.value);
-        }
+    <script type="text/javascript">
+        $(document).ready(function () {
+            registerPhysicianLinkAutocomplete('@(Model.PhysicianLinkUniqueId)');
         });
 
-        function showLabel(display) {
-            $('#sectionPhysicianLink').text(display);
-        }
-        function hidePhysicianLink() {
-            $('@("#LinkPanel" + Model.SectionId)').collapse();
-        }
-});
     </script>
 
 }
