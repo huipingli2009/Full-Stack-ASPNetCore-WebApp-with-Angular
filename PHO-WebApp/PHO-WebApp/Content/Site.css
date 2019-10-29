@@ -195,6 +195,7 @@ x
 }
 
 .panel-heading-initiative a:before {
+    content: "\f105";
     color: #A57CB7;
     padding: 0px 5px 0px 5px;
     float: left;
