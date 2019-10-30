@@ -6,127 +6,133 @@
 <html>
 
 <head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>@ViewBag.Title - PHO Registry</title>
-	@Styles.Render("~/Content/css")
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - PHO Registry</title>
+    @Styles.Render("~/Content/css")
     @Styles.Render("~/Content/fontawesome")
     @Scripts.Render("~/bundles/modernizr")
-	<script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
-	@Scripts.Render("~/bundles/jquery")
+    <script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+    @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/jqueryval")
-	@RenderSection("scripts", required: false)
-	<link href="https://fonts.googleapis.com/css?family=Arvo|Nunito+Sans&display=swap" rel="stylesheet">
+    @RenderSection("scripts", required: false)
+    <link href="https://fonts.googleapis.com/css?family=Arvo|Nunito+Sans&display=swap" rel="stylesheet">
 </head>
 <body>
 
 
     <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
-        <div class="container">
-            <div class="mx-auto">
-                <a class="navbar-brand" href="@Url.Action("Index", "Home")"><img class="header-branding-logo" src="~/Images/TSCHS_LOGO_CMYK.jpg" style="width:182px; height:55px" /></a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+        <div style="width: 100%">
+            <div class="d-flex flex-row">
+                <div class="flex-column justify-content-start align-items-start">
+                    <a class="navbar-brand" href="@Url.Action(" Index", "Home" )"><img class="header-branding-logo" src="~/Images/TSCHS_LOGO_CMYK.jpg" style="width:182px; height:55px" /></a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+                <div class="ml-auto flex-column-reverse justify-content-end align-items-start">
+                    <ul class="navbar-nav">
+                        <li>
+                            @Html.Action("LoggedInAs", "Login")
+                        </li>
+                    </ul>
+                </div>
             </div>
+            <div class="flex-row row">
+                <div class="collapse navbar-collapse flex-column justify-content-start align-items-start" id="navbarNavDropdown">
 
-            <div class="collapse navbar-collapse flex-column" id="navbarNavDropdown">
-                <ul class="navbar-nav ml-auto">
-                    <li>
-                        @Html.Action("LoggedInAs", "Login")
-                    </li>
-                </ul>
-                <ul class="navbar-nav mr-auto">
-                    @{
-                        if (@SharedLogic.IsAuthenticated(new StaffTypeEnum[] { StaffTypeEnum.CCHMC_IS, StaffTypeEnum.PHO_Staff }, Session["UserDetails"]))
-                        {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarQualityImprovementDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Quality Improvement
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarQualityImprovementDropdownMenuLink">
-                                    <a class="dropdown-item" href="#">Network Dashboard</a>
-                                    @Html.RouteLink("Practice Dashboard", "PracticeDashboard", null, new { @class = "dropdown-item" })
-                                    <a class="dropdown-item" href="#">Quarterly Reports</a>
-                                    @Html.RouteLink("Initiatives", "Initiative", null, new { @class = "dropdown-item" })
-                                    @Html.RouteLink("Cohorts", "Cohort", null, new { @class = "dropdown-item" })
-                                    @Html.RouteLink("Measures", "Measure", null, new { @class = "dropdown-item" })
-                                    <a class="dropdown-item" href="#">Operational Reports</a>
-                                </div>
-                            </li>
+                    <ul class="navbar-nav mr-auto">
+                        @{
+                            if (@SharedLogic.IsAuthenticated(new StaffTypeEnum[] { StaffTypeEnum.CCHMC_IS, StaffTypeEnum.PHO_Staff }, Session["UserDetails"]))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarQualityImprovementDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Quality Improvement
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarQualityImprovementDropdownMenuLink">
+                                        <a class="dropdown-item" href="#">Network Dashboard</a>
+                                        @Html.RouteLink("Practice Dashboard", "PracticeDashboard", null, new { @class = "dropdown-item" })
+                                        <a class="dropdown-item" href="#">Quarterly Reports</a>
+                                        @Html.RouteLink("Initiatives", "Initiative", null, new { @class = "dropdown-item" })
+                                        @Html.RouteLink("Cohorts", "Cohort", null, new { @class = "dropdown-item" })
+                                        @Html.RouteLink("Measures", "Measure", null, new { @class = "dropdown-item" })
+                                        <a class="dropdown-item" href="#">Operational Reports</a>
+                                    </div>
+                                </li>
 
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDataCollectionDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Data Collection Tools
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDataCollectionDropdownMenuLink">
-                                    @Html.RouteLink("Workbooks", "Survey", null, new { @class = "dropdown-item" })
-                                    @Html.RouteLink("Patient Questionnaires", "Survey", null, new { @class = "dropdown-item" })
-                                    @Html.RouteLink("Practice Forms", "Survey", null, new { @class = "dropdown-item" })
-                                </div>
-                            </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDataCollectionDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Data Collection Tools
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDataCollectionDropdownMenuLink">
+                                        @Html.RouteLink("Workbooks", "Survey", null, new { @class = "dropdown-item" })
+                                        @Html.RouteLink("Patient Questionnaires", "Survey", null, new { @class = "dropdown-item" })
+                                        @Html.RouteLink("Practice Forms", "Survey", null, new { @class = "dropdown-item" })
+                                    </div>
+                                </li>
 
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarResourcesDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Resources
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarResourcesDropdownMenuLink">
-                                    <a class="dropdown-item" href="#">Data Governance</a>
-                                    <a class="dropdown-item" href="#">PHO Communications</a>
-                                    <a class="dropdown-item" href="#">Operations</a>
-                                    <a class="dropdown-item" href="#">Quality Improvement</a>
-                                    <a class="dropdown-item" href="#">CCHMC General</a>
-                                    <a class="dropdown-item" href="#">Education Provider Knowledge</a>
-                                    <a class="dropdown-item" href="#">Calendar</a>
-                                </div>
-                            </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarResourcesDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Resources
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarResourcesDropdownMenuLink">
+                                        <a class="dropdown-item" href="#">Data Governance</a>
+                                        <a class="dropdown-item" href="#">PHO Communications</a>
+                                        <a class="dropdown-item" href="#">Operations</a>
+                                        <a class="dropdown-item" href="#">Quality Improvement</a>
+                                        <a class="dropdown-item" href="#">CCHMC General</a>
+                                        <a class="dropdown-item" href="#">Education Provider Knowledge</a>
+                                        <a class="dropdown-item" href="#">Calendar</a>
+                                    </div>
+                                </li>
 
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarMyPracticeDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    My Practice
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarMyPracticeDropdownMenuLink">
-                                    <a class="dropdown-item" href="#">Patients</a>
-                                    @Html.RouteLink("Staff & Users", "PracticeAdmin", null, new { @class = "dropdown-item" })
-                                    <a class="dropdown-item" href="#">Alerts &amp; Subscriptions</a>
-                                    <a class="dropdown-item" href="#">Practice Info</a>
-                                </div>
-                            </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarMyPracticeDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        My Practice
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarMyPracticeDropdownMenuLink">
+                                        <a class="dropdown-item" href="#">Patients</a>
+                                        @Html.RouteLink("Staff & Users", "PracticeAdmin", null, new { @class = "dropdown-item" })
+                                        <a class="dropdown-item" href="#">Alerts &amp; Subscriptions</a>
+                                        <a class="dropdown-item" href="#">Practice Info</a>
+                                    </div>
+                                </li>
 
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarAdminDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Admin
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarAdminDropdownMenuLink">
-                                    <a class="dropdown-item" href="#">Practice Admin</a>
-                                    <a class="dropdown-item" href="#">QI Admin</a>
-                                    <a class="dropdown-item" href="#">User Admin</a>
-                                    <a class="dropdown-item" href="#">Alert Admin</a>
-                                    @Html.RouteLink("Data Dictionary", "DataDictionary", null, new { @class = "dropdown-item" })
-                                    <a class="dropdown-item" href="#">Comments &amp; Content</a>
-                                    <a class="dropdown-item" href="#">Operations (Misc.)</a>
-                                </div>
-                            </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarAdminDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Admin
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarAdminDropdownMenuLink">
+                                        <a class="dropdown-item" href="#">Practice Admin</a>
+                                        <a class="dropdown-item" href="#">QI Admin</a>
+                                        <a class="dropdown-item" href="#">User Admin</a>
+                                        <a class="dropdown-item" href="#">Alert Admin</a>
+                                        @Html.RouteLink("Data Dictionary", "DataDictionary", null, new { @class = "dropdown-item" })
+                                        <a class="dropdown-item" href="#">Comments &amp; Content</a>
+                                        <a class="dropdown-item" href="#">Operations (Misc.)</a>
+                                    </div>
+                                </li>
+                            }
                         }
-                    }
-                </ul>
+                    </ul>
+                </div>
             </div>
         </div>
-        
+
     </nav>
 
 
 
-	<div class="container body-content">
-		@RenderBody()
-		<hr />
-		<footer class="content-footer">
-			<p>&copy; @DateTime.Now.Year Tri-State Child Health Services - All rights reserved.</p>
-		</footer>
-	</div>
-	<div id='divLogon' style='z-index:10000'>
-	</div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer class="content-footer">
+            <p>&copy; @DateTime.Now.Year Tri-State Child Health Services - All rights reserved.</p>
+        </footer>
+    </div>
+    <div id='divLogon' style='z-index:10000'>
+    </div>
 </body>
 </html>
 
