@@ -9,7 +9,7 @@
     color: #767474;
     padding-top: 2px;
     padding-left: 30px;
-    z-index:-1 !important;
+    z-index: -1 !important;
     position: absolute;
 }
 
@@ -38,8 +38,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     white-space: normal;
 }
 
-.contentRow
-{
+.contentRow {
     border-spacing: 5px !important;
 }
 
@@ -54,8 +53,8 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 }
 
 .pho-scrollable-content html {
-    height:100%; 
-    max-height:100%;
+    height: 100%;
+    max-height: 100%;
 }
 
 .content-footer {
@@ -73,7 +72,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 }
 
 .Footer {
-    /* display: none; */    
+    /* display: none; */
     -webkit-font-smoothing: subpixel-antialiased;
     -moz-osx-font-smoothing: auto;
 }
@@ -83,19 +82,19 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     font-size: 20px;
     font-weight: bold;
     color: #006D63 !important;
-
 }
 
 .navbar .dropdown.show a:nth-child(odd) {
     background-color: #EBF7F0;
 }
+
 .navbar .dropdown.show a:nth-child(even) {
     background-color: #F7FDF9;
 }
 
 .pho-login div {
-    display:flex;
-    flex-direction:column;
+    display: flex;
+    flex-direction: column;
     /*overflow:hidden;*/
 }
 
@@ -103,6 +102,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     clear: both;
     /*position:relative;*/
 }
+
 .pho-login a {
     font-family: "Archer Bold";
     font-size: 14px;
@@ -120,13 +120,13 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     /*position: relative;*/
 }
 
-.top-left{
+.top-left {
     width: 250px;
     max-width: 300px;
 }
 
 .Header-branding-logo {
-    width: 7%; 
+    width: 7%;
     padding-bottom: 12px;
     padding-top: 12px;
 }
@@ -134,8 +134,9 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 .img-top1 {
     overflow: hidden;
     position: relative;
-    z-index:-1
+    z-index: -1
 }
+
 .table-container {
     overflow: scroll;
 }
@@ -195,13 +196,14 @@ x
 }
 
 .panel-heading-initiative a:before {
-    font-family:"FontAwesome";
+    font-family: "FontAwesome";
     content: "\f105";
     color: #A57CB7;
     padding: 0px 5px 0px 5px;
     float: left;
     transition: all 0.4s;
 }
+
 .panel-heading-cohort a:before {
     font-family: "FontAwesome";
     content: "\f105";
@@ -210,6 +212,7 @@ x
     float: left;
     transition: all 0.4s;
 }
+
 .panel-heading-survey a:before {
     font-family: "FontAwesome";
     content: "\f105";
@@ -239,9 +242,11 @@ x
 .dashboard-initiative {
     color: #A57CB7 !important;
 }
+
 .dashboard-cohort {
     color: #4C9E45 !important;
 }
+
 .dashboard-survey {
     color: #E73F50 !important;
 }
@@ -251,22 +256,23 @@ x
     vertical-align: top;
     font-family: 'Archer Bold';
 }
+
 .dashboard-input {
-    outline:none;
-    border:none;
-    resize:none !important;
-}
-
-
-.dashboard-input textarea {
-    resize: none;
     outline: none;
-    width: 100%;
-    padding: 10px;
     border: none;
-    height: 100%;
-    margin: -10px;
+    resize: none !important;
 }
+
+
+    .dashboard-input textarea {
+        resize: none;
+        outline: none;
+        width: 100%;
+        padding: 10px;
+        border: none;
+        height: 100%;
+        margin: -10px;
+    }
 
 .thead th {
     background-color: #0000FF !important;
@@ -285,4 +291,12 @@ x
 
 tbody tr:nth-child(odd) {
     background: #eee;
-} 
+}
+
+.login-welcome {
+    font-size: 12px;
+}
+
+.login-practice {
+    font-size: 16px;
+}

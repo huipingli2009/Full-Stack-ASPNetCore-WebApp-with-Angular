@@ -4,12 +4,12 @@
     {
         string loginText = "Welcome, " + Model.UserName;
 
-        <div>
-            <span>@Html.Label(loginText) | @Html.ActionLink("Log out", "Logout", "Login", null)</span>
+        <div class="container">
+            <div class="row"><span>@Html.Label(loginText, new { @class = "login-welcome" }) | @Html.ActionLink("Log out", "Logout", "Login", null)</span></div>
+            <div class="row"><span>@Html.Label(Model.PracticeName, new { @class = "login-practice" })</span></div>
         </div>
-    
-        @*<div class="pho-login-practice">ESD Pediatric Group</div>*@
-        
+
+
     }
     else
     {
