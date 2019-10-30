@@ -299,4 +299,8 @@ tbody tr:nth-child(odd) {
 
 .login-practice {
     font-size: 16px;
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    color: #272624;
 }
