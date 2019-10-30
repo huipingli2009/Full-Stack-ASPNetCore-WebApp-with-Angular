@@ -42,9 +42,7 @@ namespace PHO_WebApp.Controllers
                         UserDetails savedUserDetails = userLogin.GetPersonLoginForLoginId(id.Value);
                         VerifyPassword(savedUserDetails.Password, password);
                         savedUserDetails.SessionId = this.Session.SessionID;
-                        Session["UserId"] = id;
-                        Session["PracticeId"] = savedUserDetails.PracticeId;
-                        Session["UserDetails"] = savedUserDetails;
+                        SavedUserDetails = savedUserDetails;
                         SharedLogic.LogAudit(savedUserDetails, "LoginController", "SubmitLoginPartial", "Successful login. Username: " + savedUserDetails.UserName);
                     }
                     else
@@ -75,16 +73,16 @@ namespace PHO_WebApp.Controllers
 
         public ActionResult Logout()
         {
-            Session["UserDetails"] = null;
+            SavedUserDetails = null;
             return RedirectToAction("Index", "Home");
         }
 
         [ChildActionOnly]
         public ActionResult LoggedInAs()
         {
-            if (Session["UserDetails"] != null)
+            if (SavedUserDetails != null)
             {
-                return PartialView("LoggedInAs", (Models.UserDetails)Session["UserDetails"]);
+                return PartialView("LoggedInAs", SavedUserDetails);
             }
 
             return PartialView("LoggedInAs");
@@ -92,9 +90,9 @@ namespace PHO_WebApp.Controllers
 
         public ActionResult LoginForm()
         {
-            if (Session["UserDetails"] != null)
+            if (SavedUserDetails != null)
             {
-                return PartialView("LoginForm", (Models.UserDetails)Session["UserDetails"]);
+                return PartialView("LoginForm", SavedUserDetails);
             }
             else
             {

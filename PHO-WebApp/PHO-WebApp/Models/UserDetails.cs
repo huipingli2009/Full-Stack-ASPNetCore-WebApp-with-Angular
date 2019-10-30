@@ -37,5 +37,17 @@ namespace PHO_WebApp.Models
 
         public int PracticeId { get; set; }
         public string PracticeName { get; set; }
+
+        public bool IsLoggedIn
+        {
+            get
+            {
+                if (LoginId > 0)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
     }
 }

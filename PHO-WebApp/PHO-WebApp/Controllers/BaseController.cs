@@ -17,7 +17,7 @@ namespace PHO_WebApp.Controllers
             string controllerName = filterContext.RouteData.Values["controller"].ToString();
             string actionName = filterContext.RouteData.Values["action"].ToString();
 
-            SharedLogic.LogError(Session["UserDetails"], controllerName, actionName, filterContext.Exception);
+            SharedLogic.LogError(SavedUserDetails, controllerName, actionName, filterContext.Exception);
 
             //Redirect or return a view, but not both.
             filterContext.Result = RedirectToAction("Error", "Base");

@@ -59,10 +59,7 @@ namespace PHO_WebApp.DataAccessLayer
             SqlCommand com = new SqlCommand("spGetPracticeStaff", con);
             com.CommandType = CommandType.StoredProcedure;
                         
-
-            //need later
-            string tx = HttpContext.Current.Session["UserDetails"].ToString();
-
+            
             SqlParameter parameterStaffId = new SqlParameter("@StaffId", SqlDbType.Int);
             parameterStaffId.Value = stfId;
             com.Parameters.Add(parameterStaffId);
@@ -168,7 +165,7 @@ namespace PHO_WebApp.DataAccessLayer
             return s;
         }
 
-        public void AddStaff(PracticeAdmin model)
+        public void AddStaff(PracticeAdmin model, UserDetails userDetails)
         {
             SqlCommand com = new SqlCommand("spAddNewStaff", con);
             com.CommandType = CommandType.StoredProcedure;
@@ -229,9 +226,9 @@ namespace PHO_WebApp.DataAccessLayer
 
             com.Parameters["@CreatedById"].Value = model.Entity.NPI;
 
-            if (!String.IsNullOrWhiteSpace(HttpContext.Current.Session["UserId"].ToString()))
+            if (userDetails != null && userDetails.LoginId > 0)
             {
-                com.Parameters["@CreatedById"].Value = SharedLogic.ParseNumeric(HttpContext.Current.Session["UserId"].ToString());
+                com.Parameters["@CreatedById"].Value = userDetails.LoginId;
             }
             else
             {
