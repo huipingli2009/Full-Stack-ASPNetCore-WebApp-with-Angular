@@ -211,9 +211,9 @@ namespace PHO_WebApp.DataAccessLayer
             }
 
             com.Parameters.Add("@CreatedByPersonId", SqlDbType.Int);
-            if (!String.IsNullOrWhiteSpace(HttpContext.Current.Session["UserId"].ToString()))
+            if (UD != null && UD.LoginId > 0)
             {
-                com.Parameters["@CreatedByPersonId"].Value = int.Parse(HttpContext.Current.Session["UserId"].ToString());
+                com.Parameters["@CreatedByPersonId"].Value = UD.LoginId;
             }
             else
             {

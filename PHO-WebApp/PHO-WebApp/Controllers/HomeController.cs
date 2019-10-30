@@ -23,7 +23,7 @@ namespace PHO_WebApp.Controllers
         {
             bool returnValue = false;
 
-            if (Session["UserDetails"] != null)
+            if (SavedUserDetails != null && SavedUserDetails.IsLoggedIn)
             {
                 returnValue = true;
             }
@@ -31,27 +31,6 @@ namespace PHO_WebApp.Controllers
             return returnValue;
         }
 
-        public bool IsAuthenticated(StaffTypeEnum[] authorizedStaffTypes)
-        {
-            bool returnValue = false;
-
-            if (Session["UserDetails"] != null)
-            {
-                UserDetails user = (UserDetails)Session["UserDetails"];
-                if (user.StaffTypeId > 0)
-                {
-                    foreach(StaffTypeEnum stafftype in authorizedStaffTypes)
-                    {
-                        if (user.StaffTypeId == (int)stafftype)
-                        {
-                            returnValue = true;
-                        }
-                    }
-                }
-            }
-
-            return returnValue;
-        }
 
         public ActionResult Index()
         {
@@ -161,16 +140,6 @@ namespace PHO_WebApp.Controllers
             //return View("DataDictionary");
         }
 
-        public ActionResult LoggedInAs()
-        {
-            if (Session["UserDetails"] != null)
-            {
-                this.user = (Models.UserDetails)Session["UserDetails"];
-            }
-            ViewBag.UserName = this.user.UserName;
-                
-            return LoggedInAs();
-        }
 
         public ActionResult Login()
         {

@@ -4,6 +4,7 @@
 
 <!DOCTYPE html>
 <html>
+
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -115,92 +116,6 @@
         
     </nav>
 
-    @*<div class="container navbar navbar-default navbar-static-top Header--top Header-nav">
-        <div class="navbar-header top-left">
-            <a href="@Url.Action("Index", "Home")"><img class="header-branding-logo" src="~/Images/TSCHS_LOGO_CMYK.jpg" style="width:225px; height:67px" /></a>
-        </div>
-        <nav class="Header-nav Header-nav--primary top-right" data-nc-container="top-right">
-            <ul class="nav navbar-nav">
-                @{
-                    if (@SharedLogic.IsAuthenticated(new StaffTypeEnum[] { StaffTypeEnum.CCHMC_IS, StaffTypeEnum.PHO_Staff }, Session["UserDetails"]))
-                    {
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                Quality Improvement
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Network Dashboard</a></li>
-                                <li>@Html.RouteLink("Practice Dashboard", "PracticeDashboard", null, new { })</li>
-                                <li><a href="#">Quarterly Reports</a></li>
-                                <li>@Html.RouteLink("Initiatives", "Initiative", null, new { })</li>
-                                <li>@Html.RouteLink("Cohorts", "Cohort", null, new { })</li>
-                                <li>@Html.RouteLink("Measures", "Measure", null, new { })</li>
-                                <li><a href="#">Operational Reports</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                Data Collection Tools
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>@Html.RouteLink("Workbooks", "Survey", null, new { })</li>
-                                <li>@Html.RouteLink("Patient Questionnaires", "Survey", null, new { })</li>
-                                <li>@Html.RouteLink("Practice Forms", "Survey", null, new { })</li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                Resources
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Data Governance</a></li>
-                                <li><a href="#">PHO Communications</a></li>
-                                <li><a href="#">Operations</a></li>
-                                <li><a href="#">Quality Improvement</a></li>
-                                <li><a href="#">CCHMC General</a></li>
-                                <li><a href="#">Education Provider Knowledge</a></li>
-                                <li><a href="#">Calendar</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                My Practice
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Patients</a></li>
-                                <li><a href="#">Staff &amp; Users</a></li>
-                                <li><a href="#">Alerts &amp; Subscriptions</a></li>
-                                <li><a href="#">Practice Info</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Dropdown link
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a href="#">Practice Admin</a>
-                                <a href="#">QI Admin</a>
-                                <a href="#">User Admin</a>
-                                <a href="#">Alert Admin</a>
-                                @Html.RouteLink("Data Dictionary", "DataDictionary", null, new { })
-                                <a href="#">Comments &amp; Content</a>
-                                <a href="#">Operations (Misc.)</a>
-                            </div>
-                        </li>
-
-                    }
-                }
-                <li>@Html.Action("LoggedInAs", "Login")</li>
-            </ul>
-
-
-        </nav>
-
-    </div>*@
 
 
 	<div class="container body-content">

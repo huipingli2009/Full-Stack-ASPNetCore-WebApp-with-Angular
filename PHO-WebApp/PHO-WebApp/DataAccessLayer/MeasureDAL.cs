@@ -13,12 +13,10 @@ namespace PHO_WebApp.DataAccessLayer
     {
         SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["con"].ConnectionString);
 
-        public List<Measure> getAllMeasures()
+        public List<Measure> getAllMeasures(UserDetails ud)
         {
            
-            int userId = 0;
-
-            userId = (int)System.Web.HttpContext.Current.Session["UserId"];
+            
         
 
 
@@ -28,7 +26,7 @@ namespace PHO_WebApp.DataAccessLayer
             com.CommandType = CommandType.StoredProcedure;
 
             //newly added
-            com.Parameters.Add(new SqlParameter("@userID", userId));
+            com.Parameters.Add(new SqlParameter("@userID", ud.LoginId));
 
 
 

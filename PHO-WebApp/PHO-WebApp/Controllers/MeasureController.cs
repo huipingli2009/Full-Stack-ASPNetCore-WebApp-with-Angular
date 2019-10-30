@@ -9,7 +9,7 @@ using System.Dynamic;   //new reference
 
 namespace PHO_WebApp.Controllers
 {
-    public class MeasureController : Controller
+    public class MeasureController : BaseController
     {
         DataAccessLayer.MeasureDAL MD = new MeasureDAL();
         DataAccessLayer.LoginDAL UL = new LoginDAL();
@@ -18,7 +18,7 @@ namespace PHO_WebApp.Controllers
         public ActionResult Index()
         {
             List<Measure> AllMeasureRecords = new List<Measure>();
-            AllMeasureRecords = MD.getAllMeasures();
+            AllMeasureRecords = MD.getAllMeasures(SavedUserDetails);
 
             ////New development secion starts here ----------------------
             //int loginId = 2;

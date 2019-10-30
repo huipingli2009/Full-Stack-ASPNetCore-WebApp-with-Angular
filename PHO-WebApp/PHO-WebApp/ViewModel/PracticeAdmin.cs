@@ -261,7 +261,7 @@ namespace PHO_WebApp.ViewModel
             StaffDAL std = new StaffDAL();
 
             //hardcoding this for a jif. Need to pull practiceId from either local property or controller layer
-            PracStaff = std.getPracticeStaffs(7); 
+            PracStaff = std.getPracticeStaffs(UserLogin.PracticeId); 
         }
 
         public void Insert(Staff model)
@@ -281,7 +281,7 @@ namespace PHO_WebApp.ViewModel
 
             //replace this part with coding when we have Create Staff part done
             //Create Staff is the prior step before creating user login per system design
-            com.Parameters["@PracticeId"].Value = int.Parse(HttpContext.Current.Session["PracticeId"].ToString()); ;   //practice staff type id = 4           
+            com.Parameters["@PracticeId"].Value = UserLogin.PracticeId; ;   //practice staff type id = 4           
 
             //hard code for practice staff. Will be replaced with Staff Type look ups
             com.Parameters["@StaffTypeId"].Value = 5;
@@ -338,9 +338,9 @@ namespace PHO_WebApp.ViewModel
 
             //com.Parameters["@CreatedById"].Value = model.NPI;
 
-            if (!String.IsNullOrWhiteSpace(HttpContext.Current.Session["UserId"].ToString()))
+            if (UserLogin != null && UserLogin.LoginId > 0)
             {
-                com.Parameters["@CreatedById"].Value = int.Parse(HttpContext.Current.Session["UserId"].ToString());
+                com.Parameters["@CreatedById"].Value = UserLogin.LoginId;
             }
             else
             {
@@ -424,9 +424,9 @@ namespace PHO_WebApp.ViewModel
 
             //com.Parameters["@CreatedById"].Value = model.NPI;
 
-            if (!String.IsNullOrWhiteSpace(HttpContext.Current.Session["UserId"].ToString()))
+            if (UserLogin != null && UserLogin.LoginId > 0)
             {
-                com.Parameters["@ModifiedById"].Value = int.Parse(HttpContext.Current.Session["UserId"].ToString());
+                com.Parameters["@ModifiedById"].Value = UserLogin.LoginId;
             }
             else
             {
@@ -449,9 +449,9 @@ namespace PHO_WebApp.ViewModel
 
             com.Parameters["@Id"].Value = stf.Id;
 
-            if (!String.IsNullOrWhiteSpace(HttpContext.Current.Session["UserId"].ToString()))
+            if (UserLogin != null && UserLogin.LoginId > 0)
             {
-                com.Parameters["@DeletedById"].Value = int.Parse(HttpContext.Current.Session["UserId"].ToString());
+                com.Parameters["@DeletedById"].Value = UserLogin.LoginId;
             }
             else
             {
