@@ -6,7 +6,7 @@
 
         <div class="container">
             <div class="row"><span>@Html.Label(loginText, new { @class = "login-welcome" }) | @Html.ActionLink("Log out", "Logout", "Login", null)</span></div>
-            <div class="row"><span>@Html.Label(Model.PracticeName, new { @class = "login-practice" })</span></div>
+            <div class="row"><p class="login-practice">@(Model.PracticeName)</p></div>
         </div>
 
 
