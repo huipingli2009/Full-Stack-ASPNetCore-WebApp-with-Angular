@@ -400,6 +400,22 @@ namespace PHO_WebApp.Models
                 }
             }
         }
+
+        public Section Clone()
+        {
+            Section returnObj = (Section)this.MemberwiseClone();
+            returnObj.SectionId = 0;
+            returnObj.PhysicianStaffId = 0;
+            returnObj._PhysicianLinkUniqueId = "20000" + new Random().Next(1, 1000);
+
+            returnObj.SectionQuestions = new List<SectionQuestion>();
+            foreach (SectionQuestion sq in SectionQuestions)
+            {
+                returnObj.SectionQuestions.Add(sq.Clone());
+            }
+
+            return returnObj;
+        }
     }
     public class SectionQuestion
     {
@@ -432,6 +448,14 @@ namespace PHO_WebApp.Models
             {
                 this._Question = value;
             }
+        }
+        
+        public SectionQuestion Clone()
+        {
+            SectionQuestion returnObj = (SectionQuestion)this.MemberwiseClone();
+            returnObj.Question = Question.Clone();
+
+            return returnObj;
         }
     }
 
@@ -485,6 +509,7 @@ namespace PHO_WebApp.Models
             get { return _PercentCompleted; }
             set { _PercentCompleted = value; }
         }
+
     }
     
     [FluentValidation.Attributes.Validator(typeof(ResponseValidator))]
@@ -579,6 +604,16 @@ namespace PHO_WebApp.Models
             get { return _responseAnswer; }
             set { _responseAnswer = value; }
         }
+        
+        public QuestionResponse Clone()
+        {
+            QuestionResponse returnObj = (QuestionResponse)this.MemberwiseClone();
+            returnObj.Response_Text = string.Empty;
+            returnObj.ResponseId = 0;
+            returnObj.ResponseAnswer = ResponseAnswer.Clone();
+
+            return returnObj;
+        }
 
         public bool IsListQuestionType
         {
@@ -610,28 +645,6 @@ namespace PHO_WebApp.Models
         }
     }
 
-    //[FluentValidation.Attributes.Validator(typeof(ResponseValidator))]
-    //public class Response
-    //{
-    //    private int _QuestionId;
-    //    private string _response_Text;
-    //    private ResponseAnswer _responseAnswer;
-    //    private bool _required;
-
-    //    public int QuestionId
-    //    {
-    //        get { return _QuestionId; }
-    //        set { _QuestionId = value; }
-    //    }
-
-
-    //    public bool Required
-    //    {
-    //        get { return _required; }
-    //        set { _required = value; }
-    //    }
-
-    //}
 
     public class ResponseAnswer
     {
@@ -655,6 +668,17 @@ namespace PHO_WebApp.Models
             get { return _ResponseAnswersId; }
             set { _ResponseAnswersId = value; }
         }
+
+        public ResponseAnswer Clone()
+        {
+            ResponseAnswer returnObj = (ResponseAnswer)this.MemberwiseClone();
+            returnObj.ResponseId = 0;
+            returnObj.AnswerOptionId = 0;
+            returnObj.ResponseAnswersId = 0;
+
+            return returnObj;
+        }
+
     }
 
 

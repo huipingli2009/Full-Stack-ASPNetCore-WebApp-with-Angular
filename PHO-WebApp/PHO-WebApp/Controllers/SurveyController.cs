@@ -21,15 +21,15 @@ namespace PHO_WebApp.Controllers
             return View(model);
         }
 
-        public ActionResult CompleteNewSurvey(int id)
+        public ActionResult Display(int id, int formResponseId)
         {
-            SurveyForm model = records.LoadSurveyQuestions(id, 0);
-            Session["CachedSurvey_" + id.ToString() + "_0"] = model;
-            return View("Display", model);
-        }
-        public ActionResult LoadExistingSurvey(int id, int formResponseId)
-        {
-            SurveyForm model = records.LoadSurveyQuestions(id, formResponseId);
+            //formResponseID should be 0 by default
+            int pFormResponseId = 0;
+            if (formResponseId > 0)
+            {
+                pFormResponseId = formResponseId;
+            }
+            SurveyForm model = records.LoadSurveyQuestions(id, pFormResponseId);
             Session["CachedSurvey_" + id.ToString() + "_" + formResponseId.ToString()] = model;
             return View("Display", model);
         }
@@ -53,7 +53,7 @@ namespace PHO_WebApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Save(FormCollection fc, SurveyForm model)
+        public ActionResult Submit(FormCollection fc, SurveyForm model)
         {
             if (ModelState.IsValid && model != null && model.Responses != null)
             {

@@ -8,7 +8,7 @@
 
 <h2>Survey - @Model.Survey_Title</h2>
 
-@using (Html.BeginForm("Save", "Survey", FormMethod.Post))
+@using (Html.BeginForm("Submit", "Survey", FormMethod.Post))
 {
     @Html.HiddenFor(m => Model.FormId);
     @Html.HiddenFor(m => Model.FormResponseId);
@@ -19,7 +19,7 @@
         @Html.EditorFor(model => Model.FormSections[i])
     }
 
-    <input type="submit" name="Login" value="Submit" class="btn btn-primary" />
+    <input type="submit" name="Save" value="Submit" class="btn btn-primary" />
 }
 
 <script type="text/javascript">

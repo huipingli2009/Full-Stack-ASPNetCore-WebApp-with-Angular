@@ -12,7 +12,7 @@
         {
             <hr />
             <div>
-                <h4>@Html.ActionLink(item.Survey_Title, "ViewSurveyDetails", new { id = item.FormId }) &nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp; <a href="@Url.Action("CompleteNewSurvey", "Survey", new { id = item.FormId })"><img class="" src="~/Images/addnew.jpg" style="width:20px; height:20px" /></a></h4>
+                <h4>@Html.ActionLink(item.Survey_Title, "ViewSurveyDetails", new { id = item.FormId }) &nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp; <a href="@Url.Action("Display", "Survey", new { id = item.FormId })"><img class="" src="~/Images/addnew.jpg" style="width:20px; height:20px" /></a></h4>
                                 
                 <p><i>@item.Description</i></p>
                 <div>
@@ -33,7 +33,7 @@
                         @foreach (var res in item.RecentInProgress)
                         {
                             <tr>
-                                <td>@Html.ActionLink(res.FormResponseId.ToString(), "LoadExistingSurvey", new { id = res.FormId, formResponseId = res.FormResponseId.ToString() })</td>
+                                <td>@Html.ActionLink(res.FormResponseId.ToString(), "Display", new { id = res.FormId, formResponseId = res.FormResponseId.ToString() })</td>
                                 <td>
                                     @if (res.DateCreated > DateTime.Now.AddYears(-20))
                                     {
