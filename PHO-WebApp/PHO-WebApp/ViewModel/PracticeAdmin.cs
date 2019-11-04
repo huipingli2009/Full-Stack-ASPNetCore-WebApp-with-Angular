@@ -420,7 +420,16 @@ namespace PHO_WebApp.ViewModel
                 com.Parameters["@Phone"].Value = DBNull.Value;
             }
 
-            com.Parameters["@NPI"].Value = model.NPI;
+            //com.Parameters["@NPI"].Value = model.NPI;
+
+            if (!String.IsNullOrWhiteSpace(model.NPI.ToString()))
+            {
+                com.Parameters["@NPI"].Value = model.NPI;
+            }
+            else
+            {
+                com.Parameters["@NPI"].Value = DBNull.Value;
+            }
 
             //com.Parameters["@CreatedById"].Value = model.NPI;
 

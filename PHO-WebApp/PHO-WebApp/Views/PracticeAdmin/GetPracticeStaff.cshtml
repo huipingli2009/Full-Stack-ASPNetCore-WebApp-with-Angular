@@ -22,6 +22,11 @@
 		@Html.HiddenFor(m => m.EventCommand)
 		@Html.HiddenFor(m => m.Mode)
 		@Html.HiddenFor(m => m.EventArgument)
+		@Html.HiddenFor(m => m.UserLogin.PracticeId)
+		@Html.HiddenFor(m => m.UserLogin.PracticeName)
+		@Html.HiddenFor(m => m.UserLogin.LoginId)
+		@Html.HiddenFor(m => m.UserLogin.StaffId)
+		@Html.HiddenFor(m => m.UserLogin.UserName)
 
 		<!--Begin Staff Details Area for Creating a new staff-->
 		if (Model.IsStaffDetailsAreaVisible)
@@ -33,21 +38,21 @@
 				<div class="panel-body">
 					<!--Begin message area-->
 					@*<div class="row">
-						<div class="col-sm-12">
-							@if (!Model.IsValid)
-							{
-								<div class="alert alert-danger alert-dismissable" role="alert">
-									<button type="button" class="close" data-dismiss="alert">
-										<span area-hidden="true">
-											&times;
-										</span>
-										<span class="sr-only">Close</span>
-									</button>
-									@Html.ValidationSummary(false)
-								</div>
-							}
-						</div>
-					</div>*@
+							<div class="col-sm-12">
+								@if (!Model.IsValid)
+								{
+									<div class="alert alert-danger alert-dismissable" role="alert">
+										<button type="button" class="close" data-dismiss="alert">
+											<span area-hidden="true">
+												&times;
+											</span>
+											<span class="sr-only">Close</span>
+										</button>
+										@Html.ValidationSummary(false)
+									</div>
+								}
+							</div>
+						</div>*@
 					<!--End message area-->
 					<div class="form-group">
 						@Html.LabelFor(m => m.Entity.FirstName, "First Name")
@@ -106,10 +111,10 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<button id="btnSave" class="btn btn-sm btn-primary" data-pdsa-action="SaveStaff">
-								<i class="glyphicon glyphicon-save"></i>&nbsp;Save
-							</button>							
+								<i class="fas fa-save"></i>&nbsp;Save
+							</button>
 							<button id="btnCancel" class="btn btn-sm btn-primary" formnovalidate="formnovalidate" data-pdsa-action="cancel">
-								<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;Cancel
+								<i class="fas fa-strikethrough"></i>&nbsp;Cancel
 							</button>
 						</div>
 					</div>
@@ -192,7 +197,8 @@
 								</td>*@
 							<td>
 								<a href="#" data-pdsa-action="EditStaff" data-pdsa-val="@item.Id" class="btn btn-default btn-sm btn-link">
-									<i class="glyphicon glyphicon-edit"></i>
+									@*<i class="glyphicon glyphicon-edit"></i>*@
+									<i class="fas fa-edit"></i>
 								</a>
 							</td>
 							<td>
@@ -247,7 +253,7 @@
 							<td class="pdsa-action-button-column">
 								<a href="#" id="Delete" data-pdsa-action="DeleteStaff" data-pdsa-val="@item.Id" class="btn btn-default btn-sm btn-link"
 								   onclick="return confirm('Are you sure you want to delete this staff from your practice?');">
-									<i class="glyphicon glyphicon-trash"></i>
+									<i class="fas fa-trash-alt"></i>
 								</a>
 							</td>
 						</tr>
@@ -256,7 +262,7 @@
 			</table>
 			<div>
 				<button id="btnAdd" class="btn btn-sm btn-primary pull-right" data-pdsa-action="AddStaff">
-					<i class="glyphicon glyphicon-plus-sign"></i>
+					<i class="fas fa-plus-circle"></i>
 					&nbsp;Add New Staff
 				</button>
 			</div>
@@ -266,7 +272,7 @@
 	}
 
 	<script type="text/javascript">
-		$(document).ready(function () {			
+		$(document).ready(function () {
 			$("[data-pdsa-action]").on("click", function (e) {
 				e.preventDefault();
 
@@ -275,18 +281,18 @@
 				$("form").submit();
 			});
 
-			//$("#Delete").on("click", function (e) {				
-			//	e.preventDefault();				
+			$("#Delete").on("click", function (e) {
+				e.preventDefault();
 
-			//	var choice = confirm($(this).attr('data-confirm'));
+				var choice = confirm($(this).attr('data-confirm'));
 
-			//	if (choice) {
-			//		window.location.href = $(this).attr('href');
-			//	}
-			//	else {
-			//		return false;
-			//	}
-			//});
+				if (choice) {
+					window.location.href = $(this).attr('href');
+				}
+				else {
+					return false;
+				}
+			});
 		});
 	</script>
 </body>
