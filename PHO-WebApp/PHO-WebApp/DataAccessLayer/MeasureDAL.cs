@@ -26,7 +26,7 @@ namespace PHO_WebApp.DataAccessLayer
             com.CommandType = CommandType.StoredProcedure;
 
             //newly added
-            com.Parameters.Add(new SqlParameter("@userID", ud.LoginId));
+            com.Parameters.Add(new SqlParameter("@userID", ud.StaffId));
 
 
 
