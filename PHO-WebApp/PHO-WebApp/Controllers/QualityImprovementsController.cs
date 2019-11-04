@@ -133,7 +133,7 @@ namespace PHO_WebApp.Controllers
         public ActionResult PracticeDashboard()
         {
             
-            QualityImprovement QI = QIDAL.getAllQualityImprovementsForPractice(SavedUserDetails.LoginId);
+            QualityImprovement QI = QIDAL.getAllQualityImprovementsForPractice(SavedUserDetails.StaffId);
             return View("PracticeDashboard", QI);
         }
     }
