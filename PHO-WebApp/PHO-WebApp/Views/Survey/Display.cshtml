@@ -19,7 +19,7 @@
         @Html.EditorFor(model => Model.FormSections[i])
     }
 
-    <input type="submit" name="Save" value="Submit" class="btn btn-primary" />
+    <input type="submit" name="Submit" formaction="@Url.Action("Submit","Survey")" formmethod="post" value="Submit" class="btn btn-primary" />
 }
 
 <script type="text/javascript">

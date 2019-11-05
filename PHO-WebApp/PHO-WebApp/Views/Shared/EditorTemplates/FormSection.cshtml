@@ -7,6 +7,6 @@
 @Html.HiddenFor(m => m.FormSectionId)
 @for (var i = 0; i < Model.Sections.Count(); i++)
 {
-    <input type="submit" name="@("Clone:" + Model.Sections[i].SectionId)" value="Clone" class="btn btn-primary" />
+    <input type="submit" name="Submit" formaction="@Url.Action("CloneSection","Survey", new { id=Model.Sections[i].SectionId })" formmethod="post" value="Clone" class="btn btn-primary" />
     @Html.EditorFor(m => m.Sections[i])
 }

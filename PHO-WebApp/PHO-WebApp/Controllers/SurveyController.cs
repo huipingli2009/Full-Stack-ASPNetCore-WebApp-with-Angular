@@ -21,15 +21,9 @@ namespace PHO_WebApp.Controllers
             return View(model);
         }
 
-        public ActionResult Display(int id, int formResponseId)
+        public ActionResult Display(int id, int? formResponseId)
         {
-            //formResponseID should be 0 by default
-            int pFormResponseId = 0;
-            if (formResponseId > 0)
-            {
-                pFormResponseId = formResponseId;
-            }
-            SurveyForm model = records.LoadSurveyQuestions(id, pFormResponseId);
+            SurveyForm model = records.LoadSurveyQuestions(id, formResponseId);
             Session["CachedSurvey_" + id.ToString() + "_" + formResponseId.ToString()] = model;
             return View("Display", model);
         }
@@ -49,6 +43,13 @@ namespace PHO_WebApp.Controllers
         public ActionResult DisplaySection(int id)
         {
             SurveyForm model = records.LoadSurveyQuestions(id, 0);
+            return View("DisplaySection", model);
+        }
+
+        [HttpPost]
+        public ActionResult CloneSection(FormCollection fc, SurveyForm model, int? sectionId)
+        {
+            //SurveyForm model = records.LoadSurveyQuestions(id, 0);
             return View("DisplaySection", model);
         }
 
