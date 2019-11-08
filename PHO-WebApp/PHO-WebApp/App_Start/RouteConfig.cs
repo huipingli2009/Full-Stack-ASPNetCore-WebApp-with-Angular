@@ -87,7 +87,13 @@ namespace PHO_WebApp
             name: "Staff",
             url: "Staff",
             defaults: new { controller = "Staffs", action = "Index", id = UrlParameter.Optional }
-           );          
+           );
+
+            routes.MapRoute(
+           name: "Patients",
+           url: "Patient/GetPatients",
+           defaults: new { controller = "Patient", action = "GetPatients", id = UrlParameter.Optional }
+          );
 
         }
     }

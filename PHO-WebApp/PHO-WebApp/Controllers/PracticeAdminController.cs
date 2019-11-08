@@ -10,9 +10,7 @@ using PHO_WebApp.ViewModel;
 namespace PHO_WebApp.Controllers
 {
     public class PracticeAdminController : BaseController
-    {
-        //StaffDAL SD = new StaffDAL();
-       
+    {       
         // GET: PracticeAdmin
         public ActionResult GetPracticeStaff()
         {

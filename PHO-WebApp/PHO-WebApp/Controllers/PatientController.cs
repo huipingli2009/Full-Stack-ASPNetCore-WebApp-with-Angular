@@ -2,24 +2,32 @@
 using System;
 using System.Data;
 using System.Web.Mvc;
+using PHO_WebApp.Models;
 
 namespace PHO_WebApp.Controllers
 {
     public class PatientController : BaseController
     {       
-        DataAccessLayer.Patients pts = new Patients();
+        DataAccessLayer.Patients pts = new Patients();       
         
         public ActionResult GetPatients()
         {
-            //DataSet ds = pt.GetPatients();
-            DataSet ds = pts.GetPatients();
+            int practiceId = SavedUserDetails.PracticeId;
+            //DataSet ds = pt.GetPatients(); use SPA id = 37 for now
+            
+            DataSet ds = pts.GetPatients(practiceId);
             ViewBag.patients = ds.Tables[0];
             
             return View();
         }
 
-        public ActionResult GetPatientInfo(int id)
+        //public ActionResult GetPatientInfo(int id)
+        public ActionResult GetPatientInfo(int id)             
         {
+            //Patient pt = new Patient();
+            //pt = null;
+            //pt = this.GetPatientInfo(id);
+
             DataSet ds = pts.GetPatientInfo(id);
             ViewBag.patient = ds.Tables[0];
             return View();

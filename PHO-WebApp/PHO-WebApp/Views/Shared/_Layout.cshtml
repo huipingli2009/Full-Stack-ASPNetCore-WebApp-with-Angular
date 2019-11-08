@@ -91,12 +91,13 @@
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarMyPracticeDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         My Practice
                                     </a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarMyPracticeDropdownMenuLink">
-                                        <a class="dropdown-item" href="#">Patients</a>
-                                        @Html.RouteLink("Staff & Users", "PracticeAdmin", null, new { @class = "dropdown-item" })
-                                        <a class="dropdown-item" href="#">Alerts &amp; Subscriptions</a>
-                                        <a class="dropdown-item" href="#">Practice Info</a>
-                                    </div>
+									<div class="dropdown-menu" aria-labelledby="navbarMyPracticeDropdownMenuLink">
+										@*<a class="dropdown-item" href="#">Patients</a>*@
+										@Html.RouteLink("Patients", "Patients", null, new { @class = "dropdown-item" })
+										@Html.RouteLink("Staff & Users", "PracticeAdmin", null, new { @class = "dropdown-item" })
+										<a class="dropdown-item" href="#">Alerts &amp; Subscriptions</a>
+										<a class="dropdown-item" href="#">Practice Info</a>
+									</div>
                                 </li>
 
                                 <li class="nav-item dropdown">

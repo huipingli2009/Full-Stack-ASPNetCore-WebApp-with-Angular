@@ -1,51 +1,116 @@
 ﻿
 @{
 	ViewBag.Title = "GetPatients";
-	Layout = "~/Views/Shared/_Layout.cshtml";
+	Layout = "~/Views/Shared/_Layout.cshtml";	
 }
 
+<!DOCTYPE html>
 
-
-<h2>GetPatients</h2>
-<h2>List of Patients</h2>
-<table id="dtBasicExample" class="table table-responsive table-hover table-bordered table-sm">
-	@*<caption style="text-emphasis-color">List of Patients</caption>*@
-	<thead class="black white-text">
-		<tr>
-			<th scope="col">First Name</th>
-			<th scope="col">Last Name</th>
-			<th scope="col">Date of Birth</th>
-			<th scope="col">Address</th>
-			<th scope="col">City</th>
-			<th scope="col">State</th>
-			<th scope="col">Zip</th>
-			<th scope="col">PtId</th>
-			<th>Actions</th>
-		</tr>
-	</thead>
-	<tbody class="table-striped ">
-		@{
-			foreach (System.Data.DataRow dr in ViewBag.patients.Rows)
-			{
-				<tr>
-					<td>@dr["FirstName"]</td>
-					<td>@dr["LastName"]</td>
-					<td>@dr["PersonDOB"]</td>
-					<td>@dr["AddressLine1"]</td>
-					<td>@dr["City"]</td>
-					<td>@dr["State_id"]</td>
-					<td>@dr["Zip"]</td>
-					<td>@dr["Id"]</td>
-					<td>
-						<a href="~/Patient/UpdatePatient?Id=@dr["Id"]">Update</a>
-						<a href="~/Patient/DeletePatient?Id=@dr["Id"]">Delete</a>
-					</td>
-				</tr>
-			}
+<html>
+<head>	`
+	<meta name="viewport" content="width=device-width" />
+	<title>Patient Lists</title>
+	<link href="~/Content/Site.css" rel="stylesheet" />	
+	<style>
+		input {
+			margin-bottom: 10px;
 		}
-	</tbody>
-</table>
+		h3, h5 {
+			color: #006D63;
+			font-weight: bold;
+		}
+	</style>
+</head>
+<body>
+	<div>
+		<h5>List of Patients</h5>
+	</div>
+	<div class="col-md-4" style="float:right">
+		<h5>Search</h5>
+		<input text="" class="form-control search" id="search" />
+	</div>
+	<br />
+	<br />
+	<table class="table-hover min-font-set table-bordered col-12" id="tblPatientList">
+		<thead class="pretty-table_head">
+			<tr>
+				<th scope="col">Select</th>
+				<th scope="col">First Name</th>
+				<th scope="col">Last Name</th>
+				<th scope="col">Date of Birth</th>
+				<th scope="col">Address</th>
+				<th scope="col">City</th>
+				<th scope="col">State</th>
+				<th scope="col">Zip</th>
+				<th scope="col">Clinical Dx</th>
+				@*<th scope="col">PtId</th>*@
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody class="table-striped ">
+			@{
+				foreach (System.Data.DataRow dr in ViewBag.patients.Rows)
+				{
+					//use hidden field to capture patient id
+					@*@Html.HiddenFor(m => m.iId)*@
+					<tr>
+						<td>
+							<a href="~/Patient/GetPatientInfo?Id=@dr["Id"]">
+								<i class="fas fa-check-circle"></i>&nbsp;
+							</a>
+						</td>
+						<td>@dr["FirstName"]</td>
+						<td>@dr["LastName"]</td>
+						<td>@dr["PatientDOB"]</td>
+						<td>@dr["AddressLine1"]</td>
+						<td>@dr["City"]</td>
+						<td>@dr["State"]</td>
+						<td>@dr["Zip"]</td>
+						<td>@dr["Condition"]</td>
+						@*<td>@dr["Id"]</td>*@
+						<td>
+							<a href="~/Patient/UpdatePatient?Id=@dr["Id"]">
+								<i class="fas fa-edit"></i>&nbsp;
+							</a>
+							<a href="~/Patient/DeletePatient?Id=@dr["Id"]">
+								<i class="fas fa-user-times"></i>&nbsp;
+							</a>
+						</td>
+					</tr>
+				}
+			}
+		</tbody>
+	</table>
+	<div>
+		<button id="btnAdd" class="btn btn-sm btn-primary pull-right" data-pdsa-action="AddStaff">
+			<i class="fas fa-plus-circle"></i>
+			&nbsp;Add New Patient
+		</button>
+	</div>
 
-<a href="/Patient/AddPatient">Add Patient</a>
+	<script type="text/javascript">
+
+		$(document).ready(function () {
+			//search and filter function
+			$('.search').on('keyup', function () {
+				var serachTerm = $(this).val().toLowerCase();
+
+				$('#tblPatientList tbody tr').each(function () {
+					var str = $(this).text().toLowerCase();
+
+					if (str.indexOf(serachTerm) == -1) {
+						$(this).hide();
+					}
+					else {
+						$(this).show();
+					}
+				});
+			});
+		}); //end of document.ready
+	</script>
+</body>
+</html>
+
+
 
 
