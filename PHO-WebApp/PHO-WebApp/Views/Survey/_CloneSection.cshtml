@@ -4,9 +4,17 @@
 @{
     Layout = null;
 }
-@Html.HiddenFor(m => m.PropagationTypeId)
 
 @if (Model.PropagationType == PropagationTypeEnum.Dynamic)
 {
-    <input type="submit" name="Submit" formaction="@Url.Action("CloneSection","Survey", new { sectionUniqueId = Model.SectionUniqueId })" formmethod="post" value="Clone" class="btn btn-primary" />
+    @Html.HiddenFor(m => m.PropagationButtonContent)
+    @Html.HiddenFor(m => m.PropagationHeader)
+    @Html.HiddenFor(m => m.PropagationDescription)
+    <div class="card card-body">
+        <h5>@(Model.PropagationHeader)</h5>
+        <p><i>@(Model.PropagationDescription)</i></p>
+        <input type="submit" name="Submit" formaction="@Url.Action("CloneSection","Survey", new { sectionUniqueId = Model.SectionUniqueId })" formmethod="post" value="@(Model.PropagationButtonContent)" class="btn btn-primary" />
+    </div>
+
+
 }

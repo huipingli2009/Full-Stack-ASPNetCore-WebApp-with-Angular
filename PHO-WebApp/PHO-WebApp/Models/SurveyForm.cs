@@ -330,6 +330,9 @@ namespace PHO_WebApp.Models
         private int _sectionId;
         private string _sectionDescription;
         private string _sectionHeader;
+        private string _propagationHeader;
+        private string _propagationDescription;
+        private string _propagationButtonContent;
 
         //special behavior keys
         private int _PhysicianLinkTypeId;
@@ -361,6 +364,21 @@ namespace PHO_WebApp.Models
         {
             get { return _SectionUniqueId; }
             set { _SectionUniqueId = value; }
+        }
+        public string PropagationHeader
+        {
+            get { return _propagationHeader; }
+            set { _propagationHeader = value; }
+        }
+        public string PropagationDescription
+        {
+            get { return _propagationDescription; }
+            set { _propagationDescription = value; }
+        }
+        public string PropagationButtonContent
+        {
+            get { return _propagationButtonContent; }
+            set { _propagationButtonContent = value; }
         }
 
 

@@ -13,9 +13,6 @@
 || Model.PhysicianLinkType == PHO_WebApp.Models.PhysicianLinkTypeEnum.Required)
 {
 
-    @*<p>
-
-        </p>*@
     <div class="row" style="margin-bottom:5px;">
         <div class="col">
             <div id="@("LinkPanel_" + Model.SectionUniqueId)">
@@ -24,7 +21,7 @@
                         <h5>Physician Link</h5>
                         <i>Requires a link to an existing practice physician. Select a physician below.</i>
                     </p>
-                    <div class="input-group collapse show" id="@("PhysicianLinkPanel_" + Model.SectionUniqueId + "_Set")">
+                    <div class="@("input-group collapse " + (Model.PhysicianStaffId == 0 ? "show" : "hide"))" id="@("PhysicianLinkPanel_" + Model.SectionUniqueId + "_Set")">
                         <label for="txtPhysician">Physician Lookup: </label>
                         <input type="text" id="@("txtPhysician_" + Model.SectionUniqueId)" name="PhysicianName" style="font-style:italic" placeholder="Enter search term here" />
                         <div class="input-group-append">
@@ -34,8 +31,8 @@
                         </div>
                         <input type="hidden" name="@("PhysicianStaffId_" + Model.SectionUniqueId)" id="@("PhysicianStaffId_" + Model.SectionUniqueId)" value="@(Model.PhysicianStaffId)" />
                     </div>
-                    <div class="input-group collapse" id="@("PhysicianLinkPanel_" + Model.SectionUniqueId + "_Display")">
-                        <strong id="@("lblPhysicianLinkDisplay_" + Model.SectionUniqueId)" style="font-weight:bold"></strong>&nbsp;
+                    <div class="@("input-group collapse " + (Model.PhysicianStaffId > 0 ? "show" : "hide"))" id="@("PhysicianLinkPanel_" + Model.SectionUniqueId + "_Display")">
+                        <strong id="@("lblPhysicianLinkDisplay_" + Model.SectionUniqueId)" style="font-weight:bold">@(Model.PhysicianStaffId > 0 ? "Linked: " + Model.PhysicianStaffId : "")</strong>&nbsp;
                         <a class="btn btn-primary" data-toggle="collapse" onclick="@("togglePhysicianLink('" + Model.SectionUniqueId + "')")" href="#" role="button" aria-expanded="false" aria-controls="@("LinkPanel_" + Model.SectionUniqueId)">Reset</a>
                     </div>
                 </div>
