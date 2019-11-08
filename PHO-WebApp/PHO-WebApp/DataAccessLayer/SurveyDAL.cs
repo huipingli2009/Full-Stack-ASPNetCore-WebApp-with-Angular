@@ -494,7 +494,7 @@ namespace PHO_WebApp.DataAccessLayer
         {
             Section c = new Section();
 
-            c.PhysicianLinkUniqueId = "a" + uniqueId;
+            c.SectionUniqueId = "a" + uniqueId;
             
             if (SectionId.HasValue)
             {

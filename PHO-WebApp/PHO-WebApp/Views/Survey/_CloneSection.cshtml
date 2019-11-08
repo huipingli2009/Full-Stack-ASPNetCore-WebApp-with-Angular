@@ -1,0 +1,12 @@
+﻿@model PHO_WebApp.Models.Section
+@using PHO_WebApp.Models
+
+@{
+    Layout = null;
+}
+@Html.HiddenFor(m => m.PropagationTypeId)
+
+@if (Model.PropagationType == PropagationTypeEnum.Dynamic)
+{
+    <input type="submit" name="Submit" formaction="@Url.Action("CloneSection","Survey", new { sectionUniqueId = Model.SectionUniqueId })" formmethod="post" value="Clone" class="btn btn-primary" />
+}
