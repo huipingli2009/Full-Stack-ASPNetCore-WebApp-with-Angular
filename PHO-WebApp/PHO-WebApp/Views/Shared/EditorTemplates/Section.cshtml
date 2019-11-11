@@ -20,12 +20,13 @@
 
 @Html.Partial("_PhysicianLink", Model)
 
-<table style="width:1000px; max-width:1000px">
-    @for (var i = 0; i < Model.SectionQuestions.Count(); i++)
-    {
-        @Html.EditorFor(model => Model.SectionQuestions[i])
-    }
-</table>
+    <div class="card card-body">
+         @for (var i = 0; i < Model.SectionQuestions.Count(); i++)
+         { 
+             @Html.EditorFor(model => Model.SectionQuestions[i])  
+         }
+    </div>
+         
 @Html.Partial("_CloneSection", Model)
 <br />
 
