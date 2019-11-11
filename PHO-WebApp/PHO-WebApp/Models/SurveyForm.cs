@@ -155,6 +155,31 @@ namespace PHO_WebApp.Models
             }
         }
 
+        public void CloneSection(string sectionUniqueId)
+        {
+            if (FormSections != null && FormSections.Count > 0)
+            {
+                for (int i = 0; i < FormSections.Count; i++)
+                {
+                    if (FormSections[i] != null && FormSections[i].Sections != null && FormSections[i].Sections.Count > 0)
+                    {
+                        foreach(Section s in FormSections[i].Sections)
+                        {
+                            if (s.SectionUniqueId == sectionUniqueId)
+                            {
+                                FormSection newFormSection = FormSections[i].Clone();
+                                newFormSection.Order++;
+                                FormSections.Add(newFormSection);
+                            }
+                        }
+                    }
+                }
+
+                //after the loop. Re sort form sections.
+                FormSections = FormSections.OrderBy(c => c.Order).ToList();
+            }
+        }
+
         public List<QuestionResponse> Responses
         {
             get
@@ -220,7 +245,7 @@ namespace PHO_WebApp.Models
                     {
                         foreach(Section s in fs.Sections)
                         {
-                            if (s.PhysicianLinkUniqueId == uniqueId)
+                            if (s.SectionUniqueId == uniqueId)
                             {
                                 if (!string.IsNullOrWhiteSpace(PhysicianStaffId))
                                 {
@@ -282,6 +307,22 @@ namespace PHO_WebApp.Models
                 }
             }
         }
+
+        public FormSection Clone()
+        {
+            FormSection returnObj = (FormSection)this.MemberwiseClone();
+
+            returnObj.Sections = new List<Section>();
+            if (this.Sections != null && Sections.Count > 0)
+            {
+                for (int i=0; i < Sections.Count; i++)
+                {
+                    returnObj.Sections.Add(Sections[i].Clone());
+                }
+            }
+
+            return returnObj;
+        }
     }
     public class Section
     {
@@ -289,12 +330,15 @@ namespace PHO_WebApp.Models
         private int _sectionId;
         private string _sectionDescription;
         private string _sectionHeader;
+        private string _propagationHeader;
+        private string _propagationDescription;
+        private string _propagationButtonContent;
 
         //special behavior keys
         private int _PhysicianLinkTypeId;
         private int _PropagationTypeId;
         private int _PhysicianStaffId;
-        private string _PhysicianLinkUniqueId;
+        private string _SectionUniqueId;
 
         public Section()
         {
@@ -316,10 +360,25 @@ namespace PHO_WebApp.Models
             get { return _sectionDescription; }
             set { _sectionDescription = value; }
         }
-        public string PhysicianLinkUniqueId
+        public string SectionUniqueId
         {
-            get { return _PhysicianLinkUniqueId; }
-            set { _PhysicianLinkUniqueId = value; }
+            get { return _SectionUniqueId; }
+            set { _SectionUniqueId = value; }
+        }
+        public string PropagationHeader
+        {
+            get { return _propagationHeader; }
+            set { _propagationHeader = value; }
+        }
+        public string PropagationDescription
+        {
+            get { return _propagationDescription; }
+            set { _propagationDescription = value; }
+        }
+        public string PropagationButtonContent
+        {
+            get { return _propagationButtonContent; }
+            set { _propagationButtonContent = value; }
         }
 
 
@@ -400,6 +459,22 @@ namespace PHO_WebApp.Models
                 }
             }
         }
+
+        public Section Clone()
+        {
+            Section returnObj = (Section)this.MemberwiseClone();
+            returnObj.SectionId = 0;
+            returnObj.PhysicianStaffId = 0;
+            returnObj.SectionUniqueId = "20000" + new Random().Next(1, 1000);
+
+            returnObj.SectionQuestions = new List<SectionQuestion>();
+            foreach (SectionQuestion sq in SectionQuestions)
+            {
+                returnObj.SectionQuestions.Add(sq.Clone());
+            }
+
+            return returnObj;
+        }
     }
     public class SectionQuestion
     {
@@ -432,6 +507,14 @@ namespace PHO_WebApp.Models
             {
                 this._Question = value;
             }
+        }
+        
+        public SectionQuestion Clone()
+        {
+            SectionQuestion returnObj = (SectionQuestion)this.MemberwiseClone();
+            returnObj.Question = Question.Clone();
+
+            return returnObj;
         }
     }
 
@@ -485,6 +568,7 @@ namespace PHO_WebApp.Models
             get { return _PercentCompleted; }
             set { _PercentCompleted = value; }
         }
+
     }
     
     [FluentValidation.Attributes.Validator(typeof(ResponseValidator))]
@@ -579,6 +663,27 @@ namespace PHO_WebApp.Models
             get { return _responseAnswer; }
             set { _responseAnswer = value; }
         }
+        
+        public QuestionResponse Clone()
+        {
+            QuestionResponse returnObj = (QuestionResponse)this.MemberwiseClone();
+            returnObj.Response_Text = string.Empty;
+            returnObj.ResponseId = 0;
+            if (ResponseAnswer != null)
+            {
+                returnObj.ResponseAnswer = ResponseAnswer.Clone();
+            }
+            if (QuestionAnswerOptions != null)
+            {
+                returnObj.QuestionAnswerOptions = new List<QuestionAnswerOption>();
+                for (int i = 0; i < QuestionAnswerOptions.Count; i++)
+                {
+                    returnObj.QuestionAnswerOptions.Add(QuestionAnswerOptions[i].Clone());
+                }
+            }
+
+            return returnObj;
+        }
 
         public bool IsListQuestionType
         {
@@ -610,28 +715,6 @@ namespace PHO_WebApp.Models
         }
     }
 
-    //[FluentValidation.Attributes.Validator(typeof(ResponseValidator))]
-    //public class Response
-    //{
-    //    private int _QuestionId;
-    //    private string _response_Text;
-    //    private ResponseAnswer _responseAnswer;
-    //    private bool _required;
-
-    //    public int QuestionId
-    //    {
-    //        get { return _QuestionId; }
-    //        set { _QuestionId = value; }
-    //    }
-
-
-    //    public bool Required
-    //    {
-    //        get { return _required; }
-    //        set { _required = value; }
-    //    }
-
-    //}
 
     public class ResponseAnswer
     {
@@ -655,6 +738,17 @@ namespace PHO_WebApp.Models
             get { return _ResponseAnswersId; }
             set { _ResponseAnswersId = value; }
         }
+
+        public ResponseAnswer Clone()
+        {
+            ResponseAnswer returnObj = (ResponseAnswer)this.MemberwiseClone();
+            returnObj.ResponseId = 0;
+            returnObj.AnswerOptionId = 0;
+            returnObj.ResponseAnswersId = 0;
+            
+            return returnObj;
+        }
+
     }
 
 
@@ -688,6 +782,14 @@ namespace PHO_WebApp.Models
         {
             get { return _questionId; }
             set { _questionId = value; }
+        }
+
+
+        public QuestionAnswerOption Clone()
+        {
+            QuestionAnswerOption returnObj = (QuestionAnswerOption)this.MemberwiseClone();
+
+            return returnObj;
         }
     }
 

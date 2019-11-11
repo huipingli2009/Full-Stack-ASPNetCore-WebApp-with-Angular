@@ -21,16 +21,20 @@ namespace PHO_WebApp.Controllers
             return View(model);
         }
 
-        public ActionResult CompleteNewSurvey(int id)
+        public ActionResult Display(int id, int? formResponseId)
         {
-            SurveyForm model = records.LoadSurveyQuestions(id, 0);
-            Session["CachedSurvey_" + id.ToString() + "_0"] = model;
-            return View("Display", model);
-        }
-        public ActionResult LoadExistingSurvey(int id, int formResponseId)
-        {
+            //Get the entire survey tree structure from DB, load existing responses if applies
             SurveyForm model = records.LoadSurveyQuestions(id, formResponseId);
+
+            //if this came in null, reset it to 0 for now. We need a value for the sake of caching.
+            if (formResponseId == null)
+            {
+                formResponseId = 0;
+            }
+
+            //Put in cache so we don't lose model data between postbacks.
             Session["CachedSurvey_" + id.ToString() + "_" + formResponseId.ToString()] = model;
+
             return View("Display", model);
         }
         public ActionResult ViewSurveyDetails(int id, string message)
@@ -46,14 +50,19 @@ namespace PHO_WebApp.Controllers
             return View("Details", model);
         }
 
-        public ActionResult DisplaySection(int id)
+
+        [HttpPost]
+        public ActionResult CloneSection(FormCollection fc, SurveyForm model, string sectionUniqueId)
         {
-            SurveyForm model = records.LoadSurveyQuestions(id, 0);
-            return View("DisplaySection", model);
+            model = PopulateDependencies(model);
+            model.CloneSection(sectionUniqueId);
+
+            ModelState.Clear();
+            return View("Display", model);
         }
 
         [HttpPost]
-        public ActionResult Save(FormCollection fc, SurveyForm model)
+        public ActionResult Submit(FormCollection fc, SurveyForm model)
         {
             if (ModelState.IsValid && model != null && model.Responses != null)
             {
@@ -69,15 +78,20 @@ namespace PHO_WebApp.Controllers
             }
             else
             {
-                if (Session["CachedSurvey_" + model.FormId.ToString() + "_" + model.FormResponseId.ToString()] != null)
-                {
-                    SurveyForm cachedSurvey = (SurveyForm)Session["CachedSurvey_" + model.FormId.ToString() + "_" + model.FormResponseId.ToString()];
-                    model.RefreshListFields(cachedSurvey);
-                }
+                PopulateDependencies(model);
                 return View("Display", model);
             }
         }
 
+        private SurveyForm PopulateDependencies(SurveyForm model)
+        {
+            if (model != null && Session["CachedSurvey_" + model.FormId.ToString() + "_" + model.FormResponseId.ToString()] != null)
+            {
+                SurveyForm cachedSurvey = (SurveyForm)Session["CachedSurvey_" + model.FormId.ToString() + "_" + model.FormResponseId.ToString()];
+                model.RefreshListFields(cachedSurvey);
+            }
+            return model;
+        }
 
         public void SaveForm(SurveyForm model)
         {

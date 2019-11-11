@@ -1,0 +1,20 @@
+﻿@model PHO_WebApp.Models.Section
+@using PHO_WebApp.Models
+
+@{
+    Layout = null;
+}
+
+@if (Model.PropagationType == PropagationTypeEnum.Dynamic)
+{
+    @Html.HiddenFor(m => m.PropagationButtonContent)
+    @Html.HiddenFor(m => m.PropagationHeader)
+    @Html.HiddenFor(m => m.PropagationDescription)
+    <div class="card card-body">
+        <h5>@(Model.PropagationHeader)</h5>
+        <p><i>@(Model.PropagationDescription)</i></p>
+        <input type="submit" name="Submit" formaction="@Url.Action("CloneSection","Survey", new { sectionUniqueId = Model.SectionUniqueId })" formmethod="post" value="@(Model.PropagationButtonContent)" class="btn btn-primary btn-sm" />
+    </div>
+
+
+}

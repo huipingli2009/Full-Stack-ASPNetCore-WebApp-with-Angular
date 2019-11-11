@@ -60,7 +60,7 @@
                         <tr class="contentRow pho-table-data" style="border:hidden;">
                             <td class="FormResponseId" style="border:hidden;">
                                 <span>
-                                    @Html.ActionLink(row.FormResponseId.ToString(), "LoadExistingSurvey", new { id = row.FormId, formResponseId = row.FormResponseId.ToString() })
+                                    @Html.ActionLink(row.FormResponseId.ToString(), "Display", new { id = row.FormId, formResponseId = row.FormResponseId.ToString() })
                                 </span>
                             </td>
                             <td class="DateCreated" style="border:hidden;">
@@ -111,7 +111,7 @@
                         <tr class="contentRow pho-table-data" style="border:hidden;">
                             <td class="FormResponseId" style="border:hidden;">
                                 <span>
-                                    @Html.ActionLink(row.FormResponseId.ToString(), "LoadExistingSurvey", new { id = row.FormId, formResponseId = row.FormResponseId.ToString() })
+                                    @Html.ActionLink(row.FormResponseId.ToString(), "Display", new { id = row.FormId, formResponseId = row.FormResponseId.ToString() })
                                 </span>
                             </td>
                             <td class="DateCreated" style="border:hidden;">

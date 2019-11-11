@@ -21,7 +21,7 @@
                         <div style="float:left; padding-left:10px">
                             @Html.ActionLink("Details", "ViewSurveyDetails", "Survey", new { id = Model[i].FormId }, null)
                             &nbsp;&nbsp;&nbsp;&#124;&nbsp;&nbsp;&nbsp;
-                            <a href="@Url.Action("CompleteNewSurvey", "Survey", new { id = Model[i].FormId })"><img class="" src="~/Images/addnew.jpg" style="width:20px; height:20px" /></a>
+                            <a href="@Url.Action("Display", "Survey", new { id = Model[i].FormId })"><img class="" src="~/Images/addnew.jpg" style="width:20px; height:20px" /></a>
                         </div><br />
                         <div style="float:left; padding-left:10px">
                             <p>
@@ -45,7 +45,7 @@
                                         @foreach (var res in Model[i].RecentInProgress)
                                         {
                                             <tr>
-                                                <th scope="row">@Html.ActionLink(res.FormResponseId.ToString(), "LoadExistingSurvey", "Survey", new { id = res.FormId, formResponseId = res.FormResponseId.ToString() }, null)</th>
+                                                <th scope="row">@Html.ActionLink(res.FormResponseId.ToString(), "Display", "Survey", new { id = res.FormId, formResponseId = res.FormResponseId.ToString() }, null)</th>
                                                 <td>
                                                     @if (res.DateCreated > DateTime.Now.AddYears(-20))
                                                     {

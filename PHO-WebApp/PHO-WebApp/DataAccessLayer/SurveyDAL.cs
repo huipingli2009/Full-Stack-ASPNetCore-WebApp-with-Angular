@@ -205,6 +205,9 @@ namespace PHO_WebApp.DataAccessLayer
                             r["SectionHeader"].ToString(),
                             r["SectionDescription"].ToString(),
                             SharedLogic.ParseNumericNullable(r["PropagationTypeId"].ToString()),
+                            r["PropagationHeader"].ToString(),
+                            r["PropagationDescription"].ToString(),
+                            r["PropagationButton"].ToString(),
                             SharedLogic.ParseNumericNullable(r["PhysicianLinkTypeId"].ToString()),
                             "10000" + ds.Tables[0].Rows.IndexOf(r).ToString()
                             );
@@ -490,11 +493,11 @@ namespace PHO_WebApp.DataAccessLayer
             return c;
         }
 
-        public Section CreateSectionModel(int? SectionId, string SectionHeader, string SectionDescription, int? PropagationTypeId, int? SectionPhysicianLinkTypeId, string uniqueId)
+        public Section CreateSectionModel(int? SectionId, string SectionHeader, string SectionDescription, int? PropagationTypeId, string PropagationHeader, string PropagationDescription, string PropagationButton, int? SectionPhysicianLinkTypeId, string uniqueId)
         {
             Section c = new Section();
 
-            c.PhysicianLinkUniqueId = "a" + uniqueId;
+            c.SectionUniqueId = "a" + uniqueId;
             
             if (SectionId.HasValue)
             {
@@ -515,6 +518,18 @@ namespace PHO_WebApp.DataAccessLayer
             if (SectionPhysicianLinkTypeId.HasValue)
             {
                 c.PhysicianLinkTypeId = SectionPhysicianLinkTypeId.Value;
+            }
+            if (!string.IsNullOrWhiteSpace(PropagationHeader))
+            {
+                c.PropagationHeader = PropagationHeader;
+            }
+            if (!string.IsNullOrWhiteSpace(PropagationDescription))
+            {
+                c.PropagationDescription = PropagationDescription;
+            }
+            if (!string.IsNullOrWhiteSpace(PropagationButton))
+            {
+                c.PropagationButtonContent = PropagationButton;
             }
 
             return c;

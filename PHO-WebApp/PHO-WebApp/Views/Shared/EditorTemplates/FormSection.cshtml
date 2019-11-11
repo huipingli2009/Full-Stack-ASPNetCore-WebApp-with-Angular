@@ -5,7 +5,11 @@
 }
 
 @Html.HiddenFor(m => m.FormSectionId)
+@Html.HiddenFor(m => m.Order)
+
 @for (var i = 0; i < Model.Sections.Count(); i++)
 {
+
+    @Html.HiddenFor(model => model.Sections[i].PropagationTypeId)
     @Html.EditorFor(m => m.Sections[i])
 }

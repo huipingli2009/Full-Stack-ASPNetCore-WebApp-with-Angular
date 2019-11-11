@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using PHO_WebApp.Models;
+using System.Web.Configuration;
 
 namespace PHO_WebApp.Controllers
 {
@@ -11,21 +12,21 @@ namespace PHO_WebApp.Controllers
     {
         protected override void OnException(ExceptionContext filterContext)
         {
-            filterContext.ExceptionHandled = true;
-
+            string redirectToErrorPage = WebConfigurationManager.AppSettings["RedirectToErrorPage"];
+            
             //Log the error!!
             string controllerName = filterContext.RouteData.Values["controller"].ToString();
             string actionName = filterContext.RouteData.Values["action"].ToString();
 
             SharedLogic.LogError(SavedUserDetails, controllerName, actionName, filterContext.Exception);
+            
+            if (!string.IsNullOrWhiteSpace(redirectToErrorPage) && redirectToErrorPage.ToUpper() == "TRUE")
+            {
+                filterContext.ExceptionHandled = true;
 
-            //Redirect or return a view, but not both.
-            filterContext.Result = RedirectToAction("Error", "Base");
-            // OR 
-            //filterContext.Result = new ViewResult
-            //{
-            //    ViewName = "~/Views/Base/Error.cshtml"
-            //};
+                //Redirect or return a view, but not both.
+                filterContext.Result = RedirectToAction("Error", "Base");
+            }
         }
 
         public ActionResult Error()

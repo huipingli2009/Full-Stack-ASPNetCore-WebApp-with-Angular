@@ -22,49 +22,62 @@
 @if (Model.QuestionType.ToUpper() == "TEXTBOX")
 
 {
+<div class="form-group row">
+    @Html.Label(Model.QuestionLabel.ToString())
+    <div class="col-sm-10">
+        @Html.TextBoxFor(q => q.Response_Text, new { style = "width: 500px;" })
+        @Html.ValidationMessageFor(q => q.Response_Text, null, new { @class = "validationText" })
+    </div>
+</div>
     <tr>
-        <td style="width:500px">@Html.Label(Model.QuestionLabel.ToString())</td>
+        <td style="width:500px"></td>
         <td style="width:500px">
-            @Html.TextBoxFor(q => q.Response_Text, new { style = "width: 500px;" })
-            @Html.ValidationMessageFor(q => q.Response_Text, null, new { @class = "validationText" })
         </td>
     </tr>
 }
 @if (Model.QuestionType.ToUpper() == "TEXTBOXNUMERIC")
 {
-    <tr>
-        <td style="width:500px"> @Html.Label(Model.QuestionLabel.ToString()) </td>
-        <td style="width:500px">
+
+    <div class="form-group row">        
+        @Html.Label(Model.QuestionLabel.ToString())
+        <div class="col-sm-10">
             @Html.TextBoxFor(q => q.Response_Text, new { @type = "number", style = "width: 500px;" })
             @Html.ValidationMessageFor(q => q.Response_Text, null, new { @class = "validationText" })
-        </td>
-    </tr>
+        </div>
+    </div>
 }
 @if (Model.QuestionType.ToUpper() == "TEXTBOXDATE")
 {
-    <tr>
-        <td style="width:500px"> @Html.Label(Model.QuestionLabel.ToString()) </td>
-        <td style="width:500px">
+
+    <div class="form-group row">
+        @Html.Label(Model.QuestionLabel.ToString())
+        <div class="col-sm-10">
             @Html.TextBoxFor(q => q.Response_Text, new { @type = "date", style = "width: 500px;" })
             @Html.ValidationMessageFor(q => q.Response_Text, null, new { @class = "validationText" })
-        </td>
-    </tr>
+        </div>
+    </div>
+
 }
 @if (Model.QuestionType.ToUpper() == "TEXTBOXTELEPHONE")
 {
-    <tr>
-        <td style="width:500px">@Html.Label(Model.QuestionLabel.ToString())</td>
-        <td style="width:500px">
+
+
+    <div class="form-group row">
+        @Html.Label(Model.QuestionLabel.ToString())
+        <div class="col-sm-10">
             @Html.TextBoxFor(q => q.Response_Text, new { @type = "tel", style = "width: 500px" })
             @Html.ValidationMessageFor(q => q.Response_Text, null, new { @class = "validationText" })
-        </td>
-    </tr>
+
+        </div>
+    </div>
+
 }
 @if (Model.QuestionType.ToUpper() == "DROPDOWNLIST" && Model.ResponseAnswer != null)
 {
-    <tr>
-        <td style="width:500px">@Html.Label(Model.QuestionLabel.ToString())</td>
-        <td style="width:500px">
+
+    <div class="form-group row">
+        @Html.Label(Model.QuestionLabel.ToString())
+        <div class="col-sm-10">
             @Html.DropDownListFor(
             x => x.ResponseAnswer.AnswerOptionId,
             new SelectList(Model.QuestionAnswerOptions, "QuestionAnswerOptionId", "QuestionAnswerOptionLabel"),
@@ -76,14 +89,16 @@
             }
             )
             @Html.ValidationMessageFor(x => x.ResponseAnswer.AnswerOptionId, null, new { @class = "validationText" })
-        </td>
-    </tr>
+        </div>
+    </div>
+
 }
 @if (Model.QuestionType.ToUpper() == "RADIOBUTTONLIST" && Model.ResponseAnswer != null)
 {
-    <tr>
-        <td style="width:500px">@Html.Label(Model.QuestionLabel.ToString())</td>
-        <td style="width:500px">
+
+    <div class="form-group row">
+        @Html.Label(Model.QuestionLabel.ToString())
+        <div class="col-sm-10">
             @foreach (QuestionAnswerOption q in Model.QuestionAnswerOptions)
             {
                 <div>
@@ -94,6 +109,7 @@
                 </div>
             }
             @Html.ValidationMessageFor(m => m.ResponseAnswer.AnswerOptionId, null, new { @class = "validationText" })
-        </td>
-    </tr>
+        </div>
+    </div>
+
 }
