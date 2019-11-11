@@ -14,10 +14,12 @@ namespace PHO_WebApp.DataAccessLayer
     {
         SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["con"].ConnectionString);
               
-        public DataSet GetPatients()
+        public DataSet GetPatients(int practiceId)
         {
-            SqlCommand com = new SqlCommand("proc_PatientPopulation", con);
+            SqlCommand com = new SqlCommand("spGetPracticePatients", con);
             com.CommandType = CommandType.StoredProcedure;
+
+            com.Parameters.AddWithValue("@practiceId", practiceId);
 
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
@@ -28,7 +30,7 @@ namespace PHO_WebApp.DataAccessLayer
 
         public DataSet GetPatientInfo(int id)
         {
-            SqlCommand com = new SqlCommand("proc_GetPatientInfo", con);
+            SqlCommand com = new SqlCommand("spGetPatientSummary", con);
             com.CommandType = CommandType.StoredProcedure;
 
             com.Parameters.AddWithValue("@id", id);

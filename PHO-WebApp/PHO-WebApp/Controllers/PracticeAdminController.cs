@@ -4,14 +4,13 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using PHO_WebApp.ViewModel;
+//comment
 
 
 namespace PHO_WebApp.Controllers
 {
     public class PracticeAdminController : BaseController
-    {
-        //StaffDAL SD = new StaffDAL();
-       
+    {       
         // GET: PracticeAdmin
         public ActionResult GetPracticeStaff()
         {
