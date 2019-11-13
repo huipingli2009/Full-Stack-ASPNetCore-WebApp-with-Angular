@@ -22,26 +22,25 @@
 @if (Model.QuestionType.ToUpper() == "TEXTBOX")
 
 {
-<div class="form-group row">
-    @Html.Label(Model.QuestionLabel.ToString())
-    <div class="col-sm-10">
-        @Html.TextBoxFor(q => q.Response_Text, new { style = "width: 500px;" })
-        @Html.ValidationMessageFor(q => q.Response_Text, null, new { @class = "validationText" })
+    <div class="form-group row">
+        @Html.Label(Model.QuestionLabel.ToString())
+        <div class="col-sm-10">
+            @Html.TextBoxFor(q => q.Response_Text, new { })
+            @Html.ValidationMessageFor(q => q.Response_Text, null, new { @class = "validationText" })
+        </div>
     </div>
-</div>
     <tr>
         <td style="width:500px"></td>
-        <td style="width:500px">
-        </td>
+        <td style="width:500px"></td>
     </tr>
 }
 @if (Model.QuestionType.ToUpper() == "TEXTBOXNUMERIC")
 {
 
-    <div class="form-group row">        
+    <div class="form-group row">
         @Html.Label(Model.QuestionLabel.ToString())
         <div class="col-sm-10">
-            @Html.TextBoxFor(q => q.Response_Text, new { @type = "number", style = "width: 500px;" })
+            @Html.TextBoxFor(q => q.Response_Text, new { @type = "number" })
             @Html.ValidationMessageFor(q => q.Response_Text, null, new { @class = "validationText" })
         </div>
     </div>
@@ -52,7 +51,7 @@
     <div class="form-group row">
         @Html.Label(Model.QuestionLabel.ToString())
         <div class="col-sm-10">
-            @Html.TextBoxFor(q => q.Response_Text, new { @type = "date", style = "width: 500px;" })
+            @Html.TextBoxFor(q => q.Response_Text, new { @type = "date" })
             @Html.ValidationMessageFor(q => q.Response_Text, null, new { @class = "validationText" })
         </div>
     </div>
@@ -65,7 +64,7 @@
     <div class="form-group row">
         @Html.Label(Model.QuestionLabel.ToString())
         <div class="col-sm-10">
-            @Html.TextBoxFor(q => q.Response_Text, new { @type = "tel", style = "width: 500px" })
+            @Html.TextBoxFor(q => q.Response_Text, new { @type = "tel" })
             @Html.ValidationMessageFor(q => q.Response_Text, null, new { @class = "validationText" })
 
         </div>
@@ -84,8 +83,7 @@
             "-- Select Value --",
             new
             {
-            id = "DropdownList",
-            style = "width: 500px"
+            id = "DropdownList"
             }
             )
             @Html.ValidationMessageFor(x => x.ResponseAnswer.AnswerOptionId, null, new { @class = "validationText" })
@@ -101,14 +99,25 @@
         <div class="col-sm-10">
             @foreach (QuestionAnswerOption q in Model.QuestionAnswerOptions)
             {
-                <div>
-                    <label>
-                        @Html.RadioButtonFor(m => m.ResponseAnswer.AnswerOptionId, q.QuestionAnswerOptionId, new { style = "width: 500px;" })
-                        @q.QuestionAnswerOptionId
-                    </label>
-                </div>
+                < div >
+                < label >
+                @Html.RadioButtonFor(m => m.ResponseAnswer.AnswerOptionId, q.QuestionAnswerOptionId, null)
+                @q.QuestionAnswerOptionId
+                </ label >
+                </ div >
             }
             @Html.ValidationMessageFor(m => m.ResponseAnswer.AnswerOptionId, null, new { @class = "validationText" })
+        </div>
+    </div>
+
+}
+@if (Model.QuestionType.ToUpper() == "MONTHYEARPICKER")
+{    
+    <div class="form-group row">
+        @Html.Label(Model.QuestionLabel.ToString())
+        <div class="col-sm-10">
+            @Html.TextBoxFor(q => q.Response_Text, new { @type = "month" })
+            @Html.ValidationMessageFor(q => q.Response_Text, null, new { @class = "validationText" })
         </div>
     </div>
 
