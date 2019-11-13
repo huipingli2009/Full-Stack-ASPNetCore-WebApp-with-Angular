@@ -16,7 +16,10 @@ namespace PHO_WebApp.Models
         RadioButtonList = 4,
         DropDownList = 5,
         TextBoxNumeric = 6,
-        Calculated = 7
+        Calculated = 7,
+        TextBoxDate = 8,
+        TextBoxTelephone = 9,
+        MonthYearPicker = 10
     }
     public enum PropagationTypeEnum
     {
