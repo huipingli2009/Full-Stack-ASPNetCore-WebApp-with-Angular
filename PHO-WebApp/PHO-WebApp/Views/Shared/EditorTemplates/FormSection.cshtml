@@ -6,6 +6,8 @@
 
 @Html.HiddenFor(m => m.FormSectionId)
 @Html.HiddenFor(m => m.Order)
+@Html.HiddenFor(m => m.Header)
+@Html.HiddenFor(m => m.Description)
 
 @for (var i = 0; i < Model.Sections.Count(); i++)
 {

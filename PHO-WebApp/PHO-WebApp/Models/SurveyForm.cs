@@ -172,15 +172,14 @@ namespace PHO_WebApp.Models
                             if (curSection.SectionUniqueId == sectionUniqueId)
                             {
                                 Section newSection = curSection.Clone();
-                                //newSection.Order++;
+                                newSection.Order++;
                                 FormSections[i].Sections.Add(newSection);
+                                FormSections[i].Sections = FormSections[i].Sections.OrderBy(c => c.Order).ToList();
                             }
                         }
                     }
                 }
 
-                //after the loop. Re sort form sections.
-                FormSections = FormSections.OrderBy(c => c.Order).ToList();
             }
         }
 
