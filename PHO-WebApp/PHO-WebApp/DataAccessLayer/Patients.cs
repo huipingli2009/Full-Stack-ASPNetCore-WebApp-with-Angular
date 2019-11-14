@@ -14,8 +14,10 @@ namespace PHO_WebApp.DataAccessLayer
     {
         SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["con"].ConnectionString);
               
-        public DataSet GetPatients(int practiceId)
+        public List<Patient> GetPatients(int practiceId)
         {
+            List<Patient> ptList = new List<Patient>();
+
             SqlCommand com = new SqlCommand("spGetPracticePatients", con);
             com.CommandType = CommandType.StoredProcedure;
 
@@ -25,20 +27,39 @@ namespace PHO_WebApp.DataAccessLayer
             DataSet ds = new DataSet();
 
             da.Fill(ds);
-            return ds;
+
+            for (int i=0; i < ds.Tables[0].Rows.Count; i++)
+            {
+                Patient pt = new Patient();
+                pt = CreatePatientModel(ds.Tables[0].Rows[i]);
+
+                ptList.Add(pt);
+            }
+            return ptList;
         }
 
-        public DataSet GetPatientInfo(int id)
+        public Patient GetPatient(int PtId)
         {
+            Patient practicePatient = new Patient();
+
             SqlCommand com = new SqlCommand("spGetPatientSummary", con);
             com.CommandType = CommandType.StoredProcedure;
 
-            com.Parameters.AddWithValue("@id", id);
+            SqlParameter parameterPatientId = new SqlParameter("@id", SqlDbType.Int);
+            parameterPatientId.Value = PtId;
+            com.Parameters.Add(parameterPatientId);
 
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
+
             da.Fill(ds);
-            return ds;
+
+            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+            {
+                practicePatient = CreatePatientModel(ds.Tables[0].Rows[i]);               
+            }
+
+            return practicePatient;
         }
 
         public void AddPatient(Patient pt)
@@ -84,6 +105,38 @@ namespace PHO_WebApp.DataAccessLayer
             con.Open();
             com.ExecuteNonQuery();
             con.Close();
+        }
+
+        public Patient CreatePatientModel(DataRow dr)
+        {
+            Patient p = new Patient();            
+
+            if (dr["Id"] != null && !string.IsNullOrWhiteSpace(dr["Id"].ToString()))
+            {
+                p.Id = SharedLogic.ParseNumeric(dr["Id"].ToString());
+            }
+
+            //if (dr["StaffTypeId"] != null && !string.IsNullOrWhiteSpace(dr["StaffTypeId"].ToString()))
+            //{
+            //    p.StaffTypeId = SharedLogic.ParseNumeric(dr["StaffTypeId"].ToString());
+            //}
+
+            p.FirstName = dr["FirstName"].ToString();
+            p.LastName = dr["LastName"].ToString();
+
+            p.EmailAddress = dr["Email"].ToString();
+
+            p.AddressLine1 = dr["AddressLine1"].ToString();
+            p.AddressLine2 = dr["AddressLine2"].ToString();
+            p.City = dr["City"].ToString();
+            p.State = dr["State"].ToString();
+            p.Condition = dr["Condition"].ToString();
+
+            ////s.StateId = SharedLogic.ParseNumeric(dr["StateId"].ToString());
+
+            //p.Phone = dr["Phone"].ToString();    
+
+            return p;
         }
     }
 }

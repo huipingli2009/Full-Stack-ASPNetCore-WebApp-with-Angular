@@ -21,11 +21,13 @@ namespace PHO_WebApp
         public Nullable<int> Sex_Id { get; set; }
         public string LastName { get; set; }
         public Nullable<System.DateTime> PersonDOB { get; set; }
+        public string Condition { get; set; }
         public string EmailAddress { get; set; }
         public string SSN { get; set; }
         public string AddressLine1 { get; set; }
         public string AddressLine2 { get; set; }
         public string City { get; set; }
+        public string State { get; set; }
         public Nullable<int> State_Id { get; set; }
         public string Zip { get; set; }
         public string Phone1 { get; set; }

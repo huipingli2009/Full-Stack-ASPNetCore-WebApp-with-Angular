@@ -182,6 +182,7 @@
     <Compile Include="Controllers\MeasureController.cs" />
     <Compile Include="Controllers\MeasureQualityImprovementController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
+    <Compile Include="Controllers\PatientVMController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
     <Compile Include="Controllers\PracticeAdminController.cs" />
     <Compile Include="Controllers\QualityImprovementsController.cs" />
@@ -244,6 +245,7 @@
       <DependentUpon>ReportTemplate.aspx</DependentUpon>
     </Compile>
     <Compile Include="SharedLogic\SharedLogic.cs" />
+    <Compile Include="ViewModel\PatientVM.cs" />
     <Compile Include="ViewModel\PracticeAdmin.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -454,7 +456,7 @@
     <Content Include="Views\Person\Patients.cshtml" />
     <Content Include="Views\Patient\AddPatient.cshtml" />
     <Content Include="Views\Patient\UpdatePatient.cshtml" />
-    <Content Include="Views\Patient\GetPatients.cshtml" />
+    <Content Include="Views\Patient\GetPatients_old.cshtml" />
     <Content Include="Views\Home\DataDictionary.cshtml" />
     <Content Include="Views\Login\Login.cshtml" />
     <Content Include="Views\Shared\LoggedInAs.cshtml" />
@@ -522,6 +524,8 @@
     <Content Include="webfonts\fa-brands-400.ttf" />
     <Content Include="webfonts\fa-brands-400.eot" />
     <Content Include="Views\Patient\GetPatientInfo.cshtml" />
+    <Content Include="Views\PatientVM\GetPatients_old.cshtml" />
+    <Content Include="Views\PatientVM\GetPatients.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

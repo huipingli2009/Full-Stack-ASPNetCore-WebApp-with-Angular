@@ -91,8 +91,8 @@ namespace PHO_WebApp
 
             routes.MapRoute(
            name: "Patients",
-           url: "Patient/GetPatients",
-           defaults: new { controller = "Patient", action = "GetPatients", id = UrlParameter.Optional }
+           url: "PatientVM/GetPatients",
+           defaults: new { controller = "PatientVM", action = "GetPatients", id = UrlParameter.Optional }
           );
 
         }

@@ -1,20 +1,23 @@
-﻿
+﻿@model List<PHO_WebApp.Models.Patient>
+
 @{
 	ViewBag.Title = "GetPatients";
-	Layout = "~/Views/Shared/_Layout.cshtml";	
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <!DOCTYPE html>
 
 <html>
-<head>	`
+<head>
+	`
 	<meta name="viewport" content="width=device-width" />
 	<title>Patient Lists</title>
-	<link href="~/Content/Site.css" rel="stylesheet" />	
+	<link href="~/Content/Site.css" rel="stylesheet" />
 	<style>
 		input {
 			margin-bottom: 10px;
 		}
+
 		h3, h5 {
 			color: #006D63;
 			font-weight: bold;
@@ -42,42 +45,43 @@
 				<th scope="col">City</th>
 				<th scope="col">State</th>
 				<th scope="col">Zip</th>
-				<th scope="col">Clinical Dx</th>
+				<th scope="col">Condition</th>
 				@*<th scope="col">PtId</th>*@
-				<th>Actions</th>
+				@*<th>Actions</th>*@
 			</tr>
 		</thead>
 		<tbody class="table-striped ">
-			@{
-				foreach (System.Data.DataRow dr in ViewBag.patients.Rows)
-				{
-					//use hidden field to capture patient id
-					@*@Html.HiddenFor(m => m.iId)*@
-					<tr>
-						<td>
+
+			@foreach (var item in Model)
+			{
+				//use hidden field to capture patient id
+				<tr>
+					@*<td>
 							<a href="~/Patient/GetPatientInfo?Id=@dr["Id"]">
 								<i class="fas fa-check-circle"></i>&nbsp;
 							</a>
-						</td>
-						<td>@dr["FirstName"]</td>
-						<td>@dr["LastName"]</td>
-						<td>@dr["PatientDOB"]</td>
-						<td>@dr["AddressLine1"]</td>
-						<td>@dr["City"]</td>
-						<td>@dr["State"]</td>
-						<td>@dr["Zip"]</td>
-						<td>@dr["Condition"]</td>
-						@*<td>@dr["Id"]</td>*@
-						<td>
+						</td>*@
+					@*<td>@dr["FirstName"]</td>*@
+					<td>@Html.TextBoxFor(m => item.LastName, new { @class = "form-control" })</td>
+					<td>@Html.TextBoxFor(m => item.LastName, new { @class = "form-control" })</td>
+					<td>@Html.TextBoxFor(m => item.LastName, new { @class = "form-control" })</td>
+					<td>@Html.TextBoxFor(m => item.LastName, new { @class = "form-control" })</td>
+					<td>@Html.TextBoxFor(m => item.LastName, new { @class = "form-control" })</td>
+					<td>@Html.TextBoxFor(m => item.LastName, new { @class = "form-control" })</td>
+					<td>@Html.TextBoxFor(m => item.LastName, new { @class = "form-control" })</td>
+					<td>@Html.TextBoxFor(m => item.LastName, new { @class = "form-control" })</td>
+					<td>@Html.TextBoxFor(m => item.LastName, new { @class = "form-control" })</td>
+					@*<td>@dr["Id"]</td>*@
+					@*<td>
 							<a href="~/Patient/UpdatePatient?Id=@dr["Id"]">
 								<i class="fas fa-edit"></i>&nbsp;
 							</a>
 							<a href="~/Patient/DeletePatient?Id=@dr["Id"]">
 								<i class="fas fa-user-times"></i>&nbsp;
 							</a>
-						</td>
-					</tr>
-				}
+						</td>*@
+				</tr>
+			}
 			}
 		</tbody>
 	</table>
