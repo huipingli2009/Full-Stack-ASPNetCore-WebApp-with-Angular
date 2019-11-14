@@ -24,7 +24,7 @@ namespace PHO_WebApp.DataAccessLayer
 
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
-            
+
             da.Fill(ds);
 
             if (ds != null && ds.Tables != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -62,7 +62,7 @@ namespace PHO_WebApp.DataAccessLayer
 
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
-            
+
             da.Fill(ds);
 
             if (ds != null && ds.Tables != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -193,7 +193,9 @@ namespace PHO_WebApp.DataAccessLayer
                         formSectionId = SharedLogic.ParseNumeric(r["FormSectionId"].ToString());
                         FormSection newFS = CreateFormSectionModel(
                             SharedLogic.ParseNumeric(r["FormSectionId"].ToString()),
-                            SharedLogic.ParseNumeric(r["FormSectionOrder"].ToString()));
+                            SharedLogic.ParseNumeric(r["FormSectionOrder"].ToString()),
+                            r["FormSectionHeader"].ToString(),
+                            r["FormSectionDescription"].ToString());
 
                         returnObject.FormSections.Add(newFS);
                     }
@@ -209,7 +211,8 @@ namespace PHO_WebApp.DataAccessLayer
                             r["PropagationDescription"].ToString(),
                             r["PropagationButton"].ToString(),
                             SharedLogic.ParseNumericNullable(r["PhysicianLinkTypeId"].ToString()),
-                            "10000" + ds.Tables[0].Rows.IndexOf(r).ToString()
+                            "10000" + ds.Tables[0].Rows.IndexOf(r).ToString(),
+                            SharedLogic.ParseNumeric(r["SectionOrder"].ToString())
                             );
                         returnObject.LastFormSection.Sections.Add(newS);
                     }
@@ -433,7 +436,7 @@ namespace PHO_WebApp.DataAccessLayer
             {
                 com.Parameters["@AnswerOptionId"].Value = DBNull.Value;
             }
-            
+
 
             con.Open();
             returnValue = (Int32)com.ExecuteScalar();
@@ -480,25 +483,33 @@ namespace PHO_WebApp.DataAccessLayer
             return c;
         }
 
-        public FormSection CreateFormSectionModel(int? FormSectionId, int Order)
+        public FormSection CreateFormSectionModel(int? FormSectionId, int Order, string Header, string Description)
         {
             FormSection c = new FormSection();
             if (FormSectionId.HasValue)
             {
                 c.FormSectionId = FormSectionId.Value;
             }
+            if (!string.IsNullOrWhiteSpace(Header))
+            {
+                c.Header = Header;
+            }
+            if (!string.IsNullOrWhiteSpace(Header))
+            {
+                c.Description = Description;
+            }
             c.Order = Order;
-            
+
 
             return c;
         }
 
-        public Section CreateSectionModel(int? SectionId, string SectionHeader, string SectionDescription, int? PropagationTypeId, string PropagationHeader, string PropagationDescription, string PropagationButton, int? SectionPhysicianLinkTypeId, string uniqueId)
+        public Section CreateSectionModel(int? SectionId, string SectionHeader, string SectionDescription, int? PropagationTypeId, string PropagationHeader, string PropagationDescription, string PropagationButton, int? SectionPhysicianLinkTypeId, string uniqueId, int order)
         {
             Section c = new Section();
 
             c.SectionUniqueId = "a" + uniqueId;
-            
+
             if (SectionId.HasValue)
             {
                 c.SectionId = SectionId.Value;
@@ -531,6 +542,7 @@ namespace PHO_WebApp.DataAccessLayer
             {
                 c.PropagationButtonContent = PropagationButton;
             }
+            c.Order = order;
 
             return c;
         }

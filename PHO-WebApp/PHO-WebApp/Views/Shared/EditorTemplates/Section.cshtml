@@ -9,24 +9,32 @@
 @Html.HiddenFor(model => model.SectionDescription)
 @Html.HiddenFor(model => model.SectionHeader)
 @Html.HiddenFor(model => model.SectionUniqueId)
-<div>
-    <h4>@Html.Label(Model.SectionHeader)</h4>
-</div>
 
-@if (!string.IsNullOrWhiteSpace(Model.SectionDescription))
+@if (!string.IsNullOrWhiteSpace(Model.SectionHeader))
 {
-    <p><i>@(Model.SectionDescription)</i></p>
+    <div>
+        <h5>@Html.Label(Model.SectionHeader)</h5>
+
+        @if (!string.IsNullOrWhiteSpace(Model.SectionDescription))
+        {
+            <p><i>@(Model.SectionDescription)</i></p>
+        }
+    </div>
 }
+
 
 @Html.Partial("_PhysicianLink", Model)
 
-    <div class="card card-body">
-         @for (var i = 0; i < Model.SectionQuestions.Count(); i++)
-         { 
-             @Html.EditorFor(model => Model.SectionQuestions[i])  
-         }
-    </div>
-         
+<div class="card card-body">
+    @for (var i = 0; i < Model.SectionQuestions.Count(); i++)
+    {
+        @Html.EditorFor(model => Model.SectionQuestions[i])
+    }
+</div>
+
 @Html.Partial("_CloneSection", Model)
 <br />
+
+
+
 

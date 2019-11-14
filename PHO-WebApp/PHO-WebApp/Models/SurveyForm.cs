@@ -87,7 +87,7 @@ namespace PHO_WebApp.Models
 
     public class SurveyForm
     {
-        private List<FormSection> _FormSections; 
+        private List<FormSection> _FormSections;
         private string _survey_Title;
         private int _formId;
         private int _formResponseId;
@@ -97,7 +97,7 @@ namespace PHO_WebApp.Models
             get { return _formId; }
             set { _formId = value; }
         }
-        
+
         public int FormResponseId
         {
             get { return _formResponseId; }
@@ -146,7 +146,7 @@ namespace PHO_WebApp.Models
             {
                 int total = 0;
                 int complete = 0;
-                foreach(QuestionResponse resp in this.Responses)
+                foreach (QuestionResponse resp in this.Responses)
                 {
                     total++;
                     if (!string.IsNullOrWhiteSpace(resp.Response_Text) || (resp.ResponseAnswer != null && resp.ResponseAnswer.AnswerOptionId > 0))
@@ -166,13 +166,14 @@ namespace PHO_WebApp.Models
                 {
                     if (FormSections[i] != null && FormSections[i].Sections != null && FormSections[i].Sections.Count > 0)
                     {
-                        foreach(Section s in FormSections[i].Sections)
+                        for (int j = 0; j < FormSections[i].Sections.Count; j++)
                         {
-                            if (s.SectionUniqueId == sectionUniqueId)
+                            Section curSection = FormSections[i].Sections[j];
+                            if (curSection.SectionUniqueId == sectionUniqueId)
                             {
-                                FormSection newFormSection = FormSections[i].Clone();
-                                newFormSection.Order++;
-                                FormSections.Add(newFormSection);
+                                Section newSection = curSection.Clone();
+                                //newSection.Order++;
+                                FormSections[i].Sections.Add(newSection);
                             }
                         }
                     }
@@ -195,11 +196,11 @@ namespace PHO_WebApp.Models
                     {
                         if (fs.Sections != null && fs.Sections.Count > 0)
                         {
-                            foreach(Section s in fs.Sections)
+                            foreach (Section s in fs.Sections)
                             {
                                 if (s.SectionQuestions != null && s.SectionQuestions.Count > 0)
                                 {
-                                    foreach(SectionQuestion sq in s.SectionQuestions)
+                                    foreach (SectionQuestion sq in s.SectionQuestions)
                                     {
                                         if (sq.Question != null)
                                         {
@@ -222,9 +223,9 @@ namespace PHO_WebApp.Models
         //must be refreshed after postback to the controller. It's crude, but this is the workaround for now.
         public void RefreshListFields(SurveyForm cachedSurvey)
         {
-            foreach(QuestionResponse respCurrent in this.Responses)
+            foreach (QuestionResponse respCurrent in this.Responses)
             {
-                foreach(QuestionResponse respCached in cachedSurvey.Responses)
+                foreach (QuestionResponse respCached in cachedSurvey.Responses)
                 {
                     if (respCurrent.IsListQuestionType && respCurrent.QuestionId == respCached.QuestionId)
                     {
@@ -242,11 +243,11 @@ namespace PHO_WebApp.Models
                 string uniqueId = entry.Key.Replace("PhysicianStaffId_", "");
                 string PhysicianStaffId = entry.Value;
 
-                foreach(FormSection fs in FormSections)
+                foreach (FormSection fs in FormSections)
                 {
                     if (fs.Sections != null)
                     {
-                        foreach(Section s in fs.Sections)
+                        foreach (Section s in fs.Sections)
                         {
                             if (s.SectionUniqueId == uniqueId)
                             {
@@ -270,6 +271,8 @@ namespace PHO_WebApp.Models
         private List<Section> _Sections;
         private int _order;
         private int _formSectionId;
+        private string _header;
+        private string _description;
 
         public int FormSectionId
         {
@@ -281,6 +284,17 @@ namespace PHO_WebApp.Models
             get { return _order; }
             set { _order = value; }
         }
+        public string Header
+        {
+            get { return _header; }
+            set { _header = value; }
+        }
+        public string Description
+        {
+            get { return _description; }
+            set { _description = value; }
+        }
+
         public List<Section> Sections
         {
             get
@@ -318,7 +332,7 @@ namespace PHO_WebApp.Models
             returnObj.Sections = new List<Section>();
             if (this.Sections != null && Sections.Count > 0)
             {
-                for (int i=0; i < Sections.Count; i++)
+                for (int i = 0; i < Sections.Count; i++)
                 {
                     returnObj.Sections.Add(Sections[i].Clone());
                 }
@@ -336,6 +350,7 @@ namespace PHO_WebApp.Models
         private string _propagationHeader;
         private string _propagationDescription;
         private string _propagationButtonContent;
+        private int _order;
 
         //special behavior keys
         private int _PhysicianLinkTypeId;
@@ -382,6 +397,12 @@ namespace PHO_WebApp.Models
         {
             get { return _propagationButtonContent; }
             set { _propagationButtonContent = value; }
+        }
+
+        public int Order
+        {
+            get { return _order; }
+            set { _order = value; }
         }
 
 
@@ -511,7 +532,7 @@ namespace PHO_WebApp.Models
                 this._Question = value;
             }
         }
-        
+
         public SectionQuestion Clone()
         {
             SectionQuestion returnObj = (SectionQuestion)this.MemberwiseClone();
@@ -573,7 +594,7 @@ namespace PHO_WebApp.Models
         }
 
     }
-    
+
     [FluentValidation.Attributes.Validator(typeof(ResponseValidator))]
     public class QuestionResponse
     {
@@ -666,7 +687,7 @@ namespace PHO_WebApp.Models
             get { return _responseAnswer; }
             set { _responseAnswer = value; }
         }
-        
+
         public QuestionResponse Clone()
         {
             QuestionResponse returnObj = (QuestionResponse)this.MemberwiseClone();
@@ -748,7 +769,7 @@ namespace PHO_WebApp.Models
             returnObj.ResponseId = 0;
             returnObj.AnswerOptionId = 0;
             returnObj.ResponseAnswersId = 0;
-            
+
             return returnObj;
         }
 
@@ -800,11 +821,11 @@ namespace PHO_WebApp.Models
     {
         public ResponseValidator()
         {
-            When(x => x.Flag_Required==true, () => {
+            When(x => x.Flag_Required == true, () => {
                 RuleFor(x => x.Response_Text).NotEmpty().WithMessage("Required");
             });
 
-            When(x => (x.Flag_Required==true && x.IsListQuestionType == true), () =>
+            When(x => (x.Flag_Required == true && x.IsListQuestionType == true), () =>
             {
                 //RuleFor(x => x.ResponseAnswer).NotNull().WithMessage("Required");
                 //RuleFor(x => x.ResponseAnswer.AnswerOptionId).NotNull().NotEmpty().WithMessage("Required");
@@ -812,6 +833,6 @@ namespace PHO_WebApp.Models
         }
     }
 
-    
+
 }
 

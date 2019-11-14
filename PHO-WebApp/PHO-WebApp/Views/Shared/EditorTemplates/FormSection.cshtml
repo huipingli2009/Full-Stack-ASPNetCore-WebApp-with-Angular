@@ -11,5 +11,18 @@
 {
 
     @Html.HiddenFor(model => model.Sections[i].PropagationTypeId)
+
+    if (!string.IsNullOrWhiteSpace(Model.Header))
+    {
+        <div>
+            <h4>@Html.Label(Model.Header)</h4>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Description))
+            {
+                <p><i>@(Model.Description)</i></p>
+            }
+        </div>
+    }
+
     @Html.EditorFor(m => m.Sections[i])
 }
