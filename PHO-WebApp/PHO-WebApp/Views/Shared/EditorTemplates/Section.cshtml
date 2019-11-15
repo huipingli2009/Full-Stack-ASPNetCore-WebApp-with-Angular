@@ -25,7 +25,7 @@
 
 @Html.Partial("_PhysicianLink", Model)
 
-<div class="card card-body">
+<div>
     @for (var i = 0; i < Model.SectionQuestions.Count(); i++)
     {
         @Html.EditorFor(model => Model.SectionQuestions[i])
