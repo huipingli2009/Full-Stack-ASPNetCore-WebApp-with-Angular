@@ -37,18 +37,7 @@ namespace PHO_WebApp.ViewModel
         public string EventCommand { get; set; }
         public string EventArgument { get; set; }
 
-        //public List<Staff> GetStaffs()
-        //{
-        //    List<Staff> list = new List<Staff>();
-        //    StaffDAL std = new StaffDAL();
-        //    Staff stf = new Staff();
-
-        //    list = std.getPracticeStaffs();
-
-        //    stf = list.FindAll(s=>s.Id==)
-        //    return list;
-        //}
-
+        
         private void Init()
         {
             EventCommand = "StaffList";

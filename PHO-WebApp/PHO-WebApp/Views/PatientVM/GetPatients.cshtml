@@ -1,9 +1,8 @@
 ﻿@model PHO_WebApp.ViewModel.PatientVM
 
-@*@{
-	ViewBag.Title = "GetPatients";
+@{	
 	Layout = "~/Views/Shared/_Layout.cshtml";
-}*@
+}
 <html>
 <head>
 	`
@@ -23,210 +22,212 @@
 </head>
 <body>
 
-	@using (Html.BeginForm())
-	{
-		@Html.HiddenFor(m => m.EventCommand)
-		@Html.HiddenFor(m => m.Mode)
-		@Html.HiddenFor(m => m.EventArgument)
-		@Html.HiddenFor(m => m.UserLogin.PracticeId)
-		@Html.HiddenFor(m => m.UserLogin.PracticeName)
-		@Html.HiddenFor(m => m.UserLogin.LoginId)
-		@Html.HiddenFor(m => m.UserLogin.StaffId)
-		@Html.HiddenFor(m => m.UserLogin.UserName)
+    @using (Html.BeginForm())
+    {       
+        @Html.HiddenFor(m => m.EventCommand)
+        @Html.HiddenFor(m => m.Mode)
+        @Html.HiddenFor(m => m.EventArgument)
+        @Html.HiddenFor(m => m.UserLogin.PracticeId)
+        @Html.HiddenFor(m => m.UserLogin.PracticeName)
+        @Html.HiddenFor(m => m.UserLogin.LoginId)
+        @Html.HiddenFor(m => m.UserLogin.StaffId)
+        @Html.HiddenFor(m => m.UserLogin.UserName)
 
-		<!--Begin Patient Summary Area -->
-		if (Model.IsPatientSummaryAreaVisible)
-		{
-			<div class="panel panel-primary" style="width:100%">
-				<div class="panel-heading">
-					<h2 class="panel-title">Patient Summary</h2>
-				</div>
-				<div class="panel-body">
-					<div class="form-group">
-						@Html.LabelFor(m => m.ptEntity.FirstName, "First Name")
-						@Html.TextBoxFor(m => m.ptEntity.FirstName, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.ptEntity.FirstName, null, new { @class = "validationText" })
-					</div>
-					<div class="form-group">
-						@Html.LabelFor(m => m.ptEntity.LastName, "Last Name")
-						@Html.TextBoxFor(m => m.ptEntity.LastName, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.ptEntity.LastName, null, new { @class = "validationText" })
-					</div>
-					<div class="form-group">
-						@Html.LabelFor(m => m.ptEntity.EmailAddress, "Email")
-						@Html.TextBoxFor(m => m.ptEntity.EmailAddress, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.ptEntity.EmailAddress, null, new { @class = "validationText" })
-					</div>
-					<div class="form-group">
-						@Html.LabelFor(m => m.ptEntity.Phone1, "Phone Number")
-						@Html.TextBoxFor(m => m.ptEntity.Phone1, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.ptEntity.Phone1, null, new { @class = "validationText" })
-					</div>
-					<div class="form-group">
-						@Html.LabelFor(m => m.ptEntity.AddressLine1, "AddressLine1")
-						@Html.TextBoxFor(m => m.ptEntity.AddressLine1, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.ptEntity.AddressLine1, null, new { @class = "validationText" })
-					</div>
-					<div class="form-group">
-						@Html.LabelFor(m => m.ptEntity.AddressLine2, "AddressLine2")
-						@Html.TextBoxFor(m => m.ptEntity.AddressLine2, new { @class = "form-control" })
-					</div>
-					<div class="form-group">
-						@Html.LabelFor(m => m.ptEntity.City, "City")
-						@Html.TextBoxFor(m => m.ptEntity.City, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.ptEntity.City, null, new { @class = "validationText" })
-					</div>
-					<div class="form-group">
-						@Html.LabelFor(m => m.ptEntity.State, "State")
-						@Html.TextBoxFor(m => m.ptEntity.State, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.ptEntity.State, null, new { @class = "validationText" })
-					</div>
-				</div>
-				<div class="panel-footer">
-					<div class="row">
-						<div class="col-sm-12">
-							<button id="btnSave" class="btn btn-sm btn-primary" data-pdsa-action="SavePatient">
-								<i class="fas fa-save"></i>&nbsp;Save
-							</button>
-							<button id="btnCancel" class="btn btn-sm btn-primary" formnovalidate="formnovalidate" data-pdsa-action="cancel">
-								<i class="fas fa-strikethrough"></i>&nbsp;Cancel
-							</button>
-						</div>
-					</div>
-				</div>
+        <!--Begin Patient Summary Area -->
+        if (Model.IsPatientSummaryAreaVisible)
+        {
+            <div class="panel panel-primary" style="width:100%">
+                <div class="panel-heading">
+                    <h2 class="panel-title">Patient Summary</h2>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.ptEntity.FirstName, "First Name")
+                        @Html.TextBoxFor(m => m.ptEntity.FirstName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.ptEntity.FirstName, null, new { @class = "validationText" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.ptEntity.LastName, "Last Name")
+                        @Html.TextBoxFor(m => m.ptEntity.LastName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.ptEntity.LastName, null, new { @class = "validationText" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.ptEntity.EmailAddress, "Email")
+                        @Html.TextBoxFor(m => m.ptEntity.EmailAddress, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.ptEntity.EmailAddress, null, new { @class = "validationText" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.ptEntity.Phone1, "Phone Number")
+                        @Html.TextBoxFor(m => m.ptEntity.Phone1, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.ptEntity.Phone1, null, new { @class = "validationText" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.ptEntity.AddressLine1, "AddressLine1")
+                        @Html.TextBoxFor(m => m.ptEntity.AddressLine1, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.ptEntity.AddressLine1, null, new { @class = "validationText" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.ptEntity.AddressLine2, "AddressLine2")
+                        @Html.TextBoxFor(m => m.ptEntity.AddressLine2, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.ptEntity.City, "City")
+                        @Html.TextBoxFor(m => m.ptEntity.City, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.ptEntity.City, null, new { @class = "validationText" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.ptEntity.State, "State")
+                        @Html.TextBoxFor(m => m.ptEntity.State, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.ptEntity.State, null, new { @class = "validationText" })
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button id="btnSave" class="btn btn-sm btn-primary" data-pdsa-action="SavePatient">
+                                <i class="fas fa-save"></i>&nbsp;Save
+                            </button>
+                            <button id="btnCancel" class="btn btn-sm btn-primary" formnovalidate="formnovalidate" data-pdsa-action="cancel">
+                                <i class="fas fa-strikethrough"></i>&nbsp;Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-			</div>
-		}
-		<!--End Patient Summary-->
+            </div>
+        }
+        <!--End Patient Summary-->
 
-		<!--Begin Patient List Area -->
-		if (Model.IsPatientListAreaVisible)
-		{
-			<div>
-				<h5>List of Patients</h5>
-			</div>
-			<div class="col-md-4" style="float:right">
-				<h5>Search</h5>
-				<input text="" class="form-control search" id="search" />
-			</div>
-			<table class="table-hover min-font-set table-bordered">
-				<thead class="pretty-table_head">
-					<tr>
-						<th>
-							Select
-						</th>
-						<th scope="col">
-							First Name
-						</th>
-						<th scope="col">
-							Last Name
-						</th>
-						<th scope="col" align="center">
-							DOB
-						</th>
-						<th>
-							Address
-						</th>
-						<th>
-							City
-						</th>
-						<th>
-							State
-						</th>
-						<th>
-							Zip
-						</th>
-						<th scope="col" style="width:12%">
-							Condition
-						</th>
-					</tr>
-				</thead>
-				<tbody class="pretty-table-body-font">
-					@foreach (var item in Model.PatientList)
-					{
-						<tr>
-							<td>
-								<a href="#" data-pdsa-action="SelectPatient" data-pdsa-val="@item.Id" class="btn btn-default btn-sm btn-link">
-									<i class="fas fa-check-circle"></i>&nbsp;
-								</a>
-							</td>
-							<td>
-								@Html.DisplayFor(modelItem => item.FirstName)
-							</td>
-							<td>
-								@Html.DisplayFor(modelItem => item.LastName)
-							</td>
-							<td>
-								@Html.DisplayFor(modelItem => item.PersonDOB)
-							</td>
-							<td>
-								@Html.DisplayFor(modelItem => item.AddressLine1)
-							</td>
-							<td>
-								@Html.DisplayFor(modelItem => item.City)
-							</td>
-							<td>
-								@Html.DisplayFor(modelItem => item.State)
-							</td>
-							<td>
-								@Html.DisplayFor(modelItem => item.Zip)
-							</td>
-							<td>
-								@Html.DisplayFor(modelItem => item.Condition)
-							</td>							
-						</tr>
-					}
-				</tbody>
-			</table>
-		}
-		<div>
-			<button id="btnAdd" class="btn btn-sm btn-primary pull-right" data-pdsa-action="AddPatient">
-				<i class="fas fa-plus-circle"></i>
-				&nbsp;Add New Patient
-			</button>
-		</div>
-		<!--End Patient List Area -->
-	}
+        <!--Begin Patient List Area -->
+        if (Model.IsPatientListAreaVisible)
+        {
+            <div>
+                <h5>List of Patients</h5>
+            </div>
+            <div class="col-md-4" style="float:right">
+                <h5>Search</h5>
+                <input text="" class="form-control search" id="search" />
+            </div>
+            <table class="table-hover min-font-set table-bordered col-md-12">
+                <thead class="pretty-table_head">
+                    <tr>
+                        <th>
+                            Select
+                        </th>
+                        <th scope="col">
+                            First Name
+                        </th>
+                        <th scope="col">
+                            Last Name
+                        </th>
+                        <th scope="col" align="center">
+                            DOB
+                        </th>
+                        <th>
+                            Address
+                        </th>
+                        <th>
+                            City
+                        </th>
+                        <th>
+                            State
+                        </th>
+                        <th>
+                            Zip
+                        </th>
+                        <th scope="col" style="width:12%">
+                            Condition
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="pretty-table-body-font">
+                    @foreach (var item in Model.PatientList)
+                    {
+                        <tr>
+                            <td>
+                                <a href="#" data-pdsa-action="SelectPatient" data-pdsa-val="@item.Id" class="btn btn-default btn-sm btn-link">
+                                    <i class="fas fa-check-circle"></i>&nbsp;
+                                </a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FirstName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LastName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PersonDOB)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AddressLine1)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.City)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.State)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Zip)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Condition)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        <div>
+            <button id="btnAdd" class="btn btn-sm btn-primary pull-right" data-pdsa-action="AddPatient">
+                <i class="fas fa-plus-circle"></i>
+                &nbsp;Add New Patient
+            </button>
+        </div>
+        <!--End Patient List Area -->
+    }
 
-	<script type="text/javascript">
-		$(document).ready(function () {
-			$('.search').on('keyup', function () {
-				var serachTerm = $(this).val().toLowerCase();
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //$('.search').on('keyup', function () {
+            //    var serachTerm = $(this).val().toLowerCase();
 
-				$('#tblPatientList tbody tr').each(function () {
-					var str = $(this).text().toLowerCase();
+            //    $('#tblPatientList tbody tr').each(function () {
+            //        var str = $(this).text().toLowerCase();
 
-					if (str.indexOf(serachTerm) == -1) {
-						$(this).hide();
-					}
-					else {
-						$(this).show();
-					}
-				});
-			});
+            //        if (str.indexOf(serachTerm) == -1) {
+            //            $(this).hide();
+            //        }
+            //        else {
+            //            $(this).show();
+            //        }
+            //    });
+            //});
 
-			$("[data-pdsa-action]").on("click", function (e) {
-				e.preventDefault();
+            $("[data-pdsa-action]").on("click", function (e) {
+                e.preventDefault();
+                var test = $("#EventCommand").val($(this).data("pdsa-action"));
+                alert(test);
 
-				$("#EventCommand").val($(this).data("pdsa-action"));
-				$("#EventArgument").val($(this).data("pdsa-val"));
-				$("form").submit();
-			});
+                $("#EventCommand").val($(this).data("pdsa-action"));
+                $("#EventArgument").val($(this).data("pdsa-val"));
+                $("form").submit();
+            });
 
-			$("#Delete").on("click", function (e) {
-				e.preventDefault();
+            $("#Delete").on("click", function (e) {
+                e.preventDefault();
 
-				var choice = confirm($(this).attr('data-confirm'));
+                var choice = confirm($(this).attr('data-confirm'));
 
-				if (choice) {
-					window.location.href = $(this).attr('href');
-				}
-				else {
-					return false;
-				}
-			});
-		});
-	</script>
+                if (choice) {
+                    window.location.href = $(this).attr('href');
+                }
+                else {
+                    return false;
+                }
+            });
+        });
+    </script>
 </body>
 </html>
 
