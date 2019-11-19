@@ -211,6 +211,7 @@ namespace PHO_WebApp.DataAccessLayer
                             r["PropagationDescription"].ToString(),
                             r["PropagationButton"].ToString(),
                             SharedLogic.ParseNumericNullable(r["PhysicianLinkTypeId"].ToString()),
+                            SharedLogic.ParseNumericNullable(r["PatientLinkTypeId"].ToString()),
                             "10000" + ds.Tables[0].Rows.IndexOf(r).ToString(),
                             SharedLogic.ParseNumeric(r["SectionOrder"].ToString())
                             );
@@ -504,7 +505,7 @@ namespace PHO_WebApp.DataAccessLayer
             return c;
         }
 
-        public Section CreateSectionModel(int? SectionId, string SectionHeader, string SectionDescription, int? PropagationTypeId, string PropagationHeader, string PropagationDescription, string PropagationButton, int? SectionPhysicianLinkTypeId, string uniqueId, int order)
+        public Section CreateSectionModel(int? SectionId, string SectionHeader, string SectionDescription, int? PropagationTypeId, string PropagationHeader, string PropagationDescription, string PropagationButton, int? SectionPhysicianLinkTypeId, int? SectionPatientLinkTypeId, string uniqueId, int order)
         {
             Section c = new Section();
 
@@ -529,6 +530,10 @@ namespace PHO_WebApp.DataAccessLayer
             if (SectionPhysicianLinkTypeId.HasValue)
             {
                 c.PhysicianLinkTypeId = SectionPhysicianLinkTypeId.Value;
+            }
+            if (SectionPatientLinkTypeId.HasValue)
+            {
+                c.PatientLinkTypeId = SectionPatientLinkTypeId.Value;
             }
             if (!string.IsNullOrWhiteSpace(PropagationHeader))
             {
