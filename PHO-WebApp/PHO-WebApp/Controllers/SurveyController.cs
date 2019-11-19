@@ -13,6 +13,7 @@ namespace PHO_WebApp.Controllers
     public class SurveyController : BaseController
     {
         DataAccessLayer.SurveyDAL records = new DataAccessLayer.SurveyDAL();
+        DataAccessLayer.StaffDAL staffData = new DataAccessLayer.StaffDAL();
 
         // GET: Survey
         public ActionResult Index()
@@ -55,6 +56,8 @@ namespace PHO_WebApp.Controllers
         public ActionResult CloneSection(FormCollection fc, SurveyForm model, string sectionUniqueId)
         {
             model = PopulateDependencies(model);
+            model = ProcessPhysicianLink(model, fc);
+
             model.CloneSection(sectionUniqueId);
 
             ModelState.Clear();
@@ -64,14 +67,11 @@ namespace PHO_WebApp.Controllers
         [HttpPost]
         public ActionResult Submit(FormCollection fc, SurveyForm model)
         {
+
+            model = ProcessPhysicianLink(model, fc);
+
             if (ModelState.IsValid && model != null && model.Responses != null)
             {
-                Dictionary<string, string> dictionary = fc.AllKeys
-                    .Where(k => k.StartsWith("PhysicianStaffId"))
-                    .ToDictionary(k => k, k => fc[k]);
-
-                model.AssignPhysicianLinkKeys(dictionary);
-
                 SaveForm(model);
 
                 return ViewSurveyDetails(model.FormId, "Data collection was saved successfully. ID = " + model.FormResponseId.ToString());
@@ -90,6 +90,19 @@ namespace PHO_WebApp.Controllers
                 SurveyForm cachedSurvey = (SurveyForm)Session["CachedSurvey_" + model.FormId.ToString() + "_" + model.FormResponseId.ToString()];
                 model.RefreshListFields(cachedSurvey);
             }
+            return model;
+        }
+
+        private SurveyForm ProcessPhysicianLink(SurveyForm model, FormCollection fc)
+        {
+            Dictionary<string, string> dictionary = fc.AllKeys
+            .Where(k => k.StartsWith("PhysicianStaffId"))
+            .ToDictionary(k => k, k => fc[k]);
+
+            List<Staff> staffList = staffData.getPracticeProviders(PracticeId);
+
+            model.AssignPhysicianLinkKeys(dictionary, staffList);
+
             return model;
         }
 
