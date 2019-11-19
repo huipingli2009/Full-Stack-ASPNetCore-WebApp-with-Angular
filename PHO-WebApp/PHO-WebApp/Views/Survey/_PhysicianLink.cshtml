@@ -32,7 +32,7 @@
                         <input type="hidden" name="@("PhysicianStaffId_" + Model.SectionUniqueId)" id="@("PhysicianStaffId_" + Model.SectionUniqueId)" value="@(Model.PhysicianStaffId)" />
                     </div>
                     <div class="@("input-group collapse " + (Model.PhysicianStaffId > 0 ? "show" : "hide"))" id="@("PhysicianLinkPanel_" + Model.SectionUniqueId + "_Display")">
-                        <strong id="@("lblPhysicianLinkDisplay_" + Model.SectionUniqueId)" style="font-weight:bold">@(Model.PhysicianStaffId > 0 ? "Linked: " + Model.PhysicianStaffId : "")</strong>&nbsp;
+                        <strong id="@("lblPhysicianLinkDisplay_" + Model.SectionUniqueId)" style="font-weight:bold">@(Model.PhysicianStaffId > 0 ? Model.PhysicianLinkPostSetVerbiage : "")</strong>&nbsp;
                         <a class="btn btn-primary" data-toggle="collapse" onclick="@("togglePhysicianLink('" + Model.SectionUniqueId + "')")" href="#" role="button" aria-expanded="false" aria-controls="@("LinkPanel_" + Model.SectionUniqueId)">Reset</a>
                     </div>
                 </div>

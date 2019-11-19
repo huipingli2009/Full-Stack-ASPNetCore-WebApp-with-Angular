@@ -234,14 +234,15 @@ namespace PHO_WebApp.Models
             }
         }
 
-        public void AssignPhysicianLinkKeys(Dictionary<string, string> dictionary)
+        public void AssignPhysicianLinkKeys(Dictionary<string, string> dictionary, List<Staff> staffList)
         {
             foreach (KeyValuePair<string, string> entry in dictionary)
             {
                 // do something with entry.Value or entry.Key
                 string uniqueId = entry.Key.Replace("PhysicianStaffId_", "");
                 string PhysicianStaffId = entry.Value;
-
+                int iStaffId = SharedLogic.ParseNumeric(PhysicianStaffId);
+                
                 foreach (FormSection fs in FormSections)
                 {
                     if (fs.Sections != null)
@@ -252,7 +253,14 @@ namespace PHO_WebApp.Models
                             {
                                 if (!string.IsNullOrWhiteSpace(PhysicianStaffId))
                                 {
-                                    s.PhysicianStaffId = SharedLogic.ParseNumeric(PhysicianStaffId);
+                                    
+                                    Staff selectedPhysician = staffList.Where(r => r.Id == iStaffId).FirstOrDefault();
+                                    if (selectedPhysician != null)
+                                    {
+                                        s.PhysicianStaffId = SharedLogic.ParseNumeric(PhysicianStaffId);
+                                        s.PhysicianLinkPostSetVerbiage = "Linked: " + selectedPhysician.LookupDisplayText;
+                                    }
+
                                 }
                                 else
                                 {
@@ -356,6 +364,7 @@ namespace PHO_WebApp.Models
         private int _PropagationTypeId;
         private int _PhysicianStaffId;
         private string _SectionUniqueId;
+        private string _PhysicianLinkPostSetVerbiage;
 
         public Section()
         {
@@ -396,6 +405,11 @@ namespace PHO_WebApp.Models
         {
             get { return _propagationButtonContent; }
             set { _propagationButtonContent = value; }
+        }
+        public string PhysicianLinkPostSetVerbiage
+        {
+            get { return _PhysicianLinkPostSetVerbiage; }
+            set { _PhysicianLinkPostSetVerbiage = value; }
         }
 
         public int Order

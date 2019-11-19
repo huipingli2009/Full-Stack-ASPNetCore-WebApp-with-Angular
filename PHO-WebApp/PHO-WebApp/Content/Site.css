@@ -27,8 +27,9 @@
 }
 
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-    font-family: 'Nunito Sans', sans-serif;
-    font-weight: 500;
+    font-family: 'Archer Bold';
+    color: #006D63;
+    font-weight: bold;
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 
