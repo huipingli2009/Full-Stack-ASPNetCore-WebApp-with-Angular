@@ -212,7 +212,8 @@ namespace PHO_WebApp.DataAccessLayer
         public Chart CreateChartModel(object Id,
             object Type,
             object Description,
-            object URL)
+            object URL,
+            object NetworkURL)
         {
             Chart c = new Chart();
             if (Id != null)
@@ -230,6 +231,10 @@ namespace PHO_WebApp.DataAccessLayer
             if (URL != null)
             {
                 c.URL = URL.ToString();
+            }
+            if (NetworkURL != null)
+            {
+                c.NetworkURL = NetworkURL.ToString();
             }
             return c;
         }
