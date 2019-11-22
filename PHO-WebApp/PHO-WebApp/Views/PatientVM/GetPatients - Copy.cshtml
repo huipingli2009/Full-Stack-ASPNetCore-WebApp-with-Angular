@@ -202,75 +202,91 @@
         <!--Begin Edit Patient Summary Area -->
         if (Model.IsPatientSummaryEditAreaVisible)
         {
-            <table class="PatientSummary">
-                <thead style="border-top: 1px solid #808080">
-                    <tr><th colspan="6"> </th></tr>
-                    <tr><th colspan="6"> </th></tr>
-                    <tr><th colspan="6"> </th></tr>
-                </thead>
-                <tr>&nbsp;</tr>
-                <tr>&nbsp;</tr>
-                <tr>
-                    <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Last Name:</td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.LastName)</td>
-                    <td valign="top" style="font-weight:bold; width:120px; max-width:120px;">First Name: </td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.FirstName)</td>
-                    <td valign="top" style="font-weight:bold; width:120px; max-width:150px;">DOB: </td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.PersonDOB)</td>
-                </tr>
-                <tr>
-                    <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Gender:</td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.Gender)</td>
-                    <td valign="top" style="font-weight:bold; width:120px; max-width:120px;">Condition: </td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.Condition)</td>
-                    <td valign="top" style="font-weight:bold; width:120px; max-width:150px;">Insurance: </td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.InsurerId)</td>
-                </tr>
-                <tr>
-                    <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Address::</td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.AddressLine1)</td>
-                    <td valign="top" style="font-weight:bold; width:120px; max-width:120px;">City: </td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.City)</td>
-                    <td valign="top" style="font-weight:bold; width:120px; max-width:150px;">State: </td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.State)</td>
-                </tr>
-                <tr>
-                    <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Zip: </td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.Zip)</td>
-                    <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Zip:</td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.Zip)</td>
-                    <td valign="top" style="font-weight:bold; width:100px; max-width:150px;">Email:</td>
-                    <td valign="top" style="width:120px; max-width:120px;">@Html.DisplayFor(m => m.ptEntity.EmailAddress)</td>
-                </tr>
-                <tr>
-                    <td valign="top" style="font-weight:bold; width:150px; max-width:100px;">PCP's First Name:</td>
-                    <td valign="top" style="width:250px; max-width:250px;" colspan="3">@Html.DisplayFor(m => m.ptEntity.PCP_FirstName)</td>
-                    <td valign="top" style="font-weight:bold; width:150px; max-width:150px;">PCP's Last Name: </td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.PCP_LastName)</td>
-                </tr>
-                <tr>
-                    <td valign="top" style="font-weight:bold; width:150px; max-width:100px;">PMCA Score:</td>
-                    <td valign="top" style="width:200px; max-width:200px;" colspan="3">@Html.DisplayFor(m => m.ptEntity.PMCAScore)</td>
-                    <td valign="top" style="font-weight:bold; width:250px; max-width:250px;">PMCA Score from Provider: </td>
-                    <td valign="top" style="width:250px; max-width:250px;">@Html.DisplayFor(m => m.ptEntity.ProviderPMCAScore)</td>
-                </tr>
-                <tr>
-                    <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Notes from Provider: </td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.ProviderPMCANotes)</td>
-                    <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Provider Last Name:</td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.PMCA_ProvLast)</td>
-                    <td valign="top" style="font-weight:bold; width:100px; max-width:150px;">Provider First Name:</td>
-                    <td valign="top" style="width:120px; max-width:120px;">@Html.DisplayFor(m => m.ptEntity.PMCA_ProvFirst)</td>
-                </tr>
-                <tr>
-                    <td valign="top" colspan="5"></td>
-                    <td valign="top" style="font-weight:bold; width:120px; max-width:120px;">
-                        <button id="btnEdit" class="btn btn-sm btn-primary pull-right" data-pdsa-action="EditPatient" data-pdsa-val=@Model.ptEntity.Id>
-                            <i class="fas fa-save"></i>&nbsp;Edit
-                        </button>
-                </td>
-                </tr>
-            </table>
+
+            <div id="pnlEditPatient" class="panel panel-primary col-12">
+                <div class="panel-heading">
+                    <h2 class="panel-title">Patient Summary</h2>
+                </div>
+                <div class="panel-body">
+                    <div class="row" style="width:100%;">
+                        @Html.AntiForgeryToken()
+                        <div class="col-sm-6">
+                            <div>
+                                First Name: @Html.TextBoxFor(m => m.ptEntity.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                Last Name: @Html.TextBoxFor(m => m.ptEntity.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="width:100%;">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                DOB: @Html.TextBoxFor(m => m.ptEntity.PersonDOB, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                Gender: @Html.TextBoxFor(m => m.ptEntity.City, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="width:100%;">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                Email: @Html.TextBoxFor(m => m.ptEntity.EmailAddress, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                Phone: @Html.TextBoxFor(m => m.ptEntity.Phone1, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="width:100%;">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                Address:@Html.TextBoxFor(m => m.ptEntity.AddressLine1, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                City: @Html.TextBoxFor(m => m.ptEntity.City, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="width:100%;">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                State: @Html.TextBoxFor(m => m.ptEntity.State, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                Zip: @Html.TextBoxFor(m => m.ptEntity.Zip, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @*<div class="panel-footer">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button id="btnSave" class="btn btn-sm btn-primary" data-pdsa-action="SavePatient">
+                                <i class="fas fa-save"></i>&nbsp;Save
+                            </button>
+                            <button id="btnCancel" class="btn btn-sm btn-primary" formnovalidate="formnovalidate" data-pdsa-action="cancel">
+                                <i class="fas fa-strikethrough"></i>&nbsp;Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>*@
         }
 
         <!--End Edit Patient Summary Area -->

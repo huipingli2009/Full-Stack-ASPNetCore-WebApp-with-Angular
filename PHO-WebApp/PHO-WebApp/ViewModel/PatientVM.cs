@@ -15,7 +15,7 @@ namespace PHO_WebApp.ViewModel
         private SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["con"].ConnectionString);
 
         public List<Patient> PatientList { get; set; }
-        public UserDetails UserLogin { get; set; }
+        public UserDetails UserLogin { get; set; }     
 
         public Patient ptEntity { get; set; }
 
@@ -27,6 +27,8 @@ namespace PHO_WebApp.ViewModel
         public bool IsPatientListAreaVisible { get; set; }
        
         public bool IsPatientSummaryAreaVisible { get; set; }
+
+        public bool IsPatientSummaryEditAreaVisible { get; set; }
         public PatientVM()
         {
             Init();
@@ -60,19 +62,30 @@ namespace PHO_WebApp.ViewModel
 
             SelectMode();
         }
+
+        //private void EditPatient()
+        //{
+        //    PatientVM pt = new PatientVM();
+
+        //    ptEntity = pt.GetPatient(Convert.ToInt32(EventArgument));
+
+        //    EditMode();
+        //}
         private void ListMode()
         {
             IsValid = true;
             IsPatientListAreaVisible = true;
             IsPatientSummaryAreaVisible = false;
-            //IsStaffDetailsAreaVisible = true;
+            IsPatientSummaryEditAreaVisible = false;          
 
             Mode = "PatientList";
         }
         private void SelectMode()
         {
             IsPatientListAreaVisible = false;
-            IsPatientSummaryAreaVisible = true;
+            //IsPatientSummaryAreaVisible = true;
+            //IsPatientSummaryEditAreaVisible = false;
+            IsPatientSummaryEditAreaVisible = true;
 
             Mode = "SelectPatient";
         }
@@ -89,8 +102,14 @@ namespace PHO_WebApp.ViewModel
                     GetPatients();
                     break;
                 case "selectpatient":
-                    IsValid = true; 
+                    IsValid = true;                   
                     SelectPatient();
+                    break;
+                case "editpatient":
+                    IsValid = true;
+                    IsPatientSummaryEditAreaVisible = true;
+                    IsPatientSummaryAreaVisible = false;
+                    IsPatientListAreaVisible = false;
                     break;
 
                 default:

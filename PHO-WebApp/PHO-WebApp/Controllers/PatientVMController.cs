@@ -36,20 +36,8 @@ namespace PHO_WebApp.Controllers
 
             ModelState.Clear();
 
-            return View(ptVM);      }
-        //public ActionResult GetPatient(int id)
-        //{
-        //    PatientVM ptVM = new PatientVM();
-
-        //    ptVM.IsValid = ModelState.IsValid;
-        //    //ptVM.GetPatient(id);
-        //    //ptVM.EventCommand = "SelectPatient";
-        //    ptVM.ptEntity = ptVM.GetPatient(id);
-
-        //    ModelState.Clear();
-
-        //    return View(ptVM);
-        //}
+            return View(ptVM);
+        }        
 
         // GET: PatientVM/Create
         public ActionResult Create()

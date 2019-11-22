@@ -130,7 +130,22 @@ namespace PHO_WebApp.DataAccessLayer
             p.AddressLine2 = dr["AddressLine2"].ToString();
             p.City = dr["City"].ToString();
             p.State = dr["State"].ToString();
+            p.Zip = dr["Zip"].ToString();
+            p.Phone1 = dr["Phone1"].ToString();
             p.Condition = dr["Condition"].ToString();
+            p.Gender = dr["Gender"].ToString();
+
+            //if (dr["PMCAScore"] != null && !string.IsNullOrWhiteSpace(dr["PMCAScore"].ToString()))
+            //{
+            //    p.PMCAScore = dr["PMCAScore"].ToString();
+            //}
+            p.PMCAScore = dr["PMCAScore"].ToString();
+            p.ProviderPMCAScore = dr["ProviderPMCAScore"].ToString();
+            p.ProviderPMCANotes = dr["ProviderPMCANotes"].ToString();
+            p.PMCA_ProvFirst = dr["PMCA_ProvFirst"].ToString();
+            p.PMCA_ProvLast = dr["PMCA_ProvLast"].ToString();
+            p.PCP_FirstName = dr["PCP_FirstName"].ToString();
+            p.PCP_LastName = dr["PCP_LastName"].ToString();
 
             ////s.StateId = SharedLogic.ParseNumeric(dr["StateId"].ToString());
 

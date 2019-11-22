@@ -20,6 +20,7 @@ namespace PHO_WebApp
         public string MiddleName { get; set; }
         public Nullable<int> Sex_Id { get; set; }
         public string LastName { get; set; }
+        public string Gender { get; set; }
         public Nullable<System.DateTime> PersonDOB { get; set; }
         public string Condition { get; set; }
         public string EmailAddress { get; set; }
@@ -35,6 +36,13 @@ namespace PHO_WebApp
         public string CCHMCMrn { get; set; }
         public Nullable<int> InsurerId { get; set; }
         public Nullable<int> PCPId { get; set; }
+        public string PCP_FirstName { get; set; }
+        public string PCP_LastName { get; set; }
+        public string PMCAScore { get; set; }
+        public string ProviderPMCAScore { get; set; }
+        public string ProviderPMCANotes { get; set; }
+        public string PMCA_ProvFirst { get; set; }
+        public string PMCA_ProvLast { get; set; }
         public Nullable<bool> ActiveFlag { get; set; }
         public Nullable<bool> DeletedFlag { get; set; }
         public Nullable<int> CreatedById { get; set; }
