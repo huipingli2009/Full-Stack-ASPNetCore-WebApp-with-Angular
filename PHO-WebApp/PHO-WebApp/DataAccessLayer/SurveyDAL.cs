@@ -355,6 +355,7 @@ namespace PHO_WebApp.DataAccessLayer
             com.Parameters.Add("@QuestionId", SqlDbType.Int);
             com.Parameters.Add("@FormResponseId", SqlDbType.Int);
             com.Parameters.Add("@PhysicianStaffId", SqlDbType.Int);
+            com.Parameters.Add("@PatientId", SqlDbType.Int);
             com.Parameters.Add("@ResponseText", SqlDbType.VarChar);
 
             if (FormResponseId > 0)
@@ -381,6 +382,14 @@ namespace PHO_WebApp.DataAccessLayer
             else
             {
                 com.Parameters["@PhysicianStaffId"].Value = DBNull.Value;
+            }
+            if (model.PatientId > 0)
+            {
+                com.Parameters["@PatientId"].Value = model.PhysicianStaffId;
+            }
+            else
+            {
+                com.Parameters["@PatientId"].Value = DBNull.Value;
             }
 
             if (!string.IsNullOrWhiteSpace(model.Response_Text))
