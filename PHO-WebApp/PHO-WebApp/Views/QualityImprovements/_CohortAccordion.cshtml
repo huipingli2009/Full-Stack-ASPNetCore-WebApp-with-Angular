@@ -48,7 +48,6 @@
                                         <th scope="col" class="dashboard-label dashboard-cohort">Name</th>
                                         <th scope="col" class="dashboard-label dashboard-cohort">Description</th>
                                         <th scope="col" class="dashboard-label dashboard-cohort">My Practice vs Network</th>
-                                        <th scope="col" class="dashboard-label dashboard-cohort">Chart</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -70,14 +69,16 @@
                                                 }
                                             </td>
                                             <td>
-                                                <label class="dashboard-input" title="@("Numerator: " + Model[i].Measures[m].Numerator + "; Denominator: " + Model[i].Measures[m].Denominator)" id="@("Cohort"+i.ToString()+"MeasureValues"+m.ToString())">@(Model[i].Measures[m].MeasureValue + "  /  " + Model[i].Measures[m].LastNetworkValue)</label>
+                                                <a class="dashboard-input" href="@Model[i].Measures[m].Chart.URL" target="_blank">@(Model[i].Measures[m].MeasureValue)</a>
+                                                <label class="dashboard-input"> / </label>
+                                                <a class="dashboard-input" href="@Model[i].Measures[m].Chart.NetworkURL" target="_blank">@(Model[i].Measures[m].LastNetworkValue)</a>
                                             </td>
-                                            <td>
+                                            @*<td>
                                                 @if (Model[i].Measures[m].Chart != null && !string.IsNullOrWhiteSpace(Model[i].Measures[m].Chart.URL))
                                                 {
                                                     <a href="@Model[i].Measures[m].Chart.URL" target="_blank">@(Model[i].Measures[m].Chart.Type + " as of " + @Model[i].Measures[m].LastMeasureDate.Value.ToShortDateString())</a>
                                                 }
-                                            </td>
+                                            </td>*@
                                         </tr>
 
                                     }

@@ -133,7 +133,8 @@ namespace PHO_WebApp.DataAccessLayer
                         chartObj = MeasureDAL.CreateChartModel(ds.Tables[0].Rows[i]["ChartId"]
                             , ds.Tables[0].Rows[i]["ChartType"]
                             , ds.Tables[0].Rows[i]["ChartDesc"]
-                            , ds.Tables[0].Rows[i]["URL"]);
+                            , ds.Tables[0].Rows[i]["URL"]
+                            , ds.Tables[0].Rows[i]["NetworkURL"]);
 
                         if (QIC.Cohorts[QIC.Cohorts.Count - 1].Measures.Count > 0)
                         {

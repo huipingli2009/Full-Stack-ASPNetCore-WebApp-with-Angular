@@ -11,6 +11,7 @@ namespace PHO_WebApp.Models
         public string Description { get; set; }
         public string Type { get; set; }
         public string URL { get; set; }
+        public string NetworkURL { get; set; }
 
     }
 }
