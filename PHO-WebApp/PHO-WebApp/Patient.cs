@@ -11,17 +11,20 @@ namespace PHO_WebApp
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Patient
     {
         public int Id { get; set; }
         public int PersonTypeId { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
-        public Nullable<int> Sex_Id { get; set; }
+        public string Sex { get; set; }
         public string LastName { get; set; }
         public string Gender { get; set; }
-        public Nullable<System.DateTime> PersonDOB { get; set; }
+        //public DateTime? CreatedOnDate { get; set; }
+        [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
+        public DateTime? PersonDOB { get; set; }
         public string Condition { get; set; }
         public string EmailAddress { get; set; }
         public string SSN { get; set; }

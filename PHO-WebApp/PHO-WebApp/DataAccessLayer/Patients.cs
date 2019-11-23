@@ -123,6 +123,7 @@ namespace PHO_WebApp.DataAccessLayer
 
             p.FirstName = dr["FirstName"].ToString();
             p.LastName = dr["LastName"].ToString();
+            p.PersonDOB = Convert.ToDateTime(dr["PatientDOB"].ToString());
 
             p.EmailAddress = dr["Email"].ToString();
 
@@ -132,13 +133,9 @@ namespace PHO_WebApp.DataAccessLayer
             p.State = dr["State"].ToString();
             p.Zip = dr["Zip"].ToString();
             p.Phone1 = dr["Phone1"].ToString();
+            p.Phone2 = dr["Phone2"].ToString();
             p.Condition = dr["Condition"].ToString();
             p.Gender = dr["Gender"].ToString();
-
-            //if (dr["PMCAScore"] != null && !string.IsNullOrWhiteSpace(dr["PMCAScore"].ToString()))
-            //{
-            //    p.PMCAScore = dr["PMCAScore"].ToString();
-            //}
             p.PMCAScore = dr["PMCAScore"].ToString();
             p.ProviderPMCAScore = dr["ProviderPMCAScore"].ToString();
             p.ProviderPMCANotes = dr["ProviderPMCANotes"].ToString();

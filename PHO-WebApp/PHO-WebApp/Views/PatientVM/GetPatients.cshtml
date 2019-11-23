@@ -31,178 +31,105 @@
         @Html.HiddenFor(m => m.UserLogin.PracticeName)
         @Html.HiddenFor(m => m.UserLogin.LoginId)
         @Html.HiddenFor(m => m.UserLogin.StaffId)
-        @Html.HiddenFor(m => m.UserLogin.UserName)            
+        @Html.HiddenFor(m => m.UserLogin.UserName)
 
         <!--Begin Patient Summary Area -->
-        if (Model.IsPatientSummaryAreaVisible)
-            {
-            <div id="pnlDisplayPatient" class="panel panel-primary col-12">
-                <div class="panel-heading">
-                    <h2 class="panel-title">Patient Summary</h2>
-                </div>
-                <div class="panel-body">
-                    <div class="row" style="width:100%;">
-                        @Html.AntiForgeryToken()
-                        
-                        <div class="col-sm-6">
-                            <div>
-                                First Name: @Html.DisplayFor(m => m.ptEntity.FirstName)
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                Last Name: @Html.DisplayFor(m => m.ptEntity.LastName)
-                                @*@Html.TextBoxFor(m => m.ptEntity.LastName, new { htmlAttributes = new { @class = "form-control" } })*@
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row" style="width:100%;">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                DOB: @Html.DisplayFor(m => m.ptEntity.PersonDOB)
-                                @*@Html.TextBoxFor(m => m.ptEntity.PersonDOB, new { htmlAttributes = new { @class = "form-control" } })*@
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                Gender: @Html.DisplayFor(m => m.ptEntity.Gender)
-                                @*@Html.TextBoxFor(m => m.ptEntity.City, new { htmlAttributes = new { @class = "form-control" } })*@
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row" style="width:100%;">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                Email: @Html.DisplayFor(m => m.ptEntity.EmailAddress)
-                                @*@Html.TextBoxFor(m => m.ptEntity.PersonDOB, new { htmlAttributes = new { @class = "form-control" } })*@
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                Phone: @Html.DisplayFor(m => m.ptEntity.Phone1)
-                                @*@Html.TextBoxFor(m => m.ptEntity.City, new { htmlAttributes = new { @class = "form-control" } })*@
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row" style="width:100%;">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                Address: @Html.DisplayFor(m => m.ptEntity.AddressLine1)
-                                @*@Html.TextBoxFor(m => m.ptEntity.PersonDOB, new { htmlAttributes = new { @class = "form-control" } })*@
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                City: @Html.DisplayFor(m => m.ptEntity.City)
-                                @*@Html.TextBoxFor(m => m.ptEntity.City, new { htmlAttributes = new { @class = "form-control" } })*@
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row" style="width:100%;">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                State: @Html.DisplayFor(m => m.ptEntity.State)
-                                @*@Html.TextBoxFor(m => m.ptEntity.PersonDOB, new { htmlAttributes = new { @class = "form-control" } })*@
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                Zip: @Html.DisplayFor(m => m.ptEntity.Zip)
-                                @*@Html.TextBoxFor(m => m.ptEntity.City, new { htmlAttributes = new { @class = "form-control" } })*@
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row" style="width:100%;">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                Condition: @Html.DisplayFor(m => m.ptEntity.Condition)
-                                @*@Html.TextBoxFor(m => m.ptEntity.PersonDOB, new { htmlAttributes = new { @class = "form-control" } })*@
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                Insurance: @Html.DisplayFor(m => m.ptEntity.InsurerId)
-                                @*@Html.TextBoxFor(m => m.ptEntity.City, new { htmlAttributes = new { @class = "form-control" } })*@
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row" style="width:100%;">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                PCP's First Name: @Html.DisplayFor(m => m.ptEntity.PCP_FirstName)
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                PCP's Last Name: @Html.DisplayFor(m => m.ptEntity.PCP_LastName)
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row" style="width:100%;">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                PMCA Score: @Html.DisplayFor(m => m.ptEntity.PMCAScore)
-                                @*@Html.TextBoxFor(m => m.ptEntity.PersonDOB, new { htmlAttributes = new { @class = "form-control" } })*@
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                PMCA Score from Provider: @Html.DisplayFor(m => m.ptEntity.ProviderPMCAScore)
-                                @*@Html.TextBoxFor(m => m.ptEntity.City, new { htmlAttributes = new { @class = "form-control" } })*@
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row" style="width:100%;">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                PMCA Score notes: @Html.DisplayFor(m => m.ptEntity.ProviderPMCANotes)
-                                @*@Html.TextBoxFor(m => m.ptEntity.PersonDOB, new { htmlAttributes = new { @class = "form-control" } })*@
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                Provider's Name for PMCA Score: @Html.Raw(string.Format("{0},{1}", Model.ptEntity.PMCA_ProvLast, Model.ptEntity.PMCA_ProvLast))
-                                @*@Html.TextBoxFor(m => m.ptEntity.City, new { htmlAttributes = new { @class = "form-control" } })*@
-                            </div>
-                        </div>
-                    </div>
-
-                    <div>
-                        @*<button id="btnEdit" class="btn btn-sm btn-primary pull-right" data-pdsa-action="EditPatient">*@
-                        <button id="btnEdit" class="btn btn-sm btn-primary pull-right" >
-                            <i class="fas fa-edit">Edit</i>
-                            &nbsp;
+        //if (Model.IsPatientSummaryAreaVisible)
+        if (Model.IsPatientSummaryEditAreaVisible)
+        {
+            <div>
+                <h5>Patient Summary</h5>
+            </div>
+            <table class="PatientSummary" id="pnlEditPatient">
+                <thead style="border-top: 1px solid #808080">
+                    <tr><th colspan="6"> </th></tr>
+                    <tr><th colspan="6"> </th></tr>
+                    <tr><th colspan="6"> </th></tr>
+                </thead>
+                <tr>&nbsp;</tr>
+                <tr>&nbsp;</tr>
+                <tr>
+                    <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Last Name:</td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.LastName)</td>
+                    <td valign="top" style="font-weight:bold; width:120px; max-width:120px;">First Name: </td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.FirstName)</td>
+                    <td valign="top" style="font-weight:bold; width:120px; max-width:150px;">DOB: </td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.PersonDOB)</td>
+                </tr>
+                <tr>
+                    <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Gender:</td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.Gender)</td>
+                    <td valign="top" style="font-weight:bold; width:120px; max-width:120px;">Condition: </td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.Condition)</td>
+                    <td valign="top" style="font-weight:bold; width:120px; max-width:150px;">Insurance: </td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.InsurerId)</td>
+                </tr>
+                <tr>
+                    <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Primary Phone:</td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.Phone1)</td>
+                    <td valign="top" style="font-weight:bold; width:120px; max-width:120px;">Secondary Phone: </td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.Phone2)</td>
+                    <td valign="top" style="font-weight:bold; width:120px; max-width:150px;">Email: </td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.EmailAddress)</td>
+                <tr>
+                    <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Address Line1:</td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.AddressLine1)</td>
+                    <td valign="top" style="font-weight:bold; width:120px; max-width:120px;">Address Line2: </td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.AddressLine2)</td>
+                    <td valign="top" style="font-weight:bold; width:120px; max-width:150px;">City: </td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.City)</td>
+                <tr>
+                    <td valign="top" style="font-weight:bold; width:150px; max-width:100px;">State:</td>
+                    <td valign="top" style="width:250px; max-width:250px;" colspan="3">@Html.EditorFor(m => m.ptEntity.State)</td>
+                    <td valign="top" style="font-weight:bold; width:150px; max-width:150px;">Zip: </td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.Zip)</td>
+                </tr>                
+                <tr>
+                    <td valign="top" style="font-weight:bold; width:150px; max-width:100px;">PCP's First Name:</td>
+                    <td valign="top" style="width:250px; max-width:250px;" colspan="3">@Html.DisplayFor(m => m.ptEntity.PCP_FirstName)</td>
+                    <td valign="top" style="font-weight:bold; width:150px; max-width:150px;">PCP's Last Name: </td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.PCP_LastName)</td>
+                </tr>
+                <tr>
+                    <td valign="top" style="font-weight:bold; width:150px; max-width:100px;">PMCA Score:</td>
+                    <td valign="top" style="width:200px; max-width:200px;" colspan="3">@Html.DisplayFor(m => m.ptEntity.PMCAScore)</td>
+                    <td valign="top" style="font-weight:bold; width:250px; max-width:250px;">PMCA Score from Provider: </td>
+                    <td valign="top" style="width:250px; max-width:250px;">@Html.DisplayFor(m => m.ptEntity.ProviderPMCAScore)</td>
+                </tr>
+                <tr>
+                    <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Notes from Provider: </td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.ProviderPMCANotes)</td>
+                    <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Provider Last Name:</td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.PMCA_ProvLast)</td>
+                    <td valign="top" style="font-weight:bold; width:100px; max-width:150px;">Provider First Name:</td>
+                    <td valign="top" style="width:120px; max-width:120px;">@Html.DisplayFor(m => m.ptEntity.PMCA_ProvFirst)</td>
+                </tr>
+                <tr>
+                    <td valign="top" colspan="4"></td>
+                    @*<td valign="top" style="font-weight:bold; width:120px; max-width:120px;">*@
+                    <td>
+                        <button id="btnSave" class="btn btn-sm btn-primary" data-pdsa-action="SavePatient" data-pdsa-val=@Model.ptEntity.Id>
+                            <i class="fas fa-save"></i>&nbsp;Save
                         </button>
-                    </div>
+                        <button id="btnCancel" class="btn btn-sm btn-primary pull-right" data-pdsa-action="Cancel" data-pdsa-val=@Model.ptEntity.Id>
+                            <i class="fas fa-window-close"></i>&nbsp;Cancel
+                        </button>
+                    </td>
+                </tr>
+                <tfoot style="border-top: 1px solid #808080">
+            </table>
 
-                    @*<div class="panel-footer">
-            <div class="row">
-                <div class="col-sm-12">
-                    <button id="btnSave" class="btn btn-sm btn-primary" data-pdsa-action="SavePatient">
-                        <i class="fas fa-save"></i>&nbsp;Save
-                    </button>
-                    <button id="btnCancel" class="btn btn-sm btn-primary" formnovalidate="formnovalidate" data-pdsa-action="cancel">
-                        <i class="fas fa-strikethrough"></i>&nbsp;Cancel
-                    </button>
-                </div>
-            </div>
-        </div>*@
 
-                </div>
-            </div>
-           
         }
         <!--End Patient Summary-->
 
-        <!--Begin Edit Patient Summary Area -->
-        if (Model.IsPatientSummaryEditAreaVisible)
+        <!--Begin Display Patient Summary Area -->
+        if (Model.IsPatientSummaryAreaVisible)
         {
-            <table class="PatientSummary">
+            <div>
+                <h5>Patient Summary</h5>
+            </div>
+            <table class="PatientSummary" id="pnlDisplayPatient">
                 <thead style="border-top: 1px solid #808080">
                     <tr><th colspan="6"> </th></tr>
                     <tr><th colspan="6"> </th></tr>
@@ -263,17 +190,22 @@
                     <td valign="top" style="width:120px; max-width:120px;">@Html.DisplayFor(m => m.ptEntity.PMCA_ProvFirst)</td>
                 </tr>
                 <tr>
-                    <td valign="top" colspan="5"></td>
+                    <td valign="top" colspan="4"></td>
                     <td valign="top" style="font-weight:bold; width:120px; max-width:120px;">
                         <button id="btnEdit" class="btn btn-sm btn-primary pull-right" data-pdsa-action="EditPatient" data-pdsa-val=@Model.ptEntity.Id>
                             <i class="fas fa-save"></i>&nbsp;Edit
                         </button>
-                </td>
+                    </td>
+                    <td>
+                        <button id="btnCancel" class="btn btn-sm btn-primary pull-right" data-pdsa-action="Cancel" data-pdsa-val=@Model.ptEntity.Id>
+                            <i class="fas fa-window-close"></i>&nbsp;Cancel
+                        </button>
+                    </td>
                 </tr>
             </table>
         }
 
-        <!--End Edit Patient Summary Area -->
+        <!--End Display Patient Summary Area -->
 
 
         <!--Begin Patient List Area -->
@@ -323,7 +255,7 @@
                     {
                         <tr>
                             <td>
-                                <a href="#" data-pdsa-action="SelectPatient" data-pdsa-val="@item.Id" class="btn btn-default btn-sm btn-link">
+                                <a href="#" data-pdsa-action="SelectPatient" id="SelectPatient" data-pdsa-val="@item.Id" class="btn btn-default btn-sm btn-link">
                                     <i class="fas fa-check-circle"></i>&nbsp;
                                 </a>
                             </td>
@@ -360,15 +292,14 @@
         <!--End Patient List Area -->
     }
 
-
     <script type="text/javascript">
         $(document).ready(function () {
 
-            $("#btnEdit").click(function () {
-                e.preventDefault();
-                $("#pnlDisplayPatient").hide();
-                $("#pnlEditPatient").show();
-            });
+            //$("#SelectPatient").click(function () {
+            //    e.preventDefault();
+            //    $("#pnlDisplayPatient").hide();
+            //    $("#pnlEditPatient").show();
+            //});
 
             $('.search').on('keyup', function () {
                 var serachTerm = $(this).val().toLowerCase();
@@ -387,10 +318,22 @@
 
             $("[data-pdsa-action]").on("click", function (e) {
                 e.preventDefault();
+                var test = $(this).data("pdsa-action");
+                //alert(test);
 
-                $("#EventCommand").val($(this).data("pdsa-action"));
-                $("#EventArgument").val($(this).data("pdsa-val"));
-                $("form").submit();
+                if (test == "EditPatient")
+                {
+                    $("#pnlDisplayPatient").hide();
+                    $("#pnlEditPatient").show();
+                        
+                }
+                else
+                {
+                    $("#EventCommand").val($(this).data("pdsa-action"));
+                    $("#EventArgument").val($(this).data("pdsa-val"));
+               
+                    $("form").submit();
+                }
             });
 
             $("#Delete").on("click", function (e) {
@@ -404,7 +347,7 @@
                 else {
                     return false;
                 }
-            });           
+            });
         });
     </script>
 </body>
