@@ -299,7 +299,7 @@ namespace PHO_WebApp.Models
                                 if (!string.IsNullOrWhiteSpace(PatientId))
                                 {
 
-                                    Patient selectedPatient = patientList.Where(r => r.Id == iPatientId).FirstOrDefault();
+                                    Patient selectedPatient = patientList.Where(r => r.patientId == iPatientId).FirstOrDefault();
                                     if (selectedPatient != null)
                                     {
                                         s.PatientId = SharedLogic.ParseNumeric(PatientId);

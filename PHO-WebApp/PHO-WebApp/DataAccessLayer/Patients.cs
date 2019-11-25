@@ -82,7 +82,7 @@ namespace PHO_WebApp.DataAccessLayer
         {
             SqlCommand com = new SqlCommand("proc_UpdatePatient", con);
             com.CommandType = CommandType.StoredProcedure;
-            com.Parameters.AddWithValue("@id", pt.Id);
+            com.Parameters.AddWithValue("@id", pt.patientId);
             com.Parameters.AddWithValue("@FirstName", pt.FirstName);
             com.Parameters.AddWithValue("@LastName", pt.LastName);
             com.Parameters.AddWithValue("@DOB", pt.DOB);
@@ -100,7 +100,7 @@ namespace PHO_WebApp.DataAccessLayer
         {
             SqlCommand com = new SqlCommand("proc_DeletePatient", con);
             com.CommandType = CommandType.StoredProcedure;
-            com.Parameters.AddWithValue("@id", pt.Id);
+            com.Parameters.AddWithValue("@id", pt.patientId);
 
             con.Open();
             com.ExecuteNonQuery();
@@ -113,7 +113,7 @@ namespace PHO_WebApp.DataAccessLayer
 
             if (dr["Id"] != null && !string.IsNullOrWhiteSpace(dr["Id"].ToString()))
             {
-                p.Id = SharedLogic.ParseNumeric(dr["Id"].ToString());
+                p.patientId = SharedLogic.ParseNumeric(dr["Id"].ToString());
             }
 
             //if (dr["StaffTypeId"] != null && !string.IsNullOrWhiteSpace(dr["StaffTypeId"].ToString()))

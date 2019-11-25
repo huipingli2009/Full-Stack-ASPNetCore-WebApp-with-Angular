@@ -46,7 +46,7 @@ namespace PHO_WebApp.Controllers
         public ActionResult AddPatient(FormCollection fc)
         {
             Patient pt = new Patient();
-            pt.Id = Convert.ToInt32(fc["txtId"]);
+            pt.patientId = Convert.ToInt32(fc["txtId"]);
             pt.FirstName = fc["txtFirstName"];
             pt.LastName = fc["txtLastName"];
             pt.DOB = Convert.ToDateTime(fc["txtPersonDOB"]);
@@ -101,7 +101,7 @@ namespace PHO_WebApp.Controllers
             var PatientList = patientList.Where(c => c.LookupDisplayText.ToUpper()
                             .Contains(term.ToUpper()))
                             //.Where(c => c.StaffTypeId == (int)StaffTypeEnum.Provider)
-                            .Select(c => new { label = c.LookupDisplayText, val = c.Id })
+                            .Select(c => new { label = c.LookupDisplayText, val = c.patientId })
                             .Take(10)
                             .Distinct().ToList();
             return Json(PatientList, JsonRequestBehavior.AllowGet);

@@ -115,7 +115,7 @@ namespace PHO_WebApp.Controllers
 
             List<Models.Patient> patientList = patientData.GetPatients(PracticeId);
 
-            var PatientList = patientList.Where(c => dictionary.ContainsKey(c.Id.ToString()))
+            var PatientList = patientList.Where(c => dictionary.ContainsKey(c.patientId.ToString()))
                 .Distinct().ToList();
 
             model.AssignPatientLinkKeys(dictionary, patientList);

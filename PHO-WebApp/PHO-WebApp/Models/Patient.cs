@@ -8,7 +8,7 @@ namespace PHO_WebApp.Models
 {
     public class Patient
     {
-        public int Id { get; set; }
+        public int patientId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
@@ -61,10 +61,10 @@ namespace PHO_WebApp.Models
                         returnValue += this.DOB.Value.ToShortDateString();
                     }
 
-                    if (this.Id > 0)
+                    if (this.patientId > 0)
                     {
                         returnValue += " ID: ";
-                        returnValue += this.Id.ToString();
+                        returnValue += this.patientId.ToString();
                     }
                 }
 
