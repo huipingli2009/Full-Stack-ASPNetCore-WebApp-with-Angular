@@ -98,11 +98,11 @@ namespace PHO_WebApp.Controllers
             patientList = pts.GetPatients(PracticeId);
 
             //use where linq where clause to filter by term
-            var PatientList = patientList.Where(c => c.ActiveStatus == true)
-                            .Where(c => c.LookupDisplayText.ToUpper()
+            var PatientList = patientList.Where(c => c.LookupDisplayText.ToUpper()
                             .Contains(term.ToUpper()))
                             //.Where(c => c.StaffTypeId == (int)StaffTypeEnum.Provider)
                             .Select(c => new { label = c.LookupDisplayText, val = c.Id })
+                            .Take(10)
                             .Distinct().ToList();
             return Json(PatientList, JsonRequestBehavior.AllowGet);
         }

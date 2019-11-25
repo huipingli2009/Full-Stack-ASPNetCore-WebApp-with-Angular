@@ -84,7 +84,7 @@
             select: function (event, ui) {
                 showPatientLinkLabel(uniqueId, 'Linked: ' + ui.item.label);
                 togglePatientLink(uniqueId);
-                $("#PatientStaffId_" + uniqueId).val(ui.item.value);
+                $("#PatientId_" + uniqueId).val(ui.item.value);
             }
         });
     }

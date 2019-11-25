@@ -68,8 +68,8 @@ namespace PHO_WebApp.Controllers
         [HttpPost]
         public ActionResult Submit(FormCollection fc, SurveyForm model)
         {
-
             model = ProcessPhysicianLink(model, fc);
+            model = ProcessPatientLink(model, fc);
 
             if (ModelState.IsValid && model != null && model.Responses != null)
             {
@@ -113,7 +113,10 @@ namespace PHO_WebApp.Controllers
             .Where(k => k.StartsWith("PatientId"))
             .ToDictionary(k => k, k => fc[k]);
 
-            List<Models.Patient> patientList = new List<Models.Patient>();
+            List<Models.Patient> patientList = patientData.GetPatients(PracticeId);
+
+            var PatientList = patientList.Where(c => dictionary.ContainsKey(c.Id.ToString()))
+                .Distinct().ToList();
 
             model.AssignPatientLinkKeys(dictionary, patientList);
 

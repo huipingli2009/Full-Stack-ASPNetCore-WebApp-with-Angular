@@ -29,7 +29,7 @@
                                 <i class="fa fa-search"></i>
                             </button>
                         </div>
-                        <input type="hidden" name="@("PatientStaffId_" + Model.SectionUniqueId)" id="@("PatientStaffId_" + Model.SectionUniqueId)" value="@(Model.PatientId)" />
+                        <input type="hidden" name="@("PatientId_" + Model.SectionUniqueId)" id="@("PatientId_" + Model.SectionUniqueId)" value="@(Model.PatientId)" />
                     </div>
                     <div class="@("input-group collapse " + (Model.PatientId > 0 ? "show" : "hide"))" id="@("PatientLinkPanel_" + Model.SectionUniqueId + "_Display")">
                         <strong id="@("lblPatientLinkDisplay_" + Model.SectionUniqueId)" style="font-weight:bold">@(Model.PatientId > 0 ? Model.PatientLinkPostSetVerbiage : "")</strong>&nbsp;

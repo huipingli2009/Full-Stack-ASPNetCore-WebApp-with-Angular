@@ -284,7 +284,7 @@ namespace PHO_WebApp.Models
             foreach (KeyValuePair<string, string> entry in dictionary)
             {
                 // do something with entry.Value or entry.Key
-                string uniqueId = entry.Key.Replace("PatientStaffId_", "");
+                string uniqueId = entry.Key.Replace("PatientId_", "");
                 string PatientId = entry.Value;
                 int iPatientId = SharedLogic.ParseNumeric(PatientId);
 

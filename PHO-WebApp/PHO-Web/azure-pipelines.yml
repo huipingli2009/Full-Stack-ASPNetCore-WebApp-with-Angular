@@ -1,0 +1,17 @@
+﻿resources:
+  repositories:
+    - repository: cchmctemplates
+      type: git
+      name: CCHMC.Core/CCHMC.BuildTemplates
+
+variables:
+  buildConfiguration: 'Debug'
+  sonarqubeKey: 'cchmc-phoregistry'
+  workingDir: phoregistry
+
+jobs:
+- job: build
+  pool:
+    name: OnPrem
+  steps:
+    - {template: cchmc-dotnetcore-publish.yml@cchmctemplates}
