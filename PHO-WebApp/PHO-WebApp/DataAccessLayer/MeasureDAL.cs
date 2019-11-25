@@ -14,21 +14,13 @@ namespace PHO_WebApp.DataAccessLayer
         SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["con"].ConnectionString);
 
         public List<Measure> getAllMeasures(UserDetails ud)
-        {
-           
-            
-        
-
-
-            //userId = Session["UserDetails"]
+        {          
             //SqlCommand com = new SqlCommand("spGetAllQIMeasures", con);
             SqlCommand com = new SqlCommand("spQI_Summary", con);
             com.CommandType = CommandType.StoredProcedure;
 
             //newly added
             com.Parameters.Add(new SqlParameter("@userID", ud.StaffId));
-
-
 
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();

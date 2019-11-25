@@ -37,18 +37,7 @@ namespace PHO_WebApp.ViewModel
         public string EventCommand { get; set; }
         public string EventArgument { get; set; }
 
-        //public List<Staff> GetStaffs()
-        //{
-        //    List<Staff> list = new List<Staff>();
-        //    StaffDAL std = new StaffDAL();
-        //    Staff stf = new Staff();
-
-        //    list = std.getPracticeStaffs();
-
-        //    stf = list.FindAll(s=>s.Id==)
-        //    return list;
-        //}
-
+        
         private void Init()
         {
             EventCommand = "StaffList";
@@ -165,31 +154,13 @@ namespace PHO_WebApp.ViewModel
 
 
             return stf;
-        }
-
-        //private bool Insert(Staff st)
-        //{
-        //    bool ret = true; //preset to true and may come back reset to false when working with validation
-
-        //    //if pass validation, code to add data to database
-        //    //ret = Validate(st);
-        //    if (ret)
-        //    {
-        //        //ToDo: add data to database
-
-        //    }
-
-        //    //end if
-
-        //    return ret;
-        //}
+        }       
 
         private void ListMode()
         {
             IsValid = true;
             IsStaffListAreaVisible = true;
-            IsStaffDetailsAreaVisible = false;
-            //IsStaffDetailsAreaVisible = true;
+            IsStaffDetailsAreaVisible = false;        
 
             Mode = "StaffList";
         }

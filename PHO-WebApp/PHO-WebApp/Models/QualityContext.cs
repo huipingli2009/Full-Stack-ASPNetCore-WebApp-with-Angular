@@ -22,5 +22,9 @@ namespace PHO_WebApp.Models
         public System.Data.Entity.DbSet<PHO_WebApp.Models.QualityImprovement> QualityImprovements { get; set; }
 
         public System.Data.Entity.DbSet<PHO_WebApp.Models.Staff> Staffs { get; set; }
+
+        public System.Data.Entity.DbSet<PHO_WebApp.Models.Patient> Patients { get; set; }
+
+        public System.Data.Entity.DbSet<PHO_WebApp.Models.Practice> Practices { get; set; }
     }
 }
