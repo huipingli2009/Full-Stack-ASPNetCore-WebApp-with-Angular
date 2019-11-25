@@ -488,7 +488,11 @@
     <Content Include="webfonts\fa-brands-400.ttf" />
     <Content Include="webfonts\fa-brands-400.eot" />
     <Content Include="Views\Patient\GetPatientInfo.cshtml" />
+
+    <Content Include="Views\Survey\_CloneSection.cshtml" />
+
     <Content Include="Views\PatientVM\GetPatients.cshtml" />
+
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
