@@ -23,24 +23,21 @@
 
 {
     <div class="form-group row">
-        @Html.Label(Model.QuestionLabel.ToString())
+        @Html.Label(Model.QuestionLabel.ToString(), new { @class = "col-sm-2 col-form-label" })
         <div class="col-sm-10">
             @Html.TextBoxFor(q => q.Response_Text, new { })
             @Html.ValidationMessageFor(q => q.Response_Text, null, new { @class = "validationText" })
         </div>
     </div>
-    <tr>
-        <td style="width:500px"></td>
-        <td style="width:500px"></td>
-    </tr>
+
 }
 @if (Model.QuestionType.ToUpper() == "TEXTBOXNUMERIC")
 {
 
     <div class="form-group row">
-        @Html.Label(Model.QuestionLabel.ToString())
+        @Html.Label(Model.QuestionLabel.ToString(), new { @class = "col-sm-2 col-form-label" })
         <div class="col-sm-10">
-            @Html.TextBoxFor(q => q.Response_Text, new { @type = "number" })
+            @Html.TextBoxFor(q => q.Response_Text, new { @type = "number", @class= "form-control" })
             @Html.ValidationMessageFor(q => q.Response_Text, null, new { @class = "validationText" })
         </div>
     </div>
@@ -49,7 +46,7 @@
 {
 
     <div class="form-group row">
-        @Html.Label(Model.QuestionLabel.ToString())
+        @Html.Label(Model.QuestionLabel.ToString(), new { @class = "col-sm-2 col-form-label" })
         <div class="col-sm-10">
             @Html.TextBoxFor(q => q.Response_Text, new { @type = "date" })
             @Html.ValidationMessageFor(q => q.Response_Text, null, new { @class = "validationText" })
@@ -62,7 +59,7 @@
 
 
     <div class="form-group row">
-        @Html.Label(Model.QuestionLabel.ToString())
+        @Html.Label(Model.QuestionLabel.ToString(), new { @class = "col-sm-2 col-form-label" })
         <div class="col-sm-10">
             @Html.TextBoxFor(q => q.Response_Text, new { @type = "tel" })
             @Html.ValidationMessageFor(q => q.Response_Text, null, new { @class = "validationText" })
@@ -75,7 +72,7 @@
 {
 
     <div class="form-group row">
-        @Html.Label(Model.QuestionLabel.ToString())
+        @Html.Label(Model.QuestionLabel.ToString(), new { @class = "col-sm-2 col-form-label" })
         <div class="col-sm-10">
             @Html.DropDownListFor(
             x => x.ResponseAnswer.AnswerOptionId,
@@ -95,7 +92,7 @@
 {
 
     <div class="form-group row">
-        @Html.Label(Model.QuestionLabel.ToString())
+        @Html.Label(Model.QuestionLabel.ToString(), new { @class= "col-sm-2 col-form-label" })
         <div class="col-sm-10">
             @foreach (QuestionAnswerOption q in Model.QuestionAnswerOptions)
             {
@@ -114,7 +111,7 @@
 @if (Model.QuestionType.ToUpper() == "MONTHYEARPICKER")
 {    
     <div class="form-group row">
-        @Html.Label(Model.QuestionLabel.ToString())
+        @Html.Label(Model.QuestionLabel.ToString(), new { @class = "col-sm-2 col-form-label" })
         <div class="col-sm-10">
             @Html.TextBoxFor(q => q.Response_Text, new { @type = "month" })
             @Html.ValidationMessageFor(q => q.Response_Text, null, new { @class = "validationText" })

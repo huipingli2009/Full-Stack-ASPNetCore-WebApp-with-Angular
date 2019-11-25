@@ -1,6 +1,8 @@
 ﻿using PHO_WebApp.DataAccessLayer;
 using System;
 using System.Data;
+using System.Data.Entity;
+using System.Linq;
 using System.Web.Mvc;
 using PHO_WebApp.Models;
 using System.Collections.Generic;
@@ -8,9 +10,9 @@ using System.Collections.Generic;
 namespace PHO_WebApp.Controllers
 {
     public class PatientController : BaseController
-    {       
-        DataAccessLayer.Patients pts = new Patients();       
-        
+    {
+        DataAccessLayer.Patients pts = new Patients();
+
         public ActionResult GetPatients()
         {
             List<Patient> ptList = new List<Patient>();
@@ -24,7 +26,7 @@ namespace PHO_WebApp.Controllers
         }
 
         //public ActionResult GetPatientInfo(int id)
-        public ActionResult GetPatientInfo(int id)             
+        public ActionResult GetPatientInfo(int id)
         {
             //Patient pt = new Patient();
             //pt = null;
@@ -40,11 +42,11 @@ namespace PHO_WebApp.Controllers
             return View();
         }
 
-       [HttpPost]
+        [HttpPost]
         public ActionResult AddPatient(FormCollection fc)
         {
             Patient pt = new Patient();
-            pt.Id = Convert.ToInt32(fc["txtId"]);
+            pt.patientId = Convert.ToInt32(fc["txtId"]);
             pt.FirstName = fc["txtFirstName"];
             pt.LastName = fc["txtLastName"];
             pt.DOB = Convert.ToDateTime(fc["txtPersonDOB"]);
@@ -53,7 +55,7 @@ namespace PHO_WebApp.Controllers
             //pt.State_Id = Convert.ToInt32(fc["txtStateId"]);
             pt.Zip = fc["txtZip"];
 
-            pts.AddPatient(pt);           
+            pts.AddPatient(pt);
             //return View("AddPatient");
             return RedirectToAction("GetPatients");
         }
@@ -81,9 +83,28 @@ namespace PHO_WebApp.Controllers
             return RedirectToAction("GetPatients");
         }
         public ActionResult DeletePatient(Patient pt)
-        {            
+        {
             pts.DeletePatient(pt);
             return RedirectToAction("GetPatients");
+        }
+
+        public JsonResult GetPatientLinks(string term = "")
+        {
+            List<Models.Patient> patientList = new List<Models.Patient>();
+
+            //TODO: Add logic to cache and retrieve providers instead of loading them from DB everytime. Instead, check cache for providers. If exists, return from cache. If not, load from DB and then cache.
+
+            //Get fresh from DAL
+            patientList = pts.GetPatients(PracticeId);
+
+            //use where linq where clause to filter by term
+            var PatientList = patientList.Where(c => c.LookupDisplayText.ToUpper()
+                            .Contains(term.ToUpper()))
+                            //.Where(c => c.StaffTypeId == (int)StaffTypeEnum.Provider)
+                            .Select(c => new { label = c.LookupDisplayText, val = c.patientId })
+                            .Take(10)
+                            .Distinct().ToList();
+            return Json(PatientList, JsonRequestBehavior.AllowGet);
         }
     }
 }

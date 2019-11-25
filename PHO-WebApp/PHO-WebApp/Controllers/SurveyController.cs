@@ -14,6 +14,7 @@ namespace PHO_WebApp.Controllers
     {
         DataAccessLayer.SurveyDAL records = new DataAccessLayer.SurveyDAL();
         DataAccessLayer.StaffDAL staffData = new DataAccessLayer.StaffDAL();
+        DataAccessLayer.Patients patientData = new DataAccessLayer.Patients();
 
         // GET: Survey
         public ActionResult Index()
@@ -67,8 +68,8 @@ namespace PHO_WebApp.Controllers
         [HttpPost]
         public ActionResult Submit(FormCollection fc, SurveyForm model)
         {
-
             model = ProcessPhysicianLink(model, fc);
+            model = ProcessPatientLink(model, fc);
 
             if (ModelState.IsValid && model != null && model.Responses != null)
             {
@@ -106,6 +107,22 @@ namespace PHO_WebApp.Controllers
             return model;
         }
 
+        private SurveyForm ProcessPatientLink(SurveyForm model, FormCollection fc)
+        {
+            Dictionary<string, string> dictionary = fc.AllKeys
+            .Where(k => k.StartsWith("PatientId"))
+            .ToDictionary(k => k, k => fc[k]);
+
+            List<Models.Patient> patientList = patientData.GetPatients(PracticeId);
+
+            var PatientList = patientList.Where(c => dictionary.ContainsKey(c.patientId.ToString()))
+                .Distinct().ToList();
+
+            model.AssignPatientLinkKeys(dictionary, patientList);
+
+            return model;
+        }
+
         public void SaveForm(SurveyForm model)
         {
             if (model != null && model.Responses != null)
@@ -124,11 +141,21 @@ namespace PHO_WebApp.Controllers
                             {
                                 if (s.SectionQuestions != null && s.PhysicianStaffId > 0)
                                 {
-                                    foreach(SectionQuestion sq in s.SectionQuestions)
+                                    foreach (SectionQuestion sq in s.SectionQuestions)
                                     {
                                         if (sq.Question != null)
                                         {
                                             sq.Question.PhysicianStaffId = s.PhysicianStaffId;
+                                        }
+                                    }
+                                }
+                                if (s.SectionQuestions != null && s.PatientId > 0)
+                                {
+                                    foreach (SectionQuestion sq in s.SectionQuestions)
+                                    {
+                                        if (sq.Question != null)
+                                        {
+                                            sq.Question.PatientId = s.PatientId;
                                         }
                                     }
                                 }

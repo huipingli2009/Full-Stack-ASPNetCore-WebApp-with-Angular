@@ -32,6 +32,12 @@ namespace PHO_WebApp.Models
         Allowed = 2,
         Required = 3
     }
+    public enum PatientLinkTypeEnum
+    {
+        None = 1,
+        Allowed = 2,
+        Required = 3
+    }
 
     public class SurveySummary
     {
@@ -242,7 +248,7 @@ namespace PHO_WebApp.Models
                 string uniqueId = entry.Key.Replace("PhysicianStaffId_", "");
                 string PhysicianStaffId = entry.Value;
                 int iStaffId = SharedLogic.ParseNumeric(PhysicianStaffId);
-                
+
                 foreach (FormSection fs in FormSections)
                 {
                     if (fs.Sections != null)
@@ -253,7 +259,7 @@ namespace PHO_WebApp.Models
                             {
                                 if (!string.IsNullOrWhiteSpace(PhysicianStaffId))
                                 {
-                                    
+
                                     Staff selectedPhysician = staffList.Where(r => r.Id == iStaffId).FirstOrDefault();
                                     if (selectedPhysician != null)
                                     {
@@ -265,6 +271,45 @@ namespace PHO_WebApp.Models
                                 else
                                 {
                                     s.PhysicianStaffId = 0;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public void AssignPatientLinkKeys(Dictionary<string, string> dictionary, List<Patient> patientList)
+        {
+            foreach (KeyValuePair<string, string> entry in dictionary)
+            {
+                // do something with entry.Value or entry.Key
+                string uniqueId = entry.Key.Replace("PatientId_", "");
+                string PatientId = entry.Value;
+                int iPatientId = SharedLogic.ParseNumeric(PatientId);
+
+                foreach (FormSection fs in FormSections)
+                {
+                    if (fs.Sections != null)
+                    {
+                        foreach (Section s in fs.Sections)
+                        {
+                            if (s.SectionUniqueId == uniqueId)
+                            {
+                                if (!string.IsNullOrWhiteSpace(PatientId))
+                                {
+
+                                    Patient selectedPatient = patientList.Where(r => r.patientId == iPatientId).FirstOrDefault();
+                                    if (selectedPatient != null)
+                                    {
+                                        s.PatientId = SharedLogic.ParseNumeric(PatientId);
+                                        s.PatientLinkPostSetVerbiage = "Linked: " + selectedPatient.LookupDisplayText;
+                                    }
+
+                                }
+                                else
+                                {
+                                    s.PatientId = 0;
                                 }
                             }
                         }
@@ -361,10 +406,13 @@ namespace PHO_WebApp.Models
 
         //special behavior keys
         private int _PhysicianLinkTypeId;
+        private int _PatientLinkTypeId;
         private int _PropagationTypeId;
         private int _PhysicianStaffId;
+        private int _PatientId;
         private string _SectionUniqueId;
         private string _PhysicianLinkPostSetVerbiage;
+        private string _PatientLinkPostSetVerbiage;
 
         public Section()
         {
@@ -411,6 +459,11 @@ namespace PHO_WebApp.Models
             get { return _PhysicianLinkPostSetVerbiage; }
             set { _PhysicianLinkPostSetVerbiage = value; }
         }
+        public string PatientLinkPostSetVerbiage
+        {
+            get { return _PatientLinkPostSetVerbiage; }
+            set { _PatientLinkPostSetVerbiage = value; }
+        }
 
         public int Order
         {
@@ -455,6 +508,11 @@ namespace PHO_WebApp.Models
             get { return this._PhysicianLinkTypeId; }
             set { this._PhysicianLinkTypeId = value; }
         }
+        public int PatientLinkTypeId
+        {
+            get { return this._PatientLinkTypeId; }
+            set { this._PatientLinkTypeId = value; }
+        }
         public int PropagationTypeId
         {
             get { return this._PropagationTypeId; }
@@ -465,6 +523,11 @@ namespace PHO_WebApp.Models
         {
             get { return _PhysicianStaffId; }
             set { _PhysicianStaffId = value; }
+        }
+        public int PatientId
+        {
+            get { return _PatientId; }
+            set { _PatientId = value; }
         }
 
         public PhysicianLinkTypeEnum PhysicianLinkType
@@ -478,6 +541,21 @@ namespace PHO_WebApp.Models
                 else
                 {
                     return PhysicianLinkTypeEnum.None;
+                }
+            }
+        }
+
+        public PatientLinkTypeEnum PatientLinkType
+        {
+            get
+            {
+                if (PatientLinkTypeId > 0)
+                {
+                    return (PatientLinkTypeEnum)Enum.Parse(typeof(PatientLinkTypeEnum), PatientLinkTypeId.ToString().ToUpper());
+                }
+                else
+                {
+                    return PatientLinkTypeEnum.None;
                 }
             }
         }
@@ -627,6 +705,7 @@ namespace PHO_WebApp.Models
         private int _responseId;
         private int _formResponseId;
         private int _PhysicianStaffId;
+        private int _PatientId;
 
 
         public int QuestionId
@@ -749,6 +828,11 @@ namespace PHO_WebApp.Models
         {
             get { return _PhysicianStaffId; }
             set { _PhysicianStaffId = value; }
+        }
+        public int PatientId
+        {
+            get { return _PatientId; }
+            set { _PatientId = value; }
         }
     }
 

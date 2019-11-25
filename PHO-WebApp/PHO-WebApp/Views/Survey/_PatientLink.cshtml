@@ -1,0 +1,55 @@
+﻿@model PHO_WebApp.Models.Section
+@{
+    Layout = null;
+}
+
+@* Begin Patient Lookup *@
+
+
+@Html.HiddenFor(m => m.PatientLinkTypeId)
+@Html.HiddenFor(m => m.PatientId)
+
+@if (Model.PatientLinkType == PHO_WebApp.Models.PatientLinkTypeEnum.Allowed
+|| Model.PatientLinkType == PHO_WebApp.Models.PatientLinkTypeEnum.Required)
+{
+
+    <div class="row" style="margin-bottom:5px;">
+        <div class="col">
+            <div id="@("LinkPanel_" + Model.SectionUniqueId)">
+                <div>
+                    <p>
+                        <h5>Patient Link</h5>
+                        <i>Requires a link to an existing patient. Select below.</i>
+                    </p>
+                    <div class="@("input-group collapse " + (Model.PatientId == 0 ? "show" : "hide"))" id="@("PatientLinkPanel_" + Model.SectionUniqueId + "_Set")">
+                        <label for="txtPatient">Patient Lookup: </label>
+                        <input type="text" id="@("txtPatient_" + Model.SectionUniqueId)" name="PatientName" style="font-style:italic" placeholder="Enter search term here" />
+                        <div class="input-group-append">
+                            <button class="btn btn-secondary" type="button">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                        <input type="hidden" name="@("PatientId_" + Model.SectionUniqueId)" id="@("PatientId_" + Model.SectionUniqueId)" value="@(Model.PatientId)" />
+                    </div>
+                    <div class="@("input-group collapse " + (Model.PatientId > 0 ? "show" : "hide"))" id="@("PatientLinkPanel_" + Model.SectionUniqueId + "_Display")">
+                        <strong id="@("lblPatientLinkDisplay_" + Model.SectionUniqueId)" style="font-weight:bold">@(Model.PatientId > 0 ? Model.PatientLinkPostSetVerbiage : "")</strong>&nbsp;
+                        <a class="btn btn-primary" data-toggle="collapse" onclick="@("togglePatientLink('" + Model.SectionUniqueId + "')")" href="#" role="button" aria-expanded="false" aria-controls="@("LinkPanel_" + Model.SectionUniqueId)">Reset</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*End Patient Lookup*@
+
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            registerPatientLinkAutocomplete('@(Model.SectionUniqueId)');
+        });
+
+    </script>
+
+}
+
