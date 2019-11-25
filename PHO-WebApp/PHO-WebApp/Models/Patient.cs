@@ -8,6 +8,7 @@ namespace PHO_WebApp.Models
 {
     public class Patient
     {
+        public int Id {get;set;} 
         public int patientId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -21,13 +22,17 @@ namespace PHO_WebApp.Models
         public string State { get; set; }
         public string StateId { get; set; }
         public string Zip { get; set; }
+        public string Phone1 { get; set; }
+        public string Phone2 { get; set; }
         public string Email { get; set; }
         public string Condition { get; set; }
         public string PCPFirstName { get; set; }
         public string PCPLastName { get; set; }
         public string PMCAScore { get; set; }
         public string ProviderPMCAScore { get; set; }
-
+        public string ProviderPMCANotes { get; set; }
+        public string PMCA_ProvFirst { get; set; }
+        public string PMCA_ProvLast { get; set; }
         public string Insurance { get; set; }
         public int? InsuranceId { get; set; }
         public int practiceId { get; set; }

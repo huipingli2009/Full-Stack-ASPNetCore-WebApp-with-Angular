@@ -13,10 +13,10 @@ namespace PHO_WebApp.DataAccessLayer
     public class Patients
     {
         SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["con"].ConnectionString);
-
-        public List<Models.Patient> GetPatients(int practiceId)
+              
+        public List<Patient> GetPatients(int practiceId)
         {
-            List<Models.Patient> ptList = new List<Models.Patient>();
+            List<Patient> ptList = new List<Patient>();
 
             SqlCommand com = new SqlCommand("spGetPracticePatients", con);
             com.CommandType = CommandType.StoredProcedure;
@@ -28,9 +28,9 @@ namespace PHO_WebApp.DataAccessLayer
 
             da.Fill(ds);
 
-            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+            for (int i=0; i < ds.Tables[0].Rows.Count; i++)
             {
-                Models.Patient pt = new Models.Patient();
+                Patient pt = new Patient();
                 pt = CreatePatientModel(ds.Tables[0].Rows[i]);
 
                 ptList.Add(pt);
@@ -56,7 +56,7 @@ namespace PHO_WebApp.DataAccessLayer
 
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
             {
-                practicePatient = CreatePatientModel(ds.Tables[0].Rows[i]);
+                practicePatient = CreatePatientModel(ds.Tables[0].Rows[i]);               
             }
 
             return practicePatient;
@@ -82,7 +82,7 @@ namespace PHO_WebApp.DataAccessLayer
         {
             SqlCommand com = new SqlCommand("proc_UpdatePatient", con);
             com.CommandType = CommandType.StoredProcedure;
-            com.Parameters.AddWithValue("@id", pt.patientId);
+            com.Parameters.AddWithValue("@id", pt.Id);
             com.Parameters.AddWithValue("@FirstName", pt.FirstName);
             com.Parameters.AddWithValue("@LastName", pt.LastName);
             com.Parameters.AddWithValue("@DOB", pt.DOB);
@@ -95,13 +95,13 @@ namespace PHO_WebApp.DataAccessLayer
             con.Close();
 
         }
-
+       
         public void DeletePatient(Patient pt)
         {
             SqlCommand com = new SqlCommand("proc_DeletePatient", con);
             com.CommandType = CommandType.StoredProcedure;
-            com.Parameters.AddWithValue("@id", pt.patientId);
-
+            com.Parameters.AddWithValue("@id", pt.Id);
+           
             con.Open();
             com.ExecuteNonQuery();
             con.Close();
@@ -109,11 +109,11 @@ namespace PHO_WebApp.DataAccessLayer
 
         public Patient CreatePatientModel(DataRow dr)
         {
-            Patient p = new Patient();
+            Patient p = new Patient();            
 
             if (dr["Id"] != null && !string.IsNullOrWhiteSpace(dr["Id"].ToString()))
             {
-                p.patientId = SharedLogic.ParseNumeric(dr["Id"].ToString());
+                p.Id = SharedLogic.ParseNumeric(dr["Id"].ToString());
             }
 
             //if (dr["StaffTypeId"] != null && !string.IsNullOrWhiteSpace(dr["StaffTypeId"].ToString()))
@@ -123,14 +123,26 @@ namespace PHO_WebApp.DataAccessLayer
 
             p.FirstName = dr["FirstName"].ToString();
             p.LastName = dr["LastName"].ToString();
+            p.DOB = Convert.ToDateTime(dr["PatientDOB"].ToString());
 
-            //p.EmailAddress = dr["Email"].ToString();
+            p.Email = dr["Email"].ToString();
 
             p.AddressLine1 = dr["AddressLine1"].ToString();
             p.AddressLine2 = dr["AddressLine2"].ToString();
             p.City = dr["City"].ToString();
             p.State = dr["State"].ToString();
+            p.Zip = dr["Zip"].ToString();
+            p.Phone1 = dr["Phone1"].ToString();
+            p.Phone2 = dr["Phone2"].ToString();
             p.Condition = dr["Condition"].ToString();
+            p.Gender = dr["Gender"].ToString();
+            p.PMCAScore = dr["PMCAScore"].ToString();
+            p.ProviderPMCAScore = dr["ProviderPMCAScore"].ToString();
+            p.ProviderPMCANotes = dr["ProviderPMCANotes"].ToString();
+            p.PMCA_ProvFirst = dr["PMCA_ProvFirst"].ToString();
+            p.PMCA_ProvLast = dr["PMCA_ProvLast"].ToString();
+            p.PCPFirstName = dr["PCP_FirstName"].ToString();
+            p.PCPLastName = dr["PCP_LastName"].ToString();
 
             ////s.StateId = SharedLogic.ParseNumeric(dr["StateId"].ToString());
 
