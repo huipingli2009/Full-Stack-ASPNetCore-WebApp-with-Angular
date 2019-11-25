@@ -68,7 +68,7 @@ namespace PHO_WebApp.DataAccessLayer
             com.CommandType = CommandType.StoredProcedure;
             com.Parameters.AddWithValue("@FirstName", pt.FirstName);
             com.Parameters.AddWithValue("@LastName", pt.LastName);
-            com.Parameters.AddWithValue("@DOB", pt.PersonDOB);
+            com.Parameters.AddWithValue("@DOB", pt.DOB);
             com.Parameters.AddWithValue("@AddressLine1", pt.AddressLine1);
             com.Parameters.AddWithValue("@City", pt.City);
             //com.Parameters.AddWithValue("@StateId", pt.State_Id);
@@ -85,7 +85,7 @@ namespace PHO_WebApp.DataAccessLayer
             com.Parameters.AddWithValue("@id", pt.Id);
             com.Parameters.AddWithValue("@FirstName", pt.FirstName);
             com.Parameters.AddWithValue("@LastName", pt.LastName);
-            com.Parameters.AddWithValue("@DOB", pt.PersonDOB);
+            com.Parameters.AddWithValue("@DOB", pt.DOB);
             com.Parameters.AddWithValue("@AddressLine1", pt.AddressLine1);
             com.Parameters.AddWithValue("@City", pt.City);
             //com.Parameters.AddWithValue("@StateId", pt.State_Id);
@@ -123,9 +123,9 @@ namespace PHO_WebApp.DataAccessLayer
 
             p.FirstName = dr["FirstName"].ToString();
             p.LastName = dr["LastName"].ToString();
-            p.PersonDOB = Convert.ToDateTime(dr["PatientDOB"].ToString());
+            p.DOB = Convert.ToDateTime(dr["PatientDOB"].ToString());
 
-            p.EmailAddress = dr["Email"].ToString();
+            p.Email = dr["Email"].ToString();
 
             p.AddressLine1 = dr["AddressLine1"].ToString();
             p.AddressLine2 = dr["AddressLine2"].ToString();
@@ -141,8 +141,8 @@ namespace PHO_WebApp.DataAccessLayer
             p.ProviderPMCANotes = dr["ProviderPMCANotes"].ToString();
             p.PMCA_ProvFirst = dr["PMCA_ProvFirst"].ToString();
             p.PMCA_ProvLast = dr["PMCA_ProvLast"].ToString();
-            p.PCP_FirstName = dr["PCP_FirstName"].ToString();
-            p.PCP_LastName = dr["PCP_LastName"].ToString();
+            p.PCPFirstName = dr["PCP_FirstName"].ToString();
+            p.PCPLastName = dr["PCP_LastName"].ToString();
 
             ////s.StateId = SharedLogic.ParseNumeric(dr["StateId"].ToString());
 

@@ -47,7 +47,7 @@ namespace PHO_WebApp.Controllers
             pt.Id = Convert.ToInt32(fc["txtId"]);
             pt.FirstName = fc["txtFirstName"];
             pt.LastName = fc["txtLastName"];
-            pt.PersonDOB = Convert.ToDateTime(fc["txtPersonDOB"]);
+            pt.DOB = Convert.ToDateTime(fc["txtPersonDOB"]);
             pt.AddressLine1 = fc["txtAddress"];
             pt.City = fc["txtCity"];
             //pt.State_Id = Convert.ToInt32(fc["txtStateId"]);
@@ -71,7 +71,7 @@ namespace PHO_WebApp.Controllers
             Patient pt = new Patient();
             pt.FirstName = fc["txtFirstName"];
             pt.LastName = fc["txtLastName"];
-            pt.PersonDOB = Convert.ToDateTime(fc["txtDOB"]);
+            pt.DOB = Convert.ToDateTime(fc["txtDOB"]);
             pt.AddressLine1 = fc["txtAddressLine1"];
             pt.City = fc["txtCity"];
             pt.Zip = fc["txtZip"];

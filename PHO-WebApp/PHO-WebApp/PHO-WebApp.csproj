@@ -183,7 +183,6 @@
     <Compile Include="Controllers\MeasureQualityImprovementController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Controllers\PatientVMController.cs" />
-    <Compile Include="Controllers\PersonController.cs" />
     <Compile Include="Controllers\PracticeAdminController.cs" />
     <Compile Include="Controllers\QualityImprovementsController.cs" />
     <Compile Include="Controllers\StaffsController.cs" />
@@ -218,24 +217,6 @@
     <Compile Include="Models\StaffType.cs" />
     <Compile Include="Models\SurveyForm.cs" />
     <Compile Include="Models\UserDetails.cs" />
-    <Compile Include="Patient.cs">
-      <DependentUpon>PersonModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="PersonModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PersonModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="PersonModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PersonModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="PersonModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PersonModel.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reports\ReportTemplate.aspx.cs">
       <DependentUpon>ReportTemplate.aspx</DependentUpon>
@@ -325,26 +306,9 @@
     <Content Include="Images\PortalHomeIMG.JPG" />
     <Content Include="Images\pdf_icon.png" />
     <Content Include="Images\TSCHS_LOGO_CMYK.jpg" />
-    <Content Include="PersonModel.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>PersonModel.edmx</DependentUpon>
-      <LastGenOutput>PersonModel.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="PersonModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>PersonModel.edmx</DependentUpon>
-      <LastGenOutput>PersonModel.cs</LastGenOutput>
-    </Content>
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
-    </Content>
-    <EntityDeploy Include="PersonModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>PersonModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="PersonModel.edmx.diagram">
-      <DependentUpon>PersonModel.edmx</DependentUpon>
     </Content>
     <Content Include="Reports\ReportTemplate.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />

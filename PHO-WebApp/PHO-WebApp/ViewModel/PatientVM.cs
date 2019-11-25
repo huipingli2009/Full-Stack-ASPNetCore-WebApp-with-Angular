@@ -140,8 +140,9 @@ namespace PHO_WebApp.ViewModel
                     IsValid = true;                   
                     SelectPatient();
                     break;
+               
                 case "savepatient":
-                    IsValid = true;
+                    IsValid = true;                  
                     SavePatient();
                     GetPatients();
                     break;
@@ -194,9 +195,9 @@ namespace PHO_WebApp.ViewModel
             }
 
             //Convert.ToDateTime(dr["EffectiveDate"].ToString());
-            if (!String.IsNullOrWhiteSpace(Convert.ToDateTime(model.PersonDOB).ToString()))
+            if (!String.IsNullOrWhiteSpace(Convert.ToDateTime(model.DOB).ToString()))
             {
-                com.Parameters["@PatientDOB"].Value = model.PersonDOB;
+                com.Parameters["@PatientDOB"].Value = model.DOB;
             }
             else
             {
@@ -212,9 +213,9 @@ namespace PHO_WebApp.ViewModel
                 com.Parameters["@Gender"].Value = DBNull.Value;
             }
 
-            if (!String.IsNullOrWhiteSpace(model.EmailAddress))
+            if (!String.IsNullOrWhiteSpace(model.Email))
             {
-                com.Parameters["@Email"].Value = model.EmailAddress;
+                com.Parameters["@Email"].Value = model.Email;
             }
             else
             {

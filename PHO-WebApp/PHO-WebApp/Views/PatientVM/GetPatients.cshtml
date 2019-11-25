@@ -54,7 +54,7 @@
                     <td valign="top" style="font-weight:bold; width:120px; max-width:120px;">First Name: </td>
                     <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.FirstName)</td>
                     <td valign="top" style="font-weight:bold; width:120px; max-width:150px;">DOB: </td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.PersonDOB)</td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.DOB)</td>
                 </tr>
                 <tr>
                     <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Gender:</td>
@@ -62,7 +62,7 @@
                     <td valign="top" style="font-weight:bold; width:120px; max-width:120px;">Condition: </td>
                     <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.Condition)</td>
                     <td valign="top" style="font-weight:bold; width:120px; max-width:150px;">Insurance: </td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.InsurerId)</td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.InsuranceId)</td>
                 </tr>
                 <tr>
                     <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Primary Phone:</td>
@@ -70,7 +70,7 @@
                     <td valign="top" style="font-weight:bold; width:120px; max-width:120px;">Secondary Phone: </td>
                     <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.Phone2)</td>
                     <td valign="top" style="font-weight:bold; width:120px; max-width:150px;">Email: </td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.EmailAddress)</td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.Email)</td>
                 <tr>
                     <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Address Line1:</td>
                     <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.AddressLine1)</td>
@@ -86,9 +86,9 @@
                 </tr>                
                 <tr>
                     <td valign="top" style="font-weight:bold; width:150px; max-width:100px;">PCP's First Name:</td>
-                    <td valign="top" style="width:250px; max-width:250px;" colspan="3">@Html.DisplayFor(m => m.ptEntity.PCP_FirstName)</td>
+                    <td valign="top" style="width:250px; max-width:250px;" colspan="3">@Html.DisplayFor(m => m.ptEntity.PCPFirstName)</td>
                     <td valign="top" style="font-weight:bold; width:150px; max-width:150px;">PCP's Last Name: </td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.PCP_LastName)</td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.PCPLastName)</td>
                 </tr>
                 <tr>
                     <td valign="top" style="font-weight:bold; width:150px; max-width:100px;">PMCA Score:</td>
@@ -143,7 +143,7 @@
                     <td valign="top" style="font-weight:bold; width:120px; max-width:120px;">First Name: </td>
                     <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.FirstName)</td>
                     <td valign="top" style="font-weight:bold; width:120px; max-width:150px;">DOB: </td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.PersonDOB)</td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.DOB)</td>
                 </tr>
                 <tr>
                     <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Gender:</td>
@@ -151,7 +151,7 @@
                     <td valign="top" style="font-weight:bold; width:120px; max-width:120px;">Condition: </td>
                     <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.Condition)</td>
                     <td valign="top" style="font-weight:bold; width:120px; max-width:150px;">Insurance: </td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.InsurerId)</td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.InsuranceId)</td>
                 </tr>
                 <tr>
                     <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Address::</td>
@@ -167,13 +167,13 @@
                     <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Zip:</td>
                     <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.Zip)</td>
                     <td valign="top" style="font-weight:bold; width:100px; max-width:150px;">Email:</td>
-                    <td valign="top" style="width:120px; max-width:120px;">@Html.DisplayFor(m => m.ptEntity.EmailAddress)</td>
+                    <td valign="top" style="width:120px; max-width:120px;">@Html.DisplayFor(m => m.ptEntity.Email)</td>
                 </tr>
                 <tr>
                     <td valign="top" style="font-weight:bold; width:150px; max-width:100px;">PCP's First Name:</td>
-                    <td valign="top" style="width:250px; max-width:250px;" colspan="3">@Html.DisplayFor(m => m.ptEntity.PCP_FirstName)</td>
+                    <td valign="top" style="width:250px; max-width:250px;" colspan="3">@Html.DisplayFor(m => m.ptEntity.PCPFirstName)</td>
                     <td valign="top" style="font-weight:bold; width:150px; max-width:150px;">PCP's Last Name: </td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.PCP_LastName)</td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.PCPLastName)</td>
                 </tr>
                 <tr>
                     <td valign="top" style="font-weight:bold; width:150px; max-width:100px;">PMCA Score:</td>
@@ -191,17 +191,19 @@
                 </tr>
                 <tr>
                     <td valign="top" colspan="4"></td>
-                    <td valign="top" style="font-weight:bold; width:120px; max-width:120px;">
-                        <button id="btnEdit" class="btn btn-sm btn-primary pull-right" data-pdsa-action="EditPatient" data-pdsa-val=@Model.ptEntity.Id>
+                    <td>
+                        @*<button id="btnEdit" class="btn btn-sm btn-primary pull-right" data-pdsa-action="EditPatient" data-pdsa-val=@Model.ptEntity.Id>*@
+                        <button id="btnEdit" class="btn btn-sm btn-primary">
                             <i class="fas fa-save"></i>&nbsp;Edit
                         </button>
                     </td>
                     <td>
-                        <button id="btnCancel" class="btn btn-sm btn-primary pull-right" data-pdsa-action="Cancel" data-pdsa-val=@Model.ptEntity.Id>
+                        <button id="btnCancel" class="btn btn-sm btn-primary" data-pdsa-action="Cancel" data-pdsa-val=@Model.ptEntity.Id>
                             <i class="fas fa-window-close"></i>&nbsp;Cancel
                         </button>
                     </td>
                 </tr>
+                <tfoot style="border-top: 1px solid #808080">
             </table>
         }
 
@@ -266,7 +268,7 @@
                                 @Html.DisplayFor(modelItem => item.LastName)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.PersonDOB)
+                                @Html.DisplayFor(modelItem => item.DOB)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.AddressLine1)
@@ -316,24 +318,19 @@
                 });
             });
 
+            $("#btnEdit").on("click", function () {
+                $("#pnlDisplayPatient").hide();
+                $("#pnlEditPatient").show();
+            });           
+
             $("[data-pdsa-action]").on("click", function (e) {
                 e.preventDefault();
-                var test = $(this).data("pdsa-action");
-                //alert(test);
 
-                if (test == "EditPatient")
-                {
-                    $("#pnlDisplayPatient").hide();
-                    $("#pnlEditPatient").show();
-                        
-                }
-                else
-                {
-                    $("#EventCommand").val($(this).data("pdsa-action"));
-                    $("#EventArgument").val($(this).data("pdsa-val"));
+                $("#EventCommand").val($(this).data("pdsa-action"));
+                $("#EventArgument").val($(this).data("pdsa-val"));
+
+                $("form").submit();
                
-                    $("form").submit();
-                }
             });
 
             $("#Delete").on("click", function (e) {
