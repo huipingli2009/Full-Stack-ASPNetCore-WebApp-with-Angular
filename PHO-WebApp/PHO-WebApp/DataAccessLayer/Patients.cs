@@ -13,7 +13,7 @@ namespace PHO_WebApp.DataAccessLayer
     public class Patients
     {
         SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["con"].ConnectionString);
-              
+
         public List<Patient> GetPatients(int practiceId)
         {
             List<Patient> ptList = new List<Patient>();
@@ -28,7 +28,30 @@ namespace PHO_WebApp.DataAccessLayer
 
             da.Fill(ds);
 
-            for (int i=0; i < ds.Tables[0].Rows.Count; i++)
+            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+            {
+                Patient pt = new Patient();
+                pt = CreatePatientModel(ds.Tables[0].Rows[i]);
+
+                ptList.Add(pt);
+            }
+            return ptList;
+        }
+        public List<Patient> GetPatientLinkData(int practiceId)
+        {
+            List<Patient> ptList = new List<Patient>();
+
+            SqlCommand com = new SqlCommand("spGetPracticePatientLinkData", con);
+            com.CommandType = CommandType.StoredProcedure;
+
+            com.Parameters.AddWithValue("@practiceId", practiceId);
+
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+
+            da.Fill(ds);
+
+            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
             {
                 Patient pt = new Patient();
                 pt = CreatePatientModel(ds.Tables[0].Rows[i]);
@@ -134,15 +157,41 @@ namespace PHO_WebApp.DataAccessLayer
             p.Zip = dr["Zip"].ToString();
             p.Phone1 = dr["Phone1"].ToString();
             p.Phone2 = dr["Phone2"].ToString();
-            p.Condition = dr["Condition"].ToString();
+            if (dr.Table.Columns.Contains("Condition"))
+            {
+                p.Condition = dr["Condition"].ToString();
+            }
             p.Gender = dr["Gender"].ToString();
-            p.PMCAScore = dr["PMCAScore"].ToString();
-            p.ProviderPMCAScore = dr["ProviderPMCAScore"].ToString();
-            p.ProviderPMCANotes = dr["ProviderPMCANotes"].ToString();
-            p.PMCA_ProvFirst = dr["PMCA_ProvFirst"].ToString();
-            p.PMCA_ProvLast = dr["PMCA_ProvLast"].ToString();
-            p.PCPFirstName = dr["PCP_FirstName"].ToString();
-            p.PCPLastName = dr["PCP_LastName"].ToString();
+            if (dr.Table.Columns.Contains("PMCAScore"))
+            {
+                p.PMCAScore = dr["PMCAScore"].ToString();
+            }
+            if (dr.Table.Columns.Contains("ProviderPMCAScore"))
+            {
+                p.ProviderPMCAScore = dr["ProviderPMCAScore"].ToString();
+            }
+            if (dr.Table.Columns.Contains("ProviderPMCANotes"))
+            {
+                p.ProviderPMCANotes = dr["ProviderPMCANotes"].ToString();
+            }
+            if (dr.Table.Columns.Contains("PMCA_ProvFirst"))
+            {
+                p.PMCA_ProvFirst = dr["PMCA_ProvFirst"].ToString();
+            }
+            if (dr.Table.Columns.Contains("PMCA_ProvLast"))
+            {
+                p.PMCA_ProvLast = dr["PMCA_ProvLast"].ToString();
+            }
+
+            if (dr.Table.Columns.Contains("PCP_FirstName"))
+            {
+                p.PCPFirstName = dr["PCP_FirstName"].ToString();
+            }
+
+            if (dr.Table.Columns.Contains("PCP_LastName"))
+            {
+                p.PCPLastName = dr["PCP_LastName"].ToString();
+            }
 
             ////s.StateId = SharedLogic.ParseNumeric(dr["StateId"].ToString());
 
