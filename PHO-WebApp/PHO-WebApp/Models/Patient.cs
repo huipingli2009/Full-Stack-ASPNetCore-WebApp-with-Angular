@@ -62,11 +62,11 @@ namespace PHO_WebApp.Models
                     if (this.DOB.HasValue)
                     {
 
-                        returnValue += "DOB: ";
+                        returnValue += " DOB: ";
                         returnValue += this.DOB.Value.ToShortDateString();
                     }
 
-                    if (this.patientId > 0)
+                    if (this.Id > 0)
                     {
                         returnValue += " ID: ";
                         returnValue += this.patientId.ToString();
