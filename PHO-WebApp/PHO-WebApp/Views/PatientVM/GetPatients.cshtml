@@ -132,12 +132,15 @@
                 </tr>
                 <tr>
                     <td valign="top" colspan="4"></td>
-                    @*<td valign="top" style="font-weight:bold; width:120px; max-width:120px;">*@
-                    <td>
+                    @*<td valign="top" style="font-weight:bold; width:120px; max-width:120px;">*@                   
+                    <td valign="top" colspan="2">
                         <button id="btnSave" class="btn btn-sm btn-primary" data-pdsa-action="SavePatient" data-pdsa-val=@Model.ptEntity.Id>
                             <i class="fas fa-save"></i>&nbsp;Save
                         </button>
-                        <button id="btnCancel" class="btn btn-sm btn-primary pull-right" data-pdsa-action="Cancel" data-pdsa-val=@Model.ptEntity.Id>
+                        <button id="btnDelete" class="btn btn-sm btn-primary" data-pdsa-action="DeletePatient" data-pdsa-val=@Model.ptEntity.Id>
+                            <i class="fas fa-remove"></i>&nbsp;Delete Patient
+                        </button>
+                        <button id="btnCancel" class="btn btn-sm btn-primary" data-pdsa-action="Cancel" data-pdsa-val=@Model.ptEntity.Id>
                             <i class="fas fa-window-close"></i>&nbsp;Cancel
                         </button>
                     </td>

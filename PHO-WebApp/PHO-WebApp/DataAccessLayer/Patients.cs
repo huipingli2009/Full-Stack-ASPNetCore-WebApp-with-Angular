@@ -6,7 +6,7 @@ using PHO_WebApp.Models;
 using System.Data.SqlClient;
 using System.Data;
 using System.Configuration;
-
+using PHO_WebApp.ViewModel;
 
 namespace PHO_WebApp.DataAccessLayer
 {
@@ -61,8 +61,8 @@ namespace PHO_WebApp.DataAccessLayer
             }
 
             return practicePatient;
-        }
-
+        }       
+       
         public List<PracticeInsurance> GetInsuranceStatuses(int practiceId)
         {
             List<PracticeInsurance> returnObject = null;
@@ -243,13 +243,9 @@ namespace PHO_WebApp.DataAccessLayer
             //p.Payors = this.GetInsuranceStatuses(practiceId);
             p.Payors = this.GetInsuranceStatuses(70);
 
-            p.PatientProviders = this.GetPatientProviders(349071);
+            //p.PatientProviders = this.GetPatientProviders(70);
 
-
-
-            ////s.StateId = SharedLogic.ParseNumeric(dr["StateId"].ToString());
-
-            //p.Phone = dr["Phone"].ToString();    
+            p.PatientProviders = this.GetPracticeProviders(37);
 
             return p;
         }
@@ -311,7 +307,7 @@ namespace PHO_WebApp.DataAccessLayer
                 c.StaffId = int.Parse(dr["StaffId"].ToString());
             }
             //c.Staff_FirstName = dr["Name"].ToString();           
-            c.Staff_Name= dr["Name"].ToString();
+            c.Staff_Name= dr["StaffName"].ToString();
 
             return c;
         }
@@ -326,6 +322,33 @@ namespace PHO_WebApp.DataAccessLayer
             SqlParameter parameterPatientId = new SqlParameter("@PatientId", SqlDbType.Int);
             parameterPatientId.Value = PatientId;
             com.Parameters.Add(parameterPatientId);
+
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+            {
+                if (returnObject == null)
+                {
+                    returnObject = new List<PatientProvider>();
+                }
+                PatientProvider PatProvider = CreatePatientProviderModel(ds.Tables[0].Rows[i]);
+                returnObject.Add(PatProvider);
+            }
+
+            return returnObject;
+        }
+        public List<PatientProvider> GetPracticeProviders(int PracticeId)
+        {
+            List<PatientProvider> returnObject = null;
+
+            SqlCommand com = new SqlCommand("spGetPracticeProviders", con);
+            com.CommandType = CommandType.StoredProcedure;
+
+            SqlParameter parameterPracticeId = new SqlParameter("@PracticeId", SqlDbType.Int);
+            parameterPracticeId.Value = PracticeId;
+            com.Parameters.Add(parameterPracticeId);
 
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();

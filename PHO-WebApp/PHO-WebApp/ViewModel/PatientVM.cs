@@ -65,6 +65,37 @@ namespace PHO_WebApp.ViewModel
 
             SelectMode();
         }
+        
+        private void deletePatient()
+        {
+            PatientVM ptVM = new PatientVM();
+            Patient pt = new Patient();
+
+            pt.Id = Convert.ToInt32(EventArgument);
+
+            ptVM.DeletePatient(pt);
+
+            GetPatients();
+
+            ListMode();
+        }     
+
+
+        public void DeletePatient(Patient pt)
+        {
+            SqlCommand com = new SqlCommand("spDeletePatient", con);
+            com.CommandType = CommandType.StoredProcedure;
+
+            SqlParameter parameterPatientId = new SqlParameter("@id", SqlDbType.Int);
+            parameterPatientId.Value = temp;
+            com.Parameters.Add(parameterPatientId);
+
+            con.Open();
+            com.ExecuteNonQuery();
+            con.Close();
+        }
+
+       
         private void SavePatient()
         {
             PatientVM pt = new PatientVM();
@@ -140,7 +171,12 @@ namespace PHO_WebApp.ViewModel
                     IsValid = true;                   
                     SelectPatient();
                     break;
-               
+                case "deletepatient":
+                    IsValid = true;
+                    deletePatient();
+                    GetPatients();
+                    break;
+
                 case "savepatient":
                     IsValid = true;                  
                     SavePatient();
@@ -150,6 +186,115 @@ namespace PHO_WebApp.ViewModel
                 default:
                     break;
             }
+        }
+        public void Insert(Patient model, int practiceId)
+        {
+            SqlCommand com = new SqlCommand("spAddPatient", con);
+            com.CommandType = CommandType.StoredProcedure;
+
+            com.Parameters.Add("@PracticeId", SqlDbType.Int);           
+            com.Parameters.Add("@FirstName", SqlDbType.NVarChar);
+            com.Parameters.Add("@LastName", SqlDbType.NVarChar);
+            com.Parameters.Add("@DOB", SqlDbType.NVarChar);
+            com.Parameters.Add("@AddressLine1", SqlDbType.NVarChar);
+            com.Parameters.Add("@AddressLine2", SqlDbType.NVarChar);
+            com.Parameters.Add("@State", SqlDbType.NVarChar);
+            com.Parameters.Add("@Zip", SqlDbType.NVarChar);
+            //com.Parameters.Add("@CreatedONDate", SqlDbType.DateTime);
+
+            //replace this part with coding when we have Create Staff part done
+            //Create Staff is the prior step before creating user login per system design
+            com.Parameters["@PracticeId"].Value = practiceId;                         
+
+           
+            if (!String.IsNullOrWhiteSpace(model.FirstName))
+            {
+                com.Parameters["@FirstName"].Value = model.FirstName;
+            }
+            else
+            {
+                com.Parameters["@FirstName"].Value = DBNull.Value;
+            }
+
+            if (!String.IsNullOrWhiteSpace(model.LastName))
+            {
+                com.Parameters["@LastName"].Value = model.LastName;
+            }
+            else
+            {
+                com.Parameters["@LastName"].Value = DBNull.Value;
+            }
+
+            if (!String.IsNullOrWhiteSpace(model.DOB))
+            {                 
+                com.Parameters["@DOB"].Value = model.DOB;
+            }
+            else
+            {
+                com.Parameters["@DOB"].Value = model.DOB;
+            }
+
+
+            if (!String.IsNullOrWhiteSpace(model.AddressLine1))
+            {
+                com.Parameters["@AddressLine1"].Value = model.AddressLine1;
+            }
+            else
+            {
+                com.Parameters["@AddressLine1"].Value = DBNull.Value;
+            }
+
+
+            if (!String.IsNullOrWhiteSpace(model.AddressLine2))
+            {
+                com.Parameters["@AddressLine2"].Value = model.AddressLine1;
+            }
+            else
+            {
+                com.Parameters["@AddressLine2"].Value = DBNull.Value;
+            }
+
+            if (!String.IsNullOrWhiteSpace(model.City))
+            {
+                com.Parameters["@City"].Value = model.City;
+            }
+            else
+            {
+                com.Parameters["@City"].Value = DBNull.Value;
+            }
+
+            if (!String.IsNullOrWhiteSpace(model.State))
+            {
+                com.Parameters["@State"].Value = model.State;
+            }
+            else
+            {
+                com.Parameters["@State"].Value = DBNull.Value;
+            }
+
+            if (!String.IsNullOrWhiteSpace(model.Zip))
+            {
+                com.Parameters["@Zip"].Value = model.Zip;
+            }
+            else
+            {
+                com.Parameters["@Zip"].Value = DBNull.Value;
+            }
+
+            if (UserLogin != null && UserLogin.LoginId > 0)
+            {
+                com.Parameters["@CreatedById"].Value = UserLogin.LoginId;
+            }
+            else
+            {
+                com.Parameters["@CreatedById"].Value = DBNull.Value;
+            }
+
+            //com.Parameters["@CreatedONDate"].Value = model.CreatedOnDate;
+
+            con.Open();
+            com.ExecuteNonQuery();
+            con.Close();
         }
         public void UpdatePatient(Patient model)
         {
