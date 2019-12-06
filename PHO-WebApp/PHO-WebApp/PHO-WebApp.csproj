@@ -211,6 +211,7 @@
     <Compile Include="Models\MeasurePracticeUserModels.cs" />
     <Compile Include="Models\Measures.cs" />
     <Compile Include="Models\Patient.cs" />
+    <Compile Include="Models\PracticeInsurance.cs" />
     <Compile Include="Models\QualityContext.cs" />
     <Compile Include="Models\QualityImprovement.cs" />
     <Compile Include="Models\Staff.cs" />
