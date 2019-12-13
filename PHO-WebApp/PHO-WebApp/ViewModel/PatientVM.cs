@@ -7,6 +7,7 @@ using PHO_WebApp.DataAccessLayer;
 using System.Data.SqlClient;
 using System.Data;
 using System.Configuration;
+using System.ComponentModel.DataAnnotations;
 
 namespace PHO_WebApp.ViewModel
 {
@@ -30,6 +31,9 @@ namespace PHO_WebApp.ViewModel
         public bool IsPatientSummaryAreaVisible { get; set; }
 
         public bool IsPatientSummaryEditAreaVisible { get; set; }
+
+        public bool IsAddPatientIAreaVisible { get; set; }
+        
         public PatientVM()
         {
             Init();
@@ -78,9 +82,7 @@ namespace PHO_WebApp.ViewModel
             GetPatients();
 
             ListMode();
-        }     
-
-
+        }
         public void DeletePatient(Patient pt)
         {
             SqlCommand com = new SqlCommand("spDeletePatient", con);
@@ -94,7 +96,6 @@ namespace PHO_WebApp.ViewModel
             com.ExecuteNonQuery();
             con.Close();
         }
-
        
         private void SavePatient()
         {
@@ -107,7 +108,7 @@ namespace PHO_WebApp.ViewModel
             {
                 if (Mode == "AddPatient")
                 {
-                    //pt.Insert(ptEntity, UserLogin.PracticeId);
+                    pt.Insert(ptEntity, UserLogin.PracticeId);
                     //Insert(vmPA);
                 }
                 else   //update Patient
@@ -128,6 +129,29 @@ namespace PHO_WebApp.ViewModel
                 }
             }
         }
+
+        private void AddPatient()
+        {
+            PatientVM pt = new PatientVM();
+
+            //added here for testing purpose
+            IsValid = true;
+
+            if (IsValid)
+            {
+                pt.Insert(ptEntity, UserLogin.PracticeId);
+               /* Insert(vmPA)*/;
+            }
+            else
+
+            {
+                if (Mode == "AddStaff")
+                {
+                    AddMode();
+                }
+               
+            }
+        }
         //private void EditPatient()
         //{
         //    PatientVM pt = new PatientVM();
@@ -141,7 +165,8 @@ namespace PHO_WebApp.ViewModel
             IsValid = true;
             IsPatientListAreaVisible = true;
             IsPatientSummaryAreaVisible = false;
-            IsPatientSummaryEditAreaVisible = false;          
+            IsPatientSummaryEditAreaVisible = false;
+            IsAddPatientIAreaVisible = false;
 
             Mode = "PatientList";
         }
@@ -150,6 +175,8 @@ namespace PHO_WebApp.ViewModel
             IsPatientListAreaVisible = false;
             IsPatientSummaryAreaVisible = false;
             IsPatientSummaryEditAreaVisible = true;
+            IsAddPatientIAreaVisible = false;
+
             Mode = "SelectPatient";
         }
         private void EditMode()
@@ -157,7 +184,39 @@ namespace PHO_WebApp.ViewModel
             IsPatientListAreaVisible = false;
             IsPatientSummaryAreaVisible = false;
             IsPatientSummaryEditAreaVisible = true;
+            IsAddPatientIAreaVisible = false;
+
             Mode = "EdittPatient";
+        }
+        private void Add()
+        {
+            IsValid = true;
+
+            //initialize
+            ptEntity = new Patient();
+            ptEntity.LastName = string.Empty;
+            ptEntity.FirstName = string.Empty;
+            ptEntity.DOB = null;
+
+            ptEntity.AddressLine1 = "";
+            ptEntity.AddressLine2 = "";
+            ptEntity.City = "";
+            ptEntity.State = "";
+            ptEntity.Zip = "";         
+          
+
+            //Put ViewModel mode to AddMode
+            AddMode();
+        }
+
+        private void AddMode()
+        {
+            IsPatientListAreaVisible = false;
+            IsPatientSummaryAreaVisible = false;
+            IsPatientSummaryEditAreaVisible = false;
+            IsAddPatientIAreaVisible = true;
+
+            Mode = "AddPatient";
         }
         public void HandleRequest()
         {
@@ -176,11 +235,16 @@ namespace PHO_WebApp.ViewModel
                     deletePatient();
                     GetPatients();
                     break;
-
                 case "savepatient":
                     IsValid = true;                  
                     SavePatient();
                     GetPatients();
+                    break;
+                case "addpatient":
+                    IsValid = true;
+                    Add();
+                   // AddPatient();
+                   // GetPatients();
                     break;
 
                 default:
@@ -198,8 +262,10 @@ namespace PHO_WebApp.ViewModel
             com.Parameters.Add("@DOB", SqlDbType.NVarChar);
             com.Parameters.Add("@AddressLine1", SqlDbType.NVarChar);
             com.Parameters.Add("@AddressLine2", SqlDbType.NVarChar);
+            com.Parameters.Add("@City", SqlDbType.NVarChar);
             com.Parameters.Add("@State", SqlDbType.NVarChar);
             com.Parameters.Add("@Zip", SqlDbType.NVarChar);
+           //com.Parameters.Add("@CreatedById", SqlDbType.Int);
             //com.Parameters.Add("@CreatedONDate", SqlDbType.DateTime);
 
             //replace this part with coding when we have Create Staff part done
@@ -225,7 +291,7 @@ namespace PHO_WebApp.ViewModel
                 com.Parameters["@LastName"].Value = DBNull.Value;
             }
 
-            if (!String.IsNullOrWhiteSpace(model.DOB))
+            if (!String.IsNullOrWhiteSpace(model.DOB.ToString()))
             {                 
                 com.Parameters["@DOB"].Value = model.DOB;
             }
@@ -281,14 +347,14 @@ namespace PHO_WebApp.ViewModel
                 com.Parameters["@Zip"].Value = DBNull.Value;
             }
 
-            if (UserLogin != null && UserLogin.LoginId > 0)
-            {
-                com.Parameters["@CreatedById"].Value = UserLogin.LoginId;
-            }
-            else
-            {
-                com.Parameters["@CreatedById"].Value = DBNull.Value;
-            }
+            //if (UserLogin != null && UserLogin.LoginId > 0)
+            //{
+            //    com.Parameters["@CreatedById"].Value = UserLogin.LoginId;
+            //}
+            //else
+            //{
+            //    com.Parameters["@CreatedById"].Value = DBNull.Value;
+            //}
 
             //com.Parameters["@CreatedONDate"].Value = model.CreatedOnDate;
 
@@ -307,7 +373,7 @@ namespace PHO_WebApp.ViewModel
             com.Parameters.Add("@FirstName", SqlDbType.NVarChar);
             com.Parameters.Add("@LastName", SqlDbType.NVarChar);
             com.Parameters.Add("@PatientDOB", SqlDbType.DateTime);
-            com.Parameters.Add("@Gender", SqlDbType.NVarChar);
+            com.Parameters.Add("@GenderID", SqlDbType.Int);
             com.Parameters.Add("@Email", SqlDbType.NVarChar);
             com.Parameters.Add("@Phone1", SqlDbType.NVarChar);
             com.Parameters.Add("@Phone2", SqlDbType.NVarChar);
@@ -316,6 +382,9 @@ namespace PHO_WebApp.ViewModel
             com.Parameters.Add("@City", SqlDbType.NVarChar);
             com.Parameters.Add("@State", SqlDbType.NVarChar);
             com.Parameters.Add("@Zip", SqlDbType.NVarChar);
+            com.Parameters.Add("@InsuranceId", SqlDbType.Int);
+            com.Parameters.Add("@PCPId", SqlDbType.Int);
+            com.Parameters.Add("@Conditions", SqlDbType.NVarChar);
             //com.Parameters.Add("@ModifiedById", SqlDbType.Int);
             //com.Parameters.Add("@CreatedONDate", SqlDbType.DateTime);                    
 
@@ -349,14 +418,23 @@ namespace PHO_WebApp.ViewModel
                 com.Parameters["@PatientDOB"].Value = DBNull.Value;
             }
 
-            if (!String.IsNullOrWhiteSpace(model.Gender))
+            if(model.GenderId.HasValue)
             {
-                com.Parameters["@Gender"].Value = model.Gender;
+                com.Parameters["@GenderID"].Value = model.GenderId;
             }
             else
             {
-                com.Parameters["@Gender"].Value = DBNull.Value;
+                com.Parameters["@GenderID"].Value = DBNull.Value;
             }
+            if (model.InsuranceId.HasValue)
+            {
+                com.Parameters["@InsuranceId"].Value = model.InsuranceId;
+            }
+            else
+            {
+                com.Parameters["@InsuranceId"].Value = DBNull.Value;
+            }
+            com.Parameters["@PCPId"].Value = model.StaffId;
 
             if (!String.IsNullOrWhiteSpace(model.Email))
             {
@@ -428,7 +506,18 @@ namespace PHO_WebApp.ViewModel
             else
             {
                 com.Parameters["@Zip"].Value = DBNull.Value;
-            }        
+            }
+
+            if (!String.IsNullOrWhiteSpace(model.PatientConditionsSelected.ToString()))
+            {
+                //com.Parameters["@Zip"].Value = model.Zip;
+            }
+            else
+            {
+                //com.Parameters["@Zip"].Value = DBNull.Value;
+            }
+
+            //Model.ptEntity.PatientConditionsSelected
 
             //if (UserLogin != null && UserLogin.LoginId > 0)
             //{
@@ -438,7 +527,7 @@ namespace PHO_WebApp.ViewModel
             //{
             //    com.Parameters["@ModifiedById"].Value = DBNull.Value;
             //}
-           
+
             con.Open();
             com.ExecuteNonQuery();
             con.Close();

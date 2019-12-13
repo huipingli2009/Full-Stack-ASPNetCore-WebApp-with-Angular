@@ -1,24 +1,25 @@
 ﻿@model PHO_WebApp.ViewModel.PatientVM
+@using MvcCheckBoxList.Model
 
-@{	
-	Layout = "~/Views/Shared/_Layout.cshtml";
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <html>
 <head>
-	`
-	<meta name="viewport" content="width=device-width" />
-	<title>Index</title>
-	<link href="~/Content/Site.css" rel="stylesheet" />
-	<style>
-		input {
-			margin-bottom: 10px;
-		}
+    `
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <style>
+        input {
+            margin-bottom: 10px;
+        }
 
         h3, h5 {
             color: #006D63;
             font-weight: bold;
         }
-	</style>
+    </style>
 </head>
 <body>
 
@@ -32,6 +33,69 @@
         @Html.HiddenFor(m => m.UserLogin.LoginId)
         @Html.HiddenFor(m => m.UserLogin.StaffId)
         @Html.HiddenFor(m => m.UserLogin.UserName)
+
+        <!--Begin Patient Insertion -->
+        if (Model.IsAddPatientIAreaVisible)
+        {
+            <div>
+                <h5>Add New Patient</h5>
+            </div>
+            <table class="PatientSummary" id="pnlEditPatient">
+                <thead style="border-top: 1px solid #808080">
+                    <tr><th colspan="6"> </th></tr>
+                    <tr><th colspan="6"> </th></tr>
+                    <tr><th colspan="6"> </th></tr>
+                </thead>
+                <tr>&nbsp;</tr>
+                <tr>&nbsp;</tr>
+                <tr>
+                    <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Last Name:</td>
+                    <td valign="top" style="width:300px; max-width:300px;">
+                        @Html.EditorFor(m => m.ptEntity.LastName)
+                        @Html.ValidationMessageFor(m => m.ptEntity.LastName, "", new { @class = "text-danger" })
+                    </td>
+                    <td valign="top" style="font-weight:bold; width:120px; max-width:120px;">First Name: </td>
+                    <td valign="top" style="width:300px; max-width:300px;">
+                        @Html.EditorFor(m => m.ptEntity.FirstName)
+                        @Html.ValidationMessageFor(m => m.ptEntity.FirstName, "", new { @class = "text-danger" })
+                    </td>
+                    <td valign="top" style="font-weight:bold; width:120px; max-width:150px;">DOB: </td>
+                    <td valign="top" style="width:300px; max-width:300px;">
+                        @Html.EditorFor(m => m.ptEntity.DOB)
+                        @Html.ValidationMessageFor(m => m.ptEntity.DOB, "", new { @class = "text-danger" })
+                    </td>
+                </tr>
+
+                <tr>
+                    <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Address Line1:</td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.AddressLine1)</td>
+                    <td valign="top" style="font-weight:bold; width:120px; max-width:120px;">Address Line2: </td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.AddressLine2)</td>
+                    <td valign="top" style="font-weight:bold; width:120px; max-width:150px;">City: </td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.City)</td>
+                </tr>
+                <tr>
+                    <td valign="top" style="font-weight:bold; width:150px; max-width:100px;">State:</td>
+                    <td valign="top" style="width:250px; max-width:250px;" colspan="3">@Html.EditorFor(m => m.ptEntity.State)</td>
+                    <td valign="top" style="font-weight:bold; width:150px; max-width:150px;">Zip: </td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.Zip)</td>
+                </tr>
+
+                <tr>
+                    <td valign="top" colspan="4"></td>
+                    <td valign="top" colspan="2">
+                        <button id="btnSave" class="btn btn-sm btn-primary" data-pdsa-action="SavePatient" data-pdsa-val=@Model.ptEntity.Id>
+                            <i class="fas fa-save"></i>&nbsp;Save
+                        </button>
+                        <button id="btnCancel" class="btn btn-sm btn-primary" data-pdsa-action="Cancel" data-pdsa-val=@Model.ptEntity.Id>
+                            <i class="fas fa-window-close"></i>&nbsp;Cancel
+                        </button>
+                    </td>
+                </tr>
+                <tfoot style="border-top: 1px solid #808080">
+            </table>
+        }
+        <!--End Patient Insertion-->
 
         <!--Begin Patient Summary Area -->
         //if (Model.IsPatientSummaryAreaVisible)
@@ -67,11 +131,23 @@
                 </tr>
                 <tr>
                     <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Gender:</td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.Gender)</td>
+                    <td valign="top" style="width:300px; max-width:300px;"> @Html.DropDownListFor(m => m.ptEntity.GenderId, new SelectList(Model.ptEntity.PatientGenderList, "Id", "Gender"), "-- Select Gender --", new { id = "Id" })</td>
                     <td valign="top" style="font-weight:bold; width:120px; max-width:120px;">Condition: </td>
                     <td valign="top" style="width:300px; max-width:300px;">
                         @Html.EditorFor(m => m.ptEntity.Condition)
-                        @Html.ValidationMessageFor(m => m.ptEntity.Condition, "", new { @class = "text-danger" })
+
+                        @foreach (var item in Model.ptEntity.PatientConditionsSelected)
+                        {
+                            <div class="editor-field">
+                                @Html.CheckBoxListFor(m=>m.ptEntity.PostedPatienTConditions,
+                                                      m => m.ptEntity.PatientConditions,
+                                                      m =>m.ID,
+                                                      m=>m.Condition,
+                                                      m => m.ptEntity.PatientConditionsSelected,
+                                                      Position.Horizontal)
+                            </div>
+
+                        }
                     </td>
                     <td valign="top" style="font-weight:bold; width:120px; max-width:150px;">Insurance: </td>
                     <td valign="top" style="width:300px; max-width:300px;">
@@ -109,7 +185,7 @@
                 </tr>
                 <tr>
                     <td valign="top" style="font-weight:bold; width:150px; max-width:100px;">PCP:</td>
-                    <td valign="top" style="width:250px; max-width:250px;" colspan="3">@Html.DisplayFor(m => m.ptEntity.PCPLastName), @Html.DisplayFor(m => m.ptEntity.PCPFirstName) </td>
+                    <td valign="top" style="width:250px; max-width:250px;" colspan="3"></td>
                     <td valign="top" style="font-weight:bold; width:150px; max-width:150px;">PCP's Name: </td>
                     <td valign="top" style="width:300px; max-width:300px;">@Html.DropDownListFor(m => m.ptEntity.StaffId, new SelectList(Model.ptEntity.PatientProviders, "StaffId", "Staff_Name"), "-- Select PCP --", new { id = "StaffId" })</td>
                 </tr>
@@ -132,7 +208,7 @@
                 </tr>
                 <tr>
                     <td valign="top" colspan="4"></td>
-                    @*<td valign="top" style="font-weight:bold; width:120px; max-width:120px;">*@                   
+                    @*<td valign="top" style="font-weight:bold; width:120px; max-width:120px;">*@
                     <td valign="top" colspan="2">
                         <button id="btnSave" class="btn btn-sm btn-primary" data-pdsa-action="SavePatient" data-pdsa-val=@Model.ptEntity.Id>
                             <i class="fas fa-save"></i>&nbsp;Save
@@ -319,7 +395,7 @@
                 </tbody>
             </table>
             <div>
-                <button id="btnAdd" class="btn btn-sm btn-primary pull-right" data-pdsa-action="AddStaff">
+                <button id="btnAdd" class="btn btn-sm btn-primary pull-right" data-pdsa-action="AddPatient">
                     <i class="fas fa-plus-circle"></i>
                     &nbsp;Add New Patient
                 </button>

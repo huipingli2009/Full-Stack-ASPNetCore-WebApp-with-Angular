@@ -8,16 +8,18 @@ using System.Data;
 using System.Configuration;
 using PHO_WebApp.ViewModel;
 
+
 namespace PHO_WebApp.DataAccessLayer
-{
+{   
     public class Patients
     {
         SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["con"].ConnectionString);
-              
+        static int temp = 0;
+
         public List<Patient> GetPatients(int practiceId)
         {
             List<Patient> ptList = new List<Patient>();
-            
+            temp = practiceId;
             //SqlCommand com = new SqlCommand("spGetPracticePatients", con);
             SqlCommand com = new SqlCommand("spGetPracticePatients", con);
             com.CommandType = CommandType.StoredProcedure;
@@ -64,7 +66,7 @@ namespace PHO_WebApp.DataAccessLayer
         }       
        
         public List<PracticeInsurance> GetInsuranceStatuses(int practiceId)
-        {
+        {          
             List<PracticeInsurance> returnObject = null;
 
             SqlCommand com = new SqlCommand("spGetPracticeInsurance", con);
@@ -76,7 +78,7 @@ namespace PHO_WebApp.DataAccessLayer
 
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
-            //Cohorts = ds.Tables[0].
+            
             da.Fill(ds);
 
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -108,21 +110,96 @@ namespace PHO_WebApp.DataAccessLayer
             return c;
         }
 
-        public void AddPatient(Patient pt)
+        public void AddPatient(Patient model, UserDetails userDetails)
         {
-            SqlCommand com = new SqlCommand("proc_AddPatient", con);
-            com.CommandType = CommandType.StoredProcedure;
-            com.Parameters.AddWithValue("@FirstName", pt.FirstName);
-            com.Parameters.AddWithValue("@LastName", pt.LastName);
-            com.Parameters.AddWithValue("@DOB", pt.DOB);
-            com.Parameters.AddWithValue("@AddressLine1", pt.AddressLine1);
-            com.Parameters.AddWithValue("@City", pt.City);
-            //com.Parameters.AddWithValue("@StateId", pt.State_Id);
-            com.Parameters.AddWithValue("@Zip", pt.Zip);
+            SqlCommand com = new SqlCommand("spAddPatient", con);
+            com.CommandType = CommandType.StoredProcedure;  
+
+            com.Parameters.Add("@PracticeId", SqlDbType.Int);
+            com.Parameters.Add("@FirstName", SqlDbType.NVarChar);
+            com.Parameters.Add("@LastName", SqlDbType.NVarChar);
+            com.Parameters.Add("@DOB", SqlDbType.NVarChar);
+            com.Parameters.Add("@AddressLine1", SqlDbType.NVarChar);
+            com.Parameters.Add("@AddressLine2", SqlDbType.NVarChar);
+            com.Parameters.Add("@City", SqlDbType.NVarChar);
+            com.Parameters.Add("@State", SqlDbType.NVarChar);
+            com.Parameters.Add("@Zip", SqlDbType.NVarChar);
+           
+            com.Parameters.Add("@CreatedById", SqlDbType.Int);
+           
+            com.Parameters["@PracticeId"].Value = userDetails.PracticeId;   //practice staff type id = 4           
+
+            if (!String.IsNullOrWhiteSpace(model.FirstName))
+            {
+                com.Parameters["@FirstName"].Value = model.FirstName;
+            }
+            else
+            {
+                com.Parameters["@FirstName"].Value = DBNull.Value;
+            }
+
+            if (!String.IsNullOrWhiteSpace(model.LastName))
+            {
+                com.Parameters["@LastName"].Value = model.LastName;
+            }
+            else
+            {
+                com.Parameters["@LastName"].Value = DBNull.Value;
+            }
+
+            if (!String.IsNullOrWhiteSpace(model.DOB.ToString()))
+            {
+                com.Parameters["@DOB"].Value = model.DOB;
+            }
+            else
+            {
+                com.Parameters["@DOB"].Value = DBNull.Value;
+            }
+
+            if (!String.IsNullOrWhiteSpace(model.AddressLine1))
+            {
+                com.Parameters["@AddressLine1"].Value = model.AddressLine1;
+            }
+            else
+            {
+                com.Parameters["@AddressLine1"].Value = DBNull.Value;
+            }
+
+            com.Parameters["@AddressLine2"].Value = model.AddressLine2;
+
+            com.Parameters["@City"].Value = model.City;
+            com.Parameters["@State"].Value = model.State;
+            com.Parameters["@Zip"].Value = model.Zip;
+
+            if (userDetails != null && userDetails.LoginId > 0)
+            {
+                com.Parameters["@CreatedById"].Value = userDetails.LoginId;
+            }
+            else
+            {
+                com.Parameters["@CreatedById"].Value = DBNull.Value;
+            }
+
             con.Open();
             com.ExecuteNonQuery();
             con.Close();
         }
+
+        //public void AddPatient(Patient pt)
+        //{
+        //    SqlCommand com = new SqlCommand("proc_AddPatient", con);
+        //    com.CommandType = CommandType.StoredProcedure;
+        //    com.Parameters.AddWithValue("@FirstName", pt.FirstName);
+        //    com.Parameters.AddWithValue("@LastName", pt.LastName);
+        //    com.Parameters.AddWithValue("@DOB", pt.DOB);
+        //    com.Parameters.AddWithValue("@AddressLine1", pt.AddressLine1);
+        //    com.Parameters.AddWithValue("@City", pt.City);
+        //    //com.Parameters.AddWithValue("@StateId", pt.State_Id);
+        //    com.Parameters.AddWithValue("@Zip", pt.Zip);
+        //    con.Open();
+        //    com.ExecuteNonQuery();
+        //    con.Close();
+        //}
 
         public void UpPatient(Patient pt)
         {
@@ -194,13 +271,13 @@ namespace PHO_WebApp.DataAccessLayer
         }
 
         public Patient CreatePatientModel(DataRow dr)
-        {
+        {           
             Patient p = new Patient();            
 
             if (dr["Id"] != null && !string.IsNullOrWhiteSpace(dr["Id"].ToString()))
             {
                 p.Id = SharedLogic.ParseNumeric(dr["Id"].ToString());
-            }          
+            }           
 
             p.FirstName = dr["FirstName"].ToString();
             p.LastName = dr["LastName"].ToString();
@@ -212,10 +289,7 @@ namespace PHO_WebApp.DataAccessLayer
             if (dr["InsId"] != null && !string.IsNullOrWhiteSpace(dr["InsId"].ToString()))
             {
                 p.InsuranceId = Int32.Parse(dr["InsId"].ToString());
-            }
-            
-            //p.Insurance = dr["I"]
-           // p.ActiveStatus = dr["ActiveStatus"].ToString();
+            }                   
 
             p.AddressLine1 = dr["AddressLine1"].ToString();
             p.AddressLine2 = dr["AddressLine2"].ToString();
@@ -225,13 +299,34 @@ namespace PHO_WebApp.DataAccessLayer
             p.Phone1 = dr["Phone1"].ToString();
             p.Phone2 = dr["Phone2"].ToString();
             p.Condition = dr["Condition"].ToString();
+
+            
+            //read thru all the condion ids and save in an array
+            var query = from val in (dr["ConditionIDs"].ToString()).Split(',')
+                        select int.Parse(val);
+
+            p.PatientConditions = this.GetPatientConditionsAll();
+
+            //int[] arr = Array.ConvertAll(query, Convert.ToInt32);
+            foreach (int num in query)
+            {
+                foreach(Conditions pc in p.PatientConditions)
+                {
+                    if (pc.ID == num)
+                    {
+                        p.PatientConditionsSelected.Add(pc);
+                    }
+                }
+            }
+            //p.ConditionId = int.Parse(dr["ConditionIDs"].ToString());
             p.Gender = dr["Gender"].ToString();
+            p.GenderId = int.Parse(dr["GenderID"].ToString());
             p.PMCAScore = dr["PMCAScore"].ToString();
             p.ProviderPMCAScore = dr["ProviderPMCAScore"].ToString();
             p.ProviderPMCANotes = dr["ProviderPMCANotes"].ToString();
             p.PMCA_ProvFirst = dr["PMCA_ProvFirst"].ToString();
             p.PMCA_ProvLast = dr["PMCA_ProvLast"].ToString();
-            p.PCPFirstName = dr["PCP_FirstName"].ToString();
+            p.PCPFirstName = dr["PCP_FirstName"].ToString(); 
             p.PCPLastName = dr["PCP_LastName"].ToString();
             
             if (dr["PCP_ID"] != null && !string.IsNullOrWhiteSpace(dr["PCP_ID"].ToString()))
@@ -241,11 +336,13 @@ namespace PHO_WebApp.DataAccessLayer
 
             //use SPA id = 37 for now
             //p.Payors = this.GetInsuranceStatuses(practiceId);
-            p.Payors = this.GetInsuranceStatuses(70);
+            p.Payors = this.GetInsuranceStatuses(temp);
 
             //p.PatientProviders = this.GetPatientProviders(70);
 
-            p.PatientProviders = this.GetPracticeProviders(37);
+            p.PatientProviders = this.GetPracticeProviders(temp);
+            p.PatientGenderList = this.GetPatientGenderList();
+            p.PatientConditions = this.GetPatientConditionList();
 
             return p;
         }
@@ -258,9 +355,11 @@ namespace PHO_WebApp.DataAccessLayer
             SqlCommand com = new SqlCommand("spGetPracticeInsurance", con);
             com.CommandType = CommandType.StoredProcedure;
 
+            com.Parameters.AddWithValue("@PracticeId", temp);
+
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
-            //Cohorts = ds.Tables[0].
+           
             da.Fill(ds);
 
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -341,6 +440,7 @@ namespace PHO_WebApp.DataAccessLayer
         }
         public List<PatientProvider> GetPracticeProviders(int PracticeId)
         {
+            PracticeId = temp;
             List<PatientProvider> returnObject = null;
 
             SqlCommand com = new SqlCommand("spGetPracticeProviders", con);
@@ -365,6 +465,100 @@ namespace PHO_WebApp.DataAccessLayer
             }
 
             return returnObject;
+        }
+
+        public List<PatientGender> GetPatientGenderList()
+        {
+            List<PatientGender> returnObject = null;
+
+            SqlCommand com = new SqlCommand("spGetPatientGender", con);
+            com.CommandType = CommandType.StoredProcedure;
+
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();            
+            da.Fill(ds);
+
+            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+            {
+                if (returnObject == null)
+                {
+                    returnObject = new List<PatientGender>();
+                }
+                PatientGender PtGender = CreatePatientGenderModel(ds.Tables[0].Rows[i]);
+                returnObject.Add(PtGender);
+            }
+
+            return returnObject;
+        }
+
+        public PatientGender CreatePatientGenderModel(DataRow dr)
+        {
+            PatientGender c = new PatientGender();
+            if (dr["Id"] != null && !string.IsNullOrWhiteSpace(dr["Id"].ToString()))
+            {
+                c.Id = int.Parse(dr["Id"].ToString());
+            }
+            c.Gender = dr["Gender"].ToString();          
+
+            return c;
+        }
+        public List<Conditions> GetPatientConditionList()
+        {
+            List<Conditions> returnObject = null;
+
+            SqlCommand com = new SqlCommand("spGetAllConditions", con);
+            com.CommandType = CommandType.StoredProcedure;
+
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+            {
+                if (returnObject == null)
+                {
+                    returnObject = new List<Conditions>();
+                }
+                Conditions PtCondition = CreatePatientConditionModel(ds.Tables[0].Rows[i]);
+                returnObject.Add(PtCondition);
+            }
+
+            return returnObject;
+        }
+
+        public List<Conditions> GetPatientConditionsAll()
+        {
+            List<Conditions> returnObject = null;
+
+            SqlCommand com = new SqlCommand("spGetAllConditions", con);
+            com.CommandType = CommandType.StoredProcedure;
+
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+            {
+                if (returnObject == null)
+                {
+                    returnObject = new List<Conditions>();
+                }
+                Conditions PtCondition = CreatePatientConditionModel(ds.Tables[0].Rows[i]);
+                returnObject.Add(PtCondition);
+            }
+
+            return returnObject;
+        }
+        public Conditions CreatePatientConditionModel(DataRow dr)
+        {
+            Conditions c = new Conditions();
+            if (dr["Id"] != null && !string.IsNullOrWhiteSpace(dr["Id"].ToString()))
+            {
+                c.ID = int.Parse(dr["Id"].ToString());
+            }
+            c.Condition = dr["Condition"].ToString();          
+
+            return c;
         }
     }
 }

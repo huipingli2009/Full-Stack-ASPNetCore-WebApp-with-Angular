@@ -44,22 +44,22 @@ namespace PHO_WebApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddPatient(FormCollection fc)
-        {
-            Patient pt = new Patient();
-            pt.patientId = Convert.ToInt32(fc["txtId"]);
-            pt.FirstName = fc["txtFirstName"];
-            pt.LastName = fc["txtLastName"];
-            pt.DOB = Convert.ToDateTime(fc["txtPersonDOB"]);
-            pt.AddressLine1 = fc["txtAddress"];
-            pt.City = fc["txtCity"];
-            //pt.State_Id = Convert.ToInt32(fc["txtStateId"]);
-            pt.Zip = fc["txtZip"];
+        //public ActionResult AddPatient(FormCollection fc)
+        //{
+        //    Patient pt = new Patient();
+        //    pt.patientId = Convert.ToInt32(fc["txtId"]);
+        //    pt.FirstName = fc["txtFirstName"];
+        //    pt.LastName = fc["txtLastName"];
+        //    pt.DOB = Convert.ToDateTime(fc["txtPersonDOB"]);
+        //    pt.AddressLine1 = fc["txtAddress"];
+        //    pt.City = fc["txtCity"];
+        //    //pt.State_Id = Convert.ToInt32(fc["txtStateId"]);
+        //    pt.Zip = fc["txtZip"];
 
-            pts.AddPatient(pt);
-            //return View("AddPatient");
-            return RedirectToAction("GetPatients");
-        }
+        //    pts.AddPatient(pt);
+        //    //return View("AddPatient");
+        //    return RedirectToAction("GetPatients");
+        //}
 
         public ActionResult UpdatePatient(int id)
         {

@@ -8,17 +8,29 @@ namespace PHO_WebApp.Models
 {
     public class Patient
     {
+        public Patient()
+        {
+            this.PatientConditions = new List<Conditions>();
+            this.Payors = new List<PracticeInsurance>();
+            this.PatientProviders = new List<PatientProvider>();
+            this.PatientGenderList = new List<PatientGender>();
+            this.PatientConditions = new List<Conditions>();
+            this.PatientConditionsSelected = new List<Conditions>();
+            this.PostedPatienTConditions = new PostedConditions();
+        }
         public int Id {get;set;}       
         public int patientId { get; set; }
         [Required(ErrorMessage = "First Name can't be blank")]
         public string FirstName { get; set; }       
         [Required(ErrorMessage = "Last Name can't be blank")]
         public string LastName { get; set; }
+        public PostedConditions PostedPatienTConditions { get; set;}
 
         [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
         [Required(ErrorMessage = "Date of Birth can't be blank")]
         public DateTime? DOB { get; set; }
         public string Gender { get; set; }
+        public int? GenderId { get; set; }
         public string AddressLine1 { get; set; }
         public string AddressLine2 { get; set; }
         public string City { get; set; }
@@ -32,6 +44,7 @@ namespace PHO_WebApp.Models
         public string Phone2 { get; set; }
         public string Email { get; set; }
         public string Condition { get; set; }
+        public int? ConditionId { get; set; }
         public int StaffId { get; set; }    //for provider dropdownlist, here for PCP provider
         public string PCPFirstName { get; set; }
         public string PCPLastName { get; set; }
@@ -51,6 +64,11 @@ namespace PHO_WebApp.Models
         public DateTime? LastPracticeVisitDate { get; set; }
         public List<PracticeInsurance> Payors { get; set;} //for dropdown of practice insurance
         public List<PatientProvider> PatientProviders { get; set;}
+        public List<PatientGender> PatientGenderList { get; set; }
+        public List<Conditions> PatientConditions { get; set; }
+        public List<Conditions> PatientConditionsSelected { get; set; }
+
+        //public List<Condition> PatientConditions { get; set; }
         public string LookupDisplayText
         {
             get
@@ -94,11 +112,36 @@ namespace PHO_WebApp.Models
         public string PracticeName { get; set; }
         public string PracticeDescription { get; set; }
     }
+
+    public class PatientCondition
+    {
+        public int id;
+        public int PatientId;
+        public int conditionId;
+    }
     public class PatientProvider
     {
         public int StaffId { get; set; }
-        public string Staff_Name { get; set; }  //provider's last name
-        //public string Staff_FirstName { get; set; } //provider's first name
-        //public string Staff_LastName { get; set; }  //provider's last name        
+        public string Staff_Name { get; set; }
+        public string Staff_FirstName { get; set; } //provider's first name        
+    }
+
+    public class PatientGender
+    {
+        public int Id { get; set; }
+        public string Gender { get; set; }
+    }
+
+    public class Conditions
+    {
+        public int ID { get; set; }
+        public string Condition { get; set; }
+        //public bool IsChecked { get; set; }
+        //public string Desc { get; set; }
+    }
+    public class PostedConditions
+    {
+        //this array will be used to POST values from the form to the controller
+        public int[] ConditionIds { get; set; }
     }
 }
