@@ -1,24 +1,25 @@
 ﻿@model PHO_WebApp.ViewModel.PatientVM
+@using MvcCheckBoxList.Model
 
-@{	
-	Layout = "~/Views/Shared/_Layout.cshtml";
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <html>
 <head>
-	`
-	<meta name="viewport" content="width=device-width" />
-	<title>Index</title>
-	<link href="~/Content/Site.css" rel="stylesheet" />
-	<style>
-		input {
-			margin-bottom: 10px;
-		}
+    `
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <style>
+        input {
+            margin-bottom: 10px;
+        }
 
-		h3, h5 {
-			color: #006D63;
-			font-weight: bold;
-		}
-	</style>
+        h3, h5 {
+            color: #006D63;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
 
@@ -32,6 +33,69 @@
         @Html.HiddenFor(m => m.UserLogin.LoginId)
         @Html.HiddenFor(m => m.UserLogin.StaffId)
         @Html.HiddenFor(m => m.UserLogin.UserName)
+
+        <!--Begin Patient Insertion -->
+        if (Model.IsAddPatientIAreaVisible)
+        {
+            <div>
+                <h5>Add New Patient</h5>
+            </div>
+            <table class="PatientSummary" id="pnlEditPatient">
+                <thead style="border-top: 1px solid #808080">
+                    <tr><th colspan="6"> </th></tr>
+                    <tr><th colspan="6"> </th></tr>
+                    <tr><th colspan="6"> </th></tr>
+                </thead>
+                <tr>&nbsp;</tr>
+                <tr>&nbsp;</tr>
+                <tr>
+                    <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Last Name:</td>
+                    <td valign="top" style="width:300px; max-width:300px;">
+                        @Html.EditorFor(m => m.ptEntity.LastName)
+                        @Html.ValidationMessageFor(m => m.ptEntity.LastName, "", new { @class = "text-danger" })
+                    </td>
+                    <td valign="top" style="font-weight:bold; width:120px; max-width:120px;">First Name: </td>
+                    <td valign="top" style="width:300px; max-width:300px;">
+                        @Html.EditorFor(m => m.ptEntity.FirstName)
+                        @Html.ValidationMessageFor(m => m.ptEntity.FirstName, "", new { @class = "text-danger" })
+                    </td>
+                    <td valign="top" style="font-weight:bold; width:120px; max-width:150px;">DOB: </td>
+                    <td valign="top" style="width:300px; max-width:300px;">
+                        @Html.EditorFor(m => m.ptEntity.DOB)
+                        @Html.ValidationMessageFor(m => m.ptEntity.DOB, "", new { @class = "text-danger" })
+                    </td>
+                </tr>
+
+                <tr>
+                    <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Address Line1:</td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.AddressLine1)</td>
+                    <td valign="top" style="font-weight:bold; width:120px; max-width:120px;">Address Line2: </td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.AddressLine2)</td>
+                    <td valign="top" style="font-weight:bold; width:120px; max-width:150px;">City: </td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.City)</td>
+                </tr>
+                <tr>
+                    <td valign="top" style="font-weight:bold; width:150px; max-width:100px;">State:</td>
+                    <td valign="top" style="width:250px; max-width:250px;" colspan="3">@Html.EditorFor(m => m.ptEntity.State)</td>
+                    <td valign="top" style="font-weight:bold; width:150px; max-width:150px;">Zip: </td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.Zip)</td>
+                </tr>
+
+                <tr>
+                    <td valign="top" colspan="4"></td>
+                    <td valign="top" colspan="2">
+                        <button id="btnSave" class="btn btn-sm btn-primary" data-pdsa-action="SavePatient" data-pdsa-val=@Model.ptEntity.Id>
+                            <i class="fas fa-save"></i>&nbsp;Save
+                        </button>
+                        <button id="btnCancel" class="btn btn-sm btn-primary" data-pdsa-action="Cancel" data-pdsa-val=@Model.ptEntity.Id>
+                            <i class="fas fa-window-close"></i>&nbsp;Cancel
+                        </button>
+                    </td>
+                </tr>
+                <tfoot style="border-top: 1px solid #808080">
+            </table>
+        }
+        <!--End Patient Insertion-->
 
         <!--Begin Patient Summary Area -->
         //if (Model.IsPatientSummaryAreaVisible)
@@ -50,19 +114,46 @@
                 <tr>&nbsp;</tr>
                 <tr>
                     <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Last Name:</td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.LastName)</td>
+                    <td valign="top" style="width:300px; max-width:300px;">
+                        @Html.EditorFor(m => m.ptEntity.LastName)
+                        @Html.ValidationMessageFor(m => m.ptEntity.LastName, "", new { @class = "text-danger" })
+                    </td>
                     <td valign="top" style="font-weight:bold; width:120px; max-width:120px;">First Name: </td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.FirstName)</td>
+                    <td valign="top" style="width:300px; max-width:300px;">
+                        @Html.EditorFor(m => m.ptEntity.FirstName)
+                        @Html.ValidationMessageFor(m => m.ptEntity.FirstName, "", new { @class = "text-danger" })
+                    </td>
                     <td valign="top" style="font-weight:bold; width:120px; max-width:150px;">DOB: </td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.DOB)</td>
+                    <td valign="top" style="width:300px; max-width:300px;">
+                        @Html.EditorFor(m => m.ptEntity.DOB)
+                        @Html.ValidationMessageFor(m => m.ptEntity.DOB, "", new { @class = "text-danger" })
+                    </td>
                 </tr>
                 <tr>
                     <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Gender:</td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.Gender)</td>
-                    <td valign="top" style="font-weight:bold; width:120px; max-width:120px;">Condition: </td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.Condition)</td>
+                    <td valign="top" style="width:300px; max-width:300px;"> @Html.DropDownListFor(m => m.ptEntity.GenderId, new SelectList(Model.ptEntity.PatientGenderList, "Id", "Gender"), "-- Select Gender --", new { id = "Id" })</td>
                     <td valign="top" style="font-weight:bold; width:120px; max-width:150px;">Insurance: </td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.InsuranceId)</td>
+                    <td colspan="3" valign="top" style="width:300px; max-width:300px;">
+                        @Html.DropDownListFor(m => m.ptEntity.InsuranceId, new SelectList(Model.ptEntity.Payors, "Id", "InsuranceName"), "-- Select Insurance --", new { id = "Id" })
+                        @Html.ValidationMessageFor(m => m.ptEntity.Insurance, "", new { @class = "text-danger" })
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Conditions:</td>
+                    <td colspan="4" valign="top" style="width:800px; max-width:800px;">
+                        @*@Html.EditorFor(m => m.ptEntity.Condition)*@
+                        <div class="editor-field">
+                            @Html.CheckBoxListFor(
+                                                    m=>m.ptEntity.PostedPatientConditions.ConditionIds,
+                                                    m => m.ptEntity.PatientConditions,
+                                                    x => x.ID,
+                                                    x => x.Condition,
+                                                    m => m.ptEntity.PatientConditionsSelected,
+                                                    Position.Horizontal
+                                                  )
+                        </div>
+                    </td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Primary Phone:</td>
@@ -83,35 +174,57 @@
                     <td valign="top" style="width:250px; max-width:250px;" colspan="3">@Html.EditorFor(m => m.ptEntity.State)</td>
                     <td valign="top" style="font-weight:bold; width:150px; max-width:150px;">Zip: </td>
                     <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.Zip)</td>
-                </tr>                
-                <tr>
-                    <td valign="top" style="font-weight:bold; width:150px; max-width:100px;">PCP's First Name:</td>
-                    <td valign="top" style="width:250px; max-width:250px;" colspan="3">@Html.DisplayFor(m => m.ptEntity.PCPFirstName)</td>
-                    <td valign="top" style="font-weight:bold; width:150px; max-width:150px;">PCP's Last Name: </td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.PCPLastName)</td>
                 </tr>
                 <tr>
-                    <td valign="top" style="font-weight:bold; width:150px; max-width:100px;">PMCA Score:</td>
+                    <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">PMCA Score from EPIC:</td>
+                    <td valign="top" style="width:200px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.PMCAScore)</td>
+                    <td valign="top" style="font-weight:bold; width:250px; max-width:250px;">PMCA Score from Provider: </td>
+                    @*<td valign="top" style="width:250px; max-width:120px;">@Html.EditorFor(m => m.ptEntity.ProviderPMCAScore)</td>*@  
+                    <td valign="top" style="width:300px; max-width:300px;">
+                        @Html.DropDownListFor(m => m.ptEntity.ProviderPMCAScoreId, new SelectList(Model.ptEntity.PMCAScore_Provider, "ID", "PMCAScoreId"), "-- Select PMCA Score --", new { id = "ID" })
+                        @Html.ValidationMessageFor(m => m.ptEntity.ProviderPMCAScoreId, "", new { @class = "text-danger" })
+                    </td>
+                    <td valign="top" style="font-weight:bold; width:120px; max-width:150px;">PCP's Name: </td>
+                    <td valign="top" style="width:300px; max-width:300px;">@Html.DropDownListFor(m => m.ptEntity.StaffId, new SelectList(Model.ptEntity.PatientProviders, "StaffId", "Staff_Name"), "-- Select PCP --", new { id = "StaffId" })</td>
+                </tr>
+                <tr>
+                    <td valign="top" style="font-weight:bold; width:300px; max-width:300px;">Notes from Provider: </td>
+                    <td valign="top" style="width:600px; max-width:600px;">
+                        @Html.EditorFor(m => m.ptEntity.ProviderPMCANotes)
+                        @Html.ValidationMessageFor(m => m.ptEntity.ProviderPMCANotes, "", new { @class = "text-danger" })
+                    </td>
+                    @*<td valign="top" style="font-weight:bold; width:150px; max-width:100px;">PMCA Score:</td>
                     <td valign="top" style="width:200px; max-width:200px;" colspan="3">@Html.DisplayFor(m => m.ptEntity.PMCAScore)</td>
                     <td valign="top" style="font-weight:bold; width:250px; max-width:250px;">PMCA Score from Provider: </td>
-                    <td valign="top" style="width:250px; max-width:250px;">@Html.DisplayFor(m => m.ptEntity.ProviderPMCAScore)</td>
+                    <td valign="top" style="width:250px; max-width:250px;">@Html.EditorFor(m => m.ptEntity.ProviderPMCAScore)</td>
+                    <td valign="top" style="font-weight:bold; width:120px; max-width:100px;">Notes from Provider: </td>
+                    <td valign="top" style="width:300px; max-width:300px;">
+                        @Html.EditorFor(m => m.ptEntity.ProviderPMCANotes)
+                        @Html.ValidationMessageFor(m => m.ptEntity.ProviderPMCANotes, "", new { @class = "text-danger" })
+                    </td>*@
                 </tr>
-                <tr>
+                @*<tr>
                     <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Notes from Provider: </td>
-                    <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.ProviderPMCANotes)</td>
+                    <td valign="top" style="width:300px; max-width:300px;">
+                        @Html.EditorFor(m => m.ptEntity.ProviderPMCANotes)
+                        @Html.ValidationMessageFor(m => m.ptEntity.ProviderPMCANotes, "", new { @class = "text-danger" })
+                    </td>
                     <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Provider Last Name:</td>
                     <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.PMCA_ProvLast)</td>
                     <td valign="top" style="font-weight:bold; width:100px; max-width:150px;">Provider First Name:</td>
                     <td valign="top" style="width:120px; max-width:120px;">@Html.DisplayFor(m => m.ptEntity.PMCA_ProvFirst)</td>
-                </tr>
+                </tr>*@
                 <tr>
                     <td valign="top" colspan="4"></td>
                     @*<td valign="top" style="font-weight:bold; width:120px; max-width:120px;">*@
-                    <td>
+                    <td valign="top" colspan="2">
                         <button id="btnSave" class="btn btn-sm btn-primary" data-pdsa-action="SavePatient" data-pdsa-val=@Model.ptEntity.Id>
                             <i class="fas fa-save"></i>&nbsp;Save
                         </button>
-                        <button id="btnCancel" class="btn btn-sm btn-primary pull-right" data-pdsa-action="Cancel" data-pdsa-val=@Model.ptEntity.Id>
+                        <button id="btnDelete" class="btn btn-sm btn-primary" data-pdsa-action="DeletePatient" data-pdsa-val=@Model.ptEntity.Id>
+                            <i class="fas fa-remove"></i>&nbsp;Delete Patient
+                        </button>
+                        <button id="btnCancel" class="btn btn-sm btn-primary" data-pdsa-action="Cancel" data-pdsa-val=@Model.ptEntity.Id>
                             <i class="fas fa-window-close"></i>&nbsp;Cancel
                         </button>
                     </td>
@@ -289,6 +402,12 @@
                     }
                 </tbody>
             </table>
+            <div>
+                <button id="btnAdd" class="btn btn-sm btn-primary pull-right" data-pdsa-action="AddPatient">
+                    <i class="fas fa-plus-circle"></i>
+                    &nbsp;Add New Patient
+                </button>
+            </div>
         }
 
         <!--End Patient List Area -->
@@ -321,7 +440,7 @@
             $("#btnEdit").on("click", function () {
                 $("#pnlDisplayPatient").hide();
                 $("#pnlEditPatient").show();
-            });           
+            });
 
             $("[data-pdsa-action]").on("click", function (e) {
                 e.preventDefault();
@@ -330,7 +449,7 @@
                 $("#EventArgument").val($(this).data("pdsa-val"));
 
                 $("form").submit();
-               
+
             });
 
             $("#Delete").on("click", function (e) {

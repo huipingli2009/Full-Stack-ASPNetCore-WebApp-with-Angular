@@ -29,6 +29,7 @@ namespace PHO_WebApp.Controllers
             //PatientVM ptVM = new PatientVM();
 
             ptVM.IsValid = ModelState.IsValid;
+            //ptVM.ptEntity.PatientConditionsSelected 
             //ptVM.GetPatient(id);
             //ptVM.EventCommand = "SelectPatient";
             //ptVM.ptEntity = ptVM.GetPatient(id);

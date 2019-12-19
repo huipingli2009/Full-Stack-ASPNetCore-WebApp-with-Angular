@@ -48,6 +48,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CheckBoxList.Mvc, Version=1.0.0.0, Culture=En, processorArchitecture=MSIL">
+      <HintPath>..\packages\CheckBoxList.Mvc.1.0.1\lib\net40\CheckBoxList.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -75,6 +78,9 @@
     </Reference>
     <Reference Include="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Report.Viewer.11.0.0.0\lib\net\Microsoft.ReportViewer.WebForms.DLL</HintPath>
+    </Reference>
+    <Reference Include="MvcCheckBoxList, Version=1.4.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvcCheckBoxList.1.4.5\lib\net45\MvcCheckBoxList.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -211,6 +217,7 @@
     <Compile Include="Models\MeasurePracticeUserModels.cs" />
     <Compile Include="Models\Measures.cs" />
     <Compile Include="Models\Patient.cs" />
+    <Compile Include="Models\PracticeInsurance.cs" />
     <Compile Include="Models\QualityContext.cs" />
     <Compile Include="Models\QualityImprovement.cs" />
     <Compile Include="Models\Staff.cs" />
