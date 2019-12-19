@@ -31,10 +31,33 @@ namespace PHO_WebApp.DataAccessLayer
 
             da.Fill(ds);
 
-            for (int i=0; i < ds.Tables[0].Rows.Count; i++)
+            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
             {
                 Patient pt = new Patient();
                 pt = CreatePatientsModel(ds.Tables[0].Rows[i]);
+
+                ptList.Add(pt);
+            }
+            return ptList;
+        }
+        public List<Patient> GetPatientLinkData(int practiceId)
+        {
+            List<Patient> ptList = new List<Patient>();
+
+            SqlCommand com = new SqlCommand("spGetPracticePatientLinkData", con);
+            com.CommandType = CommandType.StoredProcedure;
+
+            com.Parameters.AddWithValue("@practiceId", practiceId);
+
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+
+            da.Fill(ds);
+
+            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+            {
+                Patient pt = new Patient();
+                pt = CreatePatientModel(ds.Tables[0].Rows[i]);
 
                 ptList.Add(pt);
             }

@@ -93,15 +93,22 @@ namespace PHO_WebApp.Controllers
         {
             List<Models.Patient> patientList = new List<Models.Patient>();
 
-            //TODO: Add logic to cache and retrieve providers instead of loading them from DB everytime. Instead, check cache for providers. If exists, return from cache. If not, load from DB and then cache.
-
-            //Get fresh from DAL
-            patientList = pts.GetPatients(PracticeId);
+            //Check for cached object
+            if (Session["CachedPatients_" + PracticeId.ToString()] != null)
+            {
+                patientList = (List<Patient>)Session["CachedPatients_" + PracticeId.ToString()];
+            }
+            else
+            {
+                //Get fresh from DAL
+                patientList = pts.GetPatientLinkData(PracticeId);
+                //cache it!
+                Session["CachedPatients_" + PracticeId.ToString()] = patientList;
+            }
 
             //use where linq where clause to filter by term
             var PatientList = patientList.Where(c => c.LookupDisplayText.ToUpper()
                             .Contains(term.ToUpper()))
-                            //.Where(c => c.StaffTypeId == (int)StaffTypeEnum.Provider)
                             .Select(c => new { label = c.LookupDisplayText, val = c.patientId })
                             .Take(10)
                             .Distinct().ToList();

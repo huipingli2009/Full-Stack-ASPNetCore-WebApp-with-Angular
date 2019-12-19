@@ -94,7 +94,7 @@ namespace PHO_WebApp.Models
                         returnValue += this.DOB.Value.ToShortDateString();
                     }
 
-                    if (this.patientId > 0)
+                    if (this.Id > 0)
                     {
                         returnValue += " ID: ";
                         returnValue += this.patientId.ToString();
