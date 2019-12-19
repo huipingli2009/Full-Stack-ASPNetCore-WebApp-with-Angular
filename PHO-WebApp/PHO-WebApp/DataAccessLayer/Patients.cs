@@ -183,23 +183,7 @@ namespace PHO_WebApp.DataAccessLayer
             con.Open();
             com.ExecuteNonQuery();
             con.Close();
-        }
-
-        //public void AddPatient(Patient pt)
-        //{
-        //    SqlCommand com = new SqlCommand("proc_AddPatient", con);
-        //    com.CommandType = CommandType.StoredProcedure;
-        //    com.Parameters.AddWithValue("@FirstName", pt.FirstName);
-        //    com.Parameters.AddWithValue("@LastName", pt.LastName);
-        //    com.Parameters.AddWithValue("@DOB", pt.DOB);
-        //    com.Parameters.AddWithValue("@AddressLine1", pt.AddressLine1);
-        //    com.Parameters.AddWithValue("@City", pt.City);
-        //    //com.Parameters.AddWithValue("@StateId", pt.State_Id);
-        //    com.Parameters.AddWithValue("@Zip", pt.Zip);
-        //    con.Open();
-        //    com.ExecuteNonQuery();
-        //    con.Close();
-        //}
+        }      
 
         public void UpPatient(Patient pt)
         {
@@ -306,8 +290,7 @@ namespace PHO_WebApp.DataAccessLayer
                         select int.Parse(val);
 
             p.PatientConditions = this.GetPatientConditionsAll();
-
-            //int[] arr = Array.ConvertAll(query, Convert.ToInt32);
+           
             foreach (int num in query)
             {
                 foreach(Conditions pc in p.PatientConditions)
@@ -322,7 +305,8 @@ namespace PHO_WebApp.DataAccessLayer
             p.Gender = dr["Gender"].ToString();
             p.GenderId = int.Parse(dr["GenderID"].ToString());
             p.PMCAScore = dr["PMCAScore"].ToString();
-            p.ProviderPMCAScore = dr["ProviderPMCAScore"].ToString();
+            //p.ProviderPMCAScoreId = int.Parse(dr["ProviderPMCAScoreId"].ToString());
+            p.ProviderPMCAScoreId = int.Parse(dr["ProviderPMCAScoreId"].ToString());
             p.ProviderPMCANotes = dr["ProviderPMCANotes"].ToString();
             p.PMCA_ProvFirst = dr["PMCA_ProvFirst"].ToString();
             p.PMCA_ProvLast = dr["PMCA_ProvLast"].ToString();
@@ -343,6 +327,7 @@ namespace PHO_WebApp.DataAccessLayer
             p.PatientProviders = this.GetPracticeProviders(temp);
             p.PatientGenderList = this.GetPatientGenderList();
             p.PatientConditions = this.GetPatientConditionList();
+            p.PMCAScore_Provider = this.GetPMCAScoreList();
 
             return p;
         }
@@ -557,6 +542,40 @@ namespace PHO_WebApp.DataAccessLayer
                 c.ID = int.Parse(dr["Id"].ToString());
             }
             c.Condition = dr["Condition"].ToString();          
+
+            return c;
+        }
+        public List<PMCAScoreFromProvider> GetPMCAScoreList()
+        {
+            List<PMCAScoreFromProvider> returnObject = null;
+
+            SqlCommand com = new SqlCommand("spGetPMCAScore", con);
+            com.CommandType = CommandType.StoredProcedure;
+
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+
+            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+            {
+                if (returnObject == null)
+                {
+                    returnObject = new List<PMCAScoreFromProvider>();
+                }
+                PMCAScoreFromProvider PtPMCAScore = CreatePMCAScoreModel(ds.Tables[0].Rows[i]);
+                returnObject.Add(PtPMCAScore);
+            }
+
+            return returnObject;
+        }
+        public PMCAScoreFromProvider CreatePMCAScoreModel(DataRow dr)
+        {
+            PMCAScoreFromProvider c = new PMCAScoreFromProvider();
+            if (dr["Id"] != null && !string.IsNullOrWhiteSpace(dr["Id"].ToString()))
+            {
+                c.Id = int.Parse(dr["Id"].ToString());
+            }
+            c.PMCAScoreId = int.Parse(dr["PMCAScore"].ToString());
 
             return c;
         }

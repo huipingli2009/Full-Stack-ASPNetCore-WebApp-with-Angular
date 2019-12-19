@@ -132,37 +132,29 @@
                 <tr>
                     <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Gender:</td>
                     <td valign="top" style="width:300px; max-width:300px;"> @Html.DropDownListFor(m => m.ptEntity.GenderId, new SelectList(Model.ptEntity.PatientGenderList, "Id", "Gender"), "-- Select Gender --", new { id = "Id" })</td>
-                    <td valign="top" style="font-weight:bold; width:120px; max-width:120px;">Condition: </td>
-                    <td valign="top" style="width:300px; max-width:300px;">
-                        @Html.EditorFor(m => m.ptEntity.Condition)
-
-                        @foreach (var item in Model.ptEntity.PatientConditionsSelected)
-                        {
-                            <div class="editor-field">
-                                @Html.CheckBoxListFor(m=>m.ptEntity.PostedPatienTConditions,
-                                                      m => m.ptEntity.PatientConditions,
-                                                      m =>m.ID,
-                                                      m=>m.Condition,
-                                                      m => m.ptEntity.PatientConditionsSelected,
-                                                      Position.Horizontal)
-                            </div>
-
-                        }
-                    </td>
                     <td valign="top" style="font-weight:bold; width:120px; max-width:150px;">Insurance: </td>
-                    <td valign="top" style="width:300px; max-width:300px;">
+                    <td colspan="3" valign="top" style="width:300px; max-width:300px;">
                         @Html.DropDownListFor(m => m.ptEntity.InsuranceId, new SelectList(Model.ptEntity.Payors, "Id", "InsuranceName"), "-- Select Insurance --", new { id = "Id" })
                         @Html.ValidationMessageFor(m => m.ptEntity.Insurance, "", new { @class = "text-danger" })
                     </td>
                 </tr>
-                @*<tr>
-                        <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Gender:</td>
-                        <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.Gender)</td>
-                        <td valign="top" style="font-weight:bold; width:120px; max-width:120px;">Condition: </td>
-                        <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.Condition)</td>
-                        <td valign="top" style="font-weight:bold; width:120px; max-width:150px;">Status: </td>
-                        <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.ActiveStatus)</td>
-                    </tr>*@
+                <tr>
+                    <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Conditions:</td>
+                    <td colspan="4" valign="top" style="width:800px; max-width:800px;">
+                        @*@Html.EditorFor(m => m.ptEntity.Condition)*@
+                        <div class="editor-field">
+                            @Html.CheckBoxListFor(
+                                                    m=>m.ptEntity.PostedPatientConditions.ConditionIds,
+                                                    m => m.ptEntity.PatientConditions,
+                                                    x => x.ID,
+                                                    x => x.Condition,
+                                                    m => m.ptEntity.PatientConditionsSelected,
+                                                    Position.Horizontal
+                                                  )
+                        </div>
+                    </td>
+                    <td></td>
+                </tr>
                 <tr>
                     <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Primary Phone:</td>
                     <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.Phone1)</td>
@@ -184,18 +176,34 @@
                     <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.Zip)</td>
                 </tr>
                 <tr>
-                    <td valign="top" style="font-weight:bold; width:150px; max-width:100px;">PCP:</td>
-                    <td valign="top" style="width:250px; max-width:250px;" colspan="3"></td>
-                    <td valign="top" style="font-weight:bold; width:150px; max-width:150px;">PCP's Name: </td>
+                    <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">PMCA Score from EPIC:</td>
+                    <td valign="top" style="width:200px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.PMCAScore)</td>
+                    <td valign="top" style="font-weight:bold; width:250px; max-width:250px;">PMCA Score from Provider: </td>
+                    @*<td valign="top" style="width:250px; max-width:120px;">@Html.EditorFor(m => m.ptEntity.ProviderPMCAScore)</td>*@  
+                    <td valign="top" style="width:300px; max-width:300px;">
+                        @Html.DropDownListFor(m => m.ptEntity.ProviderPMCAScoreId, new SelectList(Model.ptEntity.PMCAScore_Provider, "ID", "PMCAScoreId"), "-- Select PMCA Score --", new { id = "ID" })
+                        @Html.ValidationMessageFor(m => m.ptEntity.ProviderPMCAScoreId, "", new { @class = "text-danger" })
+                    </td>
+                    <td valign="top" style="font-weight:bold; width:120px; max-width:150px;">PCP's Name: </td>
                     <td valign="top" style="width:300px; max-width:300px;">@Html.DropDownListFor(m => m.ptEntity.StaffId, new SelectList(Model.ptEntity.PatientProviders, "StaffId", "Staff_Name"), "-- Select PCP --", new { id = "StaffId" })</td>
                 </tr>
                 <tr>
-                    <td valign="top" style="font-weight:bold; width:150px; max-width:100px;">PMCA Score:</td>
+                    <td valign="top" style="font-weight:bold; width:300px; max-width:300px;">Notes from Provider: </td>
+                    <td valign="top" style="width:600px; max-width:600px;">
+                        @Html.EditorFor(m => m.ptEntity.ProviderPMCANotes)
+                        @Html.ValidationMessageFor(m => m.ptEntity.ProviderPMCANotes, "", new { @class = "text-danger" })
+                    </td>
+                    @*<td valign="top" style="font-weight:bold; width:150px; max-width:100px;">PMCA Score:</td>
                     <td valign="top" style="width:200px; max-width:200px;" colspan="3">@Html.DisplayFor(m => m.ptEntity.PMCAScore)</td>
                     <td valign="top" style="font-weight:bold; width:250px; max-width:250px;">PMCA Score from Provider: </td>
                     <td valign="top" style="width:250px; max-width:250px;">@Html.EditorFor(m => m.ptEntity.ProviderPMCAScore)</td>
+                    <td valign="top" style="font-weight:bold; width:120px; max-width:100px;">Notes from Provider: </td>
+                    <td valign="top" style="width:300px; max-width:300px;">
+                        @Html.EditorFor(m => m.ptEntity.ProviderPMCANotes)
+                        @Html.ValidationMessageFor(m => m.ptEntity.ProviderPMCANotes, "", new { @class = "text-danger" })
+                    </td>*@
                 </tr>
-                <tr>
+                @*<tr>
                     <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Notes from Provider: </td>
                     <td valign="top" style="width:300px; max-width:300px;">
                         @Html.EditorFor(m => m.ptEntity.ProviderPMCANotes)
@@ -205,7 +213,7 @@
                     <td valign="top" style="width:300px; max-width:300px;">@Html.DisplayFor(m => m.ptEntity.PMCA_ProvLast)</td>
                     <td valign="top" style="font-weight:bold; width:100px; max-width:150px;">Provider First Name:</td>
                     <td valign="top" style="width:120px; max-width:120px;">@Html.DisplayFor(m => m.ptEntity.PMCA_ProvFirst)</td>
-                </tr>
+                </tr>*@
                 <tr>
                     <td valign="top" colspan="4"></td>
                     @*<td valign="top" style="font-weight:bold; width:120px; max-width:120px;">*@

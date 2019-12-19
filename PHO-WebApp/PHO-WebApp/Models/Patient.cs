@@ -16,7 +16,9 @@ namespace PHO_WebApp.Models
             this.PatientGenderList = new List<PatientGender>();
             this.PatientConditions = new List<Conditions>();
             this.PatientConditionsSelected = new List<Conditions>();
-            this.PostedPatienTConditions = new PostedConditions();
+            this.PostedPatientConditions = new PostedConditions();
+            this.PatientPostedConditions = new PostedConditions();
+            this.PMCAScore_Provider = new List<PMCAScoreFromProvider>();
         }
         public int Id {get;set;}       
         public int patientId { get; set; }
@@ -24,7 +26,7 @@ namespace PHO_WebApp.Models
         public string FirstName { get; set; }       
         [Required(ErrorMessage = "Last Name can't be blank")]
         public string LastName { get; set; }
-        public PostedConditions PostedPatienTConditions { get; set;}
+        public PostedConditions PostedPatientConditions { get; set;}
 
         [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
         [Required(ErrorMessage = "Date of Birth can't be blank")]
@@ -38,8 +40,7 @@ namespace PHO_WebApp.Models
         public string StateId { get; set; }
         public string Zip { get; set; }
         [DataType(DataType.PhoneNumber)]
-        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$",
-                   ErrorMessage = "Entered phone format is not valid.")]
+        [DisplayFormat(DataFormatString = "{0:###-###-####}")]
         public string Phone1 { get; set; }
         public string Phone2 { get; set; }
         public string Email { get; set; }
@@ -50,6 +51,7 @@ namespace PHO_WebApp.Models
         public string PCPLastName { get; set; }
         public string PCPName { get; set; }  //new change per request
         public string PMCAScore { get; set; }
+        public int? ProviderPMCAScoreId { get; set; }        
         public string ProviderPMCAScore { get; set; }
         public string ProviderPMCANotes { get; set; }
         public string PMCA_ProvFirst { get; set; }
@@ -67,6 +69,8 @@ namespace PHO_WebApp.Models
         public List<PatientGender> PatientGenderList { get; set; }
         public List<Conditions> PatientConditions { get; set; }
         public List<Conditions> PatientConditionsSelected { get; set; }
+        public PostedConditions PatientPostedConditions { get; set; }
+        public List<PMCAScoreFromProvider> PMCAScore_Provider { get; set; }
 
         //public List<Condition> PatientConditions { get; set; }
         public string LookupDisplayText
@@ -82,12 +86,10 @@ namespace PHO_WebApp.Models
                     {
                         returnValue += ", ";
                         returnValue += this.FirstName;
-
                     }
 
                     if (this.DOB.HasValue)
                     {
-
                         returnValue += "DOB: ";
                         returnValue += this.DOB.Value.ToShortDateString();
                     }
@@ -130,18 +132,23 @@ namespace PHO_WebApp.Models
     {
         public int Id { get; set; }
         public string Gender { get; set; }
-    }
+    }   
 
     public class Conditions
     {
         public int ID { get; set; }
         public string Condition { get; set; }
-        //public bool IsChecked { get; set; }
+        public bool IsChecked { get; set; }
         //public string Desc { get; set; }
     }
     public class PostedConditions
     {
         //this array will be used to POST values from the form to the controller
-        public int[] ConditionIds { get; set; }
+        public string[] ConditionIds { get; set; }
+    }
+    public class PMCAScoreFromProvider
+    {
+        public int Id { get; set; }
+        public int PMCAScoreId { get; set; }
     }
 }
