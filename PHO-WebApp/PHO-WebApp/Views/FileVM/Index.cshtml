@@ -1,0 +1,111 @@
+﻿@model PHO_WebApp.ViewModel.FileVM
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<html>
+<body>
+    @using (Html.BeginForm())
+    {     
+        <div>
+            <h5>List of Folders with Files</h5>
+        </div>
+        <div class="col-md-4" style="float:right">
+            <h5>Search</h5>
+            <input text="" class="form-control search" id="search" />
+        </div>
+        <table id="tblFolderList" class="table-hover min-font-set table-bordered col-md-12">
+            <thead class="pretty-table_head">
+                <tr>
+                    <th scope="col">
+                        FOLDER NAME
+                    </th>
+                    <th scope="col">
+                        SUBFOLDER NAME
+                    </th>
+                    <th scope="col">
+                        FILE NAME
+                    </th>
+                    <th scope="col">
+                        DATE MODIFIED
+                    </th>
+                    <th scope="col">
+                        SIZE
+                    </th>
+                    <th scope="col">
+                        Viewed
+                    </th>
+                    <th scope="col">
+                        Permissions
+                    </th>                    
+                    <th scope="col">
+                        ACTIONS
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody class="pretty-table-body-font">
+                @{
+                    string folderName = "";
+                    string subfolderName = "";
+                }
+                @foreach (var item in Model.FileList)
+                {                   
+                <tr>
+                    <td>
+                        @if (folderName != item.Folder)
+                        {
+                            @Html.DisplayFor(modelItem => item.Folder)
+                        }
+                    </td>
+                    <td>
+                        @if (subfolderName != item.SubFolder)
+                        {
+                            @Html.DisplayFor(modelItem => item.SubFolder)
+                        }
+                    </td>
+                    <td>                        
+                        <a href="@Url.Content(item.FileUrl)" height="20" width="20">@Html.DisplayFor(modelItem => item.FileName)</a>
+</td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateModified)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FileSize)
+                    </td>
+                    <td>
+                        @if (item.Watch == "1")
+                        {
+                            item.Watch = "Yes";
+                        }
+                        else
+                        {
+                            item.Watch = "No";
+                        }
+                        @Html.DisplayFor(modelItem => item.Watch)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PermissionTo)
+                    </td>                    
+                </tr>
+                    folderName = item.Folder;
+                    subfolderName = item.SubFolder;
+                }
+            </tbody>
+        </table>
+        @*<div>
+            <button id="btnAdd" class="btn btn-sm btn-primary pull-right" data-pdsa-action="AddPatient">
+                <i class="fas fa-plus-circle"></i>
+                &nbsp;Add New Patient
+            </button>
+        </div>*@
+    }   
+</body>
+</html>
+
+@*<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>*@

@@ -20,8 +20,6 @@
     <link href="https://fonts.googleapis.com/css?family=Arvo|Nunito+Sans&display=swap" rel="stylesheet">
 </head>
 <body>
-
-
     <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
         <div style="width: 100%">
             <div class="d-flex flex-row">
@@ -91,13 +89,13 @@
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarMyPracticeDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         My Practice
                                     </a>
-									<div class="dropdown-menu" aria-labelledby="navbarMyPracticeDropdownMenuLink">
-										@*<a class="dropdown-item" href="#">Patients</a>*@
-										@Html.RouteLink("Patients", "Patients", null, new { @class = "dropdown-item" })
-										@Html.RouteLink("Staff & Users", "PracticeAdmin", null, new { @class = "dropdown-item" })
-										<a class="dropdown-item" href="#">Alerts &amp; Subscriptions</a>
-										<a class="dropdown-item" href="#">Practice Info</a>
-									</div>
+                                    <div class="dropdown-menu" aria-labelledby="navbarMyPracticeDropdownMenuLink">
+                                        @*<a class="dropdown-item" href="#">Patients</a>*@
+                                        @Html.RouteLink("Patients", "Patients", null, new { @class = "dropdown-item" })
+                                        @Html.RouteLink("Staff & Users", "PracticeAdmin", null, new { @class = "dropdown-item" })
+                                        <a class="dropdown-item" href="#">Alerts &amp; Subscriptions</a>
+                                        <a class="dropdown-item" href="#">Practice Info</a>
+                                    </div>
                                 </li>
 
                                 <li class="nav-item dropdown">
@@ -114,17 +112,23 @@
                                         <a class="dropdown-item" href="#">Operations (Misc.)</a>
                                     </div>
                                 </li>
+                                <li class="nav-link">
+                                    <a class="Header-nav Header-nav-primary TOP_RIGHT">
+                                        @*<a class="nav-link" href="#" id="navbarAdminDropdownMenuLink" aria-haspopup="true" aria-expanded="false">*@
+                                        @Html.RouteLink("Files", "Files", null, new { @class = "Header-nav-item" })
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDataCollectionDropdownMenuLink">
+                                        @*@Html.RouteLink("Files", "Files", null, null)*@
+                                        @*@Html.ActionLink("Files", "FileVM/Index", null, null)*@
+                                    </div>
+                                </li>
                             }
                         }
                     </ul>
                 </div>
             </div>
         </div>
-
     </nav>
-
-
-
     <div class="container body-content">
         @RenderBody()
         <hr />
