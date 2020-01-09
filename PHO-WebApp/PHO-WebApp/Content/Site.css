@@ -281,13 +281,19 @@ x
 }
 
 .pretty-table_head {
-    background-color: #3f87a6;
+    background-color: #28c9bf;
     color: #fff;
     padding: 5px;
 }
 
 .pretty-table-body-font {
     font-size: 15px;
+}
+
+.table_head {
+    background-color: #24b4ab;
+    color: #fff;
+    padding: 5px;
 }
 
 tbody tr:nth-child(odd) {
@@ -305,6 +311,35 @@ tbody tr:nth-child(odd) {
     font-style: normal;
     color: #272624;
 }
+.Search {
+    border-radius: 20px;
+    /*background-color: lightskyblue;*/
+    padding: 20px;
+    width: 200px;
+    height: 15px;
+}
+
+#filtersubmit {   
+    position: relative;
+    z-index: 1;
+    left: -25px;
+    top: 1px;
+    color: #7B7B7B;
+    cursor: pointer;
+    width: 0;
+}
+#filter {
+    border-radius: 20px;
+    padding: 20px;
+    width: 200px;
+    height: 15px;
+}
+.colFileName {
+    width: 25%;
+}
+
+
+
 
     
 

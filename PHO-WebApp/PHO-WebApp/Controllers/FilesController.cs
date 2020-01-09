@@ -16,9 +16,10 @@ namespace PHO_WebApp.Controllers
         {
             Resource myPracticeFiles = new Resource();
 
-            myPracticeFiles.getPracticeResourceFiles(60);
+            //myPracticeFiles.getPracticeResourceFiles(60);
 
-            return View(myPracticeFiles.getPracticeResourceFiles(60));
+            //return View(myPracticeFiles.getPracticeResourceFiles(60));
+            return View();
         }
 
         // GET: Files/Details/5

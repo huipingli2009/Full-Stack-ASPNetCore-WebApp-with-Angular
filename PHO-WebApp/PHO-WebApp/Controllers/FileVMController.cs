@@ -10,11 +10,28 @@ namespace PHO_WebApp.Controllers
     public class FileVMController : BaseController
     {
         // GET: FileVM
-        public ActionResult Index()
+        //public ActionResult Index()
+        //{
+        //    FileVM fvm = new FileVM();
+        //    fvm.UserLogin = SavedUserDetails;
+
+        //    return View(fvm.GetFiles());
+        //}
+        public ActionResult Index(string searchString)
         {
+            //@ViewData["searchString"] = searchString;
+
+            //if (!String.IsNullOrEmpty(@ViewData["searchString"].ToString()))
+            //{
+            //    searchString = @ViewData["searchString"].ToString();               
+            //}
+            //if (@ViewData["searchString"].ToString())
+            ////searchString = @ViewData["searchString"].ToString();
+            //searchString = "TOP 100";
             FileVM fvm = new FileVM();
-            
-            return View(fvm.GetFiles());
+            fvm.UserLogin = SavedUserDetails;
+
+            return View(fvm.GetFiles(searchString));
         }
 
         // GET: FileVM/Details/5

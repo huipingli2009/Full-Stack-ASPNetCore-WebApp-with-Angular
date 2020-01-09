@@ -22,14 +22,23 @@ namespace PHO_WebApp.ViewModel
         {
             file = new Files();
             FileList = new List<Files>();
+            //FileList = 
             UserLogin = new UserDetails();
         }
-        public FileVM GetFiles()
+        //public FileVM GetFiles()
+        //{
+        //    Resource files = new Resource();
+        //    FileVM fvm = new FileVM();
+
+        //    fvm.FileList = files.getPracticeResourceFiles(UserLogin.LoginId);
+        //    return fvm;
+        //}
+        public FileVM GetFiles(string searchBox)
         {
             Resource files = new Resource();
             FileVM fvm = new FileVM();
 
-            fvm.FileList = files.getPracticeResourceFiles(3);
+            fvm.FileList = files.getPracticeResourceFiles(UserLogin.LoginId, searchBox);
             return fvm;
         }
     }

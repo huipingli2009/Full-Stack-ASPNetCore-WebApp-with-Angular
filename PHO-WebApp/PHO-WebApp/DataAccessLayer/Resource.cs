@@ -14,9 +14,50 @@ namespace PHO_WebApp.DataAccessLayer
     public class Resource
     {
         SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["con"].ConnectionString);
-        public List<Files> getPracticeResourceFiles(int loginId)
+        //public List<Files> getPracticeResourceFiles(int loginId)
+        //{
+        //    List<Files> PracticeResoourceFiles = new List<Files>();
+
+        //    SqlCommand com = new SqlCommand("spGetResourceFiles", con);
+        //    com.CommandType = CommandType.StoredProcedure;
+
+        //    SqlParameter parameterLoginId = new SqlParameter("@LoginID", SqlDbType.Int);
+        //    parameterLoginId.Value = loginId;
+        //    com.Parameters.Add(parameterLoginId);           
+
+        //    SqlDataAdapter da = new SqlDataAdapter(com);
+        //    DataSet ds = new DataSet();
+
+        //    da.Fill(ds);
+
+        //    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+        //    {
+        //        Files file = CreatePracticeREsourceFilesModel(ds.Tables[0].Rows[i]);
+        //        PracticeResoourceFiles.Add(file);
+        //    }
+
+        //    //PracticeResoourceFiles.OrderByDescending()
+        //    return PracticeResoourceFiles;
+        //}
+        //public List<Files> getPracticeResourceFiles(int loginId, string topFilter, string tagFilter, string searchBox)
+        public List<Files> getPracticeResourceFiles(int loginId, string searchBox)
         {
             List<Files> PracticeResoourceFiles = new List<Files>();
+
+            //if (string.IsNullOrWhiteSpace(topFilter))
+            //{
+            //    topFilter = "All Files";
+            //}
+
+            //if (string.IsNullOrWhiteSpace(tagFilter))
+            //{
+            //    tagFilter = "All";
+            //}
+
+            if (string.IsNullOrWhiteSpace(searchBox))
+            {
+                searchBox = "All";
+            }           
 
             SqlCommand com = new SqlCommand("spGetResourceFiles", con);
             com.CommandType = CommandType.StoredProcedure;
@@ -24,6 +65,18 @@ namespace PHO_WebApp.DataAccessLayer
             SqlParameter parameterLoginId = new SqlParameter("@LoginID", SqlDbType.Int);
             parameterLoginId.Value = loginId;
             com.Parameters.Add(parameterLoginId);
+
+            //SqlParameter parameterTopFilter = new SqlParameter("@TopFilter", SqlDbType.NVarChar);
+            //parameterTopFilter.Value = topFilter;
+            //com.Parameters.Add(parameterTopFilter);
+
+            //SqlParameter parameterTagFilter = new SqlParameter("@TagFilter", SqlDbType.NVarChar);
+            //parameterTagFilter.Value = tagFilter;
+            //com.Parameters.Add(parameterTagFilter);
+
+            SqlParameter parameterSearchBox = new SqlParameter("@SearchBox", SqlDbType.NVarChar);
+            parameterSearchBox.Value = searchBox;
+            com.Parameters.Add(parameterSearchBox);
 
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
@@ -36,6 +89,7 @@ namespace PHO_WebApp.DataAccessLayer
                 PracticeResoourceFiles.Add(file);
             }
 
+            //PracticeResoourceFiles.OrderByDescending()
             return PracticeResoourceFiles;
         }
 
@@ -106,69 +160,7 @@ namespace PHO_WebApp.DataAccessLayer
             //if (dr["StaffTypeId"] != null && !string.IsNullOrWhiteSpace(dr["StaffTypeId"].ToString()))
             //{
             //    s.StaffTypeId = SharedLogic.ParseNumeric(dr["StaffTypeId"].ToString());
-            //}
-
-            //s.FirstName = dr["FirstName"].ToString();
-            //s.LastName = dr["LastName"].ToString();
-
-            //s.EmailAddress = dr["EmailAddress"].ToString();
-
-            //s.AddressLine1 = dr["AddressLine1"].ToString();
-            //s.AddressLine2 = dr["AddressLine2"].ToString();
-            //s.City = dr["City"].ToString();
-            //s.State = dr["State"].ToString();
-
-            //s.RegistryAccess = dr["UserName"].ToString();
-
-            //s.LeadPhysician = dr["Lead_Physician"].ToString();
-            //s.QI_Team = dr["QI_Team"].ToString();
-            //s.PracticeManager = dr["PracticeManager"].ToString();
-            //s.InterventionContact = dr["Intervention_Contact"].ToString();
-            ////s.StateId = SharedLogic.ParseNumeric(dr["StateId"].ToString());
-
-            //s.Phone = dr["Phone"].ToString();
-
-            //s.StaffPosition = dr["PositionDesc"].ToString();
-            //s.CredName = dr["CredName"].ToString();           
-
-            //s.PracticelocationId = SharedLogic.ParseNumeric(dr["PracticelocationId"].ToString());
-            //s.ActiveFlag = dr["ActiveFlag"].ToString();
-            //s.CreatedOnDate = DateTime.Parse(dr["CreatedOnDate"].ToString());           
-
-            //if (!string.IsNullOrWhiteSpace(dr["Status"].ToString()))
-            //{
-            //    c.Status = SharedLogic.ParseNumeric(dr["Status"].ToString());
-            //}
-            //if (!string.IsNullOrWhiteSpace(dr["StatusDesc"].ToString()))
-            //{
-            //    c.StatusDesc = dr["StatusDesc"].ToString();
-            //}
-
-            //if (dr["EffectiveDate"].ToString() != "")
-            //{
-            //    c.EffectiveDate = Convert.ToDateTime(dr["EffectiveDate"].ToString());
-            //}
-            //else
-            //{
-            //    c.EffectiveDate = null;
-            //}
-
-
-            //if (dr["ModifiedDate"].ToString() != "")
-            //{
-            //    c.ModifiedDate = Convert.ToDateTime(dr["ModifiedDate"].ToString());
-            //}
-
-            //if (dr["LastMeasureDate"].ToString() != "")
-            //{
-            //    c.LastMeasureDate = Convert.ToDateTime(dr["LastMeasureDate"].ToString());
-            //}
-
-            //c.MeasureValue = string.Format("{0:#.##}", Double.Parse(dr["MeasureValue"].ToString()));
-            //c.LastNetworkValue = string.Format("{0:#.##}", Double.Parse(dr["LastNetworkValue"].ToString()));
-            //c.Owner = dr["Owner"].ToString();
-
-            //c.AllInitiativeStatuses = this.GetInitiativeStatuses();
+            //}     
 
             return s;
         }
