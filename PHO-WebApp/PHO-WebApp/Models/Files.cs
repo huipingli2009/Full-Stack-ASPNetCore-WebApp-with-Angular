@@ -9,8 +9,8 @@ namespace PHO_WebApp.Models
     public class Files
     {
         public int PracticeId { get; set; }
-        public int Watch_ActionId { get; set; }
-        public string Watch { get; set; } //it's a 1 or 0. Display at front end with Yes or No
+        public int ActionId { get; set; }
+        public string Favorite { get; set; } //it's a 1 or 0. Display at front end with Yes or No
         //resource could be a folder, a sub folder, 
         public int ResourceId { get; set; }
         public string ResourceName { get; set; }

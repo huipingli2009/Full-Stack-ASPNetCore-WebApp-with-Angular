@@ -33,12 +33,12 @@ namespace PHO_WebApp.ViewModel
         //    fvm.FileList = files.getPracticeResourceFiles(UserLogin.LoginId);
         //    return fvm;
         //}
-        public FileVM GetFiles(string searchBox)
+        public FileVM GetFiles(string topfilter, string searchBox)
         {
             Resource files = new Resource();
             FileVM fvm = new FileVM();
 
-            fvm.FileList = files.getPracticeResourceFiles(UserLogin.LoginId, searchBox);
+            fvm.FileList = files.getPracticeResourceFiles(UserLogin.LoginId, topfilter, searchBox);
             return fvm;
         }
     }

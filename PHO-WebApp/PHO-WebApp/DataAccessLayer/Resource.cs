@@ -40,14 +40,14 @@ namespace PHO_WebApp.DataAccessLayer
         //    return PracticeResoourceFiles;
         //}
         //public List<Files> getPracticeResourceFiles(int loginId, string topFilter, string tagFilter, string searchBox)
-        public List<Files> getPracticeResourceFiles(int loginId, string searchBox)
+        public List<Files> getPracticeResourceFiles(int loginId, string topfilter, string searchBox)
         {
             List<Files> PracticeResoourceFiles = new List<Files>();
 
-            //if (string.IsNullOrWhiteSpace(topFilter))
-            //{
-            //    topFilter = "All Files";
-            //}
+            if (string.IsNullOrWhiteSpace(topfilter))
+            {
+                topfilter = "All Files";
+            }
 
             //if (string.IsNullOrWhiteSpace(tagFilter))
             //{
@@ -77,6 +77,10 @@ namespace PHO_WebApp.DataAccessLayer
             SqlParameter parameterSearchBox = new SqlParameter("@SearchBox", SqlDbType.NVarChar);
             parameterSearchBox.Value = searchBox;
             com.Parameters.Add(parameterSearchBox);
+
+            SqlParameter parameterTopFilter = new SqlParameter("@TopFilter", SqlDbType.NVarChar);
+            parameterTopFilter.Value = topfilter;
+            com.Parameters.Add(parameterTopFilter);
 
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
@@ -132,14 +136,14 @@ namespace PHO_WebApp.DataAccessLayer
                 s.PermissionTo = dr["PermissionTo"].ToString();
             }
             
-            if (dr["Watch"].ToString() != null && !string.IsNullOrWhiteSpace(dr["Watch"].ToString()))
+            if (dr["Favorite"].ToString() != null && !string.IsNullOrWhiteSpace(dr["Favorite"].ToString()))
             {
-                s.Watch = dr["Watch"].ToString();
+                s.Favorite = dr["Favorite"].ToString();
             }
 
-            if (dr["Watch_ActionId"].ToString() != null && !string.IsNullOrWhiteSpace(dr["Watch_ActionId"].ToString()))
+            if (dr["ActionId"].ToString() != null && !string.IsNullOrWhiteSpace(dr["ActionId"].ToString()))
             {
-                s.Watch_ActionId = int.Parse(dr["Watch_ActionId"].ToString());
+                s.ActionId = int.Parse(dr["ActionId"].ToString());
             }
 
             if (dr["FIleSize"].ToString() != null && !string.IsNullOrWhiteSpace(dr["FIleSize"].ToString()))

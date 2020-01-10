@@ -17,7 +17,7 @@ namespace PHO_WebApp.Controllers
 
         //    return View(fvm.GetFiles());
         //}
-        public ActionResult Index(string searchString)
+        public ActionResult Index(string topfilter, string searchString)
         {
             //@ViewData["searchString"] = searchString;
 
@@ -28,10 +28,14 @@ namespace PHO_WebApp.Controllers
             //if (@ViewData["searchString"].ToString())
             ////searchString = @ViewData["searchString"].ToString();
             //searchString = "TOP 100";
+            //ViewData["CurrentFilter"] = searchString;
+
+
             FileVM fvm = new FileVM();
             fvm.UserLogin = SavedUserDetails;
-
-            return View(fvm.GetFiles(searchString));
+            return View(fvm.GetFiles(topfilter, searchString));               
+           
+            //return View(fvm.GetFiles(searchString.OrderByDescending(s=>s.));
         }
 
         // GET: FileVM/Details/5
