@@ -16,11 +16,11 @@
         <table id="tblFolderList">
             <thead class="table_head">
                 <tr>
-                    <th scope="col">
-                        All Files
+                    <th scope="col" style="width:200px;">
+                        @Html.ActionLink("All Files", "Index", new { topfilter = "" }, new { @class = "text-white" })
                     </th>
-                    <th scope="col">
-                        My Files
+                    <th scope="col" style="width:200px;">
+                        @Html.ActionLink("My Files", "Index", new { topfilter = "My Files" }, new { @class = "text-white" })
                     </th>
                     <th scope="col">
                         For Providers
@@ -29,7 +29,7 @@
                         For Practice Staff
                     </th>
                     <th scope="col">
-                        @Html.ActionLink("Favorite", "Index", new { topfilter = "Favorite" })
+                        @Html.ActionLink("Favorite", "Index", new { topfilter = "Favorite" }, new { @class = "text-white" })
                         @*@Html.DisplayNameFor(model => model.file.Favorite)*@
                     </th>
                     <th scope="col" colspan="2">
@@ -37,13 +37,14 @@
                         @*<input class="search_input" type="text" name="" placeholder="Search files by name">*@
                         @*<input id="searchInput" type="text" placeholder="Search files by name" value=@ViewData["searchString"] />
         <i id="search" class="fa fa-search"></i>*@
-                        @Html.TextBox("searchString") <input type="submit" name="submit" value="Search" />
+                        @Html.TextBox("searchString","search files by name") <input type="submit" name="submit" value="Search" />
+                        @*@Html.TextBox("searchString", null, new { @class = "form-control", @placeholder = "File Name" })<input type="submit" name="submit" value="Search" />*@
                         @*@Html.TextBox("searchString", new { placeholder = "Search file name" })*@
                         @*@Html.TextBox("searchString", "search files by name", new { style = "width: 200px;", @class = "form-control" }) <input type="submit" name="submit" value="Search" />*@
                     </th>
                 </tr>
             </thead>
-            <thead class="pretty-table_head table-hover min-font-set table-bordered col-md-12">
+            <thead class="pretty-table_head table-hover min-font-set col-md-12">
                 <tr>
                     <th scope="col">
                         FOLDER NAME <i class="fas fa-sort" style="background-color:#00A896"></i>
@@ -51,20 +52,20 @@
                     <th scope="col">
                         SUBFOLDER NAME <i class="fas fa-sort"></i>
                     </th>
-                    <th scope="col" class="colFileName">
+                    <th scope="col" class="colFileName" colspan="2">
                         FILE NAME <i class="fas fa-sort"></i>
                     </th>
                     <th scope="col">
                         DATE MODIFIED <i class="fas fa-sort"></i>
                     </th>
-                    <th scope="col">
+                    @*<th scope="col">
                         SIZE
-                    </th>
+                    </th>*@
                     @*<th scope="col">
                             Watched
                         </th>*@
                     <th scope="col">
-                        Permissions
+                        @Html.ActionLink("Favorite", "Index", new { topfilter = "Favorite" }, new { @class = "text-white" })
                     </th>
                     <th scope="col">
                         ACTIONS
@@ -72,73 +73,54 @@
 
                 </tr>
             </thead>
-            <tbody class="pretty-table-body-font">
+            <tbody class="pretty-table-body-font" >
                 @{
                     string folderName = "";
                     string subfolderName = "";
                     string selected = "";
                     string nextSelected = "";
-                    selected = Model.FileList.First().Folder;
+                    //selected = Model.FileList.First().Folder;
                 }
                 @foreach (var item in Model.FileList)
                 {
-                    nextSelected = item.Folder;
-                    if (nextSelected == selected)
-                    {
+                   
                         <tr>
-                            <td>
+                            <td class="first2colm" >
                                 @if (folderName != item.Folder)
                                 {
-                                    <i class="fas fa-folder" style="color:darkgreen"></i> @Html.DisplayFor(modelItem => item.Folder)
+                                    <i class="fas fa-folder" style="color:#006d63"></i> @Html.DisplayFor(modelItem => item.Folder)
                                 }
                             </td>
-                            <td>
+                            <td class="first2colm" >
                                 @if (subfolderName != item.SubFolder)
                                 {
-                                    <i class="fas fa-folder" style="color:darkgreen"></i> @Html.DisplayFor(modelItem => item.SubFolder)
+                                    <i class="fas fa-folder" style="color:#006d63"></i> @Html.DisplayFor(modelItem => item.SubFolder)
                                 }
                             </td>
-                            <td>
-                                <a href="@Url.Content(item.FileUrl)" height="20" width="20"><i class="far fa-file-alt" style="color:orangered"></i> @Html.DisplayFor(modelItem => item.FileName)</a>
+                            <td colspan="2">
+                                <i class="fas fa-file-alt" style="color:#f0673c"></i> @Html.DisplayFor(modelItem => item.FileName)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.DateModified)
                             </td>
-                            <td>
+                            @*<td>
                                 @Html.DisplayFor(modelItem => item.FileSize)
-                            </td>
+                            </td>*@
                             <td>
-                                @Html.DisplayFor(modelItem => item.PermissionTo)
+                                @Html.DisplayFor(modelItem => item.PermissionToName)
                             </td>
                             <td>
                                 @if (item.Favorite == "1")
                                 {
-                                    <i class="fas fa-eye" style="color:orangered"></i>
+                                    <i class="fas fa-star" style="color:orangered"></i>
                                 }
                                 else
                                 {
-                                    //item.Watch = "Not watched";
+                                    <i class="fas fa-star" style="color:lightgrey"></i>
                                 }
                             </td>
                         </tr>
-                    }
-                    else
-                    {
-                        <tr>
-                            <td>
-                                @if (folderName != item.Folder)
-                                {
-                                    <i class="fas fa-folder" style="color:darkgreen"></i> @Html.DisplayFor(modelItem => item.Folder)
-                                }
-                            </td>
-                            <td>
-                                @if (subfolderName != item.SubFolder)
-                                {
-                                    <i class="fas fa-folder" style="color:darkgreen"></i> @Html.DisplayFor(modelItem => item.SubFolder)
-                                }
-                            </td>
-                        </tr>
-                    }
+                   
                     folderName = item.Folder;
                     subfolderName = item.SubFolder;
                     nextSelected = item.Folder; ;

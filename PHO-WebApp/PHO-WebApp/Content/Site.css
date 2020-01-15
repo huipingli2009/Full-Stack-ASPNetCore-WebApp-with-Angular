@@ -157,14 +157,13 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 
 
 .table-structure tr {
-    border-top: none !important;
-    border-bottom: none !important;
-    border-left: none !important;
-    border-right: none !important;
+    border-top: 1px solid #00A896 !important;
+    border-bottom: 1px solid #00A896 !important;
+    border-left: 1px solid #00A896 !important;
+    border-right: 1px solid #00A896 !important;
 }
 
 
-x
 
 .wrapper {
     width: 70%;
@@ -281,23 +280,41 @@ x
 }
 
 .pretty-table_head {
-    background-color: #28c9bf;
-    color: #fff;
-    padding: 5px;
+    background-color: #d1ece9;
+    color: #006d63;
+    font: avenir next;
+    height: 22px;
+    line-height: 30px;
+    letter-spacing: 1px;
+    font-size: 10px;
+    font-weight: bold;
+    padding-left: 31px !important;
 }
 
 .pretty-table-body-font {
-    font-size: 15px;
+    font: avenir next;
+    font-size: 12px;
+    font-weight: 500;
+    color: #4a4a4a;
+    line-height:30px;
 }
 
 .table_head {
-    background-color: #24b4ab;
+    background-color: #00a896;
     color: #fff;
-    padding: 5px;
+    font: avenir next;
+    font-size:13px; 
+    height: 20px;
+    line-height: 35px;
 }
 
 tbody tr:nth-child(odd) {
-    background: #eee;
+    background: #f4f4f4;
+}
+
+.first2colm {
+    background: #ffffff !important;
+    border-right: 1px solid #00a896 ;   
 }
 
 .login-welcome {
@@ -328,15 +345,35 @@ tbody tr:nth-child(odd) {
     cursor: pointer;
     width: 0;
 }
-#filter {
-    border-radius: 20px;
-    padding: 20px;
-    width: 200px;
-    height: 15px;
-}
+
 .colFileName {
     width: 25%;
 }
+
+#tblFolderList {
+    border-collapse: collapse;
+    border: 1px solid #00a896;
+    border-radius: 7px;
+}
+
+#tblFolderList th, td {
+    padding-left: 31px;
+    text-align: left;
+}
+
+#pretty-table_head {
+    border-collapse: collapse;
+    border: 1px solid #00a896;
+}
+
+.text-white {
+    color: white;
+}
+
+
+
+
+
 
 
 

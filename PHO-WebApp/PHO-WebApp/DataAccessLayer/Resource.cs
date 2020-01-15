@@ -131,9 +131,9 @@ namespace PHO_WebApp.DataAccessLayer
                 s.PermissionToId = dr["PermissionToId"].ToString();
             }
 
-            if (dr["PermissionTo"].ToString() != null && !string.IsNullOrWhiteSpace(dr["PermissionTo"].ToString()))
+            if (dr["PermissionToName"].ToString() != null && !string.IsNullOrWhiteSpace(dr["PermissionToName"].ToString()))
             {
-                s.PermissionTo = dr["PermissionTo"].ToString();
+                s.PermissionToName = dr["PermissionToName"].ToString();
             }
             
             if (dr["Favorite"].ToString() != null && !string.IsNullOrWhiteSpace(dr["Favorite"].ToString()))

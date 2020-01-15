@@ -24,6 +24,7 @@ namespace PHO_WebApp.Models
         public string SubFolder { get; set; }        
         public string AdminURL { get; set; }
         public string PermissionTo { get; set; }
+        public string PermissionToName { get; set; }
         public string PermissionToId { get; set; }
         [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
         public DateTime? DateModified { get; set; }
