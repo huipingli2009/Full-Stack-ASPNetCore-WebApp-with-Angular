@@ -40,7 +40,7 @@ namespace PHO_WebApp.DataAccessLayer
         //    return PracticeResoourceFiles;
         //}
         //public List<Files> getPracticeResourceFiles(int loginId, string topFilter, string tagFilter, string searchBox)
-        public List<Files> getPracticeResourceFiles(int loginId, string topfilter, string searchBox)
+        public List<Files> getPracticeResourceFiles(int loginId, string topfilter, string searchBox, string folder, string subfolder)
         {
             List<Files> PracticeResoourceFiles = new List<Files>();
 
@@ -57,7 +57,17 @@ namespace PHO_WebApp.DataAccessLayer
             if (string.IsNullOrWhiteSpace(searchBox))
             {
                 searchBox = "All";
-            }           
+            }
+
+            if (string.IsNullOrWhiteSpace(folder))
+            {
+                folder = "All";
+            }
+
+            if (string.IsNullOrWhiteSpace(subfolder))
+            {
+                subfolder = "All";
+            }
 
             SqlCommand com = new SqlCommand("spGetResourceFiles", con);
             com.CommandType = CommandType.StoredProcedure;
@@ -81,6 +91,14 @@ namespace PHO_WebApp.DataAccessLayer
             SqlParameter parameterTopFilter = new SqlParameter("@TopFilter", SqlDbType.NVarChar);
             parameterTopFilter.Value = topfilter;
             com.Parameters.Add(parameterTopFilter);
+
+            SqlParameter parameterfolder = new SqlParameter("@Folder", SqlDbType.NVarChar);
+            parameterfolder.Value = folder;
+            com.Parameters.Add(parameterfolder);
+
+            SqlParameter parametersubfolder = new SqlParameter("@SubFolder", SqlDbType.NVarChar);
+            parametersubfolder.Value = subfolder;
+            com.Parameters.Add(parametersubfolder);
 
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataSet ds = new DataSet();
@@ -135,7 +153,12 @@ namespace PHO_WebApp.DataAccessLayer
             {
                 s.PermissionToName = dr["PermissionToName"].ToString();
             }
-            
+
+            if (dr["Tags"].ToString() != null && !string.IsNullOrWhiteSpace(dr["Tags"].ToString()))
+            {
+                s.Tags = dr["Tags"].ToString();
+            }
+
             if (dr["Favorite"].ToString() != null && !string.IsNullOrWhiteSpace(dr["Favorite"].ToString()))
             {
                 s.Favorite = dr["Favorite"].ToString();

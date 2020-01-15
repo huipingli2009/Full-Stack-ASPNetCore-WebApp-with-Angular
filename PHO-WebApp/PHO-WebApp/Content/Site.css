@@ -59,7 +59,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 }
 
 .content-footer {
-    /*background-color: #91d6ac !important;*/
+    background-color: #91d6ac !important;
 }
 
 .validationText {
@@ -314,12 +314,27 @@ tbody tr:nth-child(odd) {
 
 .first2colm {
     background: #ffffff !important;
-    border-right: 1px solid #00a896 ;   
+    border-right: 1px solid #00a896;
+    color: #a4a4a4;
 }
 
-.login-welcome {
+a {
+    color: #4a4a4a;
+    font: avenir next medium;
     font-size: 12px;
 }
+
+a:link {
+        color: #4a4a4a;
+}
+
+    a:hover {
+        color: #4a4a4a;
+    }
+
+    .login-welcome {
+        font-size: 12px;
+    }
 
 .login-practice {
     font-size: 16px;
@@ -367,7 +382,7 @@ tbody tr:nth-child(odd) {
 }
 
 .text-white {
-    color: white;
+    color: red;
 }
 
 

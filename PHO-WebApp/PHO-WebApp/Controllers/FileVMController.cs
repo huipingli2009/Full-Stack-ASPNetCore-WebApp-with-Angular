@@ -17,7 +17,7 @@ namespace PHO_WebApp.Controllers
 
         //    return View(fvm.GetFiles());
         //}
-        public ActionResult Index(string topfilter, string searchString)
+        public ActionResult Index(string topfilter, string searchString, string folder, string subfolder)
         {
             //@ViewData["searchString"] = searchString;
 
@@ -33,7 +33,7 @@ namespace PHO_WebApp.Controllers
 
             FileVM fvm = new FileVM();
             fvm.UserLogin = SavedUserDetails;
-            return View(fvm.GetFiles(topfilter, searchString));               
+            return View(fvm.GetFiles(topfilter, searchString, folder, subfolder));               
            
             //return View(fvm.GetFiles(searchString.OrderByDescending(s=>s.));
         }
