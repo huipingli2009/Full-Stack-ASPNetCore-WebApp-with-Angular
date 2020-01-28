@@ -365,7 +365,7 @@ a:link {
     width: 25%;
 }
 
-#tblFolderList {
+#tblFolderList tblFiles {
     border-collapse: collapse;
     border: 1px solid #00a896;
     border-radius: 7px;

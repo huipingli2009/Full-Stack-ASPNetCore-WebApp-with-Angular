@@ -10,9 +10,9 @@
     @*@using (Html.BeginForm())*@
     @using (Html.BeginForm("Index", "FileVM", FormMethod.Get))
     {
-    <div>
-        @*<h5>@Html.DisplayFor(m => m.UserLogin.PracticeName)</h5>*@       
-    </div>
+        <div>
+            @*<h5>@Html.DisplayFor(m => m.UserLogin.PracticeName)</h5>*@
+        </div>
         <table id="tblFolderList">
             <thead class="table_head">
                 <tr>
@@ -36,8 +36,8 @@
                         @*<input class="Search" type="text" placeholder=" search files by name" /><i class="fas fa-search"></i>*@
                         @*<input class="search_input" type="text" name="" placeholder="Search files by name">*@
                         @*<input id="searchInput" type="text" placeholder="Search files by name" value=@ViewData["searchString"] />
-        <i id="search" class="fa fa-search"></i>*@
-                        @Html.TextBox("searchString","search files by name") <input type="submit" name="submit" value="Search" />
+                            <i id="search" class="fa fa-search"></i>*@
+                        @Html.TextBox("searchString", "search files by name") <input type="submit" name="submit" value="Search" />
                         @*@Html.TextBox("searchString", null, new { @class = "form-control", @placeholder = "File Name" })<input type="submit" name="submit" value="Search" />*@
                         @*@Html.TextBox("searchString", new { placeholder = "Search file name" })*@
                         @*@Html.TextBox("searchString", "search files by name", new { style = "width: 200px;", @class = "form-control" }) <input type="submit" name="submit" value="Search" />*@
@@ -59,8 +59,8 @@
                         DATE MODIFIED <i class="fas fa-sort"></i>
                     </th>
                     @*<th scope="col">
-                        SIZE
-                    </th>*@
+                            SIZE
+                        </th>*@
                     @*<th scope="col">
                             Watched
                         </th>*@
@@ -74,7 +74,7 @@
 
                 </tr>
             </thead>
-            <tbody class="pretty-table-body-font" >
+            <tbody class="pretty-table-body-font">
                 @{
                     string folderName = "";
                     string subfolderName = "";
@@ -84,12 +84,12 @@
                 }
                 @foreach (var item in Model.FileList)
                 {
-                   
+
                     <tr>
                         <td class="first2colm">
                             @if (folderName != item.Folder)
                             {
-                                <i class="fas fa-folder" style="color:#006d63"></i> @Html.ActionLink(@item.Folder,"Index","FileVM", new { @item.Folder }, null )
+                                <i class="fas fa-folder" style="color:#006d63"></i> @Html.ActionLink(@item.Folder, "Index", "FileVM", new { @item.Folder }, null)
                                 @*@Html.DisplayFor(modelItem => item.Folder)*@
                                 @*@Html.ActionLink(modelItem => item.Folder, "Index", new { folder = "All" }, new { @class = "text-white" })*@
                             }
@@ -97,7 +97,7 @@
                         <td class="first2colm">
                             @if (subfolderName != item.SubFolder)
                             {
-                                <i class="fas fa-folder" style="color:#006d63"></i> @Html.ActionLink(@item.SubFolder, "Index","FileVM", new { @item.SubFolder}, null)
+                                <i class="fas fa-folder" style="color:#006d63"></i> @Html.ActionLink(@item.SubFolder, "Index", "FileVM", new { @item.SubFolder }, null)
                                 @*@Html.DisplayFor(modelItem => item.SubFolder)*@
                             }
                         </td>
@@ -108,11 +108,11 @@
                             @Html.DisplayFor(modelItem => item.DateModified)
                         </td>
                         @*<td>
-                            @Html.DisplayFor(modelItem => item.FileSize)
-                    </td>*@
+                                    @Html.DisplayFor(modelItem => item.FileSize)
+                            </td>*@
                         @*<td>
-                            @Html.DisplayFor(modelItem => item.PermissionToName)
-                        </td>*@
+                                @Html.DisplayFor(modelItem => item.PermissionToName)
+                            </td>*@
                         <td>
                             @if (String.IsNullOrEmpty(item.Tags))
                             {
@@ -135,14 +135,14 @@
                             }
                         </td>
                     </tr>
-                   
-                        folderName = item.Folder;
-                        subfolderName = item.SubFolder;
-                        nextSelected = item.Folder; ;
+
+                    folderName = item.Folder;
+                    subfolderName = item.SubFolder;
+                    nextSelected = item.Folder; ;
                 }
 
             </tbody>
-        </table>       
+        </table>
     }
 </body>
 </html>
@@ -168,5 +168,4 @@
         });
     })
 </script>
-
 
