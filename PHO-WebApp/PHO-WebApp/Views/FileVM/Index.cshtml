@@ -1,0 +1,171 @@
+﻿@model PHO_WebApp.ViewModel.FileVM
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<html>
+<body>
+    @*@using (Html.BeginForm())*@
+    @using (Html.BeginForm("Index", "FileVM", FormMethod.Get))
+    {
+        <div>
+            @*<h5>@Html.DisplayFor(m => m.UserLogin.PracticeName)</h5>*@
+        </div>
+        <table id="tblFolderList">
+            <thead class="table_head">
+                <tr>
+                    <th scope="col" style="width:200px;">
+                        @Html.ActionLink("All Files", "Index", new { topfilter = "" }, new { @class = "text-white" })
+                    </th>
+                    <th scope="col" style="width:200px;">
+                        @Html.ActionLink("My Files", "Index", new { topfilter = "My Files" }, new { @class = "text-white" })
+                    </th>
+                    <th scope="col">
+                        For Providers
+                    </th>
+                    <th scope="col">
+                        For Practice Staff
+                    </th>
+                    <th scope="col">
+                        @Html.ActionLink("Favorite", "Index", new { topfilter = "Favorite" }, new { @class = "text-white" })
+                        @*@Html.DisplayNameFor(model => model.file.Favorite)*@
+                    </th>
+                    <th scope="col" colspan="2">
+                        @*<input class="Search" type="text" placeholder=" search files by name" /><i class="fas fa-search"></i>*@
+                        @*<input class="search_input" type="text" name="" placeholder="Search files by name">*@
+                        @*<input id="searchInput" type="text" placeholder="Search files by name" value=@ViewData["searchString"] />
+                            <i id="search" class="fa fa-search"></i>*@
+                        @Html.TextBox("searchString", "search files by name") <input type="submit" name="submit" value="Search" />
+                        @*@Html.TextBox("searchString", null, new { @class = "form-control", @placeholder = "File Name" })<input type="submit" name="submit" value="Search" />*@
+                        @*@Html.TextBox("searchString", new { placeholder = "Search file name" })*@
+                        @*@Html.TextBox("searchString", "search files by name", new { style = "width: 200px;", @class = "form-control" }) <input type="submit" name="submit" value="Search" />*@
+                    </th>
+                </tr>
+            </thead>
+            <thead class="pretty-table_head table-hover min-font-set col-md-12">
+                <tr>
+                    <th scope="col">
+                        FOLDER NAME <i class="fas fa-sort" style="background-color:#00A896"></i>
+                    </th>
+                    <th scope="col">
+                        SUBFOLDER NAME <i class="fas fa-sort"></i>
+                    </th>
+                    <th scope="col" class="colFileName" colspan="2">
+                        FILE NAME <i class="fas fa-sort"></i>
+                    </th>
+                    <th scope="col">
+                        DATE MODIFIED <i class="fas fa-sort"></i>
+                    </th>
+                    @*<th scope="col">
+                            SIZE
+                        </th>*@
+                    @*<th scope="col">
+                            Watched
+                        </th>*@
+                    <th scope="col">
+                        Tags
+                        @*@Html.ActionLink("Tags", "Index", new { topfilter = "Favorite" }, new { @class = "text-white" })*@
+                    </th>
+                    <th scope="col">
+                        ACTIONS
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody class="pretty-table-body-font">
+                @{
+                    string folderName = "";
+                    string subfolderName = "";
+                    string selected = "";
+                    string nextSelected = "";
+                    //selected = Model.FileList.First().Folder;
+                }
+                @foreach (var item in Model.FileList)
+                {
+
+                    <tr>
+                        <td class="first2colm">
+                            @if (folderName != item.Folder)
+                            {
+                                <i class="fas fa-folder" style="color:#006d63"></i> @Html.ActionLink(@item.Folder, "Index", "FileVM", new { @item.Folder }, null)
+                                @*@Html.DisplayFor(modelItem => item.Folder)*@
+                                @*@Html.ActionLink(modelItem => item.Folder, "Index", new { folder = "All" }, new { @class = "text-white" })*@
+                            }
+                        </td>
+                        <td class="first2colm">
+                            @if (subfolderName != item.SubFolder)
+                            {
+                                <i class="fas fa-folder" style="color:#006d63"></i> @Html.ActionLink(@item.SubFolder, "Index", "FileVM", new { @item.SubFolder }, null)
+                                @*@Html.DisplayFor(modelItem => item.SubFolder)*@
+                            }
+                        </td>
+                        <td colspan="2">
+                            <a href="@Url.Content(item.FileUrl)" height="20" width="20"><i class="fas fa-file-alt" style="color:#f0673c"></i> @Html.DisplayFor(modelItem => item.FileName)</a>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateModified)
+                        </td>
+                        @*<td>
+                                    @Html.DisplayFor(modelItem => item.FileSize)
+                            </td>*@
+                        @*<td>
+                                @Html.DisplayFor(modelItem => item.PermissionToName)
+                            </td>*@
+                        <td>
+                            @if (String.IsNullOrEmpty(item.Tags))
+                            {
+                                @Html.DisplayFor(modelItem => item.Tags)
+                            }
+                            else
+                            {
+                                <a href="@item.Tags" target=_blank>@Html.DisplayFor(modelItem => item.Tags)</a>
+                            }
+
+                        </td>
+                        <td>
+                            @if (item.Favorite == "1")
+                            {
+                                <i class="fas fa-star" style="color:orangered"></i>
+                            }
+                            else
+                            {
+                                <i class="fas fa-star" style="color:lightgrey"></i>
+                            }
+                        </td>
+                    </tr>
+
+                    folderName = item.Folder;
+                    subfolderName = item.SubFolder;
+                    nextSelected = item.Folder; ;
+                }
+
+            </tbody>
+        </table>
+    }
+</body>
+</html>
+<script type="text/javascript">
+    $(document).ready(function () {
+        //$('#filtersubmit').click(function () {
+        //    alert('Searching for ' + $('#filter').val());
+        //});
+
+        $('#search').on('click up', function () {
+            var serachTerm = $(searchInput).val().toLowerCase();
+
+            $('#tblFolderList tbody tr').each(function () {
+                var str = $(this).text().toLowerCase();
+
+                if (str.indexOf(serachTerm) == -1) {
+                    $(this).hide();
+                }
+                else {
+                    $(this).show();
+                }
+            });
+        });
+    })
+</script>
+

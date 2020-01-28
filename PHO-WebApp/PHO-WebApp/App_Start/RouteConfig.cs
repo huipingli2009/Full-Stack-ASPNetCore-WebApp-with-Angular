@@ -95,6 +95,12 @@ namespace PHO_WebApp
            defaults: new { controller = "PatientVM", action = "GetPatients", id = UrlParameter.Optional }
           );
 
+            routes.MapRoute(
+          name: "Files",
+          url: "FileVM/Index",
+          defaults: new { controller = "FileVM", action = "Index", id = UrlParameter.Optional }
+         );
+
         }
     }
 }

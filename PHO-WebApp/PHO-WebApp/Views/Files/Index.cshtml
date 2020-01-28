@@ -1,0 +1,93 @@
+﻿@model PHO_WebApp.Models.Files
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<html>
+<head>
+    `
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <style>
+        input {
+            margin-bottom: 10px;
+        }
+
+        h3, h5 {
+            color: #006D63;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    @using (Html.BeginForm())
+    {
+        <!--Begin Patient Insertion -->
+
+        <div>
+            <h5>Files Page</h5>
+        </div>
+        <table class="PatientSummary" id="pnlEditPatient">
+            <thead style="border-top: 1px solid #808080">
+                <tr><th colspan="6">Folder Name </th></tr>
+                <tr><th colspan="6">Sub Folder Name </th></tr>
+                <tr><th colspan="6">File Name </th></tr>
+            </thead>
+            <tr>&nbsp;</tr>
+            <tr>&nbsp;</tr>
+            <tr>
+                @foreach (var item in Model)
+                {
+                    <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Folder:</td>
+                    <td valign="top" style="width:300px; max-width:300px;">
+                        @Html.EditorFor(m => m.Folder)
+                        @Html.ValidationMessageFor(m => m.Folder, "", new { @class = "text-danger" })
+                    </td>
+                    <td valign="top" style="font-weight:bold; width:120px; max-width:120px;">First Name: </td>
+                    <td valign="top" style="width:300px; max-width:300px;">
+                        @Html.EditorFor(m => m.FileName)
+                        @Html.ValidationMessageFor(m => m.FileName, "", new { @class = "text-danger" })
+                    </td>
+                    <td valign="top" style="font-weight:bold; width:120px; max-width:150px;">DOB: </td>
+                    <td valign="top" style="width:300px; max-width:300px;">
+                        @Html.EditorFor(m => m.FileUrl)
+                        @Html.ValidationMessageFor(m => m.FileUrl, "", new { @class = "text-danger" })
+                    </td>
+                }
+            </tr>
+
+            @*<tr>
+                <td valign="top" style="font-weight:bold; width:100px; max-width:100px;">Address Line1:</td>
+                <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.AddressLine1)</td>
+                <td valign="top" style="font-weight:bold; width:120px; max-width:120px;">Address Line2: </td>
+                <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.AddressLine2)</td>
+                <td valign="top" style="font-weight:bold; width:120px; max-width:150px;">City: </td>
+                <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.City)</td>
+            </tr>
+            <tr>
+                <td valign="top" style="font-weight:bold; width:150px; max-width:100px;">State:</td>
+                <td valign="top" style="width:250px; max-width:250px;" colspan="3">@Html.EditorFor(m => m.ptEntity.State)</td>
+                <td valign="top" style="font-weight:bold; width:150px; max-width:150px;">Zip: </td>
+                <td valign="top" style="width:300px; max-width:300px;">@Html.EditorFor(m => m.ptEntity.Zip)</td>
+            </tr>*@
+
+            <tr>
+                <td valign="top" colspan="4"></td>
+                <td valign="top" colspan="2">
+                    <button id="btnSave" class="btn btn-sm btn-primary" data-pdsa-action="SavePatient" >
+                        <i class="fas fa-save"></i>&nbsp;Save
+                    </button>
+                    <button id="btnCancel" class="btn btn-sm btn-primary" data-pdsa-action="Cancel" >
+                        <i class="fas fa-window-close"></i>&nbsp;Cancel
+                    </button>
+                </td>
+            </tr>
+            <tfoot style="border-top: 1px solid #808080">
+        </table>
+    }
+</body>
+</html>
+
