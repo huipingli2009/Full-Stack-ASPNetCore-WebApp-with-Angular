@@ -1,8 +1,8 @@
 # Title
 
-> Following <https://github.com/noffle/art-of-readme> outline
-> <https://github.com/noffle/common-readme>
-> <https://github.com/richardlitt/standard-readme>
+> Following <https://github.com/noffle/art-of-readme> outline  
+> <https://github.com/noffle/common-readme>  
+> <https://github.com/richardlitt/standard-readme>   
 
 ---
 
