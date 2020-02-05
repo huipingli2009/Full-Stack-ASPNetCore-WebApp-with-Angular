@@ -8,6 +8,7 @@ using org.cchmc.pho.api.Mappings;
 using org.cchmc.pho.api.ViewModels;
 using org.cchmc.pho.core.DataModels;
 using org.cchmc.pho.core.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -97,6 +98,7 @@ namespace org.cchmc.pho.unittest.controllertests
 
             // assert
             Assert.AreEqual(400, result.StatusCode);
+            Assert.AreEqual("user is not a valid integer", result.Value);
             _mockAlertDal.Verify(p => p.ListActiveAlerts(It.IsAny<int>()), Times.Never);
         }
 
@@ -105,11 +107,109 @@ namespace org.cchmc.pho.unittest.controllertests
         {
             // setup
             var userId = 5;
-            _mockAlertDal.Setup(p => p.ListActiveAlerts(userId)).Throws(new System.Exception()).Verifiable();
+            _mockAlertDal.Setup(p => p.ListActiveAlerts(userId)).Throws(new Exception()).Verifiable();
             _alertController = new AlertController(_mockLogger.Object, _mapper, _mockAlertDal.Object);
 
             // execute
             var result = await _alertController.ListActiveAlerts(userId.ToString()) as ObjectResult;
+
+            // assert
+            Assert.AreEqual(500, result.StatusCode);
+        }
+
+        [TestMethod]
+        public async Task MarkAlertAction_Success()
+        {
+            // setup
+            var userId = 5;
+            var alertSchedule = 7;
+            var alertActionId = 9;
+            var alertDateTime = DateTime.Parse("1/19/20");
+            
+            _mockAlertDal.Setup(p => p.MarkAlertAction(userId, alertSchedule, alertActionId, alertDateTime))
+                .Returns(Task.CompletedTask).Verifiable();
+            _alertController = new AlertController(_mockLogger.Object, _mapper, _mockAlertDal.Object);
+
+            // execute
+            var result = await _alertController.MarkAlertAction(userId.ToString(), alertSchedule.ToString(), new AlertActionViewModel()
+            {
+                ActionDateTime = alertDateTime,
+                AlertActionId = alertActionId
+            });
+
+            // assert
+            Assert.IsInstanceOfType(result, typeof(OkResult));
+            var okResult = result as OkResult;
+            Assert.AreEqual(200, okResult.StatusCode);
+        }
+
+        [TestMethod]
+        public async Task MarkAlertAction_UserIdDoesNotValidate_Throws400()
+        {
+            // setup
+            var userId = "asdf";
+            var alertSchedule = 7;
+            var alertActionId = 9;
+            var alertDateTime = DateTime.Parse("1/19/20");
+
+            _alertController = new AlertController(_mockLogger.Object, _mapper, _mockAlertDal.Object);
+
+            // execute
+            var result = await _alertController.MarkAlertAction(userId.ToString(), alertSchedule.ToString(), new AlertActionViewModel()
+            {
+                ActionDateTime = alertDateTime,
+                AlertActionId = alertActionId
+            }) as ObjectResult;
+
+            // assert
+            Assert.AreEqual(400, result.StatusCode);
+            Assert.AreEqual("user is not a valid integer", result.Value);
+            _mockAlertDal.Verify(p => p.MarkAlertAction(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<DateTime>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task MarkAlertAction_AlertScheduleDoesNotValidate_Throws400()
+        {
+            // setup
+            var userId = 5;
+            var alertSchedule = "asdf";
+            var alertActionId = 9;
+            var alertDateTime = DateTime.Parse("1/19/20");
+
+            _alertController = new AlertController(_mockLogger.Object, _mapper, _mockAlertDal.Object);
+
+            // execute
+            var result = await _alertController.MarkAlertAction(userId.ToString(), alertSchedule.ToString(), new AlertActionViewModel()
+            {
+                ActionDateTime = alertDateTime,
+                AlertActionId = alertActionId
+            }) as ObjectResult;
+
+            // assert
+            Assert.AreEqual(400, result.StatusCode);
+            Assert.AreEqual("alertSchedule is not a valid integer", result.Value);
+            _mockAlertDal.Verify(p => p.MarkAlertAction(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<DateTime>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task MarkAlertAction_DataLayerThrowsException_ReturnsError()
+        {
+            // setup
+            var userId = 5;
+            var alertSchedule = 7;
+            var alertActionId = 9;
+            var alertDateTime = DateTime.Parse("1/19/20");
+
+            _mockAlertDal.Setup(p => p.MarkAlertAction(userId, alertSchedule, alertActionId, alertDateTime))
+                .Throws(new Exception()).Verifiable();
+            _alertController = new AlertController(_mockLogger.Object, _mapper, _mockAlertDal.Object);
+
+            // execute
+            var result = await _alertController.MarkAlertAction(userId.ToString(), alertSchedule.ToString(), new AlertActionViewModel()
+            {
+                ActionDateTime = alertDateTime,
+                AlertActionId = alertActionId
+            }) as ObjectResult;
 
             // assert
             Assert.AreEqual(500, result.StatusCode);
