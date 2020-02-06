@@ -36,7 +36,7 @@ namespace org.cchmc.pho.unittest.DataLayerTests
         }
 
         [TestMethod]
-        public void ListActiveAlerts_ReturnsAlerts()
+        public async Task ListActiveAlerts_ReturnsAlerts()
         {
             /* TODO: This method should:
              * - insert data in the database
@@ -46,7 +46,7 @@ namespace org.cchmc.pho.unittest.DataLayerTests
         }
 
         [TestMethod]
-        public void ListActiveAlerts_ReturnsAlertsOnlyForUser()
+        public async Task ListActiveAlerts_ReturnsAlertsOnlyForUser()
         {
             /* TODO: This method should:
              * - insert data in the database for at least 2 users
@@ -56,7 +56,7 @@ namespace org.cchmc.pho.unittest.DataLayerTests
         }
 
         [TestMethod]
-        public void ListActiveAlerts_ReturnsActiveAlertsOnly()
+        public async Task ListActiveAlerts_ReturnsActiveAlertsOnly()
         {
             /* TODO: This method should:
              * - insert data in the database for a user, some acknowledged and some not
@@ -66,7 +66,7 @@ namespace org.cchmc.pho.unittest.DataLayerTests
         }
 
         [TestMethod]
-        public void ListActiveAlerts_ProperlyHandlesADOException()
+        public async Task ListActiveAlerts_ProperlyHandlesADOException()
         {
             /* TODO: This method should:
              * - insert data in the database for a user

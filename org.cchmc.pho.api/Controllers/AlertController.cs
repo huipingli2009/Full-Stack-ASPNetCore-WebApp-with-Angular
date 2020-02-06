@@ -14,7 +14,7 @@ namespace org.cchmc.pho.api.Controllers
 {
     [ApiController]
     [Route("api/Alerts")]
-    [Authorize]
+    //[Authorize] // Uncomment this out later when the authorization parts are working
     public class AlertController : ControllerBase
     {
         private readonly ILogger<AlertController> _logger;

@@ -10,12 +10,14 @@ using org.cchmc.pho.core.DataModels;
 using org.cchmc.pho.core.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Threading.Tasks;
 
 namespace org.cchmc.pho.unittest.controllertests
 {
     [TestClass]
+    [ExcludeFromCodeCoverage]
     public class AlertControllerTests
     {
         private AlertController _alertController;
