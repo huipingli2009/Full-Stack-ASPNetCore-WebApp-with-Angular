@@ -85,7 +85,7 @@ namespace org.cchmc.pho.unittest.controllertests
             Assert.AreEqual(myAlerts[1].LinkText, resultList[1].LinkText);
             Assert.AreEqual(myAlerts[1].Message, resultList[1].Message);
             Assert.AreEqual(myAlerts[1].Url, resultList[1].Url);
-
+            _mockAlertDal.Verify();
         }
 
         [TestMethod]
