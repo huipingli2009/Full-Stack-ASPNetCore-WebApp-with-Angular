@@ -2,6 +2,11 @@
 
 TODO: Additional info to follow, such as a simple intro, environment information, and some links to documentation.
 
+## Deploying the Identity Database
+To deploy the Identity database to SQL server, complete the following steps:
+1. Ensure that the `pho-identity` connection string is complete in the `appsettings.secret.json`
+2. From the CLI, navigate to the `org.cchmc.pho.identity` project and type in `dotnet ef database update -s ../org.cchmc.pho.api/` and hit enter
+3. The CLI should read `Build started...` then `Build succeeded.` and after a short delay, `Done.`
 
 
 ## Starting a New Controller

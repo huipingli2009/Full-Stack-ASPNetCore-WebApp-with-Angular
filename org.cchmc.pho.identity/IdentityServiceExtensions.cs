@@ -13,7 +13,9 @@ namespace org.cchmc.pho.identity
     {
         public static void AddIdentityServices(this IServiceCollection services, string connectionString)
         {
-            services.AddDbContext<IdentityDataContext>(opts => opts.UseSqlServer(connectionString));
+            services.AddDbContext<IdentityDataContext>(opts =>
+                opts.UseSqlServer(connectionString, optionsBuilder =>
+                    optionsBuilder.MigrationsAssembly("org.cchmc.pho.identity")));
             services.AddIdentity<User, IdentityRole>(opts =>
                 {
                     opts.Password.RequiredLength = 8;
