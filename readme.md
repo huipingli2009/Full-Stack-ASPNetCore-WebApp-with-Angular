@@ -2,13 +2,6 @@
 
 TODO: Additional info to follow, such as a simple intro, environment information, and some links to documentation.
 
-## Solution - Getting Started
-### Secrets
-This solution uses the Windows Secret Manager for connection strings and other sensitive configuration information. For more information,
-read https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-3.1&tabs=windows#secret-manager. To get
-started, open the .NET Core CLI, navigate to the `org.cchmc.pho.api` project, and type `dotnet user-secrets init`. Alternatively,
-you can also right-click the project in Visual Studio and select `Manage User Secrets`. The secrets.json file that is created
-uses a flattened structure, so you will need to have `"ConnectionStrings:pho-db": ""` (for example).
 
 
 ## Starting a New Controller
