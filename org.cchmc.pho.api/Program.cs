@@ -31,7 +31,7 @@ namespace org.cchmc.pho.api
 
                     config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: false);
                     config.AddJsonFile("appsettings.secrets.json", optional: true, reloadOnChange: false);
-                    config.AddUserSecrets<Startup>();
+                    //config.AddUserSecrets<Startup>();
                     //add efconfig
                     //
                     //config.AddEnvironmentVariables();

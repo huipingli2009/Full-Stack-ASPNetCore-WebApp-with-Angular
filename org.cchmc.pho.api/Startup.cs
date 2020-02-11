@@ -28,7 +28,7 @@ namespace org.cchmc.pho.api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(Startup));
-            services.AddIdentityServices(Configuration.GetConnectionString("identityConnection"));
+            services.AddIdentityServices(Configuration.GetConnectionString("pho-identity"));
             services.AddOptions<CustomOptions>()
                         .Bind(Configuration.GetSection(CustomOptions.SECTION_KEY))
                         //https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.optionsbuilderdataannotationsextensions.validatedataannotations?view=dotnet-plat-ext-3.1
