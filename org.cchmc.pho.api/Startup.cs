@@ -5,22 +5,21 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using org.cchmc.pho.api.Mappings;
+using org.cchmc.pho.core.DataAccessLayer;
+using org.cchmc.pho.core.Interfaces;
+using org.cchmc.pho.core.Models;
+
 using org.cchmc.pho.identity;
 
 namespace org.cchmc.pho.api
 {
     public class Startup
     {
-        public Startup(IWebHostEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-
-            Configuration = builder.Build();
+            Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -30,21 +29,50 @@ namespace org.cchmc.pho.api
         {
             services.AddAutoMapper(typeof(Startup));
             services.AddIdentityServices(Configuration.GetConnectionString("identityConnection"));
+            services.AddOptions<CustomOptions>()
+                        .Bind(Configuration.GetSection(CustomOptions.SECTION_KEY))
+                        //https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.optionsbuilderdataannotationsextensions.validatedataannotations?view=dotnet-plat-ext-3.1
+                        .ValidateDataAnnotations() //todo 
+                        .Validate(c =>
+                        {
+                            //NOTE: can add additional validation
+                            //https://www.stevejgordon.co.uk/asp-net-core-2-2-options-validation
 
-            // TODO: Load AppSettings, DBContext
+                            //if (c.Api_Key != default)
+                            //{
+                            //    return c.Endpoint_BaseUrl != default;
+                            //}
+                            return true;
+                        }, "failure message");
+
+            var phoDbConnStr = Configuration.GetConnectionString("pho-db");
+            var phoDwConnStr = Configuration.GetConnectionString("pho-dw");
+
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo() { Title = "PHO API", Version = "v1" });
             });
+
+
+            //NOTE: register service
+            services.AddTransient<IAlert, AlertDAL>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
             if (env.IsDevelopment())
             {
+                logger.LogInformation($"Environment is Development");
                 app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                app.UseHsts();
             }
 
             app.UseHttpsRedirection();
