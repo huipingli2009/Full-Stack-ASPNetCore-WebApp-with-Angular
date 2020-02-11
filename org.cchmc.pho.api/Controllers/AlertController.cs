@@ -6,8 +6,10 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using org.cchmc.pho.api.ViewModels;
 using org.cchmc.pho.core.Interfaces;
+using org.cchmc.pho.core.Models;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace org.cchmc.pho.api.Controllers
@@ -21,11 +23,22 @@ namespace org.cchmc.pho.api.Controllers
         private readonly IMapper _mapper;
         private readonly IAlert _alertDal;
 
-        public AlertController(ILogger<AlertController> logger, IMapper mapper, IAlert alertDal)
+        //TODO: delete me refactor
+        private readonly CustomOptions _customOptions;
+
+
+        public AlertController(ILogger<AlertController> logger, IMapper mapper, IAlert alertDal, IOptions<CustomOptions> customOptions)
         {
             _logger = logger;
             _mapper = mapper;
             _alertDal = alertDal;
+
+            //TODO : CAN add some validation on this
+            _customOptions = customOptions.Value;
+
+            _logger.LogInformation($"Example of options {_customOptions?.RequiredOption}");
+
+
         }
 
         [HttpGet("active/{user}")]
@@ -36,7 +49,11 @@ namespace org.cchmc.pho.api.Controllers
         {
             // route parameters are strings and need to be translated (and validated) to their proper data type
             if (!int.TryParse(user, out var userId))
+            {
+                _logger.LogInformation($"Failed to parse userId - {user}");
                 return BadRequest("user is not a valid integer");
+            }
+
 
             try
             {
