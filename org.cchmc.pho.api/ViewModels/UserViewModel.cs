@@ -1,4 +1,6 @@
-﻿namespace org.cchmc.pho.api.ViewModels
+﻿using System.Collections.Generic;
+
+namespace org.cchmc.pho.api.ViewModels
 {
     public class UserViewModel
     {
@@ -7,5 +9,6 @@
         public string Email { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
+        public List<string> Roles { get; set; }
     }
 }

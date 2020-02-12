@@ -34,11 +34,16 @@ namespace org.cchmc.pho.api.Controllers
         {
             try
             {
-                // call the data method
+                // get the user by name, and then the roles for the user
                 var data = await _userManager.FindByNameAsync(userId);
+                var roles = await _userManager.GetRolesAsync(data);
 
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
                 var result = _mapper.Map<UserViewModel>(data);
+                if(data != null && result != null && roles != null)
+                {
+                    result.Roles = new List<string>(roles);
+                }
 
                 // return the result in a "200 OK" response
                 return Ok(result);
