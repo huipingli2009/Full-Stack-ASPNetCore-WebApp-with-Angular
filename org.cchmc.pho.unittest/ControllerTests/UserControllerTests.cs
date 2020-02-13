@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -11,6 +13,7 @@ using org.cchmc.pho.api.ViewModels;
 using org.cchmc.pho.core.DataModels;
 using org.cchmc.pho.core.Interfaces;
 using org.cchmc.pho.core.Models;
+using org.cchmc.pho.identity.Interfaces;
 using org.cchmc.pho.identity.Models;
 using System;
 using System.Collections.Generic;
@@ -26,7 +29,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
     {
         private UserController _userController;
         private Mock<ILogger<UserController>> _mockLogger;
-        private Mock<UserManager<User>> _mockUserManager;
+        private Mock<IUserService> _mockUserService;
         private Mock<IOptions<CustomOptions>> _mockOptions;
         private IMapper _mapper;
 
@@ -45,6 +48,16 @@ namespace org.cchmc.pho.unittest.ControllerTests
             return mgr;
         }
 
+        protected static Mock<SignInManager<User>> MockSignInManager(Mock<UserManager<User>> mockUserManager)
+        {
+            return new Mock<SignInManager<User>>(mockUserManager.Object,
+                                                    new Mock<IHttpContextAccessor>().Object,
+                                                    new Mock<IUserClaimsPrincipalFactory<User>>().Object,
+                                                    new Mock<IOptions<IdentityOptions>>().Object,
+                                                    new Mock<ILogger<SignInManager<User>>>().Object,
+                                                    new Mock<IAuthenticationSchemeProvider>().Object);
+        }
+
         [TestInitialize]
         public void Initialize()
         {
@@ -54,45 +67,57 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 cfg.AddMaps(Assembly.GetAssembly(typeof(AlertMappings)));
             });
             _mapper = config.CreateMapper();
-            //_mockUserManager = new Mock<IUserStore<User>>();
-            _mockUserManager = MockUserManager();
+            _mockUserService = new Mock<IUserService>();
             _mockLogger = new Mock<ILogger<UserController>>();
             _mockOptions = new Mock<IOptions<CustomOptions>>();
             //todo populate values later.
             _mockOptions.Setup(op => op.Value).Returns(new CustomOptions());
+
+            _userController = new UserController(_mockLogger.Object, _mapper, _mockUserService.Object, _mockOptions.Object);
         }
 
         [TestMethod]
-        public async Task GetUser_Success()
+        public async Task Authenticate_Success()
         {
             // setup
+            var userName = "myuserName";
+            var password = "mypassword";
             var user = new User()
             {
-                FirstName = "some",
                 Email = "someone@example.com",
-                LastName = "one",
-                UserName = "someone"
+                FirstName = "Some",
+                LastName = "One",
+                UserName = userName,
+                Token = "fhgdfsa"
             };
-            var roles = new List<string> { "role1", "role2" };
-            _mockUserManager.Setup(p => p.FindByNameAsync(user.UserName)).Returns(Task.FromResult(user)).Verifiable();
-            _mockUserManager.Setup(p => p.GetRolesAsync(It.Is<User>(x => x.UserName == user.UserName))).Returns(Task.FromResult((IList<string>)roles)).Verifiable();
-            _userController = new UserController(_mockLogger.Object, _mapper, _mockUserManager.Object);
+            _mockUserService.Setup(p => p.Authenticate(userName, password)).Returns(Task.FromResult(user)).Verifiable();
 
             // execute
-            var result = await _userController.GetUser(user.UserName) as ObjectResult;
+            var result = await _userController.Authenticate(new AuthenticationRequest() { Username = userName, Password = password }) as ObjectResult;
 
             // assert
             Assert.IsNotNull(result);
-            Assert.IsNotNull(result.Value);
-            var resultValue = result.Value as UserViewModel;
-            Assert.AreEqual(2, resultValue.Roles.Count);
-            Assert.IsTrue(resultValue.Roles.Contains(roles[0]));
-            Assert.IsTrue(resultValue.Roles.Contains(roles[1]));
-            Assert.AreEqual(user.FirstName, resultValue.FirstName);
-            Assert.AreEqual(user.Email, resultValue.Email);
-            Assert.AreEqual(user.LastName, resultValue.LastName);
-            Assert.AreEqual(user.UserName, resultValue.UserName);
-            _mockUserManager.Verify();
+            var authResult = result.Value as AuthenticationResult;
+            Assert.AreEqual("Authorized", authResult.Status);
+            Assert.AreEqual(user.Token, authResult.Token);
+        }
+
+        [TestMethod]
+        public async Task Authenticate_Failure()
+        {
+            // setup
+            var userName = "myuserName";
+            var password = "mypassword";
+            _mockUserService.Setup(p => p.Authenticate(userName, password)).Returns(Task.FromResult((User)null)).Verifiable();
+
+            // execute
+            var result = await _userController.Authenticate(new AuthenticationRequest() { Username = userName, Password = password }) as ObjectResult;
+
+            // assert
+            Assert.IsNotNull(result);
+            var authResult = result.Value as AuthenticationResult;
+            Assert.AreEqual("User not found or password did not match", authResult.Status);
+            Assert.IsTrue(String.IsNullOrEmpty(authResult.Token));
         }
     }
 }

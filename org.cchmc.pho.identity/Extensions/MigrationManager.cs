@@ -3,9 +3,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using org.cchmc.pho.identity.Models;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace org.cchmc.pho.identity.Extensions
 {
+    [ExcludeFromCodeCoverage]
     public static class MigrationManager
     {
         public static IHost MigrateDatabase(this IHost webHost)

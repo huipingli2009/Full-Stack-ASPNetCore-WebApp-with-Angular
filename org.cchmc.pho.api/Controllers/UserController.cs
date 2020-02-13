@@ -8,6 +8,10 @@ using Microsoft.Extensions.Logging;
 using org.cchmc.pho.identity.Models;
 using org.cchmc.pho.api.ViewModels;
 using Swashbuckle.AspNetCore.Annotations;
+using Microsoft.Extensions.Options;
+using org.cchmc.pho.core.Models;
+using org.cchmc.pho.identity.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace org.cchmc.pho.api.Controllers
 {
@@ -17,43 +21,33 @@ namespace org.cchmc.pho.api.Controllers
     {
         private readonly ILogger<UserController> _logger;
         private readonly IMapper _mapper;
-        private readonly UserManager<User> _userManager;
+        private readonly IUserService _userService;
 
-        public UserController(ILogger<UserController> logger, IMapper mapper, UserManager<User> userManager)
+        //TODO: delete me refactor
+        private readonly CustomOptions _customOptions;
+
+        public UserController(ILogger<UserController> logger, IMapper mapper, IUserService userService, IOptions<CustomOptions> customOptions)
         {
             _logger = logger;
             _mapper = mapper;
-            _userManager = userManager;
+            _userService = userService;
+
+            //TODO : CAN add some validation on this
+            _customOptions = customOptions.Value;
+
+            _logger.LogInformation($"Example of options {_customOptions?.RequiredOption}");
         }
 
-        [HttpGet("user/{userId}")]
-        [SwaggerResponse(200, type: typeof(List<UserViewModel>))]
-        [SwaggerResponse(400, type: typeof(string))]
-        [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> GetUser(string userId)
+        [AllowAnonymous]
+        [HttpPost("authenticate")]
+        [SwaggerResponse(200, type: typeof(AuthenticationResult))]
+        [SwaggerResponse(401, description: "User not found or password did not match")]
+        public async Task<IActionResult> Authenticate([FromBody] AuthenticationRequest userParam)
         {
-            try
-            {
-                // get the user by name, and then the roles for the user
-                var data = await _userManager.FindByNameAsync(userId);
-                
-                // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
-                var result = _mapper.Map<UserViewModel>(data);
-                if(data != null && result != null)
-                {
-                    var roles = await _userManager.GetRolesAsync(data);
-                    result.Roles = new List<string>(roles);
-                }
+            var user = await _userService.Authenticate(userParam.Username, userParam.Password);
+            if (user == null) return Unauthorized(new AuthenticationResult { Status = "User not found or password did not match" });
 
-                // return the result in a "200 OK" response
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                // log any exceptions that happen and return the error to the user
-                _logger.LogError(ex, "An error occurred");
-                return StatusCode(500, "An error occurred");
-            }
+            return Ok(new AuthenticationResult { Status = "Authorized", Token = user.Token });
         }
     }
 }

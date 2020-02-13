@@ -42,7 +42,6 @@ namespace org.cchmc.pho.unittest.ControllerTests
             _mockOptions = new Mock<IOptions<CustomOptions>>();
             //todo populate values later.
             _mockOptions.Setup(op => op.Value).Returns(new CustomOptions());
-            
         }
 
         [TestMethod]

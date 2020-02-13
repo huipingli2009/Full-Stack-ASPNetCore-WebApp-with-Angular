@@ -1,7 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -10,11 +13,11 @@ using org.cchmc.pho.api.Mappings;
 using org.cchmc.pho.core.DataAccessLayer;
 using org.cchmc.pho.core.Interfaces;
 using org.cchmc.pho.core.Models;
-
-using org.cchmc.pho.identity;
+using org.cchmc.pho.identity.Extensions;
 
 namespace org.cchmc.pho.api
 {
+    [ExcludeFromCodeCoverage]
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -28,7 +31,7 @@ namespace org.cchmc.pho.api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(Startup));
-            services.AddIdentityServices(Configuration.GetConnectionString("pho-identity"));
+            services.AddIdentityServices(Configuration);
             services.AddOptions<CustomOptions>()
                         .Bind(Configuration.GetSection(CustomOptions.SECTION_KEY))
                         //https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.optionsbuilderdataannotationsextensions.validatedataannotations?view=dotnet-plat-ext-3.1
@@ -48,8 +51,16 @@ namespace org.cchmc.pho.api
             var phoDbConnStr = Configuration.GetConnectionString("pho-db");
             var phoDwConnStr = Configuration.GetConnectionString("pho-dw");
 
+            services.AddMvc()
+                .AddControllersAsServices();
 
-            services.AddControllers();
+            //services.AddControllers(config =>
+            //{
+            //    //var policy = new AuthorizationPolicyBuilder()
+            //    //            .RequireAuthenticatedUser()
+            //    //            .Build();
+            //    //config.Filters.Add(new AuthorizeFilter(policy));
+            //});
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo() { Title = "PHO API", Version = "v1" });
@@ -57,8 +68,7 @@ namespace org.cchmc.pho.api
 
 
             //NOTE: register service
-            services.AddTransient<IAlert, AlertDAL>();
-
+            services.AddTransient<IAlert>(p => new AlertDAL(phoDbConnStr));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -79,6 +89,7 @@ namespace org.cchmc.pho.api
 
             app.UseRouting();
 
+            app.ConfigureIdentityServices(logger);
             app.UseAuthentication();
             app.UseAuthorization();
 

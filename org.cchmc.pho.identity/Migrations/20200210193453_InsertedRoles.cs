@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace org.cchmc.pho.identity.Migrations
 {
+    [ExcludeFromCodeCoverage]
     public partial class InsertedRoles : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

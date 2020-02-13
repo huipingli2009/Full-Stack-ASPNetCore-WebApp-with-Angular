@@ -10,6 +10,13 @@ namespace org.cchmc.pho.core.DataAccessLayer
     // TODO: all ADO and DI setup
     public class AlertDAL : IAlert
     {
+        private readonly string _connectionString;
+
+        public AlertDAL(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
+
         public async Task<List<Alert>> ListActiveAlerts(int userId)
         {
             // this is where the code goes to return the alerts by user
@@ -23,3 +30,4 @@ namespace org.cchmc.pho.core.DataAccessLayer
         }
     }
 }
+

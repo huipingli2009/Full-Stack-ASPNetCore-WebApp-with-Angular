@@ -1,27 +1,16 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
-using org.cchmc.pho.api.Controllers;
-using org.cchmc.pho.api.Mappings;
-using org.cchmc.pho.api.ViewModels;
-using org.cchmc.pho.core.DataModels;
-using org.cchmc.pho.core.Interfaces;
-using org.cchmc.pho.core.Models;
 using org.cchmc.pho.identity;
+using org.cchmc.pho.identity.Extensions;
 using org.cchmc.pho.identity.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Reflection;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace org.cchmc.pho.unittest.IdentityTests
@@ -31,6 +20,7 @@ namespace org.cchmc.pho.unittest.IdentityTests
     public class IdentityTests
     {
         private static UserManager<User> _userManager;
+        private static SignInManager<User> _signInManager;
         private static IdentityDataContext _context;
         private string userName = "someone";
 
@@ -42,16 +32,16 @@ namespace org.cchmc.pho.unittest.IdentityTests
             configBuilder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: false);
             configBuilder.AddJsonFile("appsettings.secrets.json", optional: true, reloadOnChange: false);
             var configuration = configBuilder.Build();
-            var identityConnString = configuration.GetConnectionString("pho-identity");
             var services = new ServiceCollection();
             services.AddSingleton<IConfiguration>(configuration)
                     .AddLogging()
-                    .AddIdentityServices(identityConnString);
+                    .AddIdentityServices(configuration);
                     
             var provider = services.BuildServiceProvider();
             var context = provider.GetRequiredService<IdentityDataContext>();
             var userManager = provider.GetRequiredService<UserManager<User>>();
-            Setup(context, userManager);
+            var signInManager = provider.GetRequiredService<SignInManager<User>>();
+            Setup(context, userManager, signInManager);
         }
 
         [ClassCleanup]
@@ -60,10 +50,11 @@ namespace org.cchmc.pho.unittest.IdentityTests
             _context.Database.CloseConnection();
         }
 
-        private static void Setup(IdentityDataContext context, UserManager<User> userManager)
+        private static void Setup(IdentityDataContext context, UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _context = context;
             _userManager = userManager;
+            _signInManager = signInManager;
             // performs all migrations on the database, so if you haven't installed it, it will be created
             _context.Database.Migrate();
             _context.Database.OpenConnection();
@@ -92,6 +83,14 @@ namespace org.cchmc.pho.unittest.IdentityTests
             }
         }
 
+        // This test is for running the migration that deploys to your local environment, per the readme.
+        [TestMethod]
+        public async Task DoNothing()
+        {
+
+        }
+
+        [Ignore("These tests are for experimenting with Identity features only.")]
         [TestMethod]
         public async Task InsertUser()
         {
@@ -109,6 +108,7 @@ namespace org.cchmc.pho.unittest.IdentityTests
             Assert.IsTrue(result.Succeeded);
         }
 
+        [Ignore("These tests are for experimenting with Identity features only.")]
         [TestMethod]
         public async Task DeleteUser()
         {
@@ -131,6 +131,7 @@ namespace org.cchmc.pho.unittest.IdentityTests
             Assert.IsNull(userToDelete);
         }
 
+        [Ignore("These tests are for experimenting with Identity features only.")]
         [TestMethod]
         public async Task AddRoleToUser()
         {
@@ -153,6 +154,39 @@ namespace org.cchmc.pho.unittest.IdentityTests
             var users = await _userManager.GetUsersInRoleAsync("Role1");
             Assert.AreEqual(1, users.Count);
             Assert.AreEqual(userName, users[0].UserName);
+        }
+
+        [Ignore("These tests are for experimenting with Identity features only.")]
+        [TestMethod]
+        public async Task Login()
+        {
+            // create user
+            var user = new User()
+            {
+                Email = "someone@example.com",
+                FirstName = "Some",
+                LastName = "One",
+                UserName = userName
+            };
+            var password = "SomePassword!1";
+            var result = await _userManager.CreateAsync(user, password);
+
+            // add role to user
+            user = await _userManager.FindByNameAsync(userName);
+            result = await _userManager.AddToRoleAsync(user, "Role1");
+            var roles = new List<string>(await _userManager.GetRolesAsync(user));
+
+            // check the password
+            var passwordResult = await _userManager.CheckPasswordAsync(user, password);
+            Assert.IsTrue(passwordResult);
+
+            // get a claim
+            var identity = new ClaimsIdentity(IdentityConstants.ApplicationScheme);
+            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id));
+            identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
+            roles.ForEach(p => identity.AddClaim(new Claim(ClaimTypes.Role, p)));
+
+            var signInResult = await _signInManager.PasswordSignInAsync(user, password, false, false);
         }
     }
 }
