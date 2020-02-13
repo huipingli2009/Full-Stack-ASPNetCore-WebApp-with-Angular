@@ -34,12 +34,14 @@ namespace org.cchmc.pho.api.Controllers
             _alertDal = alertDal;
 
             //TODO : CAN add some validation on this
-            _customOptions = customOptions.Value;
+           // _customOptions = customOptions.Value;
 
             _logger.LogInformation($"Example of options {_customOptions?.RequiredOption}");
 
 
         }
+
+              
 
         [HttpGet("active/{user}")]
         [SwaggerResponse(200, type: typeof(List<AlertViewModel>))]

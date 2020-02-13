@@ -10,5 +10,6 @@ namespace org.cchmc.pho.core.Interfaces
     {
         Task<List<Alert>> ListActiveAlerts(int userId);
         Task MarkAlertAction(int userId, int alertScheduleId, int alertActionId, DateTime actionDateTime);
+      
     }
 }
