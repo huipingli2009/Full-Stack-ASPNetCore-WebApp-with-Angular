@@ -80,10 +80,40 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 throw new NotImplementedException();
         }
 
-        public async Task MarkAlertAction(int userId, int alertScheduleId, int alertActionId, DateTime actionDateTime)
+        public async Task MarkAlertAction(int alertScheduleId, int userId, int alertActionId)
         {
-            // this is where the code goes to mark the alert activity
-            throw new NotImplementedException();
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spPostAlertActivity", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@AlertScheduleId", SqlDbType.Int).Value = alertScheduleId;
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@ActionId", SqlDbType.Int).Value = alertActionId;
+                    try
+                    {
+                        sqlConnection.Open();
+
+                        //Execute Stored Procedure
+                        sqlCommand.ExecuteNonQuery();                        
+                    }
+
+                    catch (Exception exception)
+                    {
+
+                    }
+                    finally
+                    {
+                        sqlCommand.Dispose();
+
+                        if (sqlConnection != null)
+                        {
+                            sqlConnection.Close();
+                        }
+                    }
+                }
+            }
         }
     }
 }
