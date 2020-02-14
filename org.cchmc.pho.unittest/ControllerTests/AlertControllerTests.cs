@@ -135,12 +135,12 @@ namespace org.cchmc.pho.unittest.controllertests
             var alertActionId = 9;
             var alertDateTime = DateTime.Parse("1/19/20");
             
-            _mockAlertDal.Setup(p => p.MarkAlertAction(userId, alertSchedule, alertActionId, alertDateTime))
+            _mockAlertDal.Setup(p => p.MarkAlertAction(alertSchedule,userId, alertActionId))
                 .Returns(Task.CompletedTask).Verifiable();
             _alertController = new AlertController(_mockLogger.Object, _mapper, _mockAlertDal.Object, _mockOptions.Object);
 
             // execute
-            var result = await _alertController.MarkAlertAction(userId.ToString(), alertSchedule.ToString(), new AlertActionViewModel()
+            var result = await _alertController.MarkAlertAction(alertSchedule.ToString(), userId.ToString(),  new AlertActionViewModel()
             {
                 ActionDateTime = alertDateTime,
                 AlertActionId = alertActionId
@@ -164,7 +164,7 @@ namespace org.cchmc.pho.unittest.controllertests
             _alertController = new AlertController(_mockLogger.Object, _mapper, _mockAlertDal.Object, _mockOptions.Object);
 
             // execute
-            var result = await _alertController.MarkAlertAction(userId.ToString(), alertSchedule.ToString(), new AlertActionViewModel()
+            var result = await _alertController.MarkAlertAction(alertSchedule.ToString(),userId.ToString(),new AlertActionViewModel()
             {
                 ActionDateTime = alertDateTime,
                 AlertActionId = alertActionId
@@ -173,7 +173,7 @@ namespace org.cchmc.pho.unittest.controllertests
             // assert
             Assert.AreEqual(400, result.StatusCode);
             Assert.AreEqual("user is not a valid integer", result.Value);
-            _mockAlertDal.Verify(p => p.MarkAlertAction(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<DateTime>()), Times.Never);
+            _mockAlertDal.Verify(p => p.MarkAlertAction(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()), Times.Never);
         }
 
         [TestMethod]
@@ -188,16 +188,15 @@ namespace org.cchmc.pho.unittest.controllertests
             _alertController = new AlertController(_mockLogger.Object, _mapper, _mockAlertDal.Object, _mockOptions.Object);
 
             // execute
-            var result = await _alertController.MarkAlertAction(userId.ToString(), alertSchedule.ToString(), new AlertActionViewModel()
+            var result = await _alertController.MarkAlertAction(alertSchedule.ToString(),userId.ToString(), new AlertActionViewModel()
             {
-                ActionDateTime = alertDateTime,
                 AlertActionId = alertActionId
             }) as ObjectResult;
 
             // assert
             Assert.AreEqual(400, result.StatusCode);
             Assert.AreEqual("alertSchedule is not a valid integer", result.Value);
-            _mockAlertDal.Verify(p => p.MarkAlertAction(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<DateTime>()), Times.Never);
+            _mockAlertDal.Verify(p => p.MarkAlertAction(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()), Times.Never);
         }
 
         [TestMethod]
@@ -209,15 +208,14 @@ namespace org.cchmc.pho.unittest.controllertests
             var alertActionId = 9;
             var alertDateTime = DateTime.Parse("1/19/20");
 
-            _mockAlertDal.Setup(p => p.MarkAlertAction(userId, alertSchedule, alertActionId, alertDateTime))
+            _mockAlertDal.Setup(p => p.MarkAlertAction(alertSchedule,userId,alertActionId))
                 .Throws(new Exception()).Verifiable();
             _alertController = new AlertController(_mockLogger.Object, _mapper, _mockAlertDal.Object, _mockOptions.Object);
 
             // execute
-            var result = await _alertController.MarkAlertAction(userId.ToString(), alertSchedule.ToString(), new AlertActionViewModel()
+            var result = await _alertController.MarkAlertAction(alertSchedule.ToString(), userId.ToString(),new AlertActionViewModel()
             {
-                ActionDateTime = alertDateTime,
-                AlertActionId = alertActionId
+                   AlertActionId = alertActionId
             }) as ObjectResult;
 
             // assert
