@@ -2,12 +2,12 @@
 using org.cchmc.pho.core.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System.Data.SqlClient;
 using System.Data;
 using System.Linq;
+
 
 namespace org.cchmc.pho.core.DataAccessLayer
 {
@@ -35,7 +35,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
                     try
                     {
-                        sqlConnection.Open();
+                        await sqlConnection.OpenAsync();                      
                         // Define the data adapter and fill the dataset
                         using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                         {
@@ -60,17 +60,10 @@ namespace org.cchmc.pho.core.DataAccessLayer
                    
                     catch (Exception exception)
                     {
-
+                        // log any exceptions that happen and return the error to the user
+                        
                     }
-                    finally
-                    {
-                        sqlCommand.Dispose();
-
-                        if (sqlConnection != null)
-                        {
-                            sqlConnection.Close();
-                        }
-                    }
+                   
                     return alerts;
                 }
             }
@@ -87,13 +80,14 @@ namespace org.cchmc.pho.core.DataAccessLayer
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spPostAlertActivity", sqlConnection))
                 {
+                    try
+                    {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add("@AlertScheduleId", SqlDbType.Int).Value = alertScheduleId;
                     sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
                     sqlCommand.Parameters.Add("@ActionId", SqlDbType.Int).Value = alertActionId;
-                    try
-                    {
-                        sqlConnection.Open();
+                   
+                        await sqlConnection.OpenAsync();
 
                         //Execute Stored Procedure
                         sqlCommand.ExecuteNonQuery();                        
@@ -101,17 +95,10 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                     catch (Exception exception)
                     {
-
+                        // log any exceptions that happen and return the error to the user
+                       
                     }
-                    finally
-                    {
-                        sqlCommand.Dispose();
-
-                        if (sqlConnection != null)
-                        {
-                            sqlConnection.Close();
-                        }
-                    }
+                  
                 }
             }
         }
