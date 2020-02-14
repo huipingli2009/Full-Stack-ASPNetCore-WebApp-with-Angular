@@ -9,7 +9,7 @@ namespace org.cchmc.pho.core.Interfaces
     public interface IAlert
     {
         Task<List<Alert>> ListActiveAlerts(int userId);
-        Task MarkAlertAction(int userId, int alertScheduleId, int alertActionId, DateTime actionDateTime);
+        Task MarkAlertAction(int alertScheduleId, int userId, int alertActionId);
       
     }
 }
