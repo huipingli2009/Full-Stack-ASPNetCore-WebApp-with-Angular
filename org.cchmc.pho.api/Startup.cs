@@ -13,7 +13,9 @@ using org.cchmc.pho.api.Mappings;
 using org.cchmc.pho.core.DataAccessLayer;
 using org.cchmc.pho.core.Interfaces;
 using org.cchmc.pho.core.Models;
+using org.cchmc.pho.identity;
 using org.cchmc.pho.identity.Extensions;
+using org.cchmc.pho.identity.Interfaces;
 
 namespace org.cchmc.pho.api
 {
@@ -47,9 +49,16 @@ namespace org.cchmc.pho.api
                             //}
                             return true;
                         }, "failure message");
+            services.AddOptions<ConnectionStrings>()
+                        .Bind(Configuration.GetSection(ConnectionStrings.SECTION_KEY))
+                        .ValidateDataAnnotations() //todo 
+                        .Validate(c =>
+                        {
+                            return true;
+                        }, "failure message");
 
-            var phoDbConnStr = Configuration.GetConnectionString("pho-db");
-            var phoDwConnStr = Configuration.GetConnectionString("pho-dw");
+            var phoDbConnStr = Configuration.GetConnectionString("phodb");
+            var phoDwConnStr = Configuration.GetConnectionString("phodw");
 
             services.AddMvc()
                 .AddControllersAsServices();
@@ -68,7 +77,7 @@ namespace org.cchmc.pho.api
 
 
             //NOTE: register service
-            services.AddTransient<IAlert>(p => new AlertDAL(phoDbConnStr));
+            services.AddTransient<IAlert, AlertDAL>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

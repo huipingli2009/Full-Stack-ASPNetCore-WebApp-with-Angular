@@ -1,5 +1,7 @@
-﻿using org.cchmc.pho.core.DataModels;
+﻿using Microsoft.Extensions.Options;
+using org.cchmc.pho.core.DataModels;
 using org.cchmc.pho.core.Interfaces;
+using org.cchmc.pho.core.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,9 +14,9 @@ namespace org.cchmc.pho.core.DataAccessLayer
     {
         private readonly string _connectionString;
 
-        public AlertDAL(string connectionString)
+        public AlertDAL(IOptions<ConnectionStrings> options)
         {
-            _connectionString = connectionString;
+            _connectionString = options.Value.phodb;
         }
 
         public async Task<List<Alert>> ListActiveAlerts(int userId)

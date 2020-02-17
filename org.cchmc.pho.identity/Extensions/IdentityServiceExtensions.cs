@@ -26,7 +26,7 @@ namespace org.cchmc.pho.identity.Extensions
                 .AddJwtBearer();
             services.AddDbContext<IdentityDataContext>(opts =>
             {
-                opts.UseSqlServer(configuration.GetConnectionString("pho-identity"), optionsBuilder =>
+                opts.UseSqlServer(configuration.GetConnectionString("phoidentity"), optionsBuilder =>
                 {
                     optionsBuilder.MigrationsAssembly("org.cchmc.pho.identity");
                 });
@@ -49,14 +49,10 @@ namespace org.cchmc.pho.identity.Extensions
                 .AddEntityFrameworkStores<IdentityDataContext>()
                 .AddUserManager<UserManager<User>>()
                 .AddSignInManager<SignInManager<User>>()
+                .AddRoleManager<RoleManager<IdentityRole>>() // this might be unnecessary but included so we know we're using role manager specifically
                 .AddDefaultTokenProviders();
 
-            var provider = services.BuildServiceProvider();
-            var userManager = provider.GetRequiredService<UserManager<User>>();
-            var signInManager = provider.GetRequiredService<SignInManager<User>>();
-            var jwt = provider.GetService<IOptions<JwtAuthentication>>();
-            services.AddTransient<IUserService>(p => new UserService(configuration.GetConnectionString("pho-identity"),
-                                                                     jwt, userManager, signInManager));
+            services.AddTransient<IUserService, UserService>();
         }
 
         public static void ConfigureIdentityServices<TStartup>(this IApplicationBuilder app, ILogger<TStartup> logger)

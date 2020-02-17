@@ -8,7 +8,8 @@ namespace org.cchmc.pho.api.Mappings
     {
         public UserMappings()
         {
-            CreateMap<User, UserViewModel>();
+            CreateMap<User, UserViewModel>()
+                .ForMember(destination => destination.Password, action => action.Ignore());
         }
     }
 }
