@@ -183,7 +183,6 @@ namespace org.cchmc.pho.unittest.controllertests
             var userId = 5;
             var alertSchedule = "asdf";
             var alertActionId = 9;
-            var alertDateTime = DateTime.Parse("1/19/20");
 
             _alertController = new AlertController(_mockLogger.Object, _mapper, _mockAlertDal.Object, _mockOptions.Object);
 
@@ -206,7 +205,6 @@ namespace org.cchmc.pho.unittest.controllertests
             var userId = 5;
             var alertSchedule = 7;
             var alertActionId = 9;
-            var alertDateTime = DateTime.Parse("1/19/20");
 
             _mockAlertDal.Setup(p => p.MarkAlertAction(alertSchedule,userId,alertActionId))
                 .Throws(new Exception()).Verifiable();

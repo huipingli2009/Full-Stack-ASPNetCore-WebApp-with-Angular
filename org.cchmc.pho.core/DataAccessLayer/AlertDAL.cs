@@ -1,9 +1,11 @@
 ﻿using org.cchmc.pho.core.DataModels;
 using org.cchmc.pho.core.Interfaces;
+using org.cchmc.pho.core.Settings;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
 using System.Data.SqlClient;
 using System.Data;
 using System.Linq;
@@ -14,12 +16,11 @@ namespace org.cchmc.pho.core.DataAccessLayer
     // TODO: all ADO and DI setup
     public class AlertDAL : IAlert
     {
-        private IConfiguration _config;
-        private string _connectionString;
-        public AlertDAL(IConfiguration config)
+        //private IConfiguration _config;
+        private ConnectionStrings _connectionStrings;
+        public AlertDAL(IOptions<ConnectionStrings> options, ILogger<AlertDAL> logger)
         {
-            _config = config;
-            _connectionString = _config.GetConnectionString("pho-db");
+            _connectionStrings = options.Value;
         }
 
       
@@ -27,78 +28,56 @@ namespace org.cchmc.pho.core.DataAccessLayer
         {
             DataTable dataTable = new DataTable();
             List<Alert> alerts = new List<Alert>();
-            using (SqlConnection sqlConnection = new SqlConnection(_connectionString) )
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB) )
             {                
                 using (SqlCommand sqlCommand = new SqlCommand("spGetActiveAlerts", sqlConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
-                    try
+                    
+                    await sqlConnection.OpenAsync();                      
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
-                        await sqlConnection.OpenAsync();                      
-                        // Define the data adapter and fill the dataset
-                        using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
-                        {
-                            da.Fill(dataTable);
-                            alerts = (from DataRow dr in dataTable.Rows
-                                      select new Alert()
-                                      {
-                                          AlertId = Convert.ToInt32(dr["AlertId"]),
-                                          AlertScheduleId = Convert.ToInt32(dr["Alert_ScheduleId"]),
-                                          Message = dr["AlertMessage"].ToString(),
-                                          Url = dr["URL"].ToString(),
-                                          LinkText = dr["URL_Label"].ToString(),
-                                          Definition = dr["AlertDefinition"].ToString()
+                        da.Fill(dataTable);
+                        alerts = (from DataRow dr in dataTable.Rows
+                                    select new Alert()
+                                    {
+                                        AlertId = Convert.ToInt32(dr["AlertId"]),
+                                        AlertScheduleId = Convert.ToInt32(dr["Alert_ScheduleId"]),
+                                        Message = dr["AlertMessage"].ToString(),
+                                        Url = dr["URL"].ToString(),
+                                        LinkText = dr["URL_Label"].ToString(),
+                                        Definition = dr["AlertDefinition"].ToString()
+                                    }
 
-                                      }
-
-                                ).ToList();
+                            ).ToList();
                             
-                        }
-                    }
-
-                   
-                    catch (Exception exception)
-                    {
-                        // log any exceptions that happen and return the error to the user
-                        
                     }
                    
                     return alerts;
                 }
             }
-
-            
-                // this is where the code goes to return the alerts by user
-                throw new NotImplementedException();
+                        
         }
 
         public async Task MarkAlertAction(int alertScheduleId, int userId, int alertActionId)
         {
 
-            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spPostAlertActivity", sqlConnection))
-                {
-                    try
-                    {
+                {                    
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add("@AlertScheduleId", SqlDbType.Int).Value = alertScheduleId;
                     sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
                     sqlCommand.Parameters.Add("@ActionId", SqlDbType.Int).Value = alertActionId;
                    
-                        await sqlConnection.OpenAsync();
+                    await sqlConnection.OpenAsync();
 
-                        //Execute Stored Procedure
-                        sqlCommand.ExecuteNonQuery();                        
-                    }
-
-                    catch (Exception exception)
-                    {
-                        // log any exceptions that happen and return the error to the user
-                       
-                    }
-                  
+                    //Execute Stored Procedure
+                    sqlCommand.ExecuteNonQuery();                        
+                                      
                 }
             }
         }
