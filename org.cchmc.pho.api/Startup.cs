@@ -57,9 +57,6 @@ namespace org.cchmc.pho.api
                             return true;
                         }, "failure message");
 
-            var phoDbConnStr = Configuration.GetConnectionString("phodb");
-            var phoDwConnStr = Configuration.GetConnectionString("phodw");
-
             services.AddMvc()
                 .AddControllersAsServices();
 
