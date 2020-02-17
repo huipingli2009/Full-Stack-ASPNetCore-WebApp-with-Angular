@@ -183,6 +183,48 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         // TODO: [Authorize(Roles = "PracticeMember,PracticeAdmin,PHOMember,PHOAdmin")]
+        [HttpPatch("user/{userName}/email")] // patch because we're only updating parts
+        [SwaggerResponse(200, type: typeof(bool))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> UpdateUserEmail(string userName, [FromBody] EmailChangeViewModel newEmail)
+        {
+            try
+            {
+                if (newEmail == null)
+                    return BadRequest();
+                if (String.IsNullOrEmpty(userName))
+                    return BadRequest("UserName is null or empty.");
+                if (String.IsNullOrEmpty(newEmail.NewEmailAddress))
+                    return BadRequest("Email is null or empty.");
+
+                string currentUserName = _userService.GetUserNameFromClaims(User.Claims);
+                List<string> currentUserRoles = _userService.GetRolesFromClaims(User.Claims);
+
+                // validate the username provided is a user
+                User user = await _userService.GetUserByUserName(userName);
+                if (user == null)
+                    return BadRequest("User does not exist.");
+
+                if (!InAnyAdminRole(currentUserRoles)
+                    && !string.Equals(currentUserName, user.UserName, StringComparison.OrdinalIgnoreCase))
+                {
+                    // if you're not in an Admin role, you can't set another person's password
+                    return BadRequest("Cannot update another user's email.");
+                }
+
+                // TODO: If you're in the practice admin role, you can only change emails for people in your practice (need StaffDAL or service)
+
+                return Ok(await _userService.ChangeUserEmail(userName, newEmail.NewEmailAddress));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+        // TODO: [Authorize(Roles = "PracticeMember,PracticeAdmin,PHOMember,PHOAdmin")]
         [HttpGet("roles")]
         [SwaggerResponse(200, type: typeof(List<string>))]
         [SwaggerResponse(500, type: typeof(string))]

@@ -9,6 +9,7 @@ namespace org.cchmc.pho.identity.Interfaces
     public interface IUserService
     {
         Task<User> Authenticate(string userName, string password);
+        Task<bool> ChangeUserEmail(string userName, string newEmailAddress);
         Task<bool> ChangeUserRoles(string userName, List<string> newRoles); 
         Task<List<string>> GetRoles(string userName);
         List<string> GetRolesFromClaims(IEnumerable<Claim> claims);

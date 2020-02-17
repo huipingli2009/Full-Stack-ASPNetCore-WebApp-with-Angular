@@ -224,6 +224,31 @@ namespace org.cchmc.pho.identity
             }
         }
 
+        public async Task<bool> ChangeUserEmail(string userName, string newEmailAddress)
+        {
+            try
+            {
+                // get the user
+                User user = await GetUserByUserName(userName);
+                if (user == null)
+                    return false;
+
+                // reset the user to get the token
+                string resetToken = await _userManager.GenerateChangeEmailTokenAsync(user, newEmailAddress);
+
+                // use the token to change the password
+                IdentityResult result = await _userManager.ChangeEmailAsync(user, newEmailAddress, resetToken);
+                if (result.Errors.Any())
+                    _logger.LogInformation($"Unable to reset email for user {userName}, {result.Errors.Count()} errors. First: {result.Errors.First()}");
+                return result.Succeeded;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return false;
+            }
+        }
+
         public async Task<List<string>> ListRoles()
         {
             try

@@ -1112,5 +1112,104 @@ namespace org.cchmc.pho.unittest.IdentityTests
             Assert.IsNotNull(result);
             Assert.AreEqual(0, result.Count);
         }
+
+        [TestMethod]
+        public async Task ChangeUserEmail_Success()
+        {
+            // setup
+            var user = new User()
+            {
+                Email = "someone@example.com",
+                FirstName = "Some",
+                LastName = "One",
+                UserName = "myUser"
+            };
+            var email = "asdf";
+            var token = "fhgfwsfdfsdhg";
+            _mockUserManager.Setup(p => p.FindByNameAsync(user.UserName)).Returns(Task.FromResult(user)).Verifiable();
+            _mockUserManager.Setup(p => p.GenerateChangeEmailTokenAsync(user, email)).Returns(Task.FromResult(token)).Verifiable();
+            _mockUserManager.Setup(p => p.ChangeEmailAsync(user, email, token)).Returns(Task.FromResult(IdentityResult.Success)).Verifiable();
+
+            // execute
+            var result = await _userService.ChangeUserEmail(user.UserName, email);
+
+            // assert
+            Assert.IsTrue(result);
+            _mockUserManager.Verify();
+        }
+
+        [TestMethod]
+        public async Task ChangeUserEmail_NoSuchUser_ReturnsFalse()
+        {
+            // setup
+            var user = new User()
+            {
+                Email = "someone@example.com",
+                FirstName = "Some",
+                LastName = "One",
+                UserName = "myUser"
+            };
+            var email = "asdf";
+            _mockUserManager.Setup(p => p.FindByNameAsync(user.UserName)).Returns(Task.FromResult((User)null)).Verifiable();
+
+            // execute
+            var result = await _userService.ChangeUserEmail(user.UserName, email);
+
+            // assert
+            Assert.IsFalse(result);
+            _mockUserManager.Verify();
+            _mockUserManager.Verify(p => p.GenerateChangeEmailTokenAsync(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
+            _mockUserManager.Verify(p => p.ChangeEmailAsync(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task ChangeUserEmail_ChangeReturnsFailure_Failure()
+        {
+            // setup
+            var user = new User()
+            {
+                Email = "someone@example.com",
+                FirstName = "Some",
+                LastName = "One",
+                UserName = "myUser"
+            };
+            var email = "asdf";
+            var token = "fhgfwsfdfsdhg";
+            _mockUserManager.Setup(p => p.FindByNameAsync(user.UserName)).Returns(Task.FromResult(user)).Verifiable();
+            _mockUserManager.Setup(p => p.GenerateChangeEmailTokenAsync(user, email)).Returns(Task.FromResult(token)).Verifiable();
+            _mockUserManager.Setup(p => p.ChangeEmailAsync(user, email, token))
+                .Returns(Task.FromResult(IdentityResult.Failed(new[] { new IdentityError() { Description = "Bad!" } }))).Verifiable();
+
+            // execute
+            var result = await _userService.ChangeUserEmail(user.UserName, email);
+
+            // assert
+            Assert.IsFalse(result);
+            _mockUserManager.Verify();
+        }
+
+        [TestMethod]
+        public async Task ChangeUserEmail_ThrowsException_Failure()
+        {
+            // setup
+            var user = new User()
+            {
+                Email = "someone@example.com",
+                FirstName = "Some",
+                LastName = "One",
+                UserName = "myUser"
+            };
+            var email = "asdf";
+            _mockUserManager.Setup(p => p.FindByNameAsync(user.UserName)).Returns(Task.FromResult(user)).Verifiable();
+            _mockUserManager.Setup(p => p.GenerateChangeEmailTokenAsync(user, email)).Throws(new Exception()).Verifiable();
+
+            // execute
+            var result = await _userService.ResetUserPassword(user.UserName, email);
+
+            // assert
+            Assert.IsFalse(result);
+            _mockUserManager.Verify();
+            _mockUserManager.Verify(p => p.ChangeEmailAsync(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
     }
 }
