@@ -27,6 +27,12 @@ namespace org.cchmc.pho.unittest.IdentityTests
         private Mock<ILogger<UserService>> _mockLogger;
         private Mock<IPasswordValidator<User>> _mockPasswordValidator;
 
+        /*
+         * Found this method on SO: https://stackoverflow.com/questions/49165810/how-to-mock-usermanager-in-net-core-testing
+         * You can't just new Mock<UserManager<User>> like everything else. Also in this SO question is a link to the
+         * Identity source code on GitHub showing how they mock it. Included here for full context:
+         * https://github.com/aspnet/AspNetCore/blob/master/src/Identity/test/Shared/MockHelpers.cs
+         */
         protected static Mock<UserManager<User>> MockUserManager(Mock<IPasswordValidator<User>> mockPasswordValidator)
         {
             var store = new Mock<IUserStore<User>>();
@@ -1204,7 +1210,7 @@ namespace org.cchmc.pho.unittest.IdentityTests
             _mockUserManager.Setup(p => p.GenerateChangeEmailTokenAsync(user, email)).Throws(new Exception()).Verifiable();
 
             // execute
-            var result = await _userService.ResetUserPassword(user.UserName, email);
+            var result = await _userService.ChangeUserEmail(user.UserName, email);
 
             // assert
             Assert.IsFalse(result);

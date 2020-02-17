@@ -71,7 +71,7 @@ namespace org.cchmc.pho.api.Controllers
             {
                 User user = await _userService.GetUserByEmail(emailAddress);
                 if (user == null)
-                    return null;
+                    return Ok(null);
 
                 UserViewModel returnUser = _mapper.Map<UserViewModel>(user);
                 returnUser.Roles = await _userService.GetRoles(user.UserName);
@@ -95,14 +95,14 @@ namespace org.cchmc.pho.api.Controllers
             try
             {
                 if (newPassword == null)
-                    return BadRequest();
-                if (String.IsNullOrEmpty(userName))
+                    return BadRequest("Password null.");
+                if (string.IsNullOrEmpty(userName))
                     return BadRequest("UserName is null or empty.");
-                if (String.IsNullOrEmpty(newPassword.NewPassword))
+                if (string.IsNullOrEmpty(newPassword.NewPassword))
                     return BadRequest("Password is null or empty.");
 
-                string currentUserName = _userService.GetUserNameFromClaims(User.Claims);
-                List<string> currentUserRoles = _userService.GetRolesFromClaims(User.Claims);
+                string currentUserName = _userService.GetUserNameFromClaims(User?.Claims);
+                List<string> currentUserRoles = _userService.GetRolesFromClaims(User?.Claims);
 
                 // validate the username provided is a user
                 User user = await _userService.GetUserByUserName(userName);
@@ -143,14 +143,14 @@ namespace org.cchmc.pho.api.Controllers
             try
             {
                 if (newRoles == null)
-                    return BadRequest();
-                if (String.IsNullOrEmpty(userName))
+                    return BadRequest("Role list null.");
+                if (string.IsNullOrEmpty(userName))
                     return BadRequest("UserName is null or empty.");
                 if (newRoles.NewRoles == null)
                     newRoles.NewRoles = new List<string>();
 
-                string currentUserName = _userService.GetUserNameFromClaims(User.Claims);
-                List<string> currentUserRoles = _userService.GetRolesFromClaims(User.Claims);
+                string currentUserName = _userService.GetUserNameFromClaims(User?.Claims);
+                List<string> currentUserRoles = _userService.GetRolesFromClaims(User?.Claims);
 
                 // validate the username provided is a user
                 User user = await _userService.GetUserByUserName(userName);
@@ -192,14 +192,14 @@ namespace org.cchmc.pho.api.Controllers
             try
             {
                 if (newEmail == null)
-                    return BadRequest();
-                if (String.IsNullOrEmpty(userName))
+                    return BadRequest("Email null.");
+                if (string.IsNullOrEmpty(userName))
                     return BadRequest("UserName is null or empty.");
-                if (String.IsNullOrEmpty(newEmail.NewEmailAddress))
+                if (string.IsNullOrEmpty(newEmail.NewEmailAddress))
                     return BadRequest("Email is null or empty.");
 
-                string currentUserName = _userService.GetUserNameFromClaims(User.Claims);
-                List<string> currentUserRoles = _userService.GetRolesFromClaims(User.Claims);
+                string currentUserName = _userService.GetUserNameFromClaims(User?.Claims);
+                List<string> currentUserRoles = _userService.GetRolesFromClaims(User?.Claims);
 
                 // validate the username provided is a user
                 User user = await _userService.GetUserByUserName(userName);
@@ -209,7 +209,7 @@ namespace org.cchmc.pho.api.Controllers
                 if (!InAnyAdminRole(currentUserRoles)
                     && !string.Equals(currentUserName, user.UserName, StringComparison.OrdinalIgnoreCase))
                 {
-                    // if you're not in an Admin role, you can't set another person's password
+                    // if you're not in an Admin role, you can't set another person's email
                     return BadRequest("Cannot update another user's email.");
                 }
 
@@ -259,6 +259,9 @@ namespace org.cchmc.pho.api.Controllers
         private List<string> PatchIncomingRoleList(List<string> incomingRoleList, List<string> currentRoleList)
         {
             var phoRoleList = new List<string> { "PHOAdmin", "PHOMember" };
+            // We need to remove those items, even if we re-add them later, because this user is not authorized to add PHO roles
+            incomingRoleList = incomingRoleList.Where(p => !phoRoleList.Contains(p)).ToList();
+
             foreach (var r in phoRoleList)
             {
                 if (currentRoleList.Contains(r) && !incomingRoleList.Contains(r))
