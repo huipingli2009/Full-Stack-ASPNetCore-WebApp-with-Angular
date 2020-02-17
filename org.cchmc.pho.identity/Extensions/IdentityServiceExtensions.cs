@@ -24,6 +24,13 @@ namespace org.cchmc.pho.identity.Extensions
             services.AddSingleton<IPostConfigureOptions<JwtBearerOptions>, ConfigureJwtBearerOptions>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer();
+            services.AddOptions<JwtAuthentication>()
+                        .Bind(configuration.GetSection("JwtAuthentication"))
+                        .ValidateDataAnnotations() //todo 
+                        .Validate(c =>
+                        {
+                            return true;
+                        }, "failure message");
             services.AddDbContext<IdentityDataContext>(opts =>
             {
                 opts.UseSqlServer(configuration.GetConnectionString("phoidentity"), optionsBuilder =>

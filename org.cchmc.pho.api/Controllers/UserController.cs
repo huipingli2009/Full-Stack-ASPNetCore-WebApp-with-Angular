@@ -62,7 +62,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         // TODO: [Authorize(Roles = "PracticeAdmin,PHOAdmin")]
-        [HttpGet("user?email={emailAddress}")]
+        [HttpGet("userByEmail/{emailAddress}")]
         [SwaggerResponse(200, type: typeof(UserViewModel))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> GetUserByEmailAddress(string emailAddress)
