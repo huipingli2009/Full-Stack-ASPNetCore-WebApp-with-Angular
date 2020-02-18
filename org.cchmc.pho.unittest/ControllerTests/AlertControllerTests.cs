@@ -142,7 +142,6 @@ namespace org.cchmc.pho.unittest.controllertests
             // execute
             var result = await _alertController.MarkAlertAction(alertSchedule.ToString(), userId.ToString(),  new AlertActionViewModel()
             {
-                ActionDateTime = alertDateTime,
                 AlertActionId = alertActionId
             });
 
@@ -166,7 +165,6 @@ namespace org.cchmc.pho.unittest.controllertests
             // execute
             var result = await _alertController.MarkAlertAction(alertSchedule.ToString(),userId.ToString(),new AlertActionViewModel()
             {
-                ActionDateTime = alertDateTime,
                 AlertActionId = alertActionId
             }) as ObjectResult;
 
