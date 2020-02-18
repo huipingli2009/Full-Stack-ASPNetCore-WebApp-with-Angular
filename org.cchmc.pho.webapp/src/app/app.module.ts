@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
+import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatBadgeModule} from '@angular/material/badge';
@@ -39,17 +40,26 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatTreeModule} from '@angular/material/tree';
+import { PatientsComponent } from './patients/patients.component';
+import { StaffComponent } from './staff/staff.component';
+import { FilesComponent } from './files/files.component';
+import { WorkbooksComponent } from './workbooks/workbooks.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    PatientsComponent,
+    StaffComponent,
+    FilesComponent,
+    WorkbooksComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    FlexLayoutModule,
     MatSliderModule,
     MatMenuModule,
     MatAutocompleteModule,

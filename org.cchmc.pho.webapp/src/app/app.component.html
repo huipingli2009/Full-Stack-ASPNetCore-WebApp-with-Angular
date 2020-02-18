@@ -1,13 +1,17 @@
 <!-- Toolbar -->
-<nav class="navbar navbar-fixed-top navbar-dark bg-inverse">
-  <div class="container">
-      <a class="navbar-brand">Angular Router</a>
-      <ul class="nav navbar-nav" routerLinkActive="active">
-          <li class="nav-item"><a class="nav-link" routerLink="dashboard">Dashboard</a></li>
-      </ul>
+<div fxLayout="row" class="home-submenu" > 
+  <div fxLayout="row" fxFlex="10">
+    LOGO
   </div>
-</nav>
-<button mat-button routerLink="dashboard">Dashboard</button>
+  <div fxLayout="row" fxLayoutAlign="end center" fxFlex>
+    <button mat-button routerLink="dashboard">Dashboard</button>
+    <button mat-button routerLink="patients">Patients</button>
+    <button mat-button routerLink="staff">Staff</button>
+    <button mat-button routerLink="files">Files</button>
+    <button mat-button routerLink="workbooks">Workbooks</button>
+  </div>
+
+</div>
 
 
 
