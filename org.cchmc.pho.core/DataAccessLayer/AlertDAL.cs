@@ -17,7 +17,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
     public class AlertDAL : IAlert
     {
         //private IConfiguration _config;
-        private ConnectionStrings _connectionStrings;
+        private readonly ConnectionStrings _connectionStrings;
         public AlertDAL(IOptions<ConnectionStrings> options, ILogger<AlertDAL> logger)
         {
             _connectionStrings = options.Value;
@@ -39,7 +39,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     // Define the data adapter and fill the dataset
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
-                        da.Fill(dataTable);
+                        await Task.Run(() => da.Fill(dataTable));
                         alerts = (from DataRow dr in dataTable.Rows
                                     select new Alert()
                                     {
@@ -76,7 +76,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     await sqlConnection.OpenAsync();
 
                     //Execute Stored Procedure
-                    sqlCommand.ExecuteNonQuery();                        
+                    await sqlCommand.ExecuteNonQueryAsync();                   
                                       
                 }
             }

@@ -15,7 +15,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
     public class ContentDAL:IContent
     {
         //private IConfiguration _config;
-        private ConnectionStrings _connectionStrings;
+        private readonly ConnectionStrings _connectionStrings;
         public ContentDAL(IOptions<ConnectionStrings> options, ILogger<AlertDAL> logger)
         {
             _connectionStrings = options.Value;
@@ -36,8 +36,8 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
-                        da.Fill(dataTable);
-                       
+                        await Task.Run(() => da.Fill(dataTable));
+
 
                         contents = (from DataRow dr in dataTable.Rows
                                   select new Content()
