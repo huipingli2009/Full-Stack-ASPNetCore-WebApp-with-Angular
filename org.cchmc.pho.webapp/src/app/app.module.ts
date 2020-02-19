@@ -44,6 +44,7 @@ import { PatientsComponent } from './patients/patients.component';
 import { StaffComponent } from './staff/staff.component';
 import { FilesComponent } from './files/files.component';
 import { WorkbooksComponent } from './workbooks/workbooks.component';
+import { ToastrModule } from 'ngx-toastr';
 
 
 @NgModule({
@@ -60,6 +61,11 @@ import { WorkbooksComponent } from './workbooks/workbooks.component';
     BrowserAnimationsModule,
     HttpClientModule,
     FlexLayoutModule,
+    ToastrModule.forRoot({
+      maxOpened: 3,
+      autoDismiss: false,
+      newestOnTop: true
+    }),
     MatSliderModule,
     MatMenuModule,
     MatAutocompleteModule,

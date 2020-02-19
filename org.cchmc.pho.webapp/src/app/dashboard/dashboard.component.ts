@@ -1,17 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TestService } from '../test.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
+
 export class DashboardComponent implements OnInit {
 
   alerts: any = [];
 
-  constructor(public rest: TestService, private route: ActivatedRoute, private router: Router) { }
+  constructor(public rest: TestService, private route: ActivatedRoute, private router: Router, private toastr: ToastrService) { }
 
   ngOnInit() {
     this.getAlerts(3);
@@ -24,5 +26,15 @@ export class DashboardComponent implements OnInit {
     });
     console.log(this.alerts);
   }
+
+  showToaster(){
+    this.toastr.success(this.alerts.AlertMessage, '', {
+      closeButton: true,
+      disableTimeOut: true,
+      enableHtml: true,
+      positionClass: 'toast-inline'
+
+    });
+}
 
 }
