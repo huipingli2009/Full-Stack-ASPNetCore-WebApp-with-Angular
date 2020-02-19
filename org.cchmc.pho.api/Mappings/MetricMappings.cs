@@ -4,11 +4,11 @@ using org.cchmc.pho.core.DataModels;
 
 namespace org.cchmc.pho.api.Mappings
 {
-    public class AlertMappings : Profile
+    public class MetricMappings : Profile
     {
-        public AlertMappings()
+        public MetricMappings()
         {
-            CreateMap<Alert, AlertViewModel>();
+            CreateMap<Metric, MetricViewModel>();
         }
     }
 }
