@@ -1,0 +1,31 @@
+{
+  "Alerts": [
+    {
+      "id": 3,
+      "AlertId": 1,
+      "Alert_ScheduleId": 1,
+      "AlertMessage": "Don't forget your workbook is due 12/15/2019!",
+      "URL": "https://insight.invisionapp.com/share/2YUPA0MVZB4#/screens/398015819",
+      "URL_Label": "GO TO WORKBOOK",
+      "AlertDefinition": "NULL"
+    },
+    {
+      "id": 3,
+      "AlertId": 5,
+      "Alert_ScheduleId": 9,
+      "AlertMessage": "Warning your Workbook is Past Due!",
+      "URL": "https://insight.invisionapp.com/d/main/#/console/18823247/398015819/preview",
+      "URL_Label": "GO TO WORKBOOK",
+      "AlertDefinition": "NULL"
+    },
+    {
+      "id": 3,
+      "AlertId": 3,
+      "Alert_ScheduleId": 6,
+      "AlertMessage": "Your Daily ED Patient Report for 01/01/2020 is now available!",
+      "URL": "https://insight.invisionapp.com/share/2YUPA0MVZB4#/screens/398259767",
+      "URL_Label": "VIEW IT HERE",
+      "AlertDefinition": "Alert is triggered by an ED/Urgent care visit in the last 48hrs."
+    }
+  ]
+}

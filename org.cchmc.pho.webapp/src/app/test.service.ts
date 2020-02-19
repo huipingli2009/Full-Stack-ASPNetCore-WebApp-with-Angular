@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders, HttpErrorResponse, HttpClientModule } from '@a
 import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 
-const endpoint = 'http://localhost:44302/api/';
+const endpoint = 'http://localhost:3000/';
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type':  'application/json'
@@ -23,7 +23,7 @@ export class TestService {
   }
   
   getAlerts(id): Observable<any> {
-    return this.http.get(endpoint + 'Alerts/active/' + id).pipe(
+    return this.http.get(endpoint + 'Alerts/' + id).pipe(
       map(this.extractData));
   }
 
