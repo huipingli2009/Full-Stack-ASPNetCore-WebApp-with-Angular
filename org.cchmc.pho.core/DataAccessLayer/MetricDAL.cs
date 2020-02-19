@@ -16,8 +16,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
     public class MetricDAL : IMetric
     {
-        //private IConfiguration _config;
-        private ConnectionStrings _connectionStrings;
+        private readonly ConnectionStrings _connectionStrings;
         public MetricDAL(IOptions<ConnectionStrings> options, ILogger<AlertDAL> logger)
         {
             _connectionStrings = options.Value;
@@ -37,7 +36,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     // Define the data adapter and fill the dataset
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
-                        da.Fill(dataTable);
+                        await Task.Run(() => da.Fill(dataTable));
                         metrics = (from DataRow dr in dataTable.Rows
                                    select new Metric()
                                    {
@@ -70,7 +69,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     // Define the data adapter and fill the dataset
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
-                        da.Fill(dataTable);
+                        await Task.Run(() => da.Fill(dataTable));
                         edCharts = (from DataRow dr in dataTable.Rows
                                    select new EDChart()
                                    {
@@ -104,7 +103,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     // Define the data adapter and fill the dataset
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
-                        da.Fill(dataTable);
+                        await Task.Run(() => da.Fill(dataTable));
                         details = (from DataRow dr in dataTable.Rows
                                    select new EDDetail()
                                    {
