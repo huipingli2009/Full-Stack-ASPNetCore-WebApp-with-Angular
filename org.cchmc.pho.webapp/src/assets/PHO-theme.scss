@@ -10,7 +10,7 @@ $fontConfig: (
   display-4: mat-typography-level(112px, 112px, 300, 'Lato', -0.0134em),
   display-3: mat-typography-level(56px, 56px, 400, 'Lato', -0.0089em),
   display-2: mat-typography-level(45px, 48px, 400, 'Lato', 0.0000em),
-  display-1: mat-typography-level(34px, 40px, 400, 'Lato', 0.0074em),
+  display-1: mat-typography-level(26px, 30px, 400, 'Arvo', 0.0074em),
   headline: mat-typography-level(24px, 32px, 400, 'Lato', 0.0000em),
   title: mat-typography-level(20px, 32px, 500, 'Lato', 0.0075em),
   subheading-2: mat-typography-level(16px, 28px, 400, 'Lato', 0.0094em),
@@ -140,8 +140,8 @@ $mat-dark-theme-background: (
 
 body {
   --primary-color: #00a896;
-  --primary-lighter-color: #b3e5e0;
-  --primary-darker-color: #008d79;
+  --primary-lighter-color: #00A896;
+  --primary-darker-color: #006D63;
   --text-primary-color: #{$light-primary-text};
   --text-primary-lighter-color: #{$dark-primary-text};
   --text-primary-darker-color: #{$light-primary-text};
@@ -149,8 +149,8 @@ body {
 
 $mat-primary: (
   main: #00a896,
-  lighter: #b3e5e0,
-  darker: #008d79,
+  lighter: #00A896,
+  darker: #006D63,
   200: #00a896, // For slide toggle,
   contrast : (
     main: $light-primary-text,

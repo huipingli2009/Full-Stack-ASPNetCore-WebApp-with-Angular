@@ -35,4 +35,43 @@ body {
     background-color: #FAFAFA;
 }
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; }
+/* Main Menu (Will add additional options in phase 2) */
+.main-menu {
+    background-color: white;
+    height: 121px;
+    box-shadow: 0 2px 4px 0 rgba(0,109,99,0.1);
+    padding: 23px 93px 23px;
+    .logo-col {
+        margin-right: 166px;
+    }
+    .logo {
+        height: 58px;
+        width: 188px;
+    }
+    button {
+        color: var(--primary-darker-color);
+        font-size: 16px;
+        line-height: 22px;
+        font-weight: bold;
+    }
+    button:after {
+        content: ""; 
+        display: block; 
+        margin: 0 auto; 
+        width: 98%; 
+        padding-top: 0px; 
+        border-bottom: 1.5px solid var(--primary-darker-color);
+    }
+    button:hover {
+        background-color: white;
+    }
+}
+
+/* Home Submenu (Dashboard, Patients, Staff, Files, Wookbook */
+.home-submenu {
+    margin: 21px 107px 23px;
+    .practice-title {
+        color: var(--primary-color);
+    }
+}

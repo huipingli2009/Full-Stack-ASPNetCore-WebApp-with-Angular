@@ -1,7 +1,17 @@
-<!-- Toolbar -->
+
+<!-- Main Menu TODO: Add additional pages (Phase 2)-->
+<div fxLayout="row" class="main-menu">
+  <div class="logo-col" fxLayout="row" fxFlex="188px" fxLayoutAlign="start end">
+    <img class="logo" src="assets/img/TSCHS_LOGO_PMS-SPOT-COLOR.png">
+  </div>
+  <div fxLayout="row" fxLayoutAlign="start end" fxFlex>
+    <button mat-button routerLink="dashboard">Home</button>
+  </div>
+</div>
+<!-- Submenu - Home -->
 <div fxLayout="row" class="home-submenu" > 
-  <div fxLayout="row" fxFlex="10">
-    LOGO
+  <div fxLayout="row" fxFlex="20" fxLayoutAlign="start center">
+    <h1 class="practice-title">ESD Pediatric Group</h1>
   </div>
   <div fxLayout="row" fxLayoutAlign="end center" fxFlex>
     <button mat-button routerLink="dashboard">Dashboard</button>
