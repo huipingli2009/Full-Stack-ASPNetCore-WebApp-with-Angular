@@ -17,6 +17,7 @@ using org.cchmc.pho.core.DataAccessLayer;
 using org.cchmc.pho.core.DataModels;
 using org.cchmc.pho.core.Interfaces;
 using org.cchmc.pho.core.Models;
+using org.cchmc.pho.core.Settings;
 
 namespace org.cchmc.pho.api
 {
@@ -53,6 +54,7 @@ namespace org.cchmc.pho.api
 
             var connStr = Configuration.GetConnectionString("pho-db");
 
+            services.Configure<ConnectionStrings>(options => Configuration.GetSection("ConnectionStrings").Bind(options));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -61,9 +63,10 @@ namespace org.cchmc.pho.api
             });
 
 
-            //NOTE: register service
+            //NOTE: register service    
             services.AddTransient<IAlert, AlertDAL>();
 
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
