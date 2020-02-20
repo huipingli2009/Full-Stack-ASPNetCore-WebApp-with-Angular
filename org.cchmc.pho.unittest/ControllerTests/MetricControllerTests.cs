@@ -25,7 +25,6 @@ namespace org.cchmc.pho.unittest.controllertests
         private MetricController _MetricController;
         private Mock<ILogger<MetricController>> _mockLogger;
         private Mock<IMetric> _mockMetricDal;
-        private Mock<IOptions<CustomOptions>> _mockOptions;
         private IMapper _mapper;
 
         [TestInitialize]
@@ -39,8 +38,6 @@ namespace org.cchmc.pho.unittest.controllertests
             _mapper = config.CreateMapper();
             _mockMetricDal = new Mock<IMetric>();
             _mockLogger = new Mock<ILogger<MetricController>>();
-            //todo populate values later.
-            _mockOptions.Setup(op => op.Value).Returns(new CustomOptions());
 
         }
 
