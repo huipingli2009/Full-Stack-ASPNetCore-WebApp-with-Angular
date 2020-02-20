@@ -28,6 +28,7 @@ namespace org.cchmc.pho.identity.Extensions
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(token =>
                 {
+                    // TODO: Should probably include all or some of this
                     //token.RequireHttpsMetadata = false;
                     //token.SaveToken = true;
                     //token.TokenValidationParameters = new TokenValidationParameters()

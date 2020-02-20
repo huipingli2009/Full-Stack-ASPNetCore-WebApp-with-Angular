@@ -96,9 +96,9 @@ namespace org.cchmc.pho.api.Controllers
             {
                 if (newPassword == null)
                     return BadRequest("Password null.");
-                if (string.IsNullOrEmpty(userName))
+                if (string.IsNullOrWhiteSpace(userName))
                     return BadRequest("UserName is null or empty.");
-                if (string.IsNullOrEmpty(newPassword.NewPassword))
+                if (string.IsNullOrWhiteSpace(newPassword.NewPassword))
                     return BadRequest("Password is null or empty.");
 
                 string currentUserName = _userService.GetUserNameFromClaims(User?.Claims);
@@ -144,7 +144,7 @@ namespace org.cchmc.pho.api.Controllers
             {
                 if (newRoles == null)
                     return BadRequest("Role list null.");
-                if (string.IsNullOrEmpty(userName))
+                if (string.IsNullOrWhiteSpace(userName))
                     return BadRequest("UserName is null or empty.");
                 if (newRoles.NewRoles == null)
                     newRoles.NewRoles = new List<string>();
@@ -193,9 +193,9 @@ namespace org.cchmc.pho.api.Controllers
             {
                 if (newEmail == null)
                     return BadRequest("Email null.");
-                if (string.IsNullOrEmpty(userName))
+                if (string.IsNullOrWhiteSpace(userName))
                     return BadRequest("UserName is null or empty.");
-                if (string.IsNullOrEmpty(newEmail.NewEmailAddress))
+                if (string.IsNullOrWhiteSpace(newEmail.NewEmailAddress))
                     return BadRequest("Email is null or empty.");
 
                 string currentUserName = _userService.GetUserNameFromClaims(User?.Claims);

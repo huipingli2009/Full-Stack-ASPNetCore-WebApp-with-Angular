@@ -1,7 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -14,10 +13,8 @@ using org.cchmc.pho.api.Mappings;
 using org.cchmc.pho.core.DataAccessLayer;
 using org.cchmc.pho.core.Interfaces;
 using org.cchmc.pho.core.Models;
-using org.cchmc.pho.identity;
+using org.cchmc.pho.core.Settings;
 using org.cchmc.pho.identity.Extensions;
-using org.cchmc.pho.identity.Interfaces;
-
 namespace org.cchmc.pho.api
 {
     [ExcludeFromCodeCoverage]
@@ -51,7 +48,7 @@ namespace org.cchmc.pho.api
                             return true;
                         }, "failure message");
             services.AddOptions<ConnectionStrings>()
-                        .Bind(Configuration.GetSection(ConnectionStrings.SECTION_KEY))
+                        .Bind(Configuration.GetSection("ConnectionStrings"))
                         .ValidateDataAnnotations() //todo 
                         .Validate(c =>
                         {
@@ -66,6 +63,7 @@ namespace org.cchmc.pho.api
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddControllersAsServices();
+            services.Configure<ConnectionStrings>(options => Configuration.GetSection("ConnectionStrings").Bind(options));
 
             //services.AddControllers(config =>
             //{
@@ -80,7 +78,7 @@ namespace org.cchmc.pho.api
             });
 
 
-            //NOTE: register service
+            //NOTE: register service    
             services.AddTransient<IAlert, AlertDAL>();
         }
 

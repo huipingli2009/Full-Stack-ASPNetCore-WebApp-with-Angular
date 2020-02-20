@@ -34,12 +34,14 @@ namespace org.cchmc.pho.api.Controllers
             _alertDal = alertDal;
 
             //TODO : CAN add some validation on this
-            _customOptions = customOptions.Value;
+           // _customOptions = customOptions.Value;
 
             _logger.LogInformation($"Example of options {_customOptions?.RequiredOption}");
 
 
         }
+
+              
 
         [HttpGet("active/{user}")]
         [SwaggerResponse(200, type: typeof(List<AlertViewModel>))]
@@ -74,15 +76,17 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [HttpPost("{user}/alert/{alertSchedule}")]
+        [HttpPost("alert/{alertSchedule}/{user}")]
         [SwaggerResponse(200, type: typeof(string))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> MarkAlertAction(string user, string alertSchedule, [FromBody] AlertActionViewModel action)
+        public async Task<IActionResult> MarkAlertAction(string alertSchedule, string user, [FromBody] AlertActionViewModel action)
         {
+        
             // route parameters are strings and need to be translated (and validated) to their proper data type
             if (!int.TryParse(user, out var userId))
                 return BadRequest("user is not a valid integer");
+                    
 
             if (!int.TryParse(alertSchedule, out var alertScheduleId))
                 return BadRequest("alertSchedule is not a valid integer");
@@ -90,7 +94,7 @@ namespace org.cchmc.pho.api.Controllers
             try
             {
                 // call the data layer to mark the action
-                await _alertDal.MarkAlertAction(userId, alertScheduleId, action.AlertActionId, action.ActionDateTime);
+                await _alertDal.MarkAlertAction(alertScheduleId, userId, action.AlertActionId);
                 return Ok();
             }
             catch(Exception ex)
