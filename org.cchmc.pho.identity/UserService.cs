@@ -22,6 +22,7 @@ namespace org.cchmc.pho.identity
         private readonly ILogger<UserService> _logger;
         //private readonly SignInManager<User> _signInManager; Is this even needed?
         private readonly int _tokenExpirationInHours;
+        private readonly JwtAuthentication _jwtConfig;
 
         public UserService(IOptions<JwtAuthentication> jwtConfig,
             UserManager<User> userManager, RoleManager<IdentityRole> roleManager,
@@ -34,6 +35,7 @@ namespace org.cchmc.pho.identity
             _roleManager = roleManager;
             _logger = logger;
             _tokenExpirationInHours = jwtConfig.Value.TokenExpirationInHours;
+            _jwtConfig = jwtConfig.Value;
         }
 
         public async Task<User> Authenticate(string userName, string password)
@@ -57,10 +59,12 @@ namespace org.cchmc.pho.identity
                 identity.AddClaim(new Claim(ClaimTypes.Surname, user.LastName));
                 roles?.ForEach(p => identity.AddClaim(new Claim(ClaimTypes.Role, p)));
 
-                var token = new JwtSecurityToken("PHO", "PHO", identity.Claims, null, DateTime.Now.AddHours(_tokenExpirationInHours), _signingCredentials);
+                var token = new JwtSecurityToken(_jwtConfig.ValidIssuer, _jwtConfig.ValidAudience, identity.Claims,
+                    null, DateTime.Now.AddHours(_tokenExpirationInHours), _signingCredentials);
                 
                 // This token is intentionally not getting written to the database, just returned in the object
                 user.Token = _tokenHandler.WriteToken(token);
+
                 return user;
             }
             catch(Exception ex)

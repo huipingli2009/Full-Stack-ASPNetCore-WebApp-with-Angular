@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using org.cchmc.pho.identity.Configuration;
 using org.cchmc.pho.identity.Interfaces;
 using org.cchmc.pho.identity.Models;
@@ -23,7 +26,23 @@ namespace org.cchmc.pho.identity.Extensions
             services.Configure<JwtAuthentication>(opts => configuration.GetSection("JwtAuthentication"));
             services.AddSingleton<IPostConfigureOptions<JwtBearerOptions>, ConfigureJwtBearerOptions>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer();
+                .AddJwtBearer(token =>
+                {
+                    //token.RequireHttpsMetadata = false;
+                    //token.SaveToken = true;
+                    //token.TokenValidationParameters = new TokenValidationParameters()
+                    //{
+                    //    ValidateIssuerSigningKey = true,
+                    //    IssuerSigningKey = null, // TODO: Get from JwtAuthentication
+                    //    ValidateIssuer = true,
+                    //    ValidIssuer = "", // TODO: use JwtAuthentication.Issuer
+                    //    ValidateAudience = true,
+                    //    ValidAudience = "", // TODO: use JwtAuthentication.Audience
+                    //    RequireExpirationTime = true,
+                    //    ValidateLifetime = true,
+                    //    ClockSkew = TimeSpan.Zero
+                    //};
+                });
             services.AddOptions<JwtAuthentication>()
                         .Bind(configuration.GetSection("JwtAuthentication"))
                         .ValidateDataAnnotations() //todo 
@@ -86,6 +105,16 @@ namespace org.cchmc.pho.identity.Extensions
                     }
                 }
             }
+        }
+
+        public static AuthorizationPolicy BuildAuthorizationPolicy(this IConfiguration configuration)
+        {
+            var policy = new AuthorizationPolicyBuilder()
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser()
+                    .Build();
+
+            return policy;
         }
     }
 }
