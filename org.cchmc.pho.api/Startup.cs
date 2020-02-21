@@ -39,7 +39,7 @@ namespace org.cchmc.pho.api
             services.AddOptions<CustomOptions>()
                         .Bind(Configuration.GetSection(CustomOptions.SECTION_KEY))
                         //https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.optionsbuilderdataannotationsextensions.validatedataannotations?view=dotnet-plat-ext-3.1
-                        .ValidateDataAnnotations() //todo 
+                        .ValidateDataAnnotations() //todo
                         .Validate(c =>
                         {
                             //NOTE: can add additional validation
@@ -63,10 +63,10 @@ namespace org.cchmc.pho.api
             });
 
 
-            //NOTE: register service    
+            //NOTE: register service
             services.AddTransient<IAlert, AlertDAL>();
 
-            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -82,6 +82,10 @@ namespace org.cchmc.pho.api
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
+            //NOTE: https://docs.microsoft.com/en-us/aspnet/core/fundamentals/static-files?view=aspnetcore-3.1 needed to add this package : Microsoft.AspNetCore.App metapackage
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
 
             app.UseHttpsRedirection();
 
