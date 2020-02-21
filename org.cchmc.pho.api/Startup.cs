@@ -65,9 +65,9 @@ namespace org.cchmc.pho.api
 
             //NOTE: register service    
             services.AddTransient<IAlert, AlertDAL>();
+            services.AddSingleton<IContent, ContentDAL>();
             services.AddTransient<IMetric, MetricDAL>();
-
-
+            services.AddTransient<IPatient, PatientDAL>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -105,7 +105,9 @@ namespace org.cchmc.pho.api
             {
                 cfg.AddMaps(Assembly.GetExecutingAssembly());
                 cfg.AddMaps(Assembly.GetAssembly(typeof(AlertMappings)));
+                cfg.AddMaps(Assembly.GetAssembly(typeof(ContentMappings)));
                 cfg.AddMaps(Assembly.GetAssembly(typeof(MetricMappings)));
+                cfg.AddMaps(Assembly.GetAssembly(typeof(PatientMappings)));
             });
             config.CreateMapper();
         }
