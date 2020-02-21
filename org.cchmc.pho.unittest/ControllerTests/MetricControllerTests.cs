@@ -104,7 +104,6 @@ namespace org.cchmc.pho.unittest.controllertests
             // assert
             Assert.AreEqual(400, result.StatusCode);
             Assert.AreEqual("user is not a valid integer", result.Value);
-            //TODO: Uday Explain
             _mockMetricDal.Verify(p => p.ListDashboardMetrics(It.IsAny<int>()), Times.Never);
         }
 
@@ -182,7 +181,6 @@ namespace org.cchmc.pho.unittest.controllertests
             // assert
             Assert.AreEqual(400, result.StatusCode);
             Assert.AreEqual("user is not a valid integer", result.Value);
-            //TODO: Uday Explain
             _mockMetricDal.Verify(p => p.ListEDChart(It.IsAny<int>()), Times.Never);
         }
 
@@ -214,14 +212,14 @@ namespace org.cchmc.pho.unittest.controllertests
             {
                 new EDDetail()
                 {
-                    PAT_MRN_ID = "123_456_789",
-                    PAT_ENC_CSN_ID = "4512398",
+                    PatientMRN = "123_456_789",
+                    PatientEncounterID = "4512398",
                     Facility = "Anderson",
                     PatientName = "John Doe",
                     PatientDOB = new DateTime(2010, 11, 20, 12, 12, 00, 00),
                     PCP = "Dr Nick Riviera",
-                    HOSP_ADMSN_TIME = new DateTime(2020, 11, 19, 12, 12, 00, 00),
-                    HOSP_DISCH_TIME = new DateTime(2020, 12, 1, 12, 12, 00, 00),
+                    HospitalAdmission = new DateTime(2020, 11, 19, 12, 12, 00, 00),
+                    HospitalDischarge = new DateTime(2020, 12, 1, 12, 12, 00, 00),
                     VisitType = "Followup",
                     PrimaryDX = "A234",
                     PrimaryDX_10Code = "10",
@@ -230,14 +228,14 @@ namespace org.cchmc.pho.unittest.controllertests
                 },
                 new EDDetail()
                 {
-                    PAT_MRN_ID = "987_654_321",
-                    PAT_ENC_CSN_ID = "7612986",
+                    PatientMRN = "987_654_321",
+                    PatientEncounterID = "7612986",
                     Facility = "Fairfield",
                     PatientName = "Susan Smith",
                     PatientDOB = new DateTime(2012, 3, 15, 12, 12, 00, 00),
                     PCP = "Dr Richard Kimble",
-                    HOSP_ADMSN_TIME = new DateTime(2020, 10, 19, 12, 12, 00, 00),
-                    HOSP_DISCH_TIME = null,
+                    HospitalAdmission = new DateTime(2020, 10, 19, 12, 12, 00, 00),
+                    HospitalDischarge = null,
                     VisitType = "Followup",
                     PrimaryDX = "D234",
                     PrimaryDX_10Code = "10",
@@ -254,27 +252,27 @@ namespace org.cchmc.pho.unittest.controllertests
 
             // assert
             Assert.AreEqual(2, resultList.Count);
-            Assert.AreEqual(myMetrics[0].PAT_MRN_ID, resultList[0].PAT_MRN_ID);
-            Assert.AreEqual(myMetrics[0].PAT_ENC_CSN_ID, resultList[0].PAT_ENC_CSN_ID);
+            Assert.AreEqual(myMetrics[0].PatientMRN, resultList[0].PatientMRN);
+            Assert.AreEqual(myMetrics[0].PatientEncounterID, resultList[0].PatientEncounterID);
             Assert.AreEqual(myMetrics[0].Facility, resultList[0].Facility);
             Assert.AreEqual(myMetrics[0].PatientName, resultList[0].PatientName);
             Assert.AreEqual(myMetrics[0].PatientDOB, resultList[0].PatientDOB);
             Assert.AreEqual(myMetrics[0].PCP, resultList[0].PCP);
-            Assert.AreEqual(myMetrics[0].HOSP_ADMSN_TIME, resultList[0].HOSP_ADMSN_TIME);
-            Assert.AreEqual(myMetrics[0].HOSP_DISCH_TIME, resultList[0].HOSP_DISCH_TIME);
+            Assert.AreEqual(myMetrics[0].HospitalAdmission, resultList[0].HospitalAdmission);
+            Assert.AreEqual(myMetrics[0].HospitalDischarge, resultList[0].HospitalDischarge);
             Assert.AreEqual(myMetrics[0].VisitType, resultList[0].VisitType);
             Assert.AreEqual(myMetrics[0].PrimaryDX, resultList[0].PrimaryDX);
             Assert.AreEqual(myMetrics[0].PrimaryDX_10Code, resultList[0].PrimaryDX_10Code);
             Assert.AreEqual(myMetrics[0].DX2, resultList[0].DX2);
             Assert.AreEqual(myMetrics[0].DX2_10Code, resultList[0].DX2_10Code);
-            Assert.AreEqual(myMetrics[1].PAT_MRN_ID, resultList[1].PAT_MRN_ID);
-            Assert.AreEqual(myMetrics[1].PAT_ENC_CSN_ID, resultList[1].PAT_ENC_CSN_ID);
+            Assert.AreEqual(myMetrics[1].PatientMRN, resultList[1].PatientMRN);
+            Assert.AreEqual(myMetrics[1].PatientEncounterID, resultList[1].PatientEncounterID);
             Assert.AreEqual(myMetrics[1].Facility, resultList[1].Facility);
             Assert.AreEqual(myMetrics[1].PatientName, resultList[1].PatientName);
             Assert.AreEqual(myMetrics[1].PatientDOB, resultList[1].PatientDOB);
             Assert.AreEqual(myMetrics[1].PCP, resultList[1].PCP);
-            Assert.AreEqual(myMetrics[1].HOSP_ADMSN_TIME, resultList[1].HOSP_ADMSN_TIME);
-            Assert.AreEqual(myMetrics[1].HOSP_DISCH_TIME, resultList[1].HOSP_DISCH_TIME);
+            Assert.AreEqual(myMetrics[1].HospitalAdmission, resultList[1].HospitalAdmission);
+            Assert.AreEqual(myMetrics[1].HospitalDischarge, resultList[1].HospitalDischarge);
             Assert.AreEqual(myMetrics[1].VisitType, resultList[1].VisitType);
             Assert.AreEqual(myMetrics[1].PrimaryDX, resultList[1].PrimaryDX);
             Assert.AreEqual(myMetrics[1].PrimaryDX_10Code, resultList[1].PrimaryDX_10Code);
@@ -297,7 +295,6 @@ namespace org.cchmc.pho.unittest.controllertests
             // assert
             Assert.AreEqual(400, result.StatusCode);
             Assert.AreEqual("user is not a valid integer", result.Value);
-            //TODO: Uday Explain
             _mockMetricDal.Verify(p => p.ListEDDetails(It.IsAny<int>(), It.IsAny<DateTime>()), Times.Never);
         }
 
@@ -315,7 +312,6 @@ namespace org.cchmc.pho.unittest.controllertests
             // assert
             Assert.AreEqual(400, result.StatusCode);
             Assert.AreEqual("admitdate is not a valid datetime", result.Value);
-            //TODO: Uday Explain
             _mockMetricDal.Verify(p => p.ListEDDetails(It.IsAny<int>(), It.IsAny<DateTime>()), Times.Never);
         }
 
