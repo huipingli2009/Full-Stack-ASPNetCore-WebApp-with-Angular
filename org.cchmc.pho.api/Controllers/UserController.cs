@@ -148,6 +148,11 @@ namespace org.cchmc.pho.api.Controllers
                     return BadRequest("UserName is null or empty.");
                 if (newRoles.NewRoles == null)
                     newRoles.NewRoles = new List<string>();
+                foreach (string r in newRoles.NewRoles)
+                {
+                    if (!IsValidRole(r))
+                        return BadRequest($"Invalid Role specified: {r}.");
+                }
 
                 string currentUserName = _userService.GetUserNameFromClaims(User?.Claims);
                 List<string> currentUserRoles = _userService.GetRolesFromClaims(User?.Claims);
@@ -165,12 +170,6 @@ namespace org.cchmc.pho.api.Controllers
                 }
 
                 // TODO: If you're in the practice admin role, you can only change roles for people in your practice (need StaffDAL or service)
-
-                foreach (string r in newRoles.NewRoles)
-                {
-                    if (!IsValidRole(r))
-                        return BadRequest("Invalid Role specified.");
-                }
 
                 // TODO: How do we invalidate the current users session?
                 return Ok(await _userService.ChangeUserRoles(userName, newRoles.NewRoles));
