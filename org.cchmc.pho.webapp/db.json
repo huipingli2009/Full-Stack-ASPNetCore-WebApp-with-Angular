@@ -27,5 +27,13 @@
       "URL_Label": "VIEW IT HERE",
       "AlertDefinition": "Alert is triggered by an ED/Urgent care visit in the last 48hrs."
     }
-  ]
+  ],
+  "AlertActivity": {
+    "Alert_ScheduleId" :  [
+     {
+      "alertActionId": 3,
+      "id": 3
+     }
+    ]
+  }
 }

@@ -28,14 +28,20 @@
 
 /* You can add global styles to this file, and also import other style files */
 @import 'assets/PHO-theme.scss';
+@import 'assets/icons/fontawesome-free-5.12.1-web/css/all.css';
 
 html, body { height: 100%; }
 body { 
     margin: 0;
     background-color: #FAFAFA;
 }
-html, body { height: 100%; }
-body { margin: 0; }
+h1 {
+  font-family: 'ArcherSemiBold' !important;
+}
+
+.content-main {
+  margin: 21px 107px 23px;
+}
 /* Main Menu (Will add additional options in phase 2) */
 .main-menu {
     background-color: white;
@@ -78,11 +84,14 @@ body { margin: 0; }
 
 /* Dashboard - Alerts*/
 .toast-container {
-    width: 80%;
+    width: 86%;
+    margin: 21px 107px 23px;
 }
 /* toast styles */
 .toast-title {
     font-weight: bold;
+    color: black;
+    display: none;
   }
   .toast-message {
     word-wrap: break-word;
@@ -94,6 +103,14 @@ body { margin: 0; }
   .toast-message a:hover {
     color: black;
     text-decoration: none;
+  }
+  .alert-icon {
+    margin-right: 15px;
+    color: var(--primary-color);
+    font-size: 20px;
+  }
+  .alert-link {
+    font-weight: bold;
   }
   .toast-close-button {
     position: relative;
@@ -131,6 +148,7 @@ body { margin: 0; }
     pointer-events: none;
     position: fixed;
     z-index: 999999;
+    color: black;
   }
   .toast-container * {
     box-sizing: border-box;
@@ -139,19 +157,17 @@ body { margin: 0; }
     position: relative;
     overflow: hidden;
     margin: 0 0 6px;
-    padding: 15px 15px 15px 50px;
-    width: 300px;
+    padding: 11px 19px;
+    width: 100%;
     border-radius: 3px 3px 3px 3px;
     background-position: 15px center;
     background-repeat: no-repeat;
     background-size: 24px;
-    box-shadow: 0 0 12px #999999;
     color: black;
     background-color: #F2FAFA !important;
     border: solid 1.5px var(--primary-lighter-color);
   }
   .toast-container .ngx-toastr:hover {
-    box-shadow: 0 0 12px #000000;
     opacity: 1;
     cursor: pointer;
   }

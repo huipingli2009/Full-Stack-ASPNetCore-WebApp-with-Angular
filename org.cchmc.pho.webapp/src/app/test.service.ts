@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpClientModule } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
+import { Alerts } from './models/alerts';
 
 const endpoint = 'http://localhost:3000/';
 const httpOptions = {
@@ -22,10 +23,22 @@ export class TestService {
     return body || { };
   }
   
+  /*Gets All Alerts by ID*/
   getAlerts(id): Observable<any> {
-    return this.http.get(endpoint + 'Alerts/' + id).pipe(
-      map(this.extractData));
+    return this.http.get<any>(endpoint + 'Alerts/' + '?id=' + id).pipe(
+      map((data: Alerts[]) => {
+        return data;
+      })
+   );
   }
+  /*Updates if Alert is Active*/
+  updateAlertActivity (id, Alert_ScheduleId, alert): Observable<any> {
+    return this.http.put(endpoint + 'AlertActivity/' + Alert_ScheduleId + '/' + id, JSON.stringify(alert), httpOptions).pipe(
+      tap(_ => console.log(`updated alert id=${id}`)),
+      catchError(this.handleError<any>('updateAlertActivity'))
+    );
+  }
+  
 
   private handleError<T> (operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {

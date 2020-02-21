@@ -45,6 +45,7 @@ import { StaffComponent } from './staff/staff.component';
 import { FilesComponent } from './files/files.component';
 import { WorkbooksComponent } from './workbooks/workbooks.component';
 import { ToastrModule } from 'ngx-toastr';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -61,10 +62,13 @@ import { ToastrModule } from 'ngx-toastr';
     BrowserAnimationsModule,
     HttpClientModule,
     FlexLayoutModule,
+    FormsModule,
+    ReactiveFormsModule,
     ToastrModule.forRoot({
       maxOpened: 3,
       autoDismiss: false,
-      newestOnTop: true
+      newestOnTop: true,
+      preventDuplicates: true
     }),
     MatSliderModule,
     MatMenuModule,
