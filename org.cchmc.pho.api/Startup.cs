@@ -65,7 +65,7 @@ namespace org.cchmc.pho.api
 
             //NOTE: register service    
             services.AddTransient<IAlert, AlertDAL>();
-            services.AddSingleton<IContent, ContentDAL>();
+            services.AddTransient<IContent, ContentDAL>();
             services.AddTransient<IMetric, MetricDAL>();
             services.AddTransient<IPatient, PatientDAL>();
         }
@@ -104,10 +104,7 @@ namespace org.cchmc.pho.api
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddMaps(Assembly.GetExecutingAssembly());
-                cfg.AddMaps(Assembly.GetAssembly(typeof(AlertMappings)));
-                cfg.AddMaps(Assembly.GetAssembly(typeof(ContentMappings)));
-                cfg.AddMaps(Assembly.GetAssembly(typeof(MetricMappings)));
-                cfg.AddMaps(Assembly.GetAssembly(typeof(PatientMappings)));
+                cfg.AddMaps(Assembly.GetAssembly(typeof(AlertMappings)));               
             });
             config.CreateMapper();
         }
