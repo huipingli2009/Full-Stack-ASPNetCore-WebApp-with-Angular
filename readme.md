@@ -1,4 +1,8 @@
-# PHO
+# PHO Web App
+
+> Following <https://github.com/noffle/art-of-readme> outline
+> <https://github.com/noffle/common-readme>
+> <https://github.com/richardlitt/standard-readme>
 
 TODO: Additional info to follow, such as a simple intro, environment information, and some links to documentation.
 
@@ -11,6 +15,24 @@ To deploy the Identity database to SQL server, complete the following steps:
 Alternatively...
 1. Ensure that the `pho-identity` connection string is complete in `appsettings.secret.json`
 2. Run the unit test `org.cchmc.pho.unittest.IdentityTests.IdentityTests.DoNothing()`.
+
+## org.cchmc.pho.webapp
+
+Angular JS application
+
+### Setting App Version
+Please refer to this guide
+https://docs.npmjs.com/cli/version
+
+> NOTE: invoke this in the project directory of /org.cchmc.pho.webapp
+
+```console
+npm version patch
+-- or --
+npm version patch -git-tag-version false
+```
+This will update the version number in the package.json
+
 
 
 ## Starting a New Controller
@@ -62,3 +84,38 @@ interface so that it can be dependency-injected. Add your implementation to the 
 
 ### Data Models
 The core project has a `DataModels` folder for putting all of your objects that the Data Layer receives or returns.
+
+
+
+---
+
+
+
+## Intro (what is it)
+
+- Simple introduction
+- What it is
+- What it does
+
+
+## Example
+
+- Examples of it running
+- Screenshots
+- Snippets
+
+
+## How to use it
+
+- Installation
+- Setup
+- Samples
+- APIs
+
+
+## Any other relevant data
+
+- Advance features
+- Advance commands
+- Reference material
+

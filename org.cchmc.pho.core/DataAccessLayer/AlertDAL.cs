@@ -14,7 +14,7 @@ using System.Linq;
 
 namespace org.cchmc.pho.core.DataAccessLayer
 {
-    // TODO: all ADO and DI setup
+    
     public class AlertDAL : IAlert
     {
         //private IConfiguration _config;
