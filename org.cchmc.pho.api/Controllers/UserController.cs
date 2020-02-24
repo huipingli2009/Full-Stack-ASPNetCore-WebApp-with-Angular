@@ -16,7 +16,7 @@ using System.Linq;
 
 namespace org.cchmc.pho.api.Controllers
 {
-    [Route("api/Users")]
+    [Route("api/users")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -62,7 +62,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         // TODO: [Authorize(Roles = "PracticeAdmin,PHOAdmin")]
-        [HttpGet("userByEmail/{emailAddress}")]
+        [HttpGet("user")]
         [SwaggerResponse(200, type: typeof(UserViewModel))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> GetUserByEmailAddress(string emailAddress)

@@ -65,13 +65,6 @@ namespace org.cchmc.pho.api
                 .AddControllersAsServices();
             services.Configure<ConnectionStrings>(options => Configuration.GetSection("ConnectionStrings").Bind(options));
 
-            //services.AddControllers(config =>
-            //{
-            //    //var policy = new AuthorizationPolicyBuilder()
-            //    //            .RequireAuthenticatedUser()
-            //    //            .Build();
-            //    //config.Filters.Add(new AuthorizeFilter(policy));
-            //});
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo() { Title = "PHO API", Version = "v1" });

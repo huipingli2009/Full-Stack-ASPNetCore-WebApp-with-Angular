@@ -105,15 +105,14 @@ namespace org.cchmc.pho.identity
             try
             {
                 User user = await _userManager.FindByNameAsync(userName);
-                if (user == null)
-                    return new List<string>();
-                return new List<string>(await _userManager.GetRolesAsync(user));
+                if (user != null)
+                    return new List<string>(await _userManager.GetRolesAsync(user));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return new List<string>();
             }
+            return new List<string>();
         }
 
         public List<string> GetRolesFromClaims(IEnumerable<Claim> claims)
@@ -152,14 +151,13 @@ namespace org.cchmc.pho.identity
                     if (result.Errors.Any())
                         listOfErrors.AddRange(result.Errors.Select(p => p.Description));
                 }
-                return listOfErrors;
             }
             catch(Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
                 listOfErrors.Add("An error occurred.");
-                return listOfErrors;
             }
+            return listOfErrors;
         }
 
         public async Task<bool> ResetUserPassword(string userName, string newPassword)
