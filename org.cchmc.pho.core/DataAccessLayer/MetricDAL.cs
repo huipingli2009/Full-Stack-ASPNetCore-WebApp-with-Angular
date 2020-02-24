@@ -107,14 +107,14 @@ namespace org.cchmc.pho.core.DataAccessLayer
                         details = (from DataRow dr in dataTable.Rows
                                    select new EDDetail()
                                    {
-                                       PAT_MRN_ID = dr["PAT_MRN_ID"].ToString(),
-                                       PAT_ENC_CSN_ID = dr["PAT_ENC_CSN_ID"].ToString(),
+                                       PatientMRN = dr["PAT_MRN_ID"].ToString(),
+                                       PatientEncounterID = dr["PAT_ENC_CSN_ID"].ToString(),
                                        Facility = dr["Facility"].ToString(),
                                        PatientName = dr["PatientName"].ToString(),
                                        PatientDOB = (dr["PatientDOB"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["PatientDOB"].ToString())),
                                        PCP = dr["PCP"].ToString(),
-                                       HOSP_ADMSN_TIME = (dr["HOSP_ADMSN_TIME"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["HOSP_ADMSN_TIME"].ToString())),
-                                       HOSP_DISCH_TIME = (dr["HOSP_DISCH_TIME"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["HOSP_DISCH_TIME"].ToString())),
+                                       HospitalAdmission = (dr["HOSP_ADMSN_TIME"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["HOSP_ADMSN_TIME"].ToString())),
+                                       HospitalDischarge = (dr["HOSP_DISCH_TIME"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["HOSP_DISCH_TIME"].ToString())),
                                        VisitType = dr["VisitType"].ToString(),
                                        PrimaryDX = dr["PrimaryDX"].ToString(),
                                        PrimaryDX_10Code = dr["PrimaryDX_10Code"].ToString(),

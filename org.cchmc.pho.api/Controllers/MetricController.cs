@@ -18,11 +18,11 @@ namespace org.cchmc.pho.api.Controllers
     [Route("api/metrics")]
     public class MetricController : ControllerBase
     {
-        private readonly ILogger<AlertController> _logger;
+        private readonly ILogger<MetricController> _logger;
         private readonly IMapper _mapper;
         private readonly IMetric _metricDal;
 
-        public MetricController(ILogger<AlertController> logger, IMapper mapper, IMetric metricDal)
+        public MetricController(ILogger<MetricController> logger, IMapper mapper, IMetric metricDal)
         {
             _logger = logger;
             _mapper = mapper;
