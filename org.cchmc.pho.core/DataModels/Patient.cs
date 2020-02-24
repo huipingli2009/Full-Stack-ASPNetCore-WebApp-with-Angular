@@ -15,8 +15,11 @@ namespace org.cchmc.pho.core.DataModels
         public int PCP_StaffID { get; set; }
         public DateTime? DOB { get; set; }
         public int ActiveStatus { get; set; }
-
-
-
+        public DateTime? LastEDVisit { get; set; }
+        public int Chronic { get; set; }
+        public int WatchFlag { get; set; }
+        public string SortColumn { get; set; }
+        public string Conditions { get; set; }
+        public string ConditionIDs { get; set; }
     }
 }

@@ -31,10 +31,9 @@ namespace org.cchmc.pho.core.DataAccessLayer
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spGetPracticePatients", sqlConnection))
                 {
-                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                   
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;                  
 
-                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;                  
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;                                      
 
                     if (staffID != 0)
                     {
@@ -43,8 +42,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     else
                     {
                         sqlCommand.Parameters.Add("@PCP_StaffID", SqlDbType.Int).Value = DBNull.Value;
-                    }   
-                  
+                    }                    
 
                     if (popmeasureID != 0)
                     {
@@ -71,7 +69,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     else
                     {
                         sqlCommand.Parameters.Add("@Chronic", SqlDbType.Int).Value = DBNull.Value;
-                    }
+                    }                  
 
                     if (conditionIDs != null)
                     {
@@ -134,12 +132,17 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                         PCP_StaffID = Convert.ToInt32(dr["PCP_StaffID"]),
                                         PracticeID = Convert.ToInt32(dr["PracticeID"]),
                                         DOB = (dr["DOB"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["DOB"].ToString())),
-                                        ActiveStatus = int.Parse(dr["ActiveStatus"].ToString())
+                                        ActiveStatus = int.Parse(dr["ActiveStatus"].ToString()),
+                                        LastEDVisit = (dr["LastEDVisit"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LastEDVisit"].ToString())),
+                                        Chronic = int.Parse(dr["Chronic"].ToString()),                                        
+                                        //WatchFlag = Convert.ToInt32(dr["WatchFlag"].ToString())
+                                        //SortColumn = dr["SortColumn"].ToString(),  //no need to track from data part
+                                        Conditions = dr["Conditions"].ToString(),
+                                        ConditionIDs = dr["ConditionIDs"].ToString()
                                     }
 
                           ).ToList();
                     }
-
                 }
 
                 return patients;
