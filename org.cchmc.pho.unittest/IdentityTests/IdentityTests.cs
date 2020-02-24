@@ -84,6 +84,7 @@ namespace org.cchmc.pho.unittest.IdentityTests
         }
 
         // This test is for running the migration that deploys to your local environment, per the readme.
+        [Ignore]
         [TestMethod]
         public async Task DoNothing()
         {
