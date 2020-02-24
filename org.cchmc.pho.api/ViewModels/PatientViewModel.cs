@@ -16,12 +16,11 @@ namespace org.cchmc.pho.api.ViewModels
         //public int SortCol { get; set; }
 
         public int PCP_StaffID { get; set; }
+        public DateTime? DOB { get; set; }
+        public int ActiveStatus { get; set; }
         //public int SortCol { get; set; }
         //public int SortCol { get; set; }
 
-        //public int SortCol { get; set; }
-        //public int SortCol { get; set; }
-       
 
     }
 }

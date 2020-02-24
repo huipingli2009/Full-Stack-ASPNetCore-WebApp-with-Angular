@@ -32,6 +32,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 using (SqlCommand sqlCommand = new SqlCommand("spGetPracticePatients", sqlConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                   
 
                     sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;                  
 
@@ -42,7 +43,8 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     else
                     {
                         sqlCommand.Parameters.Add("@PCP_StaffID", SqlDbType.Int).Value = DBNull.Value;
-                    }
+                    }   
+                  
 
                     if (popmeasureID != 0)
                     {
@@ -114,13 +116,13 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     else
                     {
                         sqlCommand.Parameters.Add("@RowspPage", SqlDbType.Int).Value = DBNull.Value;
-                    }                  
+                    }
 
                     await sqlConnection.OpenAsync();
 
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
-                        da.Fill(dataTable);                        
+                        da.Fill(dataTable);
 
                         patients = (from DataRow dr in dataTable.Rows
                                     select new Patient()
@@ -130,7 +132,9 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                         FirstName = dr["FirstName"].ToString(),
                                         LastName = dr["LastName"].ToString(),
                                         PCP_StaffID = Convert.ToInt32(dr["PCP_StaffID"]),
-                                        PracticeID = Convert.ToInt32(dr["PracticeID"])
+                                        PracticeID = Convert.ToInt32(dr["PracticeID"]),
+                                        DOB = (dr["DOB"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["DOB"].ToString())),
+                                        ActiveStatus = int.Parse(dr["ActiveStatus"].ToString())
                                     }
 
                           ).ToList();
