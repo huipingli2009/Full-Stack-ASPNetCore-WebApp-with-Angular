@@ -32,7 +32,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
-                    await sqlConnection.OpenAsync();
+                    sqlConnection.Open();
                     // Define the data adapter and fill the dataset
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
@@ -65,7 +65,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
 
-                    await sqlConnection.OpenAsync();
+                    sqlConnection.Open();
                     // Define the data adapter and fill the dataset
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
@@ -99,7 +99,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
                     sqlCommand.Parameters.Add("@AdmitDate", SqlDbType.Date).Value = admitDate;
 
-                    await sqlConnection.OpenAsync();
+                    sqlConnection.Open();
                     // Define the data adapter and fill the dataset
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
