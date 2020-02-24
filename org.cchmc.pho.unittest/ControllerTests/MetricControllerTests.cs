@@ -248,7 +248,7 @@ namespace org.cchmc.pho.unittest.controllertests
 
             // execute
             var result = await _MetricController.ListEDDetails(userId.ToString(), admitDate.ToString()) as ObjectResult;
-            var resultList = result.Value as List<EDDetail>;
+            var resultList = result.Value as List<EDDetailViewModel>;
 
             // assert
             Assert.AreEqual(2, resultList.Count);
