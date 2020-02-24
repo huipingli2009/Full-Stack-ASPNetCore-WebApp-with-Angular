@@ -15,7 +15,7 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace org.cchmc.pho.api.Controllers
 {
     [ApiController]
-    [Route("api/Metrics")]
+    [Route("api/metrics")]
     public class MetricController : ControllerBase
     {
         private readonly ILogger<AlertController> _logger;
@@ -30,7 +30,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpGet("list/{user}")]
-        [SwaggerResponse(200, type: typeof(List<AlertViewModel>))]
+        [SwaggerResponse(200, type: typeof(List<MetricViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> ListDashboardMetrics(string user)
@@ -60,7 +60,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpGet("edchart/{user}")]
-        [SwaggerResponse(200, type: typeof(List<AlertViewModel>))]
+        [SwaggerResponse(200, type: typeof(List<EDChartViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> ListEDChart(string user)
@@ -90,7 +90,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpGet("eddetails/{user}/{admitdate}")]
-        [SwaggerResponse(200, type: typeof(List<AlertViewModel>))]
+        [SwaggerResponse(200, type: typeof(List<EDDetailViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> ListEDDetails(string user, string admitdate)

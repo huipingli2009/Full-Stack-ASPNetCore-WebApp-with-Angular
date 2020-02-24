@@ -12,30 +12,38 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace org.cchmc.pho.api.Controllers
 {
-    [Route("api/Patients")]
+    [Route("api/patients")]
     [ApiController]
     public class PatientController : ControllerBase
-    {
-        private readonly ILogger<PatientController> _logger;
+    {       
+        private readonly ILogger<AlertController> _logger;
         private readonly IMapper _mapper;
         private readonly IPatient _patient;
-        public PatientController(ILogger<PatientController> logger, IMapper mapper, IPatient patient)
+       
+        public PatientController(ILogger<AlertController> logger, IMapper mapper, IPatient patient)
         {
             _logger = logger;
             _mapper = mapper;
             _patient = patient;
-
         }
 
         // GET: api/Patient
         //[HttpGet("PatientList/{userId}/{staffID?}/{popmeasureID?}/{watch?}/{chronic?}/{conditionIDs?}/{namesearch?}/{sortcolumn?}/{pagenumber}/{rowspage}")]
-        [HttpGet("PatientList/{userId}")]
+        [HttpGet("patientlist/{userId}")]
 
         [SwaggerResponse(200, type: typeof(List<PatientViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> ListActivePatient(int userId, int staffID, int popmeasureID, int watch, int chronic, string conditionIDs, string namesearch, string sortcolumn, int pagenumber, int rowspage)
         {
+            //For now, we assign pagenumber = 1 before we have population from group meeting this morning
+            //Will update later
+            pagenumber = 1;
+
+            if (pagenumber == 0)
+            {
+                return BadRequest("pagenumber is not a valid integer");
+            }
 
             try
             {

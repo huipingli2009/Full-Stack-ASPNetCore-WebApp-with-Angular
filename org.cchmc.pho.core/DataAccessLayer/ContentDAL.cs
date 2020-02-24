@@ -36,7 +36,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
-                        await Task.Run(() => da.Fill(dataTable));
+                        da.Fill(dataTable);
 
 
                         contents = (from DataRow dr in dataTable.Rows

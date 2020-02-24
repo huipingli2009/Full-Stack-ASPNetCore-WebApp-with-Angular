@@ -13,5 +13,10 @@ namespace org.cchmc.pho.core.DataModels
         public int PracticeID { get; set; }
         //public int SortCol { get; set; }
         public int PCP_StaffID { get; set; }
+        //public DateTime? DOB { get; set; }
+        //public int ActiveStatus { get; set; }
+
+
+        
     }
 }

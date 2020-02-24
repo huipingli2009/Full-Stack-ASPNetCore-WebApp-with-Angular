@@ -39,7 +39,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     // Define the data adapter and fill the dataset
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
-                        await Task.Run(() => da.Fill(dataTable));
+                        da.Fill(dataTable);
                         alerts = (from DataRow dr in dataTable.Rows
                                     select new Alert()
                                     {
@@ -76,7 +76,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     await sqlConnection.OpenAsync();
 
                     //Execute Stored Procedure
-                    await sqlCommand.ExecuteNonQueryAsync();                   
+                    sqlCommand.ExecuteNonQuery();                   
                                       
                 }
             }

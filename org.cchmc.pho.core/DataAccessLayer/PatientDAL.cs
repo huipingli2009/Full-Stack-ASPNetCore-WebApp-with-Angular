@@ -114,25 +114,13 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     else
                     {
                         sqlCommand.Parameters.Add("@RowspPage", SqlDbType.Int).Value = DBNull.Value;
-                    }
-
-
-                    //sqlCommand.Parameters.Add("@PopMeasureID", SqlDbType.Int).Value = popmeasureID;
-                    //sqlCommand.Parameters.Add("@Watch", SqlDbType.Int).Value = watch;
-                    //sqlCommand.Parameters.Add("@Chronic", SqlDbType.Int).Value = chronic;
-
-                    //sqlCommand.Parameters.Add("@ConditionIDs", SqlDbType.VarChar).Value = conditionIDs;
-                    //sqlCommand.Parameters.Add("@NameSearch", SqlDbType.VarChar).Value = namesearch;
-
-                    //sqlCommand.Parameters.Add("@SortColumn", SqlDbType.VarChar).Value = sortcolumn;
-                    //sqlCommand.Parameters.Add("@PageNumber", SqlDbType.Int).Value = pagenumber;
-                    //sqlCommand.Parameters.Add("@RowspPage", SqlDbType.Int).Value = rowspage;
+                    }                  
 
                     await sqlConnection.OpenAsync();
 
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
-                        await Task.Run(() => da.Fill(dataTable));                        
+                        da.Fill(dataTable);                        
 
                         patients = (from DataRow dr in dataTable.Rows
                                     select new Patient()

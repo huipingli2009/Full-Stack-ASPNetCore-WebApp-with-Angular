@@ -13,18 +13,18 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace org.cchmc.pho.api.Controllers
 {
-    [Route("api/Contents")]
+    [Route("api/contents")]
     [ApiController]
     public class ContentController : ControllerBase
     {
-        private readonly ILogger<ContentController> _logger;
+        private readonly ILogger<AlertController> _logger;
         private readonly IMapper _mapper;
         private readonly IContent _content;
 
         //TODO: delete me refactor
         private readonly CustomOptions _customOptions;
 
-        public ContentController(ILogger<ContentController> logger, IMapper mapper, IContent content)
+        public ContentController(ILogger<AlertController> logger, IMapper mapper, IContent content)
         {
             _logger = logger;
             _mapper = mapper;
@@ -34,7 +34,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         // GET: api/Content
-        [HttpGet("Lists")]
+        [HttpGet("lists")]
 
         //need to build vViewModel?
         [SwaggerResponse(200, type: typeof(List<ContentViewModel>))]
