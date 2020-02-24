@@ -20,9 +20,6 @@ namespace org.cchmc.pho.unittest.DataLayerTests
     [ExcludeFromCodeCoverage]
     public class AlertDALTests
     {
-        private AlertDAL _alertDal;
-        private string _connectionString = "";
-
         [TestInitialize]
         public void Initialize()
         {

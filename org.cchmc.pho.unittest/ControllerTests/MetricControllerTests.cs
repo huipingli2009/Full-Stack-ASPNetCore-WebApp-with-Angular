@@ -16,7 +16,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace org.cchmc.pho.unittest.controllertests
+namespace org.cchmc.pho.unittest.ControllerTests
 {
     [TestClass]
     [ExcludeFromCodeCoverage]
