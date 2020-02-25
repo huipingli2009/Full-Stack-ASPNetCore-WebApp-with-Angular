@@ -42,7 +42,7 @@ namespace org.cchmc.pho.unittest.controllertests
             _mockOptions = new Mock<IOptions<CustomOptions>>();
             //todo populate values later.
             _mockOptions.Setup(op => op.Value).Returns(new CustomOptions());
-            
+
         }
 
         [TestMethod]
@@ -134,7 +134,7 @@ namespace org.cchmc.pho.unittest.controllertests
             var alertSchedule = 7;
             var alertActionId = 9;
             var alertDateTime = DateTime.Parse("1/19/20");
-            
+
             _mockAlertDal.Setup(p => p.MarkAlertAction(alertSchedule,userId, alertActionId))
                 .Returns(Task.CompletedTask).Verifiable();
             _alertController = new AlertController(_mockLogger.Object, _mapper, _mockAlertDal.Object, _mockOptions.Object);
