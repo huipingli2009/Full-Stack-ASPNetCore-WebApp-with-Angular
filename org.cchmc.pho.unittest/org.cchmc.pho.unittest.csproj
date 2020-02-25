@@ -5,19 +5,6 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
- 
-  <ItemGroup>
-    <None Remove="DataLayerTests\appsettings.secrets.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="DataLayerTests\appsettings.secrets.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
