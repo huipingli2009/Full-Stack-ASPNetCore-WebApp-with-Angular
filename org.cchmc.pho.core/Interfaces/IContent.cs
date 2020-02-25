@@ -6,6 +6,6 @@ namespace org.cchmc.pho.core.Interfaces
 {
     public interface IContent
     {
-        Task<List<Content>> ListActiveContents();
+        Task<List<SpotLight>> ListActiveSpotLights();
     }
 }

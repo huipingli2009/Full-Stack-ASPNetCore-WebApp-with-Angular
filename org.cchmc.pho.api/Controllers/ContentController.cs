@@ -13,7 +13,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace org.cchmc.pho.api.Controllers
 {
-    [Route("api/Contents")]
+    [Route("api/contents")]
     [ApiController]
     public class ContentController : ControllerBase
     {
@@ -34,19 +34,19 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         // GET: api/Content
-        [HttpGet("Lists")]
+        [HttpGet("spotlights")]
 
         //need to build vViewModel?
-        [SwaggerResponse(200, type: typeof(List<ContentViewModel>))]
+        [SwaggerResponse(200, type: typeof(List<SpotLightViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> ListActiveContents()
+        public async Task<IActionResult> ListActiveSpotLights()
         {
             try
             {
-                var data = await _content.ListActiveContents();
+                var data = await _content.ListActiveSpotLights();
 
-                var result = _mapper.Map<List<ContentViewModel>>(data);
+                var result = _mapper.Map<List<SpotLightViewModel>>(data);
 
                 // return the result in a "200 OK" response
                 return Ok(result);

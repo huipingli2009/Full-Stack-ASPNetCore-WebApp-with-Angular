@@ -37,11 +37,7 @@ namespace org.cchmc.pho.api.Controllers
            // _customOptions = customOptions.Value;
 
             _logger.LogInformation($"Example of options {_customOptions?.RequiredOption}");
-
-
-        }
-
-              
+        }              
 
         [HttpGet("active/{user}")]
         [SwaggerResponse(200, type: typeof(List<AlertViewModel>))]

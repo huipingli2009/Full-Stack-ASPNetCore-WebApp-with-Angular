@@ -8,7 +8,7 @@ namespace org.cchmc.pho.api.Mappings
     {
         public ContentMappings()
         {
-            CreateMap<Content, ContentViewModel>();
+            CreateMap<SpotLight, SpotLightViewModel>();
         }        
     }
 }

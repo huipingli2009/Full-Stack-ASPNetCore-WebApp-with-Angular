@@ -4,7 +4,7 @@ using System.Text;
 
 namespace org.cchmc.pho.unittest.DataLayerTests
 {
-    class ContentDALTests
+    class SpotLightDALTests
     {
     }
 }
