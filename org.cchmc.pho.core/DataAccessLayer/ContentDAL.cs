@@ -12,11 +12,11 @@ using System.Linq;
 
 namespace org.cchmc.pho.core.DataAccessLayer
 {
-    public class SpotLightDAL:ISpotLight
+    public class ContentDAL:IContent
     {
         //private IConfiguration _config;
         private readonly ConnectionStrings _connectionStrings;
-        public SpotLightDAL(IOptions<ConnectionStrings> options, ILogger<AlertDAL> logger)
+        public ContentDAL(IOptions<ConnectionStrings> options, ILogger<AlertDAL> logger)
         {
             _connectionStrings = options.Value;
         }

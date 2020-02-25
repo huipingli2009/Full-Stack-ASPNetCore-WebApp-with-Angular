@@ -22,7 +22,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             _connectionStrings = options.Value;
         }
 
-        public async Task<List<Patient>> ListActivePatient(int userId, int staffID, int popmeasureID, int watch, int chronic, string conditionIDs, string namesearch, string sortcolumn, int pagenumber, int rowspage)
+        public async Task<List<Patient>> ListActivePatient(int userId, int staffID, int popmeasureID, bool watch, bool chronic, string conditionIDs, string namesearch, string sortcolumn, int pagenumber, int rowspage)
         {
             DataTable dataTable = new DataTable();
             List<Patient> patients = new List<Patient>();
@@ -53,22 +53,22 @@ namespace org.cchmc.pho.core.DataAccessLayer
                         sqlCommand.Parameters.Add("@PopMeasureID", SqlDbType.Int).Value = DBNull.Value;
                     }
 
-                    if (watch != 0)
+                    if (watch == true)
                     {
                         sqlCommand.Parameters.Add("@Watch", SqlDbType.Int).Value = watch; 
                     }
                     else
                     {
-                        sqlCommand.Parameters.Add("@Watch", SqlDbType.Int).Value = DBNull.Value;
+                        sqlCommand.Parameters.Add("@Watch", SqlDbType.Int).Value = false;
                     }
 
-                    if (chronic != 0)
+                    if (chronic == true)
                     {
                         sqlCommand.Parameters.Add("@Chronic", SqlDbType.Int).Value = chronic; 
                     }
                     else
                     {
-                        sqlCommand.Parameters.Add("@Chronic", SqlDbType.Int).Value = DBNull.Value;
+                        sqlCommand.Parameters.Add("@Chronic", SqlDbType.Int).Value = false;
                     }                  
 
                     if (conditionIDs != null)

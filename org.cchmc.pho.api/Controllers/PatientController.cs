@@ -34,7 +34,7 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(200, type: typeof(List<PatientViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> ListActivePatient(int userId, int staffID, int popmeasureID, int watch, int chronic, string conditionIDs, string namesearch, string sortcolumn, int pagenumber, int rowspage)
+        public async Task<IActionResult> ListActivePatient(int userId, int staffID, int popmeasureID, bool watch, bool chronic, string conditionIDs, string namesearch, string sortcolumn, int pagenumber, int rowspage)
         {
             //For now, we assign pagenumber = 1 before we have population from group meeting this morning
             //Will update later
