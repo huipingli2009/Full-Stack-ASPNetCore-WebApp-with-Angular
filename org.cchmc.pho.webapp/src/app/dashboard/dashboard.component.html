@@ -7,12 +7,12 @@
                     MONTHLY SPOTLIGHT
                 </div>
                 <div class="content-text">
-                    <div class="mat-subheading-2 text-green">Exceptional Patient Care: ESD Pediatrics</div>
-                    <p>ESD Pediatric Group had a successful second quarter. Read on to learn how their processes could help your practice acheive your quarterly goals. ESD Pediatric Group had a successful second quarter. Read on to learn how their processes could help your practice acheive your quarterly goals. ESD Pediatric Group had a successful second quarter. <a> Read more »</a></p>
+                    <div class="mat-subheading-2 text-green">{{monthlySpotlightTitle}}</div>
+                    <p>{{monthlySpotlightBody | slice:0:342}} <a href='{{monthlySpotlightLink}}'> Read more »</a></p>
                 </div>
             </div>
             <div fxLayout="column">
-                <div class="spotlight-img"><img src="\assets\img\Spotlight_Img1.jpeg"></div>
+                <div class="spotlight-img"><img src="\assets\img\{{monthlySpotlightImage}}"></div>
             </div>
         </div>
     </div>
@@ -24,14 +24,10 @@
         </div>
         <div fxLayout="row" class="quick-links-container" fxLayoutAlign="center center">
             <div fxLayout="row" fxLayoutGap="29px">
-                <div fxLayout="column" class="quick-link-box">
-                    Top Billed J Codes
-                </div>
-                <div fxLayout="column" class="quick-link-box">
-                    One
-                </div>
-                <div fxLayout="column" class="quick-link-box">
-                    One
+                <div fxLayout="column" class="quick-link-box" *ngFor="let item of quickLinks; let i=index;">
+                    <a href="{{item.link}}">
+                   {{item.body}}
+                </a>
                 </div>
             </div>
         </div>

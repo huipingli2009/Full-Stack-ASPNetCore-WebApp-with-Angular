@@ -4,7 +4,7 @@ import { RestService } from '../rest.service';
 import { ToastrService, ToastContainerDirective } from 'ngx-toastr';
 import { take } from 'rxjs/operators';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { Alerts } from '../models/alerts';
+import { Alerts, Content } from '../models/dashboard';
 import { element } from 'protractor';
 import { OverlayContainer } from '@angular/cdk/overlay';
 
@@ -19,8 +19,14 @@ export class DashboardComponent implements OnInit {
   @ViewChild(ToastContainerDirective, {static: true}) toastContainer: ToastContainerDirective;
   
   alerts: Alerts[];
+  content: Content[];
   updateAlert: FormGroup;
   alertScheduleId: number;
+  monthlySpotlightTitle: string;
+  monthlySpotlightBody: string;
+  monthlySpotlightLink: string;
+  monthlySpotlightImage: string;
+  quickLinks: any[] = [];
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
               private toastr: ToastrService, public fb: FormBuilder ) {
@@ -29,6 +35,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.getAlerts(3);
+    this.getAllContent();
   }
  
   getAlerts(id) {
@@ -70,5 +77,31 @@ toasterClickedHandler(sheduleId) {
   //   alertActionId: [1]
   // });
   // this.rest.updateAlertActivity(id, sheduleId, this.updateAlert.value).subscribe(res => {});
+}
+
+// getAllContent(): Content[] {
+//   return this.content;
+// }
+getAllContent() {
+  this.content = [];
+  this.rest.getDashboardContent().subscribe((data) => {
+    this.content = data;
+    console.log(this.content);
+    this.content.forEach(content => {
+      if(content.header !== 'NULL') {
+        this.monthlySpotlightTitle = content.header;
+        this.monthlySpotlightBody = content.body;
+        this.monthlySpotlightLink = content.hyperlink;
+        this.monthlySpotlightImage = content.imageHyperlink;
+      }
+      if(content.contentPlacement === 'Quick Links') {
+        this.quickLinks.push({
+          body: content.body,
+          link: content.hyperlink
+        });
+        console.log(this.quickLinks);
+      }
+    })
+  });
 }
 }

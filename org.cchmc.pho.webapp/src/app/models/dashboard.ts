@@ -7,3 +7,11 @@ export class Alerts {
     URL_Label: string;
     AlertDefinition: string;
 }
+export class Content {
+    header: string;
+    placementOrder: number;
+    body: string;
+    hyperlink: string;
+    imageHyperlink: string;
+    contentPlacement: string;
+}

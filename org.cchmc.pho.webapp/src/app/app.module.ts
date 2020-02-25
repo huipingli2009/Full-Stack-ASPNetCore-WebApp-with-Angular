@@ -48,11 +48,13 @@ import { ToastrModule, ToastContainerModule } from 'ngx-toastr';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { RouterModule } from '@angular/router';
+import { VersionComponent } from './version/version.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
+    VersionComponent,
     DashboardComponent,
     PatientsComponent,
     StaffComponent,
