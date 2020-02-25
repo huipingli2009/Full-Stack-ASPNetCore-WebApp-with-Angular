@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpClientModule } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
-import { Alerts, Content } from './models/dashboard';
+import { Alerts, Content, Population } from './models/dashboard';
 
 const endpoint = 'http://localhost:3000/';
 const httpOptions = {
@@ -45,6 +45,15 @@ export class RestService {
   getDashboardContent(): Observable<any> {
     return this.http.get<any>(endpoint + 'Contents/').pipe(
       map((data: Content[]) => {
+        return data;
+      })
+   );
+  }
+
+  /*Gets All Alerts by ID*/
+  getPopulationDetails(id): Observable<any> {
+    return this.http.get<any>(endpoint + 'Metrics/' + '?practiceId=' + id).pipe(
+      map((data: Population[]) => {
         return data;
       })
    );

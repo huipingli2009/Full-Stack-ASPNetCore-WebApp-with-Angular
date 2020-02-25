@@ -69,5 +69,71 @@
       "imageHyperlink": "NULL",
       "contentPlacement": "Quick Links"
     }
+  ],
+  "Metrics" : [
+    {
+      "practiceId": 7,
+      "dashboardLabel": "Commercially Ins",
+      "measureDesc": "All Patients with Commercial Insurance (Data as of: 2020-02-20)",
+      "measureType": "POP",
+      "practiceTotal": 61,
+      "networkTotal": 3945
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "L2 Patients",
+      "measureDesc": "All Patients with L2 PMCA Score Active in the PHO (Data as of: 2020-02-20)",
+      "measureType": "POP",
+      "practiceTotal": 695,
+      "networkTotal": 13825
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "L3 Patients",
+      "measureDesc": "All Patients with L3 PMCA Score Active in the PHO (Data as of: 2020-02-20)",
+      "measureType": "POP",
+      "practiceTotal": 296,
+      "networkTotal": 6388
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "Medicaid Patients",
+      "measureDesc": "All Patients with Medicaid Insurance (Data as of: 2020-02-20)",
+      "measureType": "POP",
+      "practiceTotal": 446,
+      "networkTotal": 19684
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "PHQ-9 Patients",
+      "measureDesc": "All Patients with a PHQ-9 Score of 10 or more (Data as of: 2020-02-20)",
+      "measureType": "POP",
+      "practiceTotal": 71,
+      "networkTotal": 1487
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "Potentially Active",
+      "measureDesc": "All Patients in the PHO who are potentially Active (Data as of: 2020-02-20)",
+      "measureType": "POP",
+      "practiceTotal": 311,
+      "networkTotal": 9138
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "Recent ED for Depression",
+      "measureDesc": "All Patients Seen in ED/UC for Depression in Last 30 Days (Data as of: 2020-02-20)",
+      "measureType": "POP",
+      "practiceTotal": 2,
+      "networkTotal": 63
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "Total",
+      "measureDesc": "All Patients in the PHO (Active or Potentially Active) (Data as of: 2020-02-20)",
+      "measureType": "POP",
+      "practiceTotal": 12616,
+      "networkTotal": 249672
+    }
   ]
 }

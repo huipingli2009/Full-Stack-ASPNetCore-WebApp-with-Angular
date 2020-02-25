@@ -4,9 +4,10 @@ import { RestService } from '../rest.service';
 import { ToastrService, ToastContainerDirective } from 'ngx-toastr';
 import { take } from 'rxjs/operators';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { Alerts, Content } from '../models/dashboard';
+import { Alerts, Content, Population } from '../models/dashboard';
 import { element } from 'protractor';
 import { OverlayContainer } from '@angular/cdk/overlay';
+import { TooltipPosition } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,9 +18,10 @@ import { OverlayContainer } from '@angular/cdk/overlay';
 export class DashboardComponent implements OnInit {
 
   @ViewChild(ToastContainerDirective, {static: true}) toastContainer: ToastContainerDirective;
-  
+
   alerts: Alerts[];
   content: Content[];
+  population: Population[] = [];
   updateAlert: FormGroup;
   alertScheduleId: number;
   monthlySpotlightTitle: string;
@@ -27,6 +29,7 @@ export class DashboardComponent implements OnInit {
   monthlySpotlightLink: string;
   monthlySpotlightImage: string;
   quickLinks: any[] = [];
+  displayedColumns: string[] = ['dashboardLabel', 'practiceTotal', 'networkTotal'];
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
               private toastr: ToastrService, public fb: FormBuilder ) {
@@ -36,8 +39,14 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.getAlerts(3);
     this.getAllContent();
+    this.getPopulation(7);
   }
- 
+  ngAfterContentChecked(): void {
+    this.toastr.overlayContainer  = this.toastContainer;
+    this.showAlert();
+
+  }
+
   getAlerts(id) {
     this.alerts = [];
     this.rest.getAlerts(id).subscribe((data) => {
@@ -45,8 +54,7 @@ export class DashboardComponent implements OnInit {
       this.alerts = data;
       this.alertScheduleId = data.Alert_ScheduleId;
       console.log('updateAlertsData', this.alerts[0].Alert_ScheduleId);
-      this.toastr.overlayContainer  = this.toastContainer;
-      this.showAlert();
+
     });
   }
 
@@ -64,7 +72,7 @@ export class DashboardComponent implements OnInit {
         .onTap
         .pipe(take(1))
         .subscribe(() => this.toasterClickedHandler(alert.Alert_ScheduleId));
-        console.log("Showing Alert Hit");
+        console.log('Showing Alert Hit');
       });
     }
 }
@@ -72,36 +80,41 @@ export class DashboardComponent implements OnInit {
 toasterClickedHandler(sheduleId) {
   console.log('Toastr clicked', sheduleId); // TODO Remove Alert based on id
   // const id = 3;
-  
+
   // this.updateAlert = this.fb.group({
   //   alertActionId: [1]
   // });
   // this.rest.updateAlertActivity(id, sheduleId, this.updateAlert.value).subscribe(res => {});
 }
 
-// getAllContent(): Content[] {
-//   return this.content;
-// }
+// Dahsboard Content
 getAllContent() {
   this.content = [];
   this.rest.getDashboardContent().subscribe((data) => {
     this.content = data;
-    console.log(this.content);
     this.content.forEach(content => {
-      if(content.header !== 'NULL') {
+      if (content.header !== 'NULL') {
         this.monthlySpotlightTitle = content.header;
         this.monthlySpotlightBody = content.body;
         this.monthlySpotlightLink = content.hyperlink;
         this.monthlySpotlightImage = content.imageHyperlink;
       }
-      if(content.contentPlacement === 'Quick Links') {
+      if (content.contentPlacement === 'Quick Links') {
         this.quickLinks.push({
           body: content.body,
           link: content.hyperlink
         });
-        console.log(this.quickLinks);
       }
-    })
+    });
+  });
+}
+
+// Metric List
+getPopulation(id) {
+  this.population = [];
+  this.rest.getPopulationDetails(id).subscribe((data) => {
+    this.population = data;
+    console.log('pop data', this.population);
   });
 }
 }

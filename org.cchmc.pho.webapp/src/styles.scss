@@ -232,6 +232,9 @@ h1 {
     pointer-events: none;
     z-index: 999999;
     color: black;
+    // top: 0;
+    // position: absolute;
+    // margin-top: 213px;
   }
   .toast-container * {
     box-sizing: border-box;
@@ -341,7 +344,7 @@ h1 {
 
   /* Content - Spotlight*/
   .content-main {
-    
+    // margin-top: 190px;
   }
   .content-box {
     background-color: #FFFFFF;
@@ -444,6 +447,36 @@ h1 {
       }
       .mat-tab-header {
         border-bottom: none;
+      }
+      /* Table Styles */
+      .mat-table {
+        width: 100%;
+      }
+      tr.mat-header-row, tr.mat-row {
+        height: 39px;
+      }
+      .mat-row:nth-child(odd) {
+        background-color: rgba(229,238,245,0.41);
+      }
+      .mat-header-cell {
+        font-weight: bold;
+        font-size: 12px;
+        line-height: 35px;
+        color: #4A4A4A;
+      }
+      th.mat-header-cell:first-of-type, td.mat-cell:first-of-type {
+        padding-left: 21px;
+        padding-right: 53px;
+      }
+      th.mat-header-cell:last-of-type, td.mat-cell:last-of-type {
+        padding-right: 21px;
+        padding-left: 38px;
+      }
+      .mat-column-dashboardLabel .grid-cell {
+        font-size: 13px;
+        line-height: 35px;
+        font-weight: normal;
+        color: #4A4A4A;
       }
     }
     .population-tabs {

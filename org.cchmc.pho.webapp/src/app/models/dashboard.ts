@@ -15,3 +15,11 @@ export class Content {
     imageHyperlink: string;
     contentPlacement: string;
 }
+export class Population {
+    practiceId: number;
+    dashboardLabel: string;
+    measureDesc: string;
+    measureType: string;
+    practiceTotal: number;
+    networkTotal: number;
+}
