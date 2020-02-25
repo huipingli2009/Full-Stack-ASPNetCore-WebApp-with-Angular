@@ -12,8 +12,9 @@ namespace org.cchmc.pho.api.Mappings
         public PatientMappings()
         {
             CreateMap<Patient, PatientViewModel>();
-            CreateMap<PatientStatus,PatientStatusViewModel>(); 
-            CreateMap<PatientCondition, PatientConditionViewModel>();           
+            CreateMap<PatientStatus,PatientStatusViewModel>();
+            CreateMap<PatientCondition, PatientConditionViewModel>();
+            CreateMap<PatientDetails, PatientDetailsViewModel>();
         }       
     }
 }
