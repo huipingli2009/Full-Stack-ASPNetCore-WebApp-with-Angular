@@ -4,7 +4,7 @@ using System.Text;
 
 namespace org.cchmc.pho.core.DataModels
 {
-    public class Content
+    public class SpotLight
     {
         public string Header { get; set; }
         public int PlacementOrder { get; set; }

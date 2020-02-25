@@ -10,16 +10,25 @@ namespace org.cchmc.pho.core.DataModels
         public int PatientId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public int PracticeID { get; set; }
-        //public int SortCol { get; set; }
+        public int PracticeID { get; set; }        
         public int PCP_StaffID { get; set; }
         public DateTime? DOB { get; set; }
-        public int ActiveStatus { get; set; }
+        public PatientStatus Status { get; set; }
         public DateTime? LastEDVisit { get; set; }
-        public int Chronic { get; set; }
-        public int WatchFlag { get; set; }
-        public string SortColumn { get; set; }
-        public string Conditions { get; set; }
-        public string ConditionIDs { get; set; }
+        public bool Chronic { get; set; }
+        public bool WatchFlag { get; set; }
+        public List<PatientCondition> Conditions { get; set; }
+
+        public class PatientStatus
+        {
+            public int ID { get; set; }
+            public string Name { get; set; }
+        }
+
+        public class PatientCondition
+        {
+            public int ID { get; set; }
+            public string Name { get; set; }
+        }
     }
 }

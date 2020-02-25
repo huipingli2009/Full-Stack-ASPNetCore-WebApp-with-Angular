@@ -118,31 +118,31 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                     await sqlConnection.OpenAsync();
 
-                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
-                    {
-                        da.Fill(dataTable);
+                    //using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    //{
+                    //    da.Fill(dataTable);
 
-                        patients = (from DataRow dr in dataTable.Rows
-                                    select new Patient()
-                                    {
-                                        //SortCol = Convert.ToInt32(dr["SortCol"]),
-                                        PatientId = Convert.ToInt32(dr["PatientId"]),
-                                        FirstName = dr["FirstName"].ToString(),
-                                        LastName = dr["LastName"].ToString(),
-                                        PCP_StaffID = Convert.ToInt32(dr["PCP_StaffID"]),
-                                        PracticeID = Convert.ToInt32(dr["PracticeID"]),
-                                        DOB = (dr["DOB"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["DOB"].ToString())),
-                                        ActiveStatus = int.Parse(dr["ActiveStatus"].ToString()),
-                                        LastEDVisit = (dr["LastEDVisit"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LastEDVisit"].ToString())),
-                                        Chronic = int.Parse(dr["Chronic"].ToString()),                                        
-                                        //WatchFlag = Convert.ToInt32(dr["WatchFlag"].ToString())
-                                        //SortColumn = dr["SortColumn"].ToString(),  //no need to track from data part
-                                        Conditions = dr["Conditions"].ToString(),
-                                        ConditionIDs = dr["ConditionIDs"].ToString()
-                                    }
+                    //    patients = (from DataRow dr in dataTable.Rows
+                    //                select new Patient()
+                    //                {
+                    //                    //SortCol = Convert.ToInt32(dr["SortCol"]),
+                    //                    PatientId = Convert.ToInt32(dr["PatientId"]),
+                    //                    FirstName = dr["FirstName"].ToString(),
+                    //                    LastName = dr["LastName"].ToString(),
+                    //                    PCP_StaffID = Convert.ToInt32(dr["PCP_StaffID"]),
+                    //                    PracticeID = Convert.ToInt32(dr["PracticeID"]),
+                    //                    DOB = (dr["DOB"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["DOB"].ToString())),
+                    //                    ActiveStatus = int.Parse(dr["ActiveStatus"].ToString()),
+                    //                    LastEDVisit = (dr["LastEDVisit"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LastEDVisit"].ToString())),
+                    //                    Chronic = bool.Parse(dr["Chronic"].ToString()),
+                    //                    //WatchFlag = Convert.ToInt32(dr["WatchFlag"].ToString()),
+                    //                    //SortColumn = dr["SortColumn"].ToString(),  //no need to track from data part                                     
 
-                          ).ToList();
-                    }
+                    //                    ConditionIDs = dr["ConditionIDs"].ToString()
+                    //                }
+
+                    //      ).ToList();
+                    //}
                 }
 
                 return patients;

@@ -12,19 +12,19 @@ using System.Linq;
 
 namespace org.cchmc.pho.core.DataAccessLayer
 {
-    public class ContentDAL:IContent
+    public class SpotLightDAL:ISpotLight
     {
         //private IConfiguration _config;
         private readonly ConnectionStrings _connectionStrings;
-        public ContentDAL(IOptions<ConnectionStrings> options, ILogger<AlertDAL> logger)
+        public SpotLightDAL(IOptions<ConnectionStrings> options, ILogger<AlertDAL> logger)
         {
             _connectionStrings = options.Value;
         }
 
-        public async Task<List<Content>> ListActiveContents()
+        public async Task<List<SpotLight>> ListActiveSpotLights()
         {
             DataTable dataTable = new DataTable();
-            List<Content> contents = new List<Content>();
+            List<SpotLight> spotlights = new List<SpotLight>();
 
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
@@ -39,8 +39,8 @@ namespace org.cchmc.pho.core.DataAccessLayer
                         da.Fill(dataTable);
 
 
-                        contents = (from DataRow dr in dataTable.Rows
-                                  select new Content()
+                        spotlights = (from DataRow dr in dataTable.Rows
+                                  select new SpotLight()
                                   {
                                       Header = dr["Header"].ToString(),
                                       PlacementOrder = Convert.ToInt32(dr["PlacementOrder"]),
@@ -55,7 +55,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                    
                 }
 
-                return contents;
+                return spotlights;
             }
         }
     }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace org.cchmc.pho.api.ViewModels
 {
-    public class ContentViewModel
+    public class SpotLightViewModel
     {
         public string Header { get; set; }
         public int PlacementOrder { get; set; }
