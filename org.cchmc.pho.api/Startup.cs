@@ -63,9 +63,9 @@ namespace org.cchmc.pho.api
 
             //NOTE: register service
             services.AddTransient<IAlert, AlertDAL>();
+            services.AddTransient<IContent, ContentDAL>();
             services.AddTransient<IMetric, MetricDAL>();
-
-
+            services.AddTransient<IPatient, PatientDAL>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -111,7 +111,7 @@ namespace org.cchmc.pho.api
                 //NOTE: The line below will load ALL the mappings in that assembly, not just the Alert one.
                 //So there's no need to repeat this line for every mapping, since they're all compiled into the same assembly.
                 cfg.AddMaps(Assembly.GetAssembly(typeof(AlertMappings)));
-                //Chris suggested that if we want to be explicit about what we're loading, we can use the AddProfile method, examples below.
+                //if we want to be explicit about what we're loading, we can use the AddProfile method, examples below.
                 //cfg.AddProfile<AlertMappings>();
                 //cfg.AddProfile<MetricMappings>();
             });

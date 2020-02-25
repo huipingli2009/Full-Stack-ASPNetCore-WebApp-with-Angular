@@ -15,7 +15,7 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace org.cchmc.pho.api.Controllers
 {
     [ApiController]
-    [Route("api/Metrics")]
+    [Route("api/metrics")]
     public class MetricController : ControllerBase
     {
         private readonly ILogger<MetricController> _logger;
