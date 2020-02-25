@@ -61,9 +61,11 @@ export class DashboardComponent implements OnInit {
   showAlert() {
     if (this.alerts.length > 0) {
       this.alerts.forEach(alert => {
-        this.toastr.success('<i class="fas fa-exclamation-triangle alert-icon" title="' + alert.AlertDefinition + '"></i>' +
-        alert.AlertMessage + '<a class="alert-link" href="' + alert.URL +
-        '">' + alert.URL_Label + ' »</a>', alert.Alert_ScheduleId.toString(), {
+        let str1 = `<i class="fas fa-exclamation-triangle alert-icon" title="${alert.AlertDefinition}"></i>
+        ${alert.AlertMessage}<a class="alert-link" href="${alert.URL}">${alert.URL_Label}»</a>`;
+
+
+        this.toastr.success(str1, alert.Alert_ScheduleId.toString(), {
           closeButton: true,
           disableTimeOut: true,
           enableHtml: true,
@@ -93,7 +95,7 @@ getAllContent() {
   this.rest.getDashboardContent().subscribe((data) => {
     this.content = data;
     this.content.forEach(content => {
-      if (content.header !== 'NULL') {
+      if (content.header !== null) {
         this.monthlySpotlightTitle = content.header;
         this.monthlySpotlightBody = content.body;
         this.monthlySpotlightLink = content.hyperlink;

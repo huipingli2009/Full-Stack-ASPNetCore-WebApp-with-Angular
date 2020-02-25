@@ -46,7 +46,7 @@
       "contentPlacement": "Monthly Spotlight"
     },
     {
-      "header": "NULL",
+      "header": null,
       "placementOrder": 2,
       "body": "Top 100 Bill Codes",
       "hyperlink": "https://cchmc.sharepoint.com/:b:/s/PHODataCollection/EYYj4_iUwVlCtknVRXSekSsBF1XWrtJPgMaZnniUQ19bzg?e=emWREK",
@@ -54,7 +54,7 @@
       "contentPlacement": "Quick Links"
     },
     {
-      "header": "NULL",
+      "header": null,
       "placementOrder": 3,
       "body": "Top Billed J Codes",
       "hyperlink": "https://cchmc.sharepoint.com/:b:/s/PHODataCollection/EYYj4_iUwVlCtknVRXSekSsBF1XWrtJPgMaZnniUQ19bzg?e=emWREK",
@@ -62,7 +62,7 @@
       "contentPlacement": "Quick Links"
     },
     {
-      "header": "NULL",
+      "header": null,
       "placementOrder": 4,
       "body": "Top Billed J Codes",
       "hyperlink": "https://cchmc.sharepoint.com/:b:/s/PHODataCollection/EYYj4_iUwVlCtknVRXSekSsBF1XWrtJPgMaZnniUQ19bzg?e=emWREK",
