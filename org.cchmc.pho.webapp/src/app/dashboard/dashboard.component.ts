@@ -37,9 +37,9 @@ export class DashboardComponent implements OnInit {
    }
 
   ngOnInit() {
-    this.getAlerts(3);
+    this.getAlerts(3); // TODO: Temp User ID Value
     this.getAllContent();
-    this.getPopulation(7);
+    this.getPopulation(7); // TODO: Temp Practice ID Value
   }
   ngAfterContentChecked(): void {
     this.toastr.overlayContainer  = this.toastContainer;
