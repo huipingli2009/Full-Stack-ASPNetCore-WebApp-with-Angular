@@ -44,13 +44,16 @@ import { PatientsComponent } from './patients/patients.component';
 import { StaffComponent } from './staff/staff.component';
 import { FilesComponent } from './files/files.component';
 import { WorkbooksComponent } from './workbooks/workbooks.component';
-import { ToastrModule } from 'ngx-toastr';
+import { ToastrModule, ToastContainerModule } from 'ngx-toastr';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
   declarations: [
     AppComponent,
+    DashboardComponent,
     PatientsComponent,
     StaffComponent,
     FilesComponent,
@@ -68,8 +71,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
       maxOpened: 3,
       autoDismiss: false,
       newestOnTop: true,
-      preventDuplicates: true
+      preventDuplicates: false,
+      positionClass: 'inline'
     }),
+    ToastContainerModule,
     MatSliderModule,
     MatMenuModule,
     MatAutocompleteModule,

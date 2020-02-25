@@ -4,7 +4,7 @@
       "id": 3,
       "AlertId": 1,
       "Alert_ScheduleId": 1,
-      "AlertMessage": "Don't forget your workbook is due 12/15/2019!",
+      "AlertMessage": "Don't forget your workbook is due <strong>12/15/2019!</strong>",
       "URL": "https://insight.invisionapp.com/share/2YUPA0MVZB4#/screens/398015819",
       "URL_Label": "GO TO WORKBOOK",
       "AlertDefinition": "NULL"
@@ -22,7 +22,7 @@
       "id": 3,
       "AlertId": 3,
       "Alert_ScheduleId": 6,
-      "AlertMessage": "Your Daily ED Patient Report for 01/01/2020 is now available!",
+      "AlertMessage": "Your Daily ED Patient Report for <strong>01/01/2020</strong> is now available!",
       "URL": "https://insight.invisionapp.com/share/2YUPA0MVZB4#/screens/398259767",
       "URL_Label": "VIEW IT HERE",
       "AlertDefinition": "Alert is triggered by an ED/Urgent care visit in the last 48hrs."

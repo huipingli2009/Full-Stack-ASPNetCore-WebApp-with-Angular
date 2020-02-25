@@ -30,6 +30,13 @@
 @import 'assets/PHO-theme.scss';
 @import 'assets/icons/fontawesome-free-5.12.1-web/css/all.css';
 
+//Additional Colors
+body {
+  --purple-dark: #451B5F;
+  --purple-light: #E3DDE7;
+  --tertiary-green: #4C9E45;
+}
+
 html, body { height: 100%; }
 body { 
     margin: 0;
@@ -37,6 +44,19 @@ body {
 }
 h1 {
   font-family: 'ArcherSemiBold' !important;
+}
+// Default Text Colors
+.text-primary {
+  color: var(--primary-color);
+}
+.text-secondary {
+  color: var(--accent-color);
+}
+.text-green {
+  color: var(--tertiary-green);
+}
+.text-purple {
+  color: var(--purple-dark);
 }
 
 .content-main {
@@ -76,16 +96,49 @@ h1 {
 
 /* Home Submenu (Dashboard, Patients, Staff, Files, Wookbook */
 .home-submenu {
-    margin: 21px 107px 23px;
+    margin: 40px 107px 24px;
+
     .practice-title {
         color: var(--primary-color);
+        margin-bottom: -4px;
     }
+    button {
+      font-family: 'ArcherSemiBold';
+    color: var(--primary-darker-color);
+    font-size: 15px;
+    line-height: 18px;
+    margin-right: 74.75px;
+    }
+    button:last-of-type {
+      margin-right: 0px;
+      padding-right: 0px;
+    }
+    .active-submenu {
+      font-family: 'ArcherBold';
+    }
+    .active-submenu:after {
+      content: ""; 
+      display: block; 
+      margin: 0 auto; 
+      width: 98%; 
+      padding-top: 0px; 
+      border-bottom: 1.8px solid var(--primary-darker-color);
+  }
 }
+/* Reusable Layout Elements ======================================================================================*/
+
+/*Dashboard Containers*/
+
+
+/* Dashboard =========================================================================== */
 
 /* Dashboard - Alerts*/
+.alert-container {
+  //Container Alert is generated in
+}
 .toast-container {
     width: 86%;
-    margin: 21px 107px 23px;
+    margin: 0px 107px 23px;
 }
 /* toast styles */
 .toast-title {
@@ -95,37 +148,42 @@ h1 {
   }
   .toast-message {
     word-wrap: break-word;
+    font-size: 12px;
+    line-height: 20px;
   }
   .toast-message a,
   .toast-message label {
-    color: black;
+    color: var(--primary-color);
+    font-size: 13px;
+    font-weight: bold;
   }
   .toast-message a:hover {
     color: black;
     text-decoration: none;
   }
   .alert-icon {
-    margin-right: 15px;
+    margin-right: 18px;
     color: var(--primary-color);
     font-size: 20px;
   }
   .alert-link {
     font-weight: bold;
+    margin-left: 18px;
   }
   .toast-close-button {
     position: relative;
     right: -0.3em;
     top: -0.3em;
     float: right;
-    font-size: 20px;
+    font-family: fontAwesome;
+    font-size: 32px;
     font-weight: bold;
     color: black;
-    text-shadow: 0 1px 0 black;
     /* opacity: 0.8; */
   }
   .toast-close-button:hover,
   .toast-close-button:focus {
-    color: #000000;
+    color: var(--primary-color);
     text-decoration: none;
     cursor: pointer;
     opacity: 0.4;
@@ -139,14 +197,11 @@ h1 {
     background: transparent !important;
     border: 0 !important;
     position: relative !important;
-    top: -2px !important;
-    right: -21px !important;
-    padding-right: 35px !important;
-    color: inherit !important;
+    padding-right: 10px !important;
+    color: var(--primary-color) !important;
 }
   .toast-container {
     pointer-events: none;
-    position: fixed;
     z-index: 999999;
     color: black;
   }
@@ -156,16 +211,18 @@ h1 {
   .toast-container .ngx-toastr {
     position: relative;
     overflow: hidden;
-    margin: 0 0 6px;
-    padding: 11px 19px;
+    margin: 0 0 14px;
+    padding: 8px 19px;
     width: 100%;
-    border-radius: 3px 3px 3px 3px;
+    height: 40px;
+    border-radius: 7px;
     background-position: 15px center;
     background-repeat: no-repeat;
     background-size: 24px;
     color: black;
     background-color: #F2FAFA !important;
     border: solid 1.5px var(--primary-lighter-color);
+    box-shadow: 1px 1px 4px 0 rgba(0,109,99,0.15);
   }
   .toast-container .ngx-toastr:hover {
     opacity: 1;
@@ -248,5 +305,117 @@ h1 {
     .toast-container .ngx-toastr.div {
       padding: 15px 15px 15px 50px;
       width: 25em;
+    }
+  }
+  // .toast-container.inline {
+  //   position: relative;
+  // }
+
+  /* Content - Spotlight*/
+  .content-main {
+    
+  }
+  .content-box {
+    background-color: #FFFFFF;
+    box-shadow: 1px 1px 4px 0 rgba(0,109,99,0.15);
+    .content-title {
+      color: white;
+      padding: 10px 22px;
+      text-align: center;
+      margin-bottom: 22px;
+    }
+    & .title-primary {
+      background-color: var(--primary-color);
+    }
+    & .title-secondary {
+      background-color: var(--accent-color);
+    }
+    & .title-green {
+      background-color: var(--tertiary-green);
+      width: 178px;
+    }
+    & .title-purple {
+      background-color: var(--purple-dark);
+    }
+    .content-text {
+      padding: 0px 34px 25px 25px;
+      & .mat-subheading-2 {
+        margin-bottom: 11.2px;
+      }
+      a {
+        color: var(--purple-dark);
+        font-family: 'ArcherSemiBold';
+        text-decoration: underline;
+        font-size: 13px;
+        line-height: 21px;
+        padding-left: 4px;
+      }
+    }
+    .spotlight-img {
+      padding: 24px 34px 24px 0;
+      & img {
+      width: 100%;
+      }
+    }
+    // Content - Quick Links
+    .quick-links-container {
+      padding: 0 32px 29px;
+      
+      .quick-link-box {
+        font-size: 13px;
+        line-height: 17px;
+        font-family: 'ArcherBold';
+        color: var(--purple-dark);
+        width: 99px;
+        background-color: var(--purple-light);
+        padding: 18px;
+        text-align: center;
+        border: 0.5px dashed var(--purple-dark);
+        outline: 4px solid var(--purple-light);
+      }
+    }
+  }
+  // Content - ED CHART
+  .ed-chart {
+    .mat-subheading-2 {
+      margin-top: -34px;
+    }
+  }
+
+  // Content - Population Details
+  .population-details {
+
+    .population-content {
+      padding: 0 20px 24px;
+      width: 100%;
+      
+      .mat-tab-group {
+        width: 100%;
+      }
+      .mat-tab-label {
+        color: var(--primary-darker-color);
+        opacity: 1;
+        font-family: 'ArcherBold';
+        font-size: 13px;
+        letter-spacing: 1px;
+        line-height: 17px;
+        background-color: rgba(0,168,150,0.2);
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+      }
+      .mat-tab-label.mat-tab-label-active {
+        color: white;
+        background-color: var(--primary-darker-color);
+        opacity: 1;
+      }
+      .mat-ink-bar {
+        display: none;
+      }
+      .mat-tab-header {
+        border-bottom: none;
+      }
+    }
+    .population-tabs {
+      
     }
   }
