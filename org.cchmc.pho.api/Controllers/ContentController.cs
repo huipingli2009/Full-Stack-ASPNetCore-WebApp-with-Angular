@@ -13,7 +13,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace org.cchmc.pho.api.Controllers
 {
-    [Route("api/spotlights")]
+    [Route("api/contents")]
     [ApiController]
     public class ContentController : ControllerBase
     {

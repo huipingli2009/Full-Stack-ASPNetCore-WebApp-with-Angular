@@ -65,7 +65,7 @@ namespace org.cchmc.pho.api
 
             //NOTE: register service    
             services.AddTransient<IAlert, AlertDAL>();
-            services.AddTransient<IContent, SpotLightDAL>();
+            services.AddTransient<IContent, ContentDAL>();
             services.AddTransient<IMetric, MetricDAL>();
             services.AddTransient<IPatient, PatientDAL>();
         }
