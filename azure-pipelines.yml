@@ -1,0 +1,61 @@
+# PHO build
+
+
+# todo : setup triggers? https://docs.microsoft.com/en-us/azure/devops/pipelines/build/triggers?view=azure-devops&tabs=yaml
+trigger:
+  branches:
+    include:
+      - '*'
+    ##- feature/yml
+
+
+resources:
+    repositories:
+        - repository: cchmctemplates
+          type: git
+          name: CCHMC.Core/CCHMC.BuildTemplates
+variables:
+    buildConfiguration: release
+    webSubDir: 'org.cchmc.pho.webapp'
+    apiSubDir: 'org.cchmc.pho.api'
+    # workingDir: src/CodeMedSheetApp
+jobs:
+    - job: build
+      displayName: 'Building Application API and Angular SPA'
+      pool:
+        name: OnPrem_AppDev
+        demands:
+        - dotnet -equals netcoreapp3.1
+      steps:
+        - {template: security-step-prebuild.yml@cchmctemplates, parameters: {sonarqubeKey: 'cchmc-pho-webapp'}}
+        # app
+        # todo : where to setup flags for the swagger for uat/prod env (false)
+        ## Building Angular SPA
+        - script: npm install
+          displayName : 'Installing the webapp npm dependency'
+          workingDirectory: $(Build.SourcesDirectory)/$(webSubDir)
+        - script: npm run build-webApp #define in package.json
+          displayName: 'Build Website'
+          workingDirectory: $(Build.SourcesDirectory)/$(webSubDir)
+        - task: CopyFiles@2
+          inputs:
+            cleanTargetFolder: true
+            sourceFolder: '$(Build.SourcesDirectory)/$(webSubDir)/dist/phoweb'
+            targetFolder: '$(Build.SourcesDirectory)/$(apiSubDir)/wwwroot'
+        ## Buidling Dotnet API
+        - task: DotNetCoreCLI@2
+          inputs:
+            command: publish
+            publishWebProjects: False
+            arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+            zipAfterPublish: True
+        - task: DotNetCoreCLI@2
+          inputs:
+            command: 'test'
+        # - script: 'dotnet test --configuration $(buildConfiguration)'
+        #   displayName: 'dotnet test $(buildConfiguration)'
+        - task: PublishBuildArtifacts@1
+          inputs:
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+
+        - {template: security-step-postbuild.yml@cchmctemplates}
