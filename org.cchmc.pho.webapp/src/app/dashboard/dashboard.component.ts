@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RestService } from '../rest.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Alerts, Content, Population } from '../models/dashboard';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,11 +20,18 @@ export class DashboardComponent implements OnInit {
   monthlySpotlightLink: string;
   monthlySpotlightImage: string;
   quickLinks: any[] = [];
+  popData: any[] = [];
+  qiData: any[] = [];
+  dataSourceOne: MatTableDataSource<any>;
   displayedColumns: string[] = ['dashboardLabel', 'practiceTotal', 'networkTotal'];
+  dataSourceTwo: MatTableDataSource<any>;
+  displayedColumnsQi: string[] = ['dashboardLabelQi', 'practiceTotalQi', 'networkTotalQi'];
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
               public fb: FormBuilder) {
     // var id = this.userId.snapshot.paramMap.get('id') TODO: Need User Table;
+    this.dataSourceOne = new MatTableDataSource;
+    this.dataSourceTwo = new MatTableDataSource;
   }
 
   ngOnInit() {
@@ -58,7 +66,26 @@ export class DashboardComponent implements OnInit {
     this.population = [];
     this.rest.getPopulationDetails(id).subscribe((data) => {
       this.population = data;
-      console.log('pop data', this.population);
+      this.population.forEach(item => {
+        if (item.measureType === 'POP') {
+          this.popData.push({
+            dashboardLabel: item.dashboardLabel,
+            measureDesc: item.measureDesc,
+            practiceTotal: item.practiceTotal,
+            networkTotal: item.networkTotal
+          });
+          this.dataSourceOne.data = this.popData;
+        }
+        if (item.measureType === 'QI') {
+          this.qiData.push({
+            dashboardLabel: item.dashboardLabel,
+            measureDesc: item.measureDesc,
+            practiceTotal: item.practiceTotal,
+            networkTotal: item.networkTotal
+          });
+          this.dataSourceTwo.data = this.qiData;
+        }
+      });
     });
   }
 }

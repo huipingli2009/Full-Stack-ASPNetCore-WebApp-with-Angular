@@ -21,7 +21,7 @@ export class AppComponent {
   updateAlert: FormGroup;
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
-    private toastr: ToastrService, public fb: FormBuilder) {
+              private toastr: ToastrService, public fb: FormBuilder) {
     // var id = this.userId.snapshot.paramMap.get('id') TODO: Need User Table;
   }
 
@@ -38,10 +38,9 @@ export class AppComponent {
   getAlerts(id) {
     this.alerts = [];
     this.rest.getAlerts(id).subscribe((data) => {
-      console.log('getAlerts', data);
       this.alerts = data;
       this.alertScheduleId = data.Alert_ScheduleId;
-      console.log('updateAlertsData', this.alerts[0].Alert_ScheduleId);
+      // console.log('updateAlertsData', this.alerts[0].Alert_ScheduleId);
 
     });
   }
@@ -62,13 +61,12 @@ export class AppComponent {
           .onTap
           .pipe(take(1))
           .subscribe(() => this.toasterClickedHandler(alert.Alert_ScheduleId));
-        console.log('Showing Alert Hit');
       });
     }
   }
 
   toasterClickedHandler(sheduleId) {
-    console.log('Toastr clicked', sheduleId); // TODO Remove Alert based on id
+    // console.log('Toastr clicked', sheduleId); // TODO Remove Alert based on id
     // const id = 3;
 
     // this.updateAlert = this.fb.group({
