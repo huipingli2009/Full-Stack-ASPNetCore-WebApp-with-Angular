@@ -16,11 +16,11 @@ namespace org.cchmc.pho.api.Controllers
     [ApiController]
     public class PatientController : ControllerBase
     {       
-        private readonly ILogger<AlertController> _logger;
+        private readonly ILogger<PatientController> _logger;
         private readonly IMapper _mapper;
         private readonly IPatient _patient;
        
-        public PatientController(ILogger<AlertController> logger, IMapper mapper, IPatient patient)
+        public PatientController(ILogger<PatientController> logger, IMapper mapper, IPatient patient)
         {
             _logger = logger;
             _mapper = mapper;

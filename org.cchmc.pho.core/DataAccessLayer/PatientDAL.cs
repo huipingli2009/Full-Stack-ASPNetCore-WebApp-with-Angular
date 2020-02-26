@@ -161,7 +161,6 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add("@id", SqlDbType.Int).Value = patientId;
-
                     sqlConnection.Open();
                     // Define the data adapter and fill the dataset
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
@@ -170,7 +169,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                         details = (from DataRow dr in dataTable.Rows
                                    select new PatientDetails()
                                    {
-                                       Id = (dr["Id"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PracticeID"].ToString())),
+                                       Id = (dr["Id"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Id"].ToString())),
                                        PatientMRNId = dr["PAT_MRN_ID"].ToString(),
                                        PatId = dr["PAT_ID"].ToString(),
                                        PracticeId = (dr["PracticeID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PracticeID"].ToString())),
