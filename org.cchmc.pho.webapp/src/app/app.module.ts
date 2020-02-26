@@ -73,7 +73,7 @@ import { VersionComponent } from './version/version.component';
       maxOpened: 3,
       autoDismiss: false,
       newestOnTop: true,
-      preventDuplicates: false,
+      preventDuplicates: true,
       positionClass: 'inline'
     }),
     ToastContainerModule,
