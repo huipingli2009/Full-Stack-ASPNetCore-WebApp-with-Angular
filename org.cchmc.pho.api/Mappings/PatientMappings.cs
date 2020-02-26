@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using org.cchmc.pho.api.ViewModels;
 using org.cchmc.pho.core.DataModels;
-using System.Collections.Generic;
 using static org.cchmc.pho.api.ViewModels.PatientViewModel;
 using static org.cchmc.pho.core.DataModels.Patient;
 
