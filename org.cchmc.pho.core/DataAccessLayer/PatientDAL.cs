@@ -154,7 +154,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         public async Task<PatientDetails> GetPatientDetails(int patientId)
         {
             DataTable dataTable = new DataTable();
-            PatientDetails details = new PatientDetails();
+            PatientDetails details;
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spGetPatientSummary", sqlConnection))
@@ -187,13 +187,11 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                        City = dr["City"].ToString(),
                                        State = dr["State"].ToString(),
                                        Zip = dr["Zip"].ToString(),
-                                       ConditionIds = dr["ConditionIDs"].ToString(),
-                                       Conditions = dr["Condition"].ToString(),
+                                       Conditions = ParseConditionStrings(dr["ConditionIDs"].ToString(), dr["Condition"].ToString()),
                                        PMCAScore = (dr["PMCAScore"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PMCAScore"].ToString())),
                                        ProviderPMCAScore = (dr["ProviderPMCAScore"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ProviderPMCAScore"].ToString())),
                                        ProviderNotes = dr["ProviderNotes"].ToString(),
-                                       ActiveStatus = (dr["ActiveStatus"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ActiveStatus"].ToString())),
-                                       ActiveStatusName = dr["ActiveStatusName"].ToString(),
+                                       Status = new PatientStatus(dr["ActiveStatus"].ToString(), dr["ActiveStatusName"].ToString()),
                                        GenderId = (dr["GenderID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["GenderID"].ToString())),
                                        Gender = dr["Gender"].ToString(),
                                        Email = dr["Email"].ToString(),
@@ -215,7 +213,26 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     return details;
                 }
             }
+        }
 
+        private List<PatientCondition> ParseConditionStrings(string ConditionIDs, string ConditionNames)
+        {
+            List<PatientCondition> conditions = new List<PatientCondition>();
+
+            int[] ids = ConditionIDs.Split(',').Select(int.Parse).ToArray();
+            string[] names = ConditionNames.Split(',').ToArray();
+
+            if (ids.Length != names.Length)
+            {
+                throw new Exception("Condition data strings have an unequal count of delimiters");
+            }
+
+            for (int i=0; i < ids.Length; i++)
+            {
+                conditions.Add(new PatientCondition(ids[i], names[i]));
+            }
+
+            return conditions;
         }
     }
 }

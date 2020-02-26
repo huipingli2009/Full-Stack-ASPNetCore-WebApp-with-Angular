@@ -46,6 +46,11 @@ namespace org.cchmc.pho.unittest.controllertests
         {
             // setup
             var patientId = 5000;
+
+            List<PatientCondition> conditions = new List<PatientCondition>();
+            conditions.Add(new PatientCondition(1, "Asthma"));
+            conditions.Add(new PatientCondition(2, "Depression"));
+
             var myPatientDetails = new PatientDetails()
             {
                 Id = 20101,
@@ -66,13 +71,11 @@ namespace org.cchmc.pho.unittest.controllertests
                 City = "Mason",
                 State = "OH",
                 Zip = "45040",
-                ConditionIds = "3, 1",
-                Conditions = "Asthma, Chronic",
+                Conditions = conditions,
                 PMCAScore = 0,
                 ProviderPMCAScore = 2,
                 ProviderNotes = "Ryan needs more care. Just updated",
-                ActiveStatus = 1,
-                ActiveStatusName = "Active",
+                Status = new PatientStatus("1", "Active"),
                 GenderId = 1,
                 Gender = "M",
                 Email = "",
@@ -100,7 +103,7 @@ namespace org.cchmc.pho.unittest.controllertests
             // assert
             Assert.AreEqual(myPatientDetails.Id, resultList.Id);
             Assert.AreEqual(myPatientDetails.PatientMRNId, resultList.PatientMRNId);
-            Assert.AreEqual(myPatientDetails.PatId, resultList.PatId);
+            Assert.AreEqual(myPatientDetails.PatId, resultList.ClarityPatientId);
             Assert.AreEqual(myPatientDetails.PracticeId, resultList.PracticeId);
             Assert.AreEqual(myPatientDetails.FirstName, resultList.FirstName);
             Assert.AreEqual(myPatientDetails.MiddleName, resultList.MiddleName);
@@ -116,13 +119,17 @@ namespace org.cchmc.pho.unittest.controllertests
             Assert.AreEqual(myPatientDetails.City, resultList.City);
             Assert.AreEqual(myPatientDetails.State, resultList.State);
             Assert.AreEqual(myPatientDetails.Zip, resultList.Zip);
-            Assert.AreEqual(myPatientDetails.ConditionIds, resultList.ConditionIds);
-            Assert.AreEqual(myPatientDetails.Conditions, resultList.Conditions);
             Assert.AreEqual(myPatientDetails.PMCAScore, resultList.PMCAScore);
             Assert.AreEqual(myPatientDetails.ProviderPMCAScore, resultList.ProviderPMCAScore);
             Assert.AreEqual(myPatientDetails.ProviderNotes, resultList.ProviderNotes);
-            Assert.AreEqual(myPatientDetails.ActiveStatus, resultList.ActiveStatus);
-            Assert.AreEqual(myPatientDetails.ActiveStatusName, resultList.ActiveStatusName);
+
+            Assert.IsNotNull(myPatientDetails.Status);
+            Assert.IsNotNull(resultList.Status);
+            Assert.AreEqual(myPatientDetails.Status.ID, resultList.Status.ID);
+
+            CompareConditionMapping(myPatientDetails.Conditions, resultList.Conditions);
+
+            Assert.AreEqual(myPatientDetails.Status.Name, resultList.Status.Name);
             Assert.AreEqual(myPatientDetails.GenderId, resultList.GenderId);
             Assert.AreEqual(myPatientDetails.Gender, resultList.Gender);
             Assert.AreEqual(myPatientDetails.Email, resultList.Email);
@@ -169,6 +176,20 @@ namespace org.cchmc.pho.unittest.controllertests
 
             // assert
             Assert.AreEqual(500, result.StatusCode);
+        }
+
+        private void CompareConditionMapping(List<PatientCondition> data, List<PatientConditionViewModel> view)
+        {
+            Assert.IsNotNull(data);
+            Assert.IsNotNull(view);
+            Assert.AreEqual(data.Count, view.Count);
+
+            for (int i = 0; i < data.Count; i++)
+            {
+                Assert.AreEqual(data[i].ID, view[i].ID);
+                Assert.AreEqual(data[i].Name, view[i].Name);
+            }
+
         }
     }
 }

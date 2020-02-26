@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace org.cchmc.pho.api.ViewModels
 {
@@ -9,7 +7,7 @@ namespace org.cchmc.pho.api.ViewModels
     {
         public int Id { get; set; }
         public string PatientMRNId { get; set; }
-        public string PatId { get; set; }
+        public string ClarityPatientId { get; set; }
         public int PracticeId { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
@@ -25,13 +23,11 @@ namespace org.cchmc.pho.api.ViewModels
         public string City { get; set; }
         public string State { get; set; }
         public string Zip { get; set; }
-        public string ConditionIds { get; set; }
-        public string Conditions { get; set; }
+        public List<PatientConditionViewModel> Conditions { get; set; }
         public int PMCAScore { get; set; }
         public int ProviderPMCAScore { get; set; }
         public string ProviderNotes { get; set; }
-        public int ActiveStatus { get; set; }
-        public string ActiveStatusName { get; set; }
+        public PatientStatusViewModel Status { get; set; }
         public int GenderId { get; set; }
         public string Gender { get; set; }
         public string Email { get; set; }

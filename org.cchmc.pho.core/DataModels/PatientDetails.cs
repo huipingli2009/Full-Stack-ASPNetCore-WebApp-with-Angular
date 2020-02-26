@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace org.cchmc.pho.core.DataModels
 {
@@ -24,13 +23,11 @@ namespace org.cchmc.pho.core.DataModels
         public string City { get; set; }
         public string State { get; set; }
         public string Zip { get; set; }
-        public string ConditionIds { get; set; }
-        public string Conditions { get; set; }
+        public List<PatientCondition> Conditions { get; set; }
         public int PMCAScore { get; set; }
         public int ProviderPMCAScore { get; set; }
         public string ProviderNotes { get; set; }
-        public int ActiveStatus { get; set; }
-        public string ActiveStatusName { get; set; }
+        public PatientStatus Status { get; set; }
         public int GenderId { get; set; }
         public string Gender { get; set; }
         public string Email { get; set; }

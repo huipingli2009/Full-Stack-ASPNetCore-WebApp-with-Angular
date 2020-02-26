@@ -18,17 +18,29 @@ namespace org.cchmc.pho.core.DataModels
         public bool Chronic { get; set; }
         public bool WatchFlag { get; set; }
         public List<PatientCondition> Conditions { get; set; }
+    }
+    public class PatientStatus
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
 
-        public class PatientStatus
+        public PatientStatus(string id, string name)
         {
-            public int ID { get; set; }
-            public string Name { get; set; }
+            int.TryParse(id, out int intId);
+            ID = intId;
+            Name = name;
         }
+    }
 
-        public class PatientCondition
+    public class PatientCondition
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+
+        public PatientCondition(int id, string name)
         {
-            public int ID { get; set; }
-            public string Name { get; set; }
+            ID = id;
+            Name = name;
         }
     }
 }
