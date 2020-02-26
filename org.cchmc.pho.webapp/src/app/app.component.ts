@@ -21,7 +21,7 @@ export class AppComponent {
   updateAlert: FormGroup;
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
-              private toastr: ToastrService, public fb: FormBuilder) {
+    private toastr: ToastrService, public fb: FormBuilder) {
     // var id = this.userId.snapshot.paramMap.get('id') TODO: Need User Table;
   }
 
@@ -47,11 +47,11 @@ export class AppComponent {
   showAlert() {
     if (this.alerts.length > 0) {
       this.alerts.forEach(alert => {
-        let str1 = `<i class="fas fa-exclamation-triangle alert-icon" title="${alert.AlertDefinition}"></i>
-      ${alert.AlertMessage}<a class="alert-link" href="${alert.URL}">${alert.URL_Label}»</a>`;
+        let str1 = `<i class="fas fa-exclamation-triangle alert-icon" title="${alert.definition}"></i>
+      ${alert.message}<a class="alert-link" href="${alert.url}">${alert.linkText}»</a>`;
 
 
-        this.toastr.success(str1, alert.Alert_ScheduleId.toString(), {
+        this.toastr.success(str1, alert.alertScheduleId.toString(), {
           closeButton: true,
           disableTimeOut: true,
           enableHtml: true,
@@ -59,7 +59,7 @@ export class AppComponent {
         })
           .onTap
           .pipe(take(1));
-          // .subscribe(() => this.toasterClickedHandler(alert.Alert_ScheduleId));
+        // .subscribe(() => this.toasterClickedHandler(alert.Alert_ScheduleId));
       });
     }
   }

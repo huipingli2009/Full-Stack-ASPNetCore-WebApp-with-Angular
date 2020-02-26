@@ -12,7 +12,7 @@ const API_URL = environment.apiURL;
 //const endpoint = 'http://localhost:3000/';
 const httpOptions = {
   headers: new HttpHeaders({
-    'Content-Type':  'application/json'
+    'Content-Type': 'application/json'
   })
 };
 @Injectable({
@@ -20,26 +20,26 @@ const httpOptions = {
 })
 export class RestService {
 
-  constructor( private http: HttpClient) {
+  constructor(private http: HttpClient) {
 
   }
   private extractData(res: Response) {
     const body = res;
-    return body || { };
+    return body || {};
   }
   /* Alerts =======================================================*/
 
   /*Gets All Alerts by ID*/
   getAlerts(id): Observable<any> {
-    return this.http.get<any>(API_URL+'/api/Alerts/' + '?id=' + id).pipe(
+    return this.http.get<any>(API_URL + '/api/Alerts/active/' + id).pipe(
       map((data: Alerts[]) => {
         return data;
       })
-   );
+    );
   }
   /*Updates if Alert is Active*/
   updateAlertActivity(id, Alert_ScheduleId, alert): Observable<any> {
-    return this.http.put(API_URL+'/api/AlertActivity/' + Alert_ScheduleId + '/' + id, JSON.stringify(alert), httpOptions).pipe(
+    return this.http.put(API_URL + '/api/AlertActivity/' + Alert_ScheduleId + '/' + id, JSON.stringify(alert), httpOptions).pipe(
       tap(_ => console.log(`updated alert id=${id}`)),
       catchError(this.handleError<any>('updateAlertActivity'))
     );
@@ -48,20 +48,20 @@ export class RestService {
   /* Dashboard Content =======================================================*/
 
   getDashboardContent(): Observable<any> {
-    return this.http.get<any>(API_URL+'/api/Contents/').pipe(
+    return this.http.get<any>(API_URL + '/api/Contents/Lists').pipe(
       map((data: Content[]) => {
         return data;
       })
-   );
+    );
   }
 
   /*Gets All Alerts by ID*/
   getPopulationDetails(id): Observable<any> {
-    return this.http.get<any>(API_URL+'/api/Metrics/' + '?practiceId=' + id).pipe(
+    return this.http.get<any>(API_URL + '/api/Metrics/' + '?practiceId=' + id).pipe(
       map((data: Population[]) => {
         return data;
       })
-   );
+    );
   }
 
 
