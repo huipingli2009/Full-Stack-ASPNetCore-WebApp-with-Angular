@@ -49,6 +49,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { RouterModule } from '@angular/router';
 import { VersionComponent } from './version/version.component';
+import { ChartsModule } from 'ng2-charts';
 
 
 @NgModule({
@@ -77,6 +78,7 @@ import { VersionComponent } from './version/version.component';
       positionClass: 'inline'
     }),
     ToastContainerModule,
+    ChartsModule,
     MatSliderModule,
     MatMenuModule,
     MatAutocompleteModule,

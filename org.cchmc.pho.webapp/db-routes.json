@@ -2,5 +2,6 @@
 {
     "/Alerts/active/*":"/Alerts/",
     "/contents/spotlights/*":"/Contents/",
-    "/metrics/list/*":"/Metrics/"
+    "/metrics/list/*":"/Metrics/",
+    "/metrics/edchart/*":"/edchart/"
 }
