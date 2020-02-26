@@ -3,8 +3,13 @@ import { HttpClient, HttpHeaders, HttpErrorResponse, HttpClientModule } from '@a
 import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 import { Alerts, Content, Population } from './models/dashboard';
+import { environment } from '../environments/environment';
 
-const endpoint = 'http://localhost:3000/';
+// we can now access environment.apiUrl
+const API_URL = environment.apiURL;
+
+
+//const endpoint = 'http://localhost:3000/';
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type':  'application/json'
@@ -26,7 +31,7 @@ export class RestService {
 
   /*Gets All Alerts by ID*/
   getAlerts(id): Observable<any> {
-    return this.http.get<any>(endpoint + 'Alerts/' + '?id=' + id).pipe(
+    return this.http.get<any>(API_URL+'/api/Alerts/' + '?id=' + id).pipe(
       map((data: Alerts[]) => {
         return data;
       })
@@ -34,7 +39,7 @@ export class RestService {
   }
   /*Updates if Alert is Active*/
   updateAlertActivity(id, Alert_ScheduleId, alert): Observable<any> {
-    return this.http.put(endpoint + 'AlertActivity/' + Alert_ScheduleId + '/' + id, JSON.stringify(alert), httpOptions).pipe(
+    return this.http.put(API_URL+'/api/AlertActivity/' + Alert_ScheduleId + '/' + id, JSON.stringify(alert), httpOptions).pipe(
       tap(_ => console.log(`updated alert id=${id}`)),
       catchError(this.handleError<any>('updateAlertActivity'))
     );
@@ -43,7 +48,7 @@ export class RestService {
   /* Dashboard Content =======================================================*/
 
   getDashboardContent(): Observable<any> {
-    return this.http.get<any>(endpoint + 'Contents/').pipe(
+    return this.http.get<any>(API_URL+'/api/Contents/').pipe(
       map((data: Content[]) => {
         return data;
       })
@@ -52,13 +57,13 @@ export class RestService {
 
   /*Gets All Alerts by ID*/
   getPopulationDetails(id): Observable<any> {
-    return this.http.get<any>(endpoint + 'Metrics/' + '?practiceId=' + id).pipe(
+    return this.http.get<any>(API_URL+'/api/Metrics/' + '?practiceId=' + id).pipe(
       map((data: Population[]) => {
         return data;
       })
    );
   }
-  
+
 
 
   private handleError<T>(operation = 'operation', result?: T) {
