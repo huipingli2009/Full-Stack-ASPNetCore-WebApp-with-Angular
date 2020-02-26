@@ -39,7 +39,6 @@ export class AppComponent {
     this.alerts = [];
     this.rest.getAlerts(id).subscribe((data) => {
       this.alerts = data;
-      this.alertScheduleId = data.Alert_ScheduleId;
       // console.log('updateAlertsData', this.alerts[0].Alert_ScheduleId);
 
     });
@@ -59,8 +58,8 @@ export class AppComponent {
           tapToDismiss: false
         })
           .onTap
-          .pipe(take(1))
-          .subscribe(() => this.toasterClickedHandler(alert.Alert_ScheduleId));
+          .pipe(take(1));
+          // .subscribe(() => this.toasterClickedHandler(alert.Alert_ScheduleId));
       });
     }
   }
