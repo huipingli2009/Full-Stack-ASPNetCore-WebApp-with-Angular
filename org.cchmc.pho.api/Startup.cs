@@ -23,17 +23,23 @@ namespace org.cchmc.pho.api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private const string PHO_WebsitePolicy = "PHO_WebsitePolicy";
+        public IConfiguration Configuration { get; }
+
+        private readonly IWebHostEnvironment _environment;
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
-        }
-
-        public IConfiguration Configuration { get; }
+            _environment = environment;
+        }              
+       
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(Startup));
+          
 
             // TODO: Load AppSettings, LDAP, DBContext, authentication
             services.AddOptions<CustomOptions>()
@@ -52,6 +58,23 @@ namespace org.cchmc.pho.api
                             return true;
                         }, "failure message");
 
+            //setting up CORS policy only in the development environment 
+            if (_environment.IsDevelopment())
+            {
+                services.AddCors(options =>
+                {
+                    options.AddPolicy(PHO_WebsitePolicy,
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:4200")
+                                     .AllowAnyHeader()
+                                     .AllowAnyMethod();
+                    });
+                });
+            }
+
+
+
             services.Configure<ConnectionStrings>(options => Configuration.GetSection("ConnectionStrings").Bind(options));
 
             services.AddControllers();
@@ -69,10 +92,12 @@ namespace org.cchmc.pho.api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
+        public void Configure(IApplicationBuilder app, ILogger<Startup> logger)
         {
-            if (env.IsDevelopment())
+            if (_environment.IsDevelopment())
             {
+                //setting up CORS policy only in the development environment 
+                app.UseCors(PHO_WebsitePolicy);
                 logger.LogInformation($"Environment is Development");
                 app.UseDeveloperExceptionPage();
             }
@@ -91,8 +116,10 @@ namespace org.cchmc.pho.api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+          
 
             app.UseAuthorization();
+            
 
             app.UseEndpoints(endpoints =>
             {

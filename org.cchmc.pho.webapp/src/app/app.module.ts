@@ -50,6 +50,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { RouterModule } from '@angular/router';
 import { VersionComponent } from './version/version.component';
 import { environment } from 'src/environments/environment';
+import { ChartsModule } from 'ng2-charts';
 
 
 @NgModule({
@@ -74,7 +75,7 @@ import { environment } from 'src/environments/environment';
       maxOpened: 3,
       autoDismiss: false,
       newestOnTop: true,
-      preventDuplicates: false,
+      preventDuplicates: true,
       positionClass: 'inline'
     }),
     LoggerModule.forRoot({
@@ -84,6 +85,7 @@ import { environment } from 'src/environments/environment';
       disableConsoleLogging: environment.disableConsoleLogging
     }),
     ToastContainerModule,
+    ChartsModule,
     MatSliderModule,
     MatMenuModule,
     MatAutocompleteModule,

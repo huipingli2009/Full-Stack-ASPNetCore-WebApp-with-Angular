@@ -8,6 +8,7 @@ export const environment = {
   logLevel: NgxLoggerLevel.WARN,
   serverLogLevel: NgxLoggerLevel.OFF,
   disableConsoleLogging: false
+
 };
 
 /*

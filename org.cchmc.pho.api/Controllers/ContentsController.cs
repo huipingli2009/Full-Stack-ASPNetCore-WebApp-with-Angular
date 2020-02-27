@@ -13,23 +13,23 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace org.cchmc.pho.api.Controllers
 {
-    [Route("api/contents")]
+    [Route("api/[controller]")]
     [ApiController]
-    public class ContentController : ControllerBase
+    public class ContentsController : ControllerBase
     {
-        private readonly ILogger<ContentController> _logger;
+        private readonly ILogger<ContentsController> _logger;
         private readonly IMapper _mapper;
         private readonly IContent _content;
 
         //TODO: delete me refactor
         private readonly CustomOptions _customOptions;
 
-        public ContentController(ILogger<ContentController> logger, IMapper mapper, IContent content)
+        public ContentsController(ILogger<ContentsController> logger, IMapper mapper, IContent content)
         {
             _logger = logger;
             _mapper = mapper;
             _content = content;
-            
+
             _logger.LogInformation($"Example of options {_customOptions?.RequiredOption}");
         }
 
@@ -57,6 +57,6 @@ namespace org.cchmc.pho.api.Controllers
                 _logger.LogError(ex, "An error occurred");
                 return StatusCode(500, "An error occurred");
             }
-        }        
+        }
     }
 }
