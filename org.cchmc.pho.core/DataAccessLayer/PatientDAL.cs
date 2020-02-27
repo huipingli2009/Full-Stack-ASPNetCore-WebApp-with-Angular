@@ -10,14 +10,12 @@ using System.Data.SqlClient;
 using System.Threading.Tasks;
 using System.Linq;
 using static org.cchmc.pho.core.DataModels.Patient;
-using System.IO;
 
 namespace org.cchmc.pho.core.DataAccessLayer
 {
     public class PatientDAL : IPatient
     {
-        private readonly ConnectionStrings _connectionStrings;
-        // TODO: Add logger
+        private readonly ConnectionStrings _connectionStrings;      
         private readonly ILogger<PatientDAL> _logger;
 
         public PatientDAL(IOptions<ConnectionStrings> options, ILogger<PatientDAL> logger)
@@ -102,6 +100,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                         PatientStatus patientStatus = new PatientStatus();
                         patientStatus =  this.GetPatientStatusAll();
+                        int patientStatusId = 0;
 
                         List<PatientCondition> patientConditions = new List<PatientCondition>();
 
@@ -121,18 +120,25 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 Chronic = bool.Parse(dr["Chronic"].ToString()),
                                 Conditions = new List<PatientCondition>(),
                                 Status = new PatientStatus()
-                            };
+                            };                           
 
-                            if (int.Parse(dr["ActiveStatus"].ToString()) > 0)
-                                patient.Status.ID = int.Parse(dr["ActiveStatus"].ToString());                           
+                            foreach (int statusId in dr["ActiveStatus"].ToString().Split(',').Select(p => int.Parse(p)))
+                            {
+                                if (patientStatus.Any(p => p.ID == statusId))
+                                    patient.Status.Add(patientStatus.First(p => p.ID == statusId));
+                                else
+                                {
+                                    _logger.LogError("An unmapped condition id was returned by the database ");
+                                }
+                            }
+
 
                             foreach (int conditionId in dr["ConditionIDs"].ToString().Split(',').Select(p => int.Parse(p)))
                             {
                                 if(patientConditions.Any(p => p.ID == conditionId))
                                     patient.Conditions.Add(patientConditions.First(p => p.ID == conditionId));
                                 else
-                                {
-                                    // TODO: Log that an unmapped condition id was returned by the database
+                                {                                    
                                     _logger.LogError("An unmapped condition id was returned by the database ");
                                 }
                             }
@@ -220,11 +226,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             da.Fill(ds);
 
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-            {
-                if (returnObject == null)
-                {
-                    returnObject = new PatientStatus();
-                }
+            {               
                 returnObject = CreatePatientStatusModel(ds.Tables[0].Rows[i]);               
             }
 
