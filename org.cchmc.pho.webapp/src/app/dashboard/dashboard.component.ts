@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RestService } from '../rest.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { Alerts, Content, Population, EdChart } from '../models/dashboard';
+import { Alerts, Content, Population, EdChart, EdChartDetails } from '../models/dashboard';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,6 +17,7 @@ export class DashboardComponent implements OnInit {
   population: Population[] = [];
   edChart: EdChart[];
   edChartData: any[] = [];
+  edChartDetails: EdChartDetails[];
   monthlySpotlightTitle: string;
   monthlySpotlightBody: string;
   monthlySpotlightLink: string;
@@ -30,7 +32,7 @@ export class DashboardComponent implements OnInit {
   displayedColumnsQi: string[] = ['dashboardLabelQi', 'practiceTotalQi', 'networkTotalQi'];
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
-              public fb: FormBuilder) {
+              public fb: FormBuilder, public dialog: MatDialog) {
     // var id = this.userId.snapshot.paramMap.get('id') TODO: Need User Table;
     this.dataSourceOne = new MatTableDataSource;
     this.dataSourceTwo = new MatTableDataSource;
@@ -53,8 +55,10 @@ export class DashboardComponent implements OnInit {
         }
     }]
 },
-events: ['click'],
-// onClick: this.getEdChartDetails
+onClick: () => {
+  console.log(this.edChartData); // Maybe add hidden field
+  this.openDialog();
+}
   };
 
   public barChartLabels = [];
@@ -66,7 +70,8 @@ events: ['click'],
       backgroundColor: '#FABD9E',
       hoverBackgroundColor: '#F0673C',
       data: this.edChartData,
-      label: '# Patients'} // Need to ask how many days and what the date range is dependent on
+      label: '# Patients' // 12 Days
+    }
   ];
 
   ngOnInit() {
@@ -136,4 +141,39 @@ events: ['click'],
       });
     });
   }
+
+  /* Open Modal (Dialog) on bar click */
+  openDialog() {
+    const dialogRef = this.dialog.open(ModalEdDetails);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+
+  /* Get ED Chart Details */
+  getEdChartDetails() {
+    this.edChartDetails = [];
+    this.rest.getEdChartDetails('02/14/2020').subscribe((data) => {
+      this.edChartDetails = data;
+      console.log('eddetails', this.edChartDetails);
+    });
+  }
 }
+
+/* Modal for ED Chart Details - This could be seperated into it's own component...Not sure if completely necessary at the moment */
+@Component({
+    selector: 'modal-ed-details',
+    templateUrl: 'modal-ed-details.html',
+  })
+  export class ModalEdDetails {
+
+    constructor(
+      public dialogRef: MatDialogRef<ModalEdDetails>,
+      @Inject(MAT_DIALOG_DATA) public data: EdChartDetails) {}
+  
+    // onNoClick(): void {
+    //   this.dialogRef.close();
+    // }
+  
+  }
