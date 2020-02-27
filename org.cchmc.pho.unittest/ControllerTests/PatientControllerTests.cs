@@ -1,7 +1,11 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using org.cchmc.pho.api.Controllers;
@@ -9,12 +13,6 @@ using org.cchmc.pho.api.Mappings;
 using org.cchmc.pho.api.ViewModels;
 using org.cchmc.pho.core.DataModels;
 using org.cchmc.pho.core.Interfaces;
-using org.cchmc.pho.core.Models;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
-using System.Threading.Tasks;
 
 namespace org.cchmc.pho.unittest.controllertests
 {
@@ -22,8 +20,8 @@ namespace org.cchmc.pho.unittest.controllertests
     [ExcludeFromCodeCoverage]
     public class PatientControllerTests
     {
-        private PatientController _PatientController;
-        private Mock<ILogger<PatientController>> _mockLogger;
+        private PatientsController _PatientController;
+        private Mock<ILogger<PatientsController>> _mockLogger;
         private Mock<IPatient> _mockPatientDal;
         private IMapper _mapper;
 
@@ -37,7 +35,7 @@ namespace org.cchmc.pho.unittest.controllertests
             });
             _mapper = config.CreateMapper();
             _mockPatientDal = new Mock<IPatient>();
-            _mockLogger = new Mock<ILogger<PatientController>>();
+            _mockLogger = new Mock<ILogger<PatientsController>>();
         }
 
 
@@ -94,7 +92,7 @@ namespace org.cchmc.pho.unittest.controllertests
             };
 
             _mockPatientDal.Setup(p => p.GetPatientDetails(patientId)).Returns(Task.FromResult(myPatientDetails)).Verifiable();
-            _PatientController = new PatientController(_mockLogger.Object, _mapper, _mockPatientDal.Object);
+            _PatientController = new PatientsController(_mockLogger.Object, _mapper, _mockPatientDal.Object);
 
             // execute
             var result = await _PatientController.GetPatientDetails(patientId.ToString()) as ObjectResult;
@@ -152,7 +150,7 @@ namespace org.cchmc.pho.unittest.controllertests
         {
             // setup
             var patientId = "asdf";
-            _PatientController = new PatientController(_mockLogger.Object, _mapper, _mockPatientDal.Object);
+            _PatientController = new PatientsController(_mockLogger.Object, _mapper, _mockPatientDal.Object);
 
             // execute
             var result = await _PatientController.GetPatientDetails(patientId) as ObjectResult;
@@ -169,7 +167,7 @@ namespace org.cchmc.pho.unittest.controllertests
             // setup
             var patientId = 5;
             _mockPatientDal.Setup(p => p.GetPatientDetails(patientId)).Throws(new Exception()).Verifiable();
-            _PatientController = new PatientController(_mockLogger.Object, _mapper, _mockPatientDal.Object);
+            _PatientController = new PatientsController(_mockLogger.Object, _mapper, _mockPatientDal.Object);
 
             // execute
             var result = await _PatientController.GetPatientDetails(patientId.ToString()) as ObjectResult;

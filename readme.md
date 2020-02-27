@@ -40,6 +40,7 @@ This will update the version number in the package.json
 
 ```console
 //in the org.cchmc.pho.webapp folder run the following
+//Will need to run npm i before this command can be invoked and/or build the web app first
 > npx json-server --watch db.json --routes db-routes.json
 ```
 
