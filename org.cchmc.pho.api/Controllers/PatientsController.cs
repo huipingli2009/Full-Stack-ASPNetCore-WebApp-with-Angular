@@ -12,15 +12,15 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace org.cchmc.pho.api.Controllers
 {
-    [Route("api/patients")]
+    [Route("api/[controller]")]
     [ApiController]
-    public class PatientController : ControllerBase
-    {       
-        private readonly ILogger<PatientController> _logger;
+    public class PatientsController : ControllerBase
+    {
+        private readonly ILogger<PatientsController> _logger;
         private readonly IMapper _mapper;
         private readonly IPatient _patient;
-       
-        public PatientController(ILogger<PatientController> logger, IMapper mapper, IPatient patient)
+
+        public PatientsController(ILogger<PatientsController> logger, IMapper mapper, IPatient patient)
         {
             _logger = logger;
             _mapper = mapper;
@@ -29,13 +29,17 @@ namespace org.cchmc.pho.api.Controllers
 
         // GET: api/Patient
         //[HttpGet("PatientList/{userId}/{staffID?}/{popmeasureID?}/{watch?}/{chronic?}/{conditionIDs?}/{namesearch?}/{sortcolumn?}/{pagenumber}/{rowspage}")]
-        [HttpGet("patientlist/{userId}")]
+        //[HttpGet("patientlist/{userId}")]
+        [HttpGet]
 
         [SwaggerResponse(200, type: typeof(List<PatientViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> ListActivePatient(int userId, int staffID, int popmeasureID, bool watch, bool chronic, string conditionIDs, string namesearch, string sortcolumn, int pagenumber, int rowspage)
         {
+            //todo all these params into a view model
+            // rule of thumb : after 3 paramters create an object
+
             //For now, we assign pagenumber = 1 before we have population from group meeting this morning
             //Will update later
             pagenumber = 1;
@@ -63,7 +67,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
 
-        [HttpGet("patientdetails/{patient}")]
+        [HttpGet("{patient}")]
         [SwaggerResponse(200, type: typeof(List<PatientDetailsViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]

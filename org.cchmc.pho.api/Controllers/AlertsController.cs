@@ -1,54 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using org.cchmc.pho.api.ViewModels;
 using org.cchmc.pho.core.Interfaces;
-using org.cchmc.pho.core.Models;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace org.cchmc.pho.api.Controllers
 {
     [ApiController]
-    [Route("api/Alerts")]
+    [Route("api/[controller]")]
     //[Authorize] // Uncomment this out later when the authorization parts are working
-    public class AlertController : ControllerBase
+    public class AlertsController : ControllerBase
     {
-        private readonly ILogger<AlertController> _logger;
+        private readonly ILogger<AlertsController> _logger;
         private readonly IMapper _mapper;
         private readonly IAlert _alertDal;
 
-        //TODO: delete me refactor
-        private readonly CustomOptions _customOptions;
 
 
-        public AlertController(ILogger<AlertController> logger, IMapper mapper, IAlert alertDal, IOptions<CustomOptions> customOptions)
+         //todo hardcoded for now.... future will get from session
+        private readonly string _DEFAULT_USER = "3";
+
+        public AlertsController(ILogger<AlertsController> logger, IMapper mapper, IAlert alertDal)
         {
             _logger = logger;
             _mapper = mapper;
             _alertDal = alertDal;
 
-            //TODO : CAN add some validation on this
-           // _customOptions = customOptions.Value;
+        }
 
-            _logger.LogInformation($"Example of options {_customOptions?.RequiredOption}");
-        }              
-
-        [HttpGet("active/{user}")]
+        [HttpGet()]
         [SwaggerResponse(200, type: typeof(List<AlertViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> ListActiveAlerts(string user)
+        public async Task<IActionResult> ListActiveAlerts()
         {
+
             // route parameters are strings and need to be translated (and validated) to their proper data type
-            if (!int.TryParse(user, out var userId))
+            if (!int.TryParse(_DEFAULT_USER, out var userId))
             {
-                _logger.LogInformation($"Failed to parse userId - {user}");
+                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
                 return BadRequest("user is not a valid integer");
             }
 
@@ -72,17 +66,17 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [HttpPost("alert/{alertSchedule}/{user}")]
+        [HttpPost("{alertSchedule}")]
         [SwaggerResponse(200, type: typeof(string))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> MarkAlertAction(string alertSchedule, string user, [FromBody] AlertActionViewModel action)
+        public async Task<IActionResult> MarkAlertAction(string alertSchedule, [FromBody] AlertActionViewModel action)
         {
-        
+
             // route parameters are strings and need to be translated (and validated) to their proper data type
-            if (!int.TryParse(user, out var userId))
+            if (!int.TryParse(_DEFAULT_USER, out var userId))
                 return BadRequest("user is not a valid integer");
-                    
+
 
             if (!int.TryParse(alertSchedule, out var alertScheduleId))
                 return BadRequest("alertSchedule is not a valid integer");

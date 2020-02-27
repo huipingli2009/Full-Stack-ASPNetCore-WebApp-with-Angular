@@ -1,6 +1,6 @@
 export class Alerts {
     id: number;
-    AlertId: number;
+    alertId: number;
     alertScheduleId: number;
     message: string;
     url: string;
