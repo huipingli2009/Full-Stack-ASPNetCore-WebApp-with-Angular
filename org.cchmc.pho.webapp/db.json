@@ -1,8 +1,7 @@
 {
   "Alerts": [
     {
-      "id": 3,
-      "AlertId": 1,
+      "alertId": 1,
       "alertScheduleId": 1,
       "message": "Don't forget your workbook is due <strong>12/15/2019!</strong>",
       "url": "https://insight.invisionapp.com/share/2YUPA0MVZB4#/screens/398015819",
@@ -10,8 +9,7 @@
       "definition": "NULL"
     },
     {
-      "id": 3,
-      "AlertId": 5,
+      "alertId": 5,
       "alertScheduleId": 9,
       "message": "Warning your Workbook is Past Due!",
       "url": "https://insight.invisionapp.com/d/main/#/console/18823247/398015819/preview",
@@ -19,8 +17,7 @@
       "definition": "NULL"
     },
     {
-      "id": 3,
-      "AlertId": 3,
+      "alertId": 3,
       "alertScheduleId": 6,
       "message": "Your Daily ED Patient Report for <strong>01/01/2020</strong> is now available!",
       "url": "https://insight.invisionapp.com/share/2YUPA0MVZB4#/screens/398259767",
