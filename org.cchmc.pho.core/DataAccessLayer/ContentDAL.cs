@@ -43,11 +43,11 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                   select new SpotLight()
                                   {
                                       Header = dr["Header"].ToString(),
-                                      PlacementOrder = Convert.ToInt32(dr["PlacementOrder"]),
+                                      PlacementOrder = (dr["PlacementOrder"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PlacementOrder"].ToString())),
                                       Body = dr["Body"].ToString(),
                                       Hyperlink = dr["Hyperlink"].ToString(),
                                       ImageHyperlink = dr["ImageHyperlink"].ToString(),
-                                      ContentPlacement = dr["ContentPlacement"].ToString()
+                                      LocationId = (dr["LocationId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["LocationId"].ToString()))
                                   }
 
                           ).ToList();
