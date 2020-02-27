@@ -54,7 +54,9 @@ export class DashboardComponent implements OnInit {
             beginAtZero: true
         }
     }]
-}
+},
+events: ['click'],
+// onClick: this.getEdChartDetails
   };
 
   public barChartLabels = [];
