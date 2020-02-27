@@ -79,7 +79,7 @@ import { ChartsModule } from 'ng2-charts';
       positionClass: 'inline'
     }),
     LoggerModule.forRoot({
-      serverLoggingUrl: `${environment.apiURL}/api/logs`,
+      // serverLoggingUrl: `${environment.apiURL}/api/logs`, TODO: uncomment when the Logging Controller is ready in the web API 
       level: environment.logLevel,
       serverLogLevel: environment.serverLogLevel,
       disableConsoleLogging: environment.disableConsoleLogging
