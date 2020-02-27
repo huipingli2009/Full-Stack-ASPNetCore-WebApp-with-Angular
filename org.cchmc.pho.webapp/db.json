@@ -3,29 +3,29 @@
     {
       "id": 3,
       "AlertId": 1,
-      "Alert_ScheduleId": 1,
-      "AlertMessage": "Don't forget your workbook is due <strong>12/15/2019!</strong>",
-      "URL": "https://insight.invisionapp.com/share/2YUPA0MVZB4#/screens/398015819",
-      "URL_Label": "GO TO WORKBOOK",
-      "AlertDefinition": "NULL"
+      "alertScheduleId": 1,
+      "message": "Don't forget your workbook is due <strong>12/15/2019!</strong>",
+      "url": "https://insight.invisionapp.com/share/2YUPA0MVZB4#/screens/398015819",
+      "linkText": "GO TO WORKBOOK",
+      "definition": "NULL"
     },
     {
       "id": 3,
       "AlertId": 5,
-      "Alert_ScheduleId": 9,
-      "AlertMessage": "Warning your Workbook is Past Due!",
-      "URL": "https://insight.invisionapp.com/d/main/#/console/18823247/398015819/preview",
-      "URL_Label": "GO TO WORKBOOK",
-      "AlertDefinition": "NULL"
+      "alertScheduleId": 9,
+      "message": "Warning your Workbook is Past Due!",
+      "url": "https://insight.invisionapp.com/d/main/#/console/18823247/398015819/preview",
+      "linkText": "GO TO WORKBOOK",
+      "definition": "NULL"
     },
     {
       "id": 3,
       "AlertId": 3,
-      "Alert_ScheduleId": 6,
-      "AlertMessage": "Your Daily ED Patient Report for <strong>01/01/2020</strong> is now available!",
-      "URL": "https://insight.invisionapp.com/share/2YUPA0MVZB4#/screens/398259767",
-      "URL_Label": "VIEW IT HERE",
-      "AlertDefinition": "Alert is triggered by an ED/Urgent care visit in the last 48hrs."
+      "alertScheduleId": 6,
+      "message": "Your Daily ED Patient Report for <strong>01/01/2020</strong> is now available!",
+      "url": "https://insight.invisionapp.com/share/2YUPA0MVZB4#/screens/398259767",
+      "linkText": "VIEW IT HERE",
+      "definition": "Alert is triggered by an ED/Urgent care visit in the last 48hrs."
     }
   ],
   "AlertActivity": {
@@ -199,5 +199,112 @@
       "practiceTotal": 12616,
       "networkTotal": 249672
     }
+  ],
+  "edchart" : [
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/8/2020",
+      "chartLabel": "Sat 2/8",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 0
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/9/2020",
+      "chartLabel": "Sun 2/9",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 1
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/10/2020",
+      "chartLabel": "Mon 2/10",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 2
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/11/2020",
+      "chartLabel": "Tue 2/11",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 3
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/12/2020",
+      "chartLabel": "Wed 2/12",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 8
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/13/2020",
+      "chartLabel": "Thu 2/13",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 10
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/14/2020",
+      "chartLabel": "Fri 2/14",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 3
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/15/2020",
+      "chartLabel": "Sat 2/15",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 0
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/16/2020",
+      "chartLabel": "Sun 2/16",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 6
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/17/2020",
+      "chartLabel": "Mon 2/17",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 25
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/18/2020",
+      "chartLabel": "Tue 2/18",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 10
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/19/2020",
+      "chartLabel": "Wed 2/19",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 0
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/20/2020",
+      "chartLabel": "Thu 2/20",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 9
+    }
+    
   ]
 }

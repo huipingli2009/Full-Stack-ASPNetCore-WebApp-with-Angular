@@ -48,7 +48,7 @@ export class RestService {
   /* Dashboard Content =======================================================*/
 
   getDashboardContent(): Observable<any> {
-    return this.http.get<any>(API_URL + '/api/contents/spotlights').pipe(
+    return this.http.get<any>(API_URL + '/api/contents/spotlights/').pipe(
       map((data: Content[]) => {
         return data;
       })
@@ -65,14 +65,14 @@ export class RestService {
   }
 
   /*Gets base ED Chart Information by ID - Working Here*/
-  // getEdChartByUser(id): Observable<any> {
-  //   const endpoint = `${API_URL}/api/edchart/?id=${id}`;
-  //   return this.http.get<any>(endpoint).pipe(
-  //     map((data: EdChart[]) => {
-  //       return data;
-  //     })
-  //  );
-  // }
+  getEdChartByUser(id): Observable<any> {
+    const endpoint = `${API_URL}/api/edchart/?id=${id}`;
+    return this.http.get<any>(endpoint).pipe(
+      map((data: EdChart[]) => {
+        return data;
+      })
+   );
+  }
 
 
 

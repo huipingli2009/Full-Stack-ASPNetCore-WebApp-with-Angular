@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RestService } from '../rest.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { Alerts, Content, Population } from '../models/dashboard';
+import { Alerts, Content, Population, EdChart } from '../models/dashboard';
 import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
@@ -13,12 +13,16 @@ import { MatTableDataSource } from '@angular/material/table';
 
 export class DashboardComponent implements OnInit {
 
+  userId = 3; //TODO Get actual User Id
   content: Content[];
   population: Population[] = [];
+  edChart: EdChart[];
+  edChartData: any[] = [];
   monthlySpotlightTitle: string;
   monthlySpotlightBody: string;
   monthlySpotlightLink: string;
   monthlySpotlightImage: string;
+  edChartTitle: string;
   quickLinks: any[] = [];
   popData: any[] = [];
   qiData: any[] = [];
@@ -35,20 +39,33 @@ export class DashboardComponent implements OnInit {
   }
   public barChartOptions = {
     scaleShowVerticalLines: true,
-    responsive: true
+    responsive: true,
+    layout: {
+      padding: {
+          left: 47,
+          right: 68,
+          top: 27,
+          bottom: 43
+      }
+  }
   };
 
-  public barChartLabels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
+  public barChartLabels = [];
   public barChartType = 'bar';
   public barChartLegend = true;
   public barChartData = [
-    {data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A'},
-    {data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B'}
+    {
+      maxBarThickness: 22,
+      backgroundColor: '#FABD9E',
+      hoverBackgroundColor: '#F0673C',
+      data: this.edChartData,
+      label: '# Patients'} // Need to ask how many days and what the date range is dependent on
   ];
 
   ngOnInit() {
     this.getAllContent();
     this.getPopulation(7); // TODO: Temp Practice ID Value
+    this.getEdChart(this.userId);
   }
 
   // Dahsboard Content
@@ -97,6 +114,18 @@ export class DashboardComponent implements OnInit {
           });
           this.dataSourceTwo.data = this.qiData;
         }
+      });
+    });
+  }
+  /* ED Chart =========================================*/
+  getEdChart(id) {
+    this.edChart = [];
+    this.rest.getEdChartByUser(id).subscribe((data) => {
+      this.edChart = data;
+      this.edChartTitle = this.edChart[0].chartTitle;
+      this.edChart.forEach(item => {
+        this.barChartLabels.push(item.chartLabel);
+        this.edChartData.push(item.edVisits);
       });
     });
   }
