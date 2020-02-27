@@ -47,7 +47,14 @@ export class DashboardComponent implements OnInit {
           top: 27,
           bottom: 43
       }
-  }
+  },
+  scales: {
+    yAxes: [{
+        ticks: {
+            beginAtZero: true
+        }
+    }]
+}
   };
 
   public barChartLabels = [];
