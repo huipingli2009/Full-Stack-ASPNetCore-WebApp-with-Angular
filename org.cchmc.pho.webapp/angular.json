@@ -128,5 +128,8 @@
       }
     }
   },
-  "defaultProject": "phoweb"
+  "defaultProject": "phoweb",
+  "cli": {
+    "analytics": "ba5b7e7c-2c92-471b-95c2-c502cc51b682"
+  }
 }
