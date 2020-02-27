@@ -1,11 +1,18 @@
 # PHO build
 
 
-# todo : setup triggers? https://docs.microsoft.com/en-us/azure/devops/pipelines/build/triggers?view=azure-devops&tabs=yaml
+# Triggers notes https://docs.microsoft.com/en-us/azure/devops/pipelines/build/triggers?view=azure-devops&tabs=yaml
+# https://docs.microsoft.com/en-us/azure/devops/release-notes/2019/sprint-146-update#avoid-triggering-multiple-ci-builds-for-pull-requests
+#
 trigger:
   branches:
     include:
-      - '*'
+      - 'develop'
+      - 'release/*'
+  paths:
+    exclude:
+      - readme.md
+      - changelog.md
     ##- feature/yml
 
 
@@ -31,29 +38,44 @@ jobs:
         # app
         # todo : where to setup flags for the swagger for uat/prod env (false)
         ## Building Angular SPA
-        - script: npm install
-          displayName : 'Installing the webapp npm dependency'
+        - script: npm cache verify
+          displayName: 'NPM verify cache'
+        - script: npm ci
+          displayName : 'Installing NPM dependency'
           workingDirectory: $(Build.SourcesDirectory)/$(webSubDir)
         - script: npm run build-webApp #define in package.json
-          displayName: 'Build Website'
+          displayName: 'Build angular website'
           workingDirectory: $(Build.SourcesDirectory)/$(webSubDir)
         - task: CopyFiles@2
           inputs:
             cleanTargetFolder: true
             sourceFolder: '$(Build.SourcesDirectory)/$(webSubDir)/dist/phoweb'
             targetFolder: '$(Build.SourcesDirectory)/$(apiSubDir)/wwwroot'
-        ## Buidling Dotnet API
-        - task: DotNetCoreCLI@2
+        ## setup dotnet 3.1 build # not sure if this is needed?
+        - task: UseDotNet@2
+          displayName: "Use .NET Core 3.1.x"
           inputs:
-            command: publish
-            publishWebProjects: False
-            arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-            zipAfterPublish: True
+            version: '3.1.x'
+            packageType: sdk
+        - script: dotnet build --configuration $(buildConfiguration)
+          displayName: 'dotnet build $(buildConfiguration)'
+
         - task: DotNetCoreCLI@2
+          displayName: 'Running Unit Tests'
           inputs:
             command: 'test'
-        # - script: 'dotnet test --configuration $(buildConfiguration)'
-        #   displayName: 'dotnet test $(buildConfiguration)'
+            ##projects: '**/*test*/*.csproj'
+            arguments: '--configuration $(buildConfiguration)'
+
+        ## Buidling Dotnet API
+        - task: DotNetCoreCLI@2
+          displayName: 'publish app'
+          inputs:
+            command: publish
+            publishWebProjects: True
+            arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+            zipAfterPublish: True
+
         - task: PublishBuildArtifacts@1
           inputs:
             PathtoPublish: '$(Build.ArtifactStagingDirectory)'

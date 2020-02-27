@@ -1,0 +1,310 @@
+{
+  "Alerts": [
+    {
+      "id": 3,
+      "AlertId": 1,
+      "alertScheduleId": 1,
+      "message": "Don't forget your workbook is due <strong>12/15/2019!</strong>",
+      "url": "https://insight.invisionapp.com/share/2YUPA0MVZB4#/screens/398015819",
+      "linkText": "GO TO WORKBOOK",
+      "definition": "NULL"
+    },
+    {
+      "id": 3,
+      "AlertId": 5,
+      "alertScheduleId": 9,
+      "message": "Warning your Workbook is Past Due!",
+      "url": "https://insight.invisionapp.com/d/main/#/console/18823247/398015819/preview",
+      "linkText": "GO TO WORKBOOK",
+      "definition": "NULL"
+    },
+    {
+      "id": 3,
+      "AlertId": 3,
+      "alertScheduleId": 6,
+      "message": "Your Daily ED Patient Report for <strong>01/01/2020</strong> is now available!",
+      "url": "https://insight.invisionapp.com/share/2YUPA0MVZB4#/screens/398259767",
+      "linkText": "VIEW IT HERE",
+      "definition": "Alert is triggered by an ED/Urgent care visit in the last 48hrs."
+    }
+  ],
+  "AlertActivity": {
+    "Alert_ScheduleId" :  [
+     {
+      "alertActionId": 3,
+      "id": 3
+     }
+    ]
+  },
+  "Contents" : [
+    {
+      "header": "Exceptional Patient Care: ESD Pediatrics",
+      "placementOrder": 1,
+      "body": "ESD Pediatric Group had a successful second quarter. Read on to learn how their processes could help your practice acheive your quarterly goals. ESD Pediatric Group had a successful second quarter. Read on to learn how their processes could help your practice acheive your quarterly goals. ESD Pediatric Group had a successful second quarter.",
+      "hyperlink": "https://cchmc.sharepoint.com/:w:/s/PHODataCollection/ETfEDhWG5UlPg6e5w6H9N-cBhbAV8QkARfidHFysShJGmw?e=569bs3",
+      "imageHyperlink": "Spotlight_Img1.jpeg",
+      "contentPlacement": "Monthly Spotlight"
+    },
+    {
+      "header": null,
+      "placementOrder": 2,
+      "body": "Top 100 Bill Codes",
+      "hyperlink": "https://cchmc.sharepoint.com/:b:/s/PHODataCollection/EYYj4_iUwVlCtknVRXSekSsBF1XWrtJPgMaZnniUQ19bzg?e=emWREK",
+      "imageHyperlink": "NULL",
+      "contentPlacement": "Quick Links"
+    },
+    {
+      "header": null,
+      "placementOrder": 3,
+      "body": "Top Billed J Codes",
+      "hyperlink": "https://cchmc.sharepoint.com/:b:/s/PHODataCollection/EYYj4_iUwVlCtknVRXSekSsBF1XWrtJPgMaZnniUQ19bzg?e=emWREK",
+      "imageHyperlink": "NULL",
+      "contentPlacement": "Quick Links"
+    },
+    {
+      "header": null,
+      "placementOrder": 4,
+      "body": "Top Billed J Codes",
+      "hyperlink": "https://cchmc.sharepoint.com/:b:/s/PHODataCollection/EYYj4_iUwVlCtknVRXSekSsBF1XWrtJPgMaZnniUQ19bzg?e=emWREK",
+      "imageHyperlink": "NULL",
+      "contentPlacement": "Quick Links"
+    }
+  ],
+  "Metrics" : [
+    {
+      "practiceId": 7,
+      "dashboardLabel": "Commercially Ins",
+      "measureDesc": "All Patients with Commercial Insurance (Data as of: 2020-02-20)",
+      "measureType": "POP",
+      "practiceTotal": 61,
+      "networkTotal": 3945
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "L2 Patients",
+      "measureDesc": "All Patients with L2 PMCA Score Active in the PHO (Data as of: 2020-02-20)",
+      "measureType": "POP",
+      "practiceTotal": 695,
+      "networkTotal": 13825
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "L3 Patients",
+      "measureDesc": "All Patients with L3 PMCA Score Active in the PHO (Data as of: 2020-02-20)",
+      "measureType": "POP",
+      "practiceTotal": 296,
+      "networkTotal": 6388
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "Medicaid Patients",
+      "measureDesc": "All Patients with Medicaid Insurance (Data as of: 2020-02-20)",
+      "measureType": "POP",
+      "practiceTotal": 446,
+      "networkTotal": 19684
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "PHQ-9 Patients",
+      "measureDesc": "All Patients with a PHQ-9 Score of 10 or more (Data as of: 2020-02-20)",
+      "measureType": "POP",
+      "practiceTotal": 71,
+      "networkTotal": 1487
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "Potentially Active",
+      "measureDesc": "All Patients in the PHO who are potentially Active (Data as of: 2020-02-20)",
+      "measureType": "POP",
+      "practiceTotal": 311,
+      "networkTotal": 9138
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "Recent ED for Depression",
+      "measureDesc": "All Patients Seen in ED/UC for Depression in Last 30 Days (Data as of: 2020-02-20)",
+      "measureType": "POP",
+      "practiceTotal": 2,
+      "networkTotal": 63
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "Total",
+      "measureDesc": "All Patients in the PHO (Active or Potentially Active) (Data as of: 2020-02-20)",
+      "measureType": "POP",
+      "practiceTotal": 12616,
+      "networkTotal": 249672
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "Commercially Ins",
+      "measureDesc": "All Patients with Commercial Insurance (Data as of: 2020-02-20)",
+      "measureType": "QI",
+      "practiceTotal": 61,
+      "networkTotal": 3945
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "L2 Patients",
+      "measureDesc": "All Patients with L2 PMCA Score Active in the PHO (Data as of: 2020-02-20)",
+      "measureType": "QI",
+      "practiceTotal": 695,
+      "networkTotal": 13825
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "L3 Patients",
+      "measureDesc": "All Patients with L3 PMCA Score Active in the PHO (Data as of: 2020-02-20)",
+      "measureType": "QI",
+      "practiceTotal": 296,
+      "networkTotal": 6388
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "Medicaid Patients",
+      "measureDesc": "All Patients with Medicaid Insurance (Data as of: 2020-02-20)",
+      "measureType": "QI",
+      "practiceTotal": 446,
+      "networkTotal": 19684
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "PHQ-9 Patients",
+      "measureDesc": "All Patients with a PHQ-9 Score of 10 or more (Data as of: 2020-02-20)",
+      "measureType": "QI",
+      "practiceTotal": 71,
+      "networkTotal": 1487
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "Potentially Active",
+      "measureDesc": "All Patients in the PHO who are potentially Active (Data as of: 2020-02-20)",
+      "measureType": "QI",
+      "practiceTotal": 311,
+      "networkTotal": 9138
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "Recent ED for Depression",
+      "measureDesc": "All Patients Seen in ED/UC for Depression in Last 30 Days (Data as of: 2020-02-20)",
+      "measureType": "QI",
+      "practiceTotal": 2,
+      "networkTotal": 63
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "Total",
+      "measureDesc": "All Patients in the PHO (Active or Potentially Active) (Data as of: 2020-02-20)",
+      "measureType": "QI",
+      "practiceTotal": 12616,
+      "networkTotal": 249672
+    }
+  ],
+  "edchart" : [
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/8/2020",
+      "chartLabel": "Sat 2/8",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 0
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/9/2020",
+      "chartLabel": "Sun 2/9",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 1
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/10/2020",
+      "chartLabel": "Mon 2/10",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 2
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/11/2020",
+      "chartLabel": "Tue 2/11",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 3
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/12/2020",
+      "chartLabel": "Wed 2/12",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 8
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/13/2020",
+      "chartLabel": "Thu 2/13",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 10
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/14/2020",
+      "chartLabel": "Fri 2/14",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 3
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/15/2020",
+      "chartLabel": "Sat 2/15",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 0
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/16/2020",
+      "chartLabel": "Sun 2/16",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 6
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/17/2020",
+      "chartLabel": "Mon 2/17",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 25
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/18/2020",
+      "chartLabel": "Tue 2/18",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 10
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/19/2020",
+      "chartLabel": "Wed 2/19",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 0
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/20/2020",
+      "chartLabel": "Thu 2/20",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 9
+    }
+    
+  ]
+}

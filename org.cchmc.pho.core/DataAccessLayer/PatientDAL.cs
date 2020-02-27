@@ -9,7 +9,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using System.Linq;
-using static org.cchmc.pho.core.DataModels.Patient;
 
 namespace org.cchmc.pho.core.DataAccessLayer
 {
@@ -22,7 +21,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         {
             _connectionStrings = options.Value;
             _logger = logger;
-        }
+        }       
 
         public async Task<List<Patient>> ListActivePatient(int userId, int staffID, int popmeasureID, bool watch, bool chronic, string conditionIDs, string namesearch)
         {
@@ -98,18 +97,19 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     {
                         da.Fill(dataTable);
 
-                        PatientStatus patientStatus = new PatientStatus();
-                        patientStatus =  this.GetPatientStatusAll();
-                        int patientStatusId = 0;
+                        List<PatientStatus> patientStatus = new List<PatientStatus>();
+
+                        patientStatus = this.GetPatientStatusAll();
 
                         List<PatientCondition> patientConditions = new List<PatientCondition>();
 
                         patientConditions = this.GetPatientConditionsAll();
 
                         foreach(DataRow dr in dataTable.Rows)
-                        {
+                        {                 
+
                             var patient = new Patient()
-                            {                               
+                            {                                 
                                 PatientId = Convert.ToInt32(dr["PatientId"]),
                                 FirstName = dr["FirstName"].ToString(),
                                 LastName = dr["LastName"].ToString(),
@@ -119,7 +119,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 LastEDVisit = (dr["LastEDVisit"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LastEDVisit"].ToString())),
                                 Chronic = bool.Parse(dr["Chronic"].ToString()),
                                 Conditions = new List<PatientCondition>(),
-                                Status = new PatientStatus()
+                                Status = new List<PatientStatus>()                               
                             };                           
 
                             foreach (int statusId in dr["ActiveStatus"].ToString().Split(',').Select(p => int.Parse(p)))
@@ -131,7 +131,6 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                     _logger.LogError("An unmapped condition id was returned by the database ");
                                 }
                             }
-
 
                             foreach (int conditionId in dr["ConditionIDs"].ToString().Split(',').Select(p => int.Parse(p)))
                             {
@@ -212,22 +211,26 @@ namespace org.cchmc.pho.core.DataAccessLayer
             return c;
         }
 
-        public PatientStatus GetPatientStatusAll()
+        public List<PatientStatus> GetPatientStatusAll()
         {
+            List<PatientStatus> returnObject = null;
             SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB);
 
             SqlCommand sqlCommand = new SqlCommand("spGetPatientStatusAll", sqlConnection);
-            sqlCommand.CommandType = CommandType.StoredProcedure;
-
-            PatientStatus returnObject = null;
+            sqlCommand.CommandType = CommandType.StoredProcedure;           
 
             SqlDataAdapter da = new SqlDataAdapter(sqlCommand);
             DataSet ds = new DataSet();
-            da.Fill(ds);
+            da.Fill(ds);            
 
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-            {               
-                returnObject = CreatePatientStatusModel(ds.Tables[0].Rows[i]);               
+            {
+                if (returnObject == null)
+                {
+                    returnObject = new List<PatientStatus>();
+                }
+                PatientStatus PtStatus = CreatePatientStatusModel(ds.Tables[0].Rows[i]);
+                returnObject.Add(PtStatus);
             }
 
             return returnObject;

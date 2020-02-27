@@ -1,0 +1,29 @@
+
+@font-face {
+    font-family: 'AvenirNextRegular';
+    src: url('fonts/Avenir-Next.ttf') format('truetype');
+  }
+@font-face {
+  font-family: 'ArcherBold';
+  src: url('fonts/Archer-Bold-Pro.otf') format('opentype');
+}
+@font-face {
+    font-family: 'ArcherSemiBold';
+    src: url('fonts/ArcherPro-Semibold_0.otf') format('opentype');
+  }
+  @font-face {
+    font-family: 'ArcherMedium';
+    src: url('fonts/Archer-Medium-Pro.otf') format('opentype');
+  }
+  @font-face {
+    font-family: 'ArcherLight';
+    src: url('fonts/Archer-Light-Pro.otf') format('opentype');
+  }
+  @font-face {
+    font-family: 'ArcherBook';
+    src: url('fonts/Archer-Book-Pro.otf') format('opentype');
+  }
+  @font-face {
+    font-family: 'ArcherBookItalic';
+    src: url('fonts/Archer-BookItal-Pro.otf') format('opentype');
+  }

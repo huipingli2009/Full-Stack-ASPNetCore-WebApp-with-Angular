@@ -17,7 +17,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
     public class MetricDAL : IMetric
     {
         private readonly ConnectionStrings _connectionStrings;
-        public MetricDAL(IOptions<ConnectionStrings> options, ILogger<AlertDAL> logger)
+        public MetricDAL(IOptions<ConnectionStrings> options, ILogger<MetricDAL> logger)
         {
             _connectionStrings = options.Value;
         }

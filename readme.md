@@ -24,6 +24,27 @@ npm version patch -git-tag-version false
 ```
 This will update the version number in the package.json
 
+### Killing 4200 port on a mac
+```console
+> npx kill-port 4200
+```
+
+## Local Development
+
+###
+
+###  JSON-Server
+
+> this is installed locally as a dev package.
+> https://egghead.io/lessons/npm-use-npx-to-run-locally-installed-node-modules
+
+```console
+//in the org.cchmc.pho.webapp folder run the following
+//Will need to run npm i before this command can be invoked and/or build the web app first
+> npx json-server --watch db.json --routes db-routes.json
+```
+
+
 
 
 ## Starting a New Controller

@@ -23,23 +23,29 @@ namespace org.cchmc.pho.api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private const string PHO_WebsitePolicy = "PHO_WebsitePolicy";
+        public IConfiguration Configuration { get; }
+
+        private readonly IWebHostEnvironment _environment;
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
-        }
-
-        public IConfiguration Configuration { get; }
+            _environment = environment;
+        }              
+       
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(Startup));
+          
 
             // TODO: Load AppSettings, LDAP, DBContext, authentication
             services.AddOptions<CustomOptions>()
                         .Bind(Configuration.GetSection(CustomOptions.SECTION_KEY))
                         //https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.optionsbuilderdataannotationsextensions.validatedataannotations?view=dotnet-plat-ext-3.1
-                        .ValidateDataAnnotations() //todo 
+                        .ValidateDataAnnotations() //todo
                         .Validate(c =>
                         {
                             //NOTE: can add additional validation
@@ -52,7 +58,22 @@ namespace org.cchmc.pho.api
                             return true;
                         }, "failure message");
 
-            var connStr = Configuration.GetConnectionString("pho-db");
+            //setting up CORS policy only in the development environment 
+            if (_environment.IsDevelopment())
+            {
+                services.AddCors(options =>
+                {
+                    options.AddPolicy(PHO_WebsitePolicy,
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:4200")
+                                     .AllowAnyHeader()
+                                     .AllowAnyMethod();
+                    });
+                });
+            }
+
+
 
             services.Configure<ConnectionStrings>(options => Configuration.GetSection("ConnectionStrings").Bind(options));
 
@@ -63,7 +84,7 @@ namespace org.cchmc.pho.api
             });
 
 
-            //NOTE: register service    
+            //NOTE: register service
             services.AddTransient<IAlert, AlertDAL>();
             services.AddTransient<IContent, ContentDAL>();
             services.AddTransient<IMetric, MetricDAL>();
@@ -71,10 +92,12 @@ namespace org.cchmc.pho.api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
+        public void Configure(IApplicationBuilder app, ILogger<Startup> logger)
         {
-            if (env.IsDevelopment())
+            if (_environment.IsDevelopment())
             {
+                //setting up CORS policy only in the development environment 
+                app.UseCors(PHO_WebsitePolicy);
                 logger.LogInformation($"Environment is Development");
                 app.UseDeveloperExceptionPage();
             }
@@ -84,11 +107,19 @@ namespace org.cchmc.pho.api
                 app.UseHsts();
             }
 
+            //NOTE: https://docs.microsoft.com/en-us/aspnet/core/fundamentals/static-files?view=aspnetcore-3.1 needed to add this package : Microsoft.AspNetCore.App metapackage
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
+
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
+          
 
             app.UseAuthorization();
+            
 
             app.UseEndpoints(endpoints =>
             {
@@ -104,7 +135,7 @@ namespace org.cchmc.pho.api
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddMaps(Assembly.GetExecutingAssembly());
-                //NOTE: The line below will load ALL the mappings in that assembly, not just the Alert one. 
+                //NOTE: The line below will load ALL the mappings in that assembly, not just the Alert one.
                 //So there's no need to repeat this line for every mapping, since they're all compiled into the same assembly.
                 cfg.AddMaps(Assembly.GetAssembly(typeof(AlertMappings)));
                 //if we want to be explicit about what we're loading, we can use the AddProfile method, examples below.

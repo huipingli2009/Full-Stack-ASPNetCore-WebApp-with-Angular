@@ -1,0 +1,127 @@
+<div alerts-component></div>
+<div fxLayout="row" class="content-main" fxLayoutGap="33px">
+    <div fxLayout="column" fxFlex="65%" class="content-box">
+        <div fxLayout="row">
+            <div fxLayout="column" fxFlex="50%">
+                <div class="content-title mat-subheading-1 title-green">
+                    MONTHLY SPOTLIGHT
+                </div>
+                <div class="content-text">
+                    <div class="mat-subheading-2 text-green">{{monthlySpotlightTitle}}</div>
+                    <p>{{monthlySpotlightBody | slice:0:342}} <a href='{{monthlySpotlightLink}}'> Read more »</a></p>
+                </div>
+            </div>
+            <div fxLayout="column">
+                <div class="spotlight-img"><img src="\assets\img\{{monthlySpotlightImage}}"></div>
+            </div>
+        </div>
+    </div>
+    <div fxLayout="column" fxFlex class="content-box quick-links">
+        <div fxLayout="row">
+            <div class="content-title mat-subheading-1 title-purple">
+                QUICK LINKS
+            </div>
+        </div>
+        <div fxLayout="row" class="quick-links-container" fxLayoutAlign="center center">
+            <div fxLayout="row" fxLayoutGap="29px">
+                <div fxLayout="column" class="quick-link-box" *ngFor="let item of quickLinks; let i=index;">
+                    <a href="{{item.link}}">
+                        {{item.body}}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div fxLayout="row" class="content-main" fxLayoutGap="33px">
+    <div fxLayout="column" fxFlex="65%" class="content-box ed-chart">
+        <div fxLayout="row">
+            <div class="content-title mat-subheading-1 title-secondary">
+                ED 10-DAY CHART
+            </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center">
+            <div class="mat-subheading-2 text-secondary">{{edChartTitle}}</div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center">
+            <canvas baseChart
+            [datasets]="barChartData"
+            [labels]="barChartLabels"
+            [options]="barChartOptions"
+            [legend]="barChartLegend"
+            [chartType]="barChartType">
+    </canvas>
+        </div>
+    </div>
+    <div fxLayout="column" fxFlex class="content-box population-details">
+        <div fxLayout="row">
+            <div class="content-title mat-subheading-1 title-primary">
+                POPULATION DETAILS
+            </div>
+        </div>
+        <div fxLayout="row" class="population-content">
+            <mat-tab-group mat-stretch-tabs class="population-tabs">
+                <mat-tab label="MY POPULATION">
+
+                    <table mat-table [dataSource]="dataSourceOne" class="mat-elevation-z8">
+
+
+
+                        <ng-container matColumnDef="dashboardLabel">
+                            <th mat-header-cell *matHeaderCellDef> Measure </th>
+                            <td mat-cell *matCellDef="let element" matTooltip="{{element.measureDesc}}">
+                                    {{element.dashboardLabel}} 
+                                </td>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="practiceTotal">
+                            <th mat-header-cell *matHeaderCellDef> Practice </th>
+                            <td mat-cell *matCellDef="let element"> {{element.practiceTotal}} </td>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="networkTotal">
+                            <th mat-header-cell *matHeaderCellDef> Network </th>
+                            <td mat-cell *matCellDef="let element"> {{element.networkTotal}} </td>
+                        </ng-container>
+
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+
+                </mat-tab>
+                <mat-tab label="MY OUTCOMES">
+                    <table mat-table [dataSource]="dataSourceTwo" class="mat-elevation-z8">
+
+
+
+                        <ng-container matColumnDef="dashboardLabelQi">
+                            <th mat-header-cell *matHeaderCellDef> Measure </th>
+                            <td mat-cell *matCellDef="let element" matTooltip="{{element.measureDesc}">
+                                    {{element.dashboardLabel}} 
+                                </td>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="practiceTotalQi">
+                            <th mat-header-cell *matHeaderCellDef> Practice </th>
+                            <td mat-cell *matCellDef="let element"> {{element.practiceTotal}} </td>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="networkTotalQi">
+                            <th mat-header-cell *matHeaderCellDef> Network </th>
+                            <td mat-cell *matCellDef="let element"> {{element.networkTotal}} </td>
+                        </ng-container>
+
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsQi"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsQi;"></tr>
+                    </table>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </div>
+</div>
