@@ -6,6 +6,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { RestService } from './rest.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
+import { NGXLogger } from 'ngx-logger';
 
 @Component({
   selector: 'app-root',
@@ -21,8 +22,9 @@ export class AppComponent {
   updateAlert: FormGroup;
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
-    private toastr: ToastrService, public fb: FormBuilder) {
+    private toastr: ToastrService, public fb: FormBuilder, private logger: NGXLogger) {
     // var id = this.userId.snapshot.paramMap.get('id') TODO: Need User Table;
+    this.logger.log("testing app component.ts constructor with NGXLogger");
   }
 
   ngOnInit() {
