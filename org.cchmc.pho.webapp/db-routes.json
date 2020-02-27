@@ -1,7 +1,7 @@
 
 {
-    "/Alerts/active/*":"/Alerts/",
-    "/contents/spotlights/*":"/Contents/",
-    "/metrics/list/*":"/Metrics/",
-    "/metrics/edchart/*":"/edchart/"
+    "/Alerts/*":"/Alerts/",
+    "/Contents/spotlights/*":"/Contents/",
+    "/Metrics/kpis/*":"/Metrics/",
+    "/Metrics/edcharts/*":"/edchart/"
 }

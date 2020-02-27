@@ -26,7 +26,7 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    this.getAlerts(3); // TODO: Temp User ID Value
+    this.getAlerts(); // TODO: Temp User ID Value
   }
 
   ngAfterContentChecked(): void {
@@ -35,9 +35,9 @@ export class AppComponent {
 
   }
 
-  getAlerts(id) {
+  getAlerts() {
     this.alerts = [];
-    this.rest.getAlerts(id).subscribe((data) => {
+    this.rest.getAlerts().subscribe((data) => {
       this.alerts = data;
       // console.log('updateAlertsData', this.alerts[0].Alert_ScheduleId);
 
