@@ -24,7 +24,7 @@ export class AppComponent {
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
     private toastr: ToastrService, public fb: FormBuilder, private logger: NGXLogger) {
     // var id = this.userId.snapshot.paramMap.get('id') TODO: Need User Table;
-    this.logger.log("testing app component.ts constructor with NGXLogger");
+    this.logger.log("testing the logging in app.component.ts constructor with NGXLogger");
   }
 
   ngOnInit() {
