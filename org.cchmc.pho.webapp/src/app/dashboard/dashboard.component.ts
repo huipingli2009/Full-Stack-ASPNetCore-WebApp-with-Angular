@@ -1,10 +1,12 @@
-import { Component, OnInit, ViewChild, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RestService } from '../rest.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Alerts, Content, Population, EdChart, EdChartDetails } from '../models/dashboard';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import * as Chart from 'chart.js';
+import { EventEmitter } from 'protractor';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,6 +15,9 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dial
 })
 
 export class DashboardComponent implements OnInit {
+
+  @ViewChild('callEDDialog') callEDDialog: TemplateRef<any>;
+  
   content: Content[];
   population: Population[] = [];
   edChart: EdChart[];
@@ -30,6 +35,11 @@ export class DashboardComponent implements OnInit {
   displayedColumns: string[] = ['dashboardLabel', 'practiceTotal', 'networkTotal'];
   dataSourceTwo: MatTableDataSource<any>;
   displayedColumnsQi: string[] = ['dashboardLabelQi', 'practiceTotalQi', 'networkTotalQi'];
+  // Chart Options
+  canvas: any;
+  ctx: any;
+  edBarChart: any;
+  selectedBar: string;
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
               public fb: FormBuilder, public dialog: MatDialog) {
@@ -37,48 +47,59 @@ export class DashboardComponent implements OnInit {
     this.dataSourceOne = new MatTableDataSource;
     this.dataSourceTwo = new MatTableDataSource;
   }
-  public barChartOptions = {
-    scaleShowVerticalLines: true,
-    responsive: true,
-    layout: {
-      padding: {
-          left: 47,
-          right: 68,
-          top: 27,
-          bottom: 43
-      }
-  },
-  scales: {
-    yAxes: [{
-        ticks: {
-            beginAtZero: true
-        }
-    }]
-},
-onClick: () => {
-  console.log(this.edChartData); // Maybe add hidden field
-  this.openDialog();
-}
-  };
 
   public barChartLabels = [];
-  public barChartType = 'bar';
-  public barChartLegend = true;
-  public barChartData = [
-    {
-      maxBarThickness: 22,
-      backgroundColor: '#FABD9E',
-      hoverBackgroundColor: '#F0673C',
-      data: this.edChartData,
-      label: '# Patients' // 12 Days
-    }
-  ];
+
 
   ngOnInit() {
     this.getAllContent();
     this.getPopulation();
     this.getEdChart();
   }
+  ngAfterViewInit() {
+    let $this = this; // This is the only way to get the bar chart to work using functions out of scope.(Fat arrow does not work)
+    this.canvas = document.getElementById('edChart');
+    this.ctx = this.canvas.getContext('2d');
+    this.edBarChart = new Chart(this.ctx, {
+      type: 'bar',
+      data: {
+        labels: [],
+        datasets: [{
+          label: '# Patients',
+          data: [],
+          maxBarThickness: 22,
+          backgroundColor: '#FABD9E',
+          hoverBackgroundColor: '#F0673C'
+        }]
+      },
+      options: {
+        responsive: true,
+        layout: {
+          padding: {
+            left: 47,
+            right: 68,
+            top: 27,
+            bottom: 43
+          }
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        },
+        onClick: function (e) {
+          var element = this.getElementAtEvent(e);
+          if (element.length) {
+            this.selectedBar = element[0]._model.label;
+          }
+          $this.Showmodal(e, this, element); // This is the result of a "fake" JQuery this
+        }
+      }
+      });
+  }
+
 
   // Dahsboard Content
   getAllContent() {
@@ -136,44 +157,33 @@ onClick: () => {
       this.edChart = data;
       this.edChartTitle = this.edChart[0].chartTitle;
       this.edChart.forEach(item => {
-        this.barChartLabels.push(item.chartLabel);
-        this.edChartData.push(item.edVisits);
+        this.addData(this.edBarChart, item.admitDate, item.edVisits); // Getting data to the chart, will be easier to update if needed
       });
     });
   }
 
-  /* Open Modal (Dialog) on bar click */
-  openDialog() {
-    const dialogRef = this.dialog.open(ModalEdDetails);
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+  addData(chart, label, data) {
+    chart.data.labels.push(label);
+    chart.data.datasets.forEach((dataset) => {
+      dataset.data.push(data);
     });
+    chart.update();
   }
-
-  /* Get ED Chart Details */
-  getEdChartDetails() {
+  
+  /* Open Modal (Dialog) on bar click */
+  Showmodal(event, chart, element) : void {
+    this.openDialogWithDetails();
+  }
+  openDialogWithDetails() {
     this.edChartDetails = [];
-    this.rest.getEdChartDetails('02/14/2020').subscribe((data) => {
+    this.rest.getEdChartDetails(this.selectedBar).subscribe((data) => {
       this.edChartDetails = data;
-      console.log('eddetails', this.edChartDetails);
+      const dialogRef = this.dialog.open(this.callEDDialog);
     });
+    
+    // Leaving this here incase we need to handle some things when a modal closes
+    // dialogRef.afterClosed().subscribe(result => {
+      
+    // });
   }
 }
-
-/* Modal for ED Chart Details - This could be seperated into it's own component...Not sure if completely necessary at the moment */
-@Component({
-    selector: 'modal-ed-details',
-    templateUrl: 'modal-ed-details.html',
-  })
-  export class ModalEdDetails {
-
-    constructor(
-      public dialogRef: MatDialogRef<ModalEdDetails>,
-      @Inject(MAT_DIALOG_DATA) public data: EdChartDetails) {}
-  
-    // onNoClick(): void {
-    //   this.dialogRef.close();
-    // }
-  
-  }
