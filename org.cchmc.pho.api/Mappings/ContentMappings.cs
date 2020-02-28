@@ -9,6 +9,7 @@ namespace org.cchmc.pho.api.Mappings
         public ContentMappings()
         {
             CreateMap<SpotLight, SpotLightViewModel>();
+            CreateMap<Quicklink, QuicklinkViewModel>();
         }        
     }
 }
