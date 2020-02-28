@@ -99,7 +99,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                         List<PatientStatus> patientStatuslist = GetPatientStatusAll();
                       
-                        List<PatientCondition> patientConditions = new List<PatientCondition>();                        
+                        List<PatientCondition> patientConditions = GetPatientConditionsAll();                        
 
                         int activeStatusId = 0;
 
