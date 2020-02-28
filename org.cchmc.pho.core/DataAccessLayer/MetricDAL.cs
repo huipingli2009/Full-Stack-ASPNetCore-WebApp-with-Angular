@@ -17,7 +17,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
     public class MetricDAL : IMetric
     {
         private readonly ConnectionStrings _connectionStrings;
-        public MetricDAL(IOptions<ConnectionStrings> options, ILogger<AlertDAL> logger)
+        public MetricDAL(IOptions<ConnectionStrings> options, ILogger<MetricDAL> logger)
         {
             _connectionStrings = options.Value;
         }
@@ -32,11 +32,11 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
-                    await sqlConnection.OpenAsync();
+                    sqlConnection.Open();
                     // Define the data adapter and fill the dataset
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
-                        await Task.Run(() => da.Fill(dataTable));
+                        da.Fill(dataTable);
                         metrics = (from DataRow dr in dataTable.Rows
                                    select new Metric()
                                    {
@@ -65,11 +65,11 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
 
-                    await sqlConnection.OpenAsync();
+                    sqlConnection.Open();
                     // Define the data adapter and fill the dataset
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
-                        await Task.Run(() => da.Fill(dataTable));
+                        da.Fill(dataTable);
                         edCharts = (from DataRow dr in dataTable.Rows
                                    select new EDChart()
                                    {
@@ -99,11 +99,11 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
                     sqlCommand.Parameters.Add("@AdmitDate", SqlDbType.Date).Value = admitDate;
 
-                    await sqlConnection.OpenAsync();
+                    sqlConnection.Open();
                     // Define the data adapter and fill the dataset
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
-                        await Task.Run(() => da.Fill(dataTable));
+                        da.Fill(dataTable);
                         details = (from DataRow dr in dataTable.Rows
                                    select new EDDetail()
                                    {

@@ -1,0 +1,7 @@
+
+{
+    "/Alerts/*":"/Alerts/",
+    "/Contents/spotlights/*":"/Contents/",
+    "/Metrics/kpis/*":"/Metrics/",
+    "/Metrics/edcharts/*":"/edchart/"
+}

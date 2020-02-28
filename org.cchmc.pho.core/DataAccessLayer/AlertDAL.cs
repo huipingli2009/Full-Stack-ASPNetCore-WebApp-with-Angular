@@ -18,7 +18,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
     public class AlertDAL : IAlert
     {
         //private IConfiguration _config;
-        private ConnectionStrings _connectionStrings;
+        private readonly ConnectionStrings _connectionStrings;
         public AlertDAL(IOptions<ConnectionStrings> options, ILogger<AlertDAL> logger)
         {
             _connectionStrings = options.Value;
@@ -77,7 +77,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     await sqlConnection.OpenAsync();
 
                     //Execute Stored Procedure
-                    sqlCommand.ExecuteNonQuery();                        
+                    sqlCommand.ExecuteNonQuery();                   
                                       
                 }
             }
