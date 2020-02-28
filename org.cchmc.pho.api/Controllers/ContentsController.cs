@@ -36,7 +36,6 @@ namespace org.cchmc.pho.api.Controllers
         // GET: api/Content
         [HttpGet("spotlights")]
 
-        //need to build vViewModel?
         [SwaggerResponse(200, type: typeof(List<SpotLightViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -47,6 +46,31 @@ namespace org.cchmc.pho.api.Controllers
                 var data = await _content.ListActiveSpotLights();
 
                 var result = _mapper.Map<List<SpotLightViewModel>>(data);
+
+                // return the result in a "200 OK" response
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+        // GET: api/Content
+        [HttpGet("quicklinks")]
+
+        [SwaggerResponse(200, type: typeof(List<QuicklinkViewModel>))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> ListActiveQuicklinks()
+        {
+            try
+            {
+                var data = await _content.ListActiveQuicklinks();
+
+                var result = _mapper.Map<List<QuicklinkViewModel>>(data);
 
                 // return the result in a "200 OK" response
                 return Ok(result);
