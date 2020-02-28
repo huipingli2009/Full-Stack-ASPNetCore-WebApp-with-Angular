@@ -95,23 +95,16 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
-                        da.Fill(dataTable);
+                        da.Fill(dataTable);                      
 
-                        PatientStatus patientStatus = new PatientStatus();
-
-                        List<PatientStatus> patientStatuslist = new List<PatientStatus>();
-
-                        patientStatuslist = this.GetPatientStatusAll();
-
-                        List<PatientCondition> patientConditions = new List<PatientCondition>();
-
-                        patientConditions = this.GetPatientConditionsAll();
+                        List<PatientStatus> patientStatuslist = GetPatientStatusAll();
+                      
+                        List<PatientCondition> patientConditions = new List<PatientCondition>();                        
 
                         int activeStatusId = 0;
 
                         foreach(DataRow dr in dataTable.Rows)
-                        {                 
-
+                        {       
                             var patient = new Patient()
                             {                                 
                                 PatientId = Convert.ToInt32(dr["PatientId"]),
@@ -126,9 +119,8 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 Status = new PatientStatus()                               
                             };
 
-                            activeStatusId = int.Parse(dr["ActiveStatus"].ToString());
-                            patientStatus = patientStatuslist.FirstOrDefault(p => p.ID == activeStatusId);
-                            patient.Status = patientStatus;
+                            activeStatusId = int.Parse(dr["ActiveStatus"].ToString());                         
+                            patient.Status = patientStatuslist.FirstOrDefault(p => p.ID == activeStatusId);
 
                             foreach (int conditionId in dr["ConditionIDs"].ToString().Split(',').Select(p => int.Parse(p)))
                             {
