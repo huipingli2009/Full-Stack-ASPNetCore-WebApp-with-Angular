@@ -135,30 +135,31 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
         public List<PatientCondition> GetPatientConditionsAll()
         {
-            SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB);          
-
-            SqlCommand sqlCommand = new SqlCommand("spGetAllConditions", sqlConnection);
-            sqlCommand.CommandType = CommandType.StoredProcedure;
-
-            List<PatientCondition> returnObject = null;
-
-            SqlDataAdapter da = new SqlDataAdapter(sqlCommand);
-            DataSet ds = new DataSet();
-            da.Fill(ds);
-
-            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
-                if (returnObject == null)
+                using (SqlCommand sqlCommand = new SqlCommand("spGetAllConditions", sqlConnection))
                 {
-                    returnObject = new List<PatientCondition>();
-                }
-                PatientCondition PtCondition = CreatePatientConditionModel(ds.Tables[0].Rows[i]);
-                returnObject.Add(PtCondition);
-            }
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
 
-            return returnObject;
-        }
-        
+                    List<PatientCondition> returnObject = null;
+
+                    SqlDataAdapter da = new SqlDataAdapter(sqlCommand);
+                    DataSet ds = new DataSet();
+                    da.Fill(ds);
+
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        if (returnObject == null)
+                        {
+                            returnObject = new List<PatientCondition>();
+                        }
+                        PatientCondition PtCondition = CreatePatientConditionModel(ds.Tables[0].Rows[i]);
+                        returnObject.Add(PtCondition);
+                    }
+                    return returnObject;
+                }
+            }           
+        }        
         public PatientCondition CreatePatientConditionModel(DataRow dr)
         {
             PatientCondition c = new PatientCondition();
@@ -174,27 +175,30 @@ namespace org.cchmc.pho.core.DataAccessLayer
         public List<PatientStatus> GetPatientStatusAll()
         {
             List<PatientStatus> returnObject = null;
-            SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB);
-
-            SqlCommand sqlCommand = new SqlCommand("spGetPatientStatusAll", sqlConnection);
-            sqlCommand.CommandType = CommandType.StoredProcedure;
-
-            SqlDataAdapter da = new SqlDataAdapter(sqlCommand);
-            DataSet ds = new DataSet();
-            da.Fill(ds);
-
-            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
-                if (returnObject == null)
+                using (SqlCommand sqlCommand = new SqlCommand("spGetPatientStatusAll", sqlConnection))
                 {
-                    returnObject = new List<PatientStatus>();
-                }
-                PatientStatus PtStatus = CreatePatientStatusModel(ds.Tables[0].Rows[i]);
-                returnObject.Add(PtStatus);
-            }
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    SqlDataAdapter da = new SqlDataAdapter(sqlCommand);
 
-            return returnObject;
-        }
+                    DataSet ds = new DataSet();
+                    da.Fill(ds);
+
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        if (returnObject == null)
+                        {
+                            returnObject = new List<PatientStatus>();
+                        }
+                        PatientStatus PtStatus = CreatePatientStatusModel(ds.Tables[0].Rows[i]);
+                        returnObject.Add(PtStatus);
+                    }
+                }
+                return returnObject;
+            }                      
+        }     
+       
 
         public PatientStatus CreatePatientStatusModel(DataRow dr)
         {
