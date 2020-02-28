@@ -26,11 +26,11 @@ namespace org.cchmc.pho.api.Controllers
             _staffDal = staffDal;
         }
 
-        [HttpGet("/{userid}/{topfilter}/{tagfilter}/{namesearch}")]
+        [HttpGet()]
         [SwaggerResponse(200, type: typeof(List<StaffViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> ListStaff(string userid, string topfilter, string tagfilter, string namesearch)
+        public async Task<IActionResult> ListStaff([FromQuery]string topfilter, [FromQuery]string tagfilter, [FromQuery]string namesearch)
         {
             string user = "3"; //todo: default for now
             // route parameters are strings and need to be translated (and validated) to their proper data type
@@ -43,7 +43,7 @@ namespace org.cchmc.pho.api.Controllers
             try
             {
                 // call the data method
-                var data = await _staffDal.ListStaff(0, "", "", "");
+                var data = await _staffDal.ListStaff(userId, topfilter, tagfilter, namesearch);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
                 var result = _mapper.Map<List<StaffViewModel>>(data);
                 // return the result in a "200 OK" response
