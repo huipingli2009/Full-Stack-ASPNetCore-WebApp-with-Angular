@@ -62,7 +62,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         public async Task<List<Quicklink>> ListActiveQuicklinks()
         {
             DataTable dataTable = new DataTable();
-            List<Quicklink> spotlights;
+            List<Quicklink> quicklinks;
 
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
@@ -79,7 +79,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                         da.Fill(dataTable);
 
 
-                        spotlights = (from DataRow dr in dataTable.Rows
+                        quicklinks = (from DataRow dr in dataTable.Rows
                                       select new Quicklink()
                                       {
                                           PlacementOrder = (dr["PlacementOrder"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PlacementOrder"].ToString())),
@@ -93,7 +93,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                 }
 
-                return spotlights;
+                return quicklinks;
             }
         }
     }
