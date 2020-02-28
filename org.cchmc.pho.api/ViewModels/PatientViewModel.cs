@@ -11,7 +11,7 @@ namespace org.cchmc.pho.api.ViewModels
         public int PracticeID { get; set; }       
         public int PCP_StaffID { get; set; }
         public DateTime? DOB { get; set; }        
-        public List<PatientStatusViewModel> Status { get; set; }
+        public PatientStatusViewModel Status { get; set; }
         public DateTime? LastEDVisit { get; set; }
         public bool Chronic { get; set; }
         public bool WatchFlag { get; set; }            

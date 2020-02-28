@@ -97,13 +97,17 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     {
                         da.Fill(dataTable);
 
-                        List<PatientStatus> patientStatus = new List<PatientStatus>();
+                        PatientStatus patientStatus = new PatientStatus();
 
-                        patientStatus = this.GetPatientStatusAll();
+                        List<PatientStatus> patientStatuslist = new List<PatientStatus>();
+
+                        patientStatuslist = this.GetPatientStatusAll();
 
                         List<PatientCondition> patientConditions = new List<PatientCondition>();
 
                         patientConditions = this.GetPatientConditionsAll();
+
+                        int activeStatusId = 0;
 
                         foreach(DataRow dr in dataTable.Rows)
                         {                 
@@ -119,18 +123,12 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 LastEDVisit = (dr["LastEDVisit"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LastEDVisit"].ToString())),
                                 Chronic = bool.Parse(dr["Chronic"].ToString()),
                                 Conditions = new List<PatientCondition>(),
-                                Status = new List<PatientStatus>()                               
-                            };                           
+                                Status = new PatientStatus()                               
+                            };
 
-                            foreach (int statusId in dr["ActiveStatus"].ToString().Split(',').Select(p => int.Parse(p)))
-                            {
-                                if (patientStatus.Any(p => p.ID == statusId))
-                                    patient.Status.Add(patientStatus.First(p => p.ID == statusId));
-                                else
-                                {
-                                    _logger.LogError("An unmapped condition id was returned by the database ");
-                                }
-                            }
+                            activeStatusId = int.Parse(dr["ActiveStatus"].ToString());
+                            patientStatus = patientStatuslist.FirstOrDefault(p => p.ID == activeStatusId);
+                            patient.Status = patientStatus;
 
                             foreach (int conditionId in dr["ConditionIDs"].ToString().Split(',').Select(p => int.Parse(p)))
                             {
@@ -217,11 +215,11 @@ namespace org.cchmc.pho.core.DataAccessLayer
             SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB);
 
             SqlCommand sqlCommand = new SqlCommand("spGetPatientStatusAll", sqlConnection);
-            sqlCommand.CommandType = CommandType.StoredProcedure;           
+            sqlCommand.CommandType = CommandType.StoredProcedure;
 
             SqlDataAdapter da = new SqlDataAdapter(sqlCommand);
             DataSet ds = new DataSet();
-            da.Fill(ds);            
+            da.Fill(ds);
 
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
             {

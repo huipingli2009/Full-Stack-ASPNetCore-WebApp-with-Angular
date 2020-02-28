@@ -27,7 +27,7 @@ namespace org.cchmc.pho.api.Controllers
 
         // GET: api/Patient
         //[HttpGet("PatientList/{userId}/{staffID?}/{popmeasureID?}/{watch?}/{chronic?}/{conditionIDs?}/{namesearch?}/{sortcolumn?}/{pagenumber}/{rowspage}")]
-        [HttpGet("patientlist/{userId}")]
+        [HttpGet]
 
         [SwaggerResponse(200, type: typeof(List<PatientViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]

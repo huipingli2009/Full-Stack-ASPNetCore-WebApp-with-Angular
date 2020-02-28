@@ -11,7 +11,7 @@ namespace org.cchmc.pho.core.DataModels
         public int PracticeID { get; set; }        
         public int PCP_StaffID { get; set; }
         public DateTime? DOB { get; set; }
-        public List<PatientStatus> Status { get; set; }
+        public PatientStatus Status { get; set; }
         public DateTime? LastEDVisit { get; set; }
         public bool Chronic { get; set; }
         public bool WatchFlag { get; set; }
@@ -28,7 +28,6 @@ namespace org.cchmc.pho.core.DataModels
             ID = intId;
             Name = name;
         }
-
         public PatientStatus()
         {
         }
