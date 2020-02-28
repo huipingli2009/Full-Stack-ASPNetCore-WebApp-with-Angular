@@ -5,6 +5,5 @@
 
         public string PHODB { get; set; }
         public string PHODW { get; set; }
-        public string PHOIDENTITY { get; set; }
     }
 }

@@ -1,0 +1,34 @@
+﻿{
+   "ContextClassName": "PHOIdentityContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "DoNotCombineNamespace": false,
+   "IdReplace": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "EntityModels",
+   "ProjectRootNamespace": "org.cchmc.pho.identity",
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 0,
+   "Tables": [
+      {
+         "HasPrimaryKey": true,
+         "Name": "[reg].[Login]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[reg].[Staff]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[reg].[tlkUserType]"
+      }
+   ],
+   "UseDatabaseNames": false,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": true,
+   "UseInflector": false,
+   "UseLegacyPluralizer": false,
+   "UseSpatial": false
+}

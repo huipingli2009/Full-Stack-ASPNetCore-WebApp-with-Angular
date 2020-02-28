@@ -21,4 +21,8 @@
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="5.6.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\org.cchmc.pho.core\org.cchmc.pho.core.csproj" />
+  </ItemGroup>
+
 </Project>

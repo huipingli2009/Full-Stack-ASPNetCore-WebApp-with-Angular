@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using org.cchmc.pho.identity.Configuration;
+using org.cchmc.pho.identity.EntityModels;
 using org.cchmc.pho.identity.Interfaces;
 using org.cchmc.pho.identity.Models;
 using System;
@@ -26,86 +27,25 @@ namespace org.cchmc.pho.identity.Extensions
             services.Configure<JwtAuthentication>(opts => configuration.GetSection("JwtAuthentication"));
             services.AddSingleton<IPostConfigureOptions<JwtBearerOptions>, ConfigureJwtBearerOptions>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(token =>
-                {
-                    // TODO: Should probably include all or some of this
-                    //token.RequireHttpsMetadata = false;
-                    //token.SaveToken = true;
-                    //token.TokenValidationParameters = new TokenValidationParameters()
-                    //{
-                    //    ValidateIssuerSigningKey = true,
-                    //    IssuerSigningKey = null, // TODO: Get from JwtAuthentication
-                    //    ValidateIssuer = true,
-                    //    ValidIssuer = "", // TODO: use JwtAuthentication.Issuer
-                    //    ValidateAudience = true,
-                    //    ValidAudience = "", // TODO: use JwtAuthentication.Audience
-                    //    RequireExpirationTime = true,
-                    //    ValidateLifetime = true,
-                    //    ClockSkew = TimeSpan.Zero
-                    //};
-                });
+                .AddJwtBearer();
             services.AddOptions<JwtAuthentication>()
                         .Bind(configuration.GetSection("JwtAuthentication"))
-                        .ValidateDataAnnotations() //todo 
+                        .ValidateDataAnnotations() // TODO
                         .Validate(c =>
                         {
                             return true;
-                        }, "failure message");
-            services.AddDbContext<IdentityDataContext>(opts =>
-            {
-                opts.UseSqlServer(configuration.GetConnectionString("phoidentity"), optionsBuilder =>
+                        }, "Failed to validate JWT Authentication options.");
+
+            // Looking at the PHO database for login information, ideally as a temporary measure
+            services.AddDbContext<PHOIdentityContext>(options => options.UseSqlServer(configuration.GetConnectionString("phodb")));
+
+            services.Configure<PasswordHasherOptions>(options =>
                 {
-                    optionsBuilder.MigrationsAssembly("org.cchmc.pho.identity");
+                    options.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV3;
+                    options.IterationCount = 10000;
                 });
-            });
-            services.AddIdentity<User, IdentityRole>(opts =>
-                {
-                    // TODO: Address the correct values for these
-                    opts.Password.RequiredLength = 8;
-                    opts.Password.RequireNonAlphanumeric = true;
-                    opts.Password.RequireLowercase = true;
-                    opts.Password.RequireUppercase = true;
-                    opts.Password.RequireDigit = true;
-
-                    opts.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-                    opts.Lockout.MaxFailedAccessAttempts = 5;
-                    opts.Lockout.AllowedForNewUsers = true;
-
-                    opts.User.RequireUniqueEmail = true;
-                })
-                .AddEntityFrameworkStores<IdentityDataContext>()
-                .AddUserManager<UserManager<User>>()
-                .AddSignInManager<SignInManager<User>>()
-                .AddRoleManager<RoleManager<IdentityRole>>() // this might be unnecessary but included so we know we're using role manager specifically
-                .AddDefaultTokenProviders();
-
-            services.AddTransient<IUserService, UserService>();
-        }
-
-        public static void ConfigureIdentityServices<TStartup>(this IApplicationBuilder app, ILogger<TStartup> logger)
-        {
-            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                using (var context = serviceScope.ServiceProvider.GetService<IdentityDataContext>())
-                {
-                    try
-                    {
-                        /* TODO: Microsoft recommends -NOT- doing this in a production environment, especially in a distributed setup.
-                           Investigate doing this via the deployment pipeline instead.
-                        */
-                        var migrations = context.Database.GetPendingMigrations();
-                        if (migrations.Any())
-                        {
-                            logger.LogInformation($"Applying ${migrations.Count()} migrations to Identity database.");
-                            context.Database.Migrate();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.LogError(ex, ex.Message);
-                    }
-                }
-            }
+            services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
+            services.AddTransient<IUserService, PhoUserService>();
         }
 
         public static AuthorizationPolicy BuildAuthorizationPolicy(this IConfiguration configuration)
