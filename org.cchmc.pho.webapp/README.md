@@ -25,3 +25,8 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## Running npm install before running the angular code
+
+When you merge/pull the changes from a branch , you might not have all the packages installed on your local machine.
+Before running the angular code, Run npm install (npm i). so that all the packages in package.json are installed on your computer

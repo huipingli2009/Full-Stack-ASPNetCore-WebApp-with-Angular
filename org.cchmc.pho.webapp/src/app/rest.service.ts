@@ -30,17 +30,17 @@ export class RestService {
   /* Alerts =======================================================*/
 
   /*Gets All Alerts by ID*/
-  getAlerts(id): Observable<any> {
-    return this.http.get<any>(API_URL + '/api/Alerts/active/' + id).pipe(
+  getAlerts(): Observable<any> {
+    return this.http.get<any>(`${API_URL}/api/Alerts/`).pipe(
       map((data: Alerts[]) => {
         return data;
       })
     );
   }
   /*Updates if Alert is Active*/
-  updateAlertActivity(id, Alert_ScheduleId, alert): Observable<any> {
-    return this.http.put(API_URL + '/api/Alerts/alert/' + Alert_ScheduleId + '/' + id, JSON.stringify(alert), httpOptions).pipe(
-      tap(_ => console.log(`updated alert id=${id}`)),
+  updateAlertActivity(alertSchedId, alert): Observable<any> {
+    return this.http.put(`${API_URL}/api/Alerts/${alertSchedId}`, JSON.stringify(alert), httpOptions).pipe(
+      tap(_ => console.log(`updated alert id=${alertSchedId}`)),
       catchError(this.handleError<any>('updateAlertActivity'))
     );
   }
@@ -48,25 +48,25 @@ export class RestService {
   /* Dashboard Content =======================================================*/
 
   getDashboardContent(): Observable<any> {
-    return this.http.get<any>(API_URL + '/api/contents/spotlights/').pipe(
+    return this.http.get<any>(`${API_URL}/api/Contents/spotlights/`).pipe(
       map((data: Content[]) => {
         return data;
       })
     );
   }
 
-  /*Gets All Alerts by ID*/
-  getPopulationDetails(id): Observable<any> {
-    return this.http.get<any>(API_URL + '/api/metrics/list/' + id).pipe(
+  /*Gets All KPIS*/
+  getAllKpis(): Observable<any> {
+    return this.http.get<any>(`${API_URL}/api/Metrics/kpis/`).pipe(
       map((data: Population[]) => {
         return data;
       })
     );
   }
 
-  /*Gets base ED Chart Information by ID - Working Here*/
-  getEdChartByUser(id): Observable<any> {
-    const endpoint = `${API_URL}/api/edchart/?id=${id}`;
+  /*Gets base ED Chart Information */
+  getEdChartByUser(): Observable<any> {
+    const endpoint = `${API_URL}/api/Metrics/edcharts/`;
     return this.http.get<any>(endpoint).pipe(
       map((data: EdChart[]) => {
         return data;

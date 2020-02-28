@@ -12,8 +12,6 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 
 export class DashboardComponent implements OnInit {
-
-  userId = 3; //TODO Get actual User Id
   content: Content[];
   population: Population[] = [];
   edChart: EdChart[];
@@ -71,8 +69,8 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.getAllContent();
-    this.getPopulation(7); // TODO: Temp Practice ID Value
-    this.getEdChart(this.userId);
+    this.getPopulation();
+    this.getEdChart();
   }
 
   // Dahsboard Content
@@ -98,9 +96,9 @@ export class DashboardComponent implements OnInit {
   }
 
   // Metric List
-  getPopulation(id) {
+  getPopulation() {
     this.population = [];
-    this.rest.getPopulationDetails(id).subscribe((data) => {
+    this.rest.getAllKpis().subscribe((data) => {
       this.population = data;
       this.population.forEach(item => {
         if (item.measureType === 'POP') {
@@ -125,9 +123,9 @@ export class DashboardComponent implements OnInit {
     });
   }
   /* ED Chart =========================================*/
-  getEdChart(id) {
+  getEdChart() {
     this.edChart = [];
-    this.rest.getEdChartByUser(id).subscribe((data) => {
+    this.rest.getEdChartByUser().subscribe((data) => {
       this.edChart = data;
       this.edChartTitle = this.edChart[0].chartTitle;
       this.edChart.forEach(item => {

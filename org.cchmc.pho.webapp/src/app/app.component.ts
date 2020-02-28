@@ -6,6 +6,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { RestService } from './rest.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
+import { NGXLogger } from 'ngx-logger';
 
 @Component({
   selector: 'app-root',
@@ -21,12 +22,13 @@ export class AppComponent {
   updateAlert: FormGroup;
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
-    private toastr: ToastrService, public fb: FormBuilder) {
+    private toastr: ToastrService, public fb: FormBuilder, private logger: NGXLogger) {
     // var id = this.userId.snapshot.paramMap.get('id') TODO: Need User Table;
+    this.logger.log("testing the logging in app.component.ts constructor with NGXLogger");
   }
 
   ngOnInit() {
-    this.getAlerts(3); // TODO: Temp User ID Value
+    this.getAlerts(); // TODO: Temp User ID Value
   }
 
   ngAfterContentChecked(): void {
@@ -35,9 +37,9 @@ export class AppComponent {
 
   }
 
-  getAlerts(id) {
+  getAlerts() {
     this.alerts = [];
-    this.rest.getAlerts(id).subscribe((data) => {
+    this.rest.getAlerts().subscribe((data) => {
       this.alerts = data;
       // console.log('updateAlertsData', this.alerts[0].Alert_ScheduleId);
 
