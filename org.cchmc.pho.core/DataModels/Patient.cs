@@ -21,12 +21,32 @@ namespace org.cchmc.pho.core.DataModels
     {
         public int ID { get; set; }
         public string Name { get; set; }
-       
+
+        public PatientStatus(string id, string name)
+        {
+            int.TryParse(id, out int intId);
+            ID = intId;
+            Name = name;
+        }
+
+        public PatientStatus()
+        {
+        }
     }
 
     public class PatientCondition
     {
         public int ID { get; set; }
-        public string Name { get; set; }       
+        public string Name { get; set; }
+
+        public PatientCondition(int id, string name)
+        {
+            ID = id;
+            Name = name;
+        }
+
+        public PatientCondition()
+        {
+        }
     }
 }
