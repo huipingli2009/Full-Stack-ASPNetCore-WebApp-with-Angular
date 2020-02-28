@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
@@ -80,11 +76,11 @@ namespace org.cchmc.pho.api
             }
 
             services.AddMvc(config =>
-            {
-                var policy = Configuration.BuildAuthorizationPolicy();
+                {
+                    var policy = Configuration.BuildAuthorizationPolicy();
 
-                config.Filters.Add(new AuthorizeFilter(policy));
-            })
+                    config.Filters.Add(new AuthorizeFilter(policy));
+                })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddControllersAsServices();
             services.Configure<ConnectionStrings>(options => Configuration.GetSection("ConnectionStrings").Bind(options));
