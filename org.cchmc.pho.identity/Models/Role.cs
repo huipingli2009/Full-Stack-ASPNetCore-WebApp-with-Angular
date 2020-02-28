@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace org.cchmc.pho.identity.Models
+﻿namespace org.cchmc.pho.identity.Models
 {
     public class Role
     {

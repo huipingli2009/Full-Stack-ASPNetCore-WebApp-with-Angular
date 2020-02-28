@@ -1,21 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using org.cchmc.pho.identity.Configuration;
 using org.cchmc.pho.identity.EntityModels;
 using org.cchmc.pho.identity.Interfaces;
 using org.cchmc.pho.identity.Models;
-using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 namespace org.cchmc.pho.identity.Extensions
 {

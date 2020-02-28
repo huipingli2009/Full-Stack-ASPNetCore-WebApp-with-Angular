@@ -21,16 +21,11 @@ namespace org.cchmc.pho.api.Controllers
         private readonly IMapper _mapper;
         private readonly IContent _content;
 
-        //TODO: delete me refactor
-        private readonly CustomOptions _customOptions;
-
         public ContentsController(ILogger<ContentsController> logger, IMapper mapper, IContent content)
         {
             _logger = logger;
             _mapper = mapper;
             _content = content;
-
-            _logger.LogInformation($"Example of options {_customOptions?.RequiredOption}");
         }
 
         // GET: api/Content

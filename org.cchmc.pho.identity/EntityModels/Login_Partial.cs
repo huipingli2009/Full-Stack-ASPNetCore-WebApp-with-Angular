@@ -1,8 +1,4 @@
 ﻿using org.cchmc.pho.identity.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace org.cchmc.pho.identity.EntityModels
 {
@@ -17,10 +13,10 @@ namespace org.cchmc.pho.identity.EntityModels
                 DeactivatedBy = DeletedBy,
                 DeactivatedDate = DeletedDate,
                 Email = Email,
-                FirstName = staff.FirstName,
+                FirstName = staff?.FirstName,
                 Id = Id,
                 IsPending = PendingFlag.GetValueOrDefault(false),
-                LastName = staff.LastName,
+                LastName = staff?.LastName,
                 LastUpdatedBy = ModifiedBy,
                 LastUpdatedDate = ModifiedDate,
                 Role = userType.BuildRole(),

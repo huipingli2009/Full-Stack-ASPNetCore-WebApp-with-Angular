@@ -13,13 +13,5 @@ namespace org.cchmc.pho.core.Models
         public bool RequireUppercase { get; set; }
         public bool RequireDigit { get; set; }
         public int MaximumAttemptsBeforeLockout { get; set; }
-
-        public string Option1 { get; set; }
-        public int Option2Int { get; set; }
-
-        [Required]
-        public string RequiredOption { get; set; }
-
-
     }
 }

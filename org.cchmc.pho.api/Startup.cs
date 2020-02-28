@@ -15,6 +15,7 @@ using org.cchmc.pho.core.Interfaces;
 using org.cchmc.pho.core.Models;
 using org.cchmc.pho.core.Settings;
 using org.cchmc.pho.identity.Extensions;
+
 namespace org.cchmc.pho.api
 {
     [ExcludeFromCodeCoverage]
@@ -30,7 +31,6 @@ namespace org.cchmc.pho.api
             Configuration = configuration;
             _environment = environment;
         }              
-       
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -77,20 +77,18 @@ namespace org.cchmc.pho.api
 
             services.AddMvc(config =>
                 {
-                    var policy = Configuration.BuildAuthorizationPolicy();
+                    // CJENKINSON - Uncomment out when ready to apply Authorize attributes
+                    //var policy = Configuration.BuildAuthorizationPolicy();
 
-                    config.Filters.Add(new AuthorizeFilter(policy));
+                    //config.Filters.Add(new AuthorizeFilter(policy));
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddControllersAsServices();
-            services.Configure<ConnectionStrings>(options => Configuration.GetSection("ConnectionStrings").Bind(options));
 
-            //services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo() { Title = "PHO API", Version = "v1" });
             });
-
 
             //NOTE: register service
             services.AddTransient<IAlert, AlertDAL>();
@@ -120,15 +118,13 @@ namespace org.cchmc.pho.api
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
-
-
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
-            
+            // CJENKINSON - Uncomment out when ready to apply Authorize attributes
+            //app.UseAuthentication();
+            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

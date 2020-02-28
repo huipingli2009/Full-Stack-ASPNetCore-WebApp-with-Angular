@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using org.cchmc.pho.identity.Models;
@@ -56,6 +55,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         // TODO: [Authorize(Roles = "PracticeMember,PracticeAdmin,PHOMember,PHOAdmin")]
+        [AllowAnonymous]
         [HttpPatch("{userId}/password")] // patch because we're only updating password
         [SwaggerResponse(200, type: typeof(bool))]
         [SwaggerResponse(400, type: typeof(string))]
@@ -101,7 +101,7 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        // TODO: [Authorize(Roles = "PracticeMember,PracticeAdmin,PHOMember,PHOAdmin")]
+        [Authorize(Roles = "PracticeMember,PracticeAdmin,PHOMember,PHOAdmin")]
         [HttpPut("{userId}")] // put because we're updating a specific user
         [SwaggerResponse(200, type: typeof(UserViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
@@ -164,6 +164,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         // TODO: [Authorize(Roles = "PracticeAdmin,PHOAdmin")]
+        [AllowAnonymous]
         [HttpPost] // post because we're inserting a new user
         [SwaggerResponse(200, type: typeof(UserViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
@@ -203,7 +204,7 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        // TODO: [Authorize(Roles = "PHOAdmin")]
+        [Authorize(Roles = "PHOAdmin")]
         [HttpPatch("{userId}/staffId")] // patch because we're only updating staff id
         [SwaggerResponse(200, type: typeof(UserViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
@@ -231,7 +232,7 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        // TODO: [Authorize(Roles = "PHOAdmin")]
+        [Authorize(Roles = "PHOAdmin")]
         [HttpPatch("{userId}/lockout")] // patch because we're only updating lockoutflag
         [SwaggerResponse(200, type: typeof(UserViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
@@ -257,7 +258,7 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        // TODO: [Authorize(Roles = "PHOAdmin")]
+        [Authorize(Roles = "PHOAdmin")]
         [HttpPatch("{userId}/delete")] // patch because we're only updating deleteflag
         [SwaggerResponse(200, type: typeof(UserViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
@@ -283,7 +284,7 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        // TODO: [Authorize(Roles = "PracticeMember,PracticeAdmin,PHOMember,PHOAdmin")]
+        [Authorize(Roles = "PracticeMember,PracticeAdmin,PHOMember,PHOAdmin")]
         [HttpGet("roles")]
         [SwaggerResponse(200, type: typeof(List<RoleViewModel>))]
         [SwaggerResponse(500, type: typeof(string))]

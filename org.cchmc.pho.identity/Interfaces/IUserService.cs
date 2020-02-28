@@ -1,5 +1,4 @@
-﻿
-using org.cchmc.pho.identity.Models;
+﻿using org.cchmc.pho.identity.Models;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;

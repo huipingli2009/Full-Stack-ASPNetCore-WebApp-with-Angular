@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using org.cchmc.pho.core.Models;
-using org.cchmc.pho.core.Settings;
 using org.cchmc.pho.identity.EntityModels;
 using org.cchmc.pho.identity.Interfaces;
 using org.cchmc.pho.identity.Models;
@@ -13,8 +12,6 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace org.cchmc.pho.identity
@@ -96,22 +93,7 @@ namespace org.cchmc.pho.identity
                 if (user == null)
                     return null;
 
-                var userType = await _context.TlkUserType.FirstOrDefaultAsync(ut => ut.Id == user.Id);
-                if (userType == null)
-                {
-                    _logger.LogInformation($"User '{user.UserName}' is not linked to an actual UserType record.");
-                    return null;
-                }
-
-                // The Login table does not foreign key to the Staff table so we need to get that data separately
-                var staffData = await _context.Staff.FirstOrDefaultAsync(s => s.Id == user.StaffId);
-                if (staffData == null)
-                {
-                    _logger.LogInformation($"User '{user.UserName}' is not linked to an actual Staff record.");
-                    return null;
-                }
-
-                return user.BuildUser(staffData, userType);
+                return await GetUserInternal(user);
             }
             catch (Exception ex)
             {
@@ -128,28 +110,28 @@ namespace org.cchmc.pho.identity
                 if (user == null)
                     return null;
 
-                var userType = await _context.TlkUserType.FirstOrDefaultAsync(ut => ut.Id == user.Id);
-                if (userType == null)
-                {
-                    _logger.LogInformation($"User '{userName}' is not linked to an actual UserType record.");
-                    return null;
-                }
-
-                // The Login table does not foreign key to the Staff table so we need to get that data separately
-                var staffData = await _context.Staff.FirstOrDefaultAsync(s => s.Id == user.StaffId);
-                if(staffData == null)
-                {
-                    _logger.LogInformation($"User '{userName}' is not linked to an actual Staff record.");
-                    return null;
-                }
-
-                return user.BuildUser(staffData, userType);
+                return await GetUserInternal(user);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
                 return null;
             }
+        }
+
+        private async Task<User> GetUserInternal(Login login)
+        {
+            var userType = await _context.TlkUserType.FirstOrDefaultAsync(ut => ut.Id == login.UserTypeId);
+            if (userType == null)
+            {
+                _logger.LogInformation($"User '{login.UserName}' is not linked to an actual UserType record.");
+                return null;
+            }
+
+            // The Login table does not foreign key to the Staff table so we need to get that data separately
+            var staffData = await _context.Staff.FirstOrDefaultAsync(s => s.Id == login.StaffId);
+
+            return login.BuildUser(staffData, userType);
         }
 
         public async Task<User> UpdateUser(User user, string userNameMakingChange)
@@ -184,6 +166,7 @@ namespace org.cchmc.pho.identity
         {
             try
             {
+                var hashedPassword = _passwordHasher.HashPassword(user, Guid.NewGuid().ToString());
                 Login userRecord = new Login()
                 {
                     CreatedBy = userNameMakingChange,
@@ -196,7 +179,7 @@ namespace org.cchmc.pho.identity
                     ModifiedDate = DateTime.Now,
                     UserName = user.UserName,
                     UserTypeId = user.Role.Id,
-                    Password = _passwordHasher.HashPassword(user, Guid.NewGuid().ToString())
+                    Password = hashedPassword
                 };
 
                 _context.Login.Add(userRecord);
