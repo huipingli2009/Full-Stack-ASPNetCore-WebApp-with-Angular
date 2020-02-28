@@ -27,7 +27,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpGet("/{userid}/{topfilter}/{tagfilter}/{namesearch}")]
-        [SwaggerResponse(200, type: typeof(List<MetricViewModel>))]
+        [SwaggerResponse(200, type: typeof(List<StaffViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> ListStaff(string userid, string topfilter, string tagfilter, string namesearch)
@@ -58,19 +58,11 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpGet("positions")]
-        [SwaggerResponse(200, type: typeof(List<MetricViewModel>))]
+        [SwaggerResponse(200, type: typeof(List<PositionViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> ListPositions()
         {
-            string user = "3"; //todo: default for now
-            // route parameters are strings and need to be translated (and validated) to their proper data type
-            if (!int.TryParse(user, out var userId))
-            {
-                _logger.LogInformation($"Failed to parse userId - {user}");
-                return BadRequest("user is not a valid integer");
-            }
-
             try
             {
                 // call the data method
@@ -89,19 +81,11 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpGet("credentials")]
-        [SwaggerResponse(200, type: typeof(List<MetricViewModel>))]
+        [SwaggerResponse(200, type: typeof(List<CredentialViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> ListCredentials()
         {
-            string user = "3"; //todo: default for now
-            // route parameters are strings and need to be translated (and validated) to their proper data type
-            if (!int.TryParse(user, out var userId))
-            {
-                _logger.LogInformation($"Failed to parse userId - {user}");
-                return BadRequest("user is not a valid integer");
-            }
-
             try
             {
                 // call the data method
@@ -125,14 +109,6 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> ListResponsibilities()
         {
-            string user = "3"; //todo: default for now
-            // route parameters are strings and need to be translated (and validated) to their proper data type
-            if (!int.TryParse(user, out var userId))
-            {
-                _logger.LogInformation($"Failed to parse userId - {user}");
-                return BadRequest("user is not a valid integer");
-            }
-
             try
             {
                 // call the data method
