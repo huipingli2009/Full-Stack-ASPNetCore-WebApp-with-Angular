@@ -24,7 +24,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         public async Task<List<SpotLight>> ListActiveSpotLights()
         {
             DataTable dataTable = new DataTable();
-            List<SpotLight> spotlights = new List<SpotLight>();
+            List<SpotLight> spotlights;
 
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
@@ -62,7 +62,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         public async Task<List<Quicklink>> ListActiveQuicklinks()
         {
             DataTable dataTable = new DataTable();
-            List<Quicklink> spotlights = new List<Quicklink>();
+            List<Quicklink> spotlights;
 
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {

@@ -61,7 +61,7 @@ namespace org.cchmc.pho.api.Controllers
         // GET: api/Content
         [HttpGet("quicklinks")]
 
-        [SwaggerResponse(200, type: typeof(List<SpotLightViewModel>))]
+        [SwaggerResponse(200, type: typeof(List<QuicklinkViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> ListActiveQuicklinks()
