@@ -25,7 +25,38 @@ namespace org.cchmc.pho.core.DataAccessLayer
         {
             DataTable dataTable = new DataTable();
             List<Staff> staff = new List<Staff>();
-            return staff;
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetStaff", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@TopFilter", SqlDbType.VarChar).Value = topfilter;
+                    sqlCommand.Parameters.Add("@TagFilter", SqlDbType.VarChar).Value = tagfilter;
+                    sqlCommand.Parameters.Add("@NameSearch", SqlDbType.VarChar).Value = namesearch;
+                    sqlConnection.Open();
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        staff = (from DataRow dr in dataTable.Rows
+                                     select new Staff()
+                                     {
+                                         Id = (dr["StaffID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StaffID"].ToString())),
+                                         FirstName = dr["FirstName"].ToString(),
+                                         LastName = dr["LastName"].ToString(),
+                                         Email = dr["EmailAddress"].ToString(),
+                                         Phone = dr["Phone"].ToString(),
+                                         PositionId = (dr["PositionId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PositionId"].ToString())),
+                                         CredentialId = (dr["CredentialId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CredentialId"].ToString())),
+                                         Registry = (dr["RegistryYN"] == DBNull.Value ? false : Convert.ToBoolean(dr["RegistryYN"].ToString())),
+                                         Responsibilities = dr["Responsibilities"].ToString()
+                                     }
+                        ).ToList();
+                    }
+                    return staff;
+                }
+            } 
         }
 
         public async Task<List<Position>> ListPositions()
