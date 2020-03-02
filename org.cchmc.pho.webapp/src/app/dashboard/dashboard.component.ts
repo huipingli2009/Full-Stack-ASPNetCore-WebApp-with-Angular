@@ -30,7 +30,7 @@ export class DashboardComponent implements OnInit {
   monthlySpotlightTitle: string;
   monthlySpotlightBody: string;
   monthlySpotlightLink: string;
-  monthlySpotlightImage: string;
+  monthlySpotlightImageUrl: string;
   edChartTitle: string;
   defaultUrl = environment.apiURL;
   popData: any[] = [];
@@ -96,7 +96,7 @@ export class DashboardComponent implements OnInit {
         onClick: function (e) {
           var element = this.getElementAtEvent(e);
           if (element.length) {
-            this.selectedBar = element[0]._model.label;
+            // this.selectedBar = element[0]._model.label;
           }
           $this.Showmodal(e, this, element); // This is the result of a "fake" JQuery this
         }
@@ -113,7 +113,7 @@ export class DashboardComponent implements OnInit {
       const imageName = this.spotlight[0].imageHyperlink;
       this.monthlySpotlightTitle = this.spotlight[0].header;
       this.monthlySpotlightBody = this.spotlight[0].body;
-      this.monthlySpotlightImage = `${this.defaultUrl}/assets/img/${imageName}`;
+      this.monthlySpotlightImageUrl = `${this.defaultUrl}/assets/img/${imageName}`;
       this.monthlySpotlightLink = this.spotlight[0].hyperlink;
     });
   }
@@ -169,7 +169,7 @@ export class DashboardComponent implements OnInit {
     return this.datePipe.transform(date, 'EE MM/dd');
   }
   transformAdmitDate(date) {
-    return this.datePipe.transform(date, 'MM/dd/YYYY');
+    return this.datePipe.transform(date, 'MM/dd/yyyy');
   }
 
   addData(chart, label, data) {
@@ -182,11 +182,11 @@ export class DashboardComponent implements OnInit {
   
   /* Open Modal (Dialog) on bar click */
   Showmodal(event, chart, element) : void {
+    this.selectedBar = this.transformAdmitDate(element[0]._model.label);
     this.openDialogWithDetails();
   }
   openDialogWithDetails() {
     this.edChartDetails = [];
-    this.transformAdmitDate(this.selectedBar);
     this.rest.getEdChartDetails(this.selectedBar).subscribe((data) => {
       this.edChartDetails = data;
       const dialogRef = this.dialog.open(this.callEDDialog);
