@@ -1,20 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace org.cchmc.pho.core.DataModels
+namespace org.cchmc.pho.api.ViewModels
 {
-    public class WorkbooksProviders
+    public class WorkbooksProviderViewModel
     {
         public int FormResponseID { get; set; }
-
         public int StaffID { get; set; }
-
         public string Provider { get; set; }
-
         public string PHQS { get; set; }
-
         public int TOTAL { get; set; }
-
     }
 }

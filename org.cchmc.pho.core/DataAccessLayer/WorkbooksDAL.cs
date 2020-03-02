@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace org.cchmc.pho.core.DataAccessLayer
 {
@@ -21,7 +22,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             _connectionStrings = options.Value;
             _logger = logger;
         }
-        public async Task<List<WorkbooksPatient>> ListPatients(int userId, DateTime reportingDate, string NameSearch)
+        public async Task<List<WorkbooksPatient>> ListPatients(int userId, int formResponseId, string NameSearch)
         {
             DataTable dataTable = new DataTable();
             List<WorkbooksPatient> workbookspatients = new List<WorkbooksPatient>();
@@ -33,7 +34,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
 
                     sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
-                    sqlCommand.Parameters.Add("@ReportingDate", SqlDbType.DateTime).Value = reportingDate;
+                    sqlCommand.Parameters.Add("@FormResponseId", SqlDbType.Int).Value = formResponseId;
                     sqlCommand.Parameters.Add("@NameSearch", SqlDbType.Int).Value = NameSearch;
 
                     await sqlConnection.OpenAsync();
@@ -63,6 +64,81 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 }               
             }
             return workbookspatients;
+        }
+
+        public async Task<WorkbooksPractice> GetPracticeWorkbooks(int userId, int formResponseId)
+        {
+            DataTable dataTable = new DataTable();
+            WorkbooksPractice workbookpractice = new WorkbooksPractice();
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetPHQ9Workbooks_Practice", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@FormResponseId", SqlDbType.Int).Value = formResponseId;
+
+                    await sqlConnection.OpenAsync();
+
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+
+                        workbookpractice = (from DataRow dr in dataTable.Rows
+                                            select new WorkbooksPractice()
+                                            {
+                                                FormResponseId = int.Parse(dr["FormResponseId"].ToString()),
+                                                Header = dr["Header"].ToString(),
+                                                Line1 = dr["Line1"].ToString(),
+                                                Line2 = dr["Line2"].ToString(),
+                                                Line3 = dr["Line3"].ToString(),
+                                                JobAidURL = dr["JobAidURL"].ToString()
+                                            }
+                                        ).SingleOrDefault();  
+                    }
+                }
+            }
+            return workbookpractice;
+        }
+
+        public async Task<List<WorkbooksProvider>> GetPracticeWorkbooksProviders(int userId, int formResponseId)
+        {
+            DataTable dataTable = new DataTable();
+            List<WorkbooksProvider> workbooksproviders = new List<WorkbooksProvider>();
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetPHQ9Workbooks_Providers", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@FormResponseId", SqlDbType.Int).Value = formResponseId;
+
+                    await sqlConnection.OpenAsync();
+
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+
+                        foreach (DataRow dr in dataTable.Rows)
+                        {
+                            var workbooksprovider = new WorkbooksProvider()
+                            {
+                                FormResponseID = int.Parse(dr["FormResponseID"].ToString()),
+                                StaffID = int.Parse(dr["StaffID"].ToString()),
+                                Provider = dr["Provider"].ToString(),
+                                PHQS = dr["PHQS"].ToString(),
+                                TOTAL = int.Parse(dr["Total"].ToString())
+                            };
+                            workbooksproviders.Add(workbooksprovider);
+                        }
+                    }
+                }
+                return workbooksproviders;
+            }
         }
     }
 }
