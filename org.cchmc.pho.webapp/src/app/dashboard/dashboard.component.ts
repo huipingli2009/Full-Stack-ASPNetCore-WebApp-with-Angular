@@ -9,7 +9,7 @@ import * as Chart from 'chart.js';
 import { EventEmitter } from 'protractor';
 import { environment } from 'src/environments/environment';
 import { DatePipe } from '@angular/common';
-import { NGXLogger } from 'ngx-logger';
+import { NGXLogger, LoggerConfig } from 'ngx-logger';
 
 @Component({
   selector: 'app-dashboard',
@@ -168,6 +168,9 @@ export class DashboardComponent implements OnInit {
   transformDate(date) {
     return this.datePipe.transform(date, 'EE MM/dd');
   }
+  transformAdmitDate(date) {
+    return this.datePipe.transform(date, 'MM/dd/YYYY');
+  }
 
   addData(chart, label, data) {
     chart.data.labels.push(label);
@@ -183,6 +186,7 @@ export class DashboardComponent implements OnInit {
   }
   openDialogWithDetails() {
     this.edChartDetails = [];
+    this.transformAdmitDate(this.selectedBar);
     this.rest.getEdChartDetails(this.selectedBar).subscribe((data) => {
       this.edChartDetails = data;
       const dialogRef = this.dialog.open(this.callEDDialog);
