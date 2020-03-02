@@ -153,9 +153,6 @@ h1 {
       border-bottom: 1.8px solid var(--primary-darker-color);
   }
 }
-/* Reusable Layout Elements ======================================================================================*/
-
-/*Dashboard Containers*/
 
 
 /* Dashboard =========================================================================== */
@@ -506,5 +503,33 @@ h1 {
       
     }
   }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+  /* Patients =========================================================================== */
+
+  .patients-header {
+    border-top-right-radius: 7px;
+      border-top-left-radius: 7px;
+    background-color: var(--primary-color);
+    font-size: 15px;
+    line-height: 20px;
+    color: white;
+    padding: 21px 35px 19px;
+    font-weight: Bold;
+    text-align: left;
+    letter-spacing: normal;
+    
+    .header-filter {
+      margin-right: 36px;
+    }
+  }
+
+  #patients {
+    width: 100%;
+
+    table {
+      width: 100%;
+      border-bottom-right-radius: 7px;
+      border-bottom-left-radius: 7px;
+    }
+  }
+

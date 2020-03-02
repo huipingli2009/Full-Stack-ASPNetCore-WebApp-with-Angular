@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Patients } from '../models/patients';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-patients',
@@ -7,9 +10,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PatientsComponent implements OnInit {
 
+  ELEMENT_DATA: Patients[] = [
+    {patientId: 12345, practiceID: 7, status: [{id: 1, name: 'active'}], pcP_StaffID: 112354654,
+      firstName: 'John', lastName: 'Smith', dob: '02/12/1988',
+    lastEDVisit: '04/16/2012', chronic: true, watchFlag: true, conditions: [{id: 1, name: 'Asthma'}]},
+  ]
+
+  displayedColumns: string[] = ['name', 'dob', 'lastEDVisit', 'chronic', 'watchFlag', 'conditions'];
+  dataSource = new MatTableDataSource<Patients>(this.ELEMENT_DATA);
+
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+
   constructor() { }
 
   ngOnInit(): void {
+    this.dataSource.paginator = this.paginator;
   }
 
 }
