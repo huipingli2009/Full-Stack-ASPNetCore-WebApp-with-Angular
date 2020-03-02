@@ -40,23 +40,65 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     {
                         da.Fill(dataTable);
                         staff = (from DataRow dr in dataTable.Rows
-                                     select new Staff()
-                                     {
-                                         Id = (dr["StaffID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StaffID"].ToString())),
-                                         FirstName = dr["FirstName"].ToString(),
-                                         LastName = dr["LastName"].ToString(),
-                                         Email = dr["EmailAddress"].ToString(),
-                                         Phone = dr["Phone"].ToString(),
-                                         PositionId = (dr["PositionId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PositionId"].ToString())),
-                                         CredentialId = (dr["CredentialId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CredentialId"].ToString())),
-                                         Registry = (dr["RegistryYN"] == DBNull.Value ? false : Convert.ToBoolean(dr["RegistryYN"].ToString())),
-                                         Responsibilities = dr["Responsibilities"].ToString()
-                                     }
+                                 select new Staff()
+                                 {
+                                     Id = (dr["StaffID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StaffID"].ToString())),
+                                     FirstName = dr["FirstName"].ToString(),
+                                     LastName = dr["LastName"].ToString(),
+                                     Email = dr["EmailAddress"].ToString(),
+                                     Phone = dr["Phone"].ToString(),
+                                     PositionId = (dr["PositionId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PositionId"].ToString())),
+                                     CredentialId = (dr["CredentialId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CredentialId"].ToString())),
+                                     Registry = (dr["RegistryYN"] == DBNull.Value ? false : Convert.ToBoolean(dr["RegistryYN"].ToString())),
+                                     Responsibilities = dr["Responsibilities"].ToString()
+                                 }
                         ).ToList();
                     }
                     return staff;
                 }
-            } 
+            }
+        }
+        public async Task<StaffDetail> GetStaffDetails(int userId, int staffId)
+        {
+            DataTable dataTable = new DataTable();
+            StaffDetail staffDetail;
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetStaffDetail", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@StaffID", SqlDbType.Int).Value = staffId;
+                    sqlConnection.Open();
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        staffDetail = (from DataRow dr in dataTable.Rows
+                                 select new StaffDetail()
+                                 {
+                                     Id = (dr["StaffID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StaffID"].ToString())),
+                                     FirstName = dr["FirstName"].ToString(),
+                                     LastName = dr["LastName"].ToString(),
+                                     Email = dr["EmailAddress"].ToString(),
+                                     Phone = dr["Phone"].ToString(),
+                                     StartDate = (dr["StartDate"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["StartDate"].ToString())),
+                                     PositionId = (dr["StaffPositionId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StaffPositionId"].ToString())),
+                                     CredentialId = (dr["CredentialId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CredentialId"].ToString())),
+                                     LeadPhysician = (dr["LeadPhysician"] == DBNull.Value ? false : Convert.ToBoolean(dr["LeadPhysician"].ToString())),
+                                     QITeam = (dr["QITeam"] == DBNull.Value ? false : Convert.ToBoolean(dr["QITeam"].ToString())),
+                                     PracticeManager = (dr["PracticeManager"] == DBNull.Value ? false : Convert.ToBoolean(dr["PracticeManager"].ToString())),
+                                     InterventionContact = (dr["InterventionContact"] == DBNull.Value ? false : Convert.ToBoolean(dr["InterventionContact"].ToString())),
+                                     QPLLeader = (dr["QPLLeader"] == DBNull.Value ? false : Convert.ToBoolean(dr["QPLLeader"].ToString())),
+                                     PHOBoard = (dr["PHOBoard"] == DBNull.Value ? false : Convert.ToBoolean(dr["PHOBoard"].ToString())),
+                                     OVPCABoard = (dr["OVPCABoard"] == DBNull.Value ? false : Convert.ToBoolean(dr["OVPCABoard"].ToString())),
+                                     RVPIBoard = (dr["RVPIBoard"] == DBNull.Value ? false : Convert.ToBoolean(dr["RVPIBoard"].ToString())),
+                                 }
+                        ).SingleOrDefault();
+                    }
+                    return staffDetail;
+                }
+            }
         }
 
         public async Task<List<Position>> ListPositions()
