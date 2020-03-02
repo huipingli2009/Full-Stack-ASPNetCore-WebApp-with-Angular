@@ -12,7 +12,7 @@
                 </div>
             </div>
             <div fxLayout="column">
-                <div class="spotlight-img"><img src="\assets\img\{{monthlySpotlightImage}}"></div>
+                <div class="spotlight-img"><img src="{{monthlySpotlightImage}}"></div>
             </div>
         </div>
     </div>
@@ -23,11 +23,24 @@
             </div>
         </div>
         <div fxLayout="row" class="quick-links-container" fxLayoutAlign="center center">
-            <div fxLayout="row" fxLayoutGap="29px">
-                <div fxLayout="column" class="quick-link-box" *ngFor="let item of quickLinks; let i=index;">
-                    <a href="{{item.link}}">
-                        {{item.body}}
-                    </a>
+            <div fxLayout="row" fxFlex="100%">
+                <div *ngFor="let item of quickLinks; let i=index;">
+                    <div fxLayout="column" class="quick-link-box" *ngIf="i<3">
+                        <a href="{{item.hyperLink}}">
+                            {{item.body}}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div fxLayout="row" class="quick-links-container" fxLayoutAlign="center center">
+            <div fxLayout="row" fxFlex="100%">
+                <div *ngFor="let item of quickLinks; let i=index;">
+                    <div fxLayout="column" class="quick-link-box" *ngIf="i>=3">
+                        <a href="{{item.hyperLink}}">
+                            {{item.body}}
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

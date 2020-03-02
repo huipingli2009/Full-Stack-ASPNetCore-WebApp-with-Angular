@@ -398,10 +398,12 @@ h1 {
         font-family: 'ArcherBold';
         width: 99px;
         background-color: var(--purple-light);
-        padding: 18px;
+        padding: 15px;
         text-align: center;
         border: 0.5px dashed var(--purple-dark);
         outline: 4px solid var(--purple-light);
+        margin-right: 14.5px;
+        margin-left: 14.5px;
       }
       a {
         color: var(--purple-dark);
