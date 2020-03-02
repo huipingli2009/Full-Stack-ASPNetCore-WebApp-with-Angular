@@ -15,13 +15,13 @@ namespace org.cchmc.pho.api.ViewModels
         public DateTime? StartDate { get; set; }
         public int PositionId { get; set; }
         public int CredentialId { get; set; }
-        public bool LeadPhysician { get; set; }
-        public bool QITeam { get; set; }
-        public bool PracticeManager { get; set; }
-        public bool InterventionContact { get; set; }
-        public bool QPLLeader { get; set; }
-        public bool PHOBoard { get; set; }
-        public bool OVPCABoard { get; set; }
-        public bool RVPIBoard { get; set; }
+        public bool IsLeadPhysician { get; set; }
+        public bool IsQITeam { get; set; }
+        public bool IsPracticeManager { get; set; }
+        public bool IsInterventionContact { get; set; }
+        public bool IsQPLLeader { get; set; }
+        public bool IsPHOBoard { get; set; }
+        public bool IsOVPCABoard { get; set; }
+        public bool IsRVPIBoard { get; set; }
     }
 }

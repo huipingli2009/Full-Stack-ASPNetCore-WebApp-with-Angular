@@ -49,7 +49,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                      Phone = dr["Phone"].ToString(),
                                      PositionId = (dr["PositionId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PositionId"].ToString())),
                                      CredentialId = (dr["CredentialId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CredentialId"].ToString())),
-                                     Registry = (dr["RegistryYN"] == DBNull.Value ? false : Convert.ToBoolean(dr["RegistryYN"].ToString())),
+                                     IsRegistry = (dr["RegistryYN"] != DBNull.Value && Convert.ToBoolean(dr["RegistryYN"])),
                                      Responsibilities = dr["Responsibilities"].ToString()
                                  }
                         ).ToList();
@@ -85,14 +85,14 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                      StartDate = (dr["StartDate"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["StartDate"].ToString())),
                                      PositionId = (dr["StaffPositionId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StaffPositionId"].ToString())),
                                      CredentialId = (dr["CredentialId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CredentialId"].ToString())),
-                                     LeadPhysician = (dr["LeadPhysician"] == DBNull.Value ? false : Convert.ToBoolean(dr["LeadPhysician"].ToString())),
-                                     QITeam = (dr["QITeam"] == DBNull.Value ? false : Convert.ToBoolean(dr["QITeam"].ToString())),
-                                     PracticeManager = (dr["PracticeManager"] == DBNull.Value ? false : Convert.ToBoolean(dr["PracticeManager"].ToString())),
-                                     InterventionContact = (dr["InterventionContact"] == DBNull.Value ? false : Convert.ToBoolean(dr["InterventionContact"].ToString())),
-                                     QPLLeader = (dr["QPLLeader"] == DBNull.Value ? false : Convert.ToBoolean(dr["QPLLeader"].ToString())),
-                                     PHOBoard = (dr["PHOBoard"] == DBNull.Value ? false : Convert.ToBoolean(dr["PHOBoard"].ToString())),
-                                     OVPCABoard = (dr["OVPCABoard"] == DBNull.Value ? false : Convert.ToBoolean(dr["OVPCABoard"].ToString())),
-                                     RVPIBoard = (dr["RVPIBoard"] == DBNull.Value ? false : Convert.ToBoolean(dr["RVPIBoard"].ToString())),
+                                     IsLeadPhysician = (dr["LeadPhysician"] != DBNull.Value && Convert.ToBoolean(dr["LeadPhysician"])),
+                                     IsQITeam = (dr["QITeam"] != DBNull.Value && Convert.ToBoolean(dr["QITeam"])),
+                                     IsPracticeManager = (dr["PracticeManager"] != DBNull.Value && Convert.ToBoolean(dr["PracticeManager"])),
+                                     IsInterventionContact = (dr["InterventionContact"] != DBNull.Value && Convert.ToBoolean(dr["InterventionContact"])),
+                                     IsQPLLeader = (dr["QPLLeader"] != DBNull.Value && Convert.ToBoolean(dr["QPLLeader"])),
+                                     IsPHOBoard = (dr["PHOBoard"] != DBNull.Value && Convert.ToBoolean(dr["PHOBoard"])),
+                                     IsOVPCABoard = (dr["OVPCABoard"] != DBNull.Value && Convert.ToBoolean(dr["OVPCABoard"])),
+                                     IsRVPIBoard = (dr["RVPIBoard"] != DBNull.Value && Convert.ToBoolean(dr["RVPIBoard"])),
                                  }
                         ).SingleOrDefault();
                     }
