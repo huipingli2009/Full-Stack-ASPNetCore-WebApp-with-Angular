@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using org.cchmc.pho.api.ViewModels;
@@ -19,9 +17,8 @@ namespace org.cchmc.pho.api.Controllers
     {
         private readonly ILogger<ContentsController> _logger;
         private readonly IMapper _mapper;
-        private readonly IContent _content;
-
-        //TODO: delete me refactor
+        private readonly IContent _content;   
+        
         private readonly CustomOptions _customOptions;
 
         public ContentsController(ILogger<ContentsController> logger, IMapper mapper, IContent content)
@@ -29,7 +26,7 @@ namespace org.cchmc.pho.api.Controllers
             _logger = logger;
             _mapper = mapper;
             _content = content;
-
+            
             _logger.LogInformation($"Example of options {_customOptions?.RequiredOption}");
         }
 

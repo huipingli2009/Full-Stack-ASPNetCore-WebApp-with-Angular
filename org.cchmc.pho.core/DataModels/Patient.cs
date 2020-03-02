@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace org.cchmc.pho.core.DataModels
 {
@@ -30,6 +28,9 @@ namespace org.cchmc.pho.core.DataModels
             ID = intId;
             Name = name;
         }
+        public PatientStatus()
+        {
+        }
     }
 
     public class PatientCondition
@@ -41,6 +42,10 @@ namespace org.cchmc.pho.core.DataModels
         {
             ID = id;
             Name = name;
+        }
+
+        public PatientCondition()
+        {
         }
     }
 }

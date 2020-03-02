@@ -1,5 +1,4 @@
-﻿
-namespace org.cchmc.pho.api.ViewModels
+﻿namespace org.cchmc.pho.api.ViewModels
 {
     public class SpotLightViewModel
     {
