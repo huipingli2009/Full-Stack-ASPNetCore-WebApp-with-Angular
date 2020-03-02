@@ -531,5 +531,36 @@ h1 {
       border-bottom-right-radius: 7px;
       border-bottom-left-radius: 7px;
     }
+
+    .mat-header-row {
+      background-color: rgba(0,168,150,0.16);
+      height: 47px;
+    .mat-header-cell, button {
+      font-size: 13px;
+      font-weight: bold;
+      line-height: 19px;
+      letter-spacing: 1px;
+      color: var(--primary-darker-color);
+      text-align: left;
+      text-transform: uppercase !important;
+
+      button {
+        text-transform: uppercase;
+      }
+    }
+    }
+
+    .mat-cell {
+      color: #4A4A4A;
+      font-size: 13px;
+      line-height: 18px;
+    }
+
+    .mat-column-name {
+      color: #4A4A4A;
+      font-size: 13px;
+      line-height: 18px;
+      font-weight: bold;
+    }
   }
 

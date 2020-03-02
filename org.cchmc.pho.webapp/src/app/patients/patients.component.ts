@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Patients } from '../models/patients';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-patients',
@@ -20,11 +21,15 @@ export class PatientsComponent implements OnInit {
   dataSource = new MatTableDataSource<Patients>(this.ELEMENT_DATA);
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
+
 
   constructor() { }
 
   ngOnInit(): void {
+    this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
   }
+  ngAfterViewInit(){}
 
 }
