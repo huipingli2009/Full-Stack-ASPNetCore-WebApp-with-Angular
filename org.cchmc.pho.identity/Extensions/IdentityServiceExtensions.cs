@@ -24,7 +24,7 @@ namespace org.cchmc.pho.identity.Extensions
                 .AddJwtBearer();
             services.AddOptions<JwtAuthentication>()
                         .Bind(configuration.GetSection("JwtAuthentication"))
-                        .ValidateDataAnnotations() // TODO
+                        .ValidateDataAnnotations()
                         .Validate(c =>
                         {
                             return true;

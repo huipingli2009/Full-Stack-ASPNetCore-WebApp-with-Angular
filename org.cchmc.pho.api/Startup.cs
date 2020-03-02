@@ -51,14 +51,14 @@ namespace org.cchmc.pho.api
                             //    return c.Endpoint_BaseUrl != default;
                             //}
                             return true;
-                        }, "failure message");
+                        }, "Failed to validate custom options.");
             services.AddOptions<ConnectionStrings>()
                         .Bind(Configuration.GetSection("ConnectionStrings"))
-                        .ValidateDataAnnotations() //todo 
+                        .ValidateDataAnnotations()
                         .Validate(c =>
                         {
                             return true;
-                        }, "failure message");
+                        }, "Failed to validate connection strings.");
 
             //setting up CORS policy only in the development environment 
             if (_environment.IsDevelopment())
@@ -79,7 +79,6 @@ namespace org.cchmc.pho.api
                 {
                     // CJENKINSON - Uncomment out when ready to apply Authorize attributes
                     //var policy = Configuration.BuildAuthorizationPolicy();
-
                     //config.Filters.Add(new AuthorizeFilter(policy));
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
