@@ -23,7 +23,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             _logger = logger;
         }       
 
-        public async Task<List<Patient>> ListActivePatient(int userId, int staffID, int popmeasureID, bool watch, bool chronic, string conditionIDs, string namesearch)
+        public async Task<List<Patient>> ListActivePatient(int userId, int? staffID, int? popmeasureID, bool? watch, bool? chronic, string conditionIDs, string namesearch, string sortcolumn, string sortdirection, int? pagenumber, int? rowsperpage)
         {
             DataTable dataTable = new DataTable();
             List<Patient> patients = new List<Patient>();
@@ -32,64 +32,18 @@ namespace org.cchmc.pho.core.DataAccessLayer
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spGetPracticePatients", sqlConnection))
                 {
-                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;               
-
-
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;          
                     sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;                                      
-
-                    if (staffID != 0)
-                    {
-                        sqlCommand.Parameters.Add("@PCP_StaffID", SqlDbType.Int).Value = staffID; 
-                    }
-                    else
-                    {
-                        sqlCommand.Parameters.Add("@PCP_StaffID", SqlDbType.Int).Value = DBNull.Value;
-                    }                    
-
-                    if (popmeasureID != 0)
-                    {
-                        sqlCommand.Parameters.Add("@PopMeasureID", SqlDbType.Int).Value = popmeasureID; 
-                    }
-                    else
-                    {
-                        sqlCommand.Parameters.Add("@PopMeasureID", SqlDbType.Int).Value = DBNull.Value;
-                    }
-
-                    if (watch == true)
-                    {
-                        sqlCommand.Parameters.Add("@Watch", SqlDbType.Int).Value = watch; 
-                    }
-                    else
-                    {
-                        sqlCommand.Parameters.Add("@Watch", SqlDbType.Int).Value = false;
-                    }
-
-                    if (chronic == true)
-                    {
-                        sqlCommand.Parameters.Add("@Chronic", SqlDbType.Int).Value = chronic; 
-                    }
-                    else
-                    {
-                        sqlCommand.Parameters.Add("@Chronic", SqlDbType.Int).Value = false;
-                    }                  
-
-                    if (conditionIDs != null)
-                    {
-                        sqlCommand.Parameters.Add("@ConditionIDs", SqlDbType.VarChar, 50).Value = conditionIDs; 
-                    }
-                    else
-                    {
-                        sqlCommand.Parameters.Add("@ConditionIDs", SqlDbType.VarChar, 50).Value = DBNull.Value;
-                    }
-
-                    if (namesearch != null)
-                    {
-                        sqlCommand.Parameters.Add("@NameSearch", SqlDbType.VarChar, 100).Value = namesearch; 
-                    }
-                    else
-                    {
-                        sqlCommand.Parameters.Add("@NameSearch", SqlDbType.VarChar, 100).Value = DBNull.Value;
-                    }                   
+                    sqlCommand.Parameters.Add("@PCP_StaffID", SqlDbType.Int).Value = staffID; 
+                    sqlCommand.Parameters.Add("@PopMeasureID", SqlDbType.Int).Value = popmeasureID; 
+                    sqlCommand.Parameters.Add("@Watch", SqlDbType.Bit).Value = watch; 
+                    sqlCommand.Parameters.Add("@Chronic", SqlDbType.Bit).Value = chronic; 
+                    sqlCommand.Parameters.Add("@ConditionIDs", SqlDbType.VarChar, 50).Value = conditionIDs; 
+                    sqlCommand.Parameters.Add("@NameSearch", SqlDbType.VarChar, 100).Value = namesearch;
+                    sqlCommand.Parameters.Add("@SortColumn", SqlDbType.VarChar, 50).Value = sortcolumn;
+                    sqlCommand.Parameters.Add("@SortDirection", SqlDbType.VarChar, 100).Value = sortdirection;
+                    sqlCommand.Parameters.Add("@PageNumber", SqlDbType.VarChar, 50).Value = pagenumber;
+                    sqlCommand.Parameters.Add("@RowspPage", SqlDbType.VarChar, 100).Value = rowsperpage;
 
                     await sqlConnection.OpenAsync();
 
@@ -102,27 +56,31 @@ namespace org.cchmc.pho.core.DataAccessLayer
                         List<PatientCondition> patientConditions = GetPatientConditionsAll();                     
                         
                         foreach(DataRow dr in dataTable.Rows)
-                        {       
+                        {
                             var patient = new Patient()
-                            {                                 
+                            {
                                 PatientId = Convert.ToInt32(dr["PatientId"]),
                                 FirstName = dr["FirstName"].ToString(),
                                 LastName = dr["LastName"].ToString(),
                                 PCP_StaffID = Convert.ToInt32(dr["PCP_StaffID"]),
                                 PracticeID = Convert.ToInt32(dr["PracticeID"]),
-                                DOB = (dr["DOB"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["DOB"].ToString())),                              
+                                DOB = (dr["DOB"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["DOB"].ToString())),
                                 LastEDVisit = (dr["LastEDVisit"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LastEDVisit"].ToString())),
                                 Chronic = bool.Parse(dr["Chronic"].ToString()),
+                                WatchFlag = bool.Parse(dr["WatchFlag"].ToString()),
                                 Conditions = new List<PatientCondition>(),
                                 Status = patientStatuslist.FirstOrDefault(p => p.ID == int.Parse(dr["ActiveStatus"].ToString()))
                             };
 
-                            foreach (int conditionId in dr["ConditionIDs"].ToString().Split(',').Select(p => int.Parse(p)))
+                            if (!string.IsNullOrWhiteSpace(dr["ConditionIDs"].ToString()))
                             {
-                                if (patientConditions.Any(p => p.ID == conditionId))
-                                    patient.Conditions.Add(patientConditions.First(p => p.ID == conditionId));
-                                else
-                                    _logger.LogError("An unmapped patient condition id was returned by the database ");
+                                foreach (int conditionId in dr["ConditionIDs"].ToString().Split(',').Select(p => int.Parse(p)))
+                                {
+                                    if (patientConditions.Any(p => p.ID == conditionId))
+                                        patient.Conditions.Add(patientConditions.First(p => p.ID == conditionId));
+                                    else
+                                        _logger.LogError("An unmapped patient condition id was returned by the database ");
+                                }
                             }
                             patients.Add(patient);
                         }  
