@@ -9,6 +9,7 @@ namespace org.cchmc.pho.api.Mappings
         public StaffMappings()
         {
             CreateMap<Staff, StaffViewModel>();
+            CreateMap<StaffDetail, StaffDetailViewModel>();
             CreateMap<Credential, CredentialViewModel>();
             CreateMap<Position, PositionViewModel>();
             CreateMap<Responsibility, ResponsibilityViewModel>();
