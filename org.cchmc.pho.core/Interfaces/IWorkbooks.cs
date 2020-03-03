@@ -9,5 +9,6 @@ namespace org.cchmc.pho.core.Interfaces
         Task<List<WorkbooksPatient>> ListPatients(int userId, int formResponseId, string nameSearch);
         Task<WorkbooksPractice> GetPracticeWorkbooks(int userId, int formResponseId);
         Task<List<WorkbooksProvider>> GetPracticeWorkbooksProviders(int userId, int formResponseId);
+        Task<List<WorkbooksLookup>> GetWorkbooksLookups(int userId);
     }
 }

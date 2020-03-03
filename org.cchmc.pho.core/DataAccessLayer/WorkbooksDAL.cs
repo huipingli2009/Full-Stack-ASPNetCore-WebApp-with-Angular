@@ -137,5 +137,37 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 return workbooksproviders;
             }
         }
+
+        public async Task<List<WorkbooksLookup>> GetWorkbooksLookups(int userId)
+        {
+            DataTable dataTable = new DataTable();
+            List<WorkbooksLookup> workbookslookups = new List<WorkbooksLookup>();
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetPHQ9Workbooks", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;                 
+
+                    await sqlConnection.OpenAsync();
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        foreach (DataRow dr in dataTable.Rows)
+                        {
+                            var workbookslookup = new WorkbooksLookup()
+                            {
+                                FormResponseID = int.Parse(dr["FormResponseID"].ToString()),
+                                ReportingMonth = (dr["ReportingMonth"] == DBNull.Value ? (DateTime?)null : (DateTime.Parse(dr["ReportingMonth"].ToString())))
+                            };
+
+                            workbookslookups.Add(workbookslookup);
+                        }
+                    }
+                }
+            }
+            return workbookslookups;
+        }
     }
 }
