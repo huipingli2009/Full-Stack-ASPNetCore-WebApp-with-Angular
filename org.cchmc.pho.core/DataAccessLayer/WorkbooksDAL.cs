@@ -69,7 +69,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         public async Task<WorkbooksPractice> GetPracticeWorkbooks(int userId, int formResponseId)
         {
             DataTable dataTable = new DataTable();
-            WorkbooksPractice workbookpractice = new WorkbooksPractice();
+            WorkbooksPractice workbookpractice;
 
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {

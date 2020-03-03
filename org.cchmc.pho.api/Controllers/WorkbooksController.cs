@@ -26,7 +26,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         // GET: api/Workbooks
-        [HttpGet]
+        [HttpGet("patients")]
         [SwaggerResponse(200, type: typeof(List<WorkbooksPatientViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -50,7 +50,7 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [HttpGet("workbookspractice")]
+        [HttpGet("practice")]
         [SwaggerResponse(200, type: typeof(WorkbooksPracticeViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]       
@@ -73,7 +73,7 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [HttpGet("workbooksprovider")]
+        [HttpGet("providers")]
         [SwaggerResponse(200, type: typeof(List<WorkbooksProviderViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
