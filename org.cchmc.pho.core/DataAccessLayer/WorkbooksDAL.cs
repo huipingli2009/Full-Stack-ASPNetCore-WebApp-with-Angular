@@ -22,7 +22,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             _connectionStrings = options.Value;
             _logger = logger;
         }
-        public async Task<List<WorkbooksPatient>> ListPatients(int userId, int formResponseId, string NameSearch)
+        public async Task<List<WorkbooksPatient>> ListPatients(int userId, int formResponseId, string nameSearch)
         {
             DataTable dataTable = new DataTable();
             List<WorkbooksPatient> workbookspatients = new List<WorkbooksPatient>();
@@ -35,7 +35,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                     sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
                     sqlCommand.Parameters.Add("@FormResponseId", SqlDbType.Int).Value = formResponseId;
-                    sqlCommand.Parameters.Add("@NameSearch", SqlDbType.Int).Value = NameSearch;
+                    sqlCommand.Parameters.Add("@NameSearch", SqlDbType.Int).Value = nameSearch;
 
                     await sqlConnection.OpenAsync();
 
