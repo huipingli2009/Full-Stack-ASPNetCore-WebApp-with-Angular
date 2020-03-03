@@ -17,7 +17,8 @@ namespace org.cchmc.pho.api.Controllers
         private readonly ILogger<PatientsController> _logger;
         private readonly IMapper _mapper;
         private readonly IPatient _patient;
-
+        //todo: hardcoded userid for now, we will be using session later
+        private readonly int _DEFAULT_USER = 3;
         public PatientsController(ILogger<PatientsController> logger, IMapper mapper, IPatient patient)
         {
             _logger = logger;
@@ -32,12 +33,12 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(200, type: typeof(List<PatientViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> ListActivePatient(int userId, int staffID, int popmeasureID, bool watch, bool chronic, string conditionIDs, string namesearch)
-        {         
-
+        public async Task<IActionResult> ListActivePatient(int userId, int? staffID, int? popmeasureID, bool? watch, bool? chronic, string conditionIDs, string namesearch, string sortcolumn, string sortdirection, int? pagenumber, int? rowsPerPage)
+        {
+            userId = _DEFAULT_USER;
             try
             {
-                var data = await _patient.ListActivePatient(userId, staffID, popmeasureID, watch, chronic, conditionIDs, namesearch);
+                var data = await _patient.ListActivePatient(userId, staffID, popmeasureID, watch, chronic, conditionIDs, namesearch,sortcolumn,sortdirection,pagenumber,rowsPerPage);
 
                 var result = _mapper.Map<List<PatientViewModel>>(data);
 

@@ -12,6 +12,7 @@ namespace org.cchmc.pho.core.DataModels
         public DateTime? StartDate { get; set; }
         public int PositionId { get; set; }
         public int CredentialId { get; set; }
+        public int NPI { get; set; }
         public bool IsLeadPhysician { get; set; }
         public bool IsQITeam { get; set; }
         public bool IsPracticeManager { get; set; }
