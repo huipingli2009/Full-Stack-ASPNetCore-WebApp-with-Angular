@@ -12,15 +12,13 @@ using System.Linq;
 
 namespace org.cchmc.pho.core.DataAccessLayer
 {
-    public class WorkbooksDAL : IWorkbooks
+    public class WorkbooksDal : IWorkbooks
     {
-        private readonly ConnectionStrings _connectionStrings;
-        private readonly ILogger<WorkbooksDAL> _logger;
+        private readonly ConnectionStrings _connectionStrings;        
 
-        public WorkbooksDAL(IOptions<ConnectionStrings> options, ILogger<WorkbooksDAL> logger)
+        public WorkbooksDal(IOptions<ConnectionStrings> options)
         {
-            _connectionStrings = options.Value;
-            _logger = logger;
+            _connectionStrings = options.Value;           
         }
         public async Task<List<WorkbooksPatient>> ListPatients(int userId, int formResponseId, string nameSearch)
         {
