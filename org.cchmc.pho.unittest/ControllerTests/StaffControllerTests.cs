@@ -14,9 +14,11 @@ using org.cchmc.pho.api.ViewModels;
 using org.cchmc.pho.core.DataModels;
 using org.cchmc.pho.core.Interfaces;
 
-namespace org.cchmc.pho.unittest.ControllerTests
+namespace org.cchmc.pho.unittest.controllertests
 {
-    class StaffTests
+    [TestClass]
+    [ExcludeFromCodeCoverage]
+    public class StaffControllerTests
     {
         private StaffController _StaffController;
         private Mock<ILogger<StaffController>> _mockLogger;
@@ -52,7 +54,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                     Phone = "513-123-4567",
                     PositionId = 37,
                     CredentialId = 76,
-                    Registry = false,
+                    IsRegistry = false,
                     Responsibilities = "Practice Manager"
                 },
                 new Staff()
@@ -64,7 +66,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                     Phone = "513-555-4567",
                     PositionId = 12,
                     CredentialId = 23,
-                    Registry = true,
+                    IsRegistry = true,
                     Responsibilities = "Auditor"
                 }
         };
@@ -84,7 +86,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.AreEqual(myStaff[0].Phone, resultList[0].Phone);
             Assert.AreEqual(myStaff[0].PositionId, resultList[0].PositionId);
             Assert.AreEqual(myStaff[0].CredentialId, resultList[0].CredentialId);
-            Assert.AreEqual(myStaff[0].Registry, resultList[0].Registry);
+            Assert.AreEqual(myStaff[0].IsRegistry, resultList[0].IsRegistry);
             Assert.AreEqual(myStaff[0].Responsibilities, resultList[0].Responsibilities);
             Assert.AreEqual(myStaff[1].Id, resultList[1].Id);
             Assert.AreEqual(myStaff[1].FirstName, resultList[1].FirstName);
@@ -93,7 +95,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.AreEqual(myStaff[1].Phone, resultList[1].Phone);
             Assert.AreEqual(myStaff[1].PositionId, resultList[1].PositionId);
             Assert.AreEqual(myStaff[1].CredentialId, resultList[1].CredentialId);
-            Assert.AreEqual(myStaff[1].Registry, resultList[1].Registry);
+            Assert.AreEqual(myStaff[1].IsRegistry, resultList[1].IsRegistry);
             Assert.AreEqual(myStaff[1].Responsibilities, resultList[1].Responsibilities);
         }
 
@@ -137,9 +139,10 @@ namespace org.cchmc.pho.unittest.ControllerTests
 
             // execute
             var result = await _StaffController.ListPositions() as ObjectResult;
-            var resultList = result.Value as List<Position>;
+            var resultList = result.Value as List<PositionViewModel>;
 
             // assert
+            Assert.AreEqual(2, resultList.Count);
             Assert.AreEqual(myPositions[0].Id, resultList[0].Id);
             Assert.AreEqual(myPositions[0].Name, resultList[0].Name);
             Assert.AreEqual(myPositions[1].Id, resultList[1].Id);
@@ -157,6 +160,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             var result = await _StaffController.ListPositions() as ObjectResult;
 
             // assert
+
             Assert.AreEqual(500, result.StatusCode);
         }
 
@@ -165,7 +169,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task ListCredentials_Mapping_Success()
         {
             // setup            
-            var myCredentials = new List<Credential>
+            var myCredentials = new List<Credential>()
             {
                 new Credential()
                 {
@@ -187,9 +191,10 @@ namespace org.cchmc.pho.unittest.ControllerTests
 
             // execute
             var result = await _StaffController.ListCredentials() as ObjectResult;
-            var resultList = result.Value as List<Credential>;
+            var resultList = result.Value as List<CredentialViewModel>;
 
             // assert
+            Assert.AreEqual(2, resultList.Count);
             Assert.AreEqual(myCredentials[0].Id, resultList[0].Id);
             Assert.AreEqual(myCredentials[0].Name, resultList[0].Name);
             Assert.AreEqual(myCredentials[0].Description, resultList[0].Description);
@@ -217,7 +222,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task ListResponsibilities_Mapping_Success()
         {
             // setup            
-            var myResponsibilities = new List<Responsibility>
+            var myResponsibilities = new List<Responsibility>()
             {
                 new Responsibility()
                 {
@@ -239,9 +244,10 @@ namespace org.cchmc.pho.unittest.ControllerTests
 
             // execute
             var result = await _StaffController.ListResponsibilities() as ObjectResult;
-            var resultList = result.Value as List<Responsibility>;
+            var resultList = result.Value as List<ResponsibilityViewModel>;
 
             // assert
+            Assert.AreEqual(2, resultList.Count);
             Assert.AreEqual(myResponsibilities[0].Id, resultList[0].Id);
             Assert.AreEqual(myResponsibilities[0].Name, resultList[0].Name);
             Assert.AreEqual(myResponsibilities[0].Type, resultList[0].Type);
