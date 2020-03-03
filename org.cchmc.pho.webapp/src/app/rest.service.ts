@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpClientModule } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
-import { Alerts, Content, Population, EdChart } from './models/dashboard';
+import { Alerts, Content, Population, EdChart, EdChartDetails } from './models/dashboard';
 import { environment } from '../environments/environment';
 
 // we can now access environment.apiUrl
@@ -69,6 +69,16 @@ export class RestService {
     const endpoint = `${API_URL}/api/Metrics/edcharts/`;
     return this.http.get<any>(endpoint).pipe(
       map((data: EdChart[]) => {
+        return data;
+      })
+   );
+  }
+
+   /*Gets base ED Chart Information */
+   getEdChartDetails(admitDate): Observable<any> {
+    const endpoint = `${API_URL}/api/Metrics/edcharts/${admitDate}`;
+    return this.http.get<any>(endpoint).pipe(
+      map((data: EdChartDetails[]) => {
         return data;
       })
    );

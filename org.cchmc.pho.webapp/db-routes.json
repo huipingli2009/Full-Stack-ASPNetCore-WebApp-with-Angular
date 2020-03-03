@@ -3,5 +3,6 @@
     "/Alerts/*":"/Alerts/",
     "/Contents/spotlights/*":"/Contents/",
     "/Metrics/kpis/*":"/Metrics/",
-    "/Metrics/edcharts/*":"/edchart/"
+    "/Metrics/edcharts/":"/edchart/",
+    "/Metrics/edcharts/*":"/edchartdetails/"
 }
