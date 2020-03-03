@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using org.cchmc.pho.core.DataModels;
 using org.cchmc.pho.core.Interfaces;
 using org.cchmc.pho.core.Settings;
