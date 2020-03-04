@@ -61,7 +61,7 @@ namespace org.cchmc.pho.identity
                     return null;
                 }
 
-                await ResetLockoutAttempts(login);
+                Task resetLockoutTask = ResetLockoutAttempts(login);
 
                 var identity = new ClaimsIdentity(IdentityConstants.ApplicationScheme);
                 identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
@@ -75,6 +75,8 @@ namespace org.cchmc.pho.identity
                     null, DateTime.Now.AddHours(_tokenExpirationInHours), _signingCredentials);
 
                 user.Token = _tokenHandler.WriteToken(token);
+
+                await resetLockoutTask;
 
                 return user;
             }
