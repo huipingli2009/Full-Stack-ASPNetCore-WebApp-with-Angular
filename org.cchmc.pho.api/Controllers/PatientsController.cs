@@ -17,8 +17,8 @@ namespace org.cchmc.pho.api.Controllers
         private readonly ILogger<PatientsController> _logger;
         private readonly IMapper _mapper;
         private readonly IPatient _patient;
-        //todo: hardcoded userid for now, we will be using session later
-        private readonly int _DEFAULT_USER = 3;
+        
+        private readonly string _DEFAULT_USER = "3";
         public PatientsController(ILogger<PatientsController> logger, IMapper mapper, IPatient patient)
         {
             _logger = logger;
@@ -33,12 +33,18 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(200, type: typeof(List<PatientViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> ListActivePatient(int userId, int? staffID, int? popmeasureID, bool? watch, bool? chronic, string conditionIDs, string namesearch, string sortcolumn, string sortdirection, int? pagenumber, int? rowsPerPage)
+        public async Task<IActionResult> ListActivePatient(int? staffID, int? popmeasureID, bool? watch, bool? chronic, string conditionIDs, string namesearch, string sortcolumn, string sortdirection, int? pagenumber, int? rowsPerPage)
         {
-            userId = _DEFAULT_USER;
+            // route parameters are strings and need to be translated (and validated) to their proper data type
+            if (!int.TryParse(_DEFAULT_USER, out var userId))
+            {
+                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
+                return BadRequest("user is not a valid integer");
+            }
+
             try
             {
-                var data = await _patient.ListActivePatient(userId, staffID, popmeasureID, watch, chronic, conditionIDs, namesearch,sortcolumn,sortdirection,pagenumber,rowsPerPage);
+                var data = await _patient.ListActivePatient(int.Parse(_DEFAULT_USER.ToString()), staffID, popmeasureID, watch, chronic, conditionIDs, namesearch,sortcolumn,sortdirection,pagenumber,rowsPerPage);
 
                 var result = _mapper.Map<List<PatientViewModel>>(data);
 
@@ -60,6 +66,13 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> GetPatientDetails(string patient)
         {
+            // route parameters are strings and need to be translated (and validated) to their proper data type
+            if (!int.TryParse(_DEFAULT_USER, out var userId))
+            {
+                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
+                return BadRequest("user is not a valid integer");
+            }
+
             // route parameters are strings and need to be translated (and validated) to their proper data type
             if (!int.TryParse(patient, out var patientId))
             {

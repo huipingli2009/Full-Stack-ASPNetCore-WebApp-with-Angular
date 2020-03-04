@@ -6,34 +6,66 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using org.cchmc.pho.api.ViewModels;
 using org.cchmc.pho.core.Interfaces;
-using org.cchmc.pho.core.DataModels;
 using Swashbuckle.AspNetCore.Annotations;
-
 
 namespace org.cchmc.pho.api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StaffController : ControllerBase
+    public class WorkbooksController : ControllerBase
     {
-        private readonly ILogger<StaffController> _logger;
+        private readonly ILogger<WorkbooksController> _logger;
         private readonly IMapper _mapper;
-        private readonly IStaff _staffDal;
+        private readonly IWorkbooks _workbooks;
 
+        //todo: hardcoded userid for now, we will be using session later
         private readonly string _DEFAULT_USER = "3";
 
-        public StaffController(ILogger<StaffController> logger, IMapper mapper, IStaff staffDal)
+        public WorkbooksController(ILogger<WorkbooksController> logger, IMapper mapper, IWorkbooks workbooks)
         {
             _logger = logger;
             _mapper = mapper;
-            _staffDal = staffDal;
+            _workbooks = workbooks;
         }
 
-        [HttpGet()]
-        [SwaggerResponse(200, type: typeof(List<StaffViewModel>))]
+        // GET: api/Workbooks
+        [HttpGet("patients")]
+        [SwaggerResponse(200, type: typeof(List<WorkbooksPatientViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> ListStaff([FromQuery]string topfilter, [FromQuery]string tagfilter, [FromQuery]string namesearch)
+
+        //public async Task<IActionResult> ListPatients(int userId, int formResponseId, string nameSearch)
+        public async Task<IActionResult> ListPatients(int formResponseId)
+        {
+            // route parameters are strings and need to be translated (and validated) to their proper data type
+            if (!int.TryParse(_DEFAULT_USER, out var userId))
+            {
+                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
+                return BadRequest("user is not a valid integer");
+            }
+
+            try
+            {
+                var data = await _workbooks.ListPatients(int.Parse(_DEFAULT_USER.ToString()), formResponseId);
+
+                var result = _mapper.Map<List<WorkbooksPatientViewModel>>(data);
+
+                // return the result in a "200 OK" response
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+        [HttpGet("practice")]
+        [SwaggerResponse(200, type: typeof(WorkbooksPracticeViewModel))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> GetPracticeWorkbooks(int formResponseId)
         {
             // route parameters are strings and need to be translated (and validated) to their proper data type
             if (!int.TryParse(_DEFAULT_USER, out var userId))
@@ -45,9 +77,9 @@ namespace org.cchmc.pho.api.Controllers
             try
             {
                 // call the data method
-                var data = await _staffDal.ListStaff(userId, topfilter, tagfilter, namesearch);
+                var data = await _workbooks.GetPracticeWorkbooks(int.Parse(_DEFAULT_USER.ToString()), formResponseId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
-                var result = _mapper.Map<List<StaffViewModel>>(data);
+                var result = _mapper.Map<WorkbooksPracticeViewModel>(data);
                 // return the result in a "200 OK" response
                 return Ok(result);
             }
@@ -59,47 +91,12 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [HttpGet("{staff}")]
-        [SwaggerResponse(200, type: typeof(StaffDetailViewModel))]
+        [HttpGet("providers")]
+        [SwaggerResponse(200, type: typeof(List<WorkbooksProviderViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> GetStaffDetails(string staff)
-        {
-            // route parameters are strings and need to be translated (and validated) to their proper data type
-            if (!int.TryParse(_DEFAULT_USER, out var userId))
-            {
-                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
-                return BadRequest("user is not a valid integer");
-            }
 
-            if (!int.TryParse(staff, out var staffId))
-            {
-                _logger.LogInformation($"Failed to parse staffId - {staff}");
-                return BadRequest("staff is not a valid integer");
-            }
-
-            try
-            {
-                // call the data method
-                var data = await _staffDal.GetStaffDetails(userId, staffId);
-                // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
-                var result = _mapper.Map<StaffDetailViewModel>(data);
-                // return the result in a "200 OK" response
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                // log any exceptions that happen and return the error to the user
-                _logger.LogError(ex, "An error occurred");
-                return StatusCode(500, "An error occurred");
-            }
-        }
-
-        [HttpPut("update")]
-        [SwaggerResponse(200, type: typeof(string))]
-        [SwaggerResponse(400, type: typeof(string))]
-        [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> UpdateStaffDetails([FromBody] StaffDetailViewModel staffDetailVM)
+        public async Task<IActionResult> GetPracticeWorkbooksProviders(int formResponseId)
         {
             // route parameters are strings and need to be translated (and validated) to their proper data type
             if (!int.TryParse(_DEFAULT_USER, out var userId))
@@ -110,31 +107,10 @@ namespace org.cchmc.pho.api.Controllers
 
             try
             {
-                StaffDetail staffDetail = _mapper.Map<StaffDetail>(staffDetailVM);
-                // call the data layer to mark the action
-                await _staffDal.UpdateStaffDetails(userId, staffDetail);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                // log any exceptions that happen and return the error to the user
-                _logger.LogError(ex, "An error occurred");
-                return StatusCode(500, "An error occurred");
-            }
-        }
-
-        [HttpGet("positions")]
-        [SwaggerResponse(200, type: typeof(List<PositionViewModel>))]
-        [SwaggerResponse(400, type: typeof(string))]
-        [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> ListPositions()
-        {
-            try
-            {
                 // call the data method
-                var data = await _staffDal.ListPositions();
+                var data = await _workbooks.GetPracticeWorkbooksProviders(int.Parse(_DEFAULT_USER.ToString()), formResponseId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
-                var result = _mapper.Map<List<PositionViewModel>>(data);
+                var result = _mapper.Map<List<WorkbooksProviderViewModel>>(data);
                 // return the result in a "200 OK" response
                 return Ok(result);
             }
@@ -146,18 +122,25 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [HttpGet("credentials")]
-        [SwaggerResponse(200, type: typeof(List<CredentialViewModel>))]
+        [HttpGet("lookups")]
+        [SwaggerResponse(200, type: typeof(List<WorkbooksLookupViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> ListCredentials()
+        public async Task<IActionResult> GetPracticeWorkbooksLookups(string nameSearch)
         {
+            // route parameters are strings and need to be translated (and validated) to their proper data type
+            if (!int.TryParse(_DEFAULT_USER, out var userId))
+            {
+                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
+                return BadRequest("user is not a valid integer");
+            }
+
             try
             {
                 // call the data method
-                var data = await _staffDal.ListCredentials();
+                var data = await _workbooks.GetWorkbooksLookups(int.Parse(_DEFAULT_USER.ToString()), nameSearch);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
-                var result = _mapper.Map<List<CredentialViewModel>>(data);
+                var result = _mapper.Map<List<WorkbooksLookupViewModel>>(data);
                 // return the result in a "200 OK" response
                 return Ok(result);
             }
@@ -168,29 +151,5 @@ namespace org.cchmc.pho.api.Controllers
                 return StatusCode(500, "An error occurred");
             }
         }
-
-        [HttpGet("responsibilities")]
-        [SwaggerResponse(200, type: typeof(List<ResponsibilityViewModel>))]
-        [SwaggerResponse(400, type: typeof(string))]
-        [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> ListResponsibilities()
-        {
-            try
-            {
-                // call the data method
-                var data = await _staffDal.ListResponsibilities();
-                // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
-                var result = _mapper.Map<List<ResponsibilityViewModel>>(data);
-                // return the result in a "200 OK" response
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                // log any exceptions that happen and return the error to the user
-                _logger.LogError(ex, "An error occurred");
-                return StatusCode(500, "An error occurred");
-            }
-        }
-
     }
 }

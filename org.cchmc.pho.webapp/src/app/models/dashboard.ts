@@ -7,13 +7,19 @@ export class Alerts {
     linkText: string;
     definition: string;
 }
-export class Content {
+export class Spotlight {
     header: string;
     placementOrder: number;
     body: string;
     hyperlink: string;
     imageHyperlink: string;
-    contentPlacement: string;
+    locationId: number;
+}
+export class Quicklinks {
+    placementOrder: number;
+    body: string;
+    hyperlink: string;
+    locationId: number;
 }
 export class Population {
     practiceId: number;
