@@ -126,7 +126,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 FormResponseID = int.Parse(dr["FormResponseID"].ToString()),
                                 StaffID = int.Parse(dr["StaffID"].ToString()),
                                 Provider = dr["Provider"].ToString(),
-                                PHQS = dr["PHQS"].ToString(),
+                                PHQS = int.Parse(dr["PHQS"].ToString()),
                                 TOTAL = int.Parse(dr["Total"].ToString())
                             };
                             workbooksproviders.Add(workbooksprovider);
@@ -169,8 +169,8 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
             return workbookslookups;
         }
-
-        public async Task UpdateWorkbooksPatient(int userId, int formResponseId, int patientID, int providerstaffID, DateTime dos, int phq9score, bool action)
+      
+        public async Task UpdateWorkbooksPatient(int userId, int formResponseId, int patientID, int providerstaffID, DateTime? dos, int phq9score, bool action)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
@@ -191,6 +191,27 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.ExecuteNonQuery();
                 }
             }
-        }       
+        }
+
+        public async Task UpdateWorkbooksProviders(int userId, int formResponseId, int providerstaffID, int phqs, int total)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spUpdatePHQ9Workbook_Providers", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@FormResponseId", SqlDbType.Int).Value = formResponseId;                  
+                    sqlCommand.Parameters.Add("@ProviderStaffID", SqlDbType.Int).Value = providerstaffID;
+                    sqlCommand.Parameters.Add("@PHQ9Score", SqlDbType.Int).Value = phqs;                   
+                    sqlCommand.Parameters.Add("@Total", SqlDbType.Int).Value = total;
+
+                    await sqlConnection.OpenAsync();
+
+                    //Execute Stored Procedure
+                    sqlCommand.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }

@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using org.cchmc.pho.api.ViewModels;
+using org.cchmc.pho.core.DataModels;
 using org.cchmc.pho.core.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -143,6 +144,62 @@ namespace org.cchmc.pho.api.Controllers
                 var result = _mapper.Map<List<WorkbooksLookupViewModel>>(data);
                 // return the result in a "200 OK" response
                 return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+       
+        [HttpPut("updatepatient")]
+        [SwaggerResponse(200, type: typeof(string))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]       
+        public async Task<IActionResult> UpdateWorkbooksPatient([FromBody] WorkbooksPatientViewModel workbookspatientVM)
+        {
+            // route parameters are strings and need to be translated (and validated) to their proper data type
+            if (!int.TryParse(_DEFAULT_USER, out var userId))
+            {
+                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
+                return BadRequest("user is not a valid integer");
+            }
+
+            try
+            {              
+                WorkbooksPatient workbookspatient = _mapper.Map<WorkbooksPatient>(workbookspatientVM);
+
+                await _workbooks.UpdateWorkbooksPatient(userId, workbookspatientVM.FormResponseId, workbookspatientVM.PatientId, workbookspatientVM.ProviderId, workbookspatientVM.DateOfService, int.Parse(workbookspatientVM.PHQ9_Score), bool.Parse(workbookspatientVM.ActionFollowUp));
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+        [HttpPut("updateprovider")]
+        [SwaggerResponse(200, type: typeof(string))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> UpdateWorkbooksProvider([FromBody] WorkbooksProviderViewModel workbooksproviderVM)
+        {
+            // route parameters are strings and need to be translated (and validated) to their proper data type
+            if (!int.TryParse(_DEFAULT_USER, out var userId))
+            {
+                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
+                return BadRequest("user is not a valid integer");
+            }
+
+            try
+            {
+                WorkbooksProvider workbookspatient = _mapper.Map<WorkbooksProvider>(workbooksproviderVM);
+
+                await _workbooks.UpdateWorkbooksProviders(userId, workbooksproviderVM.FormResponseID, workbooksproviderVM.StaffID, workbooksproviderVM.PHQS, workbooksproviderVM.TOTAL);
+                return Ok();
             }
             catch (Exception ex)
             {
