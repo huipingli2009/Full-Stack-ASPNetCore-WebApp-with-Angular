@@ -24,8 +24,8 @@
         </div>
         <div fxLayout="row" class="quick-links-container" fxLayoutAlign="center center">
             <div fxLayout="row" fxFlex="100%">
-                <div *ngFor="let item of quickLinks; let i=index;">
-                    <div fxLayout="column" class="quick-link-box" *ngIf="i<3">
+                <div *ngFor="let item of quickLinks | slice:0:3; let i=index;">
+                    <div fxLayout="column" class="quick-link-box">
                         <a href="{{item.hyperLink}}">
                             {{item.body}}
                         </a>
@@ -35,8 +35,8 @@
         </div>
         <div fxLayout="row" class="quick-links-container" fxLayoutAlign="center center">
             <div fxLayout="row" fxFlex="100%">
-                <div *ngFor="let item of quickLinks; let i=index;">
-                    <div fxLayout="column" class="quick-link-box" *ngIf="i>=3">
+                <div *ngFor="let item of quickLinks | slice:3:6; let i=index;">
+                    <div fxLayout="column" class="quick-link-box">
                         <a href="{{item.hyperLink}}">
                             {{item.body}}
                         </a>

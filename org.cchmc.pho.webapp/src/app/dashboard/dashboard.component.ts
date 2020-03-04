@@ -23,9 +23,9 @@ export class DashboardComponent implements OnInit {
   
   spotlight: Spotlight[];
   quickLinks: Quicklinks[];
-  population: Population[] = [];
+  population: Population[];
   edChart: EdChart[];
-  edChartData: any[] = [];
+  edChartData: any[];
   edChartDetails: EdChartDetails[];
   monthlySpotlightTitle: string;
   monthlySpotlightBody: string;
