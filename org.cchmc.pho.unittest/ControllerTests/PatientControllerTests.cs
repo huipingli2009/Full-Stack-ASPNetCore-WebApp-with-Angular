@@ -128,7 +128,7 @@ namespace org.cchmc.pho.unittest.controllertests
 
             CompareConditionMapping(myPatientDetails.Conditions, resultList.Conditions);
 
-            Assert.AreEqual(myPatientDetails.PotentiallyActiveStatus, resultList.PotentiallyActiveStatus);
+            Assert.AreEqual(myPatientDetails.PotentiallyActiveStatus, resultList.PendingStatusConfirmation);
             Assert.AreEqual(myPatientDetails.GenderId, resultList.GenderId);
             Assert.AreEqual(myPatientDetails.Gender, resultList.Gender);
             Assert.AreEqual(myPatientDetails.Email, resultList.Email);
