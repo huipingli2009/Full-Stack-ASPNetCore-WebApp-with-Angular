@@ -320,10 +320,9 @@ namespace org.cchmc.pho.unittest.controllertests
         public async Task ListEDDetails_DataLayerThrowsException_ReturnsError()
         {
             // setup
-            var userId = 3; 
             var admitDate = "12/1/2020 12:00:00 AM";
             DateTime admitDateTime = Convert.ToDateTime(admitDate);
-            _mockMetricDal.Setup(p => p.ListEDDetails(userId, admitDateTime)).Throws(new Exception()).Verifiable();
+            _mockMetricDal.Setup(p => p.ListEDDetails(It.IsAny<int>(), It.IsAny<DateTime>())).Throws(new Exception()).Verifiable();
             _MetricController = new MetricsController(_mockLogger.Object, _mapper, _mockMetricDal.Object);
 
             // execute

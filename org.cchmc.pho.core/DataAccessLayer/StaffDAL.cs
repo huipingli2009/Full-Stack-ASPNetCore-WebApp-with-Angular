@@ -129,7 +129,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@OVPCABoard", SqlDbType.Bit).Value = staffDetail.IsOVPCABoard;
                     sqlCommand.Parameters.Add("@RVPIBoard", SqlDbType.Bit).Value = staffDetail.IsRVPIBoard;
 
-                    await sqlConnection.OpenAsync();
+                    sqlConnection.Open();
 
                     //Execute Stored Procedure
                     sqlCommand.ExecuteNonQuery();

@@ -20,7 +20,7 @@ namespace org.cchmc.pho.unittest.controllertests
     [ExcludeFromCodeCoverage]
     public class StaffControllerTests
     {
-        private StaffController _StaffController;
+        private StaffController _staffController;
         private Mock<ILogger<StaffController>> _mockLogger;
         private Mock<IStaff> _mockStaffDal;
         private IMapper _mapper;
@@ -37,7 +37,6 @@ namespace org.cchmc.pho.unittest.controllertests
             _mockStaffDal = new Mock<IStaff>();
             _mockLogger = new Mock<ILogger<StaffController>>();
         }
-
 
         [TestMethod]
         public async Task ListStaff_Mapping_Success()
@@ -72,10 +71,10 @@ namespace org.cchmc.pho.unittest.controllertests
         };
 
             _mockStaffDal.Setup(s => s.ListStaff(3,"","","")).Returns(Task.FromResult(myStaff)).Verifiable();
-            _StaffController = new StaffController(_mockLogger.Object, _mapper, _mockStaffDal.Object);
+            _staffController = new StaffController(_mockLogger.Object, _mapper, _mockStaffDal.Object);
 
             // execute
-            var result = await _StaffController.ListStaff("", "", "") as ObjectResult;
+            var result = await _staffController.ListStaff("", "", "") as ObjectResult;
             var resultList = result.Value as List<StaffViewModel>;
 
             // assert
@@ -100,15 +99,174 @@ namespace org.cchmc.pho.unittest.controllertests
         }
 
         [TestMethod]
-        public async Task GetStaff_DataLayerThrowsException_ReturnsError()
+        public async Task ListStaff_DataLayerThrowsException_ReturnsError()
         {
             // setup
             var userId = 3;
             _mockStaffDal.Setup(p => p.ListStaff(userId, "","","")).Throws(new Exception()).Verifiable();
-            _StaffController = new StaffController(_mockLogger.Object, _mapper, _mockStaffDal.Object);
+            _staffController = new StaffController(_mockLogger.Object, _mapper, _mockStaffDal.Object);
 
             // execute
-            var result = await _StaffController.ListStaff("", "", "") as ObjectResult;
+            var result = await _staffController.ListStaff("", "", "") as ObjectResult;
+
+            // assert
+            Assert.AreEqual(500, result.StatusCode);
+        }
+
+
+        [TestMethod]
+        public async Task GetStaffDetails_Mapping_Success()
+        {
+            // setup            
+            var myStaff = new StaffDetail()
+            {
+                Id = 20101,
+                FirstName = "Carwood",
+                LastName = "Lipton",
+                Email = "cli@gmail.com",
+                Phone = "513-123-4567",
+                StartDate = Convert.ToDateTime("12-30-2011 12:00:00 AM"),
+                PositionId = 37,
+                CredentialId = 76,
+                IsLeadPhysician = false,
+                IsQITeam = true,
+                IsPracticeManager = false,
+                IsInterventionContact = true,
+                IsQPLLeader = false,
+                IsPHOBoard = false,
+                IsOVPCABoard = false,
+                IsRVPIBoard = false,
+            };
+
+            _mockStaffDal.Setup(s => s.GetStaffDetails(3, 20101)).Returns(Task.FromResult(myStaff)).Verifiable();
+            _staffController = new StaffController(_mockLogger.Object, _mapper, _mockStaffDal.Object);
+
+            // execute
+            var result = await _staffController.GetStaffDetails("20101") as ObjectResult;
+            var resultList = result.Value as StaffDetailViewModel;
+
+            // assert
+            Assert.AreEqual(myStaff.Id, resultList.Id);
+            Assert.AreEqual(myStaff.FirstName, resultList.FirstName);
+            Assert.AreEqual(myStaff.LastName, resultList.LastName);
+            Assert.AreEqual(myStaff.Email, resultList.Email);
+            Assert.AreEqual(myStaff.Phone, resultList.Phone);
+            Assert.AreEqual(myStaff.PositionId, resultList.PositionId);
+            Assert.AreEqual(myStaff.CredentialId, resultList.CredentialId);
+            Assert.AreEqual(myStaff.IsLeadPhysician, resultList.IsLeadPhysician);
+            Assert.AreEqual(myStaff.IsQITeam, resultList.IsQITeam);
+            Assert.AreEqual(myStaff.IsPracticeManager, resultList.IsPracticeManager);
+            Assert.AreEqual(myStaff.IsInterventionContact, resultList.IsInterventionContact);
+            Assert.AreEqual(myStaff.IsQPLLeader, resultList.IsQPLLeader);
+            Assert.AreEqual(myStaff.IsPHOBoard, resultList.IsPHOBoard);
+            Assert.AreEqual(myStaff.IsOVPCABoard, resultList.IsOVPCABoard);
+            Assert.AreEqual(myStaff.IsRVPIBoard, resultList.IsRVPIBoard);
+        }
+
+        [TestMethod]
+        public async Task GetStaffDetails_DataLayerThrowsException_ReturnsError()
+        {
+            // setup
+            var userId = 3;
+            _mockStaffDal.Setup(s => s.GetStaffDetails(userId, 20101)).Throws(new Exception()).Verifiable();
+            _staffController = new StaffController(_mockLogger.Object, _mapper, _mockStaffDal.Object);
+
+            // execute
+            var result = await _staffController.GetStaffDetails("20101") as ObjectResult;
+
+            // assert
+            Assert.AreEqual(500, result.StatusCode);
+        }
+
+        [TestMethod]
+        public async Task UpdateStaffDetails_Success()
+        {
+            // setup
+            var userId = 3;
+            var myStaff = new StaffDetail()
+            {
+                Id = 20101,
+                FirstName = "Carwood",
+                LastName = "Lipton",
+                Email = "cli@gmail.com",
+                Phone = "513-123-4567",
+                StartDate = Convert.ToDateTime("12-30-2011 12:00:00 AM"),
+                PositionId = 37,
+                CredentialId = 76,
+                IsLeadPhysician = false,
+                IsQITeam = true,
+                IsPracticeManager = false,
+                IsInterventionContact = true,
+                IsQPLLeader = false,
+                IsPHOBoard = false,
+                IsOVPCABoard = false,
+                IsRVPIBoard = false,
+            };
+
+            _mockStaffDal.Setup(p => p.UpdateStaffDetails(userId, myStaff))
+                .Returns(Task.CompletedTask).Verifiable();
+            _staffController = new StaffController(_mockLogger.Object, _mapper, _mockStaffDal.Object);
+
+            // execute
+            var result = await _staffController.UpdateStaffDetails(_mapper.Map<StaffDetailViewModel>(myStaff));
+
+            // assert
+            Assert.IsInstanceOfType(result, typeof(OkResult));
+            var okResult = result as OkResult;
+            Assert.AreEqual(200, okResult.StatusCode);
+        }
+
+        [TestMethod]
+        public async Task UpdateStaffDetails_DataLayerThrowsException_ReturnsError()
+        {
+            // setup
+            var userId = 3; //todo update to match the hardcoded
+            var myStaff = new StaffDetail()
+            {
+                Id = 20101,
+                FirstName = "Carwood",
+                LastName = "Lipton",
+                Email = "cli@gmail.com",
+                Phone = "513-123-4567",
+                StartDate = Convert.ToDateTime("12-30-2011 12:00:00 AM"),
+                PositionId = 37,
+                CredentialId = 76,
+                IsLeadPhysician = false,
+                IsQITeam = true,
+                IsPracticeManager = false,
+                IsInterventionContact = true,
+                IsQPLLeader = false,
+                IsPHOBoard = false,
+                IsOVPCABoard = false,
+                IsRVPIBoard = false,
+            };
+
+            _mockStaffDal.Setup(p => p.UpdateStaffDetails(userId, It.IsAny<StaffDetail>())).Throws(new Exception());
+            _staffController = new StaffController(_mockLogger.Object, _mapper, _mockStaffDal.Object);
+            
+
+            // execute
+            var result = await _staffController.UpdateStaffDetails(new StaffDetailViewModel() 
+            {
+                Id = 20101,
+                FirstName = "Carwood",
+                LastName = "Lipton",
+                Email = "cli@gmail.com",
+                Phone = "513-123-4567",
+                StartDate = Convert.ToDateTime("12-30-2011 12:00:00 AM"),
+                PositionId = 37,
+                CredentialId = 76,
+                IsLeadPhysician = false,
+                IsQITeam = true,
+                IsPracticeManager = false,
+                IsInterventionContact = true,
+                IsQPLLeader = false,
+                IsPHOBoard = false,
+                IsOVPCABoard = false,
+                IsRVPIBoard = false,
+            }
+            ) as ObjectResult;
+
 
             // assert
             Assert.AreEqual(500, result.StatusCode);
@@ -135,10 +293,10 @@ namespace org.cchmc.pho.unittest.controllertests
             };
 
             _mockStaffDal.Setup(s => s.ListPositions()).Returns(Task.FromResult(myPositions)).Verifiable();
-            _StaffController = new StaffController(_mockLogger.Object, _mapper, _mockStaffDal.Object);
+            _staffController = new StaffController(_mockLogger.Object, _mapper, _mockStaffDal.Object);
 
             // execute
-            var result = await _StaffController.ListPositions() as ObjectResult;
+            var result = await _staffController.ListPositions() as ObjectResult;
             var resultList = result.Value as List<PositionViewModel>;
 
             // assert
@@ -154,10 +312,10 @@ namespace org.cchmc.pho.unittest.controllertests
         {
             // setup
             _mockStaffDal.Setup(p => p.ListPositions()).Throws(new Exception()).Verifiable();
-            _StaffController = new StaffController(_mockLogger.Object, _mapper, _mockStaffDal.Object);
+            _staffController = new StaffController(_mockLogger.Object, _mapper, _mockStaffDal.Object);
 
             // execute
-            var result = await _StaffController.ListPositions() as ObjectResult;
+            var result = await _staffController.ListPositions() as ObjectResult;
 
             // assert
 
@@ -187,10 +345,10 @@ namespace org.cchmc.pho.unittest.controllertests
             };
 
             _mockStaffDal.Setup(s => s.ListCredentials()).Returns(Task.FromResult(myCredentials)).Verifiable();
-            _StaffController = new StaffController(_mockLogger.Object, _mapper, _mockStaffDal.Object);
+            _staffController = new StaffController(_mockLogger.Object, _mapper, _mockStaffDal.Object);
 
             // execute
-            var result = await _StaffController.ListCredentials() as ObjectResult;
+            var result = await _staffController.ListCredentials() as ObjectResult;
             var resultList = result.Value as List<CredentialViewModel>;
 
             // assert
@@ -208,10 +366,10 @@ namespace org.cchmc.pho.unittest.controllertests
         {
             // setup
             _mockStaffDal.Setup(p => p.ListCredentials()).Throws(new Exception()).Verifiable();
-            _StaffController = new StaffController(_mockLogger.Object, _mapper, _mockStaffDal.Object);
+            _staffController = new StaffController(_mockLogger.Object, _mapper, _mockStaffDal.Object);
 
             // execute
-            var result = await _StaffController.ListCredentials() as ObjectResult;
+            var result = await _staffController.ListCredentials() as ObjectResult;
 
             // assert
             Assert.AreEqual(500, result.StatusCode);
@@ -240,10 +398,10 @@ namespace org.cchmc.pho.unittest.controllertests
             };
 
             _mockStaffDal.Setup(s => s.ListResponsibilities()).Returns(Task.FromResult(myResponsibilities)).Verifiable();
-            _StaffController = new StaffController(_mockLogger.Object, _mapper, _mockStaffDal.Object);
+            _staffController = new StaffController(_mockLogger.Object, _mapper, _mockStaffDal.Object);
 
             // execute
-            var result = await _StaffController.ListResponsibilities() as ObjectResult;
+            var result = await _staffController.ListResponsibilities() as ObjectResult;
             var resultList = result.Value as List<ResponsibilityViewModel>;
 
             // assert
@@ -261,10 +419,10 @@ namespace org.cchmc.pho.unittest.controllertests
         {
             // setup
             _mockStaffDal.Setup(p => p.ListResponsibilities()).Throws(new Exception()).Verifiable();
-            _StaffController = new StaffController(_mockLogger.Object, _mapper, _mockStaffDal.Object);
+            _staffController = new StaffController(_mockLogger.Object, _mapper, _mockStaffDal.Object);
 
             // execute
-            var result = await _StaffController.ListResponsibilities() as ObjectResult;
+            var result = await _staffController.ListResponsibilities() as ObjectResult;
 
             // assert
             Assert.AreEqual(500, result.StatusCode);
