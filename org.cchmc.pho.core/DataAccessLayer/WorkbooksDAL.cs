@@ -19,7 +19,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         {
             _connectionStrings = options.Value;           
         }
-        public async Task<List<WorkbooksPatient>> ListPatients(int userId, int formResponseId, string nameSearch)
+        public async Task<List<WorkbooksPatient>> ListPatients(int userId, int formResponseId)
         {
             DataTable dataTable = new DataTable();
             List<WorkbooksPatient> workbookspatients = new List<WorkbooksPatient>();
@@ -31,8 +31,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
 
                     sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
-                    sqlCommand.Parameters.Add("@FormResponseId", SqlDbType.Int).Value = formResponseId;
-                    sqlCommand.Parameters.Add("@NameSearch", SqlDbType.Int).Value = nameSearch;
+                    sqlCommand.Parameters.Add("@FormResponseId", SqlDbType.Int).Value = formResponseId;                    
 
                     await sqlConnection.OpenAsync();
 
@@ -138,7 +137,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
-        public async Task<List<WorkbooksLookup>> GetWorkbooksLookups(int userId)
+        public async Task<List<WorkbooksLookup>> GetWorkbooksLookups(int userId, string nameSearch)
         {
             DataTable dataTable = new DataTable();
             List<WorkbooksLookup> workbookslookups = new List<WorkbooksLookup>();
@@ -148,7 +147,8 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
 
-                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;                 
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@NameSearch", SqlDbType.Int).Value = nameSearch;
 
                     await sqlConnection.OpenAsync();
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
@@ -169,5 +169,28 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
             return workbookslookups;
         }
+
+        public async Task UpdateWorkbooksPatient(int userId, int formResponseId, int patientID, int providerstaffID, DateTime dos, int phq9score, bool action)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spPostPHQ9Workbook_Patient", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@FormResponseId", SqlDbType.Int).Value = formResponseId;
+                    sqlCommand.Parameters.Add("@PatientID", SqlDbType.Int).Value = patientID;
+                    sqlCommand.Parameters.Add("@ProviderStaffID", SqlDbType.Int).Value = providerstaffID;
+                    sqlCommand.Parameters.Add("@PHQ9Score", SqlDbType.Int).Value = phq9score;
+                    sqlCommand.Parameters.Add("@DateOfService", SqlDbType.DateTime).Value = dos;
+                    sqlCommand.Parameters.Add("@Action", SqlDbType.Int).Value = action;
+
+                    await sqlConnection.OpenAsync();
+
+                    //Execute Stored Procedure
+                    sqlCommand.ExecuteNonQuery();
+                }
+            }
+        }       
     }
 }

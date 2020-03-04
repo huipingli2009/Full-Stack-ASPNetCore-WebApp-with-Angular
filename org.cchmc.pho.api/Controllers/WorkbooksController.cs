@@ -35,7 +35,7 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(500, type: typeof(string))]
 
         //public async Task<IActionResult> ListPatients(int userId, int formResponseId, string nameSearch)
-        public async Task<IActionResult> ListPatients(int formResponseId, string nameSearch)
+        public async Task<IActionResult> ListPatients(int formResponseId)
         {
             // route parameters are strings and need to be translated (and validated) to their proper data type
             if (!int.TryParse(_DEFAULT_USER, out var userId))
@@ -46,7 +46,7 @@ namespace org.cchmc.pho.api.Controllers
 
             try
             {
-                var data = await _workbooks.ListPatients(int.Parse(_DEFAULT_USER.ToString()), formResponseId, nameSearch);
+                var data = await _workbooks.ListPatients(int.Parse(_DEFAULT_USER.ToString()), formResponseId);
 
                 var result = _mapper.Map<List<WorkbooksPatientViewModel>>(data);
 
@@ -126,7 +126,7 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(200, type: typeof(List<WorkbooksLookupViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> GetPracticeWorkbooksLookups()
+        public async Task<IActionResult> GetPracticeWorkbooksLookups(string nameSearch)
         {
             // route parameters are strings and need to be translated (and validated) to their proper data type
             if (!int.TryParse(_DEFAULT_USER, out var userId))
@@ -138,7 +138,7 @@ namespace org.cchmc.pho.api.Controllers
             try
             {
                 // call the data method
-                var data = await _workbooks.GetWorkbooksLookups(int.Parse(_DEFAULT_USER.ToString()));
+                var data = await _workbooks.GetWorkbooksLookups(int.Parse(_DEFAULT_USER.ToString()), nameSearch);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
                 var result = _mapper.Map<List<WorkbooksLookupViewModel>>(data);
                 // return the result in a "200 OK" response
