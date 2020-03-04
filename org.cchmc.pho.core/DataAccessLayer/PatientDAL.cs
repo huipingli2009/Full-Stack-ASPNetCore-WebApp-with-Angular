@@ -202,7 +202,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         private List<PatientCondition> ParseConditionStrings(string ConditionIDs, string ConditionNames)
         {
             List<PatientCondition> conditions = new List<PatientCondition>();
-            conditions = null;
+          
             if (!string.IsNullOrWhiteSpace(ConditionIDs))
             {
                 
@@ -220,6 +220,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     conditions.Add(new PatientCondition(ids[i], names[i]));
                 }
             }
+
 
             return conditions;
         }

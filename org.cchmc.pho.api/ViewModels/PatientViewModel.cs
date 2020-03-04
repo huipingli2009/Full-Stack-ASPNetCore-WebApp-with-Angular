@@ -12,7 +12,7 @@ namespace org.cchmc.pho.api.ViewModels
         public int PCP_StaffID { get; set; }
         public DateTime? DOB { get; set; }
         public bool ActiveStatus { get; set; }
-        public bool PotentiallyActiveStatus { get; set; }
+        public bool PendingStatusConfirmation { get; set; }
         public DateTime? LastEDVisit { get; set; }
         public bool Chronic { get; set; }
         public bool WatchFlag { get; set; }            

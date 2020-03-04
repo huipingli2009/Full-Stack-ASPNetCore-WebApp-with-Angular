@@ -28,7 +28,7 @@ namespace org.cchmc.pho.api.ViewModels
         public int ProviderPMCAScore { get; set; }
         public string ProviderNotes { get; set; }
         public bool ActiveStatus { get; set; }
-        public bool PotentiallyActiveStatus { get; set; }
+        public bool PendingStatusConfirmation { get; set; }
 
         public int GenderId { get; set; }
         public string Gender { get; set; }
