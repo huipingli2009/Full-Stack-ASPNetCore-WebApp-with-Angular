@@ -1,8 +1,9 @@
-
 {
     "/Alerts/*":"/Alerts/",
-    "/Contents/spotlights/*":"/Contents/",
+    "/Contents/spotlights/*":"/spotlights/",
+    "/Contents/quicklinks/*":"/quicklinks/",
     "/Metrics/kpis/*":"/Metrics/",
     "/Metrics/edcharts/":"/edchart/",
-    "/Metrics/edcharts/*":"/edchartdetails/"
+    "/Metrics/edcharts/*":"/edchartdetails/",
+    "Patients/*": "/Patients/"
 }

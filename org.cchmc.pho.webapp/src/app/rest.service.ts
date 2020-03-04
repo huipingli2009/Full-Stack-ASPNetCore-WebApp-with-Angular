@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 import { Alerts, Content, Population, EdChart, EdChartDetails } from './models/dashboard';
 import { environment } from '../environments/environment';
+import { Patients } from './models/patients';
 
 // we can now access environment.apiUrl
 const API_URL = environment.apiURL;
@@ -82,6 +83,15 @@ export class RestService {
         return data;
       })
    );
+  }
+
+  /*Get All Patients*/
+  getAllPatients(): Observable<any> {
+    return this.http.get<any>(`${API_URL}/api/Patients/`).pipe(
+      map((data: Patients[]) => {
+        return data;
+      })
+    );
   }
 
 

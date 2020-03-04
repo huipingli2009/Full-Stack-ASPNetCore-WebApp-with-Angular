@@ -1,19 +1,873 @@
 {
-  "posts": [
+  "Alerts": [
     {
-      "id": 1,
-      "title": "json-server",
-      "author": "typicode"
+      "alertId": 1,
+      "alertScheduleId": 1,
+      "message": "Don't forget your workbook is due <strong>12/15/2019!</strong>",
+      "url": "https://insight.invisionapp.com/share/2YUPA0MVZB4#/screens/398015819",
+      "linkText": "GO TO WORKBOOK",
+      "definition": "NULL"
+    },
+    {
+      "alertId": 5,
+      "alertScheduleId": 9,
+      "message": "Warning your Workbook is Past Due!",
+      "url": "https://insight.invisionapp.com/d/main/#/console/18823247/398015819/preview",
+      "linkText": "GO TO WORKBOOK",
+      "definition": "NULL"
+    },
+    {
+      "alertId": 3,
+      "alertScheduleId": 6,
+      "message": "Your Daily ED Patient Report for <strong>01/01/2020</strong> is now available!",
+      "url": "https://insight.invisionapp.com/share/2YUPA0MVZB4#/screens/398259767",
+      "linkText": "VIEW IT HERE",
+      "definition": "Alert is triggered by an ED/Urgent care visit in the last 48hrs."
     }
   ],
-  "comments": [
+  "AlertActivity": {
+    "Alert_ScheduleId" :  [
+     {
+      "alertActionId": 3,
+      "id": 3
+     }
+    ]
+  },
+  "spotlights" : [
     {
-      "id": 1,
-      "body": "some comment",
-      "postId": 1
+      "header": "Exceptional Patient Care: ESD Pediatrics",
+      "body": "ESD Pediatric Group had a successful second quarter. Read on to learn how their processes could help your practice acheive your quarterly goals. ESD Pediatric Group had a successful second quarter. Read on to learn how their processes could help your practice acheive your quarterly goals. ESD Pediatric Group had a successful second quarter.",
+      "hyperlink": "https://cchmc.sharepoint.com/:w:/s/PHODataCollection/ETfEDhWG5UlPg6e5w6H9N-cBhbAV8QkARfidHFysShJGmw?e=569bs3",
+      "imageHyperlink": "Spotlight_Img1.jpeg",
+      "locationId": 1
     }
   ],
-  "profile": {
-    "name": "typicode"
-  }
+  "quicklinks" : [
+    {
+      "placementOrder": 1,
+      "body": "Top 100 Bill Codes",
+      "hyperlink": "https://cchmc.sharepoint.com/:b:/s/PHODataCollection/EYYj4_iUwVlCtknVRXSekSsBF1XWrtJPgMaZnniUQ19bzg?e=emWREK",
+      "locationId": 2
+    },
+    {
+      "placementOrder": 2,
+      "body": "Top Billed J Codes",
+      "hyperlink": "https://cchmc.sharepoint.com/:b:/s/PHODataCollection/EYYj4_iUwVlCtknVRXSekSsBF1XWrtJPgMaZnniUQ19bzg?e=b7eeLI",
+      "locationId": 2
+    },
+    {
+      "placementOrder": 3,
+      "body": "View PMCA Scores",
+      "hyperlink": "https://insight.invisionapp.com/d/main/#/console/18823247/398259767/preview",
+      "locationId": 2
+    },
+    {
+      "placementOrder": 4,
+      "body": "Depression Utilizations",
+      "hyperlink": "https://cchmc.sharepoint.com/:w:/s/PHODataCollection/ETfEDhWG5UlPg6e5w6H9N-cBhbAV8QkARfidHFysShJGmw?e=569bs3",
+      "locationId": 2
+    },
+    {
+      "placementOrder": 5,
+      "body": "Potential Patients",
+      "hyperlink": "https://insight.invisionapp.com/d/main/#/console/18823247/398259767/preview",
+      "locationId": 2
+    },
+    {
+      "placementOrder": 6,
+      "body": "Quarterly Report",
+      "hyperlink": "https://cchmc.sharepoint.com/:w:/s/PHODataCollection/Ec1NsZq63MlPvTwlfE8MDA8BPiT8zIRZFwxyvSSkZL2IOA?e=JiLGKi",
+      "locationId": 2
+    }
+  
+  ],
+  "Metrics" : [
+    {
+      "practiceId": 7,
+      "dashboardLabel": "Commercially Ins",
+      "measureDesc": "All Patients with Commercial Insurance (Data as of: 2020-02-20)",
+      "measureType": "POP",
+      "practiceTotal": 61,
+      "networkTotal": 3945
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "L2 Patients",
+      "measureDesc": "All Patients with L2 PMCA Score Active in the PHO (Data as of: 2020-02-20)",
+      "measureType": "POP",
+      "practiceTotal": 695,
+      "networkTotal": 13825
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "L3 Patients",
+      "measureDesc": "All Patients with L3 PMCA Score Active in the PHO (Data as of: 2020-02-20)",
+      "measureType": "POP",
+      "practiceTotal": 296,
+      "networkTotal": 6388
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "Medicaid Patients",
+      "measureDesc": "All Patients with Medicaid Insurance (Data as of: 2020-02-20)",
+      "measureType": "POP",
+      "practiceTotal": 446,
+      "networkTotal": 19684
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "PHQ-9 Patients",
+      "measureDesc": "All Patients with a PHQ-9 Score of 10 or more (Data as of: 2020-02-20)",
+      "measureType": "POP",
+      "practiceTotal": 71,
+      "networkTotal": 1487
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "Potentially Active",
+      "measureDesc": "All Patients in the PHO who are potentially Active (Data as of: 2020-02-20)",
+      "measureType": "POP",
+      "practiceTotal": 311,
+      "networkTotal": 9138
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "Recent ED for Depression",
+      "measureDesc": "All Patients Seen in ED/UC for Depression in Last 30 Days (Data as of: 2020-02-20)",
+      "measureType": "POP",
+      "practiceTotal": 2,
+      "networkTotal": 63
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "Total",
+      "measureDesc": "All Patients in the PHO (Active or Potentially Active) (Data as of: 2020-02-20)",
+      "measureType": "POP",
+      "practiceTotal": 12616,
+      "networkTotal": 249672
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "Commercially Ins",
+      "measureDesc": "All Patients with Commercial Insurance (Data as of: 2020-02-20)",
+      "measureType": "QI",
+      "practiceTotal": 61,
+      "networkTotal": 3945
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "L2 Patients",
+      "measureDesc": "All Patients with L2 PMCA Score Active in the PHO (Data as of: 2020-02-20)",
+      "measureType": "QI",
+      "practiceTotal": 695,
+      "networkTotal": 13825
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "L3 Patients",
+      "measureDesc": "All Patients with L3 PMCA Score Active in the PHO (Data as of: 2020-02-20)",
+      "measureType": "QI",
+      "practiceTotal": 296,
+      "networkTotal": 6388
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "Medicaid Patients",
+      "measureDesc": "All Patients with Medicaid Insurance (Data as of: 2020-02-20)",
+      "measureType": "QI",
+      "practiceTotal": 446,
+      "networkTotal": 19684
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "PHQ-9 Patients",
+      "measureDesc": "All Patients with a PHQ-9 Score of 10 or more (Data as of: 2020-02-20)",
+      "measureType": "QI",
+      "practiceTotal": 71,
+      "networkTotal": 1487
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "Potentially Active",
+      "measureDesc": "All Patients in the PHO who are potentially Active (Data as of: 2020-02-20)",
+      "measureType": "QI",
+      "practiceTotal": 311,
+      "networkTotal": 9138
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "Recent ED for Depression",
+      "measureDesc": "All Patients Seen in ED/UC for Depression in Last 30 Days (Data as of: 2020-02-20)",
+      "measureType": "QI",
+      "practiceTotal": 2,
+      "networkTotal": 63
+    },
+    {
+      "practiceId": 7,
+      "dashboardLabel": "Total",
+      "measureDesc": "All Patients in the PHO (Active or Potentially Active) (Data as of: 2020-02-20)",
+      "measureType": "QI",
+      "practiceTotal": 12616,
+      "networkTotal": 249672
+    }
+  ],
+  "edchart" : [
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/8/2020",
+      "chartLabel": "Sat 2/8",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 0
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/9/2020",
+      "chartLabel": "Sun 2/9",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 1
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/10/2020",
+      "chartLabel": "Mon 2/10",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 2
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/11/2020",
+      "chartLabel": "Tue 2/11",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 3
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/12/2020",
+      "chartLabel": "Wed 2/12",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 8
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/13/2020",
+      "chartLabel": "Thu 2/13",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 10
+    },
+    {
+      "admitdate" : "02/14/2020",
+      "practiceId": 7,
+      "admitDate": "2/14/2020",
+      "chartLabel": "Fri 2/14",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 3
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/15/2020",
+      "chartLabel": "Sat 2/15",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 0
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/16/2020",
+      "chartLabel": "Sun 2/16",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 6
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/17/2020",
+      "chartLabel": "Mon 2/17",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 25
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/18/2020",
+      "chartLabel": "Tue 2/18",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 10
+    },
+    {
+      "id": 3,
+      "practiceId": 7,
+      "admitDate": "2/19/2020",
+      "chartLabel": "Wed 2/19",
+      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
+      "edVisits": 0
+    }
+  ],
+  "edchartdetails" : [
+    {
+      "admitdate" : "02/20/2020",
+
+      "patientMRN": "01143751",
+  
+      "patientEncounterID": "550085529",
+  
+      "facility": "CCHMC",
+  
+      "patientName": "CASEY GOANS",
+  
+      "patientDOB": "2002-05-24T00:00:00",
+  
+      "pcp": "Jenny Parks",
+  
+      "hospitalAdmission": "2020-02-20T16:26:00",
+  
+      "hospitalDischarge": "2020-02-20T17:49:00",
+  
+      "visitType": "Liberty ED",
+  
+      "primaryDX": "Injury of right middle finger, initial encounter",
+  
+      "primaryDX_10Code": "S69.91XA",
+  
+      "dX2": "",
+  
+      "dX2_10Code": ""
+  
+    },
+  
+    {
+      "admitdate" : "02/20/2020",
+  
+      "patientMRN": "11724263",
+  
+      "patientEncounterID": "550087489",
+  
+      "facility": "CCHMC",
+  
+      "patientName": "Infantgirl Reed",
+  
+      "patientDOB": "2018-03-09T00:00:00",
+  
+      "pcp": "Jeffrey Drasnin",
+  
+      "hospitalAdmission": "2020-02-20T18:28:00",
+  
+      "hospitalDischarge": "2020-02-20T20:15:00",
+  
+      "visitType": "Urgent Care",
+  
+      "primaryDX": "Non-intractable vomiting with nausea, unspecified vomiting type",
+  
+      "primaryDX_10Code": "R11.2",
+  
+      "dX2": "",
+  
+      "dX2_10Code": ""
+  
+    },
+  
+    {
+      "admitdate" : "02/20/2020",
+  
+      "patientMRN": "11867370",
+  
+      "patientEncounterID": "549444143",
+  
+      "facility": "CCHMC",
+  
+      "patientName": "Rowan Hudson",
+  
+      "patientDOB": "2019-10-07T00:00:00",
+  
+      "pcp": "Jenny Parks",
+  
+      "hospitalAdmission": "2020-02-20T06:13:00",
+  
+      "hospitalDischarge": "2020-02-21T15:10:00",
+  
+      "visitType": "Adm",
+  
+      "primaryDX": "",
+  
+      "primaryDX_10Code": "",
+  
+      "dX2": "",
+  
+      "dX2_10Code": ""
+  
+    },
+  
+    {
+      "admitdate" : "02/20/2020",
+  
+      "patientMRN": "NR210908P7",
+  
+      "patientEncounterID": "",
+  
+      "facility": "MHP (Anderson)",
+  
+      "patientName": "CAITLYN WOERMANN",
+  
+      "patientDOB": "2000-10-16T00:00:00",
+  
+      "pcp": "Jeffrey Drasnin",
+  
+      "hospitalAdmission": "2020-02-20T08:07:00",
+  
+      "hospitalDischarge": null,
+  
+      "visitType": "Emergency",
+  
+      "primaryDX": "throwing up blood, fever",
+  
+      "primaryDX_10Code": "",
+  
+      "dX2": "throwing up blood, fever",
+  
+      "dX2_10Code": ""
+  
+    },
+  
+    {
+      "admitdate" : "02/20/2020",
+  
+      "patientMRN": "NR210908P7",
+  
+      "patientEncounterID": "",
+  
+      "facility": "MHP (Anderson)",
+  
+      "patientName": "CAITLYN WOERMANN",
+  
+      "patientDOB": "2000-10-16T00:00:00",
+  
+      "pcp": "Jeffrey Drasnin",
+  
+      "hospitalAdmission": "2020-02-20T22:49:00",
+  
+      "hospitalDischarge": null,
+  
+      "visitType": "Emergency",
+  
+      "primaryDX": "here this morning , vomiting blood",
+  
+      "primaryDX_10Code": "",
+  
+      "dX2": "here this morning , vomiting blood",
+  
+      "dX2_10Code": ""
+  
+    },
+  
+    {
+      "admitdate" : "02/20/2020",
+  
+      "patientMRN": "NR211885P7",
+  
+      "patientEncounterID": "",
+  
+      "facility": "TRI (BETHESDAHOSPITALS)",
+  
+      "patientName": "DEVON JOHNSON",
+  
+      "patientDOB": "1997-04-27T00:00:00",
+  
+      "pcp": "Kelly Oakes",
+  
+      "hospitalAdmission": "2020-02-20T09:59:00",
+  
+      "hospitalDischarge": null,
+  
+      "visitType": "Emergency",
+  
+      "primaryDX": "",
+  
+      "primaryDX_10Code": "",
+  
+      "dX2": "",
+  
+      "dX2_10Code": ""
+  
+    },
+  
+    {
+      "admitdate" : "02/20/2020",
+  
+      "patientMRN": "NR215465P7",
+  
+      "patientEncounterID": "",
+  
+      "facility": "UCH (UCMEDICALCENTER)",
+  
+      "patientName": "MACKENZIE WOODWARD",
+  
+      "patientDOB": "1998-07-12T00:00:00",
+  
+      "pcp": "Jenny Parks",
+  
+      "hospitalAdmission": "2020-02-20T13:50:00",
+  
+      "hospitalDischarge": null,
+  
+      "visitType": "Emergency",
+  
+      "primaryDX": "",
+  
+      "primaryDX_10Code": "",
+  
+      "dX2": "",
+  
+      "dX2_10Code": ""
+  
+    },
+  
+    {
+      "admitdate" : "02/20/2020",
+  
+      "patientMRN": "NR215465P7",
+  
+      "patientEncounterID": "",
+  
+      "facility": "UCH (UCMEDICALCENTER)",
+  
+      "patientName": "MACKENZIE WOODWARD",
+  
+      "patientDOB": "1998-07-12T00:00:00",
+  
+      "pcp": "Jenny Parks",
+  
+      "hospitalAdmission": "2020-02-20T14:08:00",
+  
+      "hospitalDischarge": null,
+  
+      "visitType": "Emergency",
+  
+      "primaryDX": "Assault Victim",
+  
+      "primaryDX_10Code": "160026",
+  
+      "dX2": "Assault Victim",
+  
+      "dX2_10Code": ""
+  
+    }
+  ],
+  "Patients" : [
+    {
+      "patientId": 489527,
+      "firstName": "Sutton",
+      "lastName": "Abney",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2019-01-24T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": null,
+      "chronic": true,
+      "watchFlag": false,
+      "conditions": [
+        {
+          "id": 3,
+          "name": "Asthma"
+        }
+      ]
+    },
+    {
+      "patientId": 43292,
+      "firstName": "CALVIN",
+      "lastName": "ACOSTA",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2007-06-10T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": "2017-04-26T15:40:00",
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": [
+        {
+          "id": 3,
+          "name": "Asthma"
+        },
+        {
+          "id": 1,
+          "name": "Chronic"
+        }
+      ]
+    },
+    {
+      "patientId": 56822,
+      "firstName": "VIOLET",
+      "lastName": "ACOSTA",
+      "practiceID": 7,
+      "pcP_StaffID": 852,
+      "dob": "2016-01-04T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": "2017-07-20T21:34:00",
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": []
+    },
+    {
+      "patientId": 47396,
+      "firstName": "EVELYNN",
+      "lastName": "ACREE",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2016-07-08T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": "2017-10-31T18:05:00",
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": []
+    },
+    {
+      "patientId": 62975,
+      "firstName": "KAYLA",
+      "lastName": "ACREE",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2013-09-27T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": "2019-08-21T13:30:00",
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": []
+    },
+    {
+      "patientId": 500867,
+      "firstName": "Jack",
+      "lastName": "Adamo",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2017-12-16T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": true,
+      "lastEDVisit": "2019-12-24T09:30:00",
+      "chronic": false,
+      "watchFlag": true,
+      "conditions": []
+    },
+    {
+      "patientId": 501602,
+      "firstName": "Sarah",
+      "lastName": "Adams",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2002-11-22T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": null,
+      "chronic": false,
+      "watchFlag": true,
+      "conditions": []
+    },
+    {
+      "patientId": 70289,
+      "firstName": "SAMUEL",
+      "lastName": "ADAMS",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2012-11-03T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": true,
+      "lastEDVisit": "2016-05-23T17:05:00",
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": []
+    },
+    {
+      "patientId": 76970,
+      "firstName": "ZAREK",
+      "lastName": "ADAMS",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2002-04-07T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": null,
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": []
+    },
+    {
+      "patientId": 79075,
+      "firstName": "ZEBULON",
+      "lastName": "ADAMS",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "1999-06-29T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": null,
+      "chronic": true,
+      "watchFlag": false,
+      "conditions": [
+        {
+          "id": 1,
+          "name": "Chronic"
+        }
+      ]
+    },
+    {
+      "patientId": 53620,
+      "firstName": "ASA",
+      "lastName": "ADAMSLASSE",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2018-02-09T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": "2019-06-30T12:10:00",
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": []
+    },
+    {
+      "patientId": 52052,
+      "firstName": "ADDISON",
+      "lastName": "ADKINS",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2012-01-01T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": null,
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": []
+    },
+    {
+      "patientId": 42174,
+      "firstName": "AVERY",
+      "lastName": "ADKINS",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2013-12-31T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": null,
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": []
+    },
+    {
+      "patientId": 51017,
+      "firstName": "JULIA",
+      "lastName": "ADRIENDUFFY",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2010-02-01T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": "2017-10-15T18:11:00",
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": []
+    },
+    {
+      "patientId": 56664,
+      "firstName": "CLARE",
+      "lastName": "ADRIENDUFFY",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2010-02-01T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": "2017-04-10T10:18:00",
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": []
+    },
+    {
+      "patientId": 56665,
+      "firstName": "CLARE",
+      "lastName": "ADRIEN-DUFFY",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2010-02-01T00:00:00",
+      "activeStatus": false,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": null,
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": []
+    },
+    {
+      "patientId": 57863,
+      "firstName": "JULIA",
+      "lastName": "ADRIEN-DUFFY",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2010-02-01T00:00:00",
+      "activeStatus": false,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": null,
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": [
+        {
+          "id": 3,
+          "name": "Asthma"
+        }
+      ]
+    },
+    {
+      "patientId": 77599,
+      "firstName": "BENJAMIN",
+      "lastName": "AGIN",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2000-01-06T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": null,
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": [
+        {
+          "id": 3,
+          "name": "Asthma"
+        }
+      ]
+    },
+    {
+      "patientId": 52091,
+      "firstName": "ADELAIDE",
+      "lastName": "AHLQUIST",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2012-12-15T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": "2017-02-04T20:03:00",
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": []
+    },
+    {
+      "patientId": 45242,
+      "firstName": "CORALAINE",
+      "lastName": "AHLQUIST",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2011-01-19T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": "2017-02-25T19:39:00",
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": []
+    }
+  ]
+  
 }

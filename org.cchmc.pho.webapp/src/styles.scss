@@ -513,13 +513,26 @@ h1 {
     font-size: 15px;
     line-height: 20px;
     color: white;
-    padding: 21px 35px 19px;
+    padding: 21px 35px 0;
     font-weight: Bold;
     text-align: left;
     letter-spacing: normal;
     
     .header-filter {
       margin-right: 36px;
+    }
+    .mat-form-field-appearance-legacy .mat-form-field-label, .mat-select-value-text {
+      font-size: 15px;
+      line-height: 20px;
+      color: white;
+      font-weight: Bold;
+      letter-spacing: normal;
+    }
+    .mat-select-arrow {
+      color: white;
+    }
+    .mat-form-field-appearance-legacy .mat-form-field-underline {
+      background-color: white;
     }
   }
 
@@ -530,6 +543,10 @@ h1 {
       width: 100%;
       border-bottom-right-radius: 7px;
       border-bottom-left-radius: 7px;
+    }
+
+    .mat-row:nth-child(even) {
+      background-color: rgba(229,238,245,0.41);
     }
 
     .mat-header-row {
@@ -556,11 +573,80 @@ h1 {
       line-height: 18px;
     }
 
+    .table-header-checkbox {
+      color: var(--primary-darker-color);
+      vertical-align: text-bottom;
+      margin-left: 5px;
+    }
+
     .mat-column-name {
       color: #4A4A4A;
       font-size: 13px;
       line-height: 18px;
       font-weight: bold;
     }
+    .mat-column-chronic {
+      font-weight: bold;
+      text-align: center !important;
+    }
+    .mat-column-lastEDVisit {
+     width: 128px;
+    }
+    .mat-column-watchFlag {
+      text-align: center !important;
+      .watchlist-icon {
+        color: gray;
+      }
+      .on-watchlist {
+        color: var(--accent-color);
+      }
+    }
+    .condition-chip {
+      background-color: var(--purple-light);
+      border-radius: 12.5px;
+      padding: 5px 19px;
+      color: var(--purple-dark);
+      font-size: 12px;
+      line-height: 16px;
+      letter-spacing: normal;
+      text-align: center;
+      font-weight: 500;
+    }
   }
+  /* Patient Expansion Panels*/
+  .element-row {
+    position: relative;
+    height: 57px !important;
+  }
+  
+  .element-row:not(.expanded) {
+    cursor: pointer;
+  }
+  
+  .element-row:not(.expanded):hover {
+    background: #f5f5f5;
+  }
+  
+  .element-row.expanded {
+    border-bottom-color: transparent;
+  }
+
+  .mat-column-arrow {
+    width: 80px;
+  }
+
+  .rotate-icon {
+    color: var(--primary-color);
+    font-weight: bold;
+  }
+
+  .expanded .rotate-icon {
+    -moz-transition: 0.5s;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    -ms-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
 

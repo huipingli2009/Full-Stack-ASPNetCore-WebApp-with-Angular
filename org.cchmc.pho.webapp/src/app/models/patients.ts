@@ -5,12 +5,8 @@ export class Patients {
     practiceID: number;
     pcP_StaffID: number;
     dob: string;
-    status: [
-        {
-            id: number,
-            name: string;
-        }
-    ]
+    activeStatus: boolean;
+    potentiallyActiveStatus: boolean;
     lastEDVisit: string;
     chronic: boolean;
     watchFlag: boolean;
