@@ -19,7 +19,7 @@ namespace org.cchmc.pho.api.Controllers
         private readonly IWorkbooks _workbooks;
 
         //todo: hardcoded userid for now, we will be using session later
-        private readonly int _DEFAULT_USER = 3;
+        private readonly string _DEFAULT_USER = "3";
 
         public WorkbooksController(ILogger<WorkbooksController> logger, IMapper mapper, IWorkbooks workbooks)
         {
@@ -36,10 +36,17 @@ namespace org.cchmc.pho.api.Controllers
 
         //public async Task<IActionResult> ListPatients(int userId, int formResponseId, string nameSearch)
         public async Task<IActionResult> ListPatients(int formResponseId, string nameSearch)
-        {           
+        {
+            // route parameters are strings and need to be translated (and validated) to their proper data type
+            if (!int.TryParse(_DEFAULT_USER, out var userId))
+            {
+                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
+                return BadRequest("user is not a valid integer");
+            }
+
             try
             {
-                var data = await _workbooks.ListPatients(_DEFAULT_USER, formResponseId, nameSearch);
+                var data = await _workbooks.ListPatients(int.Parse(_DEFAULT_USER.ToString()), formResponseId, nameSearch);
 
                 var result = _mapper.Map<List<WorkbooksPatientViewModel>>(data);
 
@@ -63,7 +70,7 @@ namespace org.cchmc.pho.api.Controllers
             try
             {
                 // call the data method
-                var data = await _workbooks.GetPracticeWorkbooks(_DEFAULT_USER, formResponseId);
+                var data = await _workbooks.GetPracticeWorkbooks(int.Parse(_DEFAULT_USER.ToString()), formResponseId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
                 var result = _mapper.Map<WorkbooksPracticeViewModel>(data);
                 // return the result in a "200 OK" response
@@ -87,7 +94,7 @@ namespace org.cchmc.pho.api.Controllers
             try
             {
                 // call the data method
-                var data = await _workbooks.GetPracticeWorkbooksProviders(_DEFAULT_USER, formResponseId);
+                var data = await _workbooks.GetPracticeWorkbooksProviders(int.Parse(_DEFAULT_USER.ToString()), formResponseId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
                 var result = _mapper.Map<List<WorkbooksProviderViewModel>>(data);
                 // return the result in a "200 OK" response
@@ -110,7 +117,7 @@ namespace org.cchmc.pho.api.Controllers
             try
             {
                 // call the data method
-                var data = await _workbooks.GetWorkbooksLookups(_DEFAULT_USER);
+                var data = await _workbooks.GetWorkbooksLookups(int.Parse(_DEFAULT_USER.ToString()));
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
                 var result = _mapper.Map<List<WorkbooksLookupViewModel>>(data);
                 // return the result in a "200 OK" response
