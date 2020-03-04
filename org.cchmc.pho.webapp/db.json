@@ -33,39 +33,53 @@
      }
     ]
   },
-  "Contents" : [
+  "spotlights" : [
     {
       "header": "Exceptional Patient Care: ESD Pediatrics",
-      "placementOrder": 1,
       "body": "ESD Pediatric Group had a successful second quarter. Read on to learn how their processes could help your practice acheive your quarterly goals. ESD Pediatric Group had a successful second quarter. Read on to learn how their processes could help your practice acheive your quarterly goals. ESD Pediatric Group had a successful second quarter.",
       "hyperlink": "https://cchmc.sharepoint.com/:w:/s/PHODataCollection/ETfEDhWG5UlPg6e5w6H9N-cBhbAV8QkARfidHFysShJGmw?e=569bs3",
       "imageHyperlink": "Spotlight_Img1.jpeg",
-      "contentPlacement": "Monthly Spotlight"
-    },
+      "locationId": 1
+    }
+  ],
+  "quicklinks" : [
     {
-      "header": null,
-      "placementOrder": 2,
+      "placementOrder": 1,
       "body": "Top 100 Bill Codes",
       "hyperlink": "https://cchmc.sharepoint.com/:b:/s/PHODataCollection/EYYj4_iUwVlCtknVRXSekSsBF1XWrtJPgMaZnniUQ19bzg?e=emWREK",
-      "imageHyperlink": "NULL",
-      "contentPlacement": "Quick Links"
+      "locationId": 2
     },
     {
-      "header": null,
+      "placementOrder": 2,
+      "body": "Top Billed J Codes",
+      "hyperlink": "https://cchmc.sharepoint.com/:b:/s/PHODataCollection/EYYj4_iUwVlCtknVRXSekSsBF1XWrtJPgMaZnniUQ19bzg?e=b7eeLI",
+      "locationId": 2
+    },
+    {
       "placementOrder": 3,
-      "body": "Top Billed J Codes",
-      "hyperlink": "https://cchmc.sharepoint.com/:b:/s/PHODataCollection/EYYj4_iUwVlCtknVRXSekSsBF1XWrtJPgMaZnniUQ19bzg?e=emWREK",
-      "imageHyperlink": "NULL",
-      "contentPlacement": "Quick Links"
+      "body": "View PMCA Scores",
+      "hyperlink": "https://insight.invisionapp.com/d/main/#/console/18823247/398259767/preview",
+      "locationId": 2
     },
     {
-      "header": null,
       "placementOrder": 4,
-      "body": "Top Billed J Codes",
-      "hyperlink": "https://cchmc.sharepoint.com/:b:/s/PHODataCollection/EYYj4_iUwVlCtknVRXSekSsBF1XWrtJPgMaZnniUQ19bzg?e=emWREK",
-      "imageHyperlink": "NULL",
-      "contentPlacement": "Quick Links"
+      "body": "Depression Utilizations",
+      "hyperlink": "https://cchmc.sharepoint.com/:w:/s/PHODataCollection/ETfEDhWG5UlPg6e5w6H9N-cBhbAV8QkARfidHFysShJGmw?e=569bs3",
+      "locationId": 2
+    },
+    {
+      "placementOrder": 5,
+      "body": "Potential Patients",
+      "hyperlink": "https://insight.invisionapp.com/d/main/#/console/18823247/398259767/preview",
+      "locationId": 2
+    },
+    {
+      "placementOrder": 6,
+      "body": "Quarterly Report",
+      "hyperlink": "https://cchmc.sharepoint.com/:w:/s/PHODataCollection/Ec1NsZq63MlPvTwlfE8MDA8BPiT8zIRZFwxyvSSkZL2IOA?e=JiLGKi",
+      "locationId": 2
     }
+  
   ],
   "Metrics" : [
     {
@@ -293,16 +307,7 @@
       "chartLabel": "Wed 2/19",
       "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
       "edVisits": 0
-    },
-    {
-      "id": 3,
-      "practiceId": 7,
-      "admitDate": "2/20/2020",
-      "chartLabel": "Thu 2/20",
-      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
-      "edVisits": 9
     }
-    
   ],
   "edchartdetails" : [
     {
