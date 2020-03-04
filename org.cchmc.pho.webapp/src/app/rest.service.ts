@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpClientModule } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
-import { Alerts, Content, Population, EdChart, EdChartDetails } from './models/dashboard';
+import { Alerts, Population, EdChart, EdChartDetails, Spotlight, Quicklinks } from './models/dashboard';
 import { environment } from '../environments/environment';
 import { Patients } from './models/patients';
 
@@ -48,9 +48,17 @@ export class RestService {
 
   /* Dashboard Content =======================================================*/
 
-  getDashboardContent(): Observable<any> {
+  getSpotlight(): Observable<any> {
     return this.http.get<any>(`${API_URL}/api/Contents/spotlights/`).pipe(
-      map((data: Content[]) => {
+      map((data: Spotlight[]) => {
+        return data;
+      })
+    );
+  }
+
+  getQuicklinks(): Observable<any> {
+    return this.http.get<any>(`${API_URL}/api/Contents/quicklinks/`).pipe(
+      map((data: Quicklinks[]) => {
         return data;
       })
     );

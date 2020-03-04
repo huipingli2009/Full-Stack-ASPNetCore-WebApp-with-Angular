@@ -395,10 +395,12 @@ h1 {
         font-family: 'ArcherBold';
         width: 99px;
         background-color: var(--purple-light);
-        padding: 18px;
+        padding: 15px;
         text-align: center;
         border: 0.5px dashed var(--purple-dark);
         outline: 4px solid var(--purple-light);
+        margin-right: 14.5px;
+        margin-left: 14.5px;
       }
       a {
         color: var(--purple-dark);
@@ -650,3 +652,16 @@ h1 {
     transform: rotate(90deg);
 }
 
+/* Patient Details */
+
+#patient-details {
+  padding: 25px 75px;
+
+  .detail-heading {
+    font-family: 'ArcherBold';
+    font-size: 16px;
+    line-height: 17px;
+    letter-spacing: 0.5px;
+    color: var(--primary-color);
+  }
+}
