@@ -73,7 +73,8 @@ namespace org.cchmc.pho.unittest.controllertests
                 PMCAScore = 0,
                 ProviderPMCAScore = 2,
                 ProviderNotes = "Ryan needs more care. Just updated",
-                Status = new PatientStatus("1", "Active"),
+                ActiveStatus = true,
+                PotentiallyActiveStatus = true,
                 GenderId = 1,
                 Gender = "M",
                 Email = "",
@@ -121,13 +122,13 @@ namespace org.cchmc.pho.unittest.controllertests
             Assert.AreEqual(myPatientDetails.ProviderPMCAScore, resultList.ProviderPMCAScore);
             Assert.AreEqual(myPatientDetails.ProviderNotes, resultList.ProviderNotes);
 
-            Assert.IsNotNull(myPatientDetails.Status);
-            Assert.IsNotNull(resultList.Status);
-            Assert.AreEqual(myPatientDetails.Status.ID, resultList.Status.ID);
+            Assert.IsNotNull(myPatientDetails.ActiveStatus);
+            Assert.IsNotNull(resultList.ActiveStatus);
+            Assert.AreEqual(myPatientDetails.ActiveStatus, resultList.ActiveStatus);
 
             CompareConditionMapping(myPatientDetails.Conditions, resultList.Conditions);
 
-            Assert.AreEqual(myPatientDetails.Status.Name, resultList.Status.Name);
+            Assert.AreEqual(myPatientDetails.PotentiallyActiveStatus, resultList.PendingStatusConfirmation);
             Assert.AreEqual(myPatientDetails.GenderId, resultList.GenderId);
             Assert.AreEqual(myPatientDetails.Gender, resultList.Gender);
             Assert.AreEqual(myPatientDetails.Email, resultList.Email);
@@ -161,7 +162,8 @@ namespace org.cchmc.pho.unittest.controllertests
             _mockPatientDal.Verify(p => p.GetPatientDetails(It.IsAny<int>()), Times.Never);
         }
 
-        [TestMethod]
+      
+  [TestMethod]
         public async Task GetPatientDetails_DataLayerThrowsException_ReturnsError()
         {
             // setup

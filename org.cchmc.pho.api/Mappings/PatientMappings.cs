@@ -11,10 +11,12 @@ namespace org.cchmc.pho.api.Mappings
         public PatientMappings()
         {
             CreateMap<Patient, PatientViewModel>();
-            CreateMap<PatientStatus,PatientStatusViewModel>();
+            CreateMap<Patient, PatientViewModel>().ForMember(dest => dest.PendingStatusConfirmation, action => action.MapFrom(source => source.PotentiallyActiveStatus));
             CreateMap<PatientCondition, PatientConditionViewModel>();
             CreateMap<PatientDetails, PatientDetailsViewModel>();
-            CreateMap<PatientDetails, PatientDetailsViewModel>().ForMember(dest => dest.ClarityPatientId, action => action.MapFrom(source => source.PatId));
+            CreateMap<PatientDetails, PatientDetailsViewModel>().ForMember(dest => dest.ClarityPatientId, action => action.MapFrom(source => source.PatId))
+                                                                 .ForMember(dest => dest.PendingStatusConfirmation, action => action.MapFrom(source => source.PotentiallyActiveStatus));
+          
 
         }
     }

@@ -51,8 +51,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     {
                         da.Fill(dataTable);                      
 
-                        List<PatientStatus> patientStatuslist = GetPatientStatusAll();
-                      
+                                             
                         List<PatientCondition> patientConditions = GetPatientConditionsAll();                     
                         
                         foreach(DataRow dr in dataTable.Rows)
@@ -69,7 +68,8 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 Chronic = bool.Parse(dr["Chronic"].ToString()),
                                 WatchFlag = bool.Parse(dr["WatchFlag"].ToString()),
                                 Conditions = new List<PatientCondition>(),
-                                Status = patientStatuslist.FirstOrDefault(p => p.ID == int.Parse(dr["ActiveStatus"].ToString()))
+                                ActiveStatus = bool.Parse(dr["ActiveStatus"].ToString()),
+                                PotentiallyActiveStatus= bool.Parse(dr["PotentiallyActive"].ToString()),
                             };
 
                             if (!string.IsNullOrWhiteSpace(dr["ConditionIDs"].ToString()))
@@ -130,45 +130,9 @@ namespace org.cchmc.pho.core.DataAccessLayer
             return c;
         }
 
-        public List<PatientStatus> GetPatientStatusAll()
-        {
-            List<PatientStatus> returnObject = null;
-            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
-            {
-                using (SqlCommand sqlCommand = new SqlCommand("spGetPatientStatusAll", sqlConnection))
-                {
-                    sqlCommand.CommandType = CommandType.StoredProcedure;
-                    SqlDataAdapter da = new SqlDataAdapter(sqlCommand);
+        
 
-                    DataSet ds = new DataSet();
-                    da.Fill(ds);
-
-                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                    {
-                        if (returnObject == null)
-                        {
-                            returnObject = new List<PatientStatus>();
-                        }
-                        PatientStatus PtStatus = CreatePatientStatusModel(ds.Tables[0].Rows[i]);
-                        returnObject.Add(PtStatus);
-                    }
-                }
-                return returnObject;
-            }                      
-        }     
-       
-
-        public PatientStatus CreatePatientStatusModel(DataRow dr)
-        {
-            PatientStatus c = new PatientStatus();
-            if (dr["Id"] != null && !string.IsNullOrWhiteSpace(dr["Id"].ToString()))
-            {
-                c.ID = int.Parse(dr["Id"].ToString());
-            }
-            c.Name = dr["Name"].ToString();
-
-            return c;
-        }
+      
 
         public async Task<PatientDetails> GetPatientDetails(int patientId)
         {
@@ -180,7 +144,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add("@id", SqlDbType.Int).Value = patientId;
-                    sqlConnection.Open();
+                    await sqlConnection.OpenAsync();
                     // Define the data adapter and fill the dataset
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
@@ -206,11 +170,12 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                        City = dr["City"].ToString(),
                                        State = dr["State"].ToString(),
                                        Zip = dr["Zip"].ToString(),
-                                       Conditions = ParseConditionStrings(dr["ConditionIDs"].ToString(), dr["Condition"].ToString()),
+                                       Conditions =  ParseConditionStrings(dr["ConditionIDs"].ToString(), dr["Condition"].ToString()),
                                        PMCAScore = (dr["PMCAScore"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PMCAScore"].ToString())),
                                        ProviderPMCAScore = (dr["ProviderPMCAScore"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ProviderPMCAScore"].ToString())),
                                        ProviderNotes = dr["ProviderNotes"].ToString(),
-                                       Status = new PatientStatus(dr["ActiveStatus"].ToString(), dr["ActiveStatusName"].ToString()),
+                                       ActiveStatus = bool.Parse(dr["ActiveStatus"].ToString()),
+                                       PotentiallyActiveStatus = bool.Parse(dr["PotentiallyActive"].ToString()),
                                        GenderId = (dr["GenderID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["GenderID"].ToString())),
                                        Gender = dr["Gender"].ToString(),
                                        Email = dr["Email"].ToString(),
@@ -237,19 +202,25 @@ namespace org.cchmc.pho.core.DataAccessLayer
         private List<PatientCondition> ParseConditionStrings(string ConditionIDs, string ConditionNames)
         {
             List<PatientCondition> conditions = new List<PatientCondition>();
-
-            int[] ids = ConditionIDs.Split(',').Select(int.Parse).ToArray();
-            string[] names = ConditionNames.Split(',').ToArray();
-
-            if (ids.Length != names.Length)
+          
+            if (!string.IsNullOrWhiteSpace(ConditionIDs))
             {
-                throw new Exception("Condition data strings have an unequal count of delimiters");
+                
+
+                int[] ids = ConditionIDs.Split(',').Select(int.Parse).ToArray();
+                string[] names = ConditionNames.Split(',').ToArray();
+
+                if (ids.Length != names.Length)
+                {
+                    throw new Exception("Condition data strings have an unequal count of delimiters");
+                }
+
+                for (int i = 0; i < ids.Length; i++)
+                {
+                    conditions.Add(new PatientCondition(ids[i], names[i]));
+                }
             }
 
-            for (int i = 0; i < ids.Length; i++)
-            {
-                conditions.Add(new PatientCondition(ids[i], names[i]));
-            }
 
             return conditions;
         }
