@@ -17,10 +17,8 @@ namespace org.cchmc.pho.api.Controllers
         private readonly ILogger<PatientsController> _logger;
         private readonly IMapper _mapper;
         private readonly IPatient _patient;
-
         //todo: hardcoded userid for now, we will be using session later
         private readonly int _DEFAULT_USER = 3;
-
         public PatientsController(ILogger<PatientsController> logger, IMapper mapper, IPatient patient)
         {
             _logger = logger;
