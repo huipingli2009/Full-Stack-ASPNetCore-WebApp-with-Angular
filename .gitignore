@@ -355,3 +355,6 @@ MigrationBackup/
 # Custom ignore secret files
 **/*.secrets.json
 org.cchmc.pho.webapp/src/environments/version.ts
+
+#ignore all the .vscode files
+.vscode/*
