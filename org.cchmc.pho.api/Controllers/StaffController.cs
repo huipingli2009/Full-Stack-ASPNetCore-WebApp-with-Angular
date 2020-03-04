@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using org.cchmc.pho.api.ViewModels;
 using org.cchmc.pho.core.Interfaces;
+using org.cchmc.pho.core.DataModels;
 using Swashbuckle.AspNetCore.Annotations;
 
 
@@ -18,6 +19,8 @@ namespace org.cchmc.pho.api.Controllers
         private readonly ILogger<StaffController> _logger;
         private readonly IMapper _mapper;
         private readonly IStaff _staffDal;
+
+        private readonly string _DEFAULT_USER = "3";
 
         public StaffController(ILogger<StaffController> logger, IMapper mapper, IStaff staffDal)
         {
@@ -32,11 +35,10 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> ListStaff([FromQuery]string topfilter, [FromQuery]string tagfilter, [FromQuery]string namesearch)
         {
-            string user = "3"; //todo: default for now
             // route parameters are strings and need to be translated (and validated) to their proper data type
-            if (!int.TryParse(user, out var userId))
+            if (!int.TryParse(_DEFAULT_USER, out var userId))
             {
-                _logger.LogInformation($"Failed to parse userId - {user}");
+                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
                 return BadRequest("user is not a valid integer");
             }
 
@@ -63,11 +65,10 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> GetStaffDetails(string staff)
         {
-            string user = "3"; //todo: default for now
             // route parameters are strings and need to be translated (and validated) to their proper data type
-            if (!int.TryParse(user, out var userId))
+            if (!int.TryParse(_DEFAULT_USER, out var userId))
             {
-                _logger.LogInformation($"Failed to parse userId - {user}");
+                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
                 return BadRequest("user is not a valid integer");
             }
 
@@ -85,6 +86,34 @@ namespace org.cchmc.pho.api.Controllers
                 var result = _mapper.Map<StaffDetailViewModel>(data);
                 // return the result in a "200 OK" response
                 return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+        [HttpPut("update")]
+        [SwaggerResponse(200, type: typeof(string))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> UpdateStaffDetails([FromBody] StaffDetailViewModel staffDetailVM)
+        {
+            // route parameters are strings and need to be translated (and validated) to their proper data type
+            if (!int.TryParse(_DEFAULT_USER, out var userId))
+            {
+                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
+                return BadRequest("user is not a valid integer");
+            }
+
+            try
+            {
+                StaffDetail staffDetail = _mapper.Map<StaffDetail>(staffDetailVM);
+                // call the data layer to mark the action
+                await _staffDal.UpdateStaffDetails(userId, staffDetail);
+                return Ok();
             }
             catch (Exception ex)
             {
