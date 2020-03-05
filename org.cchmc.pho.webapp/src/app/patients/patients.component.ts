@@ -1,13 +1,15 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Patients } from '../models/patients';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Patients, PatientDetails } from '../models/patients';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { RestService } from '../rest.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 
 @Component({
@@ -28,8 +30,13 @@ export class PatientsComponent implements OnInit {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
+  @Input()
+  checked: Boolean;
+
+
 
   patients: Patients[];
+  patientDetails: Observable<PatientDetails>;
   filterValues: any = {};
   chronic: string;
   watchFlag: string;
@@ -40,6 +47,8 @@ export class PatientsComponent implements OnInit {
   public multiFilterValues = {
     condition: ""
   };
+  isActive: boolean;
+  form: FormGroup;
 
   displayedColumns: string[] = ['arrow', 'name', 'dob', 'lastEDVisit', 'chronic', 'watchFlag', 'conditions'];
   dataSource;
@@ -82,6 +91,41 @@ export class PatientsComponent implements OnInit {
       })
     });
   }
+
+  // getPatientDetails(id) {
+  //   console.log(id);
+  //   this.rest.getPatientDetails(id).subscribe((data) => {
+  //     this.patientDetails = data;
+  //     console.log(this.patientDetails);
+      
+  //   });
+  // }
+
+  getPatientDetails(id) {
+    this.rest.getPatientDetails(id).subscribe((data) => {
+      this.patientDetails = data;
+      this.isActive = data.activeStatus;
+      this.form = this.fb.group({
+        activeStatus: [Boolean, Validators.required],
+        firstName: ['', Validators.required],
+        lastName: ['', Validators.required]
+      });
+      this.patientDetails = this.rest.getPatientDetails(id).pipe(
+        tap(user => this.form.patchValue(user))
+      );
+      console.log(this.patientDetails);
+      
+    });
+  }
+
+  // setValue(i , e){
+  //   if(e.checked){
+  //     this.patientDetails[i].activeStatus = true;
+  //   }else{
+  //     this.patientDetails[i].activeStatus = false;
+  //   }
+  //   console.log(this.patientDetails[i].activeStatus)
+  // }
 
   applySelectedFilter(column: string, filterValue: string) {
     this.filterValues[column] = filterValue;

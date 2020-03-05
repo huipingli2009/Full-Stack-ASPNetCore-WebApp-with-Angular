@@ -575,6 +575,10 @@
         {
           "id": 3,
           "name": "Asthma"
+        },
+        {
+          "id": 1,
+          "name": " Chronic"
         }
       ]
     },
@@ -942,6 +946,108 @@
           "name": "Chronic"
         }
       ]
+    }
+  ], 
+  "patientDetails" : [
+    {
+      "id": 43292,
+      "patientMRNId": "11742966",
+      "clarityPatientId": "Z1974820",
+      "practiceId": 7,
+      "firstName": "Calvin",
+      "middleName": "",
+      "lastName": "Acosta",
+      "patientDOB": "2018-06-13T00:00:00",
+      "pcpId": 383,
+      "pcpFirstName": "Shoba",
+      "pcpLastName": "Krishnan",
+      "insuranceId": 238,
+      "insuranceName": "Wellfleet",
+      "addressLine1": "4203 OMER AVE",
+      "addressLine2": "",
+      "city": "CINCINNATI",
+      "state": "OH",
+      "zip": "45227",
+      "conditions": [
+        {
+          "id": 3,
+          "name": "Asthma"
+        },
+        {
+          "id": 1,
+          "name": " Chronic"
+        }
+      ],
+      "pmcaScore": 0,
+      "providerPMCAScore": 0,
+      "providerNotes": "",
+      "activeStatus": false,
+      "pendingStatusConfirmation": false,
+      "genderId": 1,
+      "gender": "M",
+      "email": "",
+      "phone1": "5137465149",
+      "phone2": "",
+      "practiceVisits": 9,
+      "cchmcEncounters": 4,
+      "healthBridgeEncounters": 0,
+      "uniqueDXs": 0,
+      "uniqueCPTCodes": 8,
+      "lastPracticeVisit": "2019-06-20T00:00:00",
+      "lastCCHMCAdmit": null,
+      "lastHealthBridgeAdmit": null,
+      "lastDiagnosis": "",
+      "cchmcAppointment": null
+    },
+    {
+      "id": 489527,
+      "patientMRNId": "01015417",
+      "clarityPatientId": "Z419865",
+      "practiceId": 7,
+      "firstName": "Abney",
+      "middleName": "",
+      "lastName": "Sutton",
+      "patientDOB": "2019-01-24T00:00:00",
+      "pcpId": 362,
+      "pcpFirstName": "Jeffery",
+      "pcpLastName": "Heaton",
+      "insuranceId": 0,
+      "insuranceName": "",
+      "addressLine1": "7716 WILDBRANCH RD",
+      "addressLine2": "",
+      "city": "FAIRFIELD",
+      "state": "OH",
+      "zip": "45011",
+      "conditions": [
+        {
+          "id": 3,
+          "name": "Asthma"
+        },
+        {
+          "id": 1,
+          "name": " Chronic"
+        }
+      ],
+      "pmcaScore": 2,
+      "providerPMCAScore": 0,
+      "providerNotes": "",
+      "activeStatus": true,
+      "pendingStatusConfirmation": false,
+      "genderId": 1,
+      "gender": "M",
+      "email": "",
+      "phone1": "5134009592",
+      "phone2": "",
+      "practiceVisits": 24,
+      "cchmcEncounters": 15,
+      "healthBridgeEncounters": 1,
+      "uniqueDXs": 0,
+      "uniqueCPTCodes": 25,
+      "lastPracticeVisit": "2018-11-01T00:00:00",
+      "lastCCHMCAdmit": null,
+      "lastHealthBridgeAdmit": "2019-07-14T05:28:00",
+      "lastDiagnosis": "",
+      "cchmcAppointment": "2014-02-13T13:05:00"
     }
   ]
   
