@@ -18,7 +18,6 @@ namespace org.cchmc.pho.api.Mappings
             CreateMap<PatientDetailsViewModel, PatientDetails>().ForMember(dest => dest.PatId, action => action.MapFrom(source => source.ClarityPatientId))
                                                                  .ForMember(dest => dest.PotentiallyActiveStatus, action => action.MapFrom(source => source.PendingStatusConfirmation));
 
-
         }
     }
 }
