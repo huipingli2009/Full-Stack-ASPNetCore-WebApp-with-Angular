@@ -52,7 +52,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                         da.Fill(dataTable);                      
 
                                              
-                        List<PatientCondition> patientConditions = GetPatientConditionsAll();                     
+                        List<PatientCondition> patientConditions = await GetPatientConditionsAll();                     
                         
                         foreach(DataRow dr in dataTable.Rows)
                         {
@@ -91,11 +91,11 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }   
         }
 
-        public List<PatientCondition> GetPatientConditionsAll()
+        public async Task<List<PatientCondition>> GetPatientConditionsAll()
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
-                using (SqlCommand sqlCommand = new SqlCommand("spGetAllConditions", sqlConnection))
+                using (SqlCommand sqlCommand = new SqlCommand("spGetConditionList", sqlConnection))
                 {
                     sqlCommand.CommandType = CommandType.StoredProcedure;
 
@@ -111,33 +111,55 @@ namespace org.cchmc.pho.core.DataAccessLayer
                         {
                             returnObject = new List<PatientCondition>();
                         }
-                        PatientCondition PtCondition = CreatePatientConditionModel(ds.Tables[0].Rows[i]);
+                        int.TryParse(ds.Tables[0].Rows[i]["ID"].ToString(), out int intId);
+
+                        PatientCondition PtCondition = new PatientCondition
+                        {
+                            ID = intId,
+                            Name = ds.Tables[0].Rows[i]["Condition"].ToString(),
+                            Description = ds.Tables[0].Rows[i]["Desc"].ToString()
+                        };
+
                         returnObject.Add(PtCondition);
                     }
-                    return returnObject;
-                }
-            }           
-        }        
-        public PatientCondition CreatePatientConditionModel(DataRow dr)
-        {
-            PatientCondition c = new PatientCondition();
-            if (dr["Id"] != null && !string.IsNullOrWhiteSpace(dr["Id"].ToString()))
-            {
-                c.ID = int.Parse(dr["Id"].ToString());
-            }
-            c.Name = dr["Condition"].ToString();
 
-            return c;
+                    return returnObject;
+                } 
+            }
         }
 
-        
-
-      
+        public async Task<List<PatientInsurance>> GetPatientInsuranceAll(int userId)
+        {
+            DataTable dataTable = new DataTable();
+            List<PatientInsurance> insurances = new List<PatientInsurance>();
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetInsuranceList", sqlConnection))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                    sqlConnection.Open();
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        insurances = (from DataRow dr in dataTable.Rows
+                                 select new PatientInsurance()
+                                 {
+                                     Id = (dr["Id"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Id"].ToString())),
+                                     Name = dr["InsName"].ToString()
+                                 }
+                        ).ToList();
+                    }
+                }
+            }
+            return insurances;
+        }
 
         public async Task<PatientDetails> GetPatientDetails(int patientId)
         {
             DataTable dataTable = new DataTable();
-            PatientDetails details;
+            PatientDetails details = null;
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spGetPatientSummary", sqlConnection))
@@ -149,81 +171,74 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
                         da.Fill(dataTable);
-                        details = (from DataRow dr in dataTable.Rows
-                                   select new PatientDetails()
-                                   {
-                                       Id = (dr["Id"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Id"].ToString())),
-                                       PatientMRNId = dr["PAT_MRN_ID"].ToString(),
-                                       PatId = dr["PAT_ID"].ToString(),
-                                       PracticeId = (dr["PracticeID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PracticeID"].ToString())),
-                                       FirstName = dr["FirstName"].ToString(),
-                                       MiddleName = dr["MiddleName"].ToString(),
-                                       LastName = dr["LastName"].ToString(),
-                                       PatientDOB = (dr["PatientDOB"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["PatientDOB"].ToString())),
-                                       PCPId = (dr["PCP_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PCP_ID"].ToString())),
-                                       PCPFirstName = dr["PCP_FirstName"].ToString(),
-                                       PCPLastName = dr["PCP_LastName"].ToString(),
-                                       InsuranceId = (dr["InsId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["InsId"].ToString())),
-                                       InsuranceName = dr["InsName"].ToString(),
-                                       AddressLine1 = dr["AddressLine1"].ToString(),
-                                       AddressLine2 = dr["AddressLine2"].ToString(),
-                                       City = dr["City"].ToString(),
-                                       State = dr["State"].ToString(),
-                                       Zip = dr["Zip"].ToString(),
-                                       Conditions =  ParseConditionStrings(dr["ConditionIDs"].ToString(), dr["Condition"].ToString()),
-                                       PMCAScore = (dr["PMCAScore"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PMCAScore"].ToString())),
-                                       ProviderPMCAScore = (dr["ProviderPMCAScore"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ProviderPMCAScore"].ToString())),
-                                       ProviderNotes = dr["ProviderNotes"].ToString(),
-                                       ActiveStatus = bool.Parse(dr["ActiveStatus"].ToString()),
-                                       PotentiallyActiveStatus = bool.Parse(dr["PotentiallyActive"].ToString()),
-                                       GenderId = (dr["GenderID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["GenderID"].ToString())),
-                                       Gender = dr["Gender"].ToString(),
-                                       Email = dr["Email"].ToString(),
-                                       Phone1 = dr["Phone1"].ToString(),
-                                       Phone2 = dr["Phone2"].ToString(),
-                                       PracticeVisits = (dr["PracticeVisits"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PracticeVisits"].ToString())),
-                                       CCHMCEncounters = (dr["CCHMCEncounters"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CCHMCEncounters"].ToString())),
-                                       HealthBridgeEncounters = (dr["HealthBridgeEncounters"] == DBNull.Value ? 0 : Convert.ToInt32(dr["HealthBridgeEncounters"].ToString())),
-                                       UniqueDXs = (dr["UniqueDXs"] == DBNull.Value ? 0 : Convert.ToInt32(dr["UniqueDXs"].ToString())),
-                                       UniqueCPTCodes = (dr["UniqueCPTCodes"] == DBNull.Value ? 0 : Convert.ToInt32(dr["UniqueCPTCodes"].ToString())),
-                                       LastPracticeVisit = (dr["LastPracticeVisit"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LastPracticeVisit"].ToString())),
-                                       LastCCHMCAdmit = (dr["LastCCHMCAdmit"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LastCCHMCAdmit"].ToString())),
-                                       LastHealthBridgeAdmit = (dr["LastHBAdmit"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LastHBAdmit"].ToString())),
-                                       LastDiagnosis = dr["LastDiagnosis"].ToString(),
-                                       CCHMCAppointment = (dr["CCHMCAppt"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["CCHMCAppt"].ToString()))
-                                   }
-                            ).SingleOrDefault();
+
+                        List<PatientCondition> patientConditions = await GetPatientConditionsAll();
+
+                        foreach (DataRow dr in dataTable.Rows)
+                        {
+                            details = new PatientDetails()
+                            {
+                                Id = (dr["Id"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Id"].ToString())),
+                                PatientMRNId = dr["PAT_MRN_ID"].ToString(),
+                                PatId = dr["PAT_ID"].ToString(),
+                                PracticeId = (dr["PracticeID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PracticeID"].ToString())),
+                                FirstName = dr["FirstName"].ToString(),
+                                MiddleName = dr["MiddleName"].ToString(),
+                                LastName = dr["LastName"].ToString(),
+                                PatientDOB = (dr["PatientDOB"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["PatientDOB"].ToString())),
+                                PCPId = (dr["PCP_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PCP_ID"].ToString())),
+                                PCPFirstName = dr["PCP_FirstName"].ToString(),
+                                PCPLastName = dr["PCP_LastName"].ToString(),
+                                InsuranceId = (dr["InsId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["InsId"].ToString())),
+                                InsuranceName = dr["InsName"].ToString(),
+                                AddressLine1 = dr["AddressLine1"].ToString(),
+                                AddressLine2 = dr["AddressLine2"].ToString(),
+                                City = dr["City"].ToString(),
+                                State = dr["State"].ToString(),
+                                Zip = dr["Zip"].ToString(),
+                                Conditions = new List<PatientCondition>(),
+                                PMCAScore = (dr["PMCAScore"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PMCAScore"].ToString())),
+                                ProviderPMCAScore = (dr["ProviderPMCAScore"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ProviderPMCAScore"].ToString())),
+                                ProviderNotes = dr["ProviderNotes"].ToString(),
+                                ActiveStatus = bool.Parse(dr["ActiveStatus"].ToString()),
+                                PotentiallyActiveStatus = bool.Parse(dr["PotentiallyActive"].ToString()),
+                                GenderId = (dr["GenderID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["GenderID"].ToString())),
+                                Gender = dr["Gender"].ToString(),
+                                Email = dr["Email"].ToString(),
+                                Phone1 = dr["Phone1"].ToString(),
+                                Phone2 = dr["Phone2"].ToString(),
+                                PracticeVisits = (dr["PracticeVisits"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PracticeVisits"].ToString())),
+                                CCHMCEncounters = (dr["CCHMCEncounters"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CCHMCEncounters"].ToString())),
+                                HealthBridgeEncounters = (dr["HealthBridgeEncounters"] == DBNull.Value ? 0 : Convert.ToInt32(dr["HealthBridgeEncounters"].ToString())),
+                                UniqueDXs = (dr["UniqueDXs"] == DBNull.Value ? 0 : Convert.ToInt32(dr["UniqueDXs"].ToString())),
+                                UniqueCPTCodes = (dr["UniqueCPTCodes"] == DBNull.Value ? 0 : Convert.ToInt32(dr["UniqueCPTCodes"].ToString())),
+                                LastPracticeVisit = (dr["LastPracticeVisit"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LastPracticeVisit"].ToString())),
+                                LastCCHMCAdmit = (dr["LastCCHMCAdmit"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LastCCHMCAdmit"].ToString())),
+                                LastHealthBridgeAdmit = (dr["LastHBAdmit"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LastHBAdmit"].ToString())),
+                                LastDiagnosis = dr["LastDiagnosis"].ToString(),
+                                CCHMCAppointment = (dr["CCHMCAppt"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["CCHMCAppt"].ToString()))
+                            };
+
+                            if (!string.IsNullOrWhiteSpace(dr["ConditionIDs"].ToString()))
+                            {
+                                foreach (int conditionId in dr["ConditionIDs"].ToString().Split(',').Select(p => int.Parse(p)))
+                                {
+                                    if (patientConditions.Any(p => p.ID == conditionId))
+                                        details.Conditions.Add(patientConditions.First(p => p.ID == conditionId));
+                                    else
+                                        _logger.LogError("An unmapped patient condition id was returned by the database ");
+                                }
+                            }
+                        }
+
+
+
                     }
                     return details;
                 }
             }
         }
 
-        private List<PatientCondition> ParseConditionStrings(string ConditionIDs, string ConditionNames)
-        {
-            List<PatientCondition> conditions = new List<PatientCondition>();
-          
-            if (!string.IsNullOrWhiteSpace(ConditionIDs))
-            {
-                
-
-                int[] ids = ConditionIDs.Split(',').Select(int.Parse).ToArray();
-                string[] names = ConditionNames.Split(',').ToArray();
-
-                if (ids.Length != names.Length)
-                {
-                    throw new Exception("Condition data strings have an unequal count of delimiters");
-                }
-
-                for (int i = 0; i < ids.Length; i++)
-                {
-                    conditions.Add(new PatientCondition(ids[i], names[i]));
-                }
-            }
-
-
-            return conditions;
-        }
     }
 }
     

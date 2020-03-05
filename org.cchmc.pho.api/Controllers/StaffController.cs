@@ -192,5 +192,34 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
+        [HttpGet("providers")]
+        [SwaggerResponse(200, type: typeof(List<ProviderViewModel>))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> ListProviders()
+        {
+            try
+            {
+                // route parameters are strings and need to be translated (and validated) to their proper data type
+                if (!int.TryParse(_DEFAULT_USER, out var userId))
+                {
+                    _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
+                    return BadRequest("user is not a valid integer");
+                }
+
+                // call the data method
+                var data = await _staffDal.ListProviders(userId);
+                // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
+                var result = _mapper.Map<List<ProviderViewModel>>(data);
+                // return the result in a "200 OK" response
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
     }
 }

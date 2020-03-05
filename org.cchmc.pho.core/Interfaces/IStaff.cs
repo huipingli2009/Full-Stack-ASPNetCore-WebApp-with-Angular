@@ -14,5 +14,6 @@ namespace org.cchmc.pho.core.Interfaces
         Task<List<Position>> ListPositions();
         Task<List<Credential>> ListCredentials();
         Task<List<Responsibility>> ListResponsibilities();
+        Task<List<Provider>> ListProviders(int userId);
     }
 }

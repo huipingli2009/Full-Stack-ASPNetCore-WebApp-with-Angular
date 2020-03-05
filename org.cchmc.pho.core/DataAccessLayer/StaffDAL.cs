@@ -208,17 +208,45 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     {
                         da.Fill(dataTable);
                         responsibilities = (from DataRow dr in dataTable.Rows
-                                     select new Responsibility()
-                                     {
-                                         Id = (dr["Id"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Id"].ToString())),
-                                         Name = dr["Responsibility"].ToString(),
-                                         Type = dr["ResponsibiltyType"].ToString()
-                                     }
+                                            select new Responsibility()
+                                            {
+                                                Id = (dr["Id"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Id"].ToString())),
+                                                Name = dr["Responsibility"].ToString(),
+                                                Type = dr["ResponsibiltyType"].ToString()
+                                            }
                         ).ToList();
                     }
                     return responsibilities;
                 }
             }
+        }
+
+        public async Task<List<Provider>> ListProviders(int userId)
+        {
+            DataTable dataTable = new DataTable();
+            List<Provider> providers = new List<Provider>();
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetProviderList", sqlConnection))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                    sqlConnection.Open();
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        providers = (from DataRow dr in dataTable.Rows
+                                      select new Provider()
+                                      {
+                                          Id = (dr["StaffId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StaffId"].ToString())),
+                                          Name = dr["StaffName"].ToString()
+                                      }
+                        ).ToList();
+                    }
+                }
+            }
+            return providers;
         }
     }
 }

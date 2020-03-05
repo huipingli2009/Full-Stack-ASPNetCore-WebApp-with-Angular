@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace org.cchmc.pho.core.DataModels
+namespace org.cchmc.pho.api.ViewModels
 {
-    public class Metric
+    public class DashboardMetricViewModel
     {
         public int PracticeId { get; set; }
         public string DashboardLabel { get; set; }

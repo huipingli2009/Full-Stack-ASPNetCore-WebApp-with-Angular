@@ -8,9 +8,10 @@ namespace org.cchmc.pho.api.Mappings
     {
         public MetricMappings()
         {
-            CreateMap<Metric, MetricViewModel>();
+            CreateMap<DashboardMetric, DashboardMetricViewModel>();
             CreateMap<EDChart, EDChartViewModel>();
             CreateMap<EDDetail, EDDetailViewModel>();
+            CreateMap<PopulationMetric, PopulationMetricViewModel>();
         }
     }
 }
