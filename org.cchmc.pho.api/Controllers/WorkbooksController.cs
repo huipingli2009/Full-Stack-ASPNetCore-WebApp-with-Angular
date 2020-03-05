@@ -6,35 +6,36 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using org.cchmc.pho.api.ViewModels;
 using org.cchmc.pho.core.Interfaces;
-using org.cchmc.pho.core.DataModels;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace org.cchmc.pho.api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PatientsController : ControllerBase
+    public class WorkbooksController : ControllerBase
     {
-        private readonly ILogger<PatientsController> _logger;
+        private readonly ILogger<WorkbooksController> _logger;
         private readonly IMapper _mapper;
-        private readonly IPatient _patient;
-        
+        private readonly IWorkbooks _workbooks;
+
+        //todo: hardcoded userid for now, we will be using session later
         private readonly string _DEFAULT_USER = "3";
-        public PatientsController(ILogger<PatientsController> logger, IMapper mapper, IPatient patient)
+
+        public WorkbooksController(ILogger<WorkbooksController> logger, IMapper mapper, IWorkbooks workbooks)
         {
             _logger = logger;
             _mapper = mapper;
-            _patient = patient;
+            _workbooks = workbooks;
         }
 
-        // GET: api/Patient
-        //[HttpGet("PatientList/{userId}/{staffID?}/{popmeasureID?}/{watch?}/{chronic?}/{conditionIDs?}/{namesearch?}/{sortcolumn?}/{pagenumber}/{rowspage}")]
-        [HttpGet]
-
-        [SwaggerResponse(200, type: typeof(List<PatientViewModel>))]
+        // GET: api/Workbooks
+        [HttpGet("patients")]
+        [SwaggerResponse(200, type: typeof(List<WorkbooksPatientViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> ListActivePatient(int? staffID, int? popmeasureID, bool? watch, bool? chronic, string conditionIDs, string namesearch, string sortcolumn, string sortdirection, int? pagenumber, int? rowsPerPage)
+
+        //public async Task<IActionResult> ListPatients(int userId, int formResponseId, string nameSearch)
+        public async Task<IActionResult> ListPatients(int formResponseId)
         {
             // route parameters are strings and need to be translated (and validated) to their proper data type
             if (!int.TryParse(_DEFAULT_USER, out var userId))
@@ -45,9 +46,9 @@ namespace org.cchmc.pho.api.Controllers
 
             try
             {
-                var data = await _patient.ListActivePatient(int.Parse(_DEFAULT_USER.ToString()), staffID, popmeasureID, watch, chronic, conditionIDs, namesearch,sortcolumn,sortdirection,pagenumber,rowsPerPage);
+                var data = await _workbooks.ListPatients(int.Parse(_DEFAULT_USER.ToString()), formResponseId);
 
-                var result = _mapper.Map<List<PatientViewModel>>(data);
+                var result = _mapper.Map<List<WorkbooksPatientViewModel>>(data);
 
                 // return the result in a "200 OK" response
                 return Ok(result);
@@ -60,12 +61,11 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-
-        [HttpGet("{patient}")]
-        [SwaggerResponse(200, type: typeof(List<PatientDetailsViewModel>))]
+        [HttpGet("practice")]
+        [SwaggerResponse(200, type: typeof(WorkbooksPracticeViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> GetPatientDetails(string patient)
+        public async Task<IActionResult> GetPracticeWorkbooks(int formResponseId)
         {
             // route parameters are strings and need to be translated (and validated) to their proper data type
             if (!int.TryParse(_DEFAULT_USER, out var userId))
@@ -74,19 +74,43 @@ namespace org.cchmc.pho.api.Controllers
                 return BadRequest("user is not a valid integer");
             }
 
+            try
+            {
+                // call the data method
+                var data = await _workbooks.GetPracticeWorkbooks(int.Parse(_DEFAULT_USER.ToString()), formResponseId);
+                // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
+                var result = _mapper.Map<WorkbooksPracticeViewModel>(data);
+                // return the result in a "200 OK" response
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+        [HttpGet("providers")]
+        [SwaggerResponse(200, type: typeof(List<WorkbooksProviderViewModel>))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+
+        public async Task<IActionResult> GetPracticeWorkbooksProviders(int formResponseId)
+        {
             // route parameters are strings and need to be translated (and validated) to their proper data type
-            if (!int.TryParse(patient, out var patientId))
+            if (!int.TryParse(_DEFAULT_USER, out var userId))
             {
-                _logger.LogInformation($"Failed to parse patientId - {patient}");
-                return BadRequest("patient is not a valid integer");
+                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
+                return BadRequest("user is not a valid integer");
             }
 
             try
             {
                 // call the data method
-                var data = await _patient.GetPatientDetails(patientId);
+                var data = await _workbooks.GetPracticeWorkbooksProviders(int.Parse(_DEFAULT_USER.ToString()), formResponseId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
-                var result = _mapper.Map<PatientDetailsViewModel>(data);
+                var result = _mapper.Map<List<WorkbooksProviderViewModel>>(data);
                 // return the result in a "200 OK" response
                 return Ok(result);
             }
@@ -98,62 +122,25 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [HttpPut("update")]
-        [SwaggerResponse(200, type: typeof(string))]
+        [HttpGet("lookups")]
+        [SwaggerResponse(200, type: typeof(List<WorkbooksLookupViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> UpdatePatientDetails([FromBody] PatientDetailsViewModel patientDetailsVM)
+        public async Task<IActionResult> GetPracticeWorkbooksLookups(string nameSearch)
         {
-            try
+            // route parameters are strings and need to be translated (and validated) to their proper data type
+            if (!int.TryParse(_DEFAULT_USER, out var userId))
             {
-                PatientDetails patientDetail = _mapper.Map<PatientDetails>(patientDetailsVM);
-                // call the data layer to mark the action
-                await _patient.UpdatePatientDetails(_DEFAULT_USER,patientDetail);
-                return Ok();
+                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
+                return BadRequest("user is not a valid integer");
             }
-            catch (Exception ex)
-            {
-                // log any exceptions that happen and return the error to the user
-                _logger.LogError(ex, "An error occurred");
-                return StatusCode(500, "An error occurred");
-            }
-        }
 
-        [HttpGet("conditions")]
-        [SwaggerResponse(200, type: typeof(List<PatientConditionViewModel>))]
-        [SwaggerResponse(400, type: typeof(string))]
-        [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> GetConditionsAll()
-        {
             try
             {
                 // call the data method
-                var data = await _patient.GetPatientConditionsAll();
+                var data = await _workbooks.GetWorkbooksLookups(int.Parse(_DEFAULT_USER.ToString()), nameSearch);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
-                var result = _mapper.Map<List<PatientConditionViewModel>>(data);
-                // return the result in a "200 OK" response
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                // log any exceptions that happen and return the error to the user
-                _logger.LogError(ex, "An error occurred");
-                return StatusCode(500, "An error occurred");
-            }
-        }
-
-        [HttpGet("insurance")]
-        [SwaggerResponse(200, type: typeof(List<PatientInsuranceViewModel>))]
-        [SwaggerResponse(400, type: typeof(string))]
-        [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> GetInsuranceAll()
-        {
-            try
-            {
-                // call the data method
-                var data = await _patient.GetPatientInsuranceAll(_DEFAULT_USER);
-                // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
-                var result = _mapper.Map<List<PatientInsuranceViewModel>>(data);
+                var result = _mapper.Map<List<WorkbooksLookupViewModel>>(data);
                 // return the result in a "200 OK" response
                 return Ok(result);
             }

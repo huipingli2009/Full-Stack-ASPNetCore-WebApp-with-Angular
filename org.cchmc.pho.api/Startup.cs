@@ -90,6 +90,7 @@ namespace org.cchmc.pho.api
             services.AddTransient<IMetric, MetricDAL>();
             services.AddTransient<IPatient, PatientDAL>();
             services.AddTransient<IStaff, StaffDAL>();
+            services.AddTransient<IWorkbooks, WorkbooksDal>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
