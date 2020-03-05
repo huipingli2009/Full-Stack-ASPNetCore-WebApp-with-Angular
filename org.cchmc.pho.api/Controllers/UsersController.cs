@@ -71,11 +71,14 @@ namespace org.cchmc.pho.api.Controllers
                     return BadRequest("Password is null or empty.");
 
                 // validate the id provided is a user
+                string currentUserName = _userService.GetUserNameFromClaims(User?.Claims);
                 User user = await _userService.GetUser(userId);
                 if (user == null)
+                {
+                    _logger.LogInformation($"{currentUserName} tried to update the password for user id {userId}, but that user does not exist.");
                     return BadRequest("User does not exist.");
+                }
 
-                string currentUserName = _userService.GetUserNameFromClaims(User?.Claims);
                 string currentUserRole = _userService.GetRoleNameFromClaims(User?.Claims);
 
                 if (!InAnyAdminRole(currentUserRole)
@@ -119,15 +122,18 @@ namespace org.cchmc.pho.api.Controllers
 
                 // validate the username provided is a user
                 User user = await _userService.GetUser(userId);
+                string currentUserName = _userService.GetUserNameFromClaims(User?.Claims);
                 if (user == null)
+                {
+                    _logger.LogInformation($"{currentUserName} tried to update user id {userId}, but that user does not exist.");
                     return BadRequest("User does not exist.");
+                }
 
                 List<Role> rolesInSystem = await _userService.ListRoles();
                 if (userViewModel.Role != null && !rolesInSystem.Any(r => r.Id == userViewModel.Role.Id))
                     return BadRequest("Role not found.");
 
                 Role selectedRole = rolesInSystem.First(r => r.Id == userViewModel.Role.Id);
-                string currentUserName = _userService.GetUserNameFromClaims(User?.Claims);
                 string currentUserRole = _userService.GetRoleNameFromClaims(User?.Claims);
 
                 if (!InAnyAdminRole(currentUserRole) && !string.Equals(currentUserName, user.UserName, StringComparison.OrdinalIgnoreCase))
@@ -215,12 +221,14 @@ namespace org.cchmc.pho.api.Controllers
             {
                 // validate the username provided is a user
                 User user = await _userService.GetUser(userId);
+                string currentUserName = _userService.GetUserNameFromClaims(User?.Claims);
                 if (user == null)
+                {
+                    _logger.LogInformation($"{currentUserName} tried to assign a staff ID to user id {userId}, but that user does not exist.");
                     return BadRequest("User does not exist.");
+                }
 
                 // TODO: Validate staff id exists?
-
-                string currentUserName = _userService.GetUserNameFromClaims(User?.Claims);
 
                 user = await _userService.AssignStaffIdToUser(userId, staffId, currentUserName);
                 return Ok(_mapper.Map<UserViewModel>(user));
@@ -243,10 +251,12 @@ namespace org.cchmc.pho.api.Controllers
             {
                 // validate the username provided is a user
                 User user = await _userService.GetUser(userId);
-                if (user == null)
-                    return BadRequest("User does not exist.");
-
                 string currentUserName = _userService.GetUserNameFromClaims(User?.Claims);
+                if (user == null)
+                {
+                    _logger.LogInformation($"{currentUserName} tried to unlock user id {userId}, but that user does not exist.");
+                    return BadRequest("User does not exist.");
+                }
 
                 user = await _userService.RemoveLockoutFromUser(userId, currentUserName);
                 return Ok(_mapper.Map<UserViewModel>(user));
@@ -269,10 +279,12 @@ namespace org.cchmc.pho.api.Controllers
             {
                 // validate the username provided is a user
                 User user = await _userService.GetUser(userId);
-                if (user == null)
-                    return BadRequest("User does not exist.");
-
                 string currentUserName = _userService.GetUserNameFromClaims(User?.Claims);
+                if (user == null)
+                {
+                    _logger.LogInformation($"{currentUserName} tried to {(shouldDelete?"delete":"undelete")} user id {userId}, but that user does not exist.");
+                    return BadRequest("User does not exist.");
+                }
 
                 user = await _userService.ToggleDeleteOnUser(userId, shouldDelete, currentUserName);
                 return Ok(_mapper.Map<UserViewModel>(user));
