@@ -39,57 +39,57 @@
 
     <!-- DropDown Column -->
     <ng-container matColumnDef="arrow">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
-      <td mat-cell *matCellDef="let element">
+      <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+      <mat-cell *matCellDef="let element">
         <i class="material-icons rotate-icon">
           keyboard_arrow_right
         </i>
-      </td>
+      </mat-cell>
     </ng-container>
 
     <!-- Name Column -->
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-      <td mat-cell *matCellDef="let element"
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+      <mat-cell *matCellDef="let element"
         [ngStyle]="{'color': (element.potentiallyActiveStatus ? '#f0673c' : '#4A4A4A') }">
-        {{element.lastName | titlecase}}, {{element.firstName | titlecase}} </td>
+        {{element.lastName | titlecase}}, {{element.firstName | titlecase}} </mat-cell>
     </ng-container>
 
     <!-- DOB Column -->
     <ng-container matColumnDef="dob">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> DOB </th>
-      <td mat-cell *matCellDef="let element"> {{element.dob | date:'MM/dd/yyyy'}} </td>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> DOB </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.dob | date:'MM/dd/yyyy'}} </mat-cell>
     </ng-container>
 
     <!-- Last ED Visit Column -->
     <ng-container matColumnDef="lastEDVisit">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Last ED Visit </th>
-      <td mat-cell *matCellDef="let element"> {{element.lastEDVisit | date:'MM/dd/yyyy'}} </td>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Last ED Visit </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.lastEDVisit | date:'MM/dd/yyyy'}} </mat-cell>
     </ng-container>
 
     <!-- Chronic Column -->
     <ng-container matColumnDef="chronic">
-      <th mat-header-cell *matHeaderCellDef> Chronic
+      <mat-header-cell *matHeaderCellDef> Chronic
         <mat-checkbox class="table-header-checkbox" [(ngModel)]="chronic"
           (change)="applySelectedFilter('chronic', chronic ? 'true': '')"></mat-checkbox>
-      </th>
-      <td mat-cell *matCellDef="let element">
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element">
         <ng-container *ngIf="element.chronic; else elseNo">
           Yes
         </ng-container>
         <ng-template #elseNo>
           No
         </ng-template>
-      </td>
+      </mat-cell>
     </ng-container>
 
     <!-- Watch List Column -->
     <ng-container matColumnDef="watchFlag">
-      <th mat-header-cell *matHeaderCellDef> Watch List
+      <mat-header-cell *matHeaderCellDef> Watch List
         <mat-checkbox class="table-header-checkbox" [(ngModel)]="watchFlag"
           (change)="applySelectedFilter('watchFlag', watchFlag ? 'true': '')"></mat-checkbox>
-      </th>
-      <td mat-cell *matCellDef="let element">
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element">
         <ng-container *ngIf="element.watchFlag; else elseNo">
           <i class="material-icons watchlist-icon on-watchlist">
             remove_red_eye
@@ -100,44 +100,95 @@
             remove_red_eye
           </i>
         </ng-template>
-      </td>
+      </mat-cell>
     </ng-container>
 
     <!-- Conditions Column -->
     <ng-container matColumnDef="conditions">
-      <th mat-header-cell *matHeaderCellDef> Conditions </th>
-      <td mat-cell *matCellDef="let element">
+      <mat-header-cell *matHeaderCellDef> Conditions </mat-header-cell>
+      <mat-cell *matCellDef="let element">
         <div fxLayout="row" fxLayoutGap="14px">
           <div *ngFor="let item of element.conditions" class="condition-chip" fxLayout="column" fxflex="33%">
             {{item.name}}
           </div>
         </div>
-      </td>
+      </mat-cell>
     </ng-container>
     <!-- Hidden Columns===============================================================-->
     <!-- PCP Column -->
     <ng-container matColumnDef="pcP_StaffID">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let element">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let element">
         {{element.pcP_StaffID}}
-      </td>
+      </mat-cell>
     </ng-container>
-    <ng-template #tpl let-element>
-      <div class="mat-row detail-row" [@detailExpand] style="overflow: hidden">
-        <div id="patient-details">
+    
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;" class="element-row" [cdkDetailRow]="row"
+      [cdkDetailRowTpl]="tpl" (click)="getPatientDetails(row.patientId)"></mat-row>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[20, 30]" showFirstLastButtons></mat-paginator>
+</div>
+
+<ng-template #tpl let-element>
+      <div class="mat-row" [@detailExpand] id="patient-details">
           <div fxLayout="row" class="detail-heading">DEMOGRAPHICS</div>
           <div fxLayout="row" *ngIf="patientDetails">
-            <!-- <mat-slide-toggle [(ngModel)]="patientDetails" *ngIf="patientDetails.activeStatus && patientDetails.id === patientDetails.id" [checked]="true">Slide me!</mat-slide-toggle> -->
             <form class="example-form" *ngIf="patientDetails | async;" [formGroup]="form" fxLayout="row">
               <div fxLayout="row" fxLayoutGap="34px">
               <div fxLayout="column">
-                <mat-slide-toggle formControlName="activeStatus" [checked]="form.controls.activeStatus">ACTIVE
+                <label>ACTIVE PATIENT</label>
+                <mat-slide-toggle formControlName="activeStatus" [checked]="form.controls.activeStatus">
                 </mat-slide-toggle>
               </div>
               <div fxLayout="column">
-                <label for="firstname">First Name</label>
-                <input id="firstname" formControlName="firstName" />
-                <div *ngIf="form.controls.firstName.errors?.required && form.controls.firstName.touched" class="error">
+                <label for="patientMRNId">Epic MRN</label>
+                <input id="patientMRNId" formControlName="patientMRNId" />
+                <div *ngIf="form.controls.patientMRNId.errors?.required && form.controls.patientMRNId.touched" class="error">
+                  *Required
+                </div>
+              </div>
+              <div fxLayout="column">
+                <label for="gender">Gender</label>
+                <input id="gender" formControlName="gender" />
+                <div *ngIf="form.controls.gender.errors?.required && form.controls.gender.touched" class="error">
+                  *Required
+                </div>
+              </div>
+              <div fxLayout="column">
+                <label for="pcpLastName">PCP</label>
+                <input id="pcpLastName" formControlName="pcpLastName" />
+                <div *ngIf="form.controls.pcpLastName.errors?.required && form.controls.pcpLastName.touched" class="error">
+                  *Required
+                </div>
+              </div>
+              <div fxLayout="column">
+                <label for="insuranceName">Insurance</label>
+                <input id="insuranceName" formControlName="insuranceName" />
+                <div *ngIf="form.controls.insuranceName.errors?.required && form.controls.insuranceName.touched" class="error">
+                  *Required
+                </div>
+              </div>
+              <div fxLayout="column">
+                <label for="conditions">Conditions</label>
+                <input id="conditions" formControlName="conditions" />
+                <div *ngIf="form.controls.conditions.errors?.required && form.controls.conditions.touched" class="error">
+                  *Required
+                </div>
+              </div>
+              <div fxLayout="column">
+                <label for="pmcaScore">PCMA</label>
+                <input id="pmcaScore" formControlName="pmcaScore" />
+                <div *ngIf="form.controls.pmcaScore.errors?.required && form.controls.pmcaScore.touched" class="error">
+                  *Required
+                </div>
+              </div>
+              <div fxLayout="column">
+                <label for="providerPMCAScore">Provider PCMA</label>
+                <input id="providerPMCAScore" formControlName="providerPMCAScore" />
+                <div *ngIf="form.controls.providerPMCAScore.errors?.required && form.controls.providerPMCAScore.touched" class="error">
                   *Required
                 </div>
               </div>
@@ -146,15 +197,7 @@
     
           </div>
     
-        </div>
+
       </div>
     </ng-template>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="element-row" [cdkDetailRow]="row"
-      [cdkDetailRowTpl]="tpl" (click)="getPatientDetails(row.patientId)"></tr>
-  </table>
-
-  <mat-paginator [pageSizeOptions]="[20, 30]" showFirstLastButtons></mat-paginator>
-</div>
 

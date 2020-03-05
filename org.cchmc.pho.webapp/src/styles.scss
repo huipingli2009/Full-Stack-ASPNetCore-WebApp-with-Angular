@@ -635,7 +635,7 @@ h1 {
   }
 
   .mat-column-arrow {
-    width: 80px;
+    max-width: 80px;
   }
 
   .rotate-icon {
@@ -663,7 +663,28 @@ h1 {
     font-size: 16px;
     line-height: 17px;
     letter-spacing: 0.5px;
-    color: var(--primary-color);
+    color: var(--primary-darker-color);
     margin-bottom: 13px;
+  }
+
+  label {
+    font-size: 11px;
+    line-height: 19px;
+    letter-spacing: 0.88px;
+    font-weight: 700;
+    color: var(--primary-darker-color);
+    text-transform: uppercase;
+  }
+
+  input {
+    background-color: transparent;
+    border-width: 0px 0px 1.5px 0px;
+    border-color: #DDECEA;
+    padding-bottom: 4px;
+    color: #4A4A4A;
+    font-size: 13px;
+    line-height: 18px;
+    letter-spacing: normal;
+    max-width: 116px;
   }
 }

@@ -41,6 +41,7 @@ export class PatientsComponent implements OnInit {
   chronic: string;
   watchFlag: string;
   pcP_StaffID: string;
+  gender: string;
   filterFormGroup;
   conditions: string;
   conditionsList: any[] = [];
@@ -107,8 +108,18 @@ export class PatientsComponent implements OnInit {
       this.isActive = data.activeStatus;
       this.form = this.fb.group({
         activeStatus: [Boolean, Validators.required],
-        firstName: ['', Validators.required],
-        lastName: ['', Validators.required]
+        patientMRNId: ['', Validators.required],
+        gender: ['', Validators.required],
+        pcpLastName: ['', Validators.required],
+        insuranceName: ['', Validators.required],
+        conditions: ['', Validators.required],
+        pmcaScore: ['', Validators.required],
+        providerPMCAScore: ['', Validators.required],
+        phone1: ['', Validators.required],
+        addressLine1: ['', Validators.required],
+        city: ['', Validators.required],
+        state: ['', Validators.required],
+        zip: ['', Validators.required]
       });
       this.patientDetails = this.rest.getPatientDetails(id).pipe(
         tap(user => this.form.patchValue(user))
