@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using org.cchmc.pho.api.ViewModels;
 using org.cchmc.pho.core.Interfaces;
+using org.cchmc.pho.core.DataModels;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace org.cchmc.pho.api.Controllers
@@ -75,6 +76,27 @@ namespace org.cchmc.pho.api.Controllers
                 var result = _mapper.Map<PatientDetailsViewModel>(data);
                 // return the result in a "200 OK" response
                 return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+        [HttpPut("update")]
+        [SwaggerResponse(200, type: typeof(string))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> UpdatePatientDetails([FromBody] PatientDetailsViewModel patientDetailsVM)
+        {
+            try
+            {
+                PatientDetails patientDetail = _mapper.Map<PatientDetails>(patientDetailsVM);
+                // call the data layer to mark the action
+                await _patient.UpdatePatientDetails(_DEFAULT_USER,patientDetail);
+                return Ok();
             }
             catch (Exception ex)
             {

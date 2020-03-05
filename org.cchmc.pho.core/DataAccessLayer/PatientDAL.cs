@@ -91,6 +91,42 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }   
         }
 
+        public async Task UpdatePatientDetails(int userId, PatientDetails patientDetail)
+        {
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spUpdatePatient", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@Id", SqlDbType.Int).Value = patientDetail.Id;
+                    sqlCommand.Parameters.Add("@FirstName", SqlDbType.VarChar).Value = patientDetail.FirstName;
+                    sqlCommand.Parameters.Add("@LastName", SqlDbType.VarChar).Value = patientDetail.LastName;
+                    sqlCommand.Parameters.Add("@PatientDOB", SqlDbType.Date).Value = patientDetail.PatientDOB;
+                    sqlCommand.Parameters.Add("@WatchFlag", SqlDbType.Bit).Value = patientDetail.IsWatchList;
+                    sqlCommand.Parameters.Add("@ActiveStatus", SqlDbType.Bit).Value = patientDetail.ActiveStatus;
+                    sqlCommand.Parameters.Add("@GenderID", SqlDbType.Int).Value = patientDetail.GenderId;
+                    sqlCommand.Parameters.Add("@PCPId", SqlDbType.Int).Value = patientDetail.PCPId;
+                    sqlCommand.Parameters.Add("@InsuranceId", SqlDbType.Int).Value = patientDetail.InsuranceId;
+                    sqlCommand.Parameters.Add("@ConditionIDs", SqlDbType.VarChar).Value = string.Join(",", (from c in patientDetail.Conditions select c.ID).ToArray());
+                    sqlCommand.Parameters.Add("@ProvPMCAScore", SqlDbType.Int).Value = patientDetail.PMCAScore;
+                    sqlCommand.Parameters.Add("@Phone1", SqlDbType.VarChar).Value = patientDetail.Phone1;
+                    sqlCommand.Parameters.Add("@Email", SqlDbType.VarChar).Value = patientDetail.Email;
+                    sqlCommand.Parameters.Add("@AddressLine1", SqlDbType.VarChar).Value = patientDetail.AddressLine1;
+                    sqlCommand.Parameters.Add("@City", SqlDbType.VarChar).Value = patientDetail.City;
+                    sqlCommand.Parameters.Add("@State", SqlDbType.VarChar).Value = patientDetail.State;
+                    sqlCommand.Parameters.Add("@Zip", SqlDbType.VarChar).Value = patientDetail.Zip;
+
+                    await sqlConnection.OpenAsync();
+
+                    //Execute Stored Procedure
+                    sqlCommand.ExecuteNonQuery();
+
+                }
+            }
+        }
+
         public async Task<List<PatientCondition>> GetPatientConditionsAll()
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
