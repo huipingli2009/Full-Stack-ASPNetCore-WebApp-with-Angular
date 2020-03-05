@@ -167,9 +167,7 @@ namespace org.cchmc.pho.api.Controllers
             }
 
             try
-            {              
-                WorkbooksPatient workbookspatient = _mapper.Map<WorkbooksPatient>(workbookspatientVM);
-
+            {
                 await _workbooks.UpdateWorkbooksPatient(userId, workbookspatientVM.FormResponseId, workbookspatientVM.PatientId, workbookspatientVM.ProviderId, workbookspatientVM.DateOfService, int.Parse(workbookspatientVM.PHQ9_Score), bool.Parse(workbookspatientVM.ActionFollowUp));
                 return Ok();
             }
@@ -196,8 +194,6 @@ namespace org.cchmc.pho.api.Controllers
 
             try
             {
-                WorkbooksProvider workbookspatient = _mapper.Map<WorkbooksProvider>(workbooksproviderVM);
-
                 await _workbooks.UpdateWorkbooksProviders(userId, workbooksproviderVM.FormResponseID, workbooksproviderVM.StaffID, workbooksproviderVM.PHQS, workbooksproviderVM.TOTAL);
                 return Ok();
             }

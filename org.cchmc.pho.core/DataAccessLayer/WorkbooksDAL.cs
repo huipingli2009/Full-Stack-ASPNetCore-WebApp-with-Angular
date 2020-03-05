@@ -216,8 +216,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
         public async Task<WorkbooksPatientFollowup> GetWorkbooksPatientPHQ9FollowUp(int userId, int formResponseId, int patientID)
         {
-            DataTable dataTable = new DataTable();
-            //WorkbooksPatientFollowup workbookspatientfollowup = new WorkbooksPatientFollowup();
+            DataTable dataTable = new DataTable();            
             WorkbooksPatientFollowup workbookspatientfollowup;
 
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
