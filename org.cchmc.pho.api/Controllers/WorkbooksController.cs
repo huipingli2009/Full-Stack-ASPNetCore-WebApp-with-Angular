@@ -208,5 +208,36 @@ namespace org.cchmc.pho.api.Controllers
                 return StatusCode(500, "An error occurred");
             }
         }
+
+        [HttpGet("patientfollowup")]
+        [SwaggerResponse(200, type: typeof(WorkbooksPatientFollowupViewModel))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> GetWorkbooksPatientPHQ9FollowUp(int formResponseId, int patientID)
+        {
+            // route parameters are strings and need to be translated (and validated) to their proper data type
+            if (!int.TryParse(_DEFAULT_USER, out var userId))
+            {
+                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
+                return BadRequest("user is not a valid integer");
+            }
+
+            try
+            {
+                // call the data method
+                var data = await _workbooks.GetWorkbooksPatientPHQ9FollowUp(int.Parse(_DEFAULT_USER.ToString()), formResponseId, patientID);
+                // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
+                var result = _mapper.Map<WorkbooksPatientFollowup>(data);
+                // return the result in a "200 OK" response
+                return Ok(result);
+            }
+            
+            catch(Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
     }
 }
