@@ -14,7 +14,7 @@ using org.cchmc.pho.api.ViewModels;
 using org.cchmc.pho.core.DataModels;
 using org.cchmc.pho.core.Interfaces;
 
-namespace org.cchmc.pho.unittest.controllertests
+namespace org.cchmc.pho.unittest.ControllerTests
 {
     [TestClass]
     [ExcludeFromCodeCoverage]
