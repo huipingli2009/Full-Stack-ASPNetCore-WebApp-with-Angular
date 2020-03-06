@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using org.cchmc.pho.api.ViewModels;
 using org.cchmc.pho.core.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Globalization;
 
 namespace org.cchmc.pho.api.Controllers
 {
@@ -31,6 +32,7 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> ListDashboardMetrics()
         {
+
             string user = "3"; //todo: default for now
             // route parameters are strings and need to be translated (and validated) to their proper data type
             if (!int.TryParse(user, out var userId))
@@ -103,8 +105,11 @@ namespace org.cchmc.pho.api.Controllers
                 _logger.LogInformation($"Failed to parse userId - {user}");
                 return BadRequest("user is not a valid integer");
             }
+
+
             // route parameters are strings and need to be translated (and validated) to their proper data type
-            if (!DateTime.TryParse(admitdate, out var admitDateTime))
+           
+            if (!DateTime.TryParseExact(admitdate, "yyyyMMdd",CultureInfo.CurrentCulture, DateTimeStyles.None,out var admitDateTime))
             {
                 _logger.LogInformation($"Failed to parse admitDate - {admitdate}");
                 return BadRequest("admitdate is not a valid datetime");

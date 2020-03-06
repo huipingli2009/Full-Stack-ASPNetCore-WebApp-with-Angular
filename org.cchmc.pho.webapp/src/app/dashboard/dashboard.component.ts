@@ -20,7 +20,7 @@ import { NGXLogger, LoggerConfig } from 'ngx-logger';
 export class DashboardComponent implements OnInit {
 
   @ViewChild('callEDDialog') callEDDialog: TemplateRef<any>;
-  
+
   spotlight: Spotlight[];
   quickLinks: Quicklinks[];
   population: Population[];
@@ -46,7 +46,7 @@ export class DashboardComponent implements OnInit {
   selectedBar: string;
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
-              public fb: FormBuilder, public dialog: MatDialog, private datePipe: DatePipe, private logger: NGXLogger) {
+    public fb: FormBuilder, public dialog: MatDialog, private datePipe: DatePipe, private logger: NGXLogger) {
     // var id = this.userId.snapshot.paramMap.get('id') TODO: Need User Table;
     this.dataSourceOne = new MatTableDataSource;
     this.dataSourceTwo = new MatTableDataSource;
@@ -88,10 +88,17 @@ export class DashboardComponent implements OnInit {
           }
         },
         scales: {
-          yAxes: [{
-            scaleLabel: {
+          xAxes: [{
+            ticks: {
+              callback: function (value, index, values) {
+                return $this.transformDate(value);
+              }
             }
-          }]
+          }],
+
+        },
+        tooltips: {
+          enabled: true
         },
         onClick: function (e) {
           var element = this.getElementAtEvent(e);
@@ -101,7 +108,7 @@ export class DashboardComponent implements OnInit {
           $this.Showmodal(e, this, element); // This is the result of a "fake" JQuery this
         }
       }
-      });
+    });
   }
 
 
@@ -160,16 +167,24 @@ export class DashboardComponent implements OnInit {
       this.edChartTitle = this.edChart[0].chartTitle;
       this.edChart.forEach(item => {
         this.addData(this.edBarChart,
-          this.transformDate(item.admitDate), item.edVisits); // Getting data to the chart, will be easier to update if needed
+          // item.chartLabel,
+          this.transformToolTipDate(item.admitDate),
+          item.edVisits); // Getting data to the chart, will be easier to update if needed
       });
     });
   }
 
+  transformToolTipDate(date) {
+    //return this.datePipe.transform(date, 'EE MM/dd');
+    return this.datePipe.transform(date, 'MM/dd/yyyy');
+  }
+
   transformDate(date) {
     return this.datePipe.transform(date, 'EE MM/dd');
+    // return this.datePipe.transform(date, 'MM/dd/yyyy');
   }
   transformAdmitDate(date) {
-    return this.datePipe.transform(date, 'MM/dd/yyyy');
+    return this.datePipe.transform(date, 'yyyyMMdd');
   }
 
   addData(chart, label, data) {
@@ -179,9 +194,9 @@ export class DashboardComponent implements OnInit {
     });
     chart.update();
   }
-  
+
   /* Open Modal (Dialog) on bar click */
-  Showmodal(event, chart, element) : void {
+  Showmodal(event, chart, element): void {
     this.selectedBar = this.transformAdmitDate(element[0]._model.label);
     this.openDialogWithDetails();
   }
@@ -191,10 +206,10 @@ export class DashboardComponent implements OnInit {
       this.edChartDetails = data;
       const dialogRef = this.dialog.open(this.callEDDialog);
     });
-    
+
     // Leaving this here incase we need to handle some things when a modal closes
     // dialogRef.afterClosed().subscribe(result => {
-      
+
     // });
   }
 }
