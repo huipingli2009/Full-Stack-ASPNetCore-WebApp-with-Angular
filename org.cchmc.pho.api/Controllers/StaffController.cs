@@ -95,8 +95,8 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [HttpPut("update")]
-        [SwaggerResponse(200, type: typeof(string))]
+        [HttpPut("{staff}")]
+        [SwaggerResponse(200, type: typeof(StaffDetailViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> UpdateStaffDetails([FromBody] StaffDetailViewModel staffDetailVM)
@@ -112,8 +112,9 @@ namespace org.cchmc.pho.api.Controllers
             {
                 StaffDetail staffDetail = _mapper.Map<StaffDetail>(staffDetailVM);
                 // call the data layer to mark the action
-                await _staffDal.UpdateStaffDetails(userId, staffDetail);
-                return Ok();
+                var data = await _staffDal.UpdateStaffDetails(userId, staffDetail);
+                var result = _mapper.Map<StaffDetailViewModel>(data);
+                return Ok(result);
             }
             catch (Exception ex)
             {

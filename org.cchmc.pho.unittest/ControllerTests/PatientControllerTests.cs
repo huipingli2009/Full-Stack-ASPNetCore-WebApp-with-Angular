@@ -247,15 +247,15 @@ namespace org.cchmc.pho.unittest.ControllerTests
             };
 
             _mockPatientDal.Setup(p => p.UpdatePatientDetails(userId, myPatientDetails))
-                .Returns(Task.CompletedTask).Verifiable();
+                .Returns(Task.FromResult(myPatientDetails)).Verifiable();
             _PatientController = new PatientsController(_mockLogger.Object, _mapper, _mockPatientDal.Object);
 
             // execute
             var result = await _PatientController.UpdatePatientDetails(_mapper.Map<PatientDetailsViewModel>(myPatientDetails));
 
             // assert
-            Assert.IsInstanceOfType(result, typeof(OkResult));
-            var okResult = result as OkResult;
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            var okResult = result as OkObjectResult;
             Assert.AreEqual(200, okResult.StatusCode);
         }
 

@@ -91,7 +91,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }   
         }
 
-        public async Task UpdatePatientDetails(int userId, PatientDetails patientDetail)
+        public async Task<PatientDetails> UpdatePatientDetails(int userId, PatientDetails patientDetail)
         {
 
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
@@ -122,6 +122,8 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                     //Execute Stored Procedure
                     sqlCommand.ExecuteNonQuery();
+
+                    return patientDetail;
 
                 }
             }

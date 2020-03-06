@@ -98,8 +98,8 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [HttpPut("update")]
-        [SwaggerResponse(200, type: typeof(string))]
+        [HttpPut("{patient}")]
+        [SwaggerResponse(200, type: typeof(PatientDetailsViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> UpdatePatientDetails([FromBody] PatientDetailsViewModel patientDetailsVM)
@@ -111,12 +111,15 @@ namespace org.cchmc.pho.api.Controllers
                 return BadRequest("user is not a valid integer");
             }
 
+            //TODO - 
+
             try
             {
                 PatientDetails patientDetail = _mapper.Map<PatientDetails>(patientDetailsVM);
                 // call the data layer to mark the action
-                await _patient.UpdatePatientDetails(userId,patientDetail);
-                return Ok();
+                var data = await _patient.UpdatePatientDetails(userId,patientDetail);
+                var result = _mapper.Map<PatientDetailsViewModel>(data);
+                return Ok(result);
             }
             catch (Exception ex)
             {

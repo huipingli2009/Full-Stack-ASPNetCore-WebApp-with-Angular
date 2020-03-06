@@ -102,7 +102,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
-        public async Task UpdateStaffDetails(int userId, StaffDetail staffDetail)
+        public async Task<StaffDetail> UpdateStaffDetails(int userId, StaffDetail staffDetail)
         {
 
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
@@ -134,6 +134,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     //Execute Stored Procedure
                     sqlCommand.ExecuteNonQuery();
 
+                    return staffDetail;
                 }
             }
         }
