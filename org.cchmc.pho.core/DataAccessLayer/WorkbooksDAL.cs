@@ -51,7 +51,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 Provider = dr["Provider"].ToString(),
                                 DateOfService = (dr["DateOfService"] == DBNull.Value ? (DateTime?)null : (DateTime.Parse(dr["DateOfService"].ToString()))),
                                 PHQ9_Score = dr["PHQ9_Score"].ToString(),
-                                ActionFollowUp = dr["ActionFollowUp"].ToString()
+                                ActionFollowUp = bool.Parse(dr["ActionFollowUp"].ToString())
                             };
 
                             workbookspatients.Add(workbookspt);
@@ -170,7 +170,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             return workbookslookups;
         }
 
-        public async Task<bool> UpdateWorkbooksPatient(int userId, int formResponseId, int patientID, int providerstaffID, DateTime? dos, int phq9score, bool action)
+        public async Task<int> UpdateWorkbooksPatient(int userId, int formResponseId, int patientID, int providerstaffID, DateTime? dos, int phq9score, bool action)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
@@ -188,28 +188,28 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     await sqlConnection.OpenAsync();
 
                     //Execute Stored Procedure
-                    return (sqlCommand.ExecuteNonQuery() == 1);                    
+                    return sqlCommand.ExecuteNonQuery();                    
                 }
             }
         }
 
-        public async Task<bool> UpdateWorkbooksProviders(int userId, int formResponseId, int providerstaffID, int phqs, int total)
+        public async Task<int> UpdateWorkbooksProviders(int userId, int formResponseId, int providerstaffID, int phqs, int total)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
-                using (SqlCommand sqlCommand = new SqlCommand("spUpdatePHQ9Workbook_Providers", sqlConnection))
+                using (SqlCommand sqlCommand = new SqlCommand("spUpdatePHQ9Workbooks_Providers", sqlConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
                     sqlCommand.Parameters.Add("@FormResponseId", SqlDbType.Int).Value = formResponseId;
                     sqlCommand.Parameters.Add("@ProviderStaffID", SqlDbType.Int).Value = providerstaffID;
-                    sqlCommand.Parameters.Add("@PHQ9Score", SqlDbType.Int).Value = phqs;
+                    sqlCommand.Parameters.Add("@PHQS", SqlDbType.Int).Value = phqs;
                     sqlCommand.Parameters.Add("@Total", SqlDbType.Int).Value = total;
 
                     await sqlConnection.OpenAsync();
 
                     //Execute Stored Procedure
-                    return (sqlCommand.ExecuteNonQuery() == 1);
+                    return sqlCommand.ExecuteNonQuery();
                 }
             }
         }

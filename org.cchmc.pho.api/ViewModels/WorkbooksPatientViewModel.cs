@@ -13,6 +13,6 @@ namespace org.cchmc.pho.api.ViewModels
         public int ProviderId { get; set; }
         public DateTime? DateOfService { get; set; }
         public string PHQ9_Score { get; set; }
-        public string ActionFollowUp { get; set; }
+        public bool ActionFollowUp { get; set; }
     }
 }

@@ -168,7 +168,7 @@ namespace org.cchmc.pho.api.Controllers
 
             try
             {
-                await _workbooks.UpdateWorkbooksPatient(userId, workbookspatientVM.FormResponseId, workbookspatientVM.PatientId, workbookspatientVM.ProviderId, workbookspatientVM.DateOfService, int.Parse(workbookspatientVM.PHQ9_Score), bool.Parse(workbookspatientVM.ActionFollowUp));
+                await _workbooks.UpdateWorkbooksPatient(userId, workbookspatientVM.FormResponseId, workbookspatientVM.PatientId, workbookspatientVM.ProviderId, workbookspatientVM.DateOfService, int.Parse(workbookspatientVM.PHQ9_Score), workbookspatientVM.ActionFollowUp);
                 return Ok();
             }
             catch (Exception ex)
