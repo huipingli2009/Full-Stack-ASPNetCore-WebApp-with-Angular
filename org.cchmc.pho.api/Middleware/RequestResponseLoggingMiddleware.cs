@@ -45,7 +45,9 @@ namespace org.cchmc.pho.api.Middleware
             if (_pathsNotToLog != null && _pathsNotToLog.Any(p => context.Request.Path.Value.ToLower().Contains(p.ToLower())))
                 return;
 
+            // Need to buffer the request, otherwise reading it destroys it before it gets to the controller. 
             context.Request.EnableBuffering();
+
             string userName = "n/a"; // set to n/a so we don't log null or empty string for anonymous routes
             if (context.User != null && context.User.HasClaim(x => x.Type == ClaimTypes.Name))
                 userName = context.User.FindFirst(x => x.Type == ClaimTypes.Name).Value;
@@ -59,6 +61,8 @@ namespace org.cchmc.pho.api.Middleware
                                    $"Path: {context.Request.Path} " +
                                    $"QueryString: {context.Request.QueryString} " +
                                    $"Request Body: {ReadStreamInChunks(requestStream)}");
+
+            // reset the position to 0 so the request is leaving this method in the same state it came in
             context.Request.Body.Position = 0;
         }
 
