@@ -37,7 +37,6 @@ namespace org.cchmc.pho.api.Middleware
         public async Task Invoke(HttpContext context)
         {
             await LogRequest(context);
-            await _next(context);
             await LogResponse(context);
         }
 
@@ -71,16 +70,7 @@ namespace org.cchmc.pho.api.Middleware
                 return;
             }
 
-            var originalBodyStream = context.Response.Body;
-
-            await using var responseBody = _recyclableMemoryStreamManager.GetStream();
-            context.Response.Body = responseBody;
-
             await _next(context);
-
-            context.Response.Body.Seek(0, SeekOrigin.Begin);
-            var text = await new StreamReader(context.Response.Body).ReadToEndAsync();
-            context.Response.Body.Seek(0, SeekOrigin.Begin);
 
             string userName = "n/a"; // set to n/a so we don't log null or empty string for anonymous routes
             if (context.User != null && context.User.HasClaim(x => x.Type == ClaimTypes.Name))
@@ -93,8 +83,6 @@ namespace org.cchmc.pho.api.Middleware
                                    $"Host: {context.Request.Host} " +
                                    $"Path: {context.Request.Path} " +
                                    $"QueryString: {context.Request.QueryString} ");
-
-            await responseBody.CopyToAsync(originalBodyStream);
         }
 
         private static string ReadStreamInChunks(Stream stream)
