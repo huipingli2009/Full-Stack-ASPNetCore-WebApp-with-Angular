@@ -4,13 +4,14 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "start-local": "ng serve --proxy-config proxy.conf.json",
+    "start-local": "ng serve --configuration=local  --proxy-config proxy.conf.json",
     "build": "ng build",
+    "build-local": "ng build --outputPath='../org.cchmc.pho.api/wwwroot/'",
     "build-webApp": "ng build --prod --base-href ./",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "node version.js"
+    "postinstall": "node version.js && ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points"
   },
   "private": true,
   "dependencies": {

@@ -1,8 +1,10 @@
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Reflection;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,7 +31,7 @@ namespace org.cchmc.pho.api
         {
             Configuration = configuration;
             _environment = environment;
-        }              
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -39,7 +41,7 @@ namespace org.cchmc.pho.api
             services.AddOptions<CustomOptions>()
                         .Bind(Configuration.GetSection(CustomOptions.SECTION_KEY))
                         //https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.optionsbuilderdataannotationsextensions.validatedataannotations?view=dotnet-plat-ext-3.1
-                        .ValidateDataAnnotations() //todo 
+                        .ValidateDataAnnotations() //todo
                         .Validate(c =>
                         {
                             //NOTE: can add additional validation
@@ -59,7 +61,7 @@ namespace org.cchmc.pho.api
                             return true;
                         }, "Failed to validate connection strings.");
 
-            //setting up CORS policy only in the development environment 
+            //setting up CORS policy only in the development environment
             if (_environment.IsDevelopment())
             {
                 services.AddCors(options =>
@@ -102,7 +104,7 @@ namespace org.cchmc.pho.api
         {
             if (_environment.IsDevelopment())
             {
-                //setting up CORS policy only in the development environment 
+                //setting up CORS policy only in the development environment
                 app.UseCors(PHO_WebsitePolicy);
                 logger.LogInformation($"Environment is Development");
                 app.UseDeveloperExceptionPage();
@@ -112,6 +114,8 @@ namespace org.cchmc.pho.api
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
+
+            app.UseHttpsRedirection();
 
             //NOTE: https://docs.microsoft.com/en-us/aspnet/core/fundamentals/static-files?view=aspnetcore-3.1 needed to add this package : Microsoft.AspNetCore.App metapackage
             app.UseDefaultFiles();
@@ -147,6 +151,18 @@ namespace org.cchmc.pho.api
                 //cfg.AddProfile<MetricMappings>();
             });
             config.CreateMapper();
+
+
+            app.Run(async (context) =>
+            {
+                //wanting to disable caching... on index.html
+                // -- need to dig more into that this only does it for the index.html not the assets
+                context.Response.ContentType = "text/html";
+                context.Response.Headers.Add("Cache-Control", "no-cache, no-store");
+                context.Response.Headers.Add("Expires", "-1");
+                await context.Response.SendFileAsync(Path.Combine(_environment.WebRootPath, "index.html"));
+            });
+
         }
     }
 }
