@@ -188,7 +188,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     await sqlConnection.OpenAsync();
 
                     //Execute Stored Procedure
-                    sqlCommand.ExecuteNonQuery();
+                    sqlCommand.ExecuteNonQuery();                    
                 }
             }
         }
