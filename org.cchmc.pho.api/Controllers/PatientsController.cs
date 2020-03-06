@@ -104,11 +104,18 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> UpdatePatientDetails([FromBody] PatientDetailsViewModel patientDetailsVM)
         {
+            // route parameters are strings and need to be translated (and validated) to their proper data type
+            if (!int.TryParse(_DEFAULT_USER, out var userId))
+            {
+                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
+                return BadRequest("user is not a valid integer");
+            }
+
             try
             {
                 PatientDetails patientDetail = _mapper.Map<PatientDetails>(patientDetailsVM);
                 // call the data layer to mark the action
-                await _patient.UpdatePatientDetails(_DEFAULT_USER,patientDetail);
+                await _patient.UpdatePatientDetails(userId,patientDetail);
                 return Ok();
             }
             catch (Exception ex)
@@ -148,10 +155,16 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> GetInsuranceAll()
         {
+            // route parameters are strings and need to be translated (and validated) to their proper data type
+            if (!int.TryParse(_DEFAULT_USER, out var userId))
+            {
+                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
+                return BadRequest("user is not a valid integer");
+            }
             try
             {
                 // call the data method
-                var data = await _patient.GetPatientInsuranceAll(_DEFAULT_USER);
+                var data = await _patient.GetPatientInsuranceAll(userId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
                 var result = _mapper.Map<List<PatientInsuranceViewModel>>(data);
                 // return the result in a "200 OK" response
