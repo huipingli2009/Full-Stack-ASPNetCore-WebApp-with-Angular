@@ -20,13 +20,37 @@ Alternatively...
 
 Angular JS application
 
-### Setting App Version
+## Getting Started
+
+> These commands need to be ran in the /org.cchmc.pho.webapp folder (project)
+
+First Time
+```bash
+# this will install the npm packges first
+> npm i
+```
+
+- Building/Running the App
+```bash
+> npm run start # runs the app locally
+-- or ---
+> npm run start-local # this one runs the app for use against the json-server w/ a proxy
+
+> npm run build-local # builds the app and copies the artificats into the api projects wwwwroot
+## this way you can run the API project and load the SPA
+> npm run build-webApp # for prod use
+
+```
+
+
+### Setting Web App Version
 Please refer to this guide
 https://docs.npmjs.com/cli/version
 
 > NOTE: invoke this in the project directory of /org.cchmc.pho.webapp
 
-```console
+```bash
+# if you receive and error you may need to run npm i first
 npm version patch
 -- or --
 npm version patch -git-tag-version false
@@ -34,7 +58,8 @@ npm version patch -git-tag-version false
 This will update the version number in the package.json
 
 ### Killing 4200 port on a mac
-```console
+
+```bashe
 > npx kill-port 4200
 ```
 
