@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Reflection;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,13 +12,14 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using org.cchmc.pho.api.Mappings;
 using org.cchmc.pho.core.DataAccessLayer;
-using org.cchmc.pho.core.DataModels;
 using org.cchmc.pho.core.Interfaces;
 using org.cchmc.pho.core.Models;
 using org.cchmc.pho.core.Settings;
+using org.cchmc.pho.identity.Extensions;
 
 namespace org.cchmc.pho.api
 {
+    [ExcludeFromCodeCoverage]
     public class Startup
     {
         private const string PHO_WebsitePolicy = "PHO_WebsitePolicy";
@@ -32,16 +31,13 @@ namespace org.cchmc.pho.api
         {
             Configuration = configuration;
             _environment = environment;
-        }              
-       
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(Startup));
-          
-
-            // TODO: Load AppSettings, LDAP, DBContext, authentication
+            services.AddIdentityServices(Configuration);
             services.AddOptions<CustomOptions>()
                         .Bind(Configuration.GetSection(CustomOptions.SECTION_KEY))
                         //https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.optionsbuilderdataannotationsextensions.validatedataannotations?view=dotnet-plat-ext-3.1
@@ -56,9 +52,16 @@ namespace org.cchmc.pho.api
                             //    return c.Endpoint_BaseUrl != default;
                             //}
                             return true;
-                        }, "failure message");
+                        }, "Failed to validate custom options.");
+            services.AddOptions<ConnectionStrings>()
+                        .Bind(Configuration.GetSection("ConnectionStrings"))
+                        .ValidateDataAnnotations()
+                        .Validate(c =>
+                        {
+                            return true;
+                        }, "Failed to validate connection strings.");
 
-            //setting up CORS policy only in the development environment 
+            //setting up CORS policy only in the development environment
             if (_environment.IsDevelopment())
             {
                 services.AddCors(options =>
@@ -73,16 +76,19 @@ namespace org.cchmc.pho.api
                 });
             }
 
+            services.AddMvc(config =>
+                {
+                    // CJENKINSON - Uncomment out when ready to apply Authorize attributes
+                    //var policy = Configuration.BuildAuthorizationPolicy();
+                    //config.Filters.Add(new AuthorizeFilter(policy));
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+                .AddControllersAsServices();
 
-
-            services.Configure<ConnectionStrings>(options => Configuration.GetSection("ConnectionStrings").Bind(options));
-
-            services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo() { Title = "PHO API", Version = "v1" });
             });
-
 
             //NOTE: register service
             services.AddTransient<IAlert, AlertDAL>();
@@ -98,7 +104,7 @@ namespace org.cchmc.pho.api
         {
             if (_environment.IsDevelopment())
             {
-                //setting up CORS policy only in the development environment 
+                //setting up CORS policy only in the development environment
                 app.UseCors(PHO_WebsitePolicy);
                 logger.LogInformation($"Environment is Development");
                 app.UseDeveloperExceptionPage();
@@ -109,19 +115,19 @@ namespace org.cchmc.pho.api
                 app.UseHsts();
             }
 
+            app.UseHttpsRedirection();
+
             //NOTE: https://docs.microsoft.com/en-us/aspnet/core/fundamentals/static-files?view=aspnetcore-3.1 needed to add this package : Microsoft.AspNetCore.App metapackage
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
-
-
             app.UseHttpsRedirection();
 
             app.UseRouting();
-          
 
-            app.UseAuthorization();
-            
+            // CJENKINSON - Uncomment out when ready to apply Authorize attributes
+            //app.UseAuthentication();
+            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
@@ -145,6 +151,18 @@ namespace org.cchmc.pho.api
                 //cfg.AddProfile<MetricMappings>();
             });
             config.CreateMapper();
+
+
+            app.Run(async (context) =>
+            {
+                //wanting to disable caching... on index.html
+                // -- need to dig more into that this only does it for the index.html not the assets
+                context.Response.ContentType = "text/html";
+                context.Response.Headers.Add("Cache-Control", "no-cache, no-store");
+                context.Response.Headers.Add("Expires", "-1");
+                await context.Response.SendFileAsync(Path.Combine(_environment.WebRootPath, "index.html"));
+            });
+
         }
     }
 }

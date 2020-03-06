@@ -16,7 +16,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace org.cchmc.pho.unittest.controllertests
+namespace org.cchmc.pho.unittest.ControllerTests
 {
     [TestClass]
     [ExcludeFromCodeCoverage]
@@ -92,7 +92,7 @@ namespace org.cchmc.pho.unittest.controllertests
             Assert.AreEqual(myAlerts[1].LinkText, resultList[1].LinkText);
             Assert.AreEqual(myAlerts[1].Message, resultList[1].Message);
             Assert.AreEqual(myAlerts[1].Url, resultList[1].Url);
-
+            _mockAlertDal.Verify();
         }
 
         [Ignore] //todo need to fix later... since user id is hard coded now

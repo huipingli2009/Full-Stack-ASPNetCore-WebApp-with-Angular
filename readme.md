@@ -6,18 +6,51 @@
 
 TODO: Additional info to follow, such as a simple intro, environment information, and some links to documentation.
 
+## Deploying the Identity Database
+To deploy the Identity database to SQL server, complete the following steps:
+1. Ensure that the `pho-identity` connection string is complete in `appsettings.secret.json`
+2. From the CLI, navigate to the `org.cchmc.pho.identity` project and type in `dotnet ef database update -s ../org.cchmc.pho.api/` and hit enter
+3. The CLI should read `Build started...` then `Build succeeded.` and after a short delay, `Done.`
+
+Alternatively...
+1. Ensure that the `pho-identity` connection string is complete in `appsettings.secret.json`
+2. Run the unit test `org.cchmc.pho.unittest.IdentityTests.IdentityTests.DoNothing()`.
 
 ## org.cchmc.pho.webapp
 
 Angular JS application
 
-### Setting App Version
+## Getting Started
+
+> These commands need to be ran in the /org.cchmc.pho.webapp folder (project)
+
+First Time
+```bash
+# this will install the npm packges first
+> npm i
+```
+
+- Building/Running the App
+```bash
+> npm run start # runs the app locally
+-- or ---
+> npm run start-local # this one runs the app for use against the json-server w/ a proxy
+
+> npm run build-local # builds the app and copies the artificats into the api projects wwwwroot
+## this way you can run the API project and load the SPA
+> npm run build-webApp # for prod use
+
+```
+
+
+### Setting Web App Version
 Please refer to this guide
 https://docs.npmjs.com/cli/version
 
 > NOTE: invoke this in the project directory of /org.cchmc.pho.webapp
 
-```console
+```bash
+# if you receive and error you may need to run npm i first
 npm version patch
 -- or --
 npm version patch -git-tag-version false
@@ -25,7 +58,8 @@ npm version patch -git-tag-version false
 This will update the version number in the package.json
 
 ### Killing 4200 port on a mac
-```console
+
+```bashe
 > npx kill-port 4200
 ```
 
