@@ -170,7 +170,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             return workbookslookups;
         }
 
-        public async Task UpdateWorkbooksPatient(int userId, int formResponseId, int patientID, int providerstaffID, DateTime? dos, int phq9score, bool action)
+        public async Task<bool> UpdateWorkbooksPatient(int userId, int formResponseId, int patientID, int providerstaffID, DateTime? dos, int phq9score, bool action)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
@@ -188,12 +188,12 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     await sqlConnection.OpenAsync();
 
                     //Execute Stored Procedure
-                    sqlCommand.ExecuteNonQuery();                    
+                    return (sqlCommand.ExecuteNonQuery() == 1);                    
                 }
             }
         }
 
-        public async Task UpdateWorkbooksProviders(int userId, int formResponseId, int providerstaffID, int phqs, int total)
+        public async Task<bool> UpdateWorkbooksProviders(int userId, int formResponseId, int providerstaffID, int phqs, int total)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
@@ -209,7 +209,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     await sqlConnection.OpenAsync();
 
                     //Execute Stored Procedure
-                    sqlCommand.ExecuteNonQuery();
+                    return (sqlCommand.ExecuteNonQuery() == 1);
                 }
             }
         }
