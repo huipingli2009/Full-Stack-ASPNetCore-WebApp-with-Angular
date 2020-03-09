@@ -174,13 +174,11 @@ export class DashboardComponent implements OnInit {
   }
 
   transformToolTipDate(date) {
-    //return this.datePipe.transform(date, 'EE MM/dd');
     return this.datePipe.transform(date, 'MM/dd/yyyy');
   }
 
   transformDate(date) {
     return this.datePipe.transform(date, 'EE MM/dd');
-    // return this.datePipe.transform(date, 'MM/dd/yyyy');
   }
   transformAdmitDate(date) {
     return this.datePipe.transform(date, 'yyyyMMdd');
