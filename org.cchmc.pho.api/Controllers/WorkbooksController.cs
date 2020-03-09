@@ -153,11 +153,11 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
        
-        [HttpPut("patients/{id}")]
+        [HttpPost("addpatient/{id}")]
         [SwaggerResponse(200, type: typeof(string))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]       
-        public async Task<IActionResult> UpdateWorkbooksPatient(int id,[FromBody] WorkbooksPatientViewModel workbookspatientVM)
+        public async Task<IActionResult> AddPatientToWorkbooks(int id,[FromBody] WorkbooksPatientViewModel workbookspatientVM)
         {
             // route parameters are strings and need to be translated (and validated) to their proper data type
             if (!int.TryParse(_DEFAULT_USER, out var userId))
@@ -168,7 +168,7 @@ namespace org.cchmc.pho.api.Controllers
 
             try
             {
-                await _workbooks.UpdateWorkbooksPatient(userId, workbookspatientVM.FormResponseId, id, workbookspatientVM.ProviderId, workbookspatientVM.DateOfService, int.Parse(workbookspatientVM.PHQ9_Score), workbookspatientVM.ActionFollowUp);
+                await _workbooks.AddPatientToWorkbooks(userId, workbookspatientVM.FormResponseId, id, workbookspatientVM.ProviderId, workbookspatientVM.DateOfService, int.Parse(workbookspatientVM.PHQ9_Score), workbookspatientVM.ActionFollowUp);
                 return Ok();
             }
             catch (Exception ex)
@@ -234,6 +234,34 @@ namespace org.cchmc.pho.api.Controllers
                 _logger.LogError(ex, "An error occurred");
                 return StatusCode(500, "An error occurred");
             }
+        }
+
+        [HttpPut("updatepatientfollowup/{id}")]
+        [SwaggerResponse(200, type: typeof(WorkbooksPatientFollowupViewModel))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+       
+        public async Task<IActionResult> UpdateWorkbooksPatientFollowup(int id, [FromBody]WorkbooksPatientFollowupViewModel wbptfollowup)
+        {
+            // route parameters are strings and need to be translated (and validated) to their proper data type
+            if (!int.TryParse(_DEFAULT_USER, out var userId))
+            {
+                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
+                return BadRequest("user is not a valid integer");
+            }
+
+            try
+            {
+                await _workbooks.UpdateWorkbooksPatientFollowup(userId, wbptfollowup.FormResponseId, wbptfollowup.PatientId, wbptfollowup.ActionPlanGiven, wbptfollowup.ManagedByExternalProvider, wbptfollowup.DateOfLastCommunicationByExternalProvider, wbptfollowup.FollowupPhoneCallOneToTwoWeeks, wbptfollowup.DateOfFollowupCall, wbptfollowup.OneMonthFollowupVisit, wbptfollowup.DateOfOneMonthVisit, wbptfollowup.OneMonthFolllowupPHQ9Score, wbptfollowup.Improvement);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+
         }
     }
 }
