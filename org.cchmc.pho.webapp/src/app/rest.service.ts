@@ -104,7 +104,7 @@ export class RestService {
 
   /*Gets base PatientDetails based on Patient Id */
   getPatientDetails(id): Observable<any> {
-    const endpoint = `${API_URL}/api/patientDetails/${id}`;
+    const endpoint = `${API_URL}/api/Patients/${id}`;
     return this.http.get<any>(endpoint).pipe(
       map((data: PatientDetails[]) => {
         return data;

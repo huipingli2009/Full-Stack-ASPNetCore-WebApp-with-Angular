@@ -19,8 +19,8 @@ import { tap } from 'rxjs/operators';
   animations: [
     trigger('detailExpand', [
       state('void', style({ height: '0px', minHeight: '0', visibility: 'hidden' })),
-      state('*', style({ height: '*', visibility: 'visible' })),
-      transition('void <=> *', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+      state('expanded', style({ height: '*', visibility: 'visible' })),
+      transition('void <=> expanded', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
 })
@@ -33,7 +33,7 @@ export class PatientsComponent implements OnInit {
   @Input()
   checked: Boolean;
 
-
+  expandedElement: any;
 
   patients: Patients[];
   patientFormDetails: Observable<PatientDetails>;

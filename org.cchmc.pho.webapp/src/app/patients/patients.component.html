@@ -125,15 +125,16 @@
     
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;" class="element-row" [cdkDetailRow]="row"
-      [cdkDetailRowTpl]="tpl" (click)="getPatientDetails(row.patientId)"></mat-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns; when: isExpansionDetailRow" class="element-row" [cdkDetailRow]="row"
+      [cdkDetailRowTpl]="tpl" (click)="getPatientDetails(row.patientId)"
+            (click)="expandedElement = row"></mat-row>
   </table>
 
   <mat-paginator [pageSizeOptions]="[20, 30]" showFirstLastButtons></mat-paginator>
 </div>
 
 <ng-template #tpl let-element>
-      <div class="mat-row" [@detailExpand] id="patient-details">
+      <div class="mat-row" [@detailExpand]="element == expandedElement ? 'expanded' : 'void'" id="patient-details">
           <div fxLayout="row" class="detail-heading">DEMOGRAPHICS</div>
             <form *ngIf="patientFormDetails | async;" [formGroup]="form">
               <div fxLayout="row" fxLayoutGap="34px" class="form-row">
@@ -178,14 +179,14 @@
                 </div>
               </div>
               <div fxLayout="column">
-                <label for="pmcaScore">PCMA</label>
+                <label for="pmcaScore">PMCA</label>
                 <input id="pmcaScore" formControlName="pmcaScore" />
                 <div *ngIf="form.controls.pmcaScore.errors?.required && form.controls.pmcaScore.touched" class="error">
                   *Required
                 </div>
               </div>
               <div fxLayout="column">
-                <label for="providerPMCAScore">Provider PCMA</label>
+                <label for="providerPMCAScore">Provider PMCA</label>
                 <input id="providerPMCAScore" formControlName="providerPMCAScore" />
                 <div *ngIf="form.controls.providerPMCAScore.errors?.required && form.controls.providerPMCAScore.touched" class="error">
                   *Required

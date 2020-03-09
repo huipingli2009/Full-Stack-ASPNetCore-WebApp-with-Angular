@@ -1,9 +1,9 @@
-import {Directive, HostBinding, HostListener, Input, TemplateRef, ViewContainerRef} from '@angular/core';
+import {Directive, HostBinding, HostListener, Input, TemplateRef, ViewContainerRef, OnDestroy} from '@angular/core';
 
 @Directive({
   selector: '[cdkDetailRow]'
 })
-export class CdkDetailRowDirective {
+export class CdkDetailRowDirective  implements OnDestroy {
   private row: any;
   private tRef: TemplateRef<any>;
   private opened: boolean;
@@ -27,6 +27,10 @@ export class CdkDetailRowDirective {
       this.tRef = value;
       // this.render();
     }
+  }
+
+  ngOnDestroy(): void {
+    this.row.close = false;
   }
 
   constructor(public vcRef: ViewContainerRef) { }

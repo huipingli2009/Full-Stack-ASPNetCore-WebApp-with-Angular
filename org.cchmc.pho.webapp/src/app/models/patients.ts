@@ -16,6 +16,7 @@ export class Patients {
             name: string;
         }
     ]
+    close?: boolean;
 }
 export class PatientDetails {
      id: number;
@@ -61,5 +62,5 @@ export class PatientDetails {
      lastCCHMCAdmit: Date  ;
      lastHealthBridgeAdmit: Date  ;
      lastDiagnosis: string  ;
-     cchmcAppointment: Date; 
+     cchmcAppointment: Date;
 }
