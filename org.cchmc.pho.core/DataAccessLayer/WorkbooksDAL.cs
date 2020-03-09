@@ -13,11 +13,11 @@ namespace org.cchmc.pho.core.DataAccessLayer
 {
     public class WorkbooksDal : IWorkbooks
     {
-        private readonly ConnectionStrings _connectionStrings;        
+        private readonly ConnectionStrings _connectionStrings;
 
         public WorkbooksDal(IOptions<ConnectionStrings> options)
         {
-            _connectionStrings = options.Value;           
+            _connectionStrings = options.Value;
         }
         public async Task<List<WorkbooksPatient>> ListPatients(int userId, int formResponseId)
         {
@@ -31,7 +31,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
 
                     sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
-                    sqlCommand.Parameters.Add("@FormResponseId", SqlDbType.Int).Value = formResponseId;                    
+                    sqlCommand.Parameters.Add("@FormResponseId", SqlDbType.Int).Value = formResponseId;
 
                     await sqlConnection.OpenAsync();
 
@@ -46,18 +46,18 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 FormResponseId = int.Parse(dr["FormResponseId"].ToString()),
                                 PatientId = int.Parse(dr["PatientId"].ToString()),
                                 Patient = dr["Patient"].ToString(),
-                                DOB = (dr["DOB"] == DBNull.Value? (DateTime?)null: (DateTime.Parse(dr["DOB"].ToString()))),
+                                DOB = (dr["DOB"] == DBNull.Value ? (DateTime?)null : (DateTime.Parse(dr["DOB"].ToString()))),
                                 Phone = dr["Phone"].ToString(),
                                 Provider = dr["Provider"].ToString(),
-                                DateOfService = (dr["DateOfService"] == DBNull.Value? (DateTime?)null:(DateTime.Parse(dr["DateOfService"].ToString()))),
+                                DateOfService = (dr["DateOfService"] == DBNull.Value ? (DateTime?)null : (DateTime.Parse(dr["DateOfService"].ToString()))),
                                 PHQ9_Score = dr["PHQ9_Score"].ToString(),
-                                ActionFollowUp = dr["ActionFollowUp"].ToString()
+                                ActionFollowUp = bool.Parse(dr["ActionFollowUp"].ToString())
                             };
 
                             workbookspatients.Add(workbookspt);
                         }
                     }
-                }               
+                }
             }
             return workbookspatients;
         }
@@ -92,7 +92,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                                 Line3 = dr["Line3"].ToString(),
                                                 JobAidURL = dr["JobAidURL"].ToString()
                                             }
-                                        ).SingleOrDefault();  
+                                        ).SingleOrDefault();
                     }
                 }
             }
@@ -126,7 +126,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 FormResponseID = int.Parse(dr["FormResponseID"].ToString()),
                                 StaffID = int.Parse(dr["StaffID"].ToString()),
                                 Provider = dr["Provider"].ToString(),
-                                PHQS = dr["PHQS"].ToString(),
+                                PHQS = int.Parse(dr["PHQS"].ToString()),
                                 TOTAL = int.Parse(dr["Total"].ToString())
                             };
                             workbooksproviders.Add(workbooksprovider);
@@ -170,7 +170,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             return workbookslookups;
         }
 
-        public async Task UpdateWorkbooksPatient(int userId, int formResponseId, int patientID, int providerstaffID, DateTime dos, int phq9score, bool action)
+        public async Task<int> UpdateWorkbooksPatient(int userId, int formResponseId, int patientID, int providerstaffID, DateTime? dos, int phq9score, bool action)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
@@ -188,9 +188,70 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     await sqlConnection.OpenAsync();
 
                     //Execute Stored Procedure
-                    sqlCommand.ExecuteNonQuery();
+                    return sqlCommand.ExecuteNonQuery();                    
                 }
             }
-        }       
+        }
+
+        public async Task<int> UpdateWorkbooksProviders(int userId, int formResponseId, int providerstaffID, int phqs, int total)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spUpdatePHQ9Workbooks_Providers", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@FormResponseId", SqlDbType.Int).Value = formResponseId;
+                    sqlCommand.Parameters.Add("@ProviderStaffID", SqlDbType.Int).Value = providerstaffID;
+                    sqlCommand.Parameters.Add("@PHQS", SqlDbType.Int).Value = phqs;
+                    sqlCommand.Parameters.Add("@Total", SqlDbType.Int).Value = total;
+
+                    await sqlConnection.OpenAsync();
+
+                    //Execute Stored Procedure
+                    return sqlCommand.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public async Task<WorkbooksPatientFollowup> GetWorkbooksPatientPHQ9FollowUp(int userId, int formResponseId, int patientID)
+        {
+            DataTable dataTable = new DataTable();            
+            WorkbooksPatientFollowup workbookspatientfollowup;
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetPHQ9Workbooks_PatientFollowUp", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@FormResponseId", SqlDbType.Int).Value = formResponseId;
+                    sqlCommand.Parameters.Add("@PatientID", SqlDbType.Int).Value = patientID;
+
+                    await sqlConnection.OpenAsync();
+
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        workbookspatientfollowup = (from DataRow dr in dataTable.Rows
+                                                    select new WorkbooksPatientFollowup()
+                                                    {
+                                                        FormResponseId = int.Parse(dr["FormResponseId"].ToString()),
+                                                        PatientId = int.Parse(dr["PatientId"].ToString()),
+                                                        ActionPlanGiven = bool.Parse(dr["Action_Plan_Given"].ToString()),
+                                                        ManagedByExternalProvider = bool.Parse(dr["Managed_by_External_Provider"].ToString()),
+                                                        DateOfLastCommunicationByExternalProvider = (dr["Date_of_last_communication_by_external_provider"] == DBNull.Value ? (DateTime?)null: (DateTime.Parse(dr["Date_of_last_communication_by_external_provider"].ToString()))),
+                                                        FollowupPhoneCallOneToTwoWeeks = bool.Parse(dr["Follow-up_phone_call_1-2_weeks"].ToString()),
+                                                        DateOfFollowupCall = (dr["Date_of_follow_up_call_(optional)"] == DBNull.Value ? (DateTime?)null : (DateTime.Parse(dr["Date_of_follow_up_call_(optional)"].ToString()))),
+                                                        OneMonthFollowupVisit = bool.Parse(dr["1_Month_follow_up_visit"].ToString()),
+                                                        DateOfOneMonthVisit = (dr["Date_of_1_month_visit_(optional)"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["Date_of_1_month_visit_(optional)"].ToString())),
+                                                        OneMonthFolllowupPHQ9Score = int.Parse(dr["1_Month_follow-up_PHQ-9_Score"].ToString()),
+                                                        Improvement = bool.Parse(dr["Improvement"].ToString())
+                                                    }).SingleOrDefault();
+                    }                  
+                }
+            }
+            return workbookspatientfollowup;
+        }
     }
 }
