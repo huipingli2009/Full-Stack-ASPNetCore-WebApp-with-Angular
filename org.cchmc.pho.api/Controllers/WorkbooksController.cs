@@ -153,11 +153,11 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
        
-        [HttpPut("updatepatient")]
+        [HttpPut("patients/{id}")]
         [SwaggerResponse(200, type: typeof(string))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]       
-        public async Task<IActionResult> UpdateWorkbooksPatient([FromBody] WorkbooksPatientViewModel workbookspatientVM)
+        public async Task<IActionResult> UpdateWorkbooksPatient(int id,[FromBody] WorkbooksPatientViewModel workbookspatientVM)
         {
             // route parameters are strings and need to be translated (and validated) to their proper data type
             if (!int.TryParse(_DEFAULT_USER, out var userId))
@@ -168,7 +168,7 @@ namespace org.cchmc.pho.api.Controllers
 
             try
             {
-                await _workbooks.UpdateWorkbooksPatient(userId, workbookspatientVM.FormResponseId, workbookspatientVM.PatientId, workbookspatientVM.ProviderId, workbookspatientVM.DateOfService, int.Parse(workbookspatientVM.PHQ9_Score), workbookspatientVM.ActionFollowUp);
+                await _workbooks.UpdateWorkbooksPatient(userId, workbookspatientVM.FormResponseId, id, workbookspatientVM.ProviderId, workbookspatientVM.DateOfService, int.Parse(workbookspatientVM.PHQ9_Score), workbookspatientVM.ActionFollowUp);
                 return Ok();
             }
             catch (Exception ex)
@@ -179,11 +179,11 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [HttpPut("updateprovider")]
+        [HttpPut("provider/{id}")]
         [SwaggerResponse(200, type: typeof(string))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> UpdateWorkbooksProvider([FromBody] WorkbooksProviderViewModel workbooksproviderVM)
+        public async Task<IActionResult> UpdateWorkbooksProvider(int id, [FromBody] WorkbooksProviderViewModel workbooksproviderVM)
         {
             // route parameters are strings and need to be translated (and validated) to their proper data type
             if (!int.TryParse(_DEFAULT_USER, out var userId))
@@ -194,7 +194,7 @@ namespace org.cchmc.pho.api.Controllers
 
             try
             {
-                await _workbooks.UpdateWorkbooksProviders(userId, workbooksproviderVM.FormResponseID, workbooksproviderVM.StaffID, workbooksproviderVM.PHQS, workbooksproviderVM.TOTAL);
+                await _workbooks.UpdateWorkbooksProviders(userId, workbooksproviderVM.FormResponseID, id, workbooksproviderVM.PHQS, workbooksproviderVM.TOTAL);
                 return Ok();
             }
             catch (Exception ex)
