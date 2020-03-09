@@ -95,20 +95,6 @@ export class PatientsComponent implements OnInit {
     });
   }
 
-  // getPatientDetails(id) {
-  //   console.log(id);
-  //   this.rest.getPatientDetails(id).subscribe((data) => {
-  //     this.patientDetails = data;
-  //     console.log(this.patientDetails);
-      
-  //   });
-  // }
-  // getSelectedPatient(patient: PatientDetails): void {
-  //   this.selectedPatient = patient;
-  //   console.log('selectedPatient', this.selectedPatient);
-  //   this.getPatientDetails(this.selectedPatient);
-  // }
-
    getPatientDetails(id) {
     this.rest.getPatientDetails(id).subscribe((data) => {
       this.patientFormDetails = data;
@@ -136,18 +122,7 @@ export class PatientsComponent implements OnInit {
       
     });
   }
-
   
-
-  // setValue(i , e){
-  //   if(e.checked){
-  //     this.patientDetails[i].activeStatus = true;
-  //   }else{
-  //     this.patientDetails[i].activeStatus = false;
-  //   }
-  //   console.log(this.patientDetails[i].activeStatus)
-  // }
-
   applySelectedFilter(column: string, filterValue: string) {
     this.filterValues[column] = filterValue;
 
