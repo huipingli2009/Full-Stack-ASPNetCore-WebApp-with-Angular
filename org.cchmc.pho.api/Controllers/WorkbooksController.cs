@@ -153,7 +153,7 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
        
-        [HttpPost("addpatient/{id}")]
+        [HttpPost("patients/{id}")]
         [SwaggerResponse(200, type: typeof(string))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]       
@@ -236,7 +236,7 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [HttpPut("updatepatientfollowup/{id}")]
+        [HttpPut("patientfollowup/{id}")]
         [SwaggerResponse(200, type: typeof(WorkbooksPatientFollowupViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
