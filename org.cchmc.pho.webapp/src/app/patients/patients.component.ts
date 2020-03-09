@@ -36,7 +36,8 @@ export class PatientsComponent implements OnInit {
 
 
   patients: Patients[];
-  patientDetails: Observable<PatientDetails>;
+  patientFormDetails: Observable<PatientDetails>;
+  patientDetails: PatientDetails[];
   filterValues: any = {};
   chronic: string;
   watchFlag: string;
@@ -50,11 +51,12 @@ export class PatientsComponent implements OnInit {
   };
   isActive: boolean;
   form: FormGroup;
+  selectedPatient: PatientDetails;
 
   displayedColumns: string[] = ['arrow', 'name', 'dob', 'lastEDVisit', 'chronic', 'watchFlag', 'conditions'];
   dataSource;
 
-  isExpansionDetailRow = (index, row) => row.hasOwnProperty('detailRow');
+  isExpansionDetailRow = (index, row) => row[index].hasOwnProperty('detailRow');
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
               public fb: FormBuilder, private logger: NGXLogger) { 
@@ -101,9 +103,15 @@ export class PatientsComponent implements OnInit {
       
   //   });
   // }
+  // getSelectedPatient(patient: PatientDetails): void {
+  //   this.selectedPatient = patient;
+  //   console.log('selectedPatient', this.selectedPatient);
+  //   this.getPatientDetails(this.selectedPatient);
+  // }
 
-  getPatientDetails(id) {
+   getPatientDetails(id) {
     this.rest.getPatientDetails(id).subscribe((data) => {
+      this.patientFormDetails = data;
       this.patientDetails = data;
       this.isActive = data.activeStatus;
       this.form = this.fb.group({
@@ -121,13 +129,15 @@ export class PatientsComponent implements OnInit {
         state: ['', Validators.required],
         zip: ['', Validators.required]
       });
-      this.patientDetails = this.rest.getPatientDetails(id).pipe(
+      this.patientFormDetails = this.rest.getPatientDetails(id).pipe(
         tap(user => this.form.patchValue(user))
       );
       console.log(this.patientDetails);
       
     });
   }
+
+  
 
   // setValue(i , e){
   //   if(e.checked){

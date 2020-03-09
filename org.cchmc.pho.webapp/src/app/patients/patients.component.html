@@ -135,9 +135,8 @@
 <ng-template #tpl let-element>
       <div class="mat-row" [@detailExpand] id="patient-details">
           <div fxLayout="row" class="detail-heading">DEMOGRAPHICS</div>
-          <div fxLayout="row" *ngIf="patientDetails">
-            <form class="example-form" *ngIf="patientDetails | async;" [formGroup]="form" fxLayout="row">
-              <div fxLayout="row" fxLayoutGap="34px">
+            <form *ngIf="patientFormDetails | async;" [formGroup]="form">
+              <div fxLayout="row" fxLayoutGap="34px" class="form-row">
               <div fxLayout="column">
                 <label>ACTIVE PATIENT</label>
                 <mat-slide-toggle formControlName="activeStatus" [checked]="form.controls.activeStatus">
@@ -193,11 +192,106 @@
                 </div>
               </div>
             </div>
+            <div fxLayout="row" fxLayoutGap="34px">
+              <div fxLayout="column">
+                <label for="phone1">Phone</label>
+                <input id="phone1" formControlName="phone1" />
+                <div *ngIf="form.controls.phone1.errors?.required && form.controls.phone1.touched" class="error">
+                  *Required
+                </div>
+              </div>
+              <div fxLayout="column" fxFlex="288px">
+                <label for="addressLine1">Address</label>
+                <input id="addressLine1" formControlName="addressLine1" />
+                <div *ngIf="form.controls.addressLine1.errors?.required && form.controls.addressLine1.touched" class="error">
+                  *Required
+                </div>
+              </div>
+              <div fxLayout="column" fxFlex>
+                <label for="city">City</label>
+                <input id="city" formControlName="city" />
+                <div *ngIf="form.controls.city.errors?.required && form.controls.city.touched" class="error">
+                  *Required
+                </div>
+              </div>
+              <div fxLayout="column" fxFlex>
+                <label for="state">State</label>
+                <input id="state" formControlName="state" />
+                <div *ngIf="form.controls.state.errors?.required && form.controls.state.touched" class="error">
+                  *Required
+                </div>
+              </div>
+              <div fxLayout="column" fxFlex>
+                <label for="zip">Zip</label>
+                <input id="zip" formControlName="zip" />
+                <div *ngIf="form.controls.zip.errors?.required && form.controls.zip.touched" class="error">
+                  *Required
+                </div>
+              </div>
+              <div fxLayout="column" fxLayoutAlign="end" fxFlex="96px">
+                <button mat-flat-button color="accent">Save</button>
+              </div>
+            </div>
             </form>
-    
-          </div>
-    
-
+            <div fxLayout="row" class="border-row-top">
+              <div fxLayout="column">
+                <div fxLayout="row" class="detail-heading">METRICS</div>
+                <div fxLayout="row" class="metric-data-box">
+                  <div fxLayout="column" class="metric-data" fxLayoutAlign="top center" *ngIf="patientDetails">
+                    <span class="metric-number">1</span>
+                    <span class="metric-title">PRACTICE VISITS</span>
+                  </div>
+                  <div fxLayout="column" class="metric-data" fxLayoutAlign="top center" *ngIf="patientDetails">
+                    <span class="metric-number">19</span>
+                    <span class="metric-title">CCHMC ENCOUNTERS</span>
+                  </div>
+                  <div fxLayout="column" class="metric-data" fxLayoutAlign="top center" *ngIf="patientDetails">
+                    <span class="metric-number">1</span>
+                    <span class="metric-title">HEALTHBRIDGE ENCOUNTERS</span>
+                  </div>
+                  <div fxLayout="column" class="metric-data" fxLayoutAlign="top center" *ngIf="patientDetails">
+                    <span class="metric-number">14</span>
+                    <span class="metric-title">UNIQUE DXS</span>
+                  </div>
+                  <div fxLayout="column" class="metric-data" fxLayoutAlign="top center" *ngIf="patientDetails">
+                    <span class="metric-number">8</span>
+                    <span class="metric-title">UNIQUE CPT CODES</span>
+                  </div>
+                </div>
+              </div>
+              <mat-divider [vertical]="true"></mat-divider>
+              <div fxLayout="column" class="visit-details-box">
+                <div fxLayout="row" class="detail-heading">VISIT DETAILS</div>
+                <div fxLayout="row" fxLayoutGap="">
+                  <div fxLayout="column" fxFlex=50%>
+                    <span class="detail-title">LAST PRACTICE VISIT</span>
+                    <span class="detail-text">12/17/2018</span>
+                  </div>
+                  <div fxLayout="column">
+                    <span class="detail-title">Diagnosis</span>
+                    <span class="detail-text">Hypermetropia
+                      (Bilateral)</span>
+                  </div>
+                </div>
+                <div fxLayout="row" class="detail-row">
+                  <div fxLayout="column" fxFlex=50%>
+                    <span class="detail-title">LAST CCHMC ADMIT</span>
+                  <span class="detail-text">12/17/2018</span>
+                  </div>
+                </div>
+                <div fxLayout="row" class="detail-row">
+                    <div fxLayout="column" fxFlex=50%>
+                      <span class="detail-title">LAST OR NEXT CCHMC APPT</span>
+                    <span class="detail-text">12/17/2018</span>
+                    </div>
+                  <div fxLayout="column">
+                    <span class="detail-title">Last healthbridge Admit </span>
+                    <span class="detail-text">12/17/2018, 9:30 AM
+                      Hospital Name</span>
+                  </div>
+                  </div>
+              </div>
+            </div>
       </div>
     </ng-template>
 
