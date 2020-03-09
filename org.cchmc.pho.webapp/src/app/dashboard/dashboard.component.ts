@@ -167,7 +167,6 @@ export class DashboardComponent implements OnInit {
       this.edChartTitle = this.edChart[0].chartTitle;
       this.edChart.forEach(item => {
         this.addData(this.edBarChart,
-          // item.chartLabel,
           this.transformToolTipDate(item.admitDate),
           item.edVisits); // Getting data to the chart, will be easier to update if needed
       });
