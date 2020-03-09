@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using org.cchmc.pho.api.ViewModels;
+using org.cchmc.pho.core.DataModels;
 using org.cchmc.pho.core.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -145,6 +146,89 @@ namespace org.cchmc.pho.api.Controllers
                 return Ok(result);
             }
             catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+       
+        [HttpPut("patients/{id}")]
+        [SwaggerResponse(200, type: typeof(string))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]       
+        public async Task<IActionResult> UpdateWorkbooksPatient(int id,[FromBody] WorkbooksPatientViewModel workbookspatientVM)
+        {
+            // route parameters are strings and need to be translated (and validated) to their proper data type
+            if (!int.TryParse(_DEFAULT_USER, out var userId))
+            {
+                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
+                return BadRequest("user is not a valid integer");
+            }
+
+            try
+            {
+                await _workbooks.UpdateWorkbooksPatient(userId, workbookspatientVM.FormResponseId, id, workbookspatientVM.ProviderId, workbookspatientVM.DateOfService, int.Parse(workbookspatientVM.PHQ9_Score), workbookspatientVM.ActionFollowUp);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+        [HttpPut("provider/{id}")]
+        [SwaggerResponse(200, type: typeof(string))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> UpdateWorkbooksProvider(int id, [FromBody] WorkbooksProviderViewModel workbooksproviderVM)
+        {
+            // route parameters are strings and need to be translated (and validated) to their proper data type
+            if (!int.TryParse(_DEFAULT_USER, out var userId))
+            {
+                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
+                return BadRequest("user is not a valid integer");
+            }
+
+            try
+            {
+                await _workbooks.UpdateWorkbooksProviders(userId, workbooksproviderVM.FormResponseID, id, workbooksproviderVM.PHQS, workbooksproviderVM.TOTAL);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+        [HttpGet("patientfollowup")]
+        [SwaggerResponse(200, type: typeof(WorkbooksPatientFollowupViewModel))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> GetWorkbooksPatientPHQ9FollowUp(int formResponseId, int patientID)
+        {
+            // route parameters are strings and need to be translated (and validated) to their proper data type
+            if (!int.TryParse(_DEFAULT_USER, out var userId))
+            {
+                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
+                return BadRequest("user is not a valid integer");
+            }
+
+            try
+            {
+                // call the data method
+                var data = await _workbooks.GetWorkbooksPatientPHQ9FollowUp(int.Parse(_DEFAULT_USER.ToString()), formResponseId, patientID);
+                // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
+                var result = _mapper.Map<WorkbooksPatientFollowup>(data);
+                // return the result in a "200 OK" response
+                return Ok(result);
+            }
+            
+            catch(Exception ex)
             {
                 // log any exceptions that happen and return the error to the user
                 _logger.LogError(ex, "An error occurred");
