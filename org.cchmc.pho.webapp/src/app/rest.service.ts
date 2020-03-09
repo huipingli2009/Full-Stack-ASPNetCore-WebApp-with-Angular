@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 import { Alerts, Population, EdChart, EdChartDetails, Spotlight, Quicklinks } from './models/dashboard';
 import { environment } from '../environments/environment';
+import { Patients, PatientDetails } from './models/patients';
 
 // we can now access environment.apiUrl
 const API_URL = environment.apiURL;
@@ -87,6 +88,25 @@ export class RestService {
     const endpoint = `${API_URL}/api/Metrics/edcharts/${admitDate}`;
     return this.http.get<any>(endpoint).pipe(
       map((data: EdChartDetails[]) => {
+        return data;
+      })
+   );
+  }
+
+  /*Get All Patients*/
+  getAllPatients(): Observable<any> {
+    return this.http.get<any>(`${API_URL}/api/Patients/`).pipe(
+      map((data: Patients[]) => {
+        return data;
+      })
+    );
+  }
+
+  /*Gets base PatientDetails based on Patient Id */
+  getPatientDetails(id): Observable<any> {
+    const endpoint = `${API_URL}/api/patientDetails/${id}`;
+    return this.http.get<any>(endpoint).pipe(
+      map((data: PatientDetails[]) => {
         return data;
       })
    );
