@@ -102,13 +102,37 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(200, type: typeof(PatientDetailsViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> UpdatePatientDetails([FromBody] PatientDetailsViewModel patientDetailsVM)
+        public async Task<IActionResult> UpdatePatientDetails([FromBody] PatientDetailsViewModel patientDetailsVM, string patient)
         {
             // route parameters are strings and need to be translated (and validated) to their proper data type
             if (!int.TryParse(_DEFAULT_USER, out var userId))
             {
                 _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
                 return BadRequest("user is not a valid integer");
+            }
+
+            if (!int.TryParse(patient, out var patientId))
+            {
+                _logger.LogInformation($"Failed to parse patientId - {patient}");
+                return BadRequest("patient is not a valid integer");
+            }
+
+            if (patientDetailsVM == null)
+            {
+                _logger.LogInformation("patientDetails object is null");
+                return BadRequest("patient is null");
+            }
+
+            if (patientDetailsVM.Id != patientId)
+            {
+                _logger.LogInformation($"patientDetails.Id and patientId to not match");
+                return BadRequest("patient id does not match");
+            }
+
+            if (!_patient.IsPatientInSamePractice(userId, patientId))
+            {
+                _logger.LogInformation($"patient and user practices do not match");
+                return BadRequest("patient practice does not match user");
             }
 
             //TODO - 

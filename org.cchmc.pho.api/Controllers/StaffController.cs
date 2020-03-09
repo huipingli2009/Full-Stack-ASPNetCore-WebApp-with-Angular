@@ -99,13 +99,37 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(200, type: typeof(StaffDetailViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> UpdateStaffDetails([FromBody] StaffDetailViewModel staffDetailVM)
+        public async Task<IActionResult> UpdateStaffDetails([FromBody] StaffDetailViewModel staffDetailVM, string staff)
         {
             // route parameters are strings and need to be translated (and validated) to their proper data type
             if (!int.TryParse(_DEFAULT_USER, out var userId))
             {
                 _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
                 return BadRequest("user is not a valid integer");
+            }
+
+            if (!int.TryParse(staff, out var staffId))
+            {
+                _logger.LogInformation($"Failed to parse staffId - {staff}");
+                return BadRequest("staff is not a valid integer");
+            }
+
+            if (staffDetailVM == null)
+            {
+                _logger.LogInformation($"staffDetails object is null");
+                return BadRequest("staff is null");
+            }
+
+            if (staffDetailVM.Id != staffId)
+            {
+                _logger.LogInformation($"staffDetails.Id and staffId to not match");
+                return BadRequest("staff id does not match");
+            }
+
+            if (!_staffDal.IsStaffInSamePractice(userId, staffId))
+            {
+                _logger.LogInformation($"staff and user practices do not match");
+                return BadRequest("staff practice does not match user");
             }
 
             try

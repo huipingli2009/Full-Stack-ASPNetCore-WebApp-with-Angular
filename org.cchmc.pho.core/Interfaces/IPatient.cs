@@ -11,5 +11,6 @@ namespace org.cchmc.pho.core.Interfaces
         Task<PatientDetails> UpdatePatientDetails(int userId, PatientDetails patientDetail);
         Task<List<PatientCondition>> GetPatientConditionsAll();
         Task<List<PatientInsurance>> GetPatientInsuranceAll(int userId);
+        bool IsPatientInSamePractice(int userId, int patientId);
     }
 }

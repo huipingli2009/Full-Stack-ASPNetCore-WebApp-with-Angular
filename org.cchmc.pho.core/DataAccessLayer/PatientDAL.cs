@@ -123,7 +123,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     //Execute Stored Procedure
                     sqlCommand.ExecuteNonQuery();
 
-                    return patientDetail;
+                    return GetPatientDetails(patientDetail.Id).Result;
 
                 }
             }
@@ -139,29 +139,33 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                     List<PatientCondition> returnObject = null;
 
-                    SqlDataAdapter da = new SqlDataAdapter(sqlCommand);
-                    DataSet ds = new DataSet();
-                    da.Fill(ds);
-
-                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
-                        if (returnObject == null)
+
+                        DataSet ds = new DataSet();
+                        da.Fill(ds);
+
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
-                            returnObject = new List<PatientCondition>();
+                            if (returnObject == null)
+                            {
+                                returnObject = new List<PatientCondition>();
+                            }
+                            int.TryParse(ds.Tables[0].Rows[i]["ID"].ToString(), out int intId);
+
+                            PatientCondition PtCondition = new PatientCondition
+                            {
+                                ID = intId,
+                                Name = ds.Tables[0].Rows[i]["Condition"].ToString(),
+                                Description = ds.Tables[0].Rows[i]["Desc"].ToString()
+                            };
+
+                            returnObject.Add(PtCondition);
                         }
-                        int.TryParse(ds.Tables[0].Rows[i]["ID"].ToString(), out int intId);
 
-                        PatientCondition PtCondition = new PatientCondition
-                        {
-                            ID = intId,
-                            Name = ds.Tables[0].Rows[i]["Condition"].ToString(),
-                            Description = ds.Tables[0].Rows[i]["Desc"].ToString()
-                        };
-
-                        returnObject.Add(PtCondition);
+                        return returnObject;
                     }
 
-                    return returnObject;
                 } 
             }
         }
@@ -273,6 +277,23 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                     }
                     return details;
+                }
+            }
+        }
+
+        public bool IsPatientInSamePractice(int userId, int patientId)
+        {
+            DataTable dataTable = new DataTable();
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spCheckPermissions", sqlConnection))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@PatientID", SqlDbType.Int).Value = patientId;
+                    sqlConnection.Open();
+
+                    return (bool)sqlCommand.ExecuteScalar();
                 }
             }
         }

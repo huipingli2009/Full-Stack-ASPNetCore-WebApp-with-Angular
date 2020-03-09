@@ -134,7 +134,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     //Execute Stored Procedure
                     sqlCommand.ExecuteNonQuery();
 
-                    return staffDetail;
+                    return GetStaffDetails(userId, staffDetail.Id).Result;
                 }
             }
         }
@@ -248,6 +248,23 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 }
             }
             return providers;
+        }
+
+        public bool IsStaffInSamePractice(int userId, int staffId)
+        {
+            DataTable dataTable = new DataTable();
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spCheckPermissions", sqlConnection))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@StaffID", SqlDbType.Int).Value = staffId;
+                    sqlConnection.Open();
+
+                    return (bool)sqlCommand.ExecuteScalar();
+                }
+            }
         }
     }
 }

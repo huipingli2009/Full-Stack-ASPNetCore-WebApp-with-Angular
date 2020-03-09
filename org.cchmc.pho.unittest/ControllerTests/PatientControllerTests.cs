@@ -248,10 +248,11 @@ namespace org.cchmc.pho.unittest.ControllerTests
 
             _mockPatientDal.Setup(p => p.UpdatePatientDetails(userId, myPatientDetails))
                 .Returns(Task.FromResult(myPatientDetails)).Verifiable();
+            _mockPatientDal.Setup(p => p.IsPatientInSamePractice(It.IsAny<Int32>(), It.IsAny<Int32>())).Returns(true);
             _PatientController = new PatientsController(_mockLogger.Object, _mapper, _mockPatientDal.Object);
 
             // execute
-            var result = await _PatientController.UpdatePatientDetails(_mapper.Map<PatientDetailsViewModel>(myPatientDetails));
+            var result = await _PatientController.UpdatePatientDetails(_mapper.Map<PatientDetailsViewModel>(myPatientDetails), "20101");
 
             // assert
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
@@ -260,21 +261,116 @@ namespace org.cchmc.pho.unittest.ControllerTests
         }
 
         [TestMethod]
+        public async Task UpdatePatientDetails_PatientDetailIsNull_Throws400()
+        {
+            // setup
+            var patientId = "1";
+            _PatientController = new PatientsController(_mockLogger.Object, _mapper, _mockPatientDal.Object);
+
+            // execute
+            var result = await _PatientController.UpdatePatientDetails(null, patientId) as ObjectResult;
+
+            // assert
+            Assert.AreEqual(400, result.StatusCode);
+            Assert.AreEqual("patient is null", result.Value);
+            _mockPatientDal.Verify(p => p.GetPatientDetails(It.IsAny<int>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task UpdatePatientDetails_PatientDetailDoesNotMatch_Throws400()
+        {
+            // setup
+            var patientId = "1";
+            _PatientController = new PatientsController(_mockLogger.Object, _mapper, _mockPatientDal.Object);
+
+            // execute
+            var result = await _PatientController.UpdatePatientDetails(new PatientDetailsViewModel(), patientId) as ObjectResult;
+
+            // assert
+            Assert.AreEqual(400, result.StatusCode);
+            Assert.AreEqual("patient id does not match", result.Value);
+            _mockPatientDal.Verify(p => p.GetPatientDetails(It.IsAny<int>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task UpdatePatientDetails_PatientAndUserNotSamePractice_Throws400()
+        {
+            // setup
+            var patientId = "20101";
+            
+            var myPatientDetails = new PatientDetailsViewModel()
+            {
+                Id = 20101,
+                PatientMRNId = "01302109",
+                ClarityPatientId = "Z667259",
+                PracticeId = 37,
+                FirstName = "Ryan",
+                MiddleName = "",
+                LastName = "Abbott",
+                PatientDOB = Convert.ToDateTime("2004-08-25T00:00:00"),
+                PCPId = 602,
+                PCPFirstName = "Nancy",
+                PCPLastName = "Young",
+                InsuranceId = 2038,
+                InsuranceName = "UMR",
+                AddressLine1 = "5613 Glenbrook Ct",
+                AddressLine2 = "",
+                City = "Mason",
+                State = "OH",
+                Zip = "45040",
+                Conditions = new List<PatientConditionViewModel>(),
+                PMCAScore = 0,
+                ProviderPMCAScore = 2,
+                ProviderNotes = "Ryan needs more care. Just updated",
+                ActiveStatus = true,
+                PendingStatusConfirmation = true,
+                GenderId = 1,
+                Gender = "M",
+                Email = "",
+                Phone1 = "5137700902",
+                Phone2 = "",
+                PracticeVisits = 28,
+                CCHMCEncounters = 15,
+                HealthBridgeEncounters = 0,
+                UniqueDXs = 0,
+                UniqueCPTCodes = 23,
+                LastPracticeVisit = Convert.ToDateTime("2018-09-11T00:00:00"),
+                LastCCHMCAdmit = Convert.ToDateTime("2018-09-12T00:00:00"),
+                LastHealthBridgeAdmit = Convert.ToDateTime("2016-01-28T21:04:00"),
+                LastDiagnosis = "",
+                CCHMCAppointment = Convert.ToDateTime("2016-02-03T19:00:00")
+            };
+
+            _PatientController = new PatientsController(_mockLogger.Object, _mapper, _mockPatientDal.Object);
+            _mockPatientDal.Setup(p => p.IsPatientInSamePractice(It.IsAny<Int32>(), It.IsAny<Int32>())).Returns(false);
+
+            // execute
+            var result = await _PatientController.UpdatePatientDetails(myPatientDetails, patientId) as ObjectResult;
+
+            // assert
+            Assert.AreEqual(400, result.StatusCode);
+            Assert.AreEqual("patient practice does not match user", result.Value);
+            _mockPatientDal.Verify(p => p.GetPatientDetails(It.IsAny<int>()), Times.Never);
+        }
+
+        [TestMethod]
         public async Task UpdatePatientDetails_DataLayerThrowsException_ReturnsError()
         {
             // setup
             var userId = 3; //todo update to match the hardcoded
 
-            List<PatientCondition> conditions = new List<PatientCondition>();
-            conditions.Add(new PatientCondition(1, "Asthma"));
-            conditions.Add(new PatientCondition(2, "Depression"));
+            List<PatientConditionViewModel> conditions = new List<PatientConditionViewModel>();
+            PatientConditionViewModel condition1 = new PatientConditionViewModel();
+            condition1.ID = 1;
+            condition1.Name = "Asthma";
+            conditions.Add(condition1);
 
 
-            var myPatientDetails = new PatientDetails()
+            var myPatientDetails = new PatientDetailsViewModel()
             {
                 Id = 20101,
                 PatientMRNId = "01302109",
-                PatId = "Z667259",
+                ClarityPatientId = "Z667259",
                 PracticeId = 37,
                 FirstName = "Ryan",
                 MiddleName = "",
@@ -295,7 +391,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 ProviderPMCAScore = 2,
                 ProviderNotes = "Ryan needs more care. Just updated",
                 ActiveStatus = true,
-                PotentiallyActiveStatus = true,
+                PendingStatusConfirmation = true,
                 GenderId = 1,
                 Gender = "M",
                 Email = "",
@@ -314,11 +410,12 @@ namespace org.cchmc.pho.unittest.ControllerTests
             };
 
             _mockPatientDal.Setup(p => p.UpdatePatientDetails(userId, It.IsAny<PatientDetails>())).Throws(new Exception());
+            _mockPatientDal.Setup(p => p.IsPatientInSamePractice(It.IsAny<Int32>(), It.IsAny<Int32>())).Returns(true);
             _PatientController = new PatientsController(_mockLogger.Object, _mapper, _mockPatientDal.Object);
 
 
             // execute
-            var result = await _PatientController.UpdatePatientDetails(new PatientDetailsViewModel()) as ObjectResult;
+            var result = await _PatientController.UpdatePatientDetails(myPatientDetails, "20101") as ObjectResult;
 
 
             // assert

@@ -15,5 +15,6 @@ namespace org.cchmc.pho.core.Interfaces
         Task<List<Credential>> ListCredentials();
         Task<List<Responsibility>> ListResponsibilities();
         Task<List<Provider>> ListProviders(int userId);
+        bool IsStaffInSamePractice(int userId, int staffId);
     }
 }
