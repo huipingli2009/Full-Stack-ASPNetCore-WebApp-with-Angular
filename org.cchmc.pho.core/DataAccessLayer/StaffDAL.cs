@@ -134,7 +134,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     //Execute Stored Procedure
                     sqlCommand.ExecuteNonQuery();
 
-                    return GetStaffDetails(userId, staffDetail.Id).Result;
+                    return await GetStaffDetails(userId, staffDetail.Id);
                 }
             }
         }

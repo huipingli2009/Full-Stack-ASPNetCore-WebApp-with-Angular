@@ -123,7 +123,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     //Execute Stored Procedure
                     sqlCommand.ExecuteNonQuery();
 
-                    return GetPatientDetails(patientDetail.Id).Result;
+                    return await GetPatientDetails(patientDetail.Id);
 
                 }
             }
