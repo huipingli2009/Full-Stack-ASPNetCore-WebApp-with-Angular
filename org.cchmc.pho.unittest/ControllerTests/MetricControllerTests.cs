@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -14,7 +15,7 @@ using org.cchmc.pho.api.ViewModels;
 using org.cchmc.pho.core.DataModels;
 using org.cchmc.pho.core.Interfaces;
 
-namespace org.cchmc.pho.unittest.controllertests
+namespace org.cchmc.pho.unittest.ControllerTests
 {
     [TestClass]
     [ExcludeFromCodeCoverage]
@@ -44,9 +45,9 @@ namespace org.cchmc.pho.unittest.controllertests
         {
             // setup
             var userId = 3;
-            var myMetrics = new List<Metric>()
+            var myMetrics = new List<DashboardMetric>()
             {
-                new Metric()
+                new DashboardMetric()
                 {
                     PracticeId = 1,
                     DashboardLabel = "LabelTextFor1",
@@ -55,7 +56,7 @@ namespace org.cchmc.pho.unittest.controllertests
                     PracticeTotal = 14,
                     NetworkTotal = 234
                 },
-                new Metric()
+                new DashboardMetric()
                 {
                     PracticeId = 1,
                     DashboardLabel = "LabelTextFor2",
@@ -70,7 +71,7 @@ namespace org.cchmc.pho.unittest.controllertests
 
             // execute
             var result = await _MetricController.ListDashboardMetrics() as ObjectResult;
-            var resultList = result.Value as List<MetricViewModel>;
+            var resultList = result.Value as List<DashboardMetricViewModel>;
 
             // assert
             Assert.AreEqual(2, resultList.Count);
@@ -206,8 +207,8 @@ namespace org.cchmc.pho.unittest.controllertests
         {
             // setup
             var userId = 3;
-            var admitDate = "12/1/2020 12:00:00 AM";
-            DateTime admitDateTime = Convert.ToDateTime(admitDate);
+            var admitDate = "20201201";
+            bool converstionResult = DateTime.TryParseExact(admitDate, "yyyyMMdd", CultureInfo.CurrentCulture, DateTimeStyles.None, out var admitDateTime);
             var myMetrics = new List<EDDetail>()
             {
                 new EDDetail()
@@ -320,9 +321,10 @@ namespace org.cchmc.pho.unittest.controllertests
         public async Task ListEDDetails_DataLayerThrowsException_ReturnsError()
         {
             // setup
-            var admitDate = "12/1/2020 12:00:00 AM";
-            DateTime admitDateTime = Convert.ToDateTime(admitDate);
-            _mockMetricDal.Setup(p => p.ListEDDetails(It.IsAny<int>(), It.IsAny<DateTime>())).Throws(new Exception()).Verifiable();
+            var userId = 3; 
+            var admitDate = "20201201";
+            bool converstionResult = DateTime.TryParseExact(admitDate, "yyyyMMdd", CultureInfo.CurrentCulture, DateTimeStyles.None, out var admitDateTime);
+            _mockMetricDal.Setup(p => p.ListEDDetails(userId, admitDateTime)).Throws(new Exception()).Verifiable();
             _MetricController = new MetricsController(_mockLogger.Object, _mapper, _mockMetricDal.Object);
 
             // execute

@@ -1,10 +1,11 @@
-﻿using org.cchmc.pho.core.DataModels;
+﻿using Microsoft.Extensions.Options;
+using org.cchmc.pho.core.DataModels;
 using org.cchmc.pho.core.Interfaces;
+//using org.cchmc.pho.core.Models;
 using org.cchmc.pho.core.Settings;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 using System.Data.SqlClient;
 using System.Data;
@@ -83,3 +84,4 @@ namespace org.cchmc.pho.core.DataAccessLayer
         }
     }
 }
+

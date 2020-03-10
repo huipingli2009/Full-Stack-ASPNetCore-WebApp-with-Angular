@@ -153,9 +153,6 @@ h1 {
       border-bottom: 1.8px solid var(--primary-darker-color);
   }
 }
-/* Reusable Layout Elements ======================================================================================*/
-
-/*Dashboard Containers*/
 
 
 /* Dashboard =========================================================================== */
@@ -398,10 +395,12 @@ h1 {
         font-family: 'ArcherBold';
         width: 99px;
         background-color: var(--purple-light);
-        padding: 18px;
+        padding: 15px;
         text-align: center;
         border: 0.5px dashed var(--purple-dark);
         outline: 4px solid var(--purple-light);
+        margin-right: 14.5px;
+        margin-left: 14.5px;
       }
       a {
         color: var(--purple-dark);
@@ -506,5 +505,250 @@ h1 {
       
     }
   }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+  /* Patients =========================================================================== */
+
+  .patients-header {
+    border-top-right-radius: 7px;
+      border-top-left-radius: 7px;
+    background-color: var(--primary-color);
+    font-size: 15px;
+    line-height: 20px;
+    color: white;
+    padding: 21px 35px 0;
+    font-weight: Bold;
+    text-align: left;
+    letter-spacing: normal;
+    
+    .header-filter {
+      margin-right: 36px;
+    }
+    .mat-form-field-appearance-legacy .mat-form-field-label, .mat-select-value-text {
+      font-size: 15px;
+      line-height: 20px;
+      color: white;
+      font-weight: Bold;
+      letter-spacing: normal;
+    }
+    .mat-select-arrow {
+      color: white;
+    }
+    .mat-form-field-appearance-legacy .mat-form-field-underline {
+      background-color: white;
+    }
+  }
+
+  #patients {
+    width: 100%;
+    border: solid 1px var(--primary-color);
+
+    table {
+      width: 100%;
+      border-bottom-right-radius: 7px;
+      border-bottom-left-radius: 7px;
+    }
+
+    .mat-row:nth-child(even) {
+      background-color: rgba(229,238,245,0.41);
+    }
+
+    .mat-header-row {
+      background-color: rgba(0,168,150,0.16);
+      height: 47px;
+    .mat-header-cell, button {
+      font-size: 13px;
+      font-weight: bold;
+      line-height: 19px;
+      letter-spacing: 1px;
+      color: var(--primary-darker-color);
+      text-align: left;
+      text-transform: uppercase !important;
+
+      button {
+        text-transform: uppercase;
+      }
+    }
+    }
+
+    .mat-cell {
+      color: #4A4A4A;
+      font-size: 13px;
+      line-height: 18px;
+    }
+
+    .table-header-checkbox {
+      color: var(--primary-darker-color);
+      vertical-align: text-bottom;
+      margin-left: 5px;
+    }
+
+    .mat-column-name {
+      color: #4A4A4A;
+      font-size: 13px;
+      line-height: 18px;
+      font-weight: bold;
+    }
+    .mat-column-chronic {
+      font-weight: bold;
+      text-align: center !important;
+    }
+    .mat-column-lastEDVisit {
+     width: 128px;
+    }
+    .mat-column-watchFlag {
+      text-align: center !important;
+      .watchlist-icon {
+        color: rgb(226, 225, 225);
+      }
+      .on-watchlist {
+        color: var(--accent-color);
+      }
+    }
+    .condition-chip {
+      background-color: var(--purple-light);
+      border-radius: 12.5px;
+      padding: 5px 19px;
+      color: var(--purple-dark);
+      font-size: 12px;
+      line-height: 16px;
+      letter-spacing: normal;
+      text-align: center;
+      font-weight: 500;
+    }
+  }
+  /* Patient Expansion Panels*/
+  .element-row {
+    position: relative;
+    height: 57px !important;
+  }
+  
+  .element-row:not(.expanded) {
+    cursor: pointer;
+  }
+  
+  .element-row:not(.expanded):hover {
+    background: #f5f5f5;
+  }
+  
+  .element-row.expanded {
+    border-bottom-color: transparent;
+  }
+
+  .mat-column-arrow {
+    max-width: 80px;
+  }
+
+  .rotate-icon {
+    color: var(--primary-color);
+    font-weight: bold;
+  }
+
+  .expanded .rotate-icon {
+    -moz-transition: 0.5s;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    -ms-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+
+/* Patient Details */
+
+#patient-details {
+  padding: 25px 75px;
+
+  .detail-heading {
+    font-family: 'ArcherBold';
+    font-size: 16px;
+    line-height: 17px;
+    letter-spacing: 0.5px;
+    color: var(--primary-darker-color);
+    margin-bottom: 13px;
+  }
+
+  label {
+    font-size: 11px;
+    line-height: 19px;
+    letter-spacing: 0.88px;
+    font-weight: 700;
+    color: var(--primary-darker-color);
+    text-transform: uppercase;
+  }
+
+  input {
+    background-color: transparent;
+    border-width: 0px 0px 1.5px 0px;
+    border-color: #DDECEA;
+    padding-bottom: 4px;
+    color: #4A4A4A;
+    font-size: 13px;
+    line-height: 18px;
+    letter-spacing: normal;
+    max-width: 116px;
+  }
+  .form-row {
+    margin-bottom: 16px;
+  }
+  #addressLine1 {
+    min-width: 288px;
+  }
+
+  .border-row-top {
+    border-top: 1px solid #979797;
+    margin-top: 25px;
+    padding: 20px 0;
+  }
+
+  .metric-data-box {
+    background-color: rgba(#DFF2F0, 0.69);
+    padding: 30px 0;
+    border-radius: 4px;
+    margin-right: 24px;
+  }
+
+  .metric-data {
+    border-right: 1px solid #979797;
+    padding: 0 26px;
+    text-align: center;
+    max-width: 141px;
+
+    .metric-number {
+      font-size: 48px;
+      line-height: 66px;
+      font-weight: bold;
+      color: var(--primary-darker-color);
+    }
+    .metric-title {
+      font-size: 10.5px;
+      font-weight: bold;
+      line-height: 13px;
+      letter-spacing: 0.88px;
+      color: #4A4A4A;
+    }
+  }
+  .metric-data:last-of-type {
+    border-right: none;
+  }
+
+  .visit-details-box {
+    padding-left: 24px;
+
+    .detail-title {
+      color: var(--primary-darker-color);
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+    .detail-row {
+      margin-top: 15px;
+    }
+    .detail-text {
+      font-size: 13px;
+      line-height: 20px;
+      letter-spacing: 0.88px;
+      color: #4A4A4A;
+      font-weight: 500;
+    }
+  }
+}

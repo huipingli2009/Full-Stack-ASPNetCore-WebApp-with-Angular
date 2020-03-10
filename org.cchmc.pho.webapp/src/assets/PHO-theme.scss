@@ -6,6 +6,10 @@
 @import url('https://fonts.googleapis.com/css?family=Lato:300,400,500');
 @import url('https://fonts.googleapis.com/css?family=Arvo:300,400,500');
 
+
+// Define a custom typography config that overrides the font-family as well as the
+// `headlines` and `body-1` levels.
+
 $fontConfig: (
   display-4: mat-typography-level(112px, 112px, 300, 'Lato', -0.0134em),
   display-3: mat-typography-level(56px, 56px, 400, 'Lato', -0.0089em),
@@ -22,7 +26,8 @@ $fontConfig: (
   input: mat-typography-level(inherit, 1.125, 400, 'Lato', 1.5px)
 );
 
-// Foreground Elements
+// Override Default Elements
+
 
 // Light Theme Text
 $dark-text: #000000;
@@ -222,10 +227,20 @@ $altTheme: mat-dark-theme($theme-primary, $theme-accent, $theme-warn);
   padding: 0 1.15em;
   margin: 0 .65em;
   min-width: 3em;
-  line-height: 46.800000000000004px
+  line-height: 18px;
+  color: white !important;
+  font-family: 'ArcherBold';
+  font-size: 15px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  min-width: 94px !important;
 }
 
 .mat-standard-chip {
   padding: .5em .85em;
   min-height: 2.5em;
+}
+
+.mat-table {
+  font-family: 'Lato';
 }

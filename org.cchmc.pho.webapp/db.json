@@ -33,39 +33,53 @@
      }
     ]
   },
-  "Contents" : [
+  "spotlights" : [
     {
       "header": "Exceptional Patient Care: ESD Pediatrics",
-      "placementOrder": 1,
       "body": "ESD Pediatric Group had a successful second quarter. Read on to learn how their processes could help your practice acheive your quarterly goals. ESD Pediatric Group had a successful second quarter. Read on to learn how their processes could help your practice acheive your quarterly goals. ESD Pediatric Group had a successful second quarter.",
       "hyperlink": "https://cchmc.sharepoint.com/:w:/s/PHODataCollection/ETfEDhWG5UlPg6e5w6H9N-cBhbAV8QkARfidHFysShJGmw?e=569bs3",
       "imageHyperlink": "Spotlight_Img1.jpeg",
-      "contentPlacement": "Monthly Spotlight"
-    },
+      "locationId": 1
+    }
+  ],
+  "quicklinks" : [
     {
-      "header": null,
-      "placementOrder": 2,
+      "placementOrder": 1,
       "body": "Top 100 Bill Codes",
       "hyperlink": "https://cchmc.sharepoint.com/:b:/s/PHODataCollection/EYYj4_iUwVlCtknVRXSekSsBF1XWrtJPgMaZnniUQ19bzg?e=emWREK",
-      "imageHyperlink": "NULL",
-      "contentPlacement": "Quick Links"
+      "locationId": 2
     },
     {
-      "header": null,
+      "placementOrder": 2,
+      "body": "Top Billed J Codes",
+      "hyperlink": "https://cchmc.sharepoint.com/:b:/s/PHODataCollection/EYYj4_iUwVlCtknVRXSekSsBF1XWrtJPgMaZnniUQ19bzg?e=b7eeLI",
+      "locationId": 2
+    },
+    {
       "placementOrder": 3,
-      "body": "Top Billed J Codes",
-      "hyperlink": "https://cchmc.sharepoint.com/:b:/s/PHODataCollection/EYYj4_iUwVlCtknVRXSekSsBF1XWrtJPgMaZnniUQ19bzg?e=emWREK",
-      "imageHyperlink": "NULL",
-      "contentPlacement": "Quick Links"
+      "body": "View PMCA Scores",
+      "hyperlink": "https://insight.invisionapp.com/d/main/#/console/18823247/398259767/preview",
+      "locationId": 2
     },
     {
-      "header": null,
       "placementOrder": 4,
-      "body": "Top Billed J Codes",
-      "hyperlink": "https://cchmc.sharepoint.com/:b:/s/PHODataCollection/EYYj4_iUwVlCtknVRXSekSsBF1XWrtJPgMaZnniUQ19bzg?e=emWREK",
-      "imageHyperlink": "NULL",
-      "contentPlacement": "Quick Links"
+      "body": "Depression Utilizations",
+      "hyperlink": "https://cchmc.sharepoint.com/:w:/s/PHODataCollection/ETfEDhWG5UlPg6e5w6H9N-cBhbAV8QkARfidHFysShJGmw?e=569bs3",
+      "locationId": 2
+    },
+    {
+      "placementOrder": 5,
+      "body": "Potential Patients",
+      "hyperlink": "https://insight.invisionapp.com/d/main/#/console/18823247/398259767/preview",
+      "locationId": 2
+    },
+    {
+      "placementOrder": 6,
+      "body": "Quarterly Report",
+      "hyperlink": "https://cchmc.sharepoint.com/:w:/s/PHODataCollection/Ec1NsZq63MlPvTwlfE8MDA8BPiT8zIRZFwxyvSSkZL2IOA?e=JiLGKi",
+      "locationId": 2
     }
+  
   ],
   "Metrics" : [
     {
@@ -293,16 +307,7 @@
       "chartLabel": "Wed 2/19",
       "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
       "edVisits": 0
-    },
-    {
-      "id": 3,
-      "practiceId": 7,
-      "admitDate": "2/20/2020",
-      "chartLabel": "Thu 2/20",
-      "chartTitle": "ED Patient Counts for Sat 2/8 to Thu 2/20",
-      "edVisits": 9
     }
-    
   ],
   "edchartdetails" : [
     {
@@ -552,5 +557,498 @@
       "dX2_10Code": ""
   
     }
+  ],
+  "Patients" : [
+    {
+      "patientId": 489527,
+      "firstName": "Sutton",
+      "lastName": "Abney",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2019-01-24T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": null,
+      "chronic": true,
+      "watchFlag": false,
+      "conditions": [
+        {
+          "id": 3,
+          "name": "Asthma"
+        },
+        {
+          "id": 1,
+          "name": " Chronic"
+        }
+      ]
+    },
+    {
+      "patientId": 43292,
+      "firstName": "CALVIN",
+      "lastName": "ACOSTA",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2007-06-10T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": "2017-04-26T15:40:00",
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": [
+        {
+          "id": 3,
+          "name": "Asthma"
+        },
+        {
+          "id": 1,
+          "name": "Chronic"
+        }
+      ]
+    },
+    {
+      "patientId": 56822,
+      "firstName": "VIOLET",
+      "lastName": "ACOSTA",
+      "practiceID": 7,
+      "pcP_StaffID": 852,
+      "dob": "2016-01-04T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": "2017-07-20T21:34:00",
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": [
+        {
+          "id": 3,
+          "name": "Asthma"
+        }
+      ]
+    },
+    {
+      "patientId": 47396,
+      "firstName": "EVELYNN",
+      "lastName": "ACREE",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2016-07-08T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": "2017-10-31T18:05:00",
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": [
+        {
+          "id": 3,
+          "name": "Asthma"
+        }
+      ]
+    },
+    {
+      "patientId": 62975,
+      "firstName": "KAYLA",
+      "lastName": "ACREE",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2013-09-27T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": "2019-08-21T13:30:00",
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": [
+        {
+          "id": 3,
+          "name": "Asthma"
+        }
+      ]
+    },
+    {
+      "patientId": 500867,
+      "firstName": "Jack",
+      "lastName": "Adamo",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2017-12-16T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": true,
+      "lastEDVisit": "2019-12-24T09:30:00",
+      "chronic": false,
+      "watchFlag": true,
+      "conditions": [
+        {
+          "id": 3,
+          "name": "Asthma"
+        }
+      ]
+    },
+    {
+      "patientId": 501602,
+      "firstName": "Sarah",
+      "lastName": "Adams",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2002-11-22T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": null,
+      "chronic": false,
+      "watchFlag": true,
+      "conditions": [
+        {
+          "id": 3,
+          "name": "Asthma"
+        }
+      ]
+    },
+    {
+      "patientId": 70289,
+      "firstName": "SAMUEL",
+      "lastName": "ADAMS",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2012-11-03T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": true,
+      "lastEDVisit": "2016-05-23T17:05:00",
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": [
+        {
+          "id": 3,
+          "name": "Asthma"
+        }
+      ]
+    },
+    {
+      "patientId": 76970,
+      "firstName": "ZAREK",
+      "lastName": "ADAMS",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2002-04-07T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": null,
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": [
+        {
+          "id": 3,
+          "name": "Asthma"
+        }
+      ]
+    },
+    {
+      "patientId": 79075,
+      "firstName": "ZEBULON",
+      "lastName": "ADAMS",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "1999-06-29T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": null,
+      "chronic": true,
+      "watchFlag": false,
+      "conditions": [
+        {
+          "id": 1,
+          "name": "Chronic"
+        }
+      ]
+    },
+    {
+      "patientId": 53620,
+      "firstName": "ASA",
+      "lastName": "ADAMSLASSE",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2018-02-09T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": "2019-06-30T12:10:00",
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": [
+        {
+          "id": 1,
+          "name": "Chronic"
+        }
+      ]
+    },
+    {
+      "patientId": 52052,
+      "firstName": "ADDISON",
+      "lastName": "ADKINS",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2012-01-01T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": null,
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": [
+        {
+          "id": 1,
+          "name": "Chronic"
+        }
+      ]
+    },
+    {
+      "patientId": 42174,
+      "firstName": "AVERY",
+      "lastName": "ADKINS",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2013-12-31T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": null,
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": [
+        {
+          "id": 1,
+          "name": "Chronic"
+        }
+      ]
+    },
+    {
+      "patientId": 51017,
+      "firstName": "JULIA",
+      "lastName": "ADRIENDUFFY",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2010-02-01T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": "2017-10-15T18:11:00",
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": [
+        {
+          "id": 1,
+          "name": "Chronic"
+        }
+      ]
+    },
+    {
+      "patientId": 56664,
+      "firstName": "CLARE",
+      "lastName": "ADRIENDUFFY",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2010-02-01T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": "2017-04-10T10:18:00",
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": [
+        {
+          "id": 1,
+          "name": "Chronic"
+        }
+      ]
+    },
+    {
+      "patientId": 56665,
+      "firstName": "CLARE",
+      "lastName": "ADRIEN-DUFFY",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2010-02-01T00:00:00",
+      "activeStatus": false,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": null,
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": [
+        {
+          "id": 1,
+          "name": "Chronic"
+        }
+      ]
+    },
+    {
+      "patientId": 57863,
+      "firstName": "JULIA",
+      "lastName": "ADRIEN-DUFFY",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2010-02-01T00:00:00",
+      "activeStatus": false,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": null,
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": [
+        {
+          "id": 3,
+          "name": "Asthma"
+        }
+      ]
+    },
+    {
+      "patientId": 77599,
+      "firstName": "BENJAMIN",
+      "lastName": "AGIN",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2000-01-06T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": null,
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": [
+        {
+          "id": 3,
+          "name": "Asthma"
+        }
+      ]
+    },
+    {
+      "patientId": 52091,
+      "firstName": "ADELAIDE",
+      "lastName": "AHLQUIST",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2012-12-15T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": "2017-02-04T20:03:00",
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": [
+        {
+          "id": 1,
+          "name": "Chronic"
+        }
+      ]
+    },
+    {
+      "patientId": 45242,
+      "firstName": "CORALAINE",
+      "lastName": "AHLQUIST",
+      "practiceID": 7,
+      "pcP_StaffID": 362,
+      "dob": "2011-01-19T00:00:00",
+      "activeStatus": true,
+      "potentiallyActiveStatus": false,
+      "lastEDVisit": "2017-02-25T19:39:00",
+      "chronic": false,
+      "watchFlag": false,
+      "conditions": [
+        {
+          "id": 1,
+          "name": "Chronic"
+        }
+      ]
+    }
+  ], 
+  "patientDetails" : [
+    {
+      "id": 43292,
+      "patientMRNId": "11742966",
+      "clarityPatientId": "Z1974820",
+      "practiceId": 7,
+      "firstName": "Calvin",
+      "middleName": "",
+      "lastName": "Acosta",
+      "patientDOB": "2018-06-13T00:00:00",
+      "pcpId": 383,
+      "pcpFirstName": "Shoba",
+      "pcpLastName": "Krishnan",
+      "insuranceId": 238,
+      "insuranceName": "Wellfleet",
+      "addressLine1": "4203 OMER AVE",
+      "addressLine2": "",
+      "city": "CINCINNATI",
+      "state": "OH",
+      "zip": "45227",
+      "conditions": [
+        {
+          "id": 3,
+          "name": "Asthma"
+        },
+        {
+          "id": 1,
+          "name": " Chronic"
+        }
+      ],
+      "pmcaScore": 0,
+      "providerPMCAScore": 0,
+      "providerNotes": "",
+      "activeStatus": false,
+      "pendingStatusConfirmation": false,
+      "genderId": 1,
+      "gender": "M",
+      "email": "",
+      "phone1": "5137465149",
+      "phone2": "",
+      "practiceVisits": 9,
+      "cchmcEncounters": 4,
+      "healthBridgeEncounters": 0,
+      "uniqueDXs": 0,
+      "uniqueCPTCodes": 8,
+      "lastPracticeVisit": "2019-06-20T00:00:00",
+      "lastCCHMCAdmit": null,
+      "lastHealthBridgeAdmit": null,
+      "lastDiagnosis": "",
+      "cchmcAppointment": null
+    },
+    {
+      "id": 489527,
+      "patientMRNId": "01015417",
+      "clarityPatientId": "Z419865",
+      "practiceId": 7,
+      "firstName": "Abney",
+      "middleName": "",
+      "lastName": "Sutton",
+      "patientDOB": "2019-01-24T00:00:00",
+      "pcpId": 362,
+      "pcpFirstName": "Jeffery",
+      "pcpLastName": "Heaton",
+      "insuranceId": 0,
+      "insuranceName": "",
+      "addressLine1": "7716 WILDBRANCH RD",
+      "addressLine2": "",
+      "city": "FAIRFIELD",
+      "state": "OH",
+      "zip": "45011",
+      "conditions": [
+        {
+          "id": 3,
+          "name": "Asthma"
+        },
+        {
+          "id": 1,
+          "name": " Chronic"
+        }
+      ],
+      "pmcaScore": 2,
+      "providerPMCAScore": 0,
+      "providerNotes": "",
+      "activeStatus": true,
+      "pendingStatusConfirmation": false,
+      "genderId": 1,
+      "gender": "M",
+      "email": "",
+      "phone1": "5134009592",
+      "phone2": "",
+      "practiceVisits": 24,
+      "cchmcEncounters": 15,
+      "healthBridgeEncounters": 1,
+      "uniqueDXs": 0,
+      "uniqueCPTCodes": 25,
+      "lastPracticeVisit": "2018-11-01T00:00:00",
+      "lastCCHMCAdmit": null,
+      "lastHealthBridgeAdmit": "2019-07-14T05:28:00",
+      "lastDiagnosis": "",
+      "cchmcAppointment": "2014-02-13T13:05:00"
+    }
   ]
+  
 }

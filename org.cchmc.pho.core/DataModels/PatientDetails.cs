@@ -13,6 +13,7 @@ namespace org.cchmc.pho.core.DataModels
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public DateTime? PatientDOB { get; set; }
+        public bool IsWatchList { get; set; }
         public int PCPId { get; set; }
         public string PCPFirstName { get; set; }
         public string PCPLastName { get; set; }
@@ -27,7 +28,8 @@ namespace org.cchmc.pho.core.DataModels
         public int PMCAScore { get; set; }
         public int ProviderPMCAScore { get; set; }
         public string ProviderNotes { get; set; }
-        public PatientStatus Status { get; set; }
+        public bool ActiveStatus { get; set; }
+        public bool PotentiallyActiveStatus { get; set; }
         public int GenderId { get; set; }
         public string Gender { get; set; }
         public string Email { get; set; }

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using org.cchmc.pho.api.ViewModels;
 using org.cchmc.pho.core.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Globalization;
 
 namespace org.cchmc.pho.api.Controllers
 {
@@ -26,11 +27,12 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpGet("kpis")]
-        [SwaggerResponse(200, type: typeof(List<MetricViewModel>))]
+        [SwaggerResponse(200, type: typeof(List<DashboardMetricViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> ListDashboardMetrics()
         {
+
             string user = "3"; //todo: default for now
             // route parameters are strings and need to be translated (and validated) to their proper data type
             if (!int.TryParse(user, out var userId))
@@ -44,7 +46,29 @@ namespace org.cchmc.pho.api.Controllers
                 // call the data method
                 var data = await _metricDal.ListDashboardMetrics(userId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
-                var result = _mapper.Map<List<MetricViewModel>>(data);
+                var result = _mapper.Map<List<DashboardMetricViewModel>>(data);
+                // return the result in a "200 OK" response
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+        [HttpGet("pop")]
+        [SwaggerResponse(200, type: typeof(List<PopulationMetricViewModel>))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> ListPopulationMetrics()
+        {
+            try
+            {
+                // call the data method
+                var data = await _metricDal.ListPopulationMetrics();
+                // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
+                var result = _mapper.Map<List<PopulationMetricViewModel>>(data);
                 // return the result in a "200 OK" response
                 return Ok(result);
             }
@@ -103,8 +127,11 @@ namespace org.cchmc.pho.api.Controllers
                 _logger.LogInformation($"Failed to parse userId - {user}");
                 return BadRequest("user is not a valid integer");
             }
+
+
             // route parameters are strings and need to be translated (and validated) to their proper data type
-            if (!DateTime.TryParse(admitdate, out var admitDateTime))
+           
+            if (!DateTime.TryParseExact(admitdate, "yyyyMMdd",CultureInfo.CurrentCulture, DateTimeStyles.None,out var admitDateTime))
             {
                 _logger.LogInformation($"Failed to parse admitDate - {admitdate}");
                 return BadRequest("admitdate is not a valid datetime");

@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpClientModule } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
-import { Alerts, Content, Population, EdChart, EdChartDetails } from './models/dashboard';
+import { Alerts, Population, EdChart, EdChartDetails, Spotlight, Quicklinks } from './models/dashboard';
 import { environment } from '../environments/environment';
+import { Patients, PatientDetails } from './models/patients';
 
 // we can now access environment.apiUrl
 const API_URL = environment.apiURL;
@@ -47,9 +48,17 @@ export class RestService {
 
   /* Dashboard Content =======================================================*/
 
-  getDashboardContent(): Observable<any> {
+  getSpotlight(): Observable<any> {
     return this.http.get<any>(`${API_URL}/api/Contents/spotlights/`).pipe(
-      map((data: Content[]) => {
+      map((data: Spotlight[]) => {
+        return data;
+      })
+    );
+  }
+
+  getQuicklinks(): Observable<any> {
+    return this.http.get<any>(`${API_URL}/api/Contents/quicklinks/`).pipe(
+      map((data: Quicklinks[]) => {
         return data;
       })
     );
@@ -79,6 +88,25 @@ export class RestService {
     const endpoint = `${API_URL}/api/Metrics/edcharts/${admitDate}`;
     return this.http.get<any>(endpoint).pipe(
       map((data: EdChartDetails[]) => {
+        return data;
+      })
+   );
+  }
+
+  /*Get All Patients*/
+  getAllPatients(): Observable<any> {
+    return this.http.get<any>(`${API_URL}/api/Patients/`).pipe(
+      map((data: Patients[]) => {
+        return data;
+      })
+    );
+  }
+
+  /*Gets base PatientDetails based on Patient Id */
+  getPatientDetails(id): Observable<any> {
+    const endpoint = `${API_URL}/api/patientDetails/${id}`;
+    return this.http.get<any>(endpoint).pipe(
+      map((data: PatientDetails[]) => {
         return data;
       })
    );

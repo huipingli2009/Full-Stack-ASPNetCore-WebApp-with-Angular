@@ -4,13 +4,14 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "start-local": "ng serve --proxy-config proxy.conf.json",
+    "start-local": "ng serve --configuration=local  --proxy-config proxy.conf.json",
     "build": "ng build",
+    "build-local": "ng build --outputPath='../org.cchmc.pho.api/wwwroot/'",
     "build-webApp": "ng build --prod --base-href ./",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "node version.js"
+    "postinstall": "node version.js && ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points"
   },
   "private": true,
   "dependencies": {
@@ -34,7 +35,7 @@
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.900.2",
+    "@angular-devkit/build-angular": "^0.900.5",
     "@angular/cli": "~9.0.2",
     "@angular/compiler-cli": "~9.0.1",
     "@angular/language-service": "~9.0.1",
@@ -45,12 +46,12 @@
     "git-describe": "^4.0.4",
     "jasmine-core": "~3.5.0",
     "jasmine-spec-reporter": "~4.2.1",
+    "json-server": "^0.16.1",
     "karma": "~4.3.0",
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage-istanbul-reporter": "~2.1.0",
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.4.2",
-    "json-server": "^0.16.1",
     "protractor": "~5.4.3",
     "ts-node": "~8.3.0",
     "tslint": "~5.18.0",
