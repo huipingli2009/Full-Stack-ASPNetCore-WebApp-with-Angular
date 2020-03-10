@@ -204,16 +204,88 @@ namespace org.cchmc.pho.unittest.controllertests
             };
 
             _mockStaffDal.Setup(p => p.UpdateStaffDetails(userId, myStaff))
-                .Returns(Task.CompletedTask).Verifiable();
+                .Returns(Task.FromResult(myStaff)).Verifiable();
+            _mockStaffDal.Setup(p => p.IsStaffInSamePractice(It.IsAny<Int32>(), It.IsAny<Int32>())).Returns(true);
             _staffController = new StaffController(_mockLogger.Object, _mapper, _mockStaffDal.Object);
 
             // execute
-            var result = await _staffController.UpdateStaffDetails(_mapper.Map<StaffDetailViewModel>(myStaff));
+            var result = await _staffController.UpdateStaffDetails(_mapper.Map<StaffDetailViewModel>(myStaff), "20101");
 
             // assert
-            Assert.IsInstanceOfType(result, typeof(OkResult));
-            var okResult = result as OkResult;
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            var okResult = result as OkObjectResult;
             Assert.AreEqual(200, okResult.StatusCode);
+        }
+
+
+        [TestMethod]
+        public async Task UpdateStaffDetails_StaffDetailIsNull_Throws400()
+        {
+            // setup
+            var staffId = "1";
+            _staffController = new StaffController(_mockLogger.Object, _mapper, _mockStaffDal.Object);
+
+            // execute
+            var result = await _staffController.UpdateStaffDetails(null, staffId) as ObjectResult;
+
+            // assert
+            Assert.AreEqual(400, result.StatusCode);
+            Assert.AreEqual("staff is null", result.Value);
+            _mockStaffDal.Verify(p => p.GetStaffDetails(It.IsAny<int>(), It.IsAny<int>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task UpdateStaffDetails_StaffDetailDoesNotMatch_Throws400()
+        {
+            // setup
+            var staffId = "1";
+            _staffController = new StaffController(_mockLogger.Object, _mapper, _mockStaffDal.Object);
+
+            // execute
+            var result = await _staffController.UpdateStaffDetails(new StaffDetailViewModel(), staffId) as ObjectResult;
+
+            // assert
+            Assert.AreEqual(400, result.StatusCode);
+            Assert.AreEqual("staff id does not match", result.Value);
+            _mockStaffDal.Verify(p => p.GetStaffDetails(It.IsAny<int>(), It.IsAny<int>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task UpdateStaffDetails_PatientAndUserNotSamePractice_Throws400()
+        {
+            // setup
+            var staffId = "20101";
+
+            var myStaff = new StaffDetailViewModel()
+            {
+                Id = 20101,
+                FirstName = "Carwood",
+                LastName = "Lipton",
+                Email = "cli@gmail.com",
+                Phone = "513-123-4567",
+                StartDate = Convert.ToDateTime("12-30-2011 12:00:00 AM"),
+                PositionId = 37,
+                CredentialId = 76,
+                IsLeadPhysician = false,
+                IsQITeam = true,
+                IsPracticeManager = false,
+                IsInterventionContact = true,
+                IsQPLLeader = false,
+                IsPHOBoard = false,
+                IsOVPCABoard = false,
+                IsRVPIBoard = false,
+            };
+
+            _staffController = new StaffController(_mockLogger.Object, _mapper, _mockStaffDal.Object);
+            _mockStaffDal.Setup(p => p.IsStaffInSamePractice(It.IsAny<Int32>(), It.IsAny<Int32>())).Returns(false);
+
+            // execute
+            var result = await _staffController.UpdateStaffDetails(myStaff, staffId) as ObjectResult;
+
+            // assert
+            Assert.AreEqual(400, result.StatusCode);
+            Assert.AreEqual("staff practice does not match user", result.Value);
+            _mockStaffDal.Verify(p => p.GetStaffDetails(It.IsAny<int>(), It.IsAny<Int32>()), Times.Never);
         }
 
         [TestMethod]
@@ -242,6 +314,7 @@ namespace org.cchmc.pho.unittest.controllertests
             };
 
             _mockStaffDal.Setup(p => p.UpdateStaffDetails(userId, It.IsAny<StaffDetail>())).Throws(new Exception());
+            _mockStaffDal.Setup(p => p.IsStaffInSamePractice(It.IsAny<Int32>(), It.IsAny<Int32>())).Returns(true);
             _staffController = new StaffController(_mockLogger.Object, _mapper, _mockStaffDal.Object);
             
 
@@ -265,6 +338,7 @@ namespace org.cchmc.pho.unittest.controllertests
                 IsOVPCABoard = false,
                 IsRVPIBoard = false,
             }
+            , "20101"
             ) as ObjectResult;
 
 
