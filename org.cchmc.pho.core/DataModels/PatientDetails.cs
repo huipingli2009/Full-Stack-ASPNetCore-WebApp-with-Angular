@@ -13,6 +13,7 @@ namespace org.cchmc.pho.core.DataModels
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public DateTime? PatientDOB { get; set; }
+        public bool IsWatchList { get; set; }
         public int PCPId { get; set; }
         public string PCPFirstName { get; set; }
         public string PCPLastName { get; set; }

@@ -102,7 +102,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
-        public async Task UpdateStaffDetails(int userId, StaffDetail staffDetail)
+        public async Task<StaffDetail> UpdateStaffDetails(int userId, StaffDetail staffDetail)
         {
 
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
@@ -134,6 +134,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     //Execute Stored Procedure
                     sqlCommand.ExecuteNonQuery();
 
+                    return await GetStaffDetails(userId, staffDetail.Id);
                 }
             }
         }
@@ -196,7 +197,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         public async Task<List<Responsibility>> ListResponsibilities()
         {
             DataTable dataTable = new DataTable();
-            List<Responsibility> responsibilities = new List<Responsibility>();
+            List<Responsibility> responsibilities;
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spGetResponsibilityList", sqlConnection))
@@ -208,15 +209,59 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     {
                         da.Fill(dataTable);
                         responsibilities = (from DataRow dr in dataTable.Rows
-                                     select new Responsibility()
-                                     {
-                                         Id = (dr["Id"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Id"].ToString())),
-                                         Name = dr["Responsibility"].ToString(),
-                                         Type = dr["ResponsibiltyType"].ToString()
-                                     }
+                                            select new Responsibility()
+                                            {
+                                                Id = (dr["Id"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Id"].ToString())),
+                                                Name = dr["Responsibility"].ToString(),
+                                                Type = dr["ResponsibiltyType"].ToString()
+                                            }
                         ).ToList();
                     }
                     return responsibilities;
+                }
+            }
+        }
+
+        public async Task<List<Provider>> ListProviders(int userId)
+        {
+            DataTable dataTable = new DataTable();
+            List<Provider> providers;
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetProviderList", sqlConnection))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                    sqlConnection.Open();
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        providers = (from DataRow dr in dataTable.Rows
+                                      select new Provider()
+                                      {
+                                          Id = (dr["StaffId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StaffId"].ToString())),
+                                          Name = dr["StaffName"].ToString()
+                                      }
+                        ).ToList();
+                    }
+                }
+            }
+            return providers;
+        }
+
+        public bool IsStaffInSamePractice(int userId, int staffId)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spCheckPermissions", sqlConnection))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@StaffID", SqlDbType.Int).Value = staffId;
+                    sqlConnection.Open();
+
+                    return (bool)sqlCommand.ExecuteScalar();
                 }
             }
         }

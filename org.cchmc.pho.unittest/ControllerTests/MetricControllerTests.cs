@@ -45,9 +45,9 @@ namespace org.cchmc.pho.unittest.ControllerTests
         {
             // setup
             var userId = 3;
-            var myMetrics = new List<Metric>()
+            var myMetrics = new List<DashboardMetric>()
             {
-                new Metric()
+                new DashboardMetric()
                 {
                     PracticeId = 1,
                     DashboardLabel = "LabelTextFor1",
@@ -56,7 +56,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                     PracticeTotal = 14,
                     NetworkTotal = 234
                 },
-                new Metric()
+                new DashboardMetric()
                 {
                     PracticeId = 1,
                     DashboardLabel = "LabelTextFor2",
@@ -71,7 +71,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
 
             // execute
             var result = await _MetricController.ListDashboardMetrics() as ObjectResult;
-            var resultList = result.Value as List<MetricViewModel>;
+            var resultList = result.Value as List<DashboardMetricViewModel>;
 
             // assert
             Assert.AreEqual(2, resultList.Count);

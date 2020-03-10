@@ -95,11 +95,11 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [HttpPut("update")]
-        [SwaggerResponse(200, type: typeof(string))]
+        [HttpPut("{staff}")]
+        [SwaggerResponse(200, type: typeof(StaffDetailViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> UpdateStaffDetails([FromBody] StaffDetailViewModel staffDetailVM)
+        public async Task<IActionResult> UpdateStaffDetails([FromBody] StaffDetailViewModel staffDetailVM, string staff)
         {
             // route parameters are strings and need to be translated (and validated) to their proper data type
             if (!int.TryParse(_DEFAULT_USER, out var userId))
@@ -108,12 +108,37 @@ namespace org.cchmc.pho.api.Controllers
                 return BadRequest("user is not a valid integer");
             }
 
+            if (!int.TryParse(staff, out var staffId))
+            {
+                _logger.LogInformation($"Failed to parse staffId - {staff}");
+                return BadRequest("staff is not a valid integer");
+            }
+
+            if (staffDetailVM == null)
+            {
+                _logger.LogInformation($"staffDetails object is null");
+                return BadRequest("staff is null");
+            }
+
+            if (staffDetailVM.Id != staffId)
+            {
+                _logger.LogInformation($"staffDetails.Id and staffId to not match");
+                return BadRequest("staff id does not match");
+            }
+
+            if (!_staffDal.IsStaffInSamePractice(userId, staffId))
+            {
+                _logger.LogInformation($"staff and user practices do not match");
+                return BadRequest("staff practice does not match user");
+            }
+
             try
             {
                 StaffDetail staffDetail = _mapper.Map<StaffDetail>(staffDetailVM);
                 // call the data layer to mark the action
-                await _staffDal.UpdateStaffDetails(userId, staffDetail);
-                return Ok();
+                var data = await _staffDal.UpdateStaffDetails(userId, staffDetail);
+                var result = _mapper.Map<StaffDetailViewModel>(data);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -192,5 +217,34 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
+        [HttpGet("providers")]
+        [SwaggerResponse(200, type: typeof(List<ProviderViewModel>))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> ListProviders()
+        {
+            try
+            {
+                // route parameters are strings and need to be translated (and validated) to their proper data type
+                if (!int.TryParse(_DEFAULT_USER, out var userId))
+                {
+                    _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
+                    return BadRequest("user is not a valid integer");
+                }
+
+                // call the data method
+                var data = await _staffDal.ListProviders(userId);
+                // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
+                var result = _mapper.Map<List<ProviderViewModel>>(data);
+                // return the result in a "200 OK" response
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
     }
 }
