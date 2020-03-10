@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using org.cchmc.pho.api.Mappings;
+using org.cchmc.pho.api.Middleware;
 using org.cchmc.pho.core.DataAccessLayer;
 using org.cchmc.pho.core.Interfaces;
 using org.cchmc.pho.core.Models;
@@ -102,6 +103,8 @@ namespace org.cchmc.pho.api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, ILogger<Startup> logger)
         {
+            app.UseMiddleware<RequestResponseLoggingMiddleware>();
+
             if (_environment.IsDevelopment())
             {
                 //setting up CORS policy only in the development environment

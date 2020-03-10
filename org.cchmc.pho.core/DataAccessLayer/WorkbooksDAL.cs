@@ -170,7 +170,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             return workbookslookups;
         }
 
-        public async Task<int> UpdateWorkbooksPatient(int userId, int formResponseId, int patientID, int providerstaffID, DateTime? dos, int phq9score, bool action)
+        public async Task<int> AddPatientToWorkbooks(int userId, int formResponseId, int patientID, int providerstaffID, DateTime? dos, int phq9score, bool action)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
@@ -252,6 +252,34 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 }
             }
             return workbookspatientfollowup;
+        }
+      
+        public async Task<int> UpdateWorkbooksPatientFollowup(int userId, int formResponseId, int patientId, bool actionPlanGiven, bool managedByExternalProvider, DateTime? dateOfLastCommunicationByExternalProvider, bool followupPhoneCallOneToTwoWeeks, DateTime? dateOfFollowupCall, bool oneMonthFollowupVisit, DateTime? dateOfOneMonthVisit, int oneMonthFolllowupPHQ9Score, bool improvement)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spUpdatePHQ9Workbook_PatientFollowUp", sqlConnection))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@FormResponseId", SqlDbType.Int).Value = formResponseId;
+                    sqlCommand.Parameters.Add("@PatientID", SqlDbType.Int).Value = patientId;
+                    sqlCommand.Parameters.Add("@Action_Plan_Given", SqlDbType.Bit).Value = actionPlanGiven;
+                    sqlCommand.Parameters.Add("@Managed_by_External_Provider", SqlDbType.Bit).Value = managedByExternalProvider;
+                    sqlCommand.Parameters.Add("@Date_of_last_communication_by_external_provider", SqlDbType.DateTime).Value = dateOfLastCommunicationByExternalProvider;
+                    sqlCommand.Parameters.Add("@Followup_phone_call_1_2_weeks", SqlDbType.Bit).Value = followupPhoneCallOneToTwoWeeks;
+                    sqlCommand.Parameters.Add("@Date_of_follow_up_call", SqlDbType.DateTime).Value = dateOfFollowupCall;
+                    sqlCommand.Parameters.Add("@1_Month_follow_up_visit", SqlDbType.Bit).Value = oneMonthFollowupVisit;
+                    sqlCommand.Parameters.Add("@Date_of_1_month_visit", SqlDbType.DateTime).Value = dateOfOneMonthVisit;
+                    sqlCommand.Parameters.Add("@1_Month_followup_PHQ9_Score", SqlDbType.Int).Value = oneMonthFolllowupPHQ9Score;
+                    sqlCommand.Parameters.Add("@Improvement", SqlDbType.Bit).Value = improvement;
+
+                    await sqlConnection.OpenAsync();
+
+                    //return rows of data affected
+                    return sqlCommand.ExecuteNonQuery();
+                }
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -206,8 +207,8 @@ namespace org.cchmc.pho.unittest.ControllerTests
         {
             // setup
             var userId = 3;
-            var admitDate = "12/1/2020 12:00:00 AM";
-            DateTime admitDateTime = Convert.ToDateTime(admitDate);
+            var admitDate = "20201201";
+            bool converstionResult = DateTime.TryParseExact(admitDate, "yyyyMMdd", CultureInfo.CurrentCulture, DateTimeStyles.None, out var admitDateTime);
             var myMetrics = new List<EDDetail>()
             {
                 new EDDetail()
@@ -321,8 +322,8 @@ namespace org.cchmc.pho.unittest.ControllerTests
         {
             // setup
             var userId = 3; 
-            var admitDate = "12/1/2020 12:00:00 AM";
-            DateTime admitDateTime = Convert.ToDateTime(admitDate);
+            var admitDate = "20201201";
+            bool converstionResult = DateTime.TryParseExact(admitDate, "yyyyMMdd", CultureInfo.CurrentCulture, DateTimeStyles.None, out var admitDateTime);
             _mockMetricDal.Setup(p => p.ListEDDetails(userId, admitDateTime)).Throws(new Exception()).Verifiable();
             _MetricController = new MetricsController(_mockLogger.Object, _mapper, _mockMetricDal.Object);
 

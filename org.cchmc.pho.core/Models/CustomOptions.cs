@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 namespace org.cchmc.pho.core.Models
 {
@@ -19,5 +19,7 @@ namespace org.cchmc.pho.core.Models
         public bool RequireDigit { get; set; }
         [Required]
         public int MaximumAttemptsBeforeLockout { get; set; }
+        [Required]
+        public List<string> DoNotLogMetaDataForPaths { get; set; }
     }
 }
