@@ -1,1 +1,63 @@
-<p>staff works!</p>
+<table mat-table [dataSource]="dataSourceStaff" class="mat-elevation-z8">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- id Column -->
+    <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> id </th>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+    </ng-container>
+
+    <!-- firstName Column -->
+    <ng-container matColumnDef="firstName">
+        <th mat-header-cell *matHeaderCellDef> firstName </th>
+        <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
+    </ng-container>
+
+    <!-- lastName Column -->
+    <ng-container matColumnDef="lastName">
+        <th mat-header-cell *matHeaderCellDef> lastName </th>
+        <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
+    </ng-container>
+
+    <!-- email Column -->
+    <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef> email </th>
+        <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+    </ng-container>
+
+    <!-- phone Column -->
+    <ng-container matColumnDef="phone1">
+        <th mat-header-cell *matHeaderCellDef> phone </th>
+        <td mat-cell *matCellDef="let element"> {{element.phone}} </td>
+    </ng-container>
+
+    <!-- positionId Column -->
+    <ng-container matColumnDef="positionId">
+        <th mat-header-cell *matHeaderCellDef> positionId </th>
+        <td mat-cell *matCellDef="let element"> {{element.positionId}} </td>
+    </ng-container>
+
+    <!-- credentialId Column -->
+    <ng-container matColumnDef="credentialId">
+        <th mat-header-cell *matHeaderCellDef> credentialId </th>
+        <td mat-cell *matCellDef="let element"> {{element.credentialId}} </td>
+    </ng-container>
+
+    <!-- isRegistry Column -->
+    <ng-container matColumnDef="isRegistry">
+        <th mat-header-cell *matHeaderCellDef> isRegistry </th>
+        <td mat-cell *matCellDef="let element"> {{element.isRegistry}} </td>
+    </ng-container>
+
+    <!-- responsibilities Column -->
+    <ng-container matColumnDef="responsibilities">
+        <th mat-header-cell *matHeaderCellDef> responsibilities </th>
+        <td mat-cell *matCellDef="let element"> {{element.responsibilities}} </td>
+    </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
