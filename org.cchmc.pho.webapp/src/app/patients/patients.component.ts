@@ -1,15 +1,17 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { Patients, PatientDetails } from '../models/patients';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { RestService } from '../rest.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { DataSource } from '@angular/cdk/collections';
+import { get } from 'https';
 
 
 @Component({
@@ -18,9 +20,9 @@ import { tap } from 'rxjs/operators';
   styleUrls: ['./patients.component.scss'],
   animations: [
     trigger('detailExpand', [
-      state('void', style({ height: '0px', minHeight: '0', visibility: 'hidden' })),
+      state('collapsed', style({ height: '0px', minHeight: '0', visibility: 'hidden' })),
       state('expanded', style({ height: '*', visibility: 'visible' })),
-      transition('void <=> expanded', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
 })
@@ -51,12 +53,11 @@ export class PatientsComponent implements OnInit {
   };
   isActive: boolean;
   form: FormGroup;
-  selectedPatient: PatientDetails;
 
   displayedColumns: string[] = ['arrow', 'name', 'dob', 'lastEDVisit', 'chronic', 'watchFlag', 'conditions'];
-  dataSource;
 
-  isExpansionDetailRow = (index, row) => row[index].hasOwnProperty('detailRow');
+  dataSource;
+  isExpansionDetailRow = (i: number, row: object) => row.hasOwnProperty('detailRow');
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
               public fb: FormBuilder, private logger: NGXLogger) { 
@@ -93,6 +94,21 @@ export class PatientsComponent implements OnInit {
         && (this.conditions ? data.conditions.toString().trim().toLowerCase().indexOf(filterValues.conditions) !== -1 : true); // Conditions is not working. Need to revisit
       })
     });
+  }
+
+  getAllPatientsViaFilter(filter) {
+    this.rest.getAllPatientsWithFilters(filter).subscribe((data) => {
+      this.patients = data;
+      this.logger.log('Filtered Patients', data)
+    })
+  }
+
+  /*PAgination via API*/
+  getNext(event: PageEvent) {
+    const offset = event.pageSize * event.pageIndex
+    let pageQuery = `?pagenumber=${event.pageIndex}`;
+    this.getAllPatientsViaFilter(pageQuery);
+    this.logger.log(offset, event.pageSize, event.pageIndex);
   }
 
    getPatientDetails(id) {
@@ -132,6 +148,7 @@ export class PatientsComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
+  
 
 
 }

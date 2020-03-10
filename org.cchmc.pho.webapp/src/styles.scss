@@ -649,10 +649,16 @@ h1 {
     transform: rotate(90deg);
 }
 
+.tr.collapsed-detail {
+  height: 0;
+}
+tr.mat-row {
+  height: 0 !important;
+}
 /* Patient Details */
 
 #patient-details {
-  padding: 25px 75px;
+  padding: 25px 51px;
 
   .detail-heading {
     font-family: 'ArcherBold';

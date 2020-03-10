@@ -102,6 +102,17 @@ export class RestService {
     );
   }
 
+  /*Get Patients based on Filter Query*/
+  getAllPatientsWithFilters(filter): Observable<any> {
+    const filterQuery = filter;
+    const endpoint = `${API_URL}/api/Patients/${filterQuery}`;
+    return this.http.get<any>(endpoint).pipe(
+      map((data: Patients[]) => {
+        return data;
+      })
+   );
+  }
+
   /*Gets base PatientDetails based on Patient Id */
   getPatientDetails(id): Observable<any> {
     const endpoint = `${API_URL}/api/Patients/${id}`;
