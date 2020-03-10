@@ -197,7 +197,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         public async Task<List<Responsibility>> ListResponsibilities()
         {
             DataTable dataTable = new DataTable();
-            List<Responsibility> responsibilities = new List<Responsibility>();
+            List<Responsibility> responsibilities;
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spGetResponsibilityList", sqlConnection))
@@ -225,7 +225,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         public async Task<List<Provider>> ListProviders(int userId)
         {
             DataTable dataTable = new DataTable();
-            List<Provider> providers = new List<Provider>();
+            List<Provider> providers;
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spGetProviderList", sqlConnection))
@@ -252,7 +252,6 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
         public bool IsStaffInSamePractice(int userId, int staffId)
         {
-            DataTable dataTable = new DataTable();
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spCheckPermissions", sqlConnection))

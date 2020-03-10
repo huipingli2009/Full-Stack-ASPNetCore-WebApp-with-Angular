@@ -135,8 +135,6 @@ namespace org.cchmc.pho.api.Controllers
                 return BadRequest("patient practice does not match user");
             }
 
-            //TODO - 
-
             try
             {
                 PatientDetails patientDetail = _mapper.Map<PatientDetails>(patientDetailsVM);

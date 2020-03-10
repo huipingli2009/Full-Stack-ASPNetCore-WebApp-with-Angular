@@ -25,7 +25,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         public async Task<List<DashboardMetric>> ListDashboardMetrics(int userId)
         {
             DataTable dataTable = new DataTable();
-            List<DashboardMetric> metrics = new List<DashboardMetric>();
+            List<DashboardMetric> metrics;
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spGetDashboardMetrics", sqlConnection))
@@ -56,7 +56,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         public async Task<List<PopulationMetric>> ListPopulationMetrics()
         {
             DataTable dataTable = new DataTable();
-            List<PopulationMetric> metrics = new List<PopulationMetric>();
+            List<PopulationMetric> metrics;
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spGetPopulationMetricList", sqlConnection))

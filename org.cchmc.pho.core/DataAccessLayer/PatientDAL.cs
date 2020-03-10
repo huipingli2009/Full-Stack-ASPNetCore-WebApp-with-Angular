@@ -173,7 +173,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         public async Task<List<PatientInsurance>> GetPatientInsuranceAll(int userId)
         {
             DataTable dataTable = new DataTable();
-            List<PatientInsurance> insurances = new List<PatientInsurance>();
+            List<PatientInsurance> insurances;
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spGetInsuranceList", sqlConnection))
@@ -283,7 +283,6 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
         public bool IsPatientInSamePractice(int userId, int patientId)
         {
-            DataTable dataTable = new DataTable();
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spCheckPermissions", sqlConnection))
