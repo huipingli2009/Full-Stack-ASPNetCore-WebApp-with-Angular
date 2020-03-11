@@ -3,6 +3,6 @@
     public class AuthenticationResult
     {
         public string Status { get; set; }
-        public string Token { get; set; }
+        public UserViewModel User { get; set; }
     }
 }
