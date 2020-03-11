@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace org.cchmc.pho.core.DataModels
 {
     public class Staff
@@ -12,5 +14,6 @@ namespace org.cchmc.pho.core.DataModels
         public int CredentialId { get; set; }
         public bool IsRegistry { get; set; }
         public string Responsibilities { get; set; }
+        public DateTime? LegalDisclaimerSigned { get; set; }
     }
 }
