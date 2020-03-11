@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace org.cchmc.pho.api.ViewModels
+﻿namespace org.cchmc.pho.api.ViewModels
 {
     public class AuthenticationResult
     {
