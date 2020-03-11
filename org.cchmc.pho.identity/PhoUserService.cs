@@ -45,9 +45,13 @@ namespace org.cchmc.pho.identity
         {
             try
             {
+                _logger.LogInformation($"User {userName} attempting to log in.");
                 User user = await GetUser(userName);
                 if (user == null || user.IsPending || user.IsDeleted)
+                {
+                    _logger.LogInformation($"User {userName} unable to log in because { (user == null ? "no such user" : user.IsPending ? "user is pending" : "user is deleted" ) }");
                     return null;
+                }
 
                 var login = await _context.Login.FirstOrDefaultAsync(l => l.UserName == userName);
                 string hashedPassword = login.Password;
@@ -56,8 +60,11 @@ namespace org.cchmc.pho.identity
                 if (result == PasswordVerificationResult.Failed)
                 {
                     int loginAttempts = await IncrementLockoutAttempts(login);
+                    _logger.LogInformation($"User {userName} verification failure, {loginAttempts} consecutive failure(s).");
                     if (loginAttempts >= _customOptions.MaximumAttemptsBeforeLockout)
+                    {
                         await LockoutUser(login);
+                    }
                     return null;
                 }
 
@@ -223,6 +230,34 @@ namespace org.cchmc.pho.identity
             }
         }
 
+        public int GetStaffIdFromClaims(IEnumerable<Claim> claims)
+        {
+            try
+            {
+                if (claims.Any(p => p.Type == ClaimTypes.UserData))
+                    return int.Parse(claims.First(p => p.Type == ClaimTypes.UserData).Value);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+            return 0;
+        }
+
+        public int GetUserIdFromClaims(IEnumerable<Claim> claims)
+        {
+            try
+            {
+                if (claims.Any(p => p.Type == ClaimTypes.NameIdentifier))
+                    return int.Parse(claims.First(p => p.Type == ClaimTypes.NameIdentifier).Value);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+            return 0;
+        }
+
         public string GetUserNameFromClaims(IEnumerable<Claim> claims)
         {
             try
@@ -243,6 +278,8 @@ namespace org.cchmc.pho.identity
                 var userRecord = await _context.Login.FirstOrDefaultAsync(l => l.Id == userId);
                 if (userRecord == null)
                     return false;
+                _logger.LogInformation($"User {userNameMakingChange} attempting to change password for user {userRecord.UserName}.");
+
                 userRecord.Password = _passwordHasher.HashPassword(await GetUser(userId), newPassword);
                 userRecord.ModifiedBy = userNameMakingChange;
                 userRecord.ModifiedDate = DateTime.Now;
@@ -297,6 +334,7 @@ namespace org.cchmc.pho.identity
                     _logger.LogInformation($"User {userNameMakingChange} tried to unlock user id {userId}, but that user does not exist.");
                     return null;
                 }
+                _logger.LogInformation($"User {userNameMakingChange} unlocking user {userRecord.UserName}.");
 
                 userRecord.LockoutFlag = false;
                 userRecord.AccessFailedCount = 0;
@@ -329,11 +367,13 @@ namespace org.cchmc.pho.identity
 
                 if (shouldDelete && !userRecord.DeletedFlag.GetValueOrDefault(false))
                 {
+                    _logger.LogInformation($"User {userNameMakingChange} logically deleting user {userRecord.UserName}.");
                     userRecord.DeletedBy = userNameMakingChange;
                     userRecord.DeletedDate = DateTime.Now;
                 }
                 else if (!shouldDelete && userRecord.DeletedFlag.GetValueOrDefault(false))
                 {
+                    _logger.LogInformation($"User {userNameMakingChange} logically undeleting user {userRecord.UserName}.");
                     userRecord.DeletedBy = null;
                     userRecord.DeletedDate = null;
                 }
@@ -353,6 +393,7 @@ namespace org.cchmc.pho.identity
 
         private async Task LockoutUser(Login user)
         {
+            _logger.LogInformation($"User {user.UserName} is locked out after {_customOptions.MaximumAttemptsBeforeLockout} attempts.");
             user.LockoutFlag = true;
             _context.Login.Update(user);
             await _context.SaveChangesAsync();
