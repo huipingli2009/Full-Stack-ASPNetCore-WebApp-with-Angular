@@ -16,6 +16,6 @@ namespace org.cchmc.pho.core.Interfaces
         Task<List<Responsibility>> ListResponsibilities();
         Task<List<Provider>> ListProviders(int userId);
         bool IsStaffInSamePractice(int userId, int staffId);
-        Task<int> SignLegalDisclaimer(int userId);
+        Task<bool> SignLegalDisclaimer(int userId);
     }
 }

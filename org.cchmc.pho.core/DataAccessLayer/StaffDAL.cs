@@ -50,7 +50,8 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                      PositionId = (dr["PositionId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PositionId"].ToString())),
                                      CredentialId = (dr["CredentialId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CredentialId"].ToString())),
                                      IsRegistry = (dr["RegistryYN"] != DBNull.Value && Convert.ToBoolean(dr["RegistryYN"])),
-                                     Responsibilities = dr["Responsibilities"].ToString()
+                                     Responsibilities = dr["Responsibilities"].ToString(),
+                                     LegalDisclaimerSigned = dr["LegalDisclaimerSigned"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LegalDisclaimerSigned"].ToString())                                     
                                  }
                         ).ToList();
                     }
@@ -265,7 +266,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 }
             }
         }
-        public async Task<int> SignLegalDisclaimer(int userId)
+        public async Task<bool> SignLegalDisclaimer(int userId)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
@@ -275,7 +276,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
                     await sqlConnection.OpenAsync();
 
-                    return sqlCommand.ExecuteNonQuery();
+                    return (sqlCommand.ExecuteNonQuery() > 0);
                 }
             }
         }
