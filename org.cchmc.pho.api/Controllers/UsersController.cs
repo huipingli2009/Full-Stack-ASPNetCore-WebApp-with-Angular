@@ -13,6 +13,7 @@ using org.cchmc.pho.identity.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using org.cchmc.pho.core.Interfaces;
 
 namespace org.cchmc.pho.api.Controllers
 {
@@ -24,13 +25,15 @@ namespace org.cchmc.pho.api.Controllers
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
         private readonly CustomOptions _customOptions;
+        private readonly IStaff _staff;
 
-        public UsersController(ILogger<UsersController> logger, IMapper mapper, IUserService userService, IOptions<CustomOptions> customOptions)
+        public UsersController(ILogger<UsersController> logger, IMapper mapper, IUserService userService, IOptions<CustomOptions> customOptions, IStaff staffDal)
         {
             _logger = logger;
             _mapper = mapper;
             _userService = userService;
             _customOptions = customOptions.Value;
+            _staff = staffDal;
         }
 
         [AllowAnonymous]
@@ -81,20 +84,28 @@ namespace org.cchmc.pho.api.Controllers
 
                 string currentUserRole = _userService.GetRoleNameFromClaims(User?.Claims);
 
-                if (!InAnyAdminRole(currentUserRole)
-                    && !string.Equals(currentUserName, user.UserName, StringComparison.OrdinalIgnoreCase))
+                if (!InAnyAdminRole(currentUserRole) && !string.Equals(currentUserName, user.UserName, StringComparison.OrdinalIgnoreCase))
                 {
                     // if you're not in an Admin role, you can't set another person's password
+                    _logger.LogInformation($"{currentUserName} tried to update the password for user id {userId}, but the caller is not an admin.");
                     return Unauthorized("Cannot update another user's password.");
                 }
 
-                // TODO: If you're in the practice admin role, you can only change passwords for people in your practice (need StaffDAL or service)
+                if(IsPracticeAdmin(currentUserRole) && !string.Equals(currentUserName, user.UserName, StringComparison.OrdinalIgnoreCase))
+                {
+                    // if you're a practice admin, you can only set another users password if they're in your practice
+                    int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+                    if (!_staff.IsStaffInSamePractice(currentUserId, user.StaffId))
+                    {
+                        _logger.LogInformation($"{currentUserName} tried to update the password for user id {userId}, but the caller is in another practice.");
+                        return Unauthorized("Cannot update users in another practice.");
+                    }
+                }
 
                 List<string> errors = ValidatePasswordComplexity(newPassword.NewPassword);
                 if (errors.Any())
                     return BadRequest($"Password validation error: {string.Join(", ", errors)}");
 
-                // TODO: How do we invalidate the current user's session, or do we just let it time out naturally?
                 return Ok(await _userService.ResetUserPassword(userId, newPassword.NewPassword, currentUserName));
             }
             catch (Exception ex)
@@ -154,9 +165,16 @@ namespace org.cchmc.pho.api.Controllers
                     return Unauthorized("Invalid role.");
                 }
 
-                // TODO: If you're in PracticeAdmin, you can only change details for people in your practice (need StaffDAL or service)
-                
-                // TODO: If you're PHOAdmin, you can set roles for anyone
+                if (IsPracticeAdmin(currentUserRole) && !string.Equals(currentUserName, user.UserName, StringComparison.OrdinalIgnoreCase))
+                {
+                    // if you're a practice admin, you can only update another user if they're in your practice
+                    int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+                    if (!_staff.IsStaffInSamePractice(currentUserId, user.StaffId))
+                    {
+                        _logger.LogInformation($"{currentUserName} tried to update user id {userId}, but the caller is in another practice.");
+                        return Unauthorized("Cannot update users in another practice.");
+                    }
+                }
 
                 var userDetails = _mapper.Map<User>(userViewModel);
                 user = await _userService.UpdateUser(userDetails, currentUserName);
@@ -228,7 +246,7 @@ namespace org.cchmc.pho.api.Controllers
                     return BadRequest("User does not exist.");
                 }
 
-                // TODO: Validate staff id exists?
+                // TODO: Validate staff id exists
 
                 user = await _userService.AssignStaffIdToUser(userId, staffId, currentUserName);
                 return Ok(_mapper.Map<UserViewModel>(user));
@@ -342,7 +360,7 @@ namespace org.cchmc.pho.api.Controllers
             if (_customOptions.RequireUppercase && !Regex.Match(password, @"[A-Z]+").Success)
                 errorMessages.Add("Password must contain an uppercase character.");
             if (_customOptions.RequireNonAlphaNumeric && !Regex.Match(password, @"[^a-zA-Z0-9]+").Success)
-                errorMessages.Add("Password must contain an uppercase character.");
+                errorMessages.Add("Password must contain a special character.");
             if (password.Contains(" "))
                 errorMessages.Add("Passwords cannot contain spaces.");
 
