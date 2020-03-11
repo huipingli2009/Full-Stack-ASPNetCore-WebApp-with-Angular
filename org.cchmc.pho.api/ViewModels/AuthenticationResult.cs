@@ -1,8 +1,10 @@
-﻿namespace org.cchmc.pho.api.ViewModels
+﻿using System.Collections.Generic;
+
+namespace org.cchmc.pho.api.ViewModels
 {
     public class AuthenticationResult
     {
         public string Status { get; set; }
-        public string Token { get; set; }
+        public UserViewModel User { get; set; }
     }
 }
