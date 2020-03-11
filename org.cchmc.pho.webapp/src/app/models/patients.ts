@@ -65,3 +65,19 @@ export class PatientDetails {
      lastDiagnosis: string  ;
      cchmcAppointment: Date;
 }
+
+export class Conditions {
+    id: number;
+    name: string;
+    description: string;
+}
+
+export class Providers {
+    id: number;
+    name: string;
+}
+
+export class PopSlices {
+    id: number;
+    label: string;
+}

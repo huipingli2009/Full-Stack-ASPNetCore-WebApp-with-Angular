@@ -9,7 +9,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { NGXLogger } from 'ngx-logger';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Observable, of } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, startWith, map } from 'rxjs/operators';
 import { DataSource } from '@angular/cdk/collections';
 import { get } from 'https';
 import { PatientsDataSource } from './patients.datasource';
@@ -37,6 +37,7 @@ export class PatientsComponent implements OnInit {
   checked: Boolean;
 
   expandedElement: any;
+  value = '';
 
   patients: Patients;
   patientFormDetails: Observable<PatientDetails>;
@@ -49,9 +50,16 @@ export class PatientsComponent implements OnInit {
   filterFormGroup;
   conditions: string;
   conditionsList: any[] = [];
-  public multiFilterValues = {
-    condition: ""
-  };
+  providers: string;
+  providersList: any[] = [];
+  popSlices: string;
+  popSliceList: any[] = [];
+  options: string[];
+  defaultSortedRow = 'name';
+  defaultSortDirection = 'asc';
+  patientNameControl = new FormControl();
+  patientNameSearch: string;
+  filteredOptions: Observable<string[]>;
   isActive: boolean;
   form: FormGroup;
 
@@ -70,8 +78,10 @@ export class PatientsComponent implements OnInit {
     this.patients = this.route.snapshot.data['patients'];
     // console.log(this.route.snapshot.data["patients"]);
     this.dataSource = new PatientsDataSource(this.rest);
-    this.dataSource.loadPatients('name', 'asc', 0, 20, this.chronic, this.watchFlag);
-    
+    this.loadPatientsWithFilters();
+    this.getConditionsList();
+    this.getPCPList();
+    this.getPopSliceList();
   }
 
   ngAfterViewInit() {
@@ -82,43 +92,31 @@ export class PatientsComponent implements OnInit {
         )
         .subscribe();
 }
-// ngAfterViewInit() {
-//   // this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-//   this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-
-//   fromEvent(this.input.nativeElement, 'keyup')
-//           .pipe(
-//               debounceTime(150),
-//               distinctUntilChanged(),
-//               tap(() => {
-//                   this.paginator.pageIndex = 0;
-
-//                   this.loadPatientsPage();
-//               })
-//           )
-//           .subscribe();
-
-//   merge(this.sort.sortChange, this.paginator.page)
-//       .pipe(
-//           tap(() => this.loadPatientsPage())
-//       )
-//       .subscribe();
-// }
 
 @HostListener('matSortChange', ['$event'])
 sortChange(e) {
-  this.dataSource.loadPatients(e.active, e.direction, 0, 20, this.chronic, this.watchFlag);
-console.log(e);
+  this.defaultSortedRow = e.active;
+  this.defaultSortDirection = e.direction;
+  this.loadPatientsWithFilters();
+}
+
+loadPatientsWithFilters() {
+  this.dataSource.loadPatients(this.defaultSortedRow, this.defaultSortDirection, 0, 20, this.chronic, this.watchFlag, this.conditions,
+    this.providers, this.popSlices, this.patientNameSearch);
 }
 
 loadPatientsPage() {
     this.dataSource.loadPatients(
-        'name',
-        'asc',
+      this.defaultSortedRow,
+      this.defaultSortDirection,
         this.paginator.pageIndex,
         this.paginator.pageSize,
-        this.chronic, 
-        this.watchFlag);
+        this.chronic,
+        this.watchFlag,
+        this.conditions,
+        this.providers,
+        this.popSlices, 
+        this.patientNameSearch);
 }
 
 
@@ -135,19 +133,55 @@ loadPatientsPage() {
   isChronicFilter(e) {
     if (e.checked === true) {
       this.chronic = 'true';
-      this.dataSource.loadPatients('name', 'asc', 0, 20, 'true');
+      this.loadPatientsWithFilters();
     } else { 
       this.chronic = '';
-      this.dataSource.loadPatients('name', 'asc', 0, 20, ''); }
+      this.loadPatientsWithFilters();
+    }
   }
 
   isOnWatchlist(e) {
     if (e.checked === true) {
       this.watchFlag = 'true';
-      this.dataSource.loadPatients('name', 'asc', 0, 20, this.chronic, this.watchFlag);
+      this.loadPatientsWithFilters();
     } else { 
       this.watchFlag = '';
-      this.dataSource.loadPatients('name', 'asc', 0, 20, this.chronic, this.watchFlag); }
+      this.loadPatientsWithFilters();
+    }
+  }
+
+  getPopSliceList() {
+    this.rest.getPopSliceList().subscribe((data) => {
+      this.popSliceList = data;
+    })
+  }
+
+  patientHasPopSlice() {
+    this.loadPatientsWithFilters();
+  }
+
+  getConditionsList() {
+    this.rest.getConditionsList().subscribe((data) => {
+      this.conditionsList = data;
+    })
+  }
+
+  patientHasCondition(e) {
+    this.loadPatientsWithFilters();
+  }
+
+  getPCPList() {
+    this.rest.getPCPList().subscribe((data) => {
+      this.providersList = data;
+    })
+  }
+  patientHasPCP() {
+    this.loadPatientsWithFilters();
+  }
+
+  searchPatientsByName(e) {
+    this.patientNameSearch = e.target.value;
+    this.loadPatientsWithFilters();
   }
 
 

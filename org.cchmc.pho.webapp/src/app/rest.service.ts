@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 import { Alerts, Population, EdChart, EdChartDetails, Spotlight, Quicklinks } from './models/dashboard';
 import { environment } from '../environments/environment';
-import { Patients, PatientDetails } from './models/patients';
+import { Patients, PatientDetails, Conditions, Providers, PopSlices } from './models/patients';
 
 // we can now access environment.apiUrl
 const API_URL = environment.apiURL;
@@ -80,18 +80,20 @@ export class RestService {
       map((data: EdChart[]) => {
         return data;
       })
-   );
+    );
   }
 
-   /*Gets base ED Chart Information */
-   getEdChartDetails(admitDate): Observable<any> {
+  /*Gets base ED Chart Information */
+  getEdChartDetails(admitDate): Observable<any> {
     const endpoint = `${API_URL}/api/Metrics/edcharts/${admitDate}`;
     return this.http.get<any>(endpoint).pipe(
       map((data: EdChartDetails[]) => {
         return data;
       })
-   );
+    );
   }
+
+  /* Patients Content =======================================================*/
 
   /*Get All Patients*/
   getAllPatients(): Observable<any> {
@@ -102,37 +104,58 @@ export class RestService {
     );
   }
 
-  /*Get Patients based on Filter Query*/
-  getAllPatientsWithFilters(filter): Observable<any> {
-    const filterQuery = filter;
-    const endpoint = `${API_URL}/api/Patients/${filterQuery}`;
-    return this.http.get<any>(endpoint).pipe(
-      map((data: Patients[]) => {
-        return data;
-      })
-   );
-  }
-
-  /*Find Patients*/
+  /*Find Patients by Query*/
   findPatients(
     sortcolumn = 'name', sortdirection = 'Asc',
-    pageNumber = 0, rowsPerPage = 20, chronic = '', watchFlag = ''):  Observable<Patients[]> {
+    pageNumber = 0, rowsPerPage = 20, chronic = '', watchFlag = '', conditionIDs = '',
+    staffID = '', popmeasureID = '', namesearch = ''): Observable<Patients[]> {
 
     return this.http.get(`${API_URL}/api/Patients`, {
-        params: new HttpParams()
-            .set('sortcolumn', sortcolumn)
-            .set('sortdirection', sortdirection)
-            .set('pagenumber', pageNumber.toString())
-            .set('rowsPerPage', rowsPerPage.toString())
-            .set('chronic', chronic.toString())
-            .set('watch', watchFlag.toString())
+      params: new HttpParams()
+        .set('sortcolumn', sortcolumn)
+        .set('sortdirection', sortdirection)
+        .set('pagenumber', pageNumber.toString())
+        .set('rowsPerPage', rowsPerPage.toString())
+        .set('chronic', chronic.toString())
+        .set('watch', watchFlag.toString())
+        .set('conditionIDs', conditionIDs)
+        .set('staffID', staffID)
+        .set('popmeasureID', popmeasureID)
+        .set('namesearch', namesearch)
     }).pipe(
       map(res => {
-      res['payload'] = res;
-      return res["payload"];
+        res['payload'] = res;
+        return res["payload"];
       })
-      );
-}
+    );
+  }
+
+  /*Get Conditions List */
+  getConditionsList(): Observable<any> {
+    return this.http.get<any>(`${API_URL}/api/Patients/conditions/`).pipe(
+      map((data: Conditions[]) => {
+        return data;
+      })
+    );
+  }
+
+  /*Get List of PCPs*/
+  getPCPList(): Observable<any> {
+    return this.http.get<any>(`${API_URL}/api/Staff/providers/`).pipe(
+      map((data: Providers[]) => {
+        return data;
+      })
+    );
+  }
+
+  /*Get List of Population Slices*/
+  getPopSliceList(): Observable<any> {
+    return this.http.get<any>(`${API_URL}/api/Metrics/pop/`).pipe(
+      map((data: PopSlices[]) => {
+        return data;
+      })
+    );
+  }
 
   /*Gets base PatientDetails based on Patient Id */
   getPatientDetails(id): Observable<any> {
@@ -141,7 +164,7 @@ export class RestService {
       map((data: PatientDetails[]) => {
         return data;
       })
-   );
+    );
   }
 
 

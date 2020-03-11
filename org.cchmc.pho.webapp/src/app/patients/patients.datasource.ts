@@ -23,12 +23,14 @@ export class PatientsDataSource implements DataSource<Patients> {
   }
 
   loadPatients(sortcolumn = 'name',
-              sortDirection = 'asc', pageIndex = 0, pageSize = 20, chronic = '', watchFlag = '') {
+              sortDirection = 'asc', pageIndex = 0, pageSize = 20, chronic = '', watchFlag = '', conditionIDs = '',
+              staffID = '', popmeasureID = '', namesearch = '') {
 
       this.loadingSubject.next(true);
 
       this.restService.findPatients(sortcolumn, sortDirection,
-          pageIndex, pageSize, chronic, watchFlag).pipe(
+          pageIndex, pageSize, chronic, watchFlag, conditionIDs, staffID, popmeasureID,
+          namesearch).pipe(
           catchError(() => of([])),
           finalize(() => this.loadingSubject.next(false))
       )

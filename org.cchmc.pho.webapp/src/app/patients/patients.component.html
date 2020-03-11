@@ -3,10 +3,9 @@
     <div fxLayout="column" class="header-filter">
       <mat-form-field>
         <mat-label>PCP</mat-label>
-        <mat-select [(ngModel)]="pcP_StaffID"
-          (selectionChange)="applySelectedFilter('pcP_StaffID', pcP_StaffID ? pcP_StaffID: '')">
-          <mat-option *ngFor="let pcp of patients" [value]="pcp.pcP_StaffID">
-            {{pcp.pcP_StaffID}}
+        <mat-select [(ngModel)]="providers" (selectionChange)="patientHasPCP()">
+          <mat-option *ngFor="let provider of providersList" [value]="provider.id">
+            {{provider.name}}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -14,10 +13,9 @@
     <div fxLayout="column" class="header-filter">
       <mat-form-field>
         <mat-label>Population Slices</mat-label>
-        <mat-select [(ngModel)]="pcP_StaffID"
-          (selectionChange)="applySelectedFilter('pcP_StaffID', pcP_StaffID ? pcP_StaffID: '')">
-          <mat-option *ngFor="let pcp of patients" [value]="pcp.pcP_StaffID">
-            {{pcp.pcP_StaffID}}
+        <mat-select [(ngModel)]="popSlices" (selectionChange)="patientHasPopSlice()">
+          <mat-option *ngFor="let slice of popSliceList" [value]="slice.id">
+            {{slice.label}}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -25,12 +23,23 @@
     <div fxLayout="column" class="header-filter">
       <mat-form-field>
         <mat-label>Conditions</mat-label>
-        <mat-select [(ngModel)]="conditions"
-          (selectionChange)="applySelectedFilter('conditions', conditions ? conditions: '')" multiple>
-          <mat-option *ngFor="let condition of patients" [value]="condition.conditions.name">
-            {{condition.conditions.name}}
+        <mat-select [(ngModel)]="conditions" multiple (selectionChange)="patientHasCondition($event)">
+          <mat-option *ngFor="let condition of conditionsList" [value]="condition.id">
+            {{condition.name}}
           </mat-option>
         </mat-select>
+      </mat-form-field>
+    </div>
+    <div fxLayout="column" class="header-filter search-input" fxFlex fxLayoutAlign="center end">
+      <mat-form-field>
+        <input type="text"
+               matInput
+               [formControl]="patientNameControl"
+               placeholder="Search Patient Name"
+               (change)="searchPatientsByName($event)">
+               <button mat-button matSuffix mat-icon-button aria-label="Search">
+                <mat-icon>search</mat-icon>
+              </button>
       </mat-form-field>
     </div>
   </div>
