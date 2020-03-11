@@ -281,6 +281,89 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
+
+        public async Task<List<Gender>> ListGender()
+        {
+            DataTable dataTable = new DataTable();
+            List<Gender> genders;
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetGenderList", sqlConnection))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlConnection.Open();
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        genders = (from DataRow dr in dataTable.Rows
+                                      select new Gender()
+                                      {
+                                          Id = (dr["ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ID"].ToString())),
+                                          ShortName = dr["Gender"].ToString(),
+                                          Name = dr["GenderDesc"].ToString()
+                                      }
+                        ).ToList();
+                    }
+                }
+            }
+            return genders;
+        }
+        public async Task<List<PMCA>> ListPMCA()
+        {
+            DataTable dataTable = new DataTable();
+            List<PMCA> pmcas;
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetPMCAList", sqlConnection))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlConnection.Open();
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        pmcas = (from DataRow dr in dataTable.Rows
+                                      select new PMCA()
+                                      {
+                                          Id = (dr["ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ID"].ToString())),
+                                          Score = dr["PMCAScore"].ToString(),
+                                          Description = dr["Description"].ToString()
+                                      }
+                        ).ToList();
+                    }
+                }
+            }
+            return pmcas;
+        }
+        public async Task<List<State>> ListState()
+        {
+            DataTable dataTable = new DataTable();
+            List<State> states;
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetStateList", sqlConnection))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlConnection.Open();
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        states = (from DataRow dr in dataTable.Rows
+                                      select new State()
+                                      {
+                                          Id = (dr["ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ID"].ToString())),
+                                          Name = dr["Name"].ToString(),
+                                          ShortName = dr["ShortName"].ToString()
+                                      }
+                        ).ToList();
+                    }
+                }
+            }
+            return states;
+        }
+
         public bool IsPatientInSamePractice(int userId, int patientId)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
