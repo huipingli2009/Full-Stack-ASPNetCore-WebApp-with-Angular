@@ -115,7 +115,8 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.IsNotNull(result);
             var authResult = result.Value as AuthenticationResult;
             Assert.AreEqual("Authorized", authResult.Status);
-            Assert.AreEqual(_user.Token, authResult.Token);
+            Assert.IsNotNull(authResult.User);
+            Assert.AreEqual(_user.Token, authResult.User.Token);
         }
 
         [TestMethod]
@@ -130,7 +131,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.AreEqual(401, result.StatusCode);
             var authResult = result.Value as AuthenticationResult;
             Assert.AreEqual("User not found or password did not match", authResult.Status);
-            Assert.IsTrue(String.IsNullOrEmpty(authResult.Token));
+            Assert.IsNull(authResult.User);
         }
 
         [TestMethod]

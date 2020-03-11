@@ -22,10 +22,10 @@ namespace org.cchmc.pho.core.DataAccessLayer
             _connectionStrings = options.Value;
         }
 
-        public async Task<List<Metric>> ListDashboardMetrics(int userId)
+        public async Task<List<DashboardMetric>> ListDashboardMetrics(int userId)
         {
             DataTable dataTable = new DataTable();
-            List<Metric> metrics = new List<Metric>();
+            List<DashboardMetric> metrics;
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spGetDashboardMetrics", sqlConnection))
@@ -38,7 +38,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     {
                         da.Fill(dataTable);
                         metrics = (from DataRow dr in dataTable.Rows
-                                   select new Metric()
+                                   select new DashboardMetric()
                                    {
                                        PracticeId = Convert.ToInt32(dr["PracticeId"]),
                                        DashboardLabel = dr["DashboardLabel"].ToString(),
@@ -46,6 +46,32 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                        MeasureType = dr["MeasureType"].ToString(),
                                        PracticeTotal = Convert.ToInt32(dr["PracticeTotal"]),
                                        NetworkTotal = Convert.ToInt32(dr["NetworkTotal"])
+                                   }
+                            ).ToList();
+                    }
+                    return metrics;
+                }
+            }
+        }
+        public async Task<List<PopulationMetric>> ListPopulationMetrics()
+        {
+            DataTable dataTable = new DataTable();
+            List<PopulationMetric> metrics;
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetPopulationMetricList", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlConnection.Open();
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        metrics = (from DataRow dr in dataTable.Rows
+                                   select new PopulationMetric()
+                                   {
+                                       Id = Convert.ToInt32(dr["MeasureId"]),
+                                       Label = dr["DashboardLabel"].ToString()
                                    }
                             ).ToList();
                     }

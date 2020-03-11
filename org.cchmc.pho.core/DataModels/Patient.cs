@@ -24,6 +24,7 @@ namespace org.cchmc.pho.core.DataModels
     {
         public int ID { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
 
         public PatientCondition(int id, string name)
         {
@@ -34,5 +35,10 @@ namespace org.cchmc.pho.core.DataModels
         public PatientCondition()
         {
         }
+    }
+    public class PatientInsurance
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

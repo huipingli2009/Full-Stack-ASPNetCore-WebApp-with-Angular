@@ -45,7 +45,7 @@ namespace org.cchmc.pho.api.Controllers
                 User user = await _userService.Authenticate(userParam.Username, userParam.Password);
                 if (user == null) return Unauthorized(new AuthenticationResult { Status = "User not found or password did not match" });
 
-                return Ok(new AuthenticationResult { Status = "Authorized", Token = user.Token });
+                return Ok(new AuthenticationResult { Status = "Authorized", User = _mapper.Map<UserViewModel>(user) });
             }
             catch(Exception ex)
             {
