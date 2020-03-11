@@ -51,7 +51,6 @@ import { RouterModule } from '@angular/router';
 import { VersionComponent } from './version/version.component';
 import { environment } from 'src/environments/environment';
 import { ChartsModule } from 'ng2-charts';
-import { CdkDetailRowDirective } from './patients/cdk-detail-row.directive';
 
 
 @NgModule({
@@ -62,8 +61,7 @@ import { CdkDetailRowDirective } from './patients/cdk-detail-row.directive';
     PatientsComponent,
     StaffComponent,
     FilesComponent,
-    WorkbooksComponent,
-    CdkDetailRowDirective
+    WorkbooksComponent
   ],
   imports: [
     BrowserModule,

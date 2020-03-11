@@ -35,11 +35,13 @@
     </div>
   </div>
 
-  <mat-table matSort [dataSource]="dataSource" id="patients" multiTemplateDataRows>
-
+  <mat-table [dataSource]="dataSource" id="patients" multiTemplateDataRows matSort matSortActive="name" matSortDirection="asc" matSortDisableClear>
+    <div class="spinner-container" *ngIf="dataSource.loading$ | async">
+      <mat-spinner></mat-spinner>
+  </div>
     <!-- DropDown Column -->
     <ng-container matColumnDef="arrow">
-      <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let element">
         <i class="material-icons rotate-icon">
           keyboard_arrow_right
@@ -299,8 +301,12 @@
             <tr mat-row *matRowDef="let row; columns: ['expandedDetail'];" class="collapsed-detail"> 
             </tr>
   </mat-table>
-
-  <mat-paginator [pageIndex]=0 (page)="getNext($event)"></mat-paginator>
+  <mat-paginator [length]="200" [pageSize]="20"
+                   [pageSizeOptions]="[20, 40, 60]"></mat-paginator>
+  <!-- <mat-paginator [pageIndex]=0 (page)="getNext($event)"></mat-paginator> -->
+  <!-- <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[20, 40, 60, 80]" [showFirstLastButtons]="true" [length]="totalSize"
+    [pageIndex]="currentPage" (page)="handlePage($event)">
+</mat-paginator> -->
 </div>
 
 <ng-template #tpl let-element>

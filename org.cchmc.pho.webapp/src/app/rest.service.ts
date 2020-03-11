@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse, HttpClientModule, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 import { Alerts, Population, EdChart, EdChartDetails, Spotlight, Quicklinks } from './models/dashboard';
@@ -112,6 +112,25 @@ export class RestService {
       })
    );
   }
+
+  /*Find Patients*/
+  findPatients(
+    sortcolumn = 'name', sortdirection = 'Asc',
+    pageNumber = 0, rowsPerPage = 20):  Observable<Patients[]> {
+
+    return this.http.get(`${API_URL}/api/Patients`, {
+        params: new HttpParams()
+            .set('sortcolumn', sortcolumn)
+            .set('sortdirection', sortdirection)
+            .set('pagenumber', pageNumber.toString())
+            .set('rowsPerPage', rowsPerPage.toString())
+    }).pipe(
+      map(res => {
+      res['payload'] = res;
+      return res["payload"];
+      })
+      );
+}
 
   /*Gets base PatientDetails based on Patient Id */
   getPatientDetails(id): Observable<any> {

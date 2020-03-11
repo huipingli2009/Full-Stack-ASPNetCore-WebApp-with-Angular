@@ -12,6 +12,7 @@ import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { DataSource } from '@angular/cdk/collections';
 import { get } from 'https';
+import { PatientsDataSource } from './patients.datasource';
 
 
 @Component({
@@ -30,14 +31,14 @@ import { get } from 'https';
 export class PatientsComponent implements OnInit {
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   @Input()
   checked: Boolean;
 
   expandedElement: any;
 
-  patients: Patients[];
+  patients: Patients;
   patientFormDetails: Observable<PatientDetails>;
   patientDetails: PatientDetails[];
   filterValues: any = {};
@@ -55,8 +56,9 @@ export class PatientsComponent implements OnInit {
   form: FormGroup;
 
   displayedColumns: string[] = ['arrow', 'name', 'dob', 'lastEDVisit', 'chronic', 'watchFlag', 'conditions'];
+  pageEvent: PageEvent;
+  dataSource: PatientsDataSource;
 
-  dataSource;
   isExpansionDetailRow = (i: number, row: object) => row.hasOwnProperty('detailRow');
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
@@ -65,52 +67,44 @@ export class PatientsComponent implements OnInit {
               }
 
   ngOnInit() {
-    this.getAllPatients();
+    this.patients = this.route.snapshot.data['patients'];
+    // console.log(this.route.snapshot.data["patients"]);
+    this.dataSource = new PatientsDataSource(this.rest);
+    this.dataSource.loadPatients('name', 'asc', 0, 20);
+    
   }
 
-  getAllPatients() {
-    this.rest.getAllPatients().subscribe((data) => {
-      this.patients = data;
-      this.dataSource = new MatTableDataSource<Patients>(this.patients);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-      // this.patients.forEach((patient, index) => {
-      //   if (Array.isArray(patient.conditions) && patient.conditions.length > 1) {
-      //     console.log(patient.conditions.length);
-      //     if (patient.conditions[index].name !== undefined) {
-      //       this.conditionsList.push({
-      //         condition: patient.conditions[index].name
-      //       });
-      //     }
-      //   }
-      //   console.log(this.conditionsList);
-      // });
-      this.dataSource.filterPredicate = ((data: Patients, filter): boolean => {
-        const filterValues = JSON.parse(filter);
-  
-        return (this.chronic ? data.chronic.toString().trim().toLowerCase().indexOf(filterValues.chronic) !== -1 : true)
-        && (this.watchFlag ? data.watchFlag.toString().trim().toLowerCase().indexOf(filterValues.watchFlag) !== -1 : true)
-        && (this.pcP_StaffID ? data.pcP_StaffID.toString().trim().toLowerCase().indexOf(filterValues.pcP_StaffID) !== -1 : true)
-        && (this.conditions ? data.conditions.toString().trim().toLowerCase().indexOf(filterValues.conditions) !== -1 : true); // Conditions is not working. Need to revisit
-      })
-    });
+  ngAfterViewInit() {
+    // this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.paginator.page
+        .pipe(
+            tap(() => this.loadPatientsPage())
+        )
+        .subscribe();
+        console.log(this.paginator.pageIndex);
+}
+
+loadPatientsPage() {
+    this.dataSource.loadPatients(
+        'name',
+        'asc',
+        this.paginator.pageIndex,
+        this.paginator.pageSize);
+}
+
+
+  applySelectedFilter(column: string, filterValue: string) {
+    this.filterValues[column] = filterValue;
+
+    // this.dataSource.filter = JSON.stringify(this.filterValues);
+
+    // if (this.dataSource.paginator) {
+    //   this.dataSource.paginator.firstPage();
+    // }
   }
 
-  getAllPatientsViaFilter(filter) {
-    this.rest.getAllPatientsWithFilters(filter).subscribe((data) => {
-      this.patients = data;
-      this.logger.log('Filtered Patients', data)
-    })
-  }
 
-  /*PAgination via API*/
-  getNext(event: PageEvent) {
-    const offset = event.pageSize * event.pageIndex
-    let pageQuery = `?pagenumber=${event.pageIndex}`;
-    this.getAllPatientsViaFilter(pageQuery);
-    this.logger.log(offset, event.pageSize, event.pageIndex);
-  }
-
+  /*Patient Details */
    getPatientDetails(id) {
     this.rest.getPatientDetails(id).subscribe((data) => {
       this.patientFormDetails = data;
@@ -139,15 +133,7 @@ export class PatientsComponent implements OnInit {
     });
   }
   
-  applySelectedFilter(column: string, filterValue: string) {
-    this.filterValues[column] = filterValue;
-
-    this.dataSource.filter = JSON.stringify(this.filterValues);
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
+  
   
 
 

@@ -1,4 +1,4 @@
-export class Patients {
+export interface Patients {
     patientId: number;
     firstName: string;
     lastName: string;
@@ -17,6 +17,7 @@ export class Patients {
         }
     ]
     close?: boolean;
+    patientsCount: 200; //Need to know the COunt, hardcoding this for now (Missing from API)
 }
 export class PatientDetails {
      id: number;
