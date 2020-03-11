@@ -9,6 +9,7 @@ using org.cchmc.pho.core.Interfaces;
 using org.cchmc.pho.core.DataModels;
 using Swashbuckle.AspNetCore.Annotations;
 
+
 namespace org.cchmc.pho.api.Controllers
 {
     [Route("api/[controller]")]
@@ -46,8 +47,7 @@ namespace org.cchmc.pho.api.Controllers
             try
             {
                 var data = await _patient.ListActivePatient(int.Parse(_DEFAULT_USER.ToString()), staffID, popmeasureID, watch, chronic, conditionIDs, namesearch,sortcolumn,sortdirection,pagenumber,rowsPerPage);
-
-                var result = _mapper.Map<List<PatientViewModel>>(data);
+                var result = _mapper.Map<SearchResultsViewModel<PatientViewModel>>(data);
 
                 // return the result in a "200 OK" response
                 return Ok(result);

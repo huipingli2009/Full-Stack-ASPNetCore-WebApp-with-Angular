@@ -9,6 +9,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using System.Linq;
+using org.cchmc.pho.core.Models;
 
 namespace org.cchmc.pho.core.DataAccessLayer
 {
@@ -23,10 +24,13 @@ namespace org.cchmc.pho.core.DataAccessLayer
             _logger = logger;
         }       
 
-        public async Task<List<Patient>> ListActivePatient(int userId, int? staffID, int? popmeasureID, bool? watch, bool? chronic, string conditionIDs, string namesearch, string sortcolumn, string sortdirection, int? pagenumber, int? rowsperpage)
+        public async Task<SearchResults<Patient>> ListActivePatient(int userId, int? staffID, int? popmeasureID, bool? watch, bool? chronic, string conditionIDs, string namesearch, string sortcolumn, string sortdirection, int? pagenumber, int? rowsperpage)
         {
-            DataTable dataTable = new DataTable();
-            List<Patient> patients = new List<Patient>();
+            DataTable patientListDataTable;
+            DataTable patientListCountDataTable;
+            DataSet dataSet = new DataSet();
+            SearchResults<Patient> searchResults = new SearchResults<Patient>();
+            searchResults.Results = new List<Patient>();
 
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
@@ -49,12 +53,13 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
-                        da.Fill(dataTable);                      
-
-                                             
+                        da.Fill(dataSet,"PatientsDataset");
+                        patientListDataTable = dataSet.Tables[0];
+                        patientListCountDataTable = dataSet.Tables[1];                        
+                        
                         List<PatientCondition> patientConditions = await GetPatientConditionsAll();                     
                         
-                        foreach(DataRow dr in dataTable.Rows)
+                        foreach(DataRow dr in patientListDataTable.Rows)
                         {
                             var patient = new Patient()
                             {
@@ -82,12 +87,16 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                         _logger.LogError("An unmapped patient condition id was returned by the database ");
                                 }
                             }
-                            patients.Add(patient);
+                            searchResults.Results.Add(patient);
                         }  
+                        foreach(DataRow dr in patientListCountDataTable.Rows)
+                        {
+                            searchResults.ResultCount = Convert.ToInt32(dr["TotalRecords"].ToString());
+                        }
                     }
                 }
 
-                return patients;
+                return searchResults;
             }   
         }
 
