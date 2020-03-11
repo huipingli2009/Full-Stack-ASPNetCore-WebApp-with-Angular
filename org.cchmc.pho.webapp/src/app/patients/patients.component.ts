@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, HostListener } from '@angular/core';
 import { Patients, PatientDetails } from '../models/patients';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -70,7 +70,7 @@ export class PatientsComponent implements OnInit {
     this.patients = this.route.snapshot.data['patients'];
     // console.log(this.route.snapshot.data["patients"]);
     this.dataSource = new PatientsDataSource(this.rest);
-    this.dataSource.loadPatients('name', 'asc', 0, 20);
+    this.dataSource.loadPatients('name', 'asc', 0, 20, this.chronic, this.watchFlag);
     
   }
 
@@ -81,7 +81,34 @@ export class PatientsComponent implements OnInit {
             tap(() => this.loadPatientsPage())
         )
         .subscribe();
-        console.log(this.paginator.pageIndex);
+}
+// ngAfterViewInit() {
+//   // this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+//   this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+
+//   fromEvent(this.input.nativeElement, 'keyup')
+//           .pipe(
+//               debounceTime(150),
+//               distinctUntilChanged(),
+//               tap(() => {
+//                   this.paginator.pageIndex = 0;
+
+//                   this.loadPatientsPage();
+//               })
+//           )
+//           .subscribe();
+
+//   merge(this.sort.sortChange, this.paginator.page)
+//       .pipe(
+//           tap(() => this.loadPatientsPage())
+//       )
+//       .subscribe();
+// }
+
+@HostListener('matSortChange', ['$event'])
+sortChange(e) {
+  this.dataSource.loadPatients(e.active, e.direction, 0, 20, this.chronic, this.watchFlag);
+console.log(e);
 }
 
 loadPatientsPage() {
@@ -89,7 +116,9 @@ loadPatientsPage() {
         'name',
         'asc',
         this.paginator.pageIndex,
-        this.paginator.pageSize);
+        this.paginator.pageSize,
+        this.chronic, 
+        this.watchFlag);
 }
 
 
@@ -101,6 +130,24 @@ loadPatientsPage() {
     // if (this.dataSource.paginator) {
     //   this.dataSource.paginator.firstPage();
     // }
+  }
+
+  isChronicFilter(e) {
+    if (e.checked === true) {
+      this.chronic = 'true';
+      this.dataSource.loadPatients('name', 'asc', 0, 20, 'true');
+    } else { 
+      this.chronic = '';
+      this.dataSource.loadPatients('name', 'asc', 0, 20, ''); }
+  }
+
+  isOnWatchlist(e) {
+    if (e.checked === true) {
+      this.watchFlag = 'true';
+      this.dataSource.loadPatients('name', 'asc', 0, 20, this.chronic, this.watchFlag);
+    } else { 
+      this.watchFlag = '';
+      this.dataSource.loadPatients('name', 'asc', 0, 20, this.chronic, this.watchFlag); }
   }
 
 

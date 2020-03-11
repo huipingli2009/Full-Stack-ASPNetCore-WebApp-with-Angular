@@ -116,7 +116,7 @@ export class RestService {
   /*Find Patients*/
   findPatients(
     sortcolumn = 'name', sortdirection = 'Asc',
-    pageNumber = 0, rowsPerPage = 20):  Observable<Patients[]> {
+    pageNumber = 0, rowsPerPage = 20, chronic = '', watchFlag = ''):  Observable<Patients[]> {
 
     return this.http.get(`${API_URL}/api/Patients`, {
         params: new HttpParams()
@@ -124,6 +124,8 @@ export class RestService {
             .set('sortdirection', sortdirection)
             .set('pagenumber', pageNumber.toString())
             .set('rowsPerPage', rowsPerPage.toString())
+            .set('chronic', chronic.toString())
+            .set('watch', watchFlag.toString())
     }).pipe(
       map(res => {
       res['payload'] = res;

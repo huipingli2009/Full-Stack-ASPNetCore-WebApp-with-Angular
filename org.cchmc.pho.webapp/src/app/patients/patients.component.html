@@ -35,7 +35,7 @@
     </div>
   </div>
 
-  <mat-table [dataSource]="dataSource" id="patients" multiTemplateDataRows matSort matSortActive="name" matSortDirection="asc" matSortDisableClear>
+  <mat-table [dataSource]="dataSource" id="patients" multiTemplateDataRows matSort matSortDisableClear (matSortChange)="sortChange($event)">
     <div class="spinner-container" *ngIf="dataSource.loading$ | async">
       <mat-spinner></mat-spinner>
   </div>
@@ -73,7 +73,7 @@
     <ng-container matColumnDef="chronic">
       <mat-header-cell *matHeaderCellDef> Chronic
         <mat-checkbox class="table-header-checkbox" [(ngModel)]="chronic"
-          (change)="applySelectedFilter('chronic', chronic ? 'true': '')"></mat-checkbox>
+          (change)="isChronicFilter($event)"></mat-checkbox>
       </mat-header-cell>
       <mat-cell *matCellDef="let element">
         <ng-container *ngIf="element.chronic; else elseNo">
@@ -89,7 +89,7 @@
     <ng-container matColumnDef="watchFlag">
       <mat-header-cell *matHeaderCellDef> Watch List
         <mat-checkbox class="table-header-checkbox" [(ngModel)]="watchFlag"
-          (change)="applySelectedFilter('watchFlag', watchFlag ? 'true': '')"></mat-checkbox>
+          (change)="isOnWatchlist($event)"></mat-checkbox>
       </mat-header-cell>
       <mat-cell *matCellDef="let element">
         <ng-container *ngIf="element.watchFlag; else elseNo">

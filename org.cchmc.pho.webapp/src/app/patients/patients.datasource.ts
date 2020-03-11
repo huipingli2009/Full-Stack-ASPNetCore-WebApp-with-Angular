@@ -23,12 +23,12 @@ export class PatientsDataSource implements DataSource<Patients> {
   }
 
   loadPatients(sortcolumn = 'name',
-              sortDirection = 'asc', pageIndex = 0, pageSize = 20) {
+              sortDirection = 'asc', pageIndex = 0, pageSize = 20, chronic = '', watchFlag = '') {
 
       this.loadingSubject.next(true);
 
       this.restService.findPatients(sortcolumn, sortDirection,
-          pageIndex, pageSize).pipe(
+          pageIndex, pageSize, chronic, watchFlag).pipe(
           catchError(() => of([])),
           finalize(() => this.loadingSubject.next(false))
       )
