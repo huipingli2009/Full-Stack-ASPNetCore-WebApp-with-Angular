@@ -53,22 +53,22 @@ namespace org.cchmc.pho.unittest.ControllerTests
             new Role()
             {
                 Id = 1,
-                Name = "PracticeMember"
+                Name = "Practice Member"
             },
             new Role()
             {
                 Id = 2,
-                Name = "PracticeAdmin"
+                Name = "Practice Admin"
             },
             new Role()
             {
                 Id = 3,
-                Name = "PHOMember"
+                Name = "PHO Member"
             },
             new Role()
             {
                 Id = 4,
-                Name = "PHOAdmin"
+                Name = "PHO Admin"
             }
         };
         
@@ -98,7 +98,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 LastName = "Last",
                 LastUpdatedBy = "system",
                 LastUpdatedDate = DateTime.Parse("1/2/20"),
-                Role = new Role() { Id = 1, Name = "PracticeMember" },
+                Role = new Role() { Id = 1, Name = "Practice Member" },
                 StaffId = 5,
                 UserName = _userName,
                 Token = Guid.NewGuid().ToString() // let's not worry about the token contents just yet
@@ -157,7 +157,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task UpdateUserPassword_UpdateSelf_Success_ReturnsTrue()
         {
             string myUserName = _userName;
-            string myUserRole = "PracticeMember";
+            string myUserRole = "Practice Member";
             string newPassword = "Th1sP@sses!";
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserName).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserRole).Verifiable();
@@ -175,7 +175,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task UpdateUserPassword_UpdateOther_Success_ReturnsTrue()
         {
             string myUserName = "SomeOtherName";
-            string myUserRole = "PHOAdmin";
+            string myUserRole = "PHO Admin";
             string newPassword = "Th1sP@sses!";
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserName).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserRole).Verifiable();
@@ -193,7 +193,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task UpdateUserPassword_UpdateSelf_Fails_ReturnsFalse()
         {
             string myUserName = _userName;
-            string myUserRole = "PracticeMember";
+            string myUserRole = "Practice Member";
             string newPassword = "Th1sP@sses!";
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserName).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserRole).Verifiable();
@@ -258,7 +258,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task UpdateUserPassword_CannotUpdateAnotherUser_Returns401()
         {
             string myUserName = "SomeOtherName";
-            string myUserRole = "PracticeMember";
+            string myUserRole = "Practice Member";
             string newPassword = "Th1sP@sses!";
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserName).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserRole).Verifiable();
@@ -276,7 +276,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task UpdateUserPassword_CannotUpdateAnotherUserInADifferentPractice_Returns401()
         {
             string myUserName = "SomeOtherName";
-            string myUserRole = "PracticeAdmin";
+            string myUserRole = "Practice Admin";
             string newPassword = "Th1sP@sses!";
             int myUserId = 7;
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserName).Verifiable();
@@ -297,7 +297,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task UpdateUserPassword_CanUpdateAnotherUserInSamePractice_Success()
         {
             string myUserName = "SomeOtherName";
-            string myUserRole = "PracticeAdmin";
+            string myUserRole = "Practice Admin";
             string newPassword = "Th1sP@sses!";
             int myUserId = 7;
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserName).Verifiable();
@@ -318,7 +318,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task UpdateUserPassword_PasswordTooShort_Returns400()
         {
             string myUserName = _userName;
-            string myUserRole = "PracticeMember";
+            string myUserRole = "Practice Member";
             string newPassword = "Th1sP@s";
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserName).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserRole).Verifiable();
@@ -337,7 +337,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task UpdateUserPassword_PasswordMissingDigit_Returns400()
         {
             string myUserName = _userName;
-            string myUserRole = "PracticeMember";
+            string myUserRole = "Practice Member";
             string newPassword = "ThisP@ss";
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserName).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserRole).Verifiable();
@@ -356,7 +356,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task UpdateUserPassword_PasswordMissingLowercase_Returns400()
         {
             string myUserName = _userName;
-            string myUserRole = "PracticeMember";
+            string myUserRole = "Practice Member";
             string newPassword = "TH1SP@SS";
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserName).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserRole).Verifiable();
@@ -375,7 +375,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task UpdateUserPassword_PasswordMissingUppercase_Returns400()
         {
             string myUserName = _userName;
-            string myUserRole = "PracticeMember";
+            string myUserRole = "Practice Member";
             string newPassword = "th1sp@ss";
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserName).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserRole).Verifiable();
@@ -394,7 +394,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task UpdateUserPassword_PasswordMissingSpecial_Returns400()
         {
             string myUserName = _userName;
-            string myUserRole = "PracticeMember";
+            string myUserRole = "Practice Member";
             string newPassword = "ThisNoPass1";
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserName).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserRole).Verifiable();
@@ -413,7 +413,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task UpdateUserPassword_PasswordHasSpace_Returns400()
         {
             string myUserName = _userName;
-            string myUserRole = "PracticeMember";
+            string myUserRole = "Practice Member";
             string newPassword = "th1sp@s ";
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserName).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserRole).Verifiable();
@@ -485,8 +485,8 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 Id = _user.Id,
                 Role = new RoleViewModel() { Id = _user.Role.Id, Name = _user.Role.Name }
             };
-            string userMakingChange = "PHOAdmin";
-            string roleMakingChange = "PHOAdmin";
+            string userMakingChange = "PHO Admin";
+            string roleMakingChange = "PHO Admin";
             _mockUserService.Setup(p => p.GetUser(_userId)).Returns(Task.FromResult(_user)).Verifiable();
             _mockUserService.Setup(p => p.ListRoles()).Returns(Task.FromResult(_roles)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userMakingChange).Verifiable();
@@ -587,7 +587,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 Role = new RoleViewModel() { Id = _user.Role.Id, Name = _user.Role.Name }
             };
             string userMakingChange = "SomeoneElse";
-            string roleMakingChange = "PracticeMember";
+            string roleMakingChange = "Practice Member";
             _mockUserService.Setup(p => p.GetUser(_userId)).Returns(Task.FromResult(_user)).Verifiable();
             _mockUserService.Setup(p => p.ListRoles()).Returns(Task.FromResult(_roles)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userMakingChange).Verifiable();
@@ -602,7 +602,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
         }
 
         [TestMethod]
-        public async Task UpdateUser_PhoMemberCantUpdateAnotherUser_Returns401()
+        public async Task UpdateUser_PHOMemberCantUpdateAnotherUser_Returns401()
         {
             UserViewModel newUser = new UserViewModel()
             {
@@ -611,7 +611,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 Role = new RoleViewModel() { Id = _user.Role.Id, Name = _user.Role.Name }
             };
             string userMakingChange = "SomeoneElse";
-            string roleMakingChange = "PHOMember";
+            string roleMakingChange = "PHO Member";
             _mockUserService.Setup(p => p.GetUser(_userId)).Returns(Task.FromResult(_user)).Verifiable();
             _mockUserService.Setup(p => p.ListRoles()).Returns(Task.FromResult(_roles)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userMakingChange).Verifiable();
@@ -632,10 +632,10 @@ namespace org.cchmc.pho.unittest.ControllerTests
             {
                 Email = "something@example.com",
                 Id = _user.Id,
-                Role = new RoleViewModel() { Id = 2, Name = "PracticeAdmin" }
+                Role = new RoleViewModel() { Id = 2, Name = "Practice Admin" }
             };
             string userMakingChange = _user.UserName;
-            string roleMakingChange = "PracticeMember";
+            string roleMakingChange = "Practice Member";
             _mockUserService.Setup(p => p.GetUser(_userId)).Returns(Task.FromResult(_user)).Verifiable();
             _mockUserService.Setup(p => p.ListRoles()).Returns(Task.FromResult(_roles)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userMakingChange).Verifiable();
@@ -650,17 +650,17 @@ namespace org.cchmc.pho.unittest.ControllerTests
         }
 
         [TestMethod]
-        public async Task UpdateUser_PhoMemberCantChangeTheirOwnRole_Returns401()
+        public async Task UpdateUser_PHOMemberCantChangeTheirOwnRole_Returns401()
         {
-            _user.Role = new Role() { Id = 3, Name = "PHOMember" };
+            _user.Role = new Role() { Id = 3, Name = "PHO Member" };
             UserViewModel newUser = new UserViewModel()
             {
                 Email = "something@example.com",
                 Id = _user.Id,
-                Role = new RoleViewModel() { Id = 1, Name = "PracticeMember" }
+                Role = new RoleViewModel() { Id = 1, Name = "Practice Member" }
             };
             string userMakingChange = _user.UserName;
-            string roleMakingChange = "PHOMember";
+            string roleMakingChange = "PHO Member";
             _mockUserService.Setup(p => p.GetUser(_userId)).Returns(Task.FromResult(_user)).Verifiable();
             _mockUserService.Setup(p => p.ListRoles()).Returns(Task.FromResult(_roles)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userMakingChange).Verifiable();
@@ -681,10 +681,10 @@ namespace org.cchmc.pho.unittest.ControllerTests
             {
                 Email = "something@example.com",
                 Id = _user.Id,
-                Role = new RoleViewModel() { Id = 3, Name = "PHOMember" }
+                Role = new RoleViewModel() { Id = 3, Name = "PHO Member" }
             };
             string userMakingChange = _user.UserName;
-            string roleMakingChange = "PracticeAdmin";
+            string roleMakingChange = "Practice Admin";
             _mockUserService.Setup(p => p.GetUser(_userId)).Returns(Task.FromResult(_user)).Verifiable();
             _mockUserService.Setup(p => p.ListRoles()).Returns(Task.FromResult(_roles)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userMakingChange).Verifiable();
@@ -705,10 +705,10 @@ namespace org.cchmc.pho.unittest.ControllerTests
             {
                 Email = "something@example.com",
                 Id = _user.Id,
-                Role = new RoleViewModel() { Id = 1, Name = "PracticeMember" }
+                Role = new RoleViewModel() { Id = 1, Name = "Practice Member" }
             };
             string userMakingChange = "someothername";
-            string roleMakingChange = "PracticeAdmin";
+            string roleMakingChange = "Practice Admin";
             int userIdMakingChange = 8;
             _mockUserService.Setup(p => p.GetUser(_userId)).Returns(Task.FromResult(_user)).Verifiable();
             _mockUserService.Setup(p => p.ListRoles()).Returns(Task.FromResult(_roles)).Verifiable();
@@ -732,10 +732,10 @@ namespace org.cchmc.pho.unittest.ControllerTests
             {
                 Email = "something@example.com",
                 Id = _user.Id,
-                Role = new RoleViewModel() { Id = 1, Name = "PracticeMember" }
+                Role = new RoleViewModel() { Id = 1, Name = "Practice Member" }
             };
             string userMakingChange = "someothername";
-            string roleMakingChange = "PracticeAdmin";
+            string roleMakingChange = "Practice Admin";
             int userIdMakingChange = 8;
             _mockUserService.Setup(p => p.GetUser(_userId)).Returns(Task.FromResult(_user)).Verifiable();
             _mockUserService.Setup(p => p.ListRoles()).Returns(Task.FromResult(_roles)).Verifiable();
@@ -803,7 +803,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 UserName = "someusername"
             };
             string userMakingChange = "sdffhasdf";
-            string roleMakingChange = "PHOAdmin";
+            string roleMakingChange = "PHO Admin";
             _mockUserService.Setup(p => p.GetUser(newUser.UserName)).Returns(Task.FromResult((User)null)).Verifiable();
             _mockUserService.Setup(p => p.ListRoles()).Returns(Task.FromResult(_roles)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userMakingChange).Verifiable();
@@ -855,7 +855,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             UserViewModel newUser = new UserViewModel()
             {
                 Email = "something@example.com",
-                Role = new RoleViewModel() { Id = 3, Name = "PHOMember" },
+                Role = new RoleViewModel() { Id = 3, Name = "PHO Member" },
                 CreatedBy = "someone",
                 CreatedDate = DateTime.Now.Date,
                 FirstName = "first",
@@ -866,7 +866,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             };
             _mockUserService.Setup(p => p.GetUser(newUser.UserName)).Returns(Task.FromResult((User)null)).Verifiable();
             string userMakingChange = "sdffhasdf";
-            string roleMakingChange = "PracticeAdmin";
+            string roleMakingChange = "Practice Admin";
             _mockUserService.Setup(p => p.ListRoles()).Returns(Task.FromResult(_roles)).Verifiable();
             _mockUserService.Setup(p => p.GetUser(newUser.UserName)).Returns(Task.FromResult((User)null)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userMakingChange).Verifiable();
@@ -923,7 +923,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 UserName = "someusername"
             };
             string userMakingChange = "sdffhasdf";
-            string roleMakingChange = "PHOAdmin";
+            string roleMakingChange = "PHO Admin";
             _mockUserService.Setup(p => p.GetUser(newUser.UserName)).Returns(Task.FromResult((User)null)).Verifiable();
             _mockUserService.Setup(p => p.ListRoles()).Returns(Task.FromResult(_roles)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userMakingChange).Verifiable();
