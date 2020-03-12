@@ -1,4 +1,5 @@
 export interface Patients {
+    resultCount: number;
     patientId: number;
     firstName: string;
     lastName: string;
@@ -17,7 +18,6 @@ export interface Patients {
         }
     ]
     close?: boolean;
-    patientsCount: 200; //Need to know the COunt, hardcoding this for now (Missing from API)
 }
 export interface PatientDetails {
      id: number;

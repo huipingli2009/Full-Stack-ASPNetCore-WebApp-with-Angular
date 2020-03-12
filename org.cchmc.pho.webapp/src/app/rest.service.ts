@@ -123,9 +123,8 @@ export class RestService {
         .set('popmeasureID', popmeasureID)
         .set('namesearch', namesearch)
     }).pipe(
-      map(res => {
-        res['payload'] = res;
-        return res["payload"];
+      map(res => {        
+        return res["results"];
       })
     );
   }
