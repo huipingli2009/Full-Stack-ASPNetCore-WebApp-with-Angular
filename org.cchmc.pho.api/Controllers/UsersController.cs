@@ -57,7 +57,7 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        // TODO: [Authorize(Roles = "PracticeMember,PracticeAdmin,PHOMember,PHOAdmin")]
+        // TODO: [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [AllowAnonymous]
         [HttpPatch("{userId}/password")] // patch because we're only updating password
         [SwaggerResponse(200, type: typeof(bool))]
@@ -119,7 +119,7 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [Authorize(Roles = "PracticeMember,PracticeAdmin,PHOMember,PHOAdmin")]
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [HttpPut("{userId}")] // put because we're updating a specific user
         [SwaggerResponse(200, type: typeof(UserViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
@@ -199,7 +199,7 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        // TODO: [Authorize(Roles = "PracticeAdmin,PHOAdmin")]
+        // TODO: [Authorize(Roles = "Practice Admin,PHO Admin")]
         [AllowAnonymous]
         [HttpPost] // post because we're inserting a new user
         [SwaggerResponse(200, type: typeof(UserViewModel))]
@@ -240,7 +240,7 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [Authorize(Roles = "PHOAdmin")]
+        [Authorize(Roles = "PHO Admin")]
         [HttpPatch("{userId}/staffId")] // patch because we're only updating staff id
         [SwaggerResponse(200, type: typeof(UserViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
@@ -270,7 +270,7 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [Authorize(Roles = "PHOAdmin")]
+        [Authorize(Roles = "PHO Admin")]
         [HttpPatch("{userId}/lockout")] // patch because we're only updating lockoutflag
         [SwaggerResponse(200, type: typeof(UserViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
@@ -298,7 +298,7 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [Authorize(Roles = "PHOAdmin")]
+        [Authorize(Roles = "PHO Admin")]
         [HttpPatch("{userId}/delete")] // patch because we're only updating deleteflag
         [SwaggerResponse(200, type: typeof(UserViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
@@ -326,7 +326,7 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [Authorize(Roles = "PracticeMember,PracticeAdmin,PHOMember,PHOAdmin")]
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [HttpGet("roles")]
         [SwaggerResponse(200, type: typeof(List<RoleViewModel>))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -346,18 +346,18 @@ namespace org.cchmc.pho.api.Controllers
 
         private bool IsPhoAdmin(string role)
         {
-            return string.Equals(role, "PHOAdmin", StringComparison.OrdinalIgnoreCase);
+            return string.Equals(role, "PHO Admin", StringComparison.OrdinalIgnoreCase);
         }
 
         private bool IsPracticeAdmin(string role)
         {
-            return string.Equals(role, "PracticeAdmin", StringComparison.OrdinalIgnoreCase);
+            return string.Equals(role, "Practice Admin", StringComparison.OrdinalIgnoreCase);
         }
 
         private bool InAnyAdminRole(string role)
         {
-            return string.Equals(role, "PHOAdmin", StringComparison.OrdinalIgnoreCase) ||
-                   string.Equals(role, "PracticeAdmin", StringComparison.OrdinalIgnoreCase);
+            return string.Equals(role, "PHO Admin", StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(role, "Practice Admin", StringComparison.OrdinalIgnoreCase);
         }
 
         private List<string> ValidatePasswordComplexity(string password)
