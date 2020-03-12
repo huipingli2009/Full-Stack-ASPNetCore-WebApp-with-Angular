@@ -49,7 +49,14 @@ namespace org.cchmc.pho.identity
                 User user = await GetUser(userName);
                 if (user == null || user.IsPending || user.IsDeleted)
                 {
-                    _logger.LogInformation($"User {userName} unable to log in because { (user == null ? "no such user" : user.IsPending ? "user is pending" : "user is deleted" ) }");
+                    string reason = "there is no such user";
+                    if(user != null)
+                    {
+                        if (user.IsPending)
+                            reason = "the user is pending activation";
+                        else reason = "the user is deleted";
+                    }
+                    _logger.LogInformation($"User {userName} unable to log in because { reason }");
                     return null;
                 }
 

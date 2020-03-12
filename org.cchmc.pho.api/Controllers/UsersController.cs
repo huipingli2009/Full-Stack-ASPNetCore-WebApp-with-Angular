@@ -84,21 +84,24 @@ namespace org.cchmc.pho.api.Controllers
 
                 string currentUserRole = _userService.GetRoleNameFromClaims(User?.Claims);
 
-                if (!InAnyAdminRole(currentUserRole) && !string.Equals(currentUserName, user.UserName, StringComparison.OrdinalIgnoreCase))
+                if(!string.Equals(currentUserName, user.UserName, StringComparison.OrdinalIgnoreCase))
                 {
-                    // if you're not in an Admin role, you can't set another person's password
-                    _logger.LogInformation($"{currentUserName} tried to update the password for user id {userId}, but the caller is not an admin.");
-                    return Unauthorized("Cannot update another user's password.");
-                }
-
-                if(IsPracticeAdmin(currentUserRole) && !string.Equals(currentUserName, user.UserName, StringComparison.OrdinalIgnoreCase))
-                {
-                    // if you're a practice admin, you can only set another users password if they're in your practice
-                    int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
-                    if (!_staff.IsStaffInSamePractice(currentUserId, user.StaffId))
+                    if(!InAnyAdminRole(currentUserRole))
                     {
-                        _logger.LogInformation($"{currentUserName} tried to update the password for user id {userId}, but the caller is in another practice.");
-                        return Unauthorized("Cannot update users in another practice.");
+                        // if you're not in an Admin role, you can't set another person's password
+                        _logger.LogInformation($"{currentUserName} tried to update the password for user id {userId}, but the caller is not an admin.");
+                        return Unauthorized("Cannot update another user's password.");
+                    }
+
+                    if (IsPracticeAdmin(currentUserRole))
+                    {
+                        // if you're a practice admin, you can only set another users password if they're in your practice
+                        int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+                        if (!_staff.IsStaffInSamePractice(currentUserId, user.StaffId))
+                        {
+                            _logger.LogInformation($"{currentUserName} tried to update the password for user id {userId}, but the caller is in another practice.");
+                            return Unauthorized("Cannot update users in another practice.");
+                        }
                     }
                 }
 
@@ -147,32 +150,38 @@ namespace org.cchmc.pho.api.Controllers
                 Role selectedRole = rolesInSystem.First(r => r.Id == userViewModel.Role.Id);
                 string currentUserRole = _userService.GetRoleNameFromClaims(User?.Claims);
 
-                if (!InAnyAdminRole(currentUserRole) && !string.Equals(currentUserName, user.UserName, StringComparison.OrdinalIgnoreCase))
+                if(!string.Equals(currentUserName, user.UserName, StringComparison.OrdinalIgnoreCase))
                 {
-                    // if you're not in an Admin role, you can't set another person's details
-                    return Unauthorized("Cannot update another user's details.");
-                }
-
-                if(!InAnyAdminRole(currentUserRole) && user.Role.Id != userViewModel.Role.Id)
-                {
-                    // if you're not in an admin role, you can't change roles
-                    return Unauthorized("Cannot change roles.");
-                }
-
-                if(!IsPhoAdmin(currentUserRole) && user.Role.Id != userViewModel.Role.Id && selectedRole.Name.Contains("PHO"))
-                {
-                    // If you're not PHO Admin you can't use the PHO roles
-                    return Unauthorized("Invalid role.");
-                }
-
-                if (IsPracticeAdmin(currentUserRole) && !string.Equals(currentUserName, user.UserName, StringComparison.OrdinalIgnoreCase))
-                {
-                    // if you're a practice admin, you can only update another user if they're in your practice
-                    int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
-                    if (!_staff.IsStaffInSamePractice(currentUserId, user.StaffId))
+                    if (!InAnyAdminRole(currentUserRole))
                     {
-                        _logger.LogInformation($"{currentUserName} tried to update user id {userId}, but the caller is in another practice.");
-                        return Unauthorized("Cannot update users in another practice.");
+                        // if you're not in an Admin role, you can't set another person's details
+                        return Unauthorized("Cannot update another user's details.");
+                    }
+
+                    if (IsPracticeAdmin(currentUserRole))
+                    {
+                        // if you're a practice admin, you can only update another user if they're in your practice
+                        int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+                        if (!_staff.IsStaffInSamePractice(currentUserId, user.StaffId))
+                        {
+                            _logger.LogInformation($"{currentUserName} tried to update user id {userId}, but the caller is in another practice.");
+                            return Unauthorized("Cannot update users in another practice.");
+                        }
+                    }
+                }
+
+                if(user.Role.Id != userViewModel.Role.Id)
+                {
+                    if (!InAnyAdminRole(currentUserRole))
+                    {
+                        // if you're not in an admin role, you can't change roles
+                        return Unauthorized("Cannot change roles.");
+                    }
+
+                    if (!IsPhoAdmin(currentUserRole) && selectedRole.Name.Contains("PHO"))
+                    {
+                        // If you're not PHO Admin you can't use the PHO roles
+                        return Unauthorized("Invalid role.");
                     }
                 }
 
