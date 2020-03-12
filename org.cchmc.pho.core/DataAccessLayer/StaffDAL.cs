@@ -281,5 +281,20 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
+        public async Task<bool> SwitchPractice(int userId)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spUpdateDefPracticeID", sqlConnection))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                    await sqlConnection.OpenAsync();
+
+                    return (sqlCommand.ExecuteNonQuery() > 0);
+                }
+            }
+        }
+
     }
 }

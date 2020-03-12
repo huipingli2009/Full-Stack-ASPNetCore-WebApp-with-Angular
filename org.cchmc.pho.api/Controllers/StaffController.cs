@@ -278,5 +278,36 @@ namespace org.cchmc.pho.api.Controllers
                 return StatusCode(500, "An error occurred");
             }
         }
+
+        [HttpPut("{staff}/switchpractice")]
+        [SwaggerResponse(200, type: typeof(bool))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> SwitchPractice(string staff)
+        {
+            if (!int.TryParse(_DEFAULT_USER, out var userId))
+            {
+                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
+                return BadRequest("user is not a valid integer");
+            }
+
+            if (!int.TryParse(staff, out var staffId))
+            {
+                _logger.LogInformation($"Failed to parse staffId - {staff}");
+                return BadRequest("staff is not a valid integer");
+            }
+
+            try
+            {
+                var result = await _staffDal.SwitchPractice(userId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
     }
 }
