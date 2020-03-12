@@ -76,7 +76,6 @@ export class PatientsComponent implements OnInit {
 
   ngOnInit() {
     this.patients = this.route.snapshot.data['patients'];
-    // console.log(this.route.snapshot.data["patients"]);
     this.dataSource = new PatientsDataSource(this.rest);
     this.loadPatientsWithFilters();
     this.getConditionsList();

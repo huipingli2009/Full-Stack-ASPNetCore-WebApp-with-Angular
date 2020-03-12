@@ -19,6 +19,11 @@ export interface Patients {
     ]
     close?: boolean;
 }
+export interface PatientClass {
+    resultCount: number;
+    results: Patients[];
+
+}
 export interface PatientDetails {
      id: number;
      patientMRNId: string;

@@ -124,7 +124,10 @@ export class RestService {
         .set('namesearch', namesearch)
     }).pipe(
       map(res => {        
-        return res["results"];
+        var patientsAndCount: Patients[];
+        
+        patientsAndCount = res['results'];
+        return patientsAndCount;
       })
     );
   }
