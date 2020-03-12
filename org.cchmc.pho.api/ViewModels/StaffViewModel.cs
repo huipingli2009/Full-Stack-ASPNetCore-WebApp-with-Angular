@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace org.cchmc.pho.api.ViewModels
 {
     public class StaffViewModel
@@ -12,7 +14,6 @@ namespace org.cchmc.pho.api.ViewModels
         public int CredentialId { get; set; }
         public bool IsRegistry { get; set; }
         public string Responsibilities { get; set; }
-        //PHO Admin user switched practice Id
-        public int defPracticeId { get; set; }
+        public DateTime? LegalDisclaimerSigned { get; set; }
     }
 }
