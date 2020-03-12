@@ -77,8 +77,8 @@
                         <ng-container matColumnDef="dashboardLabel">
                             <th mat-header-cell *matHeaderCellDef> Measure </th>
                             <td mat-cell *matCellDef="let element" matTooltip="{{element.measureDesc}}">
-                                    {{element.dashboardLabel}} 
-                                </td>
+                                {{element.dashboardLabel}}
+                            </td>
                         </ng-container>
 
 
@@ -107,8 +107,8 @@
                         <ng-container matColumnDef="dashboardLabelQi">
                             <th mat-header-cell *matHeaderCellDef> Measure </th>
                             <td mat-cell *matCellDef="let element" matTooltip="{{element.measureDesc}}">
-                                    {{element.dashboardLabel}} 
-                                </td>
+                                {{element.dashboardLabel}}
+                            </td>
                         </ng-container>
 
 
@@ -137,44 +137,44 @@
     <div mat-dialog-content class="mat-typography">
         <h3>ED Details: </h3>
         <table class="ed-table">
-          <thead>
-            <tr>
-              <th>Patient MRN</th>
-              <th>Patient Encounter ID</th>
-              <th>Facility</th>
-              <th>Patient Name</th>
-              <th>Patient DOB</th>
-              <th>PCP</th>
-              <th>Hospital Admission</th>
-              <th>Hospital Discharge</th>
-              <th>Visit Type</th>
-              <th>Primary DX</th>
-              <th>Primary DX_10Code</th>
-              <th>DX2</th>
-              <th>DX2_10Code</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of edChartDetails; let i=index;">
-              <td>{{item.patientMRN}}</td>
-              <td>{{item.patientEncounterID}}</td>
-              <td>{{item.facility}}</td>
-              <td>{{item.patientName}}</td>
-              <td>{{item.patientDOB}}</td>
-              <td>{{item.pcp}}</td>
-              <td>{{item.hospitalAdmission}}</td>
-              <td>{{item.hospitalDischarge}}</td>
-              <td>{{item.visitType}}</td>
-              <td>{{item.primaryDX}}</td>
-              <td>{{item.primaryDX_10Code}}</td>
-              <td>{{item.dX2}}</td>
-              <td>{{item.dX2_10Code}}</td>
-            </tr>
+            <thead>
+                <tr>
+                    <th>Patient MRN</th>
+                    <th>Patient Encounter ID</th>
+                    <th>Facility</th>
+                    <th>Patient Name</th>
+                    <th>Patient DOB</th>
+                    <th>PCP</th>
+                    <th>Hospital Admission</th>
+                    <th>Hospital Discharge</th>
+                    <th>Visit Type</th>
+                    <th>Primary DX</th>
+                    <th>Primary DX_10Code</th>
+                    <th>DX2</th>
+                    <th>DX2_10Code</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of edChartDetails; let i=index;">
+                    <td>{{item.patientMRN}}</td>
+                    <td>{{item.patientEncounterID}}</td>
+                    <td>{{item.facility}}</td>
+                    <td>{{item.patientName}}</td>
+                    <td>{{item.patientDOB | date:'shortDate'}}</td>
+                    <td>{{item.pcp}}</td>
+                    <td>{{item.hospitalAdmission | date:'short'}}</td>
+                    <td>{{item.hospitalDischarge | date:'short'}}</td>
+                    <td>{{item.visitType}}</td>
+                    <td>{{item.primaryDX}}</td>
+                    <td>{{item.primaryDX_10Code}}</td>
+                    <td>{{item.dX2}}</td>
+                    <td>{{item.dX2_10Code}}</td>
+                </tr>
         </table>
-        </div>
-      <div mat-dialog-actions align="end">
-        <button mat-button mat-dialog-close>Cancel</button>
+    </div>
+    <div mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Close</button>
         <button mat-button>View Report</button>
-      </div>
+    </div>
 
 </ng-template>

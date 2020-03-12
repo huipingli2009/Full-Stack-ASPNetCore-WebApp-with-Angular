@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using org.cchmc.pho.api.ViewModels;
 using org.cchmc.pho.core.Interfaces;
+using org.cchmc.pho.core.DataModels;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace org.cchmc.pho.api.Controllers
@@ -86,6 +87,111 @@ namespace org.cchmc.pho.api.Controllers
                 var data = await _patient.GetPatientDetails(patientId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
                 var result = _mapper.Map<PatientDetailsViewModel>(data);
+                // return the result in a "200 OK" response
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+        [HttpPut("{patient}")]
+        [SwaggerResponse(200, type: typeof(PatientDetailsViewModel))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> UpdatePatientDetails([FromBody] PatientDetailsViewModel patientDetailsVM, string patient)
+        {
+            // route parameters are strings and need to be translated (and validated) to their proper data type
+            if (!int.TryParse(_DEFAULT_USER, out var userId))
+            {
+                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
+                return BadRequest("user is not a valid integer");
+            }
+
+            if (!int.TryParse(patient, out var patientId))
+            {
+                _logger.LogInformation($"Failed to parse patientId - {patient}");
+                return BadRequest("patient is not a valid integer");
+            }
+
+            if (patientDetailsVM == null)
+            {
+                _logger.LogInformation("patientDetails object is null");
+                return BadRequest("patient is null");
+            }
+
+            if (patientDetailsVM.Id != patientId)
+            {
+                _logger.LogInformation($"patientDetails.Id and patientId to not match");
+                return BadRequest("patient id does not match");
+            }
+
+            if (!_patient.IsPatientInSamePractice(userId, patientId))
+            {
+                _logger.LogInformation($"patient and user practices do not match");
+                return BadRequest("patient practice does not match user");
+            }
+
+            try
+            {
+                PatientDetails patientDetail = _mapper.Map<PatientDetails>(patientDetailsVM);
+                // call the data layer to mark the action
+                var data = await _patient.UpdatePatientDetails(userId,patientDetail);
+                var result = _mapper.Map<PatientDetailsViewModel>(data);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+        [HttpGet("conditions")]
+        [SwaggerResponse(200, type: typeof(List<PatientConditionViewModel>))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> GetConditionsAll()
+        {
+            try
+            {
+                // call the data method
+                var data = await _patient.GetPatientConditionsAll();
+                // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
+                var result = _mapper.Map<List<PatientConditionViewModel>>(data);
+                // return the result in a "200 OK" response
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+        [HttpGet("insurance")]
+        [SwaggerResponse(200, type: typeof(List<PatientInsuranceViewModel>))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> GetInsuranceAll()
+        {
+            // route parameters are strings and need to be translated (and validated) to their proper data type
+            if (!int.TryParse(_DEFAULT_USER, out var userId))
+            {
+                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
+                return BadRequest("user is not a valid integer");
+            }
+            try
+            {
+                // call the data method
+                var data = await _patient.GetPatientInsuranceAll(userId);
+                // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
+                var result = _mapper.Map<List<PatientInsuranceViewModel>>(data);
                 // return the result in a "200 OK" response
                 return Ok(result);
             }

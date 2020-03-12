@@ -19,8 +19,14 @@ namespace org.cchmc.pho.api.ViewModels
         public List<PatientConditionViewModel> Conditions { get; set; }
     }
 
-   
+
     public class PatientConditionViewModel
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+    }
+    public class PatientInsuranceViewModel
     {
         public int ID { get; set; }
         public string Name { get; set; }
