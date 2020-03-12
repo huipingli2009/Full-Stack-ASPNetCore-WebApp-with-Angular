@@ -42,6 +42,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                    {
                                        PracticeId = Convert.ToInt32(dr["PracticeId"]),
                                        DashboardLabel = dr["DashboardLabel"].ToString(),
+                                       MeasureId = (dr["MeasureId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["MeasureId"].ToString())),
                                        MeasureDesc = dr["MeasureDesc"].ToString(),
                                        MeasureType = dr["MeasureType"].ToString(),
                                        PracticeTotal = Convert.ToInt32(dr["PracticeTotal"]),
