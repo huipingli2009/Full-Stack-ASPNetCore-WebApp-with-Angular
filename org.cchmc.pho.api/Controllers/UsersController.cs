@@ -84,6 +84,7 @@ namespace org.cchmc.pho.api.Controllers
 
                 string currentUserRole = _userService.GetRoleNameFromClaims(User?.Claims);
 
+                // if we're updating a different user, check some additional rules based on roles
                 if(!string.Equals(currentUserName, user.UserName, StringComparison.OrdinalIgnoreCase))
                 {
                     if(!InAnyAdminRole(currentUserRole))
@@ -150,7 +151,8 @@ namespace org.cchmc.pho.api.Controllers
                 Role selectedRole = rolesInSystem.First(r => r.Id == userViewModel.Role.Id);
                 string currentUserRole = _userService.GetRoleNameFromClaims(User?.Claims);
 
-                if(!string.Equals(currentUserName, user.UserName, StringComparison.OrdinalIgnoreCase))
+                // if we're updating a different user, check some additional rules based on roles
+                if (!string.Equals(currentUserName, user.UserName, StringComparison.OrdinalIgnoreCase))
                 {
                     if (!InAnyAdminRole(currentUserRole))
                     {
@@ -170,7 +172,8 @@ namespace org.cchmc.pho.api.Controllers
                     }
                 }
 
-                if(user.Role.Id != userViewModel.Role.Id)
+                // if we're changing roles, check some additional rules based on current role
+                if (user.Role.Id != userViewModel.Role.Id)
                 {
                     if (!InAnyAdminRole(currentUserRole))
                     {
