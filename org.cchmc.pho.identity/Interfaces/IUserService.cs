@@ -10,6 +10,8 @@ namespace org.cchmc.pho.identity.Interfaces
         Task<User> AssignStaffIdToUser(int userId, int staffId, string userNameMakingChange); 
         Task<User> Authenticate(string userName, string password);
         string GetRoleNameFromClaims(IEnumerable<Claim> claims);
+        int GetStaffIdFromClaims(IEnumerable<Claim> claims);
+        int GetUserIdFromClaims(IEnumerable<Claim> claims);
         string GetUserNameFromClaims(IEnumerable<Claim> claims);
         Task<User> GetUser(int userId);
         Task<User> GetUser(string userName);
