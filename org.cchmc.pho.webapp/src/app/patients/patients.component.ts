@@ -47,6 +47,7 @@ export class PatientsComponent implements OnInit {
   watchFlag: string;
   pcP_StaffID: string;
   gender: string;
+  insurance: string;
   filterFormGroup;
   conditions: string;
   conditionsList: any[] = [];
@@ -62,6 +63,10 @@ export class PatientsComponent implements OnInit {
   filteredOptions: Observable<string[]>;
   isActive: boolean;
   form: FormGroup;
+  insuranceList: any[] = [];
+  genderList: any[] = [];
+  pmcaList: any[] = [];
+  stateList: any[] = [];
 
   displayedColumns: string[] = ['arrow', 'name', 'dob', 'lastEDVisit', 'chronic', 'watchFlag', 'conditions'];
   pageEvent: PageEvent;
@@ -70,17 +75,21 @@ export class PatientsComponent implements OnInit {
   isExpansionDetailRow = (i: number, row: object) => row.hasOwnProperty('detailRow');
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
-              public fb: FormBuilder, private logger: NGXLogger) { 
+              public fb: FormBuilder, private logger: NGXLogger) {
                 this.filterFormGroup = this.fb.group({});
               }
 
   ngOnInit() {
-    this.patients = this.route.snapshot.data['patients'];
+    this.patients = this.route.snapshot.data.patients;
     this.dataSource = new PatientsDataSource(this.rest);
     this.loadPatientsWithFilters();
     this.getConditionsList();
     this.getPCPList();
     this.getPopSliceList();
+    this.getInsuranceList();
+    this.getGenderList();
+    this.getPmca();
+    this.getStates();
   }
 
   ngAfterViewInit() {
@@ -114,7 +123,7 @@ loadPatientsPage() {
         this.watchFlag,
         this.conditions,
         this.providers,
-        this.popSlices, 
+        this.popSlices,
         this.patientNameSearch);
 }
 
@@ -133,7 +142,7 @@ loadPatientsPage() {
     if (e.checked === true) {
       this.chronic = 'true';
       this.loadPatientsWithFilters();
-    } else { 
+    } else {
       this.chronic = '';
       this.loadPatientsWithFilters();
     }
@@ -143,7 +152,7 @@ loadPatientsPage() {
     if (e.checked === true) {
       this.watchFlag = 'true';
       this.loadPatientsWithFilters();
-    } else { 
+    } else {
       this.watchFlag = '';
       this.loadPatientsWithFilters();
     }
@@ -152,7 +161,7 @@ loadPatientsPage() {
   getPopSliceList() {
     this.rest.getPopSliceList().subscribe((data) => {
       this.popSliceList = data;
-    })
+    });
   }
 
   patientHasPopSlice() {
@@ -162,7 +171,7 @@ loadPatientsPage() {
   getConditionsList() {
     this.rest.getConditionsList().subscribe((data) => {
       this.conditionsList = data;
-    })
+    });
   }
 
   patientHasCondition(e) {
@@ -172,7 +181,7 @@ loadPatientsPage() {
   getPCPList() {
     this.rest.getPCPList().subscribe((data) => {
       this.providersList = data;
-    })
+    });
   }
   patientHasPCP() {
     this.loadPatientsWithFilters();
@@ -190,6 +199,9 @@ loadPatientsPage() {
       this.patientFormDetails = data;
       this.patientDetails = data;
       this.isActive = data.activeStatus;
+      this.gender = data.gender;
+      this.insurance = data.insurance;
+      // this.gender = data.
       this.form = this.fb.group({
         activeStatus: [Boolean, Validators.required],
         patientMRNId: ['', Validators.required],
@@ -209,12 +221,34 @@ loadPatientsPage() {
         tap(user => this.form.patchValue(user))
       );
       console.log(this.patientDetails);
-      
+
     });
   }
-  
-  
-  
+
+  /* Patient Details - Form Elements*/
+  getInsuranceList() {
+    this.rest.getInsurance().subscribe((data) => {
+      this.insuranceList = data;
+    });
+  }
+  getGenderList() {
+    this.rest.getGender().subscribe((data) => {
+      this.genderList = data;
+    });
+  }
+  getPmca() {
+    this.rest.getPmca().subscribe((data) => {
+      this.pmcaList = data;
+    });
+  }
+  getStates() {
+    this.rest.getState().subscribe((data) => {
+      this.stateList = data;
+    });
+  }
+
+
+
 
 
 }

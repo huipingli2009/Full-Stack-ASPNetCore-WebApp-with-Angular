@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 import { Alerts, Population, EdChart, EdChartDetails, Spotlight, Quicklinks } from './models/dashboard';
 import { environment } from '../environments/environment';
-import { Patients, PatientDetails, Conditions, Providers, PopSlices } from './models/patients';
+import { Patients, PatientDetails, Conditions, Providers, PopSlices, Gender, Insurance, Pmca, States } from './models/patients';
 
 // we can now access environment.apiUrl
 const API_URL = environment.apiURL;
@@ -164,6 +164,40 @@ export class RestService {
     const endpoint = `${API_URL}/api/Patients/${id}`;
     return this.http.get<any>(endpoint).pipe(
       map((data: PatientDetails[]) => {
+        return data;
+      })
+    );
+  }
+
+  /* Get Insurance */
+  getInsurance(): Observable<any> {
+    return this.http.get<any>(`${API_URL}/api/Patients/insurance/`).pipe(
+      map((data: Insurance[]) => {
+        return data;
+      })
+    );
+  }
+
+  /* Get Gender */
+  getGender(): Observable<any> {
+    return this.http.get<any>(`${API_URL}/api/Patients/gender/`).pipe(
+      map((data: Gender[]) => {
+        return data;
+      })
+    );
+  }
+  /* Get Gender */
+  getPmca(): Observable<any> {
+    return this.http.get<any>(`${API_URL}/api/Patients/pmca/`).pipe(
+      map((data: Pmca[]) => {
+        return data;
+      })
+    );
+  }
+  /* Get Gender */
+  getState(): Observable<any> {
+    return this.http.get<any>(`${API_URL}/api/Patients/state/`).pipe(
+      map((data: States[]) => {
         return data;
       })
     );

@@ -120,7 +120,7 @@ export class DashboardComponent implements OnInit {
       const imageName = this.spotlight[0].imageHyperlink;
       this.monthlySpotlightTitle = this.spotlight[0].header;
       this.monthlySpotlightBody = this.spotlight[0].body;
-      this.monthlySpotlightImageUrl = `/assets/img/${imageName}`;
+      this.monthlySpotlightImageUrl = `${this.defaultUrl}/assets/img/${imageName}`;
       this.monthlySpotlightLink = this.spotlight[0].hyperlink;
     });
   }

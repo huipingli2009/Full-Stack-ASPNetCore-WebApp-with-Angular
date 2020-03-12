@@ -153,7 +153,11 @@
             </div>
             <div fxLayout="column">
               <label for="gender">Gender</label>
-              <input id="gender" formControlName="gender" name="gender"/>
+                <select formControlName="gender" [(value)]="gender">
+                  <option *ngFor="let item of genderList" >
+                    {{item.name}}
+                  </option>
+                </select>
               <div *ngIf="form.controls.gender.errors?.required && form.controls.gender.touched" class="error">
                 *Required
               </div>
@@ -167,7 +171,11 @@
             </div>
             <div fxLayout="column">
               <label for="insuranceName">Insurance</label>
-              <input id="insuranceName" formControlName="insuranceName" name="insuranceName"/>
+              <select formControlName="insuranceName" [(value)]="insurance" class="insurance">
+                <option *ngFor="let item of insuranceList" >
+                  {{item.name}}
+                </option>
+              </select>
               <div *ngIf="form.controls.insuranceName.errors?.required && form.controls.insuranceName.touched" class="error">
                 *Required
               </div>

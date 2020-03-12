@@ -86,3 +86,26 @@ export class PopSlices {
     id: number;
     label: string;
 }
+
+export class Insurance {
+    id: number;
+    name: string;
+}
+
+export class Gender {
+    id: number;
+    shortName: string;
+    name: string;
+}
+
+export class Pmca {
+    id: number;
+    score: string;
+    description: string;
+}
+
+export class States {
+    id: number;
+    shortName: string;
+    name: string;
+}
