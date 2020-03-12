@@ -19,7 +19,7 @@ export interface Patients {
     close?: boolean;
     patientsCount: 200; //Need to know the COunt, hardcoding this for now (Missing from API)
 }
-export class PatientDetails {
+export interface PatientDetails {
      id: number;
      patientMRNId: string;
      clarityPatientId: string  ;

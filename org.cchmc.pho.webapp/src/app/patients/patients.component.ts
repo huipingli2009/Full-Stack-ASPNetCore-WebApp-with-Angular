@@ -41,7 +41,7 @@ export class PatientsComponent implements OnInit {
 
   patients: Patients;
   patientFormDetails: Observable<PatientDetails>;
-  patientDetails: PatientDetails[];
+  patientDetails: PatientDetails;
   filterValues: any = {};
   chronic: string;
   watchFlag: string;
