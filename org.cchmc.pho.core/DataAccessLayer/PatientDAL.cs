@@ -74,7 +74,8 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 WatchFlag = bool.Parse(dr["WatchFlag"].ToString()),
                                 Conditions = new List<PatientCondition>(),
                                 ActiveStatus = bool.Parse(dr["ActiveStatus"].ToString()),
-                                PotentiallyActiveStatus= bool.Parse(dr["PotentiallyActive"].ToString()),
+                                PotentiallyActiveStatus = bool.Parse(dr["PotentiallyActive"].ToString()),
+                                TotalRecords = Convert.ToInt32(dr["TotalRecords"])
                             };
 
                             if (!string.IsNullOrWhiteSpace(dr["ConditionIDs"].ToString()))
