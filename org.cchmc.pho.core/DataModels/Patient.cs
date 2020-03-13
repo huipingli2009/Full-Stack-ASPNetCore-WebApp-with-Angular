@@ -16,6 +16,8 @@ namespace org.cchmc.pho.core.DataModels
         public DateTime? LastEDVisit { get; set; }
         public bool Chronic { get; set; }
         public bool WatchFlag { get; set; }
+
+        public int TotalRecords { get; set; }
         public List<PatientCondition> Conditions { get; set; }
     }
    

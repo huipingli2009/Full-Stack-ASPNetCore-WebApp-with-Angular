@@ -33,6 +33,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
         private Mock<IUserService> _mockUserService;
         private Mock<IOptions<CustomOptions>> _mockOptions;
         private IMapper _mapper;
+        private Mock<IStaff> _mockStaff;
 
         private const string _userName = "cjenkinson";
         private const string _password = "P@ssw0rd!";
@@ -52,22 +53,22 @@ namespace org.cchmc.pho.unittest.ControllerTests
             new Role()
             {
                 Id = 1,
-                Name = "PracticeMember"
+                Name = "Practice Member"
             },
             new Role()
             {
                 Id = 2,
-                Name = "PracticeAdmin"
+                Name = "Practice Admin"
             },
             new Role()
             {
                 Id = 3,
-                Name = "PHOMember"
+                Name = "PHO Member"
             },
             new Role()
             {
                 Id = 4,
-                Name = "PHOAdmin"
+                Name = "PHO Admin"
             }
         };
         
@@ -81,11 +82,12 @@ namespace org.cchmc.pho.unittest.ControllerTests
             });
             _mapper = config.CreateMapper();
             _mockUserService = new Mock<IUserService>();
+            _mockStaff = new Mock<IStaff>();
             _mockLogger = new Mock<ILogger<UsersController>>();
             _mockOptions = new Mock<IOptions<CustomOptions>>();
             _mockOptions.Setup(op => op.Value).Returns(_customOptions);
 
-            _userController = new UsersController(_mockLogger.Object, _mapper, _mockUserService.Object, _mockOptions.Object);
+            _userController = new UsersController(_mockLogger.Object, _mapper, _mockUserService.Object, _mockOptions.Object, _mockStaff.Object);
             _user = new User()
             {
                 CreatedBy = "system",
@@ -96,7 +98,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 LastName = "Last",
                 LastUpdatedBy = "system",
                 LastUpdatedDate = DateTime.Parse("1/2/20"),
-                Role = new Role() { Id = 1, Name = "PracticeMember" },
+                Role = new Role() { Id = 1, Name = "Practice Member" },
                 StaffId = 5,
                 UserName = _userName,
                 Token = Guid.NewGuid().ToString() // let's not worry about the token contents just yet
@@ -117,6 +119,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.AreEqual("Authorized", authResult.Status);
             Assert.IsNotNull(authResult.User);
             Assert.AreEqual(_user.Token, authResult.User.Token);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
@@ -132,6 +135,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             var authResult = result.Value as AuthenticationResult;
             Assert.AreEqual("User not found or password did not match", authResult.Status);
             Assert.IsNull(authResult.User);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
@@ -144,6 +148,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             // assert
             Assert.IsNotNull(result);
             Assert.AreEqual(500, result.StatusCode);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
         #endregion
 
@@ -152,7 +157,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task UpdateUserPassword_UpdateSelf_Success_ReturnsTrue()
         {
             string myUserName = _userName;
-            string myUserRole = "PracticeMember";
+            string myUserRole = "Practice Member";
             string newPassword = "Th1sP@sses!";
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserName).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserRole).Verifiable();
@@ -163,13 +168,14 @@ namespace org.cchmc.pho.unittest.ControllerTests
 
             Assert.IsNotNull(result);
             Assert.IsTrue((bool)result.Value);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
         public async Task UpdateUserPassword_UpdateOther_Success_ReturnsTrue()
         {
             string myUserName = "SomeOtherName";
-            string myUserRole = "PracticeAdmin";
+            string myUserRole = "PHO Admin";
             string newPassword = "Th1sP@sses!";
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserName).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserRole).Verifiable();
@@ -180,13 +186,14 @@ namespace org.cchmc.pho.unittest.ControllerTests
 
             Assert.IsNotNull(result);
             Assert.IsTrue((bool)result.Value);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
         public async Task UpdateUserPassword_UpdateSelf_Fails_ReturnsFalse()
         {
             string myUserName = _userName;
-            string myUserRole = "PracticeMember";
+            string myUserRole = "Practice Member";
             string newPassword = "Th1sP@sses!";
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserName).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserRole).Verifiable();
@@ -197,6 +204,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
 
             Assert.IsNotNull(result);
             Assert.IsFalse((bool)result.Value);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
@@ -207,6 +215,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(400, result.StatusCode);
             _mockUserService.Verify(p => p.ResetUserPassword(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
@@ -217,6 +226,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(400, result.StatusCode);
             _mockUserService.Verify(p => p.ResetUserPassword(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
@@ -227,6 +237,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(400, result.StatusCode);
             _mockUserService.Verify(p => p.ResetUserPassword(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
@@ -240,13 +251,14 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(400, result.StatusCode);
             _mockUserService.Verify(p => p.ResetUserPassword(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
         public async Task UpdateUserPassword_CannotUpdateAnotherUser_Returns401()
         {
             string myUserName = "SomeOtherName";
-            string myUserRole = "PracticeMember";
+            string myUserRole = "Practice Member";
             string newPassword = "Th1sP@sses!";
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserName).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserRole).Verifiable();
@@ -257,20 +269,56 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(401, result.StatusCode);
             _mockUserService.Verify(p => p.ResetUserPassword(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
-        [Ignore("Needs the StaffDAL implemented")]
         [TestMethod]
         public async Task UpdateUserPassword_CannotUpdateAnotherUserInADifferentPractice_Returns401()
         {
+            string myUserName = "SomeOtherName";
+            string myUserRole = "Practice Admin";
+            string newPassword = "Th1sP@sses!";
+            int myUserId = 7;
+            _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserName).Verifiable();
+            _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserRole).Verifiable();
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserId).Verifiable();
+            _mockStaff.Setup(p => p.IsStaffInSamePractice(myUserId, _user.StaffId)).Returns(false).Verifiable();
+            _mockUserService.Setup(p => p.GetUser(_userId)).Returns(Task.FromResult(_user)).Verifiable();
+            
+            var result = await _userController.UpdateUserPassword(_userId, new PasswordChangeViewModel() { NewPassword = newPassword }) as ObjectResult;
 
+            Assert.IsNotNull(result);
+            Assert.AreEqual(401, result.StatusCode);
+            _mockUserService.Verify(p => p.ResetUserPassword(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
+        }
+
+        [TestMethod]
+        public async Task UpdateUserPassword_CanUpdateAnotherUserInSamePractice_Success()
+        {
+            string myUserName = "SomeOtherName";
+            string myUserRole = "Practice Admin";
+            string newPassword = "Th1sP@sses!";
+            int myUserId = 7;
+            _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserName).Verifiable();
+            _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserRole).Verifiable();
+            _mockUserService.Setup(p => p.GetUser(_userId)).Returns(Task.FromResult(_user)).Verifiable();
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserId).Verifiable();
+            _mockStaff.Setup(p => p.IsStaffInSamePractice(myUserId, _user.StaffId)).Returns(true).Verifiable();
+            _mockUserService.Setup(p => p.ResetUserPassword(_userId, newPassword, myUserName)).Returns(Task.FromResult(true)).Verifiable();
+
+            var result = await _userController.UpdateUserPassword(_userId, new PasswordChangeViewModel() { NewPassword = newPassword }) as ObjectResult;
+
+            Assert.IsNotNull(result);
+            Assert.IsTrue((bool)result.Value);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
         public async Task UpdateUserPassword_PasswordTooShort_Returns400()
         {
             string myUserName = _userName;
-            string myUserRole = "PracticeMember";
+            string myUserRole = "Practice Member";
             string newPassword = "Th1sP@s";
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserName).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserRole).Verifiable();
@@ -282,13 +330,14 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.AreEqual(400, result.StatusCode);
             Assert.IsTrue(result.Value.ToString().Contains($"Password must be at least {_customOptions.MinimumPasswordLength} characters"));
             _mockUserService.Verify(p => p.ResetUserPassword(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
         public async Task UpdateUserPassword_PasswordMissingDigit_Returns400()
         {
             string myUserName = _userName;
-            string myUserRole = "PracticeMember";
+            string myUserRole = "Practice Member";
             string newPassword = "ThisP@ss";
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserName).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserRole).Verifiable();
@@ -300,13 +349,14 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.AreEqual(400, result.StatusCode);
             Assert.IsTrue(result.Value.ToString().Contains("Password must contain a digit"));
             _mockUserService.Verify(p => p.ResetUserPassword(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
         public async Task UpdateUserPassword_PasswordMissingLowercase_Returns400()
         {
             string myUserName = _userName;
-            string myUserRole = "PracticeMember";
+            string myUserRole = "Practice Member";
             string newPassword = "TH1SP@SS";
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserName).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserRole).Verifiable();
@@ -318,13 +368,14 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.AreEqual(400, result.StatusCode);
             Assert.IsTrue(result.Value.ToString().Contains("Password must contain a lowercase character"));
             _mockUserService.Verify(p => p.ResetUserPassword(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
         public async Task UpdateUserPassword_PasswordMissingUppercase_Returns400()
         {
             string myUserName = _userName;
-            string myUserRole = "PracticeMember";
+            string myUserRole = "Practice Member";
             string newPassword = "th1sp@ss";
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserName).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserRole).Verifiable();
@@ -336,13 +387,33 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.AreEqual(400, result.StatusCode);
             Assert.IsTrue(result.Value.ToString().Contains("Password must contain an uppercase character"));
             _mockUserService.Verify(p => p.ResetUserPassword(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
+        }
+
+        [TestMethod]
+        public async Task UpdateUserPassword_PasswordMissingSpecial_Returns400()
+        {
+            string myUserName = _userName;
+            string myUserRole = "Practice Member";
+            string newPassword = "ThisNoPass1";
+            _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserName).Verifiable();
+            _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserRole).Verifiable();
+            _mockUserService.Setup(p => p.GetUser(_userId)).Returns(Task.FromResult(_user)).Verifiable();
+
+            var result = await _userController.UpdateUserPassword(_userId, new PasswordChangeViewModel() { NewPassword = newPassword }) as ObjectResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(400, result.StatusCode);
+            Assert.IsTrue(result.Value.ToString().Contains("Password must contain a special character"));
+            _mockUserService.Verify(p => p.ResetUserPassword(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
         public async Task UpdateUserPassword_PasswordHasSpace_Returns400()
         {
             string myUserName = _userName;
-            string myUserRole = "PracticeMember";
+            string myUserRole = "Practice Member";
             string newPassword = "th1sp@s ";
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserName).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(myUserRole).Verifiable();
@@ -354,6 +425,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.AreEqual(400, result.StatusCode);
             Assert.IsTrue(result.Value.ToString().Contains("Passwords cannot contain spaces"));
             _mockUserService.Verify(p => p.ResetUserPassword(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
@@ -367,6 +439,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(500, result.StatusCode);
             _mockUserService.Verify(p => p.ResetUserPassword(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
         #endregion
 
@@ -400,6 +473,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             var resultUser = result.Value as UserViewModel;
             Assert.AreEqual(userMakingChange, resultUser.LastUpdatedBy);
             Assert.AreEqual(newUser.Email, resultUser.Email);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
@@ -411,8 +485,8 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 Id = _user.Id,
                 Role = new RoleViewModel() { Id = _user.Role.Id, Name = _user.Role.Name }
             };
-            string userMakingChange = "PHOAdmin";
-            string roleMakingChange = "PHOAdmin";
+            string userMakingChange = "PHO Admin";
+            string roleMakingChange = "PHO Admin";
             _mockUserService.Setup(p => p.GetUser(_userId)).Returns(Task.FromResult(_user)).Verifiable();
             _mockUserService.Setup(p => p.ListRoles()).Returns(Task.FromResult(_roles)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userMakingChange).Verifiable();
@@ -431,6 +505,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             var resultUser = result.Value as UserViewModel;
             Assert.AreEqual(userMakingChange, resultUser.LastUpdatedBy);
             Assert.AreEqual(newUser.Email, resultUser.Email);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
@@ -441,6 +516,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(400, result.StatusCode);
             _mockUserService.Verify(p => p.UpdateUser(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
@@ -452,13 +528,13 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 Id = _userId - 1,
                 Role = new RoleViewModel() { Id = _user.Role.Id, Name = _user.Role.Name }
             };
-            _mockUserService.Setup(p => p.GetUser(_userId)).Returns(Task.FromResult(_user)).Verifiable();
 
             var result = await _userController.UpdateUser(_userId, newUser) as ObjectResult;
 
             Assert.IsNotNull(result);
             Assert.AreEqual(400, result.StatusCode);
             _mockUserService.Verify(p => p.UpdateUser(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
@@ -467,9 +543,10 @@ namespace org.cchmc.pho.unittest.ControllerTests
             UserViewModel newUser = new UserViewModel()
             {
                 Email = "something@example.com",
-                Id = _userId - 1,
+                Id = _userId,
                 Role = new RoleViewModel() { Id = _user.Role.Id, Name = _user.Role.Name }
             };
+            _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns("ASDF").Verifiable();
             _mockUserService.Setup(p => p.GetUser(_userId)).Returns(Task.FromResult((User)null)).Verifiable();
 
             var result = await _userController.UpdateUser(_userId, newUser) as ObjectResult;
@@ -477,6 +554,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(400, result.StatusCode);
             _mockUserService.Verify(p => p.UpdateUser(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
@@ -496,6 +574,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(400, result.StatusCode);
             _mockUserService.Verify(p => p.UpdateUser(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
@@ -508,7 +587,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 Role = new RoleViewModel() { Id = _user.Role.Id, Name = _user.Role.Name }
             };
             string userMakingChange = "SomeoneElse";
-            string roleMakingChange = "PracticeMember";
+            string roleMakingChange = "Practice Member";
             _mockUserService.Setup(p => p.GetUser(_userId)).Returns(Task.FromResult(_user)).Verifiable();
             _mockUserService.Setup(p => p.ListRoles()).Returns(Task.FromResult(_roles)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userMakingChange).Verifiable();
@@ -519,10 +598,11 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(401, result.StatusCode);
             _mockUserService.Verify(p => p.UpdateUser(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
-        public async Task UpdateUser_PhoMemberCantUpdateAnotherUser_Returns401()
+        public async Task UpdateUser_PHOMemberCantUpdateAnotherUser_Returns401()
         {
             UserViewModel newUser = new UserViewModel()
             {
@@ -531,7 +611,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 Role = new RoleViewModel() { Id = _user.Role.Id, Name = _user.Role.Name }
             };
             string userMakingChange = "SomeoneElse";
-            string roleMakingChange = "PHOMember";
+            string roleMakingChange = "PHO Member";
             _mockUserService.Setup(p => p.GetUser(_userId)).Returns(Task.FromResult(_user)).Verifiable();
             _mockUserService.Setup(p => p.ListRoles()).Returns(Task.FromResult(_roles)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userMakingChange).Verifiable();
@@ -542,6 +622,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(401, result.StatusCode);
             _mockUserService.Verify(p => p.UpdateUser(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
@@ -551,10 +632,10 @@ namespace org.cchmc.pho.unittest.ControllerTests
             {
                 Email = "something@example.com",
                 Id = _user.Id,
-                Role = new RoleViewModel() { Id = 2, Name = "PracticeAdmin" }
+                Role = new RoleViewModel() { Id = 2, Name = "Practice Admin" }
             };
             string userMakingChange = _user.UserName;
-            string roleMakingChange = "PracticeMember";
+            string roleMakingChange = "Practice Member";
             _mockUserService.Setup(p => p.GetUser(_userId)).Returns(Task.FromResult(_user)).Verifiable();
             _mockUserService.Setup(p => p.ListRoles()).Returns(Task.FromResult(_roles)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userMakingChange).Verifiable();
@@ -565,20 +646,21 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(401, result.StatusCode);
             _mockUserService.Verify(p => p.UpdateUser(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
-        public async Task UpdateUser_PhoMemberCantChangeTheirOwnRole_Returns401()
+        public async Task UpdateUser_PHOMemberCantChangeTheirOwnRole_Returns401()
         {
-            _user.Role = new Role() { Id = 3, Name = "PHOMember" };
+            _user.Role = new Role() { Id = 3, Name = "PHO Member" };
             UserViewModel newUser = new UserViewModel()
             {
                 Email = "something@example.com",
                 Id = _user.Id,
-                Role = new RoleViewModel() { Id = 1, Name = "PracticeMember" }
+                Role = new RoleViewModel() { Id = 1, Name = "Practice Member" }
             };
             string userMakingChange = _user.UserName;
-            string roleMakingChange = "PHOMember";
+            string roleMakingChange = "PHO Member";
             _mockUserService.Setup(p => p.GetUser(_userId)).Returns(Task.FromResult(_user)).Verifiable();
             _mockUserService.Setup(p => p.ListRoles()).Returns(Task.FromResult(_roles)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userMakingChange).Verifiable();
@@ -589,6 +671,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(401, result.StatusCode);
             _mockUserService.Verify(p => p.UpdateUser(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
@@ -598,10 +681,10 @@ namespace org.cchmc.pho.unittest.ControllerTests
             {
                 Email = "something@example.com",
                 Id = _user.Id,
-                Role = new RoleViewModel() { Id = 3, Name = "PHOMember" }
+                Role = new RoleViewModel() { Id = 3, Name = "PHO Member" }
             };
             string userMakingChange = _user.UserName;
-            string roleMakingChange = "PracticeAdmin";
+            string roleMakingChange = "Practice Admin";
             _mockUserService.Setup(p => p.GetUser(_userId)).Returns(Task.FromResult(_user)).Verifiable();
             _mockUserService.Setup(p => p.ListRoles()).Returns(Task.FromResult(_roles)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userMakingChange).Verifiable();
@@ -612,13 +695,69 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(401, result.StatusCode);
             _mockUserService.Verify(p => p.UpdateUser(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
-        [Ignore("Needs the StaffDAL implemented")]
         [TestMethod]
         public async Task UpdateUser_PracticeAdminCantChangeUserOutsideTheirPractice_Returns401()
         {
+            UserViewModel newUser = new UserViewModel()
+            {
+                Email = "something@example.com",
+                Id = _user.Id,
+                Role = new RoleViewModel() { Id = 1, Name = "Practice Member" }
+            };
+            string userMakingChange = "someothername";
+            string roleMakingChange = "Practice Admin";
+            int userIdMakingChange = 8;
+            _mockUserService.Setup(p => p.GetUser(_userId)).Returns(Task.FromResult(_user)).Verifiable();
+            _mockUserService.Setup(p => p.ListRoles()).Returns(Task.FromResult(_roles)).Verifiable();
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userIdMakingChange).Verifiable();
+            _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userMakingChange).Verifiable();
+            _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(roleMakingChange).Verifiable();
+            _mockStaff.Setup(p => p.IsStaffInSamePractice(userIdMakingChange, _user.StaffId)).Returns(false).Verifiable();
 
+            var result = await _userController.UpdateUser(_userId, newUser) as ObjectResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(401, result.StatusCode);
+            _mockUserService.Verify(p => p.UpdateUser(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
+        }
+
+        [TestMethod]
+        public async Task UpdateUser_PracticeAdminCanChangeUserInsideTheirPractice_Success()
+        {
+            UserViewModel newUser = new UserViewModel()
+            {
+                Email = "something@example.com",
+                Id = _user.Id,
+                Role = new RoleViewModel() { Id = 1, Name = "Practice Member" }
+            };
+            string userMakingChange = "someothername";
+            string roleMakingChange = "Practice Admin";
+            int userIdMakingChange = 8;
+            _mockUserService.Setup(p => p.GetUser(_userId)).Returns(Task.FromResult(_user)).Verifiable();
+            _mockUserService.Setup(p => p.ListRoles()).Returns(Task.FromResult(_roles)).Verifiable();
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userIdMakingChange).Verifiable();
+            _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userMakingChange).Verifiable();
+            _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(roleMakingChange).Verifiable();
+            _mockStaff.Setup(p => p.IsStaffInSamePractice(userIdMakingChange, _user.StaffId)).Returns(true).Verifiable();
+            _mockUserService.Setup(p => p.UpdateUser(It.IsAny<User>(), userMakingChange))
+                .Returns<User, string>((x, y) => {
+                    x.LastUpdatedBy = y;
+                    x.LastUpdatedDate = DateTime.Now.Date;
+                    return Task.FromResult(x);
+                }).Verifiable();
+
+            var result = await _userController.UpdateUser(_userId, newUser) as ObjectResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(200, result.StatusCode);
+            var resultUser = result.Value as UserViewModel;
+            Assert.AreEqual(userMakingChange, resultUser.LastUpdatedBy);
+            Assert.AreEqual(newUser.Email, resultUser.Email);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
@@ -643,6 +782,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
 
             Assert.IsNotNull(result);
             Assert.AreEqual(500, result.StatusCode);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
         #endregion
 
@@ -663,7 +803,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 UserName = "someusername"
             };
             string userMakingChange = "sdffhasdf";
-            string roleMakingChange = "PHOAdmin";
+            string roleMakingChange = "PHO Admin";
             _mockUserService.Setup(p => p.GetUser(newUser.UserName)).Returns(Task.FromResult((User)null)).Verifiable();
             _mockUserService.Setup(p => p.ListRoles()).Returns(Task.FromResult(_roles)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userMakingChange).Verifiable();
@@ -681,6 +821,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(200, result.StatusCode);
             Assert.IsTrue(result.Value is UserViewModel);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
@@ -705,6 +846,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(400, result.StatusCode);
             _mockUserService.Verify(p => p.InsertUser(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
@@ -713,7 +855,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             UserViewModel newUser = new UserViewModel()
             {
                 Email = "something@example.com",
-                Role = new RoleViewModel() { Id = 3, Name = "PHOMember" },
+                Role = new RoleViewModel() { Id = 3, Name = "PHO Member" },
                 CreatedBy = "someone",
                 CreatedDate = DateTime.Now.Date,
                 FirstName = "first",
@@ -724,7 +866,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             };
             _mockUserService.Setup(p => p.GetUser(newUser.UserName)).Returns(Task.FromResult((User)null)).Verifiable();
             string userMakingChange = "sdffhasdf";
-            string roleMakingChange = "PracticeAdmin";
+            string roleMakingChange = "Practice Admin";
             _mockUserService.Setup(p => p.ListRoles()).Returns(Task.FromResult(_roles)).Verifiable();
             _mockUserService.Setup(p => p.GetUser(newUser.UserName)).Returns(Task.FromResult((User)null)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userMakingChange).Verifiable();
@@ -735,6 +877,34 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(401, result.StatusCode);
             _mockUserService.Verify(p => p.InsertUser(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
+        }
+
+        [TestMethod]
+        public async Task InsertUser_RoleNotFound_Returns400()
+        {
+            UserViewModel newUser = new UserViewModel()
+            {
+                Email = "something@example.com",
+                Role = new RoleViewModel() { Id = 1, Name = _user.Role.Name },
+                CreatedBy = "someone",
+                CreatedDate = DateTime.Now.Date,
+                FirstName = "first",
+                LastName = "last",
+                LastUpdatedBy = "smeone",
+                LastUpdatedDate = DateTime.Now.Date,
+                UserName = "someusername"
+            };
+            string userMakingChange = "sdffhasdf";
+            _mockUserService.Setup(p => p.GetUser(newUser.UserName)).Returns(Task.FromResult((User)null)).Verifiable();
+            _mockUserService.Setup(p => p.ListRoles()).Returns(Task.FromResult(new List<Role>())).Verifiable();
+
+            var result = await _userController.InsertUser(newUser) as ObjectResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(400, result.StatusCode);
+            _mockUserService.Verify(p => p.InsertUser(It.IsAny<User>(), userMakingChange), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
@@ -753,7 +923,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 UserName = "someusername"
             };
             string userMakingChange = "sdffhasdf";
-            string roleMakingChange = "PHOAdmin";
+            string roleMakingChange = "PHO Admin";
             _mockUserService.Setup(p => p.GetUser(newUser.UserName)).Returns(Task.FromResult((User)null)).Verifiable();
             _mockUserService.Setup(p => p.ListRoles()).Returns(Task.FromResult(_roles)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userMakingChange).Verifiable();
@@ -765,6 +935,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
 
             Assert.IsNotNull(result);
             Assert.AreEqual(500, result.StatusCode);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
         #endregion
 
@@ -783,6 +954,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(200, result.StatusCode);
             Assert.IsTrue(result.Value is UserViewModel);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
@@ -796,7 +968,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(400, result.StatusCode);
             _mockUserService.Verify(p => p.AssignStaffIdToUser(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>()), Times.Never);
-
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [Ignore("Needs the StaffDAL implemented")]
@@ -816,6 +988,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(500, result.StatusCode);
             _mockUserService.Verify(p => p.AssignStaffIdToUser(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
         #endregion
 
@@ -833,6 +1006,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(200, result.StatusCode);
             Assert.IsTrue(result.Value is UserViewModel);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
@@ -845,6 +1019,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(400, result.StatusCode);
             _mockUserService.Verify(p => p.RemoveLockoutFromUser(It.IsAny<int>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
@@ -857,6 +1032,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(500, result.StatusCode);
             _mockUserService.Verify(p => p.RemoveLockoutFromUser(It.IsAny<int>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
         #endregion
 
@@ -874,6 +1050,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(200, result.StatusCode);
             Assert.IsTrue(result.Value is UserViewModel);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
@@ -886,6 +1063,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(400, result.StatusCode);
             _mockUserService.Verify(p => p.ToggleDeleteOnUser(It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
 
         }
 
@@ -899,6 +1077,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(500, result.StatusCode);
             _mockUserService.Verify(p => p.ToggleDeleteOnUser(It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
         #endregion
 
@@ -914,6 +1093,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.AreEqual(200, result.StatusCode);
             Assert.IsTrue(result.Value is List<RoleViewModel>);
             Assert.AreEqual(4, ((List<RoleViewModel>)result.Value).Count);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
         [TestMethod]
@@ -925,6 +1105,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
 
             Assert.IsNotNull(result);
             Assert.AreEqual(500, result.StatusCode);
+            _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
         #endregion
     }
