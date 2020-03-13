@@ -32,21 +32,19 @@
     </div>
     <div fxLayout="column" class="header-filter search-input" fxFlex fxLayoutAlign="center end">
       <mat-form-field>
-        <input type="text"
-               matInput
-               placeholder="Search Patient Name"
-               (change)="searchPatientsByName($event)">
-               <button mat-button matSuffix mat-icon-button aria-label="Search">
-                <mat-icon>search</mat-icon>
-              </button>
+        <input type="text" matInput placeholder="Search Patient Name" (change)="searchPatientsByName($event)">
+        <button mat-button matSuffix mat-icon-button aria-label="Search">
+          <mat-icon>search</mat-icon>
+        </button>
       </mat-form-field>
     </div>
   </div>
 
-  <mat-table [dataSource]="dataSource" id="patients" multiTemplateDataRows matSort matSortDisableClear (matSortChange)="sortChange($event)">
+  <mat-table [dataSource]="dataSource" id="patients" multiTemplateDataRows matSort matSortDisableClear
+    (matSortChange)="sortChange($event)">
     <div class="spinner-container" *ngIf="dataSource.loading$ | async">
       <mat-spinner></mat-spinner>
-  </div>
+    </div>
     <!-- DropDown Column -->
     <ng-container matColumnDef="arrow">
       <mat-header-cell *matHeaderCellDef></mat-header-cell>
@@ -80,8 +78,8 @@
     <!-- Chronic Column -->
     <ng-container matColumnDef="chronic">
       <mat-header-cell *matHeaderCellDef> Chronic
-        <mat-checkbox class="table-header-checkbox" [(ngModel)]="chronic"
-          (change)="isChronicFilter($event)"></mat-checkbox>
+        <mat-checkbox class="table-header-checkbox" [(ngModel)]="chronic" (change)="isChronicFilter($event)">
+        </mat-checkbox>
       </mat-header-cell>
       <mat-cell *matCellDef="let element">
         <ng-container *ngIf="element.chronic; else elseNo">
@@ -96,8 +94,8 @@
     <!-- Watch List Column -->
     <ng-container matColumnDef="watchFlag">
       <mat-header-cell *matHeaderCellDef> Watch List
-        <mat-checkbox class="table-header-checkbox" [(ngModel)]="watchFlag"
-          (change)="isOnWatchlist($event)"></mat-checkbox>
+        <mat-checkbox class="table-header-checkbox" [(ngModel)]="watchFlag" (change)="isOnWatchlist($event)">
+        </mat-checkbox>
       </mat-header-cell>
       <mat-cell *matCellDef="let element">
         <ng-container *ngIf="element.watchFlag; else elseNo">
@@ -134,119 +132,178 @@
     </ng-container>
 
     <ng-container matColumnDef="expandedDetail">
-      <mat-cell *matCellDef="let detail" [attr.colspan]="displayedColumns.length" [@detailExpand]="detail == expandedElement ? 'expanded' : 'collapsed'"> 
-      <div id="patient-details">
-        <div fxLayout="row" class="detail-heading">DEMOGRAPHICS</div>
-          <form *ngIf="patientFormDetails | async;" [formGroup]="form" >
+      <mat-cell *matCellDef="let detail" [attr.colspan]="displayedColumns.length"
+        [@detailExpand]="detail == expandedElement ? 'expanded' : 'collapsed'">
+        <div id="patient-details">
+          <div fxLayout="row" class="detail-heading">DEMOGRAPHICS</div>
+          <div fxLayout="row" *ngIf="isLoading">
+            <mat-progress-spinner color="primary" mode="indeterminate">
+            </mat-progress-spinner>
+          </div>
+          <form *ngIf="patientDetails" [formGroup]="form" (ngSubmit)="submitForm()">
             <div fxLayout="row" fxLayoutGap="34px" class="form-row">
-            <div fxLayout="column">
-              <label>ACTIVE PATIENT</label>
-              <mat-slide-toggle formControlName="activeStatus" [checked]="form.controls.activeStatus" name="activeStatus" ngDefaultControl>
-              </mat-slide-toggle>
-            </div>
-            <div fxLayout="column">
-              <label for="patientMRNId">Epic MRN</label>
-              <input id="patientMRNId" formControlName="patientMRNId" name="patientMRNId"/>
-              <div *ngIf="form.controls.patientMRNId.errors?.required && form.controls.patientMRNId.touched" class="error">
-                *Required
+              <div fxLayout="column">
+                <label for="firstName">First Name</label>
+                <input formControlName="firstName" name="firstName" />
+                <div *ngIf="form.controls.firstName.errors?.required && form.controls.firstName.touched" class="error">
+                  *Required
+                </div>
+              </div>
+              <div fxLayout="column">
+                <label for="lastName">Last Name</label>
+                <input formControlName="lastName" name="lastName" />
+                <div *ngIf="form.controls.lastName.errors?.required && form.controls.lastName.touched" class="error">
+                  *Required
+                </div>
+              </div>
+              <div fxLayout="column">
+                <label for="dob">Date of Birth</label>
+                <input formControlName="dob" name="dob" />
+                <div *ngIf="form.controls.dob.errors?.required && form.controls.dob.touched" class="error">
+                  *Required
+                </div>
+              </div>
+              <div fxLayout="column">
+                <label for="email">Email</label>
+                <input formControlName="email" name="email" />
+                <div *ngIf="form.controls.email.errors?.required && form.controls.email.touched" class="error">
+                  *Required
+                </div>
+              </div>
+              <div fxLayout="column">
+                <label for="gender">Gender</label>
+                <select formControlName="gender" [(value)]="gender">
+                  <option *ngFor="let item of genderList">{{item.shortName}}</option>
+                </select>
               </div>
             </div>
-            <div fxLayout="column">
-              <label for="gender">Gender</label>
-                <select formControlName="gender" [(value)]="gender">
-                  <option *ngFor="let item of genderList" >
+            <div fxLayout="row" fxLayoutGap="34px" class="form-row">
+              <div fxLayout="column">
+                <label>ACTIVE PATIENT</label>
+                <mat-slide-toggle formControlName="activeStatus" [checked]="form.controls.activeStatus"
+                  name="activeStatus" ngDefaultControl>
+                </mat-slide-toggle>
+              </div>
+              <div fxLayout="column">
+                <label for="patientMRNId">Epic MRN</label>
+                {{epicMrn}}
+              </div>
+              <div fxLayout="column">
+                <label for="pcpName">PCP</label>
+                <!-- <input formControlName="pcpLastName" name="pcpLastName"/> -->
+                <select formControlName="pcpName">
+                  <option *ngFor="let item of providersList" [value]="item.name">
                     {{item.name}}
                   </option>
                 </select>
-              <div *ngIf="form.controls.gender.errors?.required && form.controls.gender.touched" class="error">
+              </div>
+              <div fxLayout="column">
+                <label for="insuranceName">Insurance</label>
+                <select formControlName="insuranceName" class="insurance">
+                  <option *ngFor="let item of insuranceList">
+                    {{item.name}}
+                  </option>
+                </select>
+                <div *ngIf="form.controls.insuranceName.errors?.required && form.controls.insuranceName.touched"
+                  class="error">
+                  *Required
+                </div>
+              </div>
+              <div fxLayout="column">
+                <label for="conditions">Conditions</label>
+                <!-- <input formControlName="conditions" name="conditions"/> -->
+                <mat-form-field>
+                  <mat-select matNativeControl multiple formControlName="conditionsControl" [compareWith]="compareFn">
+                    <mat-option *ngFor="let item of conditionsList" [value]="item">{{item.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <!-- <div *ngIf="form.controls.conditions.errors?.required && form.controls.conditions.touched" class="error">
                 *Required
+              </div> -->
+              </div>
+              <div fxLayout="column">
+                <label for="pmcaScore">PMCA</label>
+                {{pmcaScore}}
+              </div>
+              <div fxLayout="column">
+                <label>Provider PMCA</label>
+                <div mat-icon-button (click)="openPmcaDialog()">
+                  {{providerPmcaScoreControl}}
+                  <mat-icon>edit</mat-icon>
+                </div>
+                <ng-template #pmcaDialog>
+                  <div mat-dialog-content class="mat-typography">
+                    <div fxLayout="row">
+                    <label for="providerPMCAScore">Provider PMCA</label>
+                    <input formControlName="providerPMCAScore" name="providerPMCAScore" />
+                    <div *ngIf="form.controls.providerPMCAScore.errors?.required && form.controls.providerPMCAScore.touched"
+                      class="error">
+                      *Required
+                    </div>
+                  </div>
+                  <div fxLayout="row">
+                    <label for="providerNotes">Provider Notes</label>
+                    <textarea formControlName="providerNotes" name="providerNotes" ></textarea>
+                    <div *ngIf="form.controls.providerNotes.errors?.required && form.controls.providerNotes.touched"
+                      class="error">
+                      *Required
+                    </div>
+                  </div>
+                  </div>
+                  <div mat-dialog-actions align="end">
+                    <button mat-button mat-dialog-close>Cancel</button>
+                    <button mat-button>Save</button>
+                </div>
+                </ng-template>
+
               </div>
             </div>
-            <div fxLayout="column">
-              <label for="pcpLastName">PCP</label>
-              <input id="pcpLastName" formControlName="pcpLastName" name="pcpLastName"/>
-              <div *ngIf="form.controls.pcpLastName.errors?.required && form.controls.pcpLastName.touched" class="error">
-                *Required
+            <div fxLayout="row" fxLayoutGap="34px">
+              <div fxLayout="column">
+                <label for="phone1">Phone</label>
+                <input formControlName="phone1" name="phone1" />
+                <div *ngIf="form.controls.phone1.errors?.required && form.controls.phone1.touched" class="error">
+                  *Required
+                </div>
+              </div>
+              <div fxLayout="column" fxFlex="288px">
+                <label for="addressLine1">Address</label>
+                <input formControlName="addressLine1" name="addressLine1" />
+                <div *ngIf="form.controls.addressLine1.errors?.required && form.controls.addressLine1.touched"
+                  class="error">
+                  *Required
+                </div>
+              </div>
+              <div fxLayout="column" fxFlex>
+                <label for="city">City</label>
+                <input formControlName="city" name="city" />
+                <div *ngIf="form.controls.city.errors?.required && form.controls.city.touched" class="error">
+                  *Required
+                </div>
+              </div>
+              <div fxLayout="column" fxFlex>
+                <label for="state">State</label>
+                <select formControlName="state" [(value)]="state">
+                  <option *ngFor="let item of stateList">{{item.shortName}}</option>
+                </select>
+              </div>
+              <div fxLayout="column" fxFlex>
+                <label for="zip">Zip</label>
+                <input formControlName="zip" name="zip" />
+                <div *ngIf="form.controls.zip.errors?.required && form.controls.zip.touched" class="error">
+                  *Required
+                </div>
+              </div>
+              <div fxLayout="column" fxLayoutAlign="end" fxFlex="96px">
+                <button mat-flat-button color="accent">Save</button>
               </div>
             </div>
-            <div fxLayout="column">
-              <label for="insuranceName">Insurance</label>
-              <select formControlName="insuranceName" [(value)]="insurance" class="insurance">
-                <option *ngFor="let item of insuranceList" >
-                  {{item.name}}
-                </option>
-              </select>
-              <div *ngIf="form.controls.insuranceName.errors?.required && form.controls.insuranceName.touched" class="error">
-                *Required
-              </div>
-            </div>
-            <div fxLayout="column">
-              <label for="conditions">Conditions</label>
-              <input id="conditions" formControlName="conditions" name="conditions"/>
-              <div *ngIf="form.controls.conditions.errors?.required && form.controls.conditions.touched" class="error">
-                *Required
-              </div>
-            </div>
-            <div fxLayout="column">
-              <label for="pmcaScore">PMCA</label>
-              <input id="pmcaScore" formControlName="pmcaScore" name="pmcaScore"/>
-              <div *ngIf="form.controls.pmcaScore.errors?.required && form.controls.pmcaScore.touched" class="error">
-                *Required
-              </div>
-            </div>
-            <div fxLayout="column">
-              <label for="providerPMCAScore">Provider PMCA</label>
-              <input id="providerPMCAScore" formControlName="providerPMCAScore" name="providerPMCAScore"/>
-              <div *ngIf="form.controls.providerPMCAScore.errors?.required && form.controls.providerPMCAScore.touched" class="error">
-                *Required
-              </div>
-            </div>
-          </div>
-          <div fxLayout="row" fxLayoutGap="34px">
-            <div fxLayout="column">
-              <label for="phone1">Phone</label>
-              <input id="phone1" formControlName="phone1" name="phone1"/>
-              <div *ngIf="form.controls.phone1.errors?.required && form.controls.phone1.touched" class="error">
-                *Required
-              </div>
-            </div>
-            <div fxLayout="column" fxFlex="288px">
-              <label for="addressLine1">Address</label>
-              <input id="addressLine1" formControlName="addressLine1" name="addressLine1"/>
-              <div *ngIf="form.controls.addressLine1.errors?.required && form.controls.addressLine1.touched" class="error">
-                *Required
-              </div>
-            </div>
-            <div fxLayout="column" fxFlex>
-              <label for="city">City</label>
-              <input id="city" formControlName="city" name="city"/>
-              <div *ngIf="form.controls.city.errors?.required && form.controls.city.touched" class="error">
-                *Required
-              </div>
-            </div>
-            <div fxLayout="column" fxFlex>
-              <label for="state">State</label>
-              <input id="state" formControlName="state" name="state"/>
-              <div *ngIf="form.controls.state.errors?.required && form.controls.state.touched" class="error">
-                *Required
-              </div>
-            </div>
-            <div fxLayout="column" fxFlex>
-              <label for="zip">Zip</label>
-              <input id="zip" formControlName="zip" name="zip"/>
-              <div *ngIf="form.controls.zip.errors?.required && form.controls.zip.touched" class="error">
-                *Required
-              </div>
-            </div>
-            <div fxLayout="column" fxLayoutAlign="end" fxFlex="96px">
-              <button mat-flat-button color="accent">Save</button>
-            </div>
-          </div>
           </form>
           <div fxLayout="row" class="border-row-top">
             <div fxLayout="column">
               <div fxLayout="row" class="detail-heading">METRICS</div>
-              <div fxLayout="row" class="metric-data-box" *ngIf="patientDetails" [(ngModel)]="patientDetails" ngDefaultControl>
+              <div fxLayout="row" class="metric-data-box" *ngIf="patientDetails" [(ngModel)]="patientDetails"
+                ngDefaultControl>
                 <div fxLayout="column" class="metric-data" fxLayoutAlign="top center">
                   <span class="metric-number">{{patientDetails.practiceVisits}}</span>
                   <span class="metric-title">PRACTICE VISITS</span>
@@ -270,56 +327,53 @@
               </div>
             </div>
             <mat-divider [vertical]="true"></mat-divider>
-            <div fxLayout="column" class="visit-details-box" *ngIf="patientDetails" [(ngModel)]="patientDetails" ngDefaultControl>
+            <div fxLayout="column" class="visit-details-box" *ngIf="patientDetails" [(ngModel)]="patientDetails"
+              ngDefaultControl>
               <div fxLayout="row" class="detail-heading">VISIT DETAILS</div>
               <div fxLayout="row">
-              <div fxLayout="column" fxFlex="50%">
-                <div fxLayout="row" class="detail-title">
-                  LAST PRACTICE VISIT
+                <div fxLayout="column" fxFlex="50%">
+                  <div fxLayout="row" class="detail-title">
+                    LAST PRACTICE VISIT
+                  </div>
+                  <div fxLayout="row" class="detail-text">{{patientDetails.lastPracticeVisit | date:'MM/dd/yyyy'}}</div>
+                  <div fxLayout="row" class="detail-title">
+                    LAST CCHMC ADMIT
+                  </div>
+                  <div fxLayout="row" class="detail-text">{{patientDetails.lastCCHMCAdmit | date:'MM/dd/yyyy'}}</div>
+                  <div fxLayout="row" class="detail-title">
+                    LAST OR NEXT CCHMC APPT
+                  </div>
+                  <div fxLayout="row" class="detail-text">{{patientDetails.cchmcAppointment | date:'MM/dd/yyyy'}}</div>
                 </div>
-                <div fxLayout="row" class="detail-text">{{patientDetails.lastPracticeVisit | date:'MM/dd/yyyy'}}</div>
-                <div fxLayout="row" class="detail-title">
-                  LAST CCHMC ADMIT
+                <div fxLayout="column">
+                  <div fxLayout="row" class="detail-title">
+                    Diagnosis
+                  </div>
+                  <div fxLayout="row" class="detail-text">{{patientDetails.lastDiagnosis}}</div>
+                  <div fxLayout="row" class="detail-title">
+                    Last healthbridge Admit
+                  </div>
+                  <div fxLayout="row" class="detail-text">{{patientDetails.lastHealthBridgeAdmit | date:'MM/dd/yyyy'}}
+                  </div>
                 </div>
-                <div fxLayout="row" class="detail-text">{{patientDetails.lastCCHMCAdmit | date:'MM/dd/yyyy'}}</div>
-                <div fxLayout="row" class="detail-title">
-                  LAST OR NEXT CCHMC APPT
-                </div>
-                <div fxLayout="row" class="detail-text">{{patientDetails.cchmcAppointment | date:'MM/dd/yyyy'}}</div>
               </div>
-              <div fxLayout="column">
-                <div fxLayout="row" class="detail-title">
-                  Diagnosis
-                </div>
-                <div fxLayout="row" class="detail-text">{{patientDetails.lastDiagnosis}}</div>
-                <div fxLayout="row" class="detail-title">
-                  Last healthbridge Admit
-                </div>
-                <div fxLayout="row" class="detail-text">{{patientDetails.lastHealthBridgeAdmit | date:'MM/dd/yyyy'}}</div>
-              </div>
+            </div>
           </div>
-          </div>
-        </div> <!--This ends the not form section-->
-    </div> <!--End Patient Details-->
-    </mat-cell>
+          <!--This ends the not form section-->
+        </div>
+        <!--End Patient Details-->
+      </mat-cell>
     </ng-container>
-    
-    
+
+
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple 
-    class="element-row" 
-    [class.expanded]="expandedElement == row" (click)="getPatientDetails(row.patientId)"
-            (click)="expandedElement = row"></mat-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple class="element-row"
+      [class.expanded]="expandedElement == row" (click)="getPatientDetails(row.patientId)"
+      (click)="expandedElement = row"></mat-row>
 
-            <tr mat-row *matRowDef="let row; columns: ['expandedDetail'];" class="collapsed-detail"> 
-            </tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail'];" class="collapsed-detail">
+    </tr>
   </mat-table>
-  <mat-paginator [length]="200" [pageSize]="20"
-                   [pageSizeOptions]="[20, 40, 60]"></mat-paginator>
+  <mat-paginator [length]="patientRecords" [pageSize]="20" [pageSizeOptions]="[20, 40, 60]"></mat-paginator>
 </div>
-<!-- patients.resultCount -->
-<ng-template #tpl let-element>
-      
-    </ng-template>
-

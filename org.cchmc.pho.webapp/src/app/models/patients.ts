@@ -11,13 +11,9 @@ export interface Patients {
     lastEDVisit: string;
     chronic: boolean;
     watchFlag: boolean;
-    conditions: [
-        {
-            id: number;
-            name: string;
-        }
-    ]
+    conditions: Array<Conditions>;
     close?: boolean;
+    totalRecords: number;
 }
 export interface PatientClass {
     resultCount: number;
@@ -43,12 +39,7 @@ export interface PatientDetails {
      city: string  ;
      state: string  ;
      zip: string  ;
-     conditions: [
-      {
-         id: number ;
-         name: string;
-      }
-    ] ;
+     conditions: Array<Conditions>;
      pmcaScore: number ;
      providerPMCAScore: number ;
      providerNotes: string  ;
@@ -92,7 +83,7 @@ export class Insurance {
     name: string;
 }
 
-export class Gender {
+export interface Gender {
     id: number;
     shortName: string;
     name: string;

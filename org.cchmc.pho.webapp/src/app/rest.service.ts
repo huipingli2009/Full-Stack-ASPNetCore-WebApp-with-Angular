@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpClientModule, HttpParams } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 import { Alerts, Population, EdChart, EdChartDetails, Spotlight, Quicklinks } from './models/dashboard';
 import { environment } from '../environments/environment';
@@ -21,6 +21,9 @@ const httpOptions = {
 })
 export class RestService {
 
+  private snackbarSubject = new Subject<any>();
+  public snackbarState = this.snackbarSubject.asObservable();
+
   constructor(private http: HttpClient) {
 
   }
@@ -28,6 +31,14 @@ export class RestService {
     const body = res;
     return body || {};
   }
+
+  showSnackbar(message: string, type?: string) { // TODO: Working here
+    this.snackbarSubject.next({
+      show: true,
+      message, type
+    })
+  }
+  
   /* Alerts =======================================================*/
 
   /*Gets All Alerts by ID*/
@@ -129,6 +140,15 @@ export class RestService {
         patientsAndCount = res['results'];
         return patientsAndCount;
       })
+    );
+  }
+
+  /*Update Patient Details*/
+  savePatientDetails(patientId, patient): Observable<any> {
+    console.log('PatientPutInest', JSON.stringify(patient))
+    return this.http.put(`${API_URL}/api/Patients/${patientId}`, JSON.stringify(patient), httpOptions).pipe(
+      tap(_ => console.log(`updated patient id=${patientId}`)),
+      catchError(this.handleError<any>('SavePatientDetails'))
     );
   }
 
