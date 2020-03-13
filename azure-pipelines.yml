@@ -47,6 +47,7 @@ jobs:
           displayName: 'Build angular website'
           workingDirectory: $(Build.SourcesDirectory)/$(webSubDir)
         - task: CopyFiles@2
+          displayName: 'Copying SPA to API project'
           inputs:
             cleanTargetFolder: true
             sourceFolder: '$(Build.SourcesDirectory)/$(webSubDir)/dist/phoweb'
@@ -57,26 +58,27 @@ jobs:
           inputs:
             version: '3.1.x'
             packageType: sdk
-        - script: dotnet build --configuration $(buildConfiguration)
+        - script: dotnet build --configuration $(buildConfiguration) /p:SourceRevisionId=$(Build.SourceVersion)
           displayName: 'dotnet build $(buildConfiguration)'
 
         - task: DotNetCoreCLI@2
           displayName: 'Running Unit Tests'
           inputs:
             command: 'test'
-            ##projects: '**/*test*/*.csproj'
+            projects: '**/*test.csproj'
             arguments: '--configuration $(buildConfiguration)'
 
         ## Buidling Dotnet API
         - task: DotNetCoreCLI@2
-          displayName: 'publish app'
+          displayName: 'Publish App (zip)'
           inputs:
             command: publish
             publishWebProjects: True
-            arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+            arguments: '--no-build --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
             zipAfterPublish: True
 
         - task: PublishBuildArtifacts@1
+          displayName: "Uploading Artifacts"
           inputs:
             PathtoPublish: '$(Build.ArtifactStagingDirectory)'
 
