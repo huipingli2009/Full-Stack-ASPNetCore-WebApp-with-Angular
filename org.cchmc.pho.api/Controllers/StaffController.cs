@@ -313,7 +313,7 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(200, type: typeof(bool))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> SwitchPractice([FromBody]StaffViewModel staffVM, string staff)
+        public async Task<IActionResult> SwitchPractice([FromBody]StaffViewModel staffVM)
         {
             if (!int.TryParse(_DEFAULT_USER, out var userId))
             {
