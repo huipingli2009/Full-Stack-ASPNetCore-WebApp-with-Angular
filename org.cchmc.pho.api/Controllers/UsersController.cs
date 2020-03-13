@@ -57,6 +57,110 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
+        [AllowAnonymous]
+        [HttpPost("refresh")]
+        [SwaggerResponse(200, type: typeof(AuthenticationResult))]
+        [SwaggerResponse(401, description: "Token not valid")]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> Refresh([FromBody] AuthenticationRefreshRequest refreshRequest)
+        {
+            try
+            {
+                // don't have to check the token string here, we do that in the service
+                if (refreshRequest == null || string.IsNullOrWhiteSpace(refreshRequest.RefreshToken))
+                    return Unauthorized("Token not valid");
+
+                User user = await _userService.Refresh(refreshRequest.Token, refreshRequest.RefreshToken);
+                if (user == null) return Unauthorized(new AuthenticationResult { Status = "Token not valid" });
+
+                return Ok(new AuthenticationResult { Status = "Authorized", User = _mapper.Map<UserViewModel>(user) });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("verbiage")]
+        [SwaggerResponse(200, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> PasswordVerbiage()
+        {
+            try
+            {
+                List<string> rules = new List<string>();
+                if (_customOptions.MinimumPasswordLength > 0)
+                    rules.Add($"Passwords must have a minimum length of {_customOptions.MinimumPasswordLength} characters and cannot contain spaces.");
+                if (_customOptions.RequireDigit)
+                    rules.Add("Password must contain a digit.");
+                if (_customOptions.RequireLowercase)
+                    rules.Add("Password must have a lowercase character.");
+                if (_customOptions.RequireUppercase)
+                    rules.Add("Password must have an uppercase character.");
+                if (_customOptions.RequireNonAlphaNumeric)
+                    rules.Add("Password must have one special character (such as punctuation).");
+
+                return Ok(string.Join(' ', rules));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [HttpGet("{userId}")] // put because we're getting a specific user
+        [SwaggerResponse(200, type: typeof(UserViewModel))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(401, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> GetUser(int userId)
+        {
+            try
+            {
+                // validate the user provided is a user
+                User user = await _userService.GetUser(userId);
+                string currentUserName = _userService.GetUserNameFromClaims(User?.Claims);
+                if (user == null)
+                {
+                    _logger.LogInformation($"{currentUserName} tried to access user id {userId}, but that user does not exist.");
+                    return BadRequest("User does not exist.");
+                }
+
+                string currentUserRole = _userService.GetRoleNameFromClaims(User?.Claims);
+                // if we're getting a different user, check some additional rules based on roles
+                if (!string.Equals(currentUserName, user.UserName, StringComparison.OrdinalIgnoreCase))
+                {
+                    if (!InAnyAdminRole(currentUserRole))
+                    {
+                        // if you're not in an Admin role, you can't set another person's details
+                        return BadRequest("Cannot get another user's details.");
+                    }
+
+                    if (IsPracticeAdmin(currentUserRole))
+                    {
+                        // if you're a practice admin, you can only get another user if they're in your practice
+                        int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+                        if (!_staff.IsStaffInSamePractice(currentUserId, user.StaffId))
+                        {
+                            _logger.LogInformation($"{currentUserName} tried to get info for user id {userId}, but the caller is in another practice.");
+                            return BadRequest("Cannot get users in another practice.");
+                        }
+                    }
+                }
+
+                return Ok(_mapper.Map<UserViewModel>(user));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
         // TODO: [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [AllowAnonymous]
         [HttpPatch("{userId}/password")] // patch because we're only updating password
@@ -91,7 +195,7 @@ namespace org.cchmc.pho.api.Controllers
                     {
                         // if you're not in an Admin role, you can't set another person's password
                         _logger.LogInformation($"{currentUserName} tried to update the password for user id {userId}, but the caller is not an admin.");
-                        return Unauthorized("Cannot update another user's password.");
+                        return BadRequest("Cannot update another user's password.");
                     }
 
                     if (IsPracticeAdmin(currentUserRole))
@@ -101,7 +205,7 @@ namespace org.cchmc.pho.api.Controllers
                         if (!_staff.IsStaffInSamePractice(currentUserId, user.StaffId))
                         {
                             _logger.LogInformation($"{currentUserName} tried to update the password for user id {userId}, but the caller is in another practice.");
-                            return Unauthorized("Cannot update users in another practice.");
+                            return BadRequest("Cannot update users in another practice.");
                         }
                     }
                 }
@@ -157,7 +261,7 @@ namespace org.cchmc.pho.api.Controllers
                     if (!InAnyAdminRole(currentUserRole))
                     {
                         // if you're not in an Admin role, you can't set another person's details
-                        return Unauthorized("Cannot update another user's details.");
+                        return BadRequest("Cannot update another user's details.");
                     }
 
                     if (IsPracticeAdmin(currentUserRole))
@@ -167,7 +271,7 @@ namespace org.cchmc.pho.api.Controllers
                         if (!_staff.IsStaffInSamePractice(currentUserId, user.StaffId))
                         {
                             _logger.LogInformation($"{currentUserName} tried to update user id {userId}, but the caller is in another practice.");
-                            return Unauthorized("Cannot update users in another practice.");
+                            return BadRequest("Cannot update users in another practice.");
                         }
                     }
                 }
@@ -178,13 +282,13 @@ namespace org.cchmc.pho.api.Controllers
                     if (!InAnyAdminRole(currentUserRole))
                     {
                         // if you're not in an admin role, you can't change roles
-                        return Unauthorized("Cannot change roles.");
+                        return BadRequest("Cannot change roles.");
                     }
 
                     if (!IsPhoAdmin(currentUserRole) && selectedRole.Name.Contains("PHO"))
                     {
                         // If you're not PHO Admin you can't use the PHO roles
-                        return Unauthorized("Invalid role.");
+                        return BadRequest("Invalid role.");
                     }
                 }
 
@@ -210,6 +314,11 @@ namespace org.cchmc.pho.api.Controllers
         {
             try
             {
+                if (userViewModel == null)
+                    return BadRequest("Input is null.");
+                if (string.IsNullOrWhiteSpace(userViewModel.NewPassword))
+                    return BadRequest("Password is null or empty.");
+
                 // validate the username provided is a user
                 User user = await _userService.GetUser(userViewModel.UserName);
                 if (user != null)
@@ -223,44 +332,27 @@ namespace org.cchmc.pho.api.Controllers
                 string currentUserName = _userService.GetUserNameFromClaims(User?.Claims);
                 string currentUserRole = _userService.GetRoleNameFromClaims(User?.Claims);
 
+                List<string> errors = ValidatePasswordComplexity(userViewModel.NewPassword);
+                if (errors.Any())
+                    return BadRequest($"Password validation error: {string.Join(", ", errors)}");
+
                 if (!IsPhoAdmin(currentUserRole) && selectedRole.Name.Contains("PHO"))
                 {
                     // If you're not PHO Admin you can't use the PHO roles
-                    return Unauthorized("Invalid role.");
+                    return BadRequest("Invalid role.");
                 }
 
+                if (await _staff.GetStaffDetailsById(userViewModel.StaffId) == null)
+                    return BadRequest("No such staff record.");
+
+                int userId = _userService.GetUserIdFromClaims(User?.Claims);
+                if (!_staff.IsStaffInSamePractice(userId, userViewModel.StaffId))
+                    return BadRequest("Cannot add users from another practice.");
+                
                 var userDetails = _mapper.Map<User>(userViewModel);
                 user = await _userService.InsertUser(userDetails, currentUserName);
-                return Ok(_mapper.Map<UserViewModel>(user));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                return StatusCode(500, "An error occurred");
-            }
-        }
-
-        [Authorize(Roles = "PHO Admin")]
-        [HttpPatch("{userId}/staffId")] // patch because we're only updating staff id
-        [SwaggerResponse(200, type: typeof(UserViewModel))]
-        [SwaggerResponse(400, type: typeof(string))]
-        [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> AssignStaffIdToUser(int userId, [FromBody] int staffId)
-        {
-            try
-            {
-                // validate the username provided is a user
-                User user = await _userService.GetUser(userId);
-                string currentUserName = _userService.GetUserNameFromClaims(User?.Claims);
-                if (user == null)
-                {
-                    _logger.LogInformation($"{currentUserName} tried to assign a staff ID to user id {userId}, but that user does not exist.");
-                    return BadRequest("User does not exist.");
-                }
-
-                // TODO: Validate staff id exists
-
-                user = await _userService.AssignStaffIdToUser(userId, staffId, currentUserName);
+                user = await _userService.AssignStaffIdToUser(user.Id, user.StaffId, currentUserName);
+                
                 return Ok(_mapper.Map<UserViewModel>(user));
             }
             catch (Exception ex)

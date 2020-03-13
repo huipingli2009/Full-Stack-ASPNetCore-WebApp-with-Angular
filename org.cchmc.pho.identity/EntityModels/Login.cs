@@ -22,5 +22,7 @@ namespace org.cchmc.pho.identity.EntityModels
         public DateTime? DeletedDate { get; set; }
         public int? AccessFailedCount { get; set; }
         public bool? LockoutFlag { get; set; }
+        public DateTime? LegalDisclaimerSigned { get; set; }
+        public string RefreshToken { get; set; }
     }
 }
