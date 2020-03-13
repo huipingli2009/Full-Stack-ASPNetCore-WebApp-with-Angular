@@ -15,7 +15,8 @@ namespace org.cchmc.pho.api.ViewModels
         public bool PendingStatusConfirmation { get; set; }
         public DateTime? LastEDVisit { get; set; }
         public bool Chronic { get; set; }
-        public bool WatchFlag { get; set; }            
+        public bool WatchFlag { get; set; }
+        public int TotalRecords { get; set; }
         public List<PatientConditionViewModel> Conditions { get; set; }
     }
 
