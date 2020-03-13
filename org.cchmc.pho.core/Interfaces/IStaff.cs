@@ -10,6 +10,7 @@ namespace org.cchmc.pho.core.Interfaces
     {
         Task<List<Staff>> ListStaff(int userId, string topfilter, string tagfilter, string namesearch);
         Task<StaffDetail> GetStaffDetails(int userId, int staffId);
+        Task<StaffDetail> GetStaffDetailsById(int staffId);
         Task<StaffDetail> UpdateStaffDetails(int userId, StaffDetail staffDetail);
         Task<List<Position>> ListPositions();
         Task<List<Credential>> ListCredentials();
