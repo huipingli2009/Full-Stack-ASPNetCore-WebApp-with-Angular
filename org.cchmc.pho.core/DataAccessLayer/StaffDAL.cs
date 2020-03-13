@@ -342,12 +342,14 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
-        public async Task<List<Practice>> GetPracticeList(int userId)
+        public async Task<SelectPractice> GetPracticeList(int userId)
         {
-            DataTable dataTable = new DataTable();
-            List<Practice> practicelist;
-            //Practice mypractice;
-            
+            DataSet practicesDS = new DataSet();
+            SelectPractice selectpractice = new SelectPractice()
+            {
+                PracticeList = new List<Practice>()
+            };
+
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spGetPracticeList", sqlConnection))
@@ -358,21 +360,23 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     // Define the data adapter and fill the dataset
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
-                        da.Fill(dataTable);
-                        
-                        practicelist = (from DataRow dr in dataTable.Rows
-                                  select new Practice()
-                                  {
-                                      Id = (dr["ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ID"].ToString())),
-                                      Name = dr["PracticeName"].ToString()                                     
-                                  }
-                        ).ToList();
+                        da.Fill(practicesDS);
 
-                        //mypractice = ()
+                        foreach (DataRow dr in practicesDS.Tables[0].Rows)
+                        {
+                            var practice = new Practice()
+                            {
+                                Id = (dr["ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ID"].ToString())),
+                                Name = dr["PracticeName"].ToString()
+                            };
+                            selectpractice.PracticeList.Add(practice);
+                        }
+
+                        selectpractice.CurrentPracticeId = int.Parse(practicesDS.Tables[1].Rows[0].ItemArray[0].ToString());                      
                     }
                 }
             }
-            return practicelist;
+            return selectpractice;
         }
-    }
+    }   
 }

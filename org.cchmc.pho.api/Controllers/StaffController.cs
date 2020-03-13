@@ -296,9 +296,9 @@ namespace org.cchmc.pho.api.Controllers
                 // call the data method
                 var data = await _staffDal.GetPracticeList(userId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
-                var result = _mapper.Map<List<PracticeViewModel>>(data);
+                var result = _mapper.Map<SelectPracticeViewModel>(data);
                 // return the result in a "200 OK" response
-                return Ok();
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -306,7 +306,7 @@ namespace org.cchmc.pho.api.Controllers
                 _logger.LogError(ex, "An error occurred");
                 return StatusCode(500, "An error occurred");
             }
-
+            
         }
 
         [HttpPut("switchpractice")]
