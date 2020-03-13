@@ -281,7 +281,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
-        public async Task<bool> SwitchPractice(int userId)
+        public async Task<bool> SwitchPractice(int userId, int practiceID)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
@@ -289,6 +289,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 {
                     sqlCommand.CommandType = CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@PracticeID", SqlDbType.Int).Value = practiceID;
                     await sqlConnection.OpenAsync();
 
                     return (sqlCommand.ExecuteNonQuery() > 0);
@@ -296,5 +297,37 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
+        public async Task<List<Practice>> GetPracticeList(int userId)
+        {
+            DataTable dataTable = new DataTable();
+            List<Practice> practicelist;
+            //Practice mypractice;
+            
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetPracticeList", sqlConnection))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    await sqlConnection.OpenAsync();
+                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        
+                        practicelist = (from DataRow dr in dataTable.Rows
+                                  select new Practice()
+                                  {
+                                      Id = (dr["ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ID"].ToString())),
+                                      Name = dr["PracticeName"].ToString()                                     
+                                  }
+                        ).ToList();
+
+                        //mypractice = ()
+                    }
+                }
+            }
+            return practicelist;
+        }
     }
 }
