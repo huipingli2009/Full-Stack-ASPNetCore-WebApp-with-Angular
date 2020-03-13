@@ -280,7 +280,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpGet("practicelist")]
-        [SwaggerResponse(200, type: typeof(List<Practice>))]
+        [SwaggerResponse(200, type: typeof(SelectPracticeViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> GetPracticeList()
