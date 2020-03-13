@@ -48,7 +48,10 @@ namespace org.cchmc.pho.api.Controllers
                 User user = await _userService.Authenticate(userParam.Username, userParam.Password);
                 if (user == null) return Unauthorized(new AuthenticationResult { Status = "User not found or password did not match" });
 
-                return Ok(new AuthenticationResult { Status = "Authorized", User = _mapper.Map<UserViewModel>(user) });
+                // manually mapping the refresh token so that we can ignore it in AutoMapper.
+                UserViewModel outgoingUser = _mapper.Map<UserViewModel>(user);
+                outgoingUser.RefreshToken = user.RefreshToken;
+                return Ok(new AuthenticationResult { Status = "Authorized", User = outgoingUser });
             }
             catch(Exception ex)
             {
@@ -73,7 +76,10 @@ namespace org.cchmc.pho.api.Controllers
                 User user = await _userService.Refresh(refreshRequest.Token, refreshRequest.RefreshToken);
                 if (user == null) return Unauthorized(new AuthenticationResult { Status = "Token not valid" });
 
-                return Ok(new AuthenticationResult { Status = "Authorized", User = _mapper.Map<UserViewModel>(user) });
+                // manually mapping the refresh token so that we can ignore it in AutoMapper.
+                UserViewModel outgoingUser = _mapper.Map<UserViewModel>(user);
+                outgoingUser.RefreshToken = user.RefreshToken;
+                return Ok(new AuthenticationResult { Status = "Authorized", User = outgoingUser });
             }
             catch (Exception ex)
             {
