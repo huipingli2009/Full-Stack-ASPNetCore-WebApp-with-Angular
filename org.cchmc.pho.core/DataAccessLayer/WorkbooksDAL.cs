@@ -51,7 +51,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 Provider = dr["Provider"].ToString(),
                                 DateOfService = (dr["DateOfService"] == DBNull.Value ? (DateTime?)null : (DateTime.Parse(dr["DateOfService"].ToString()))),
                                 PHQ9_Score = dr["PHQ9_Score"].ToString(),
-                                ActionFollowUp = bool.Parse(dr["ActionFollowUp"].ToString())
+                                ActionFollowUp = (dr["ActionFollowUp"] != DBNull.Value && Convert.ToBoolean(dr["ActionFollowUp"]))
                             };
 
                             workbookspatients.Add(workbookspt);
@@ -148,7 +148,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
 
                     sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
-                    sqlCommand.Parameters.Add("@NameSearch", SqlDbType.Int).Value = nameSearch;
+                    sqlCommand.Parameters.Add("@NameSearch", SqlDbType.VarChar).Value = nameSearch;
 
                     await sqlConnection.OpenAsync();
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
@@ -158,7 +158,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                         {
                             var workbookslookup = new WorkbooksLookup()
                             {
-                                FormResponseID = int.Parse(dr["FormResponseID"].ToString()),
+                                FormResponseID = (dr["FormResponseID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FormResponseID"].ToString())),
                                 ReportingMonth = (dr["ReportingMonth"] == DBNull.Value ? (DateTime?)null : (DateTime.Parse(dr["ReportingMonth"].ToString())))
                             };
 
