@@ -4,5 +4,6 @@
     {
         public string Status { get; set; }
         public UserViewModel User { get; set; }
+        public string RefreshToken { get; set; }
     }
 }
