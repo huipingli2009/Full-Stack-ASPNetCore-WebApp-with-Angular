@@ -40,8 +40,7 @@ export class RestService {
   }
   /*Updates if Alert is Active*/
   updateAlertActivity(alertSchedId, alert): Observable<any> {
-    return this.http.put(`${API_URL}/api/Alerts/${alertSchedId}`, JSON.stringify(alert), httpOptions).pipe(
-      tap(_ => console.log(`updated alert id=${alertSchedId}`)),
+    return this.http.post(`${API_URL}/api/Alerts/${alertSchedId}`, JSON.stringify(alert), httpOptions).pipe(
       catchError(this.handleError<any>('updateAlertActivity'))
     );
   }
@@ -123,9 +122,9 @@ export class RestService {
         .set('popmeasureID', popmeasureID)
         .set('namesearch', namesearch)
     }).pipe(
-      map(res => {        
+      map(res => {
         var patientsAndCount: Patients[];
-        
+
         patientsAndCount = res['results'];
         return patientsAndCount;
       })
