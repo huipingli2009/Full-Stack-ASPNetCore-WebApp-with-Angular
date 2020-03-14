@@ -5,6 +5,8 @@ import { map, catchError, tap } from 'rxjs/operators';
 import { Alerts, Population, EdChart, EdChartDetails, Spotlight, Quicklinks } from './models/dashboard';
 import { environment } from '../environments/environment';
 import { Patients, PatientDetails, Conditions, Providers, PopSlices, Gender, Insurance, Pmca, States } from './models/patients';
+import { NGXLogger } from 'ngx-logger';
+
 
 // we can now access environment.apiUrl
 const API_URL = environment.apiURL;
@@ -21,7 +23,7 @@ const httpOptions = {
 })
 export class RestService {
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private logger: NGXLogger) {
 
   }
   private extractData(res: Response) {
@@ -39,8 +41,8 @@ export class RestService {
     );
   }
   /*Updates if Alert is Active*/
-  updateAlertActivity(alertSchedId, alert): Observable<any> {
-    return this.http.post(`${API_URL}/api/Alerts/${alertSchedId}`, JSON.stringify(alert), httpOptions).pipe(
+  updateAlertActivity(alertScheduleId, alert): Observable<any> {
+    return this.http.post<any>(`${API_URL}/api/Alerts/${alertScheduleId}`, JSON.stringify(alert), httpOptions).pipe(
       catchError(this.handleError<any>('updateAlertActivity'))
     );
   }
@@ -208,10 +210,10 @@ export class RestService {
     return (error: any): Observable<T> => {
 
       // TODO: send the error to remote logging infrastructure
-      console.error(error); // log to console instead
+      this.logger.error(error); // log to console instead
 
       // TODO: better job of transforming error for user consumption
-      console.log(`${operation} failed: ${error.message}`);
+      this.logger.log(`${operation} failed: ${error.message}`);
 
       // Let the app keep running by returning an empty result.
       return of(result as T);

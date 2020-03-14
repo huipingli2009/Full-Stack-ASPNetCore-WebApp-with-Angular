@@ -15,7 +15,7 @@ import { NGXLogger } from 'ngx-logger';
 })
 export class AppComponent {
   @ViewChild(ToastContainerDirective, { static: true }) toastContainer: ToastContainerDirective;
-
+  error: any;
   title = 'phoweb';
   alerts: Alerts[];
   alertAction: AlertAction;
@@ -44,7 +44,7 @@ export class AppComponent {
       if (this.alerts.length > 0) {
         this.alerts.forEach(alert => {
           let toasterMessage = `<i class="fas fa-exclamation-triangle alert-icon" title="${alert.definition}"></i>
-        ${alert.message}<a class="alert-link" href="${alert.url}">${alert.linkText}»</a>`;
+        ${alert.message}<a class="alert-link" href="${alert.url}" target="_blank">${alert.linkText}»</a>`;
 
 
           var activeToaster = this.toastr.success(toasterMessage, alert.alertScheduleId.toString(), {
@@ -58,7 +58,7 @@ export class AppComponent {
             .subscribe((data) => this.toasterCloseHandler(alert.alertScheduleId));
           activeToaster.onTap
             .pipe(take(1))
-            .subscribe((data) => this.toasterClickHandler(alert.alertScheduleId));
+            .subscribe((data) => this.toasterClickHandler(alert.alertScheduleId, alert.url));
 
         });
       }
@@ -67,14 +67,23 @@ export class AppComponent {
   }
 
 
-  toasterCloseHandler(alertScheduleId) {
+  toasterCloseHandler(alertScheduleId: number) {
     this.alertAction = { alertActionId: AlertActionTaken.close };
-    this.rest.updateAlertActivity(alertScheduleId, this.alertAction).subscribe(res => { });
+    this.rest.updateAlertActivity(alertScheduleId, this.alertAction).subscribe(res => { },
+      error => {
+        this.error = error;
+      });
   }
 
-  toasterClickHandler(alertScheduleId) {
+  toasterClickHandler(alertScheduleId: number, url: string) {
     this.alertAction = { alertActionId: AlertActionTaken.click };
-    this.rest.updateAlertActivity(alertScheduleId, this.alertAction).subscribe(res => { });
+    window.open(url, "_blank");
+    this.rest.updateAlertActivity(alertScheduleId, this.alertAction).subscribe(res => { },
+      error => {
+        this.error = error;
+      })
+
+
   }
 
 }
