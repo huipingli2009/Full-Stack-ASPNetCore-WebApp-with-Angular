@@ -43,22 +43,22 @@ export class AppComponent {
 
       if (this.alerts.length > 0) {
         this.alerts.forEach(alert => {
-          let toasterMessage = `<i class="fas fa-exclamation-triangle alert-icon" title="${alert.definition}"></i>
+          let toastrMessage = `<i class="fas fa-exclamation-triangle alert-icon" title="${alert.definition}"></i>
         ${alert.message}<a class="alert-link" href="${alert.url}" target="_blank">${alert.linkText}»</a>`;
 
 
-          var activeToaster = this.toastr.success(toasterMessage, alert.alertScheduleId.toString(), {
+          var activeToastr = this.toastr.success(toastrMessage, alert.alertScheduleId.toString(), {
             closeButton: true,
             disableTimeOut: true,
             enableHtml: true,
             tapToDismiss: false
           });
-          activeToaster.onHidden
+          activeToastr.onHidden
             .pipe(take(1))
-            .subscribe((data) => this.toasterCloseHandler(alert.alertScheduleId));
-          activeToaster.onTap
+            .subscribe((data) => this.toastrCloseHandler(alert.alertScheduleId));
+          activeToastr.onTap
             .pipe(take(1))
-            .subscribe((data) => this.toasterClickHandler(alert.alertScheduleId, alert.url));
+            .subscribe((data) => this.toastrClickHandler(alert.alertScheduleId, alert.url));
 
         });
       }
@@ -67,7 +67,7 @@ export class AppComponent {
   }
 
 
-  toasterCloseHandler(alertScheduleId: number) {
+  toastrCloseHandler(alertScheduleId: number) {
     this.alertAction = { alertActionId: AlertActionTaken.close };
     this.rest.updateAlertActivity(alertScheduleId, this.alertAction).subscribe(res => { },
       error => {
@@ -75,7 +75,7 @@ export class AppComponent {
       });
   }
 
-  toasterClickHandler(alertScheduleId: number, url: string) {
+  toastrClickHandler(alertScheduleId: number, url: string) {
     this.alertAction = { alertActionId: AlertActionTaken.click };
     window.open(url, "_blank");
     this.rest.updateAlertActivity(alertScheduleId, this.alertAction).subscribe(res => { },
