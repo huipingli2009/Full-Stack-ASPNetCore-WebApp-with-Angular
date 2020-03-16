@@ -165,6 +165,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@AddressLine1", SqlDbType.VarChar).Value = patientDetail.AddressLine1;
                     sqlCommand.Parameters.Add("@City", SqlDbType.VarChar).Value = patientDetail.City;
                     sqlCommand.Parameters.Add("@State", SqlDbType.VarChar).Value = patientDetail.State;
+                    sqlCommand.Parameters.Add("@StateID", SqlDbType.Int).Value = patientDetail.StateId;
                     sqlCommand.Parameters.Add("@Zip", SqlDbType.VarChar).Value = patientDetail.Zip;
 
                     await sqlConnection.OpenAsync();
@@ -173,6 +174,26 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.ExecuteNonQuery();
 
                     return await GetPatientDetails(patientDetail.Id);
+
+                }
+            }
+        }
+        public async Task<bool> UpdatePatientWatchlist(int userId, int patientId)
+        {
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spUpdatePatientWatch", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@PatientID", SqlDbType.Int).Value = patientId;
+
+                    await sqlConnection.OpenAsync();
+
+                    //Execute Stored Procedure
+                    
+                    return ((bool)sqlCommand.ExecuteScalar());
 
                 }
             }
