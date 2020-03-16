@@ -42,6 +42,8 @@ namespace org.cchmc.pho.identity.EntityModels
 
                 entity.Property(e => e.Email).HasMaxLength(50);
 
+                entity.Property(e => e.LegalDisclaimerSigned).HasColumnType("datetime");
+
                 entity.Property(e => e.LockoutFlag).HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.ModifiedBy).HasMaxLength(50);
@@ -50,7 +52,9 @@ namespace org.cchmc.pho.identity.EntityModels
 
                 entity.Property(e => e.Password)
                     .IsRequired()
-                    .HasMaxLength(50);
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.RefreshToken).HasMaxLength(100);
 
                 entity.Property(e => e.UserName)
                     .IsRequired()
@@ -78,25 +82,31 @@ namespace org.cchmc.pho.identity.EntityModels
 
                 entity.Property(e => e.DeletedFlag).HasDefaultValueSql("((0))");
 
-                entity.Property(e => e.EmailAddress).HasMaxLength(50);
+                entity.Property(e => e.EmailAddress)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
 
-                entity.Property(e => e.EndDate).HasColumnType("datetime");
+                entity.Property(e => e.EndDate).HasColumnType("date");
 
                 entity.Property(e => e.FirstName)
                     .IsRequired()
-                    .HasMaxLength(25);
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.LastName)
                     .IsRequired()
-                    .HasMaxLength(25);
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Npi).HasColumnName("NPI");
 
-                entity.Property(e => e.Phone).HasMaxLength(50);
+                entity.Property(e => e.Phone)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
-                entity.Property(e => e.StartDate).HasColumnType("datetime");
+                entity.Property(e => e.StartDate).HasColumnType("date");
             });
 
             modelBuilder.Entity<TlkUserType>(entity =>

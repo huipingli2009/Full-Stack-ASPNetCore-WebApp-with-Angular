@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace org.cchmc.pho.identity
@@ -90,7 +91,77 @@ namespace org.cchmc.pho.identity
 
                 user.Token = _tokenHandler.WriteToken(token);
 
+                // This refresh token will get overwritten if a user logs in with more than one device. Per Brad, this is acceptable.
+                // Refresh tokens are only valid while the token itself is valid, so we don't need a separate refresh token expiration.
+                user.RefreshToken = await GenerateAndWriteRefreshToken(login);
+
                 await resetLockoutTask;
+
+                return user;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return null;
+            }
+        }
+
+        public async Task<User> Refresh(string tokenString, string refreshToken)
+        {
+            try
+            {
+                if (!_tokenHandler.CanReadToken(tokenString))
+                    return null;
+
+                JwtSecurityToken myToken = _tokenHandler.ReadJwtToken(tokenString);
+                int userId = GetUserIdFromClaims(myToken.Claims);
+                string userName = GetUserNameFromClaims(myToken.Claims);
+
+                _logger.LogInformation($"User {userName} attempting to refresh token.");
+
+                if(myToken.ValidTo < DateTime.Now)
+                {
+                    _logger.LogInformation($"User {userName} unable to refresh because current token is expired.");
+                    return null;
+                }
+
+                User user = await GetUser(userId);
+                if (user == null || user.IsPending || user.IsDeleted)
+                {
+                    string reason = "there is no such user";
+                    if (user != null)
+                    {
+                        if (user.IsPending)
+                            reason = "the user is pending activation";
+                        else reason = "the user is deleted";
+                    }
+                    _logger.LogInformation($"User {userName} unable to refresh because { reason }");
+                    return null;
+                }
+
+                if (user.RefreshToken != refreshToken)
+                {
+                    _logger.LogInformation($"User {userName} unable to refresh because refresh tokens don't match.");
+                    return null;
+                }
+
+                var identity = new ClaimsIdentity(IdentityConstants.ApplicationScheme);
+                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
+                identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
+                identity.AddClaim(new Claim(ClaimTypes.GivenName, user.FirstName));
+                identity.AddClaim(new Claim(ClaimTypes.Surname, user.LastName));
+                identity.AddClaim(new Claim(ClaimTypes.UserData, user.StaffId.ToString()));
+                identity.AddClaim(new Claim(ClaimTypes.Role, user.Role?.Name));
+
+                myToken = new JwtSecurityToken(_jwtConfig.ValidIssuer, _jwtConfig.ValidAudience, identity.Claims,
+                    null, DateTime.Now.AddHours(_tokenExpirationInHours), _signingCredentials);
+
+                user.Token = _tokenHandler.WriteToken(myToken);
+
+                var login = await _context.Login.FirstOrDefaultAsync(l => l.UserName == userName);
+
+                // This refresh token will get overwritten if a user logs in with more than one device. Per Brad, this is acceptable.
+                user.RefreshToken = await GenerateAndWriteRefreshToken(login);
 
                 return user;
             }
@@ -419,6 +490,21 @@ namespace org.cchmc.pho.identity
             user.AccessFailedCount = 0;
             _context.Login.Update(user);
             await _context.SaveChangesAsync();
+        }
+
+        private async Task<string> GenerateAndWriteRefreshToken(Login user)
+        {
+            var randomNumber = new byte[32];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomNumber);
+                user.RefreshToken = Convert.ToBase64String(randomNumber);
+            }
+
+            _context.Login.Update(user);
+            await _context.SaveChangesAsync();
+
+            return user.RefreshToken;
         }
     }
 }
