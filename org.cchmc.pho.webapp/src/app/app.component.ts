@@ -7,6 +7,8 @@ import { RestService } from './rest.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { NGXLogger } from 'ngx-logger';
+import { User } from './models/user';
+import { AuthenticationService } from './services/authentication.service';
 
 @Component({
   selector: 'app-root',
@@ -21,10 +23,13 @@ export class AppComponent {
   alertAction: AlertAction;
   alertScheduleId: number;
   updateAlert: FormGroup;
+  currentUser: User;
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
-    private toastr: ToastrService, public fb: FormBuilder, private logger: NGXLogger) {
+    private toastr: ToastrService, public fb: FormBuilder, private logger: NGXLogger,
+     private authenticationService: AuthenticationService) {
     // var id = this.userId.snapshot.paramMap.get('id') TODO: Need User Table;
     this.logger.log("testing the logging in app.component.ts constructor with NGXLogger");
+    this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
 
   }
 
@@ -85,5 +90,10 @@ export class AppComponent {
 
 
   }
+
+  logout() {
+    this.authenticationService.logout();
+    this.router.navigate(['/login']);
+}
 
 }
