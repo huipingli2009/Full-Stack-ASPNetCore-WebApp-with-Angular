@@ -372,14 +372,12 @@ namespace org.cchmc.pho.core.DataAccessLayer
                             selectpractice.PracticeList.Add(practice);
                         }
 
-                        if(practicesDS.Tables.Count > 1 && practicesDS.Tables[1].Rows.Count > 0 && !string.IsNullOrWhiteSpace(practicesDS.Tables[1].Rows[0].ItemArray[0].ToString()))
+                        selectpractice.CurrentPracticeId = 51;
+                        if (practicesDS.Tables.Count > 1 && practicesDS.Tables[1].Rows.Count > 0 && practicesDS.Tables[1].Rows[0].ItemArray.Length > 0)
                         {
-                            selectpractice.CurrentPracticeId = int.Parse(practicesDS.Tables[1].Rows[0].ItemArray[0].ToString());
-                        }
-                        else
-                        {
-                            selectpractice.CurrentPracticeId = 51;
-                        }                        
+                            if(int.TryParse(practicesDS.Tables[1].Rows[0].ItemArray[0].ToString(), out int result))
+                                selectpractice.CurrentPracticeId = result;
+                        }                                          
                     }
                 }
             }
