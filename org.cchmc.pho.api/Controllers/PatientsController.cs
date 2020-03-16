@@ -98,6 +98,39 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
+        // GET: api/Workbooks
+        [HttpGet("simple/{searchTerm}")]
+        [SwaggerResponse(200, type: typeof(List<SimplifiedPatientViewModel>))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+
+        //public async Task<IActionResult> ListPatients(int userId, int formResponseId, string nameSearch)
+        public async Task<IActionResult> ListPatients(string searchTerm)
+        {
+            // route parameters are strings and need to be translated (and validated) to their proper data type
+            if (!int.TryParse(_DEFAULT_USER, out var userId))
+            {
+                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
+                return BadRequest("user is not a valid integer");
+            }
+
+            try
+            {
+                var data = await _patient.SearchSimplifiedPatients(int.Parse(_DEFAULT_USER.ToString()), searchTerm);
+
+                var result = _mapper.Map<List<SimplifiedPatientViewModel>>(data);
+
+                // return the result in a "200 OK" response
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
         [HttpPut("{patient}")]
         [SwaggerResponse(200, type: typeof(PatientDetailsViewModel))]
         [SwaggerResponse(400, type: typeof(string))]

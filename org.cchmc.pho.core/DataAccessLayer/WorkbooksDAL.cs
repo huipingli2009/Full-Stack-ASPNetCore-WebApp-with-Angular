@@ -63,44 +63,6 @@ namespace org.cchmc.pho.core.DataAccessLayer
             return workbookspatients;
         }
 
-        public async Task<List<WorkbookPatientNameSearch>> SearchPatients(int userId, string search)
-        {
-            DataTable dataTable = new DataTable();
-            List<WorkbookPatientNameSearch> searchResults = new List<WorkbookPatientNameSearch>();
-
-            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
-            {
-                using (SqlCommand sqlCommand = new SqlCommand("spGetPatientList", sqlConnection))
-                {
-                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-
-                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
-                    sqlCommand.Parameters.Add("@NameSearch", SqlDbType.VarChar).Value = search;
-
-                    await sqlConnection.OpenAsync();
-
-                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
-                    {
-                        da.Fill(dataTable);
-
-                        foreach (DataRow dr in dataTable.Rows)
-                        {
-                            var workbookspt = new WorkbookPatientNameSearch()
-                            {
-                                PatientId = int.Parse(dr["Id"].ToString()),
-                                LastName = dr["LastName"].ToString(),
-                                FirstName = dr["FirstName"].ToString(),
-                                DOB = (dr["PatientDOB"] == DBNull.Value ? (DateTime?)null : (DateTime.Parse(dr["PatientDOB"].ToString()))),
-                                Phone = dr["Phone1"].ToString()
-                            };
-
-                            searchResults.Add(workbookspt);
-                        }
-                    }
-                }
-            }
-            return searchResults;
-        }
             public async Task<WorkbooksPractice> GetPracticeWorkbooks(int userId, int formResponseId)
         {
             DataTable dataTable = new DataTable();

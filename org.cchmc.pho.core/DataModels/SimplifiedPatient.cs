@@ -2,7 +2,7 @@
 
 namespace org.cchmc.pho.core.DataModels
 {
-    public class WorkbookPatientNameSearch
+    public class SimplifiedPatient
     {
         public int PatientId { get; set; }
         public string FirstName { get; set; }

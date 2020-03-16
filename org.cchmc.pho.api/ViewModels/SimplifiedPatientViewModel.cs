@@ -2,7 +2,7 @@
 
 namespace org.cchmc.pho.api.ViewModels
 {
-    public class WorkbookPatientNameSearchViewModel
+    public class SimplifiedPatientViewModel
     {
         public int PatientId { get; set; }
         public string FirstName { get; set; }
