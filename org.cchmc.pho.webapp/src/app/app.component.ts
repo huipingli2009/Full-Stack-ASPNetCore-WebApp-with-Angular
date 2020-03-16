@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
-import { Alerts } from './models/dashboard';
+import { Alerts, AlertAction, AlertActionTaken } from './models/dashboard';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { RestService } from './rest.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,65 +15,75 @@ import { NGXLogger } from 'ngx-logger';
 })
 export class AppComponent {
   @ViewChild(ToastContainerDirective, { static: true }) toastContainer: ToastContainerDirective;
-
+  error: any;
   title = 'phoweb';
   alerts: Alerts[];
+  alertAction: AlertAction;
   alertScheduleId: number;
   updateAlert: FormGroup;
-
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
     private toastr: ToastrService, public fb: FormBuilder, private logger: NGXLogger) {
     // var id = this.userId.snapshot.paramMap.get('id') TODO: Need User Table;
     this.logger.log("testing the logging in app.component.ts constructor with NGXLogger");
+
   }
 
   ngOnInit() {
+    this.toastr.overlayContainer = this.toastContainer;
     this.getAlerts(); // TODO: Temp User ID Value
   }
 
-  ngAfterContentChecked(): void {
-    this.toastr.overlayContainer = this.toastContainer;
-    this.showAlert();
 
-  }
+
 
   getAlerts() {
     this.alerts = [];
     this.rest.getAlerts().subscribe((data) => {
       this.alerts = data;
-      // console.log('updateAlertsData', this.alerts[0].Alert_ScheduleId);
+
+      if (this.alerts.length > 0) {
+        this.alerts.forEach(alert => {
+          let toastrMessage = `<i class="fas fa-exclamation-triangle alert-icon" title="${alert.definition}"></i>
+        ${alert.message}<a class="alert-link" href="${alert.url}" target="_blank">${alert.linkText}»</a>`;
+
+
+          var activeToastr = this.toastr.success(toastrMessage, alert.alertScheduleId.toString(), {
+            closeButton: true,
+            disableTimeOut: true,
+            enableHtml: true,
+            tapToDismiss: false
+          });
+          activeToastr.onHidden
+            .pipe(take(1))
+            .subscribe((data) => this.toastrCloseHandler(alert.alertScheduleId));
+          activeToastr.onTap
+            .pipe(take(1))
+            .subscribe((data) => this.toastrClickHandler(alert.alertScheduleId, alert.url));
+
+        });
+      }
 
     });
   }
 
-  showAlert() {
-    if (this.alerts.length > 0) {
-      this.alerts.forEach(alert => {
-        let str1 = `<i class="fas fa-exclamation-triangle alert-icon" title="${alert.definition}"></i>
-      ${alert.message}<a class="alert-link" href="${alert.url}">${alert.linkText}»</a>`;
 
-
-        this.toastr.success(str1, alert.alertScheduleId.toString(), {
-          closeButton: true,
-          disableTimeOut: true,
-          enableHtml: true,
-          tapToDismiss: false
-        })
-          .onTap
-          .pipe(take(1));
-        // .subscribe(() => this.toasterClickedHandler(alert.Alert_ScheduleId));
+  toastrCloseHandler(alertScheduleId: number) {
+    this.alertAction = { alertActionId: AlertActionTaken.close };
+    this.rest.updateAlertActivity(alertScheduleId, this.alertAction).subscribe(res => { },
+      error => {
+        this.error = error;
       });
-    }
   }
 
-  toasterClickedHandler(sheduleId) {
-    // console.log('Toastr clicked', sheduleId); // TODO Remove Alert based on id
-    // const id = 3;
+  toastrClickHandler(alertScheduleId: number, url: string) {
+    this.alertAction = { alertActionId: AlertActionTaken.click };
+    window.open(url, "_blank");
+    this.rest.updateAlertActivity(alertScheduleId, this.alertAction).subscribe(res => { },
+      error => {
+        this.error = error;
+      })
 
-    // this.updateAlert = this.fb.group({
-    //   alertActionId: [1]
-    // });
-    // this.rest.updateAlertActivity(id, sheduleId, this.updateAlert.value).subscribe(res => {});
+
   }
 
 }
