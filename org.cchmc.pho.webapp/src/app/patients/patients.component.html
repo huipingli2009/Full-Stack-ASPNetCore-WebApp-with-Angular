@@ -7,6 +7,7 @@
           <mat-option *ngFor="let provider of providersList" [value]="provider.id">
             {{provider.name}}
           </mat-option>
+          <mat-option>All</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -59,7 +60,7 @@
     <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
       <mat-cell *matCellDef="let element"
-        [ngStyle]="{'color': (element.potentiallyActiveStatus ? '#f0673c' : '#4A4A4A') }">
+        [ngStyle]="{'color': (element.pendingStatusConfirmation ? '#f0673c' : '#4A4A4A') }">
         {{element.lastName | titlecase}}, {{element.firstName | titlecase}} </mat-cell>
     </ng-container>
 
@@ -173,9 +174,13 @@
               </div>
               <div fxLayout="column" fxFlex="115px">
                 <label for="gender">Gender</label>
-                <select formControlName="gender">
-                  <option *ngFor="let item of genderList" [ngValue]="item.shortName" >{{item.shortName | i18nSelect: genderMap}}</option>
-                </select>
+                <mat-form-field class="multi-select-override">
+                  <mat-select matNativeControl formControlName="gender" [compareWith]="compareShortFn">
+                    <mat-option *ngFor="let item of genderList" [value]="item">
+                      {{item.shortName | i18nSelect: genderMap}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
               </div>
             </div>
             <div fxLayout="row" fxLayoutGap="34px" class="form-row">
@@ -187,19 +192,23 @@
               </div>
               <div fxLayout="column" fxFlex>
                 <label for="pcpName">PCP</label>
-                <select formControlName="pcpName">
-                  <option *ngFor="let item of providersList" [value]="item.name">
-                    {{item.name}}
-                  </option>
-                </select>
+                <mat-form-field class="multi-select-override">
+                  <mat-select matNativeControl formControlName="pcpName" [compareWith]="compareFn">
+                    <mat-option *ngFor="let item of providersList" [value]="item">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
               </div>
               <div fxLayout="column" fxFlex>
                 <label for="insuranceName">Insurance</label>
-                <select formControlName="insuranceName" class="insurance">
-                  <option *ngFor="let item of insuranceList" [value]="item.name">
+                <mat-form-field class="multi-select-override">
+                <mat-select matNativeControl formControlName="insuranceName" class="insurance" [compareWith]="compareFn">
+                  <mat-option *ngFor="let item of insuranceList" [value]="item">
                     {{item.name}}
-                  </option>
-                </select>
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
               </div>
               <div fxLayout="column" fxFlex fxFill>
                 <label for="conditions">Conditions</label>
@@ -239,7 +248,7 @@
                 </div>
                   </div>
                   <div mat-dialog-actions align="end">
-                    <button mat-button mat-dialog-close>Cancel</button>
+                    <button mat-button (click)="cancelPmcaUpdate()">Cancel</button>
                     <button mat-button (click)="updatePmcaScore()">Update</button>
                 </div>
                 </ng-template>
@@ -275,6 +284,13 @@
               </div>
               <div fxLayout="column" fxFlex>
                 <label for="state">State</label>
+                <!-- <mat-form-field class="multi-select-override">
+                  <mat-select matNativeControl formControlName="state" [compareWith]="compareShortFn">
+                    <mat-option *ngFor="let item of stateList" [value]="item">
+                      {{item.shortName}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field> -->
                 <select formControlName="state">
                   <option *ngFor="let item of stateList" [value]="item.shortName">{{item.shortName}}</option>
                 </select>

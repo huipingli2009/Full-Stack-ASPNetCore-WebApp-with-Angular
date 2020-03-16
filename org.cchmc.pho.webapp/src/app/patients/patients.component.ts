@@ -90,6 +90,7 @@ export class PatientsComponent implements OnInit {
 
   displayedColumns: string[] = ['arrow', 'name', 'dob', 'lastEDVisit', 'chronic', 'watchFlag', 'conditions'];
   compareFn: ((f1: any, f2: any) => boolean) | null = this.compareByValue;
+  compareShortFn: ((f1: any, f2: any) => boolean) | null = this.compareByShortValue;
   pageEvent: PageEvent;
   dataSource: PatientsDataSource;
   savedPatientData: any;
@@ -105,19 +106,19 @@ export class PatientsComponent implements OnInit {
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       dob: ['', Validators.required],
-      email: ['', Validators.required],
-      activeStatus: [Boolean, Validators.required],
-      gender: ['', Validators.required],
-      pcpName: ['', Validators.required],
-      insuranceName: ['', Validators.required],
-      conditionsControl: [null, Validators.required],
-      providerPMCAScore: ['', Validators.required],
-      providerNotes: ['', Validators.required],
-      phone1: ['', Validators.required],
-      addressLine1: ['', Validators.required],
-      city: ['', Validators.required],
-      state: ['', Validators.required],
-      zip: ['', Validators.required]
+      email: [''],
+      activeStatus: [Boolean],
+      gender: [''],
+      pcpName: [''],
+      insuranceName: [''],
+      conditionsControl: [null],
+      providerPMCAScore: [''],
+      providerNotes: [''],
+      phone1: [''],
+      addressLine1: [''],
+      city: [''],
+      state: [''],
+      zip: ['']
     });
   }
 
@@ -150,11 +151,12 @@ export class PatientsComponent implements OnInit {
     this.loadPatientsWithFilters();
   }
 
-  // compareByValue(f1: any, f2: any) {
-  //   return f1 && f2 && f1.value === f2.value;
-  // }
   compareByValue(o1, o2): boolean {
     return o1.name === o2.name;
+  }
+
+  compareByShortValue(o1, o2): boolean {
+    return o1.shortName === o2.shortName;
   }
 
   loadPatientsWithFilters() {
@@ -269,9 +271,18 @@ export class PatientsComponent implements OnInit {
         dob: this.transformDob(data.patientDOB),
         email: data.email,
         activeStatus: data.activeStatus,
-        gender: data.gender,
-        pcpName: this.pcpFullName,
-        insuranceName: data.insuranceName,
+        gender: {
+          id: data.genderId,
+          shortName: data.gender
+        },
+        pcpName: {
+          id: data.pcpId,
+          name: this.pcpFullName
+        },
+        insuranceName: {
+          id: data.insuranceId,
+          name: data.insuranceName
+        },
         conditionsControl: data.conditions,
         providerPMCAScore: data.providerPMCAScore,
         providerNotes: data.providerNotes,
@@ -279,11 +290,15 @@ export class PatientsComponent implements OnInit {
         addressLine1: data.addressLine1,
         city: data.city,
         state: data.state + '        ', // This needs to be fixed in the API, the state list is coming back with a huge space
+        // state: {
+        //   id: '',
+        //   shortName: data.state + '        '
+        // }, // Need to pull Tonys change from Dev to fix this space issue
         zip: data.zip
       }
       this.form.setValue(selectedValues);
       console.log(selectedValues);
-      console.log(new Date(this.transformDobForPut(this.form.controls['dob'].value)))
+      console.log(this.form.controls['gender'].value.id, 'gender id')
       // this.patientFormDetails = this.rest.getPatientDetails(id).pipe(
       //   tap(user => this.form.patchValue(user))
       // );
@@ -307,15 +322,17 @@ export class PatientsComponent implements OnInit {
 
   }
 
+  cancelPmcaUpdate() {
+    this.form.controls['providerPMCAScore'].setValue(this.providerPmcaScoreControl);
+    this.form.controls['providerNotes'].setValue(this.providerNotesControl);
+    this.dialog.closeAll();
+  }
+
   openPatientSaveDialog() {
     const {value, valid} = this.form;
     if(valid){
     this.dialog.open(this.callPatientSaveDialog, { disableClose: true });
     }
-  }
-
-  getselectedGender() {
-    console.log(this.selectedGender.id);
   }
 
   submitForm() {
@@ -324,8 +341,8 @@ export class PatientsComponent implements OnInit {
     this.patientDetails.patientDOB = new Date(this.transformDobForPut(this.form.controls['dob'].value));
     this.patientDetails.email = this.form.controls['email'].value;
     this.patientDetails.activeStatus = this.form.controls['activeStatus'].value;
-    this.patientDetails.genderId = this.genderList.id;
-    this.patientDetails.gender = this.form.controls['gender'].value;
+    this.patientDetails.genderId = this.form.controls['gender'].value.id;
+    this.patientDetails.gender = this.form.controls['gender'].value; // TODO Working here - Probably only need ID
     this.patientDetails.pcpFirstName = this.form.controls['pcpName'].value.split(' ')[0];
     this.patientDetails.pcpLastName = this.form.controls['pcpName'].value.split(' ')[1];
     this.patientDetails.insuranceName = this.form.controls['insuranceName'].value;
