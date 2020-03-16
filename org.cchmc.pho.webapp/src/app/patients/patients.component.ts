@@ -55,7 +55,7 @@ export class PatientsComponent implements OnInit {
   watchFlag: string;
   pcP_StaffID: string;
   gender: string;
-  genderMap: any = {'M': 'Male', 'F' : 'Female', 'U' : 'Unknown'};
+  genderMap: any = {M: 'Male', F : 'Female', U : 'Unknown'};
   state: string;
   insurance: string;
   pcpId: number;
@@ -100,9 +100,8 @@ export class PatientsComponent implements OnInit {
 
   isExpansionDetailRow = (i: number, row: object) => row.hasOwnProperty('detailRow');
 
-  constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
-    public fb: FormBuilder, private logger: NGXLogger, public dialog: MatDialog, private datePipe: DatePipe, public snackBar: MatSnackBar) {
-    // this.filterFormGroup = this.fb.group({});
+  constructor(public rest: RestService, private route: ActivatedRoute, public fb: FormBuilder,
+              private logger: NGXLogger, public dialog: MatDialog, private datePipe: DatePipe, public snackBar: MatSnackBar) {
     this.form = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -137,7 +136,6 @@ export class PatientsComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    // this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
     this.paginator.page
       .pipe(
         tap(() => this.loadPatientsPage())
@@ -260,7 +258,7 @@ export class PatientsComponent implements OnInit {
       this.providerNotesControl = data.providerNotes;
       this.selectedGender = data.gender;
 
-      let selectedValues = {
+      const selectedValues = {
         firstName: data.firstName,
         lastName: data.lastName,
         dob: this.transformDob(data.patientDOB),
@@ -290,14 +288,8 @@ export class PatientsComponent implements OnInit {
         //   shortName: data.state + '        '
         // }, // Need to pull Tonys change from Dev to fix this space issue
         zip: data.zip
-      }
+      };
       this.form.setValue(selectedValues);
-      console.log(selectedValues);
-      console.log(this.form.controls['gender'].value.id, 'gender id')
-      // this.patientFormDetails = this.rest.getPatientDetails(id).pipe(
-      //   tap(user => this.form.patchValue(user))
-      // );
-
     });
   }
   transformDob(date) {
@@ -307,63 +299,61 @@ export class PatientsComponent implements OnInit {
     return this.datePipe.transform(date, 'yyyy-MM-ddT00:00:00');
   }
 
-  updatePmcaScore(){
+  updatePmcaScore() {
     const {value, valid} = this.form;
-    if(valid){
-      this.providerPmcaScoreControl = this.form.controls['providerPMCAScore'].value;
-      this.providerNotesControl = this.form.controls['providerNotes'].value;
+    if (valid) {
+      this.providerPmcaScoreControl = this.form.controls.providerPMCAScore.value;
+      this.providerNotesControl = this.form.controls.providerNotes.value;
       this.dialog.closeAll();
     }
 
   }
 
   pmcaProviderScoreChanged() {
-    this.form.controls['providerNotes'].setValidators([Validators.required]);
-    this.form.controls['providerNotes'].updateValueAndValidity();
-    console.log('Changed');
+    this.form.controls.providerNotes.setValidators([Validators.required]);
+    this.form.controls.providerNotes.updateValueAndValidity();
   }
 
   cancelPmcaUpdate() {
-    this.form.controls['providerNotes'].setValidators([]);
-    this.form.controls['providerNotes'].updateValueAndValidity();
-    this.form.controls['providerPMCAScore'].setValue(this.providerPmcaScoreControl);
-    this.form.controls['providerNotes'].setValue(this.providerNotesControl);
+    this.form.controls.providerNotes.setValidators([]);
+    this.form.controls.providerNotes.updateValueAndValidity();
+    this.form.controls.providerPMCAScore.setValue(this.providerPmcaScoreControl);
+    this.form.controls.providerNotes.setValue(this.providerNotesControl);
     this.dialog.closeAll();
   }
 
   openPatientSaveDialog() {
     const {value, valid} = this.form;
-    if(valid){
+    if (valid) {
     this.dialog.open(this.callPatientSaveDialog, { disableClose: true });
     }
   }
 
   submitForm() {
-    this.patientDetails.firstName = this.form.controls['firstName'].value;
-    this.patientDetails.lastName = this.form.controls['lastName'].value;
-    this.patientDetails.patientDOB = new Date(this.transformDobForPut(this.form.controls['dob'].value));
-    this.patientDetails.email = this.form.controls['email'].value;
-    this.patientDetails.activeStatus = this.form.controls['activeStatus'].value;
-    this.patientDetails.genderId = this.form.controls['gender'].value.id;
-    this.patientDetails.pcpFirstName = this.form.controls['pcpName'].value.name.split(' ')[0]; //TODO: Put PCP ID instead
-    this.patientDetails.pcpLastName = this.form.controls['pcpName'].value.name.split(' ')[1];
-    this.patientDetails.insuranceName = this.form.controls['insuranceName'].value.name; //TODO: ID instead
-    this.patientDetails.conditions = this.form.controls['conditionsControl'].value;
-    this.patientDetails.providerPMCAScore = Number(this.form.controls['providerPMCAScore'].value);
-    this.patientDetails.providerNotes = this.form.controls['providerNotes'].value;
-    this.patientDetails.phone1 = this.form.controls['phone1'].value;
-    this.patientDetails.addressLine1 = this.form.controls['addressLine1'].value;
-    this.patientDetails.city = this.form.controls['city'].value;
-    this.patientDetails.state = this.form.controls['state'].value; //TODO: ID Instead
-    this.patientDetails.zip = this.form.controls['zip'].value;
+    this.patientDetails.firstName = this.form.controls.firstName.value;
+    this.patientDetails.lastName = this.form.controls.lastName.value;
+    this.patientDetails.patientDOB = new Date(this.transformDobForPut(this.form.controls.dob.value));
+    this.patientDetails.email = this.form.controls.email.value;
+    this.patientDetails.activeStatus = this.form.controls.activeStatus.value;
+    this.patientDetails.genderId = this.form.controls.gender.value.id;
+    this.patientDetails.pcpFirstName = this.form.controls.pcpName.value.name.split(' ')[0]; // TODO: Put PCP ID instead
+    this.patientDetails.pcpLastName = this.form.controls.pcpName.value.name.split(' ')[1];
+    this.patientDetails.insuranceName = this.form.controls.insuranceName.value.name; // TODO: ID instead
+    this.patientDetails.conditions = this.form.controls.conditionsControl.value;
+    this.patientDetails.providerPMCAScore = Number(this.form.controls.providerPMCAScore.value);
+    this.patientDetails.providerNotes = this.form.controls.providerNotes.value;
+    this.patientDetails.phone1 = this.form.controls.phone1.value;
+    this.patientDetails.addressLine1 = this.form.controls.addressLine1.value;
+    this.patientDetails.city = this.form.controls.city.value;
+    this.patientDetails.state = this.form.controls.state.value; // TODO: ID Instead
+    this.patientDetails.zip = this.form.controls.zip.value;
 
-    console.log('inSubmit', this.patientDetails);
-    console.log(this.form.value);
-    console.log(this.currentPatientId);
+    this.logger.log('inSubmit', this.patientDetails);
+    this.logger.log(this.form.value);
+    this.logger.log(this.currentPatientId);
     this.rest.savePatientDetails(this.currentPatientId, this.patientDetails).subscribe(data => {
       this.savedPatientData = data;
     });
-    console.log(this.savedPatientData);
   }
 
   /* Patient Details - Form Elements*/
