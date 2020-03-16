@@ -87,6 +87,17 @@ h1 {
 .text-purple {
   color: var(--purple-dark);
 }
+.text-warn {
+  color: var(--warn-color);
+}
+
+.success-snackbar {
+  background-color: var(--primary-color);
+}
+
+.warn-snackbar {
+  background-color: var(--warn-darker-color);
+}
 
 .form-error, .error {
   color: var(--warn-color);

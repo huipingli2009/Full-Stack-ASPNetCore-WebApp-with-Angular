@@ -6,6 +6,7 @@ import { Alerts, Population, EdChart, EdChartDetails, Spotlight, Quicklinks } fr
 import { environment } from '../environments/environment';
 import { Patients, PatientDetails, Conditions, Providers, PopSlices, Gender, Insurance, Pmca, States } from './models/patients';
 import { NGXLogger } from 'ngx-logger';
+import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
 
 
 // we can now access environment.apiUrl
@@ -23,22 +24,10 @@ const httpOptions = {
 })
 export class RestService {
 
-  constructor(private http: HttpClient, private logger: NGXLogger) {
-  private snackbarSubject = new Subject<any>();
-  public snackbarState = this.snackbarSubject.asObservable();
-
-
-  }
+  constructor(private http: HttpClient, private logger: NGXLogger, private snackBar: MatSnackBarComponent) { }
   private extractData(res: Response) {
     const body = res;
     return body || {};
-  }
-
-  showSnackbar(message: string, type?: string) { // TODO: Working here
-    this.snackbarSubject.next({
-      show: true,
-      message, type
-    })
   }
   
   /* Alerts =======================================================*/
@@ -148,8 +137,9 @@ export class RestService {
   savePatientDetails(patientId, patient): Observable<any> {
     console.log('PatientPutInest', JSON.stringify(patient))
     return this.http.put(`${API_URL}/api/Patients/${patientId}`, JSON.stringify(patient), httpOptions).pipe(
-      tap(_ => console.log(`updated patient id=${patientId}`)),
-      catchError(this.handleError<any>('SavePatientDetails'))
+      tap(_ => this.snackBar.openSnackBar(`Patient ${patient.firstName} ${patient.lastName} has been updated!`
+      , 'Close', 'success-snackbar')),
+      catchError(this.handleError.bind( this.snackBar.openSnackBar('ERROR', 'Close', 'warn-snackbar')))
     );
   }
 

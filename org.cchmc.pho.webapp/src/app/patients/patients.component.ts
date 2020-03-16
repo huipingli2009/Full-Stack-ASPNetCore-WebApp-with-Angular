@@ -16,6 +16,7 @@ import { PatientsDataSource } from './patients.datasource';
 import { MatDialog } from '@angular/material/dialog';
 import { DatePipe } from '@angular/common';
 import { validateBasis } from '@angular/flex-layout';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -100,7 +101,7 @@ export class PatientsComponent implements OnInit {
   isExpansionDetailRow = (i: number, row: object) => row.hasOwnProperty('detailRow');
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
-    public fb: FormBuilder, private logger: NGXLogger, public dialog: MatDialog, private datePipe: DatePipe) {
+    public fb: FormBuilder, private logger: NGXLogger, public dialog: MatDialog, private datePipe: DatePipe, public snackBar: MatSnackBar) {
     // this.filterFormGroup = this.fb.group({});
     this.form = this.fb.group({
       firstName: ['', Validators.required],
@@ -115,10 +116,10 @@ export class PatientsComponent implements OnInit {
       providerPMCAScore: [''],
       providerNotes: [''],
       phone1: [''],
-      addressLine1: [''],
-      city: [''],
-      state: [''],
-      zip: ['']
+      addressLine1: ['', Validators.required],
+      city: ['', Validators.required],
+      state: ['', Validators.required],
+      zip: ['', Validators.required]
     });
   }
 
@@ -185,12 +186,6 @@ export class PatientsComponent implements OnInit {
 
   applySelectedFilter(column: string, filterValue: string) {
     this.filterValues[column] = filterValue;
-
-    // this.dataSource.filter = JSON.stringify(this.filterValues);
-
-    // if (this.dataSource.paginator) {
-    //   this.dataSource.paginator.firstPage();
-    // }
   }
 
   isChronicFilter(e) {
@@ -322,7 +317,15 @@ export class PatientsComponent implements OnInit {
 
   }
 
+  pmcaProviderScoreChanged() {
+    this.form.controls['providerNotes'].setValidators([Validators.required]);
+    this.form.controls['providerNotes'].updateValueAndValidity();
+    console.log('Changed');
+  }
+
   cancelPmcaUpdate() {
+    this.form.controls['providerNotes'].setValidators([]);
+    this.form.controls['providerNotes'].updateValueAndValidity();
     this.form.controls['providerPMCAScore'].setValue(this.providerPmcaScoreControl);
     this.form.controls['providerNotes'].setValue(this.providerNotesControl);
     this.dialog.closeAll();
@@ -342,17 +345,16 @@ export class PatientsComponent implements OnInit {
     this.patientDetails.email = this.form.controls['email'].value;
     this.patientDetails.activeStatus = this.form.controls['activeStatus'].value;
     this.patientDetails.genderId = this.form.controls['gender'].value.id;
-    this.patientDetails.gender = this.form.controls['gender'].value; // TODO Working here - Probably only need ID
-    this.patientDetails.pcpFirstName = this.form.controls['pcpName'].value.split(' ')[0];
-    this.patientDetails.pcpLastName = this.form.controls['pcpName'].value.split(' ')[1];
-    this.patientDetails.insuranceName = this.form.controls['insuranceName'].value;
+    this.patientDetails.pcpFirstName = this.form.controls['pcpName'].value.name.split(' ')[0]; //TODO: Put PCP ID instead
+    this.patientDetails.pcpLastName = this.form.controls['pcpName'].value.name.split(' ')[1];
+    this.patientDetails.insuranceName = this.form.controls['insuranceName'].value.name; //TODO: ID instead
     this.patientDetails.conditions = this.form.controls['conditionsControl'].value;
     this.patientDetails.providerPMCAScore = Number(this.form.controls['providerPMCAScore'].value);
     this.patientDetails.providerNotes = this.form.controls['providerNotes'].value;
     this.patientDetails.phone1 = this.form.controls['phone1'].value;
     this.patientDetails.addressLine1 = this.form.controls['addressLine1'].value;
     this.patientDetails.city = this.form.controls['city'].value;
-    this.patientDetails.state = this.form.controls['state'].value;
+    this.patientDetails.state = this.form.controls['state'].value; //TODO: ID Instead
     this.patientDetails.zip = this.form.controls['zip'].value;
 
     console.log('inSubmit', this.patientDetails);
@@ -361,7 +363,7 @@ export class PatientsComponent implements OnInit {
     this.rest.savePatientDetails(this.currentPatientId, this.patientDetails).subscribe(data => {
       this.savedPatientData = data;
     });
-    console.log(this.savedPatientData)
+    console.log(this.savedPatientData);
   }
 
   /* Patient Details - Form Elements*/

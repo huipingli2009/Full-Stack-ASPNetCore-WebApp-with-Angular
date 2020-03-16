@@ -51,6 +51,7 @@ import { RouterModule } from '@angular/router';
 import { VersionComponent } from './version/version.component';
 import { environment } from 'src/environments/environment';
 import { ChartsModule } from 'ng2-charts';
+import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
 
 
 @NgModule({
@@ -61,7 +62,8 @@ import { ChartsModule } from 'ng2-charts';
     PatientsComponent,
     StaffComponent,
     FilesComponent,
-    WorkbooksComponent
+    WorkbooksComponent,
+    MatSnackBarComponent
   ],
   imports: [
     BrowserModule,
@@ -124,7 +126,7 @@ import { ChartsModule } from 'ng2-charts';
     MatTooltipModule,
     MatTreeModule
   ],
-  providers: [],
+  providers: [MatSnackBarComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -232,17 +232,13 @@
                   <div mat-dialog-content class="mat-typography pmca-dialog">
                     <label for="providerPMCAScore">Provider PMCA</label>
                     <div fxLayout="row" class="pmca-dialog-inputs">
-                    <input formControlName="providerPMCAScore" name="providerPMCAScore" required/>
+                    <input formControlName="providerPMCAScore" name="providerPMCAScore" (change)="pmcaProviderScoreChanged()" required/>
                   </div>
-                  <div *ngIf="form.controls.providerPMCAScore.errors?.required && form.controls.providerPMCAScore.touched"
-                  class="form-error" fxLayout="row">
-                  Required
-                </div>
                   <label for="providerNotes">Provider Notes</label>
                   <div fxLayout="row">
-                    <textarea formControlName="providerNotes" name="providerNotes" required></textarea>
+                    <textarea formControlName="providerNotes" name="providerNotes"></textarea>
                   </div>
-                  <div *ngIf="form.controls.providerNotes.errors?.required && form.controls.providerNotes.touched"
+                  <div *ngIf="form.controls.providerPMCAScore.touched && form.controls.providerNotes.errors?.required"
                   class="form-error" fxLayout="row">
                   You must include a note
                 </div>
@@ -307,16 +303,18 @@
               </div>
               <ng-template #updatePatientDialog>
                 <div mat-dialog-content class="mat-typography">
-                  Are you sure you want to save changes to this patient?
+                  <h3>Are you sure you want to save changes to this patient?</h3>
+                  <h3 class="text-warn">Patients made Inactive will be removed from the website but remain in the data warehouse for analytical purposes.</h3>
+                  <h3><strong>Do you still wish to continue?</strong></h3>
                 </div>
                 <div mat-dialog-actions align="end">
                   <button mat-button mat-dialog-close>Cancel</button>
-                  <button mat-button mat-dialog-close (click)="submitForm()">Save and Update Patient</button>
+                  <button mat-flat-button color="accent" mat-dialog-close (click)="submitForm()">Save and Update Patient</button>
               </div>
               </ng-template>
             </div>
             <div *ngIf="!form.valid" class="entire-form-error" fxLayout="row">
-              You must fill out alll required fields to update the patient.
+              You must fill out all required fields to update the patient.
             </div>
           </form>
           <div fxLayout="row" class="border-row-top">
