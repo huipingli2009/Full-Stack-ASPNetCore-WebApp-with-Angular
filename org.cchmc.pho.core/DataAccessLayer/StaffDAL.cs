@@ -326,5 +326,62 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
-    }
+        public async Task<bool> SwitchPractice(int userId, int practiceID)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spUpdateDefPracticeID", sqlConnection))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@PracticeID", SqlDbType.Int).Value = practiceID;
+                    await sqlConnection.OpenAsync();
+
+                    return (sqlCommand.ExecuteNonQuery() > 0);
+                }
+            }
+        }
+
+        public async Task<SelectPractice> GetPracticeList(int userId)
+        {
+            DataSet practicesDS = new DataSet();
+            SelectPractice selectpractice = new SelectPractice()
+            {
+                PracticeList = new List<Practice>()
+            };
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetPracticeList", sqlConnection))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    await sqlConnection.OpenAsync();
+                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(practicesDS);
+
+                        foreach (DataRow dr in practicesDS.Tables[0].Rows)
+                        {
+                            var practice = new Practice()
+                            {
+                                Id = (dr["ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ID"].ToString())),
+                                Name = dr["PracticeName"].ToString()
+                            };
+                            selectpractice.PracticeList.Add(practice);
+                        }
+
+                        selectpractice.CurrentPracticeId = 51;
+                        if (practicesDS.Tables.Count > 1 && practicesDS.Tables[1].Rows.Count > 0 && practicesDS.Tables[1].Rows[0].ItemArray.Length > 0)
+                        {
+                            if(int.TryParse(practicesDS.Tables[1].Rows[0].ItemArray[0].ToString(), out int result))
+                                selectpractice.CurrentPracticeId = result;
+                        }                                          
+                    }
+                }
+            }
+            return selectpractice;
+        }
+    }   
 }
