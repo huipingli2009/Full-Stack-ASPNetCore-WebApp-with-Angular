@@ -684,6 +684,9 @@ button.toast-close-button {
     text-align: center;
     font-weight: 500;
   }
+  tr.mat-row {
+    height: 0 !important;
+  }
 }
 /* Patient Expansion Panels*/
 .element-row {
@@ -728,9 +731,7 @@ button.toast-close-button {
 .tr.collapsed-detail {
   height: 0;
 }
-tr.mat-row {
-  height: 0 !important;
-}
+
 /* Patient Details */
 
 #patient-details, .pmca-dialog {
