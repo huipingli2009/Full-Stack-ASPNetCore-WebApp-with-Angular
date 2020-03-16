@@ -1,4 +1,5 @@
 ﻿
+using org.cchmc.pho.core.DataModels;
 using System;
 
 namespace org.cchmc.pho.api.ViewModels
@@ -15,5 +16,6 @@ namespace org.cchmc.pho.api.ViewModels
         public bool IsRegistry { get; set; }
         public string Responsibilities { get; set; }
         public DateTime? LegalDisclaimerSigned { get; set; }
+        public Practice MyPractice { get; set; }
     }
 }
