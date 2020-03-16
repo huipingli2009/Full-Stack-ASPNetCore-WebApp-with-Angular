@@ -36,6 +36,7 @@ export class PatientsComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild('pmcaDialog') callPmcaDialog: TemplateRef<any>;
+  @ViewChild('updatePatientDialog') callPatientSaveDialog: TemplateRef<any>;
 
   @Input()
   checked: Boolean;
@@ -53,6 +54,7 @@ export class PatientsComponent implements OnInit {
   watchFlag: string;
   pcP_StaffID: string;
   gender: string;
+  genderMap: any = {'M': 'Male', 'F' : 'Female', 'U' : 'Unknown'};
   state: string;
   insurance: string;
   pcpId: number;
@@ -77,7 +79,7 @@ export class PatientsComponent implements OnInit {
   isActive: boolean;
   form: FormGroup;
   insuranceList: any[] = [];
-  genderList: any[] = [];
+  genderList: Gender;
   pmcaList: any[] = [];
   stateList: any[] = [];
 
@@ -91,6 +93,8 @@ export class PatientsComponent implements OnInit {
   pageEvent: PageEvent;
   dataSource: PatientsDataSource;
   savedPatientData: any;
+  isDisabled: boolean;
+  isFormValid = this.form;
 
   isExpansionDetailRow = (i: number, row: object) => row.hasOwnProperty('detailRow');
 
@@ -146,8 +150,8 @@ export class PatientsComponent implements OnInit {
     this.loadPatientsWithFilters();
   }
 
-  // compareByValue(f1: any, f2: any) { 
-  //   return f1 && f2 && f1.value === f2.value; 
+  // compareByValue(f1: any, f2: any) {
+  //   return f1 && f2 && f1.value === f2.value;
   // }
   compareByValue(o1, o2): boolean {
     return o1.name === o2.name;
@@ -274,7 +278,7 @@ export class PatientsComponent implements OnInit {
         phone1: data.phone1,
         addressLine1: data.addressLine1,
         city: data.city,
-        state: data.state,
+        state: data.state + '        ', // This needs to be fixed in the API, the state list is coming back with a huge space
         zip: data.zip
       }
       this.form.setValue(selectedValues);
@@ -293,18 +297,40 @@ export class PatientsComponent implements OnInit {
     return this.datePipe.transform(date, 'yyyy-MM-ddT00:00:00');
   }
 
+  updatePmcaScore(){
+    const {value, valid} = this.form;
+    if(valid){
+      this.providerPmcaScoreControl = this.form.controls['providerPMCAScore'].value;
+      this.providerNotesControl = this.form.controls['providerNotes'].value;
+      this.dialog.closeAll();
+    }
+
+  }
+
+  openPatientSaveDialog() {
+    const {value, valid} = this.form;
+    if(valid){
+    this.dialog.open(this.callPatientSaveDialog, { disableClose: true });
+    }
+  }
+
+  getselectedGender() {
+    console.log(this.selectedGender.id);
+  }
+
   submitForm() {
     this.patientDetails.firstName = this.form.controls['firstName'].value;
     this.patientDetails.lastName = this.form.controls['lastName'].value;
     this.patientDetails.patientDOB = new Date(this.transformDobForPut(this.form.controls['dob'].value));
     this.patientDetails.email = this.form.controls['email'].value;
     this.patientDetails.activeStatus = this.form.controls['activeStatus'].value;
+    this.patientDetails.genderId = this.genderList.id;
     this.patientDetails.gender = this.form.controls['gender'].value;
     this.patientDetails.pcpFirstName = this.form.controls['pcpName'].value.split(' ')[0];
     this.patientDetails.pcpLastName = this.form.controls['pcpName'].value.split(' ')[1];
     this.patientDetails.insuranceName = this.form.controls['insuranceName'].value;
     this.patientDetails.conditions = this.form.controls['conditionsControl'].value;
-    this.patientDetails.providerPMCAScore = this.form.controls['providerPMCAScore'].value;
+    this.patientDetails.providerPMCAScore = Number(this.form.controls['providerPMCAScore'].value);
     this.patientDetails.providerNotes = this.form.controls['providerNotes'].value;
     this.patientDetails.phone1 = this.form.controls['phone1'].value;
     this.patientDetails.addressLine1 = this.form.controls['addressLine1'].value;
