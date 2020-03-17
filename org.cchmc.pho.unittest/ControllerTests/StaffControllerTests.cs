@@ -51,30 +51,36 @@ namespace org.cchmc.pho.unittest.controllertests
                     LastName = "Lipton",
                     Email = "cli@gmail.com",
                     Phone = "513-123-4567",
-                    PositionId = 37,
-                    CredentialId = 76,
+                    Position = new Position()
+                    {
+                        Id = 1,
+                        Name = "General Manager"
+                    },
+                    Credentials = new Credential()
+                    {
+                        Id = 1,
+                        Name = "RN"
+                    },
                     IsRegistry = false,
                     Responsibilities = "Practice Manager"
                 },
                 new Staff()
                 {
-                    Id = 20101,
+                    Id = 20102,
                     FirstName = "Richard",
                     LastName = "Winters",
                     Email = "wintersr@yahoo.com",
                     Phone = "513-555-4567",
-                    PositionId = 12,
-                    CredentialId = 23,
                     IsRegistry = true,
                     Responsibilities = "Auditor"
                 }
         };
 
-            _mockStaffDal.Setup(s => s.ListStaff(3,"","","")).Returns(Task.FromResult(myStaff)).Verifiable();
+            _mockStaffDal.Setup(s => s.ListStaff(3)).Returns(Task.FromResult(myStaff)).Verifiable();
             _staffController = new StaffController(_mockLogger.Object, _mapper, _mockStaffDal.Object);
 
             // execute
-            var result = await _staffController.ListStaff("", "", "") as ObjectResult;
+            var result = await _staffController.ListStaff() as ObjectResult;
             var resultList = result.Value as List<StaffViewModel>;
 
             // assert
@@ -83,8 +89,12 @@ namespace org.cchmc.pho.unittest.controllertests
             Assert.AreEqual(myStaff[0].LastName, resultList[0].LastName);
             Assert.AreEqual(myStaff[0].Email, resultList[0].Email);
             Assert.AreEqual(myStaff[0].Phone, resultList[0].Phone);
-            Assert.AreEqual(myStaff[0].PositionId, resultList[0].PositionId);
-            Assert.AreEqual(myStaff[0].CredentialId, resultList[0].CredentialId);
+            Assert.IsNotNull(resultList[0].Credentials);
+            Assert.IsNotNull(resultList[0].Position);
+            Assert.AreEqual(myStaff[0].Credentials.Id, resultList[0].Credentials.Id);
+            Assert.AreEqual(myStaff[0].Credentials.Name, resultList[0].Credentials.Name);
+            Assert.AreEqual(myStaff[0].Position.Id, resultList[0].Position.Id);
+            Assert.AreEqual(myStaff[0].Position.Name, resultList[0].Position.Name);
             Assert.AreEqual(myStaff[0].IsRegistry, resultList[0].IsRegistry);
             Assert.AreEqual(myStaff[0].Responsibilities, resultList[0].Responsibilities);
             Assert.AreEqual(myStaff[1].Id, resultList[1].Id);
@@ -92,8 +102,8 @@ namespace org.cchmc.pho.unittest.controllertests
             Assert.AreEqual(myStaff[1].LastName, resultList[1].LastName);
             Assert.AreEqual(myStaff[1].Email, resultList[1].Email);
             Assert.AreEqual(myStaff[1].Phone, resultList[1].Phone);
-            Assert.AreEqual(myStaff[1].PositionId, resultList[1].PositionId);
-            Assert.AreEqual(myStaff[1].CredentialId, resultList[1].CredentialId);
+            Assert.IsNull(resultList[1].Credentials);
+            Assert.IsNull(resultList[1].Position);
             Assert.AreEqual(myStaff[1].IsRegistry, resultList[1].IsRegistry);
             Assert.AreEqual(myStaff[1].Responsibilities, resultList[1].Responsibilities);
         }
@@ -103,11 +113,11 @@ namespace org.cchmc.pho.unittest.controllertests
         {
             // setup
             var userId = 3;
-            _mockStaffDal.Setup(p => p.ListStaff(userId, "","","")).Throws(new Exception()).Verifiable();
+            _mockStaffDal.Setup(p => p.ListStaff(userId)).Throws(new Exception()).Verifiable();
             _staffController = new StaffController(_mockLogger.Object, _mapper, _mockStaffDal.Object);
 
             // execute
-            var result = await _staffController.ListStaff("", "", "") as ObjectResult;
+            var result = await _staffController.ListStaff() as ObjectResult;
 
             // assert
             Assert.AreEqual(500, result.StatusCode);

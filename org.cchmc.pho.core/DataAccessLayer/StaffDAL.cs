@@ -21,7 +21,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             _connectionStrings = options.Value;
         }
 
-        public async Task<List<Staff>> ListStaff(int userId, string topfilter, string tagfilter, string namesearch)
+        public async Task<List<Staff>> ListStaff(int userId)
         {
             DataTable dataTable = new DataTable();
             List<Staff> staff = new List<Staff>();
@@ -31,29 +31,46 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
-                    sqlCommand.Parameters.Add("@TopFilter", SqlDbType.VarChar).Value = topfilter;
-                    sqlCommand.Parameters.Add("@TagFilter", SqlDbType.VarChar).Value = tagfilter;
-                    sqlCommand.Parameters.Add("@NameSearch", SqlDbType.VarChar).Value = namesearch;
                     sqlConnection.Open();
                     // Define the data adapter and fill the dataset
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
                         da.Fill(dataTable);
-                        staff = (from DataRow dr in dataTable.Rows
-                                 select new Staff()
-                                 {
-                                     Id = (dr["StaffID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StaffID"].ToString())),
-                                     FirstName = dr["FirstName"].ToString(),
-                                     LastName = dr["LastName"].ToString(),
-                                     Email = dr["EmailAddress"].ToString(),
-                                     Phone = dr["Phone"].ToString(),
-                                     PositionId = (dr["PositionId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PositionId"].ToString())),
-                                     CredentialId = (dr["CredentialId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CredentialId"].ToString())),
-                                     IsRegistry = (dr["RegistryYN"] != DBNull.Value && Convert.ToBoolean(dr["RegistryYN"])),
-                                     Responsibilities = dr["Responsibilities"].ToString(),
-                                     LegalDisclaimerSigned = dr["LegalDisclaimerSigned"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LegalDisclaimerSigned"].ToString())                                     
-                                 }
-                        ).ToList();
+                        foreach(DataRow dr in dataTable.Rows)
+                        {
+                            var record = new Staff()
+                            {
+                                Id = (dr["StaffID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StaffID"].ToString())),
+                                FirstName = dr["FirstName"].ToString(),
+                                LastName = dr["LastName"].ToString(),
+                                Email = dr["EmailAddress"].ToString(),
+                                Phone = dr["Phone"].ToString(),
+                                IsRegistry = (dr["RegistryYN"] != DBNull.Value && Convert.ToBoolean(dr["RegistryYN"])),
+                                Responsibilities = dr["Responsibilities"].ToString(),
+                                LegalDisclaimerSigned = dr["LegalDisclaimerSigned"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LegalDisclaimerSigned"].ToString())
+                            };
+                            if (dr["CredentialId"] != DBNull.Value && int.TryParse(dr["CredentialId"].ToString(), out int intCredential))
+                            {
+                                Credential cred = new Credential();
+                                cred.Id = intCredential;
+                                cred.Name = dr["CredentialName"].ToString();
+                                record.Credentials = cred;
+                            }
+                            if (dr["PositionId"] != DBNull.Value && int.TryParse(dr["PositionId"].ToString(), out int intPosition))
+                            {
+                                Position pos = new Position();
+                                pos.Id = intPosition;
+                                pos.Name = dr["Position"].ToString();
+                                record.Position = pos;
+                            }
+                            staff.Add(record);
+                        }
+                        //staff = (from DataRow dr in dataTable.Rows
+                        //         select new Staff()
+                        //         {
+                                 
+                        //         }
+                        //).ToList();
                     }
                     return staff;
                 }
