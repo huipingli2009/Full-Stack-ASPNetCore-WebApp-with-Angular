@@ -8,7 +8,7 @@ namespace org.cchmc.pho.core.Interfaces
 {
     public interface IStaff
     {
-        Task<List<Staff>> ListStaff(int userId, string topfilter, string tagfilter, string namesearch);
+        Task<List<Staff>> ListStaff(int userId);
         Task<StaffDetail> GetStaffDetails(int userId, int staffId);
         Task<StaffDetail> GetStaffDetailsById(int staffId);
         Task<StaffDetail> UpdateStaffDetails(int userId, StaffDetail staffDetail);
@@ -18,5 +18,7 @@ namespace org.cchmc.pho.core.Interfaces
         Task<List<Provider>> ListProviders(int userId);
         bool IsStaffInSamePractice(int userId, int staffId);
         Task<bool> SignLegalDisclaimer(int userId);
+        Task<SelectPractice> GetPracticeList(int userId);
+        Task<bool> SwitchPractice(int userId, int practiceID);
     }
 }

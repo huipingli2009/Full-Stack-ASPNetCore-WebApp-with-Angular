@@ -252,7 +252,7 @@ namespace org.cchmc.pho.api.Controllers
 
             try
             {
-                await _workbooks.UpdateWorkbooksPatientFollowup(userId, wbptfollowup.FormResponseId, wbptfollowup.PatientId, wbptfollowup.ActionPlanGiven, wbptfollowup.ManagedByExternalProvider, wbptfollowup.DateOfLastCommunicationByExternalProvider, wbptfollowup.FollowupPhoneCallOneToTwoWeeks, wbptfollowup.DateOfFollowupCall, wbptfollowup.OneMonthFollowupVisit, wbptfollowup.DateOfOneMonthVisit, wbptfollowup.OneMonthFolllowupPHQ9Score, wbptfollowup.Improvement);
+                await _workbooks.UpdateWorkbooksPatientFollowup(userId, wbptfollowup.FormResponseId, wbptfollowup.PatientId, wbptfollowup.ActionPlanGiven, wbptfollowup.ManagedByExternalProvider, wbptfollowup.DateOfLastCommunicationByExternalProvider, wbptfollowup.FollowupPhoneCallOneToTwoWeeks, wbptfollowup.DateOfFollowupCall, wbptfollowup.OneMonthFollowupVisit, wbptfollowup.DateOfOneMonthVisit, wbptfollowup.OneMonthFolllowupPHQ9Score);
                 return Ok();
             }
             catch (Exception ex)

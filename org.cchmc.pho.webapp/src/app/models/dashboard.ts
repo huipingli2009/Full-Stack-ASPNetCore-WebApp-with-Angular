@@ -7,6 +7,16 @@ export class Alerts {
     linkText: string;
     definition: string;
 }
+
+export interface AlertAction {
+    alertActionId: number;
+}
+
+export enum AlertActionTaken {
+    click = 2,
+    close = 3
+}
+
 export class Spotlight {
     header: string;
     placementOrder: number;

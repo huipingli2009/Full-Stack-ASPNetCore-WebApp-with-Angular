@@ -1,4 +1,5 @@
-export class Patients {
+export interface Patients {
+    resultCount: number;
     patientId: number;
     firstName: string;
     lastName: string;
@@ -16,8 +17,14 @@ export class Patients {
             name: string;
         }
     ]
+    close?: boolean;
 }
-export class PatientDetails {
+export interface PatientClass {
+    resultCount: number;
+    results: Patients[];
+
+}
+export interface PatientDetails {
      id: number;
      patientMRNId: string;
      clarityPatientId: string  ;
@@ -61,5 +68,44 @@ export class PatientDetails {
      lastCCHMCAdmit: Date  ;
      lastHealthBridgeAdmit: Date  ;
      lastDiagnosis: string  ;
-     cchmcAppointment: Date; 
+     cchmcAppointment: Date;
+}
+
+export class Conditions {
+    id: number;
+    name: string;
+    description: string;
+}
+
+export class Providers {
+    id: number;
+    name: string;
+}
+
+export class PopSlices {
+    id: number;
+    label: string;
+}
+
+export class Insurance {
+    id: number;
+    name: string;
+}
+
+export class Gender {
+    id: number;
+    shortName: string;
+    name: string;
+}
+
+export class Pmca {
+    id: number;
+    score: string;
+    description: string;
+}
+
+export class States {
+    id: number;
+    shortName: string;
+    name: string;
 }

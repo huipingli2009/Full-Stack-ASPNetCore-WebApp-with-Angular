@@ -8,9 +8,10 @@ namespace org.cchmc.pho.api.Mappings
     {
         public UserMappings()
         {
-            CreateMap<User, UserViewModel>();
-            CreateMap<UserViewModel, User>()
-                .ForMember(dest => dest.StaffId, action => action.Ignore());
+            CreateMap<User, UserViewModel>()
+                .ForMember(dest => dest.NewPassword, action => action.Ignore())
+                .ForMember(dest => dest.RefreshToken, action => action.Ignore());
+            CreateMap<UserViewModel, User>();
             CreateMap<Role, RoleViewModel>();
             CreateMap<RoleViewModel, Role>();
         }

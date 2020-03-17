@@ -21,7 +21,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             _connectionStrings = options.Value;
         }
 
-        public async Task<List<Staff>> ListStaff(int userId, string topfilter, string tagfilter, string namesearch)
+        public async Task<List<Staff>> ListStaff(int userId)
         {
             DataTable dataTable = new DataTable();
             List<Staff> staff = new List<Staff>();
@@ -31,29 +31,40 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
-                    sqlCommand.Parameters.Add("@TopFilter", SqlDbType.VarChar).Value = topfilter;
-                    sqlCommand.Parameters.Add("@TagFilter", SqlDbType.VarChar).Value = tagfilter;
-                    sqlCommand.Parameters.Add("@NameSearch", SqlDbType.VarChar).Value = namesearch;
                     sqlConnection.Open();
                     // Define the data adapter and fill the dataset
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
                         da.Fill(dataTable);
-                        staff = (from DataRow dr in dataTable.Rows
-                                 select new Staff()
-                                 {
-                                     Id = (dr["StaffID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StaffID"].ToString())),
-                                     FirstName = dr["FirstName"].ToString(),
-                                     LastName = dr["LastName"].ToString(),
-                                     Email = dr["EmailAddress"].ToString(),
-                                     Phone = dr["Phone"].ToString(),
-                                     PositionId = (dr["PositionId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PositionId"].ToString())),
-                                     CredentialId = (dr["CredentialId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CredentialId"].ToString())),
-                                     IsRegistry = (dr["RegistryYN"] != DBNull.Value && Convert.ToBoolean(dr["RegistryYN"])),
-                                     Responsibilities = dr["Responsibilities"].ToString(),
-                                     LegalDisclaimerSigned = dr["LegalDisclaimerSigned"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LegalDisclaimerSigned"].ToString())                                     
-                                 }
-                        ).ToList();
+                        foreach(DataRow dr in dataTable.Rows)
+                        {
+                            var record = new Staff()
+                            {
+                                Id = (dr["StaffID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StaffID"].ToString())),
+                                FirstName = dr["FirstName"].ToString(),
+                                LastName = dr["LastName"].ToString(),
+                                Email = dr["EmailAddress"].ToString(),
+                                Phone = dr["Phone"].ToString(),
+                                IsRegistry = (dr["RegistryYN"] != DBNull.Value && Convert.ToBoolean(dr["RegistryYN"])),
+                                Responsibilities = dr["Responsibilities"].ToString(),
+                                LegalDisclaimerSigned = dr["LegalDisclaimerSigned"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LegalDisclaimerSigned"].ToString())
+                            };
+                            if (dr["CredentialId"] != DBNull.Value && int.TryParse(dr["CredentialId"].ToString(), out int intCredential))
+                            {
+                                Credential cred = new Credential();
+                                cred.Id = intCredential;
+                                cred.Name = dr["CredentialName"].ToString();
+                                record.Credentials = cred;
+                            }
+                            if (dr["PositionId"] != DBNull.Value && int.TryParse(dr["PositionId"].ToString(), out int intPosition))
+                            {
+                                Position pos = new Position();
+                                pos.Id = intPosition;
+                                pos.Name = dr["Position"].ToString();
+                                record.Position = pos;
+                            }
+                            staff.Add(record);
+                        }
                     }
                     return staff;
                 }
@@ -326,5 +337,62 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
-    }
+        public async Task<bool> SwitchPractice(int userId, int practiceID)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spUpdateDefPracticeID", sqlConnection))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@PracticeID", SqlDbType.Int).Value = practiceID;
+                    await sqlConnection.OpenAsync();
+
+                    return (sqlCommand.ExecuteNonQuery() > 0);
+                }
+            }
+        }
+
+        public async Task<SelectPractice> GetPracticeList(int userId)
+        {
+            DataSet practicesDS = new DataSet();
+            SelectPractice selectpractice = new SelectPractice()
+            {
+                PracticeList = new List<Practice>()
+            };
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetPracticeList", sqlConnection))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    await sqlConnection.OpenAsync();
+                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(practicesDS);
+
+                        foreach (DataRow dr in practicesDS.Tables[0].Rows)
+                        {
+                            var practice = new Practice()
+                            {
+                                Id = (dr["ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ID"].ToString())),
+                                Name = dr["PracticeName"].ToString()
+                            };
+                            selectpractice.PracticeList.Add(practice);
+                        }
+
+                        selectpractice.CurrentPracticeId = 51;
+                        if (practicesDS.Tables.Count > 1 && practicesDS.Tables[1].Rows.Count > 0 && practicesDS.Tables[1].Rows[0].ItemArray.Length > 0)
+                        {
+                            if(int.TryParse(practicesDS.Tables[1].Rows[0].ItemArray[0].ToString(), out int result))
+                                selectpractice.CurrentPracticeId = result;
+                        }                                          
+                    }
+                }
+            }
+            return selectpractice;
+        }
+    }   
 }

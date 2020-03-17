@@ -101,6 +101,45 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }   
         }
 
+        public async Task<List<SimplifiedPatient>> SearchSimplifiedPatients(int userId, string search)
+        {
+            DataTable dataTable = new DataTable();
+            List<SimplifiedPatient> searchResults = new List<SimplifiedPatient>();
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetPatientList", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@NameSearch", SqlDbType.VarChar).Value = search;
+
+                    await sqlConnection.OpenAsync();
+
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+
+                        foreach (DataRow dr in dataTable.Rows)
+                        {
+                            var workbookspt = new SimplifiedPatient()
+                            {
+                                PatientId = int.Parse(dr["Id"].ToString()),
+                                LastName = dr["LastName"].ToString(),
+                                FirstName = dr["FirstName"].ToString(),
+                                DOB = (dr["PatientDOB"] == DBNull.Value ? (DateTime?)null : (DateTime.Parse(dr["PatientDOB"].ToString()))),
+                                Phone = dr["Phone1"].ToString()
+                            };
+
+                            searchResults.Add(workbookspt);
+                        }
+                    }
+                }
+            }
+            return searchResults;
+        }
+
         public async Task<PatientDetails> UpdatePatientDetails(int userId, PatientDetails patientDetail)
         {
 
@@ -126,6 +165,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@AddressLine1", SqlDbType.VarChar).Value = patientDetail.AddressLine1;
                     sqlCommand.Parameters.Add("@City", SqlDbType.VarChar).Value = patientDetail.City;
                     sqlCommand.Parameters.Add("@State", SqlDbType.VarChar).Value = patientDetail.State;
+                    sqlCommand.Parameters.Add("@StateID", SqlDbType.Int).Value = patientDetail.StateId;
                     sqlCommand.Parameters.Add("@Zip", SqlDbType.VarChar).Value = patientDetail.Zip;
 
                     await sqlConnection.OpenAsync();
@@ -134,6 +174,26 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.ExecuteNonQuery();
 
                     return await GetPatientDetails(patientDetail.Id);
+
+                }
+            }
+        }
+        public async Task<bool> UpdatePatientWatchlist(int userId, int patientId)
+        {
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spUpdatePatientWatch", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@PatientID", SqlDbType.Int).Value = patientId;
+
+                    await sqlConnection.OpenAsync();
+
+                    //Execute Stored Procedure
+                    
+                    return ((bool)sqlCommand.ExecuteScalar());
 
                 }
             }
@@ -246,6 +306,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 AddressLine1 = dr["AddressLine1"].ToString(),
                                 AddressLine2 = dr["AddressLine2"].ToString(),
                                 City = dr["City"].ToString(),
+                                StateId = (dr["StateID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StateID"].ToString())),
                                 State = dr["State"].ToString(),
                                 Zip = dr["Zip"].ToString(),
                                 Conditions = new List<PatientCondition>(),

@@ -23,7 +23,8 @@ namespace org.cchmc.pho.identity.EntityModels
                 UserName = UserName,
                 IsDeleted = DeletedFlag.GetValueOrDefault(false),
                 IsLockedOut = LockoutFlag.GetValueOrDefault(false),
-                StaffId = StaffId
+                StaffId = StaffId,
+                RefreshToken = RefreshToken
             };
         }
     }
