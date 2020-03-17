@@ -217,7 +217,6 @@ namespace org.cchmc.pho.unittest.controllertests
             Assert.AreEqual(200, okResult.StatusCode);
         }
 
-
         [TestMethod]
         public async Task UpdateStaffDetails_StaffDetailIsNull_Throws400()
         {
