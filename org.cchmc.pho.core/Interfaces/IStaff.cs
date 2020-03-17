@@ -8,7 +8,7 @@ namespace org.cchmc.pho.core.Interfaces
 {
     public interface IStaff
     {
-        Task<List<Staff>> ListStaff(int userId, string topfilter, string tagfilter, string namesearch);
+        Task<List<Staff>> ListStaff(int userId);
         Task<StaffDetail> GetStaffDetails(int userId, int staffId);
         Task<StaffDetail> GetStaffDetailsById(int staffId);
         Task<StaffDetail> UpdateStaffDetails(int userId, StaffDetail staffDetail);
