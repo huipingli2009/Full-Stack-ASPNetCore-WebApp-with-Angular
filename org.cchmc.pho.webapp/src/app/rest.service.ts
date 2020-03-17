@@ -7,7 +7,7 @@ import { environment } from '../environments/environment';
 import { Patients, PatientDetails, Conditions, Providers, PopSlices, Gender, Insurance, Pmca, States } from './models/patients';
 import { NGXLogger } from 'ngx-logger';
 import { Staff, StaffDetails, Responsibilities } from './models/Staff';
-import { Patients, PatientDetails } from './models/patients';
+
 
 
 // we can now access environment.apiUrl

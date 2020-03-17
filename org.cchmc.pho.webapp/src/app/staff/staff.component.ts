@@ -71,7 +71,7 @@ export class StaffComponent implements OnInit {
     this.getPositions();
     this.getCredentials();
     this.getResponsibilities();
-    this.setFilter();
+
   }
 
 
@@ -105,7 +105,17 @@ export class StaffComponent implements OnInit {
       this.staff = data;
       this.dataSourceStaff = new MatTableDataSource(this.staff);
       this.dataSourceStaff.data = this.staff;
-    });
+
+      this.dataSourceStaff.filterPredicate = ((data: Staff, filter): boolean => {
+        const filterValues = JSON.parse(filter);
+
+        return (this.positionFilter ? data.position.name.toString().trim().toLowerCase().indexOf(filterValues.position.toLowerCase()) !== -1 : true)
+          && (this.responsibilityFilter ? data.responsibilities.toString().trim().toLowerCase().indexOf(filterValues.responsibilities.toLowerCase()) !== -1 : true)
+          && ((this.staffNameFilter ? data.firstName.toString().trim().toLowerCase().indexOf(filterValues.StaffName.toLowerCase()) !== -1 : true)
+            || (this.staffNameFilter ? data.lastName.toString().trim().toLowerCase().indexOf(filterValues.StaffName.toLowerCase()) !== -1 : true))
+
+      });
+    })
   }
 
   getStaffDetails(id: number) {
@@ -139,18 +149,6 @@ export class StaffComponent implements OnInit {
     });
   }
 
-  //setting filter predicate for filtering data on different columns of the table
-  setFilter() {
-    this.dataSourceStaff.filterPredicate = ((data: Staff, filter): boolean => {
-      const filterValues = JSON.parse(filter);
-
-      return (this.positionFilter ? data.position.name.toString().trim().toLowerCase().indexOf(filterValues.position.toLowerCase()) !== -1 : true)
-        && (this.responsibilityFilter ? data.responsibilities.toString().trim().toLowerCase().indexOf(filterValues.responsibilities.toLowerCase()) !== -1 : true)
-        && ((this.staffNameFilter ? data.firstName.toString().trim().toLowerCase().indexOf(filterValues.StaffName.toLowerCase()) !== -1 : true)
-          || (this.staffNameFilter ? data.lastName.toString().trim().toLowerCase().indexOf(filterValues.StaffName.toLowerCase()) !== -1 : true))
-
-    })
-  }
 
   // for sorting the  table columns 
   onSortData(sort: Sort) {
