@@ -18,7 +18,7 @@ export class HeaderComponent {
 
     isLoggedIn$: boolean;
 
-    @ViewChild(ToastContainerDirective, { static: true }) toastContainer: ToastContainerDirective;
+    @ViewChild(ToastContainerDirective, { static: false }) toastContainer: ToastContainerDirective;
     error: any;
     title = 'phoweb';
     alerts: Alerts[];
@@ -36,9 +36,12 @@ export class HeaderComponent {
     }
   
     ngOnInit() {
-      this.toastr.overlayContainer = this.toastContainer;
       this.getAlerts(); // TODO: Temp User ID Value
       this.isLoggedIn$ = this.authenticationService.isUserLoggedIn;
+    }
+  
+    ngAfterViewInit() {
+      this.toastr.overlayContainer = this.toastContainer;
     }
   
   
@@ -96,6 +99,7 @@ export class HeaderComponent {
   
     logout() {
       this.authenticationService.logout();
+      this.isLoggedIn$ = false;
       this.router.navigate(['/login']);
   }
 }
