@@ -65,12 +65,6 @@ namespace org.cchmc.pho.core.DataAccessLayer
                             }
                             staff.Add(record);
                         }
-                        //staff = (from DataRow dr in dataTable.Rows
-                        //         select new Staff()
-                        //         {
-                                 
-                        //         }
-                        //).ToList();
                     }
                     return staff;
                 }
