@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 import { Alerts, Population, EdChart, EdChartDetails, Spotlight, Quicklinks } from './models/dashboard';
 import { environment } from '../environments/environment';
-import { Staff } from './models/Staff';
+import { Staff, StaffDetails, Responsibilities } from './models/Staff';
 import { Patients, PatientDetails } from './models/patients';
 
 
@@ -114,6 +114,8 @@ export class RestService {
     );
   }
 
+  /* Staff Component =======================================================*/
+
   /*Get all the staff */
   getStaff(): Observable<any> {
     const endpoint = `${API_URL}/api/staff`;
@@ -123,6 +125,55 @@ export class RestService {
       })
     );
   }
+
+  /*Get specific staff details */
+  getStaffDetails(id: number): Observable<any> {
+    const endpoint = `${API_URL}/api/Staff/${id}`;
+    return this.http.get<StaffDetails>(endpoint).pipe(
+      map((data: StaffDetails) => {
+        return data;
+      })
+    );
+  }
+
+  /*Updates Staff*/
+  updateStaff(StaffDetails): Observable<any> {
+    console.log(JSON.stringify(StaffDetails));
+    return this.http.put<StaffDetails>(`${API_URL}/api/Staff/${StaffDetails.id}`, JSON.stringify(StaffDetails), httpOptions).pipe(
+      catchError(this.handleError<any>('updateStaff'))
+    );
+  }
+
+  /*Get all Credentials */
+  getCredentials(): Observable<any> {
+    const endpoint = `${API_URL}/api/staff/credentials`;
+    return this.http.get<Credential[]>(endpoint).pipe(
+      map((data: Credential[]) => {
+        return data;
+      })
+    );
+  }
+
+  /*Get all Positions */
+  getPositions(): Observable<any> {
+    const endpoint = `${API_URL}/api/staff/positions`;
+    return this.http.get<Position[]>(endpoint).pipe(
+      map((data: Position[]) => {
+        return data;
+      })
+    );
+  }
+
+  /*Get all Responsibilities */
+  getResponsibilities(): Observable<any> {
+    const endpoint = `${API_URL}/api/staff/responsibilities`;
+    return this.http.get<Responsibilities[]>(endpoint).pipe(
+      map((data: Responsibilities[]) => {
+        return data;
+      })
+    );
+  }
+
 
 
 

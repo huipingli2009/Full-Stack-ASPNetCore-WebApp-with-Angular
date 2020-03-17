@@ -538,7 +538,7 @@ h1 {
     }
   }
 
-  #patients {
+  #patients,#staff {
     width: 100%;
     border: solid 1px var(--primary-color);
 
@@ -752,3 +752,138 @@ h1 {
     }
   }
 }
+
+  /* Staff =========================================================================== */
+
+  .staff-header {
+    border-top-right-radius: 7px;
+      border-top-left-radius: 7px;
+    background-color: var(--primary-color);
+    font-size: 15px;
+    line-height: 20px;
+    color: white;
+    padding: 21px 35px 0;
+    font-weight: Bold;
+    text-align: left;
+    letter-spacing: normal;
+    
+    .header-filter {
+      margin-right: 36px;
+    }
+    .mat-form-field-appearance-legacy .mat-form-field-label, .mat-select-value-text {
+      font-size: 15px;
+      line-height: 20px;
+      color: white;
+      font-weight: Bold;
+      letter-spacing: normal;
+    }
+    .mat-select-arrow {
+      color: white;
+    }
+    .mat-form-field-appearance-legacy .mat-form-field-underline {
+      background-color: white;
+    }
+  }
+
+  .icons-white-mail {
+    height: 16px;
+    width: 20px;
+    color: #F0673C;
+  }
+
+  .icons-white-mail-input{
+    height: 8px;
+    width: 10px;
+    color: #F0673C;
+  }
+
+  .responsibility-chip {
+    background-color: var(--purple-light);
+    border-radius: 12.5px;
+    padding: 5px 19px;
+    color: var(--purple-dark);
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: normal;
+    text-align: center;
+    font-weight: 500;
+  }
+
+
+  .staffDetailDivider{
+    height: 200px;
+    width: 2px;
+    background-color: black;
+  }
+
+  .mat-icon
+  {
+    font-size: 150px;
+
+  }
+
+  .green-snackbar
+  {
+    background: var(--tertiary-green);
+    color:white;
+
+.mat-simple-snackbar-action {
+  color: white !important;
+}
+  }
+
+
+  .staff-expanded-row .rotate-icon
+  {
+    -moz-transition: 0.5s;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    -ms-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+  }
+
+  tr.staff-element-row:not(.staff-expanded-row):hover {
+    background: whitesmoke;
+  }
+  
+  tr.staff-element-row:not(.staff-expanded-row):active {
+    background: #efefef;
+  }
+  
+  .staff-element-row td {
+    border-bottom-width: 0;
+  }
+  
+  .staff-element-detail {
+    overflow: hidden;
+    display: flex;
+  }
+  
+  .staff-element-diagram {
+    min-width: 80px;
+    border: 2px solid black;
+    padding: 8px;
+    font-weight: lighter;
+    margin: 8px 0;
+    height: 104px;
+  }
+  
+  .staff-element-symbol {
+    font-weight: bold;
+    font-size: 40px;
+    line-height: normal;
+  }
+  
+  .staff-element-description {
+    padding: 16px;
+  }
+  
+  .staff-element-description-attribution {
+    opacity: 0.5;
+  }
+
+  tr.staff-detail-row {
+    height: 0;
+  }
