@@ -51,7 +51,8 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 Provider = dr["Provider"].ToString(),
                                 DateOfService = (dr["DateOfService"] == DBNull.Value ? (DateTime?)null : (DateTime.Parse(dr["DateOfService"].ToString()))),
                                 PHQ9_Score = dr["PHQ9_Score"].ToString(),
-                                ActionFollowUp = (dr["ActionFollowUp"] != DBNull.Value && Convert.ToBoolean(dr["ActionFollowUp"]))
+                                ActionFollowUp = (dr["ActionFollowUp"] != DBNull.Value && Convert.ToBoolean(dr["ActionFollowUp"])),
+                                Improvement = bool.Parse(dr["Improvement"].ToString())
                             };
 
                             workbookspatients.Add(workbookspt);
@@ -62,7 +63,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             return workbookspatients;
         }
 
-        public async Task<WorkbooksPractice> GetPracticeWorkbooks(int userId, int formResponseId)
+            public async Task<WorkbooksPractice> GetPracticeWorkbooks(int userId, int formResponseId)
         {
             DataTable dataTable = new DataTable();
             WorkbooksPractice workbookpractice;
@@ -245,8 +246,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                                         DateOfFollowupCall = (dr["Date_of_follow_up_call_(optional)"] == DBNull.Value ? (DateTime?)null : (DateTime.Parse(dr["Date_of_follow_up_call_(optional)"].ToString()))),
                                                         OneMonthFollowupVisit = bool.Parse(dr["1_Month_follow_up_visit"].ToString()),
                                                         DateOfOneMonthVisit = (dr["Date_of_1_month_visit_(optional)"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["Date_of_1_month_visit_(optional)"].ToString())),
-                                                        OneMonthFolllowupPHQ9Score = int.Parse(dr["1_Month_follow-up_PHQ-9_Score"].ToString()),
-                                                        Improvement = bool.Parse(dr["Improvement"].ToString())
+                                                        OneMonthFolllowupPHQ9Score = int.Parse(dr["1_Month_follow-up_PHQ-9_Score"].ToString())
                                                     }).SingleOrDefault();
                     }                  
                 }
@@ -254,7 +254,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             return workbookspatientfollowup;
         }
       
-        public async Task<int> UpdateWorkbooksPatientFollowup(int userId, int formResponseId, int patientId, bool actionPlanGiven, bool managedByExternalProvider, DateTime? dateOfLastCommunicationByExternalProvider, bool followupPhoneCallOneToTwoWeeks, DateTime? dateOfFollowupCall, bool oneMonthFollowupVisit, DateTime? dateOfOneMonthVisit, int oneMonthFolllowupPHQ9Score, bool improvement)
+        public async Task<int> UpdateWorkbooksPatientFollowup(int userId, int formResponseId, int patientId, bool actionPlanGiven, bool managedByExternalProvider, DateTime? dateOfLastCommunicationByExternalProvider, bool followupPhoneCallOneToTwoWeeks, DateTime? dateOfFollowupCall, bool oneMonthFollowupVisit, DateTime? dateOfOneMonthVisit, int oneMonthFolllowupPHQ9Score)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
@@ -272,7 +272,6 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@1_Month_follow_up_visit", SqlDbType.Bit).Value = oneMonthFollowupVisit;
                     sqlCommand.Parameters.Add("@Date_of_1_month_visit", SqlDbType.DateTime).Value = dateOfOneMonthVisit;
                     sqlCommand.Parameters.Add("@1_Month_followup_PHQ9_Score", SqlDbType.Int).Value = oneMonthFolllowupPHQ9Score;
-                    sqlCommand.Parameters.Add("@Improvement", SqlDbType.Bit).Value = improvement;
 
                     await sqlConnection.OpenAsync();
 
