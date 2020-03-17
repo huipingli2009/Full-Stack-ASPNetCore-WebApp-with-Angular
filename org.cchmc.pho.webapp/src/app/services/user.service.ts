@@ -8,6 +8,6 @@ export class UserService {
     constructor(private http: HttpClient) { }
 
     getAll() {
-        return this.http.get<User[]>(`${environment.apiURL}/Users`);
+        return this.http.get<User[]>(`${environment.apiURL}/api/Users/16`);
     }
 }

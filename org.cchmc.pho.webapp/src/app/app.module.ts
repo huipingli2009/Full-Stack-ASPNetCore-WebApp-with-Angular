@@ -54,6 +54,7 @@ import { ChartsModule } from 'ng2-charts';
 import { LoginComponent } from './login/login.component';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { ErrorInterceptor } from './helpers/error.interceptor';
+import { HeaderComponent } from './header/header.component';
 
 
 @NgModule({
@@ -65,6 +66,7 @@ import { ErrorInterceptor } from './helpers/error.interceptor';
     StaffComponent,
     FilesComponent,
     WorkbooksComponent,
+    HeaderComponent,
     LoginComponent
   ],
   imports: [
