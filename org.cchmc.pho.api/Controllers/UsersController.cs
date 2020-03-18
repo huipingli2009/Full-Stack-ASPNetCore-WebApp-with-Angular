@@ -167,8 +167,7 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        // TODO: [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
-        [AllowAnonymous]
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [HttpPatch("{userId}/password")] // patch because we're only updating password
         [SwaggerResponse(200, type: typeof(bool))]
         [SwaggerResponse(400, type: typeof(string))]
@@ -309,8 +308,7 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        // TODO: [Authorize(Roles = "Practice Admin,PHO Admin")]
-        [AllowAnonymous]
+        [Authorize(Roles = "Practice Admin,PHO Admin")]
         [HttpPost] // post because we're inserting a new user
         [SwaggerResponse(200, type: typeof(UserViewModel))]
         [SwaggerResponse(400, type: typeof(string))]

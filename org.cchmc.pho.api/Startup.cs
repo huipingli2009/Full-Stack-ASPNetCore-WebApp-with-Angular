@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -79,9 +80,8 @@ namespace org.cchmc.pho.api
 
             services.AddMvc(config =>
                 {
-                    // CJENKINSON - Uncomment out when ready to apply Authorize attributes
-                    //var policy = Configuration.BuildAuthorizationPolicy();
-                    //config.Filters.Add(new AuthorizeFilter(policy));
+                    var policy = Configuration.BuildAuthorizationPolicy();
+                    config.Filters.Add(new AuthorizeFilter(policy));
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddControllersAsServices();
@@ -128,9 +128,8 @@ namespace org.cchmc.pho.api
 
             app.UseRouting();
 
-            // CJENKINSON - Uncomment out when ready to apply Authorize attributes
-            //app.UseAuthentication();
-            //app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
