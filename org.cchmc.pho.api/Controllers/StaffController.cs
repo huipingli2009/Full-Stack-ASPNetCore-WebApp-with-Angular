@@ -33,7 +33,7 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(200, type: typeof(List<StaffViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> ListStaff([FromQuery]string topfilter, [FromQuery]string tagfilter, [FromQuery]string namesearch)
+        public async Task<IActionResult> ListStaff()
         {
             // route parameters are strings and need to be translated (and validated) to their proper data type
             if (!int.TryParse(_DEFAULT_USER, out var userId))
@@ -45,7 +45,7 @@ namespace org.cchmc.pho.api.Controllers
             try
             {
                 // call the data method
-                var data = await _staffDal.ListStaff(userId, topfilter, tagfilter, namesearch);
+                var data = await _staffDal.ListStaff(userId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
                 var result = _mapper.Map<List<StaffViewModel>>(data);
                 // return the result in a "200 OK" response

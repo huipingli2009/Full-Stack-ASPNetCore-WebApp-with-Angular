@@ -10,8 +10,8 @@ namespace org.cchmc.pho.core.DataModels
         public string LastName { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
-        public int PositionId { get; set; }
-        public int CredentialId { get; set; }
+        public Position Position { get; set; }
+        public Credential Credentials { get; set; }
         public bool IsRegistry { get; set; }
         public string Responsibilities { get; set; }
         public DateTime? LegalDisclaimerSigned { get; set; }
