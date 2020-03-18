@@ -14,16 +14,12 @@
         <div fxLayout="column" class="header-filter">
             <mat-form-field>
                 <mat-label>Responsibilities</mat-label>
-                <mat-select [(ngModel)]="responsibilityFilter"
+                <mat-select [formControl]="responsibilityFilter"
                     (selectionChange)="applySelectedFilter('responsibilities','')">
                     <mat-option></mat-option>
                     <mat-option *ngFor="let responsibility of responsibilities" [value]="responsibility.name">
-                        <ng-container *ngIf="responsibility.name =='PHO Board'; else responsibilityelse">
-                            {{responsibility.name}} (All)
-                        </ng-container>
-                        <ng-template #responsibilityelse>
-                            {{responsibility.name}}
-                        </ng-template>
+
+                        {{responsibility.name}}
 
                     </mat-option>
 
@@ -32,7 +28,7 @@
         </div>
         <div fxLayout="column" class="header-filter">
             <mat-form-field appearance="fill">
-                <input matInput [(ngModel)]="staffNameFilter" (keyup)="applySelectedFilter('StaffName','')"
+                <input matInput [formControl]="staffNameFilter" (keyup)="applySelectedFilter('StaffName','')"
                     placeholder="search staff by name">
             </mat-form-field>
         </div>

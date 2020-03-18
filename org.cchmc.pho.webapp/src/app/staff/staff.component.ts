@@ -4,7 +4,7 @@ import { Staff, Responsibilities, StaffDetails } from '../models/Staff'
 import { MatTableDataSource, MatTable } from '@angular/material/table';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { NGXLogger } from 'ngx-logger';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { Sort } from '@angular/material/sort';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -31,15 +31,17 @@ export class StaffComponent implements OnInit {
   credentials: Credential[];
   filterValues: any = {};
   sortedData: Staff[];
-  positionFilter: string;
-  responsibilityFilter: string;
-  staffNameFilter: string;
   responsibilities: Responsibilities[];
   staffDetails: StaffDetails;
   error: any;
   staff: Staff[];
   expandedElement: Staff | null;
   dataSourceStaff: MatTableDataSource<any>;
+
+  responsibilityFilter = new FormControl('');
+  staffNameFilter = new FormControl('');
+  positionFilter = new FormControl('');
+
 
   StaffDetailsForm = this.fb.group({
     id: [''],
@@ -109,10 +111,10 @@ export class StaffComponent implements OnInit {
       this.dataSourceStaff.filterPredicate = ((data: Staff, filter): boolean => {
         const filterValues = JSON.parse(filter);
 
-        return (this.positionFilter ? data.position.name.toString().trim().toLowerCase().indexOf(filterValues.position.toLowerCase()) !== -1 : true)
-          && (this.responsibilityFilter ? data.responsibilities.toString().trim().toLowerCase().indexOf(filterValues.responsibilities.toLowerCase()) !== -1 : true)
-          && ((this.staffNameFilter ? data.firstName.toString().trim().toLowerCase().indexOf(filterValues.StaffName.toLowerCase()) !== -1 : true)
-            || (this.staffNameFilter ? data.lastName.toString().trim().toLowerCase().indexOf(filterValues.StaffName.toLowerCase()) !== -1 : true))
+        return (this.positionFilter.value ? data.position.name.toString().trim().toLowerCase().indexOf(filterValues.position.toLowerCase()) !== -1 : true)
+          && (this.responsibilityFilter.value ? data.responsibilities.toString().trim().toLowerCase().indexOf(filterValues.responsibilities.toLowerCase()) !== -1 : true)
+          && ((this.staffNameFilter.value ? data.firstName.toString().trim().toLowerCase().indexOf(filterValues.StaffName.toLowerCase()) !== -1 : true)
+            || (this.staffNameFilter.value ? data.lastName.toString().trim().toLowerCase().indexOf(filterValues.StaffName.toLowerCase()) !== -1 : true))
 
       });
     })
@@ -153,9 +155,9 @@ export class StaffComponent implements OnInit {
   // for sorting the  table columns 
   onSortData(sort: Sort) {
 
-    this.positionFilter = "";
-    this.staffNameFilter = "";
-    this.responsibilityFilter = "";
+    this.positionFilter.setValue('');
+    this.staffNameFilter.setValue('');
+    this.responsibilityFilter.setValue('');
 
     const data = this.staff.slice();
     if (!sort.active || sort.direction === '') {
@@ -186,22 +188,22 @@ export class StaffComponent implements OnInit {
   //for filtering the table columns 
   applySelectedFilter(column: string, filterValue: string) {
     if (column == 'position') {
-      this.positionFilter = filterValue;
-      this.responsibilityFilter = "";
-      this.staffNameFilter = "";
+      this.positionFilter.setValue(filterValue);
+      this.responsibilityFilter.setValue('');
+      this.staffNameFilter.setValue('');
     }
     if (column == 'responsibilities') {
       filterValue = "";
-      this.positionFilter = "";
-      this.staffNameFilter = "";
-      filterValue = this.responsibilityFilter;
+      this.positionFilter.setValue('');
+      this.staffNameFilter.setValue('');
+      filterValue = this.responsibilityFilter.value;
     }
 
     if (column == 'StaffName') {
       filterValue = "";
-      this.responsibilityFilter = "";
-      this.positionFilter = "";
-      filterValue = this.staffNameFilter;
+      this.responsibilityFilter.setValue('');
+      this.positionFilter.setValue('');
+      filterValue = this.staffNameFilter.value;
     }
 
     this.filterValues[column] = filterValue;
