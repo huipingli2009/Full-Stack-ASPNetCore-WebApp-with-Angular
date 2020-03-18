@@ -105,6 +105,13 @@ export class RestService {
     );
   }
 
+  updateWatchlistStatus(patientID): Observable<any> {
+    return this.http.put(`${API_URL}/api/Patients/watchlist/${patientID}`, httpOptions).pipe(
+      map((data) => {
+        return data;
+      })
+    );
+  }
   /*Find Patients by Query*/
   findPatients(
     sortcolumn = 'name', sortdirection = 'Asc',
@@ -138,8 +145,7 @@ export class RestService {
     console.log('PatientPutInest', JSON.stringify(patient))
     return this.http.put(`${API_URL}/api/Patients/${patientId}`, JSON.stringify(patient), httpOptions).pipe(
       tap(_ => this.snackBar.openSnackBar(`Patient ${patient.firstName} ${patient.lastName} has been updated!`
-      , 'Close', 'success-snackbar')),
-      catchError(this.handleError.bind( this.snackBar.openSnackBar('ERROR', 'Close', 'warn-snackbar')))
+      , 'Close', 'success-snackbar'))
     );
   }
 

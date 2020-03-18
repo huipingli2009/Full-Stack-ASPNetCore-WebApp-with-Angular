@@ -243,6 +243,15 @@ export class PatientsComponent implements OnInit {
     this.loadPatientsWithFilters();
   }
 
+  updateWatchlistStatus(id, index) {
+    this.rest.updateWatchlistStatus(id).subscribe((data) => {
+    });
+  }
+
+  changeWatchFlag(id, index) {
+    this.logger.log(index);
+  }
+
 
   /*Patient Details */
   getPatientDetails(id) {
@@ -282,11 +291,10 @@ export class PatientsComponent implements OnInit {
         phone1: data.phone1,
         addressLine1: data.addressLine1,
         city: data.city,
-        state: data.state + '        ', // This needs to be fixed in the API, the state list is coming back with a huge space
-        // state: {
-        //   id: '',
-        //   shortName: data.state + '        '
-        // }, // Need to pull Tonys change from Dev to fix this space issue
+        state: {
+          id: data.stateId,
+          shortName: data.state
+        },
         zip: data.zip
       };
       this.form.setValue(selectedValues);
@@ -304,6 +312,7 @@ export class PatientsComponent implements OnInit {
     if (valid) {
       this.providerPmcaScoreControl = this.form.controls.providerPMCAScore.value;
       this.providerNotesControl = this.form.controls.providerNotes.value;
+      this.form.controls.providerNotes.setValidators([]);
       this.dialog.closeAll();
     }
 
@@ -336,16 +345,20 @@ export class PatientsComponent implements OnInit {
     this.patientDetails.email = this.form.controls.email.value;
     this.patientDetails.activeStatus = this.form.controls.activeStatus.value;
     this.patientDetails.genderId = this.form.controls.gender.value.id;
-    this.patientDetails.pcpFirstName = this.form.controls.pcpName.value.name.split(' ')[0]; // TODO: Put PCP ID instead
+    this.patientDetails.gender = this.form.controls.gender.value.shortName;
+    this.patientDetails.pcpId = this.form.controls.pcpName.value.id;
+    this.patientDetails.pcpFirstName = this.form.controls.pcpName.value.name.split(' ')[0];
     this.patientDetails.pcpLastName = this.form.controls.pcpName.value.name.split(' ')[1];
-    this.patientDetails.insuranceName = this.form.controls.insuranceName.value.name; // TODO: ID instead
+    this.patientDetails.insuranceId = this.form.controls.insuranceName.value.id;
+    this.patientDetails.insuranceName = this.form.controls.insuranceName.value.name;
     this.patientDetails.conditions = this.form.controls.conditionsControl.value;
     this.patientDetails.providerPMCAScore = Number(this.form.controls.providerPMCAScore.value);
     this.patientDetails.providerNotes = this.form.controls.providerNotes.value;
     this.patientDetails.phone1 = this.form.controls.phone1.value;
     this.patientDetails.addressLine1 = this.form.controls.addressLine1.value;
     this.patientDetails.city = this.form.controls.city.value;
-    this.patientDetails.state = this.form.controls.state.value; // TODO: ID Instead
+    this.patientDetails.stateId = this.form.controls.state.value.id;
+    this.patientDetails.state = this.form.controls.state.value.shortName;
     this.patientDetails.zip = this.form.controls.zip.value;
 
     this.logger.log('inSubmit', this.patientDetails);

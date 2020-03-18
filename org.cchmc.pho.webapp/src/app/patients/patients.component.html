@@ -98,17 +98,12 @@
         <mat-checkbox class="table-header-checkbox" [(ngModel)]="watchFlag" (change)="isOnWatchlist($event)">
         </mat-checkbox>
       </mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <ng-container *ngIf="element.watchFlag; else elseNo">
-          <i class="material-icons watchlist-icon on-watchlist">
+      <mat-cell *matCellDef="let element; let i = renderIndex;" (click)="$event.stopPropagation()" (click)="updateWatchlistStatus(element.patientId, i)" (click)="element.watchFlag = !element.watchFlag">
+        <button mat-icon-button>
+          <i class="material-icons watchlist-icon" [ngClass]="element.watchFlag ? 'on-watchlist' : 'off-watchlist'">
             remove_red_eye
           </i>
-        </ng-container>
-        <ng-template #elseNo>
-          <i class="material-icons watchlist-icon">
-            remove_red_eye
-          </i>
-        </ng-template>
+        </button> 
       </mat-cell>
     </ng-container>
 
@@ -280,16 +275,13 @@
               </div>
               <div fxLayout="column" fxFlex>
                 <label for="state">State</label>
-                <!-- <mat-form-field class="multi-select-override">
+                <mat-form-field class="multi-select-override">
                   <mat-select matNativeControl formControlName="state" [compareWith]="compareShortFn">
                     <mat-option *ngFor="let item of stateList" [value]="item">
                       {{item.shortName}}
                     </mat-option>
                   </mat-select>
-                </mat-form-field> -->
-                <select formControlName="state">
-                  <option *ngFor="let item of stateList" [value]="item.shortName">{{item.shortName}}</option>
-                </select>
+                </mat-form-field>
               </div>
               <div fxLayout="column" fxFlex>
                 <label for="zip">Zip</label>

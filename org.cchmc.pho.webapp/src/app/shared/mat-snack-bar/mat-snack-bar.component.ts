@@ -13,7 +13,7 @@ export class MatSnackBarComponent {
   openSnackBar(message: string, action: string, className: string) {
 
     this.snackBar.open(message, action, {
-      duration: 2000,
+      duration: 5000,
       verticalPosition: 'bottom',
       horizontalPosition: 'center',
       panelClass: [className],

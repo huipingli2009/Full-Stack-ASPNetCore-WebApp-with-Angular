@@ -37,6 +37,7 @@ export interface PatientDetails {
      addressLine1: string  ;
      addressLine2: string  ;
      city: string  ;
+     stateId: number ;
      state: string  ;
      zip: string  ;
      conditions: Array<Conditions>;

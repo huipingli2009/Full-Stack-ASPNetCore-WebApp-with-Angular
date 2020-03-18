@@ -93,6 +93,9 @@ h1 {
 
 .success-snackbar {
   background-color: var(--primary-color);
+  button {
+    color: white;
+  }
 }
 
 .warn-snackbar {
@@ -671,6 +674,9 @@ button.toast-close-button {
     }
     .on-watchlist {
       color: var(--accent-color);
+    }
+    .off-watchlist {
+      color: rgb(226, 225, 225); 
     }
   }
   .condition-chip {
