@@ -76,7 +76,7 @@ namespace org.cchmc.pho.identity
                     return null;
                 }
 
-                Task resetLockoutTask = ResetLockoutAttempts(login);
+                await ResetLockoutAttempts(login);
 
                 var identity = new ClaimsIdentity(IdentityConstants.ApplicationScheme);
                 identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
@@ -94,8 +94,6 @@ namespace org.cchmc.pho.identity
                 // This refresh token will get overwritten if a user logs in with more than one device. Per Brad, this is acceptable.
                 // Refresh tokens are only valid while the token itself is valid, so we don't need a separate refresh token expiration.
                 user.RefreshToken = await GenerateAndWriteRefreshToken(login);
-
-                await resetLockoutTask;
 
                 return user;
             }
