@@ -811,6 +811,7 @@ tr.mat-row {
 
   /* Staff =========================================================================== */
 
+  #staffcomponent{
   .staff-header {
     border-top-right-radius: 7px;
       border-top-left-radius: 7px;
@@ -943,3 +944,4 @@ tr.mat-row {
   tr.staff-detail-row {
     height: 0;
   }
+}
