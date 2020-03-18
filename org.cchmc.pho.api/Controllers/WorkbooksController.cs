@@ -168,8 +168,8 @@ namespace org.cchmc.pho.api.Controllers
 
             try
             {
-                await _workbooks.AddPatientToWorkbooks(userId, workbookspatientVM.FormResponseId, id, workbookspatientVM.ProviderId, workbookspatientVM.DateOfService, int.Parse(workbookspatientVM.PHQ9_Score), workbookspatientVM.ActionFollowUp);
-                return Ok();
+                var result = await _workbooks.AddPatientToWorkbooks(userId, workbookspatientVM.FormResponseId, id, workbookspatientVM.ProviderId, workbookspatientVM.DateOfService, int.Parse(workbookspatientVM.PHQ9_Score), workbookspatientVM.ActionFollowUp);
+                return Ok(result);
             }
             catch (Exception ex)
             {

@@ -34,7 +34,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddMaps(Assembly.GetExecutingAssembly());
-                cfg.AddMaps(Assembly.GetAssembly(typeof(AlertMappings)));
+                cfg.AddMaps(Assembly.GetAssembly(typeof(WorkbooksMappings)));
             });
             _mapper = config.CreateMapper();
             _mockWorkbooksDal = new Mock<IWorkbooks>();
@@ -48,10 +48,11 @@ namespace org.cchmc.pho.unittest.ControllerTests
         [TestMethod]
         public async Task ListPatients_Mapping_Success()
         {
+            // setup  
             var userId = 3;
             var formResponseId = 109;
 
-            var myWorkbooksPatients = new List<WorkbooksPatient>()
+            var myWorkbooksPatients = new List<WorkbooksPatient>
             {
                 new WorkbooksPatient()
                 {
@@ -98,24 +99,24 @@ namespace org.cchmc.pho.unittest.ControllerTests
         [TestMethod]
         public async Task ListPatients_DataLayerThrowsException_ReturnsError()
         {
-            //Arrange
+            // setup  
             var userId = 3;
             var formResponseId = 109;
 
             _mockWorkbooksDal.Setup(s => s.ListPatients(userId,formResponseId)).Throws(new Exception()).Verifiable();
             _workbooksController = new WorkbooksController(_mockLogger.Object, _mapper, _mockWorkbooksDal.Object);
 
-            //Act
+            //execute
             var result = await _workbooksController.ListPatients(formResponseId) as ObjectResult;
 
-            //Assert
+            //assert
             Assert.AreEqual(500, result.StatusCode);
         }
 
         [TestMethod]
         public async Task GetPracticeWorkbooks_Success()
         {
-            //Arrange
+            // setup  
             var userId = 3;
             var formResponseId = 109;
 
@@ -148,7 +149,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
         [TestMethod]
         public async Task GetPracticeWorkbooksProviders_Success()
         {
-            //Arrange
+            // setup  
             var userId = 3;
             var formResponseId = 109;
 
@@ -207,43 +208,42 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.AreEqual(workbooksproviders[2].Provider, resultList[2].Provider);
             Assert.AreEqual(workbooksproviders[2].PHQS, resultList[2].PHQS);
             Assert.AreEqual(workbooksproviders[2].TOTAL, resultList[2].TOTAL);
-        }
+        }       
 
         [TestMethod]
         public async Task AddPatientToWorkbooks_Success()
         {
             //set up
-            var userId = 3;
+            var userId = 3;           
+            var patientId = 10809;
+            int expected = 1;
 
-            var selectedPatient = new WorkbooksPatientViewModel()
+            WorkbooksPatientViewModel selectedPatient = new WorkbooksPatientViewModel()
             {
                 FormResponseId = 109,
                 PatientId = 10809,
                 DOB = DateTime.Parse("2018-03-27"),
                 Phone = "5132536333",
                 Provider = "Theiss",
+                ProviderId = 302,
+                Patient ="Test",
                 DateOfService = DateTime.Parse("2020-03-10"),
                 PHQ9_Score = "10",
                 ActionFollowUp = true
             };
 
-            _mockWorkbooksDal.Setup(s => s.AddPatientToWorkbooks(userId, selectedPatient.FormResponseId, selectedPatient.PatientId, selectedPatient.ProviderId, selectedPatient.DateOfService, int.Parse(selectedPatient.PHQ9_Score), selectedPatient.ActionFollowUp)).Returns(Task.FromResult(1)).Verifiable();
+            _mockWorkbooksDal.Setup(s => s.AddPatientToWorkbooks(userId, selectedPatient.FormResponseId, selectedPatient.PatientId, selectedPatient.ProviderId, selectedPatient.DateOfService, int.Parse(selectedPatient.PHQ9_Score), selectedPatient.ActionFollowUp))
+                             .Returns(Task.FromResult(expected))
+                             .Verifiable();
             _workbooksController = new WorkbooksController(_mockLogger.Object, _mapper, _mockWorkbooksDal.Object);
 
             // execute
-            var result = await _workbooksController.AddPatientToWorkbooks(selectedPatient.FormResponseId, selectedPatient) as ObjectResult;
-            Assert.IsNotNull(result);
-            var resultList = result.Value as WorkbooksPatientViewModel;
+            var result = await _workbooksController.AddPatientToWorkbooks(patientId, selectedPatient) as ObjectResult;
+            var resultvalue = result.Value;
 
             // assert
-            Assert.AreEqual(selectedPatient.FormResponseId, resultList.FormResponseId);
-            Assert.AreEqual(selectedPatient.PatientId, resultList.PatientId);
-            Assert.AreEqual(selectedPatient.DOB, resultList.DOB);
-            Assert.AreEqual(selectedPatient.Phone, resultList.Phone);
-            Assert.AreEqual(selectedPatient.Provider, resultList.Provider);
-            Assert.AreEqual(selectedPatient.PHQ9_Score, resultList.PHQ9_Score);
-            Assert.AreEqual(selectedPatient.DateOfService, resultList.DateOfService);
-            Assert.AreEqual(selectedPatient.ActionFollowUp, resultList.ActionFollowUp);            
+            Assert.IsNotNull(result);
+            Assert.AreEqual(expected, resultvalue);            
         }
     }
 }
