@@ -10,6 +10,7 @@ import { EventEmitter } from 'protractor';
 import { environment } from 'src/environments/environment';
 import { DatePipe } from '@angular/common';
 import { NGXLogger, LoggerConfig } from 'ngx-logger';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -44,9 +45,11 @@ export class DashboardComponent implements OnInit {
   ctx: any;
   edBarChart: any;
   selectedBar: string;
+  isLoggedIn$: boolean;
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
-    public fb: FormBuilder, public dialog: MatDialog, private datePipe: DatePipe, private logger: NGXLogger) {
+    public fb: FormBuilder, public dialog: MatDialog, private datePipe: DatePipe, private logger: NGXLogger,
+    private authenticationService: AuthenticationService) {
     // var id = this.userId.snapshot.paramMap.get('id') TODO: Need User Table;
     this.dataSourceOne = new MatTableDataSource;
     this.dataSourceTwo = new MatTableDataSource;
@@ -56,6 +59,7 @@ export class DashboardComponent implements OnInit {
 
 
   ngOnInit() {
+    this.isLoggedIn$ = this.authenticationService.isUserLoggedIn;
     this.getSpotlight();
     this.getQuicklinks();
     this.getPopulation();

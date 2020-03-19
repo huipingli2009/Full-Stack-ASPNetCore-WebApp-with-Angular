@@ -5,17 +5,22 @@ import { PatientsComponent } from './patients/patients.component';
 import { StaffComponent } from './staff/staff.component';
 import { FilesComponent } from './files/files.component';
 import { WorkbooksComponent } from './workbooks/workbooks.component';
+import { AuthGuard } from './helpers/auth.guard';
+import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [{
   path: 'dashboard',
   component: DashboardComponent,
   data: {
     title: 'Dashboard' // Keeping this as ex. in case we need to use Dynamic switching for menu titles etc.
-  }
+  },
+  canActivate: [AuthGuard]
 },
+{ path: 'login', component: LoginComponent },
 {
   path: 'patients',
   component: PatientsComponent,
+  canActivate: [AuthGuard]
 },
 {
   path: 'staff',
@@ -32,6 +37,7 @@ const routes: Routes = [{
 {
   path: '',
   redirectTo: '/dashboard',
+  canActivate: [AuthGuard],
   pathMatch: 'full'
 },
 {
