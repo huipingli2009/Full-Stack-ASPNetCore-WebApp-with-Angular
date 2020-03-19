@@ -41,11 +41,13 @@ export class HeaderComponent {
       this.subscription = this.authenticationService.isLoggedIn.subscribe(res => {
         this.isLoggedIn$ = res;
         if(this.isLoggedIn$ === true) {
+          this.toastr.overlayContainer = this.toastContainer;
           this.getAlerts();
         }
       });
       this.isLoggedIn$ = this.authenticationService.isUserLoggedIn;
       if(this.isLoggedIn$ === true) {
+        this.toastr.overlayContainer = this.toastContainer;
         this.getAlerts();
       }
       //TODO: ALERTS ARE BROKEN UNLESS YOU REFRESH...I need to figure out why this is not responding to subscription

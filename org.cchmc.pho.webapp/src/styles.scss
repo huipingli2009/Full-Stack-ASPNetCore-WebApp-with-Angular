@@ -87,7 +87,35 @@ h1 {
 .text-purple {
   color: var(--purple-dark);
 }
+.text-warn {
+  color: var(--warn-color);
+}
 
+.success-snackbar {
+  background-color: var(--primary-color);
+  button {
+    color: white;
+  }
+}
+
+.warn-snackbar {
+  background-color: var(--warn-darker-color);
+}
+
+.form-error, .error {
+  color: var(--warn-color);
+  font-weight: 600;
+  letter-spacing: 1px;
+  border-top: var(--warn-color) 1.2px solid;
+}
+
+.entire-form-error {
+  color: var(--warn-color);
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-align: center;
+  margin-top: 16px;
+}
 .content-main {
   margin: 21px 107px 23px;
 }
@@ -660,6 +688,9 @@ button.toast-close-button {
     .on-watchlist {
       color: var(--accent-color);
     }
+    .off-watchlist {
+      color: rgb(226, 225, 225); 
+    }
   }
   .condition-chip {
     background-color: var(--purple-light);
@@ -671,6 +702,9 @@ button.toast-close-button {
     letter-spacing: normal;
     text-align: center;
     font-weight: 500;
+  }
+  tr.mat-row {
+    height: 0 !important;
   }
 }
 /* Patient Expansion Panels*/
@@ -709,16 +743,17 @@ button.toast-close-button {
   -webkit-transform: rotate(90deg);
   transform: rotate(90deg);
 }
+.collapsed-detail {
+  display: contents;
+}
 
 .tr.collapsed-detail {
   height: 0;
 }
-tr.mat-row {
-  height: 0 !important;
-}
+
 /* Patient Details */
 
-#patient-details {
+#patient-details, .pmca-dialog {
   padding: 25px 51px;
 
   .detail-heading {
@@ -741,20 +776,108 @@ tr.mat-row {
 
   input {
     background-color: transparent;
-    border-width: 0px 0px 1.5px 0px;
+    border-width: 0px 0px 1px 0px;
     border-color: #ddecea;
     padding-bottom: 4px;
     color: #4a4a4a;
     font-size: 13px;
     line-height: 18px;
     letter-spacing: normal;
-    max-width: 116px;
+  }
+
+  select {
+    margin-top: 4px;
+    border-width: 0px 0px 1px 0px;
+    border-color: #DDECEA;
+    padding-bottom: 4px;
+    color: #4a4a4a;
+    font-size: 13px;
+    line-height: 18px;
+    letter-spacing: normal;
+  }
+  select {
+    background-image: url(assets/icons/keyboard_arrow_down-24px.svg);
+    background-position: right;
+    background-size: 25px 25px;
+    background-repeat: no-repeat;
+    margin: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+  .multi-select-override {
+    border-width: 0px 0px 1px 0px;
+    border-color: #DDECEA;
+    padding-bottom: 4px;
+    color: #4a4a4a;
+    font-size: 13px;
+    line-height: 18px;
+    letter-spacing: normal;
+    .mat-form-field-infix {
+      border-top: none;
+      padding-top: 0px !important;
+    }
+    .mat-select-trigger {
+      background-image: url(assets/icons/keyboard_arrow_down-24px.svg);
+      background-position: right;
+      background-size: 25px 25px;
+      background-repeat: no-repeat;
+      margin: 0;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+    }
+    .mat-select-arrow {
+      border-left: none;
+      border-right: none;
+    }
+    .mat-form-field-underline {
+      background-color: #DDECEA;
+      bottom: 0;
+    }
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
   }
   .form-row {
     margin-bottom: 16px;
+    color: #4a4a4a;
+    font-size: 13px;
+    line-height: 18px;
+    letter-spacing: normal;
   }
   #addressLine1 {
     min-width: 288px;
+  }
+
+  .edit-dialog {
+    color: var(--accent-color);
+    font-weight: bold;
+    cursor: pointer;
+    .mat-icon {
+      width: 13px;
+      height: 13px;
+      font-size: 13px;
+      margin-left: 7px;
+      vertical-align: text-bottom;
+    }
+  }
+
+  .pmca-dialog-inputs {
+    label {
+      margin-right: 7px;
+      margin-bottom: 16px;
+    }
+    textarea {
+      color: #4a4a4a;
+    font-size: 13px;
+    line-height: 18px;
+    letter-spacing: normal;
+    }
   }
 
   .insurance {
