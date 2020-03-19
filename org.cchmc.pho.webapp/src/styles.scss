@@ -126,6 +126,21 @@ h1 {
     line-height: 18px;
     letter-spacing: normal;
     color: #272624;
+    font-weight: 600;
+    .mat-button {
+      padding: 0;
+    }
+    button {
+      font-size: 12px;
+    line-height: 18px;
+    }
+    button:after {
+      width: 67%;
+      margin: 0 0 0 7px;
+    }
+    span {
+      padding-right: 9px;
+    }
   }
 }
 /* Login ===================================================================================*/
@@ -138,9 +153,10 @@ h1 {
 .login-wrapper .example-full-width,.login-wrapper .btn-block{width:100%;}
 .login-wrapper mat-card-header{text-align:center;width:100%;display:block;font-weight:700;}
 .login-wrapper mat-card-header mat-card-title{font-size:30px;margin:0;}
-.login-wrapper .mat-card{padding:40px 70px 50px;}
+.login-wrapper .mat-card{padding:40px 70px 25px;}
 .login-wrapper .mat-stroked-button{border:1px solid currentColor;line-height:54px;background:#FFF7FA;}
 .login-wrapper .mat-form-field-appearance-legacy .mat-form-field-infix{padding:0.8375em 0;}
+.version-text{text-align: center;padding-top: 25px;color:#989390;}
 
 /* Home Submenu (Dashboard, Patients, Staff, Files, Wookbook */
 .home-submenu {

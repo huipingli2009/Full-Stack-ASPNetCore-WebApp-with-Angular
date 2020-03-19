@@ -4,11 +4,12 @@ import { AuthenticationService } from '../services/authentication.service';
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
 import { Alerts, AlertAction, AlertActionTaken } from '../models/dashboard';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { User } from '../models/user';
+import { User, CurrentUser } from '../models/user';
 import { RestService } from '../rest.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NGXLogger } from 'ngx-logger';
 import { take } from 'rxjs/operators';
+import { UserService } from '../services/user.service';
 
 @Component({
     selector: 'app-header',
@@ -25,11 +26,13 @@ export class HeaderComponent {
     alertAction: AlertAction;
     alertScheduleId: number;
     updateAlert: FormGroup;
-    currentUser: User;
+    currentUser: CurrentUser ;
+    firstName: string;
+    lastName: string;
     subscription: Subscription;
     constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
                 private toastr: ToastrService, public fb: FormBuilder, private logger: NGXLogger,
-                private authenticationService: AuthenticationService) {
+                private authenticationService: AuthenticationService, private userService: UserService) {
       // var id = this.userId.snapshot.paramMap.get('id') TODO: Need User Table;
       this.logger.log('testing the logging in app.component.ts constructor with NGXLogger');
     //   this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
@@ -41,18 +44,31 @@ export class HeaderComponent {
       this.subscription = this.authenticationService.isLoggedIn.subscribe(res => {
         this.isLoggedIn$ = res;
         if(this.isLoggedIn$ === true) {
+          this.logger.log('Hitting this when first logging in ');
           this.getAlerts();
+          this.getCurrentUser();
         }
       });
       this.isLoggedIn$ = this.authenticationService.isUserLoggedIn;
       if(this.isLoggedIn$ === true) {
+        this.logger.log('Hitting this on refrsh', this.currentUser);
         this.getAlerts();
+        this.getCurrentUser();
       }
       //TODO: ALERTS ARE BROKEN UNLESS YOU REFRESH...I need to figure out why this is not responding to subscription
+      // this.currentUser = this.authenticationService.currentUser;
     }
 
     ngAfterViewInit() {
       this.toastr.overlayContainer = this.toastContainer;
+    }
+
+    getCurrentUser() {
+      this.userService.getCurrentUser().subscribe((data) => {
+        this.currentUser = data;
+        this.firstName = data.firstName;
+        this.lastName = data.lastName;
+      });
     }
 
     getAlerts() {
@@ -61,7 +77,6 @@ export class HeaderComponent {
         this.alerts = data;
         if (this.alerts.length > 0) {
           this.alerts.forEach(alert => {
-            this.logger.log(alert)
             const toastrMessage = `<i class="fas fa-exclamation-triangle alert-icon" title="${alert.definition}"></i>
           ${alert.message}<a class="alert-link" href="${alert.url}" target="_blank">${alert.linkText}»</a>`;
 
