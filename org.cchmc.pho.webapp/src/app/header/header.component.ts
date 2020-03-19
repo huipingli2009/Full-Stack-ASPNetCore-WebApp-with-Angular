@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnInit, ViewChild, SimpleChanges } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { AuthenticationService } from '../services/authentication.service';
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
 import { Alerts, AlertAction, AlertActionTaken } from '../models/dashboard';
@@ -26,39 +26,47 @@ export class HeaderComponent {
     alertScheduleId: number;
     updateAlert: FormGroup;
     currentUser: User;
+    subscription: Subscription;
     constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
-      private toastr: ToastrService, public fb: FormBuilder, private logger: NGXLogger,
-       private authenticationService: AuthenticationService) {
+                private toastr: ToastrService, public fb: FormBuilder, private logger: NGXLogger,
+                private authenticationService: AuthenticationService) {
       // var id = this.userId.snapshot.paramMap.get('id') TODO: Need User Table;
-      this.logger.log("testing the logging in app.component.ts constructor with NGXLogger");
+      this.logger.log('testing the logging in app.component.ts constructor with NGXLogger');
     //   this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
-  
+      
+
     }
-  
+
     ngOnInit() {
-      this.getAlerts(); // TODO: Temp User ID Value
+      this.subscription = this.authenticationService.isLoggedIn.subscribe(res => {
+        this.isLoggedIn$ = res;
+        if(this.isLoggedIn$ === true) {
+          this.getAlerts();
+        }
+      });
       this.isLoggedIn$ = this.authenticationService.isUserLoggedIn;
+      if(this.isLoggedIn$ === true) {
+        this.getAlerts();
+      }
+      //TODO: ALERTS ARE BROKEN UNLESS YOU REFRESH...I need to figure out why this is not responding to subscription
     }
-  
+
     ngAfterViewInit() {
       this.toastr.overlayContainer = this.toastContainer;
     }
-  
-  
-  
-  
+
     getAlerts() {
       this.alerts = [];
       this.rest.getAlerts().subscribe((data) => {
         this.alerts = data;
-  
         if (this.alerts.length > 0) {
           this.alerts.forEach(alert => {
-            let toastrMessage = `<i class="fas fa-exclamation-triangle alert-icon" title="${alert.definition}"></i>
+            this.logger.log(alert)
+            const toastrMessage = `<i class="fas fa-exclamation-triangle alert-icon" title="${alert.definition}"></i>
           ${alert.message}<a class="alert-link" href="${alert.url}" target="_blank">${alert.linkText}»</a>`;
-  
-  
-            var activeToastr = this.toastr.success(toastrMessage, alert.alertScheduleId.toString(), {
+
+
+            let activeToastr = this.toastr.success(toastrMessage, alert.alertScheduleId.toString(), {
               closeButton: true,
               disableTimeOut: true,
               enableHtml: true,
@@ -70,14 +78,14 @@ export class HeaderComponent {
             activeToastr.onTap
               .pipe(take(1))
               .subscribe((data) => this.toastrClickHandler(alert.alertScheduleId, alert.url));
-  
+
           });
         }
-  
+
       });
     }
-  
-  
+
+
     toastrCloseHandler(alertScheduleId: number) {
       this.alertAction = { alertActionId: AlertActionTaken.close };
       this.rest.updateAlertActivity(alertScheduleId, this.alertAction).subscribe(res => { },
@@ -85,18 +93,18 @@ export class HeaderComponent {
           this.error = error;
         });
     }
-  
+
     toastrClickHandler(alertScheduleId: number, url: string) {
       this.alertAction = { alertActionId: AlertActionTaken.click };
-      window.open(url, "_blank");
+      window.open(url, '_blank');
       this.rest.updateAlertActivity(alertScheduleId, this.alertAction).subscribe(res => { },
         error => {
           this.error = error;
-        })
-  
-  
+        });
+
+
     }
-  
+
     logout() {
       this.authenticationService.logout();
       this.isLoggedIn$ = false;

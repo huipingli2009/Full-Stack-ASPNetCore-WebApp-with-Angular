@@ -1,4 +1,3 @@
-
 <!-- Main Menu TODO: Add additional pages (Phase 2)-->
 <div fxLayout="row" class="main-menu" *ngIf="isLoggedIn$">
     <div class="logo-col" fxLayout="row" fxFlex="188px" fxLayoutAlign="start end">
@@ -23,5 +22,6 @@
     </div>
   </div>
   <div toastContainer class="alert-container" *ngIf="isLoggedIn$"><span></span></div>
+  <router-outlet></router-outlet>
 
   

@@ -28,9 +28,9 @@ export class AuthenticationService {
                 localStorage.setItem('access_token', res.user.token);
                 this.logger.log('Token', res.user.token);
                 this.logger.log('RESPONSE', res);
-                this.loggedIn.next(!this.loggedIn.value);
                 if (res.user.token !== null) {
                     this.router.navigate(['/dashboard']);
+                    this.loggedIn.next(true);
                 }
             })
     }
@@ -40,7 +40,7 @@ export class AuthenticationService {
     }
 
     get isLoggedIn() {
-        this.logger.log('islogged in', this.loggedIn)
+        this.logger.log('islogged in', this.loggedIn.value)
         return this.loggedIn.asObservable();
     }
 
