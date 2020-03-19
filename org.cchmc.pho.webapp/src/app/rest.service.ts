@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpClientModule, HttpParams } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 import { Alerts, Population, EdChart, EdChartDetails, Spotlight, Quicklinks } from './models/dashboard';
 import { environment } from '../environments/environment';
 import { Patients, PatientDetails, Conditions, Providers, PopSlices, Gender, Insurance, Pmca, States } from './models/patients';
 import { NGXLogger } from 'ngx-logger';
 import { Staff, StaffDetails, Responsibilities } from './models/Staff';
+import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
 
 
 
@@ -25,13 +26,12 @@ const httpOptions = {
 })
 export class RestService {
 
-  constructor(private http: HttpClient, private logger: NGXLogger) {
-
-  }
+  constructor(private http: HttpClient, private logger: NGXLogger, private snackBar: MatSnackBarComponent) { }
   private extractData(res: Response) {
     const body = res;
     return body || {};
   }
+  
   /* Alerts =======================================================*/
 
   /*Gets All Alerts by ID*/
@@ -107,6 +107,13 @@ export class RestService {
     );
   }
 
+  updateWatchlistStatus(patientID): Observable<any> {
+    return this.http.put(`${API_URL}/api/Patients/watchlist/${patientID}`, httpOptions).pipe(
+      map((data) => {
+        return data;
+      })
+    );
+  }
   /*Find Patients by Query*/
   findPatients(
     sortcolumn = 'name', sortdirection = 'Asc',
@@ -126,12 +133,21 @@ export class RestService {
         .set('popmeasureID', popmeasureID)
         .set('namesearch', namesearch)
     }).pipe(
-      map(res => {
+      map(res => {        
         var patientsAndCount: Patients[];
-
+        
         patientsAndCount = res['results'];
         return patientsAndCount;
       })
+    );
+  }
+
+  /*Update Patient Details*/
+  savePatientDetails(patientId, patient): Observable<any> {
+    console.log('PatientPutInest', JSON.stringify(patient))
+    return this.http.put(`${API_URL}/api/Patients/${patientId}`, JSON.stringify(patient), httpOptions).pipe(
+      tap(_ => this.snackBar.openSnackBar(`Patient ${patient.firstName} ${patient.lastName} has been updated!`
+      , 'Close', 'success-snackbar'))
     );
   }
 

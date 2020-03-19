@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NLog;
 using org.cchmc.pho.api.Mappings;
 using org.cchmc.pho.api.Middleware;
 using org.cchmc.pho.core.DataAccessLayer;
@@ -62,6 +64,10 @@ namespace org.cchmc.pho.api
                             return true;
                         }, "Failed to validate connection strings.");
 
+            var defaultConnection = Configuration.GetSection("ConnectionStrings").GetSection("phodb").Value;
+            GlobalDiagnosticsContext.Set("defaultConnection", defaultConnection);
+            var logger = LogManager.LoadConfiguration("nlog.config").GetCurrentClassLogger();
+
             //setting up CORS policy only in the development environment
             if (_environment.IsDevelopment())
             {
@@ -79,9 +85,8 @@ namespace org.cchmc.pho.api
 
             services.AddMvc(config =>
                 {
-                    // CJENKINSON - Uncomment out when ready to apply Authorize attributes
-                    //var policy = Configuration.BuildAuthorizationPolicy();
-                    //config.Filters.Add(new AuthorizeFilter(policy));
+                    var policy = Configuration.BuildAuthorizationPolicy();
+                    config.Filters.Add(new AuthorizeFilter(policy));
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddControllersAsServices();
@@ -128,9 +133,8 @@ namespace org.cchmc.pho.api
 
             app.UseRouting();
 
-            // CJENKINSON - Uncomment out when ready to apply Authorize attributes
-            //app.UseAuthentication();
-            //app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

@@ -4,7 +4,7 @@ import { NgxLoggerLevel, LoggerModule } from 'ngx-logger';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -51,6 +51,11 @@ import { RouterModule } from '@angular/router';
 import { VersionComponent } from './version/version.component';
 import { environment } from 'src/environments/environment';
 import { ChartsModule } from 'ng2-charts';
+import { LoginComponent } from './login/login.component';
+import { JwtInterceptor } from './helpers/jwt.interceptor';
+import { ErrorInterceptor } from './helpers/error.interceptor';
+import { HeaderComponent } from './header/header.component';
+import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
 
 
 @NgModule({
@@ -61,11 +66,15 @@ import { ChartsModule } from 'ng2-charts';
     PatientsComponent,
     StaffComponent,
     FilesComponent,
-    WorkbooksComponent
+    WorkbooksComponent,
+    HeaderComponent,
+        LoginComponent,
+        MatSnackBarComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    RouterModule,
     BrowserAnimationsModule,
     HttpClientModule,
     FlexLayoutModule,
@@ -124,7 +133,8 @@ import { ChartsModule } from 'ng2-charts';
     MatTooltipModule,
     MatTreeModule
   ],
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+      { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }, MatSnackBarComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
