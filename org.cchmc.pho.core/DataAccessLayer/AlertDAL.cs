@@ -49,7 +49,8 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                         Message = dr["AlertMessage"].ToString(),
                                         Url = dr["URL"].ToString(),
                                         LinkText = dr["URL_Label"].ToString(),
-                                        Definition = dr["AlertDefinition"].ToString()
+                                        Definition = dr["AlertDefinition"].ToString(),
+                                        Target = dr["Target"].ToString()
                                     }
 
                             ).ToList();

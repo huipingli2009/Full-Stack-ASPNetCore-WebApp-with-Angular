@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NLog;
 using org.cchmc.pho.api.Mappings;
 using org.cchmc.pho.api.Middleware;
 using org.cchmc.pho.core.DataAccessLayer;
@@ -62,6 +63,10 @@ namespace org.cchmc.pho.api
                         {
                             return true;
                         }, "Failed to validate connection strings.");
+
+            var defaultConnection = Configuration.GetSection("ConnectionStrings").GetSection("phodb").Value;
+            GlobalDiagnosticsContext.Set("defaultConnection", defaultConnection);
+            var logger = LogManager.LoadConfiguration("nlog.config").GetCurrentClassLogger();
 
             //setting up CORS policy only in the development environment
             if (_environment.IsDevelopment())

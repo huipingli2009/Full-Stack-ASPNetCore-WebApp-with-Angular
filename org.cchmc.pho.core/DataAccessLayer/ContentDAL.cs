@@ -85,7 +85,8 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                           PlacementOrder = (dr["PlacementOrder"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PlacementOrder"].ToString())),
                                           Body = dr["Body"].ToString(),
                                           Hyperlink = dr["Hyperlink"].ToString(),
-                                          LocationId = (dr["LocationId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["LocationId"].ToString()))
+                                          LocationId = (dr["LocationId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["LocationId"].ToString())),
+                                          Target = dr["Target"].ToString()
                                       }
 
                           ).ToList();
