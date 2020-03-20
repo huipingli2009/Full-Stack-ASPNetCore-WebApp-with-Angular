@@ -152,12 +152,12 @@ namespace org.cchmc.pho.api.Controllers
                 return StatusCode(500, "An error occurred");
             }
         }
-       
+
         [HttpPost("patients/{id}")]
         [SwaggerResponse(200, type: typeof(string))]
         [SwaggerResponse(400, type: typeof(string))]
-        [SwaggerResponse(500, type: typeof(string))]       
-        public async Task<IActionResult> AddPatientToWorkbooks(int id,[FromBody] WorkbooksPatientViewModel workbookspatientVM)
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> AddPatientToWorkbooks(int id, [FromBody] WorkbooksPatientViewModel workbookspatientVM)
         {
             // route parameters are strings and need to be translated (and validated) to their proper data type
             if (!int.TryParse(_DEFAULT_USER, out var userId))
@@ -168,8 +168,34 @@ namespace org.cchmc.pho.api.Controllers
 
             try
             {
-                await _workbooks.AddPatientToWorkbooks(userId, workbookspatientVM.FormResponseId, id, workbookspatientVM.ProviderId, workbookspatientVM.DateOfService, int.Parse(workbookspatientVM.PHQ9_Score), workbookspatientVM.ActionFollowUp);
-                return Ok();
+                var result = await _workbooks.AddPatientToWorkbooks(userId, workbookspatientVM.FormResponseId, id, workbookspatientVM.ProviderId, workbookspatientVM.DateOfService, int.Parse(workbookspatientVM.PHQ9_Score), workbookspatientVM.ActionFollowUp);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+        [HttpDelete("patients/{id}")]
+        [SwaggerResponse(200, type: typeof(bool))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> DeletePatientFromWorkbooks(int id, [FromBody] WorkbooksPatientViewModel workbookspatientVM)
+        {
+            // route parameters are strings and need to be translated (and validated) to their proper data type
+            if (!int.TryParse(_DEFAULT_USER, out var userId))
+            {
+                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
+                return BadRequest("user is not a valid integer");
+            }
+
+            try
+            {
+                var result = await _workbooks.RemovePatientFromWorkbooks(userId, workbookspatientVM.FormResponseId, id);
+                return Ok(result);
             }
             catch (Exception ex)
             {

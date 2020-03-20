@@ -159,7 +159,8 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@PCPId", SqlDbType.Int).Value = patientDetail.PCPId;
                     sqlCommand.Parameters.Add("@InsuranceId", SqlDbType.Int).Value = patientDetail.InsuranceId;
                     sqlCommand.Parameters.Add("@ConditionIDs", SqlDbType.VarChar).Value = string.Join(",", (from c in patientDetail.Conditions select c.ID).ToArray());
-                    sqlCommand.Parameters.Add("@ProvPMCAScore", SqlDbType.Int).Value = patientDetail.PMCAScore;
+                    sqlCommand.Parameters.Add("@ProvPMCAScore", SqlDbType.Int).Value = patientDetail.ProviderPMCAScore;
+                    sqlCommand.Parameters.Add("@ProviderNotes", SqlDbType.VarChar).Value = patientDetail.ProviderNotes;
                     sqlCommand.Parameters.Add("@Phone1", SqlDbType.VarChar).Value = patientDetail.Phone1;
                     sqlCommand.Parameters.Add("@Email", SqlDbType.VarChar).Value = patientDetail.Email;
                     sqlCommand.Parameters.Add("@AddressLine1", SqlDbType.VarChar).Value = patientDetail.AddressLine1;

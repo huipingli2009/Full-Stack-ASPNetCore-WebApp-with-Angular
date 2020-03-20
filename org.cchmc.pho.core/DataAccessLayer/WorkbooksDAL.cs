@@ -52,7 +52,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 DateOfService = (dr["DateOfService"] == DBNull.Value ? (DateTime?)null : (DateTime.Parse(dr["DateOfService"].ToString()))),
                                 PHQ9_Score = dr["PHQ9_Score"].ToString(),
                                 ActionFollowUp = (dr["ActionFollowUp"] != DBNull.Value && Convert.ToBoolean(dr["ActionFollowUp"])),
-                                Improvement = bool.Parse(dr["Improvement"].ToString())
+                                Improvement = dr["Improvement"].ToString()
                             };
 
                             workbookspatients.Add(workbookspt);
@@ -189,7 +189,26 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     await sqlConnection.OpenAsync();
 
                     //Execute Stored Procedure
-                    return sqlCommand.ExecuteNonQuery();                    
+                    return sqlCommand.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public async Task<bool> RemovePatientFromWorkbooks(int userId, int formResponseId, int patientID)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spRemovePHQ9Workbook_Patient", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@FormResponseId", SqlDbType.Int).Value = formResponseId;
+                    sqlCommand.Parameters.Add("@PatientID", SqlDbType.Int).Value = patientID;
+
+                    await sqlConnection.OpenAsync();
+
+                    //Execute Stored Procedure
+                    return (bool)sqlCommand.ExecuteScalar();
                 }
             }
         }
