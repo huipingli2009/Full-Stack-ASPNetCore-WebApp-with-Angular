@@ -8,5 +8,6 @@
         public string Url { get; set; }
         public string LinkText { get; set; }
         public string Definition { get; set; }
+        public string Target { get; set; }
     }
 }
