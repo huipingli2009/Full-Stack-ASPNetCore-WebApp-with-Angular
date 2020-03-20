@@ -6,7 +6,9 @@ import { Alerts, Population, EdChart, EdChartDetails, Spotlight, Quicklinks } fr
 import { environment } from '../environments/environment';
 import { Patients, PatientDetails, Conditions, Providers, PopSlices, Gender, Insurance, Pmca, States } from './models/patients';
 import { NGXLogger } from 'ngx-logger';
+import { Staff, StaffDetails, Responsibilities } from './models/Staff';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
+
 
 
 // we can now access environment.apiUrl
@@ -186,6 +188,66 @@ export class RestService {
     );
   }
 
+  /* Staff Component =======================================================*/
+
+  /*Get all the staff */
+  getStaff(): Observable<any> {
+    const endpoint = `${API_URL}/api/staff`;
+    return this.http.get<Staff[]>(endpoint).pipe(
+      map((data: Staff[]) => {
+        return data;
+      })
+    );
+  }
+
+  /*Get specific staff details */
+  getStaffDetails(id: number): Observable<any> {
+    const endpoint = `${API_URL}/api/Staff/${id}`;
+    return this.http.get<StaffDetails>(endpoint).pipe(
+      map((data: StaffDetails) => {
+        return data;
+      })
+    );
+  }
+
+  /*Updates Staff*/
+  updateStaff(StaffDetails): Observable<any> {
+    console.log(JSON.stringify(StaffDetails));
+    return this.http.put<StaffDetails>(`${API_URL}/api/Staff/${StaffDetails.id}`, JSON.stringify(StaffDetails), httpOptions).pipe(
+      catchError(this.handleError<any>('updateStaff'))
+    );
+  }
+
+  /*Get all Credentials */
+  getCredentials(): Observable<any> {
+    const endpoint = `${API_URL}/api/staff/credentials`;
+    return this.http.get<Credential[]>(endpoint).pipe(
+      map((data: Credential[]) => {
+        return data;
+      })
+    );
+  }
+
+  /*Get all Positions */
+  getPositions(): Observable<any> {
+    const endpoint = `${API_URL}/api/staff/positions`;
+    return this.http.get<Position[]>(endpoint).pipe(
+      map((data: Position[]) => {
+        return data;
+      })
+    );
+  }
+
+  /*Get all Responsibilities */
+  getResponsibilities(): Observable<any> {
+    const endpoint = `${API_URL}/api/staff/responsibilities`;
+    return this.http.get<Responsibilities[]>(endpoint).pipe(
+      map((data: Responsibilities[]) => {
+        return data;
+      })
+    );
+  }
+
   /* Get Insurance */
   getInsurance(): Observable<any> {
     return this.http.get<any>(`${API_URL}/api/Patients/insurance/`).pipe(
@@ -219,6 +281,8 @@ export class RestService {
       })
     );
   }
+
+
 
 
 
