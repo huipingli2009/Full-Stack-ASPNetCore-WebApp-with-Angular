@@ -5,6 +5,26 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": ".NET Core Launch (web)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/org.cchmc.pho.api/bin/Debug/netcoreapp3.1/org.cchmc.pho.api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        },
+        {
             "type": "chrome",
             "request": "launch",
             "name": "Launch Chrome against localhost",
@@ -33,7 +53,7 @@
 //             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
 //             "serverReadyAction": {
 //                 "action": "openExternally",
-//                 "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"                
+//                 "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
 //             },
 //             "env": {
 //                 "ASPNETCORE_ENVIRONMENT": "Development"

@@ -42,9 +42,11 @@ namespace org.cchmc.pho.api
                 .UseNLog()
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
+                    var env = hostingContext.HostingEnvironment;
                     config.SetBasePath(Directory.GetCurrentDirectory());
 
                     config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: false);
+                    config.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
                     config.AddJsonFile("appsettings.secrets.json", optional: true, reloadOnChange: false);
                     //add efconfig
                     //
