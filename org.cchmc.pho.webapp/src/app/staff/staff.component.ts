@@ -8,6 +8,8 @@ import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { Sort } from '@angular/material/sort';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { CurrentUser } from '../models/user';
+import { UserService } from '../services/user.service';
 
 
 @Component({
@@ -25,6 +27,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class StaffComponent implements OnInit {
   displayedColumns: string[] = ['arrow', 'name', 'email', 'phone', 'position', 'credentials', 'isRegistry', 'responsibilities'];
   positions: Position[];
+  currentUser: CurrentUser;
 
   @ViewChild('table') table: MatTable<Staff>;
 
@@ -63,12 +66,14 @@ export class StaffComponent implements OnInit {
     isRVPIBoard: ['']
   });
 
-  constructor(private rest: RestService, private logger: NGXLogger, private fb: FormBuilder, private datePipe: DatePipe, private _snackBar: MatSnackBar) {
+  constructor(private rest: RestService, private logger: NGXLogger, private fb: FormBuilder, private datePipe: DatePipe,
+    private _snackBar: MatSnackBar, private userService: UserService) {
     this.dataSourceStaff = new MatTableDataSource;
   }
 
 
   ngOnInit(): void {
+    this.getCurrentUser();
     this.getStaff();
     this.getPositions();
     this.getCredentials();
@@ -96,6 +101,13 @@ export class StaffComponent implements OnInit {
     this.rest.getResponsibilities().subscribe((data) => {
       this.responsibilities = data;
     })
+  }
+
+  getCurrentUser() {
+    this.userService.getCurrentUser().subscribe((data) => {
+      this.currentUser = data;
+      this.logger.log('Current User in Staff', this.currentUser); //TODO: Working here
+    });
   }
 
 
