@@ -160,7 +160,7 @@
                                 <div fxLayout="column" fxFlex class="input-w-icon">
                                     <mat-form-field>
                                         <mat-label>Email</mat-label>
-                                        <input matInput id="emailaddress" formControlName="email" name="email">
+                                        <input matInput formControlName="email" name="email">
                                         <mat-icon matPrefix>
                                             email
                                             </mat-icon>
@@ -296,6 +296,7 @@
 
                             </div>
                             <div fxLayout="row" fxLayoutAlign="end end">
+                                <button *ngIf="isUserAdmin" mat-flat-button color="accent">ADMIN CHANGE</button>
                                 <button mat-flat-button color="accent" (click)="updateStaff()">SAVE</button>
                             </div>
                         

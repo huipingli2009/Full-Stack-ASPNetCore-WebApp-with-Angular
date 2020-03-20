@@ -28,6 +28,7 @@ export class StaffComponent implements OnInit {
   displayedColumns: string[] = ['arrow', 'name', 'email', 'phone', 'position', 'credentials', 'isRegistry', 'responsibilities'];
   positions: Position[];
   currentUser: CurrentUser;
+  isUserAdmin: boolean;
 
   @ViewChild('table') table: MatTable<Staff>;
 
@@ -106,6 +107,9 @@ export class StaffComponent implements OnInit {
   getCurrentUser() {
     this.userService.getCurrentUser().subscribe((data) => {
       this.currentUser = data;
+      if(data.role.id === 3) {
+        this.isUserAdmin = true;
+      } else {this.isUserAdmin = false;}
       this.logger.log('Current User in Staff', this.currentUser); //TODO: Working here
     });
   }

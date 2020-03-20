@@ -54,7 +54,7 @@ export interface CurrentUser {
         deactivatedDate: Date;
         deactivatedBy: string;
         role: {
-            id: 0;
+            id: number;
             name: string;
         }
     };
