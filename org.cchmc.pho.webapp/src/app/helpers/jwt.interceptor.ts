@@ -12,14 +12,15 @@ export class JwtInterceptor implements HttpInterceptor {
     constructor(private authenticationService: AuthenticationService) { }
     private refreshTokenInProgress = false;
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
-  token = this.authenticationService.getToken();
+  token;
   defaultUrl = environment.apiURL;
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        // const token = this.authenticationService.getToken();
+        const authToken = this.authenticationService.getToken();
+        this.token = authToken;
         req = req.clone({
             setHeaders: {
-                Authorization: `Bearer ${this.token}`
+                Authorization: `Bearer ${authToken}`
             }
         });
         return next.handle(req)
