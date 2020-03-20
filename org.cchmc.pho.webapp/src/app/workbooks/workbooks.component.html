@@ -1,1 +1,95 @@
-<p>workbooks works!</p>
+<div class="content-main">
+    <div>
+        <mat-label>
+            DEPRESSION WORKBOOK FOR
+        </mat-label>
+
+        <mat-form-field>
+
+            <mat-select [formControl]="selectedFormResponseID" (selectionChange)="onReportingDateSelectionChange()">
+                <mat-label>
+                    select the reporting date
+                </mat-label>
+                <mat-option *ngFor="let reportingdate of workbookReportingMonths"
+                    [value]="reportingdate.formResponseID">
+                    {{reportingdate.reportingMonth}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+    </div>
+    <div class="providerSummary">
+        <ng-container *ngIf="phqsFinal">
+            <div class="ProviderWorkbookSummary ">
+
+                You have completed <b>{{phqsFinal}} </b> of <b>{{totalFinal}}</b> PHO screenings for this period
+            </div>
+            <div class="ProviderWorkbookSummary">
+                For <b>{{totalFinal}}</b> total 12-17 year olds seen for WCC in this reporting period, <b>{{phqsFinal}}
+                </b>
+                had a PHQ Screening during their
+                visit
+            </div>
+        </ng-container>
+    </div>
+    <form [formGroup]="ProvidersForWorkbookForm">
+        <div>
+            <ng-container *ngIf="workbookProviders">
+                <div class=".practice-title">
+                    Patients with a Completed PHQ screen vs. patients seen by doctor:
+                </div>
+                <ng-container formArrayName="ProviderWorkbookArray">
+                    <div fxLayout="row" fxLayoutAlign="space-around center">
+                        <div>
+                            <mat-label>Provider</mat-label>
+                        </div>
+                        <div>
+                            <mat-label>PHQS</mat-label>
+                        </div>
+                        <div>
+                            <mat-label>TOTAL</mat-label>
+                        </div>
+                    </div>
+                    <div *ngFor="let provider of ProviderWorkbookArray.controls;index as i">
+
+
+                        <ng-container [formGroupName]="i">
+                            <div fxLayout="row" fxLayoutAlign="space-around center">
+                                <div>
+                                    <mat-form-field>
+                                        <input matInput formControlName="provider">
+                                    </mat-form-field>
+                                </div>
+                                <div>
+                                    <mat-form-field>
+                                        <input matInput (change)="onProviderWorkbookChange(i)" formControlName="phqs">
+                                    </mat-form-field>
+                                </div>
+                                <div>
+                                    <mat-form-field>
+                                        <input matInput (change)="onProviderWorkbookChange(i)" formControlName="total">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+
+                        </ng-container>
+                    </div>
+                </ng-container>
+
+                <!-- <button mat-button color="accent" (click)="updateWorkbookProviders()">Save</button> -->
+
+            </ng-container>
+        </div>
+    </form>
+</div>
+
+<!-- <mat-list>
+    <mat-list-item *ngFor="let workbookProvider of workbookProviders">
+        <h3 matLine>{{workbookProvider.provider}} </h3>
+        <input matInput [value]="workbookProvider.phqs">
+        <input matInput [value]="workbookProvider.total">
+    </mat-list-item>
+</mat-list> -->
+
+{{ProvidersForWorkbookForm.value | json}}

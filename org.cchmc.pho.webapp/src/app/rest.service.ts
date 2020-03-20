@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpClientModule, HttpParams } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable, of, observable } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 import { Alerts, Population, EdChart, EdChartDetails, Spotlight, Quicklinks } from './models/dashboard';
 import { environment } from '../environments/environment';
 import { Patients, PatientDetails, Conditions, Providers, PopSlices, Gender, Insurance, Pmca, States } from './models/patients';
 import { NGXLogger } from 'ngx-logger';
+import { WorkbookReportingMonths, WorkbookProvider, WorkbookPatient } from './models/workbook';
+import { URLSearchParams } from 'url';
 
 
 // we can now access environment.apiUrl
@@ -205,7 +207,47 @@ export class RestService {
   }
 
 
+  /* Workbook Component =======================================================*/
 
+  /* for getting the reporting month and form response ID */
+  getWorkbookReportingMonths(): Observable<any> {
+    return this.http.get<WorkbookReportingMonths[]>(`${API_URL}/api/Workbooks/lookups`).pipe(
+      map((data: WorkbookReportingMonths[]) => {
+        return data;
+      })
+    );
+  }
+
+  /* for getting providers for Depression workbook for a spefic reporting date*/
+
+  getWorkbookProviders(formResponseid: number): Observable<any> {
+    let paramsValue = new HttpParams();
+    paramsValue = paramsValue.append("formResponseId", formResponseid.toString());
+    return this.http.get<WorkbookProvider[]>(`${API_URL}/api/Workbooks/providers`, { params: paramsValue }).pipe(
+      map((data: WorkbookProvider[]) => {
+        return data;
+      })
+    );
+  }
+
+  /*Update workbook for Staff*/
+  updateWorkbookForProvider(WorkbookProvider: WorkbookProvider): Observable<any> {
+    console.log(JSON.stringify(WorkbookProvider));
+    return this.http.put(`${API_URL}/api/Workbooks/provider/${WorkbookProvider.staffID}`, JSON.stringify(WorkbookProvider), httpOptions).pipe(
+      catchError(this.handleError<any>('update staff workbook'))
+    );
+  }
+
+  /* for getting the patients for a form response ID */
+  getWorkbookPatients(formResponseid: number): Observable<any> {
+    let paramsValue = new HttpParams();
+    paramsValue = paramsValue.append("formResponseId", formResponseid.toString());
+    return this.http.get<WorkbookProvider[]>(`${API_URL}/api/Workbooks/patients`, { params: paramsValue }).pipe(
+      map((data: WorkbookProvider[]) => {
+        return data;
+      })
+    );
+  }
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
 
@@ -220,3 +262,6 @@ export class RestService {
     };
   }
 }
+
+
+
