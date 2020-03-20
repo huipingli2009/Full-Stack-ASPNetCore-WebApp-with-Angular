@@ -8,6 +8,7 @@ using org.cchmc.pho.api.ViewModels;
 using org.cchmc.pho.core.DataModels;
 using org.cchmc.pho.core.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace org.cchmc.pho.api.Controllers
 {
@@ -30,6 +31,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         // GET: api/Workbooks
+        [AllowAnonymous]
         [HttpGet("patients")]
         [SwaggerResponse(200, type: typeof(List<WorkbooksPatientViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
