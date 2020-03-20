@@ -52,7 +52,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 DateOfService = (dr["DateOfService"] == DBNull.Value ? (DateTime?)null : (DateTime.Parse(dr["DateOfService"].ToString()))),
                                 PHQ9_Score = dr["PHQ9_Score"].ToString(),
                                 ActionFollowUp = (dr["ActionFollowUp"] != DBNull.Value && Convert.ToBoolean(dr["ActionFollowUp"])),
-                                Improvement = bool.Parse(dr["Improvement"].ToString())
+                                Improvement = dr["Improvement"].ToString()
                             };
 
                             workbookspatients.Add(workbookspt);
