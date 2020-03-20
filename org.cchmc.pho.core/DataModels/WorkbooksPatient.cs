@@ -14,6 +14,6 @@ namespace org.cchmc.pho.core.DataModels
         public DateTime? DateOfService { get; set; }
         public string PHQ9_Score { get; set; }        
         public bool ActionFollowUp { get; set; }
-        public bool Improvement { get; set; }
+        public string Improvement { get; set; }
     }
 }
