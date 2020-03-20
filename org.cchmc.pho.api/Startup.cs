@@ -141,11 +141,16 @@ namespace org.cchmc.pho.api
                 endpoints.MapControllers();
             });
 
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("v1/swagger.json", "PHO API v1");
-            });
+
+            //NOTE : using appsettings to enable/disable swagger, would like to dig into this a little more on the proper way to do
+            bool.TryParse(Configuration["UseSwagger"], out bool useSwagger);
+            if(useSwagger){
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("v1/swagger.json", "PHO API v1");
+                });
+            }
 
             var config = new MapperConfiguration(cfg =>
             {
