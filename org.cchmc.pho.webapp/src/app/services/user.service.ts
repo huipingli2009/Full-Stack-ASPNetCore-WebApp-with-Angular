@@ -43,13 +43,6 @@ export class UserService {
               catchError(this.handleError<any>('UserCreationError'))
             );
           }
-          // savePatientDetails(patientId, patient): Observable<any> {
-          //   console.log('PatientPutInest', JSON.stringify(patient))
-          //   return this.http.put(`${API_URL}/api/Patients/${patientId}`, JSON.stringify(patient), httpOptions).pipe(
-          //     tap(_ => this.snackBar.openSnackBar(`Patient ${patient.firstName} ${patient.lastName} has been updated!`
-          //     , 'Close', 'success-snackbar'))
-          //   );
-          // }
 
           private handleError<T>(operation = 'operation', result?: T) {
             return (error: any): Observable<T> => {

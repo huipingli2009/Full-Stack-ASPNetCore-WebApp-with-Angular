@@ -70,26 +70,6 @@ export class StaffComponent implements OnInit {
     isRVPIBoard: ['']
   });
 
-  // AdminPortalForm = this.fb.group({
-  //   id: [''],
-  //   firstName: [''],
-  //   lastName: [''],
-  //   email: ['', [Validators.required, Validators.email]],
-  //   phone: ['', Validators.required],
-  //   startDate: ['', Validators.required],
-  //   positionId: ['', Validators.required],
-  //   credentialId: ['', Validators.required],
-  //   npi: ['', Validators.required],
-  //   isLeadPhysician: [''],
-  //   isQITeam: [''],
-  //   isPracticeManager: [''],
-  //   isInterventionContact: [''],
-  //   isQPLLeader: [''],
-  //   isPHOBoard: [''],
-  //   isOVPCABoard: [''],
-  //   isRVPIBoard: ['']
-  // });
-
   constructor(private rest: RestService, private logger: NGXLogger, private fb: FormBuilder, private datePipe: DatePipe,
     private _snackBar: MatSnackBar, private userService: UserService, public dialog: MatDialog) {
     this.dataSourceStaff = new MatTableDataSource;
@@ -102,7 +82,7 @@ export class StaffComponent implements OnInit {
     this.getPositions();
     this.getCredentials();
     this.getResponsibilities();
-    // this.getAdminVerbiage();
+    // this.getAdminVerbiage(); // WIP Ignore this for now
 
   }
 
@@ -302,10 +282,6 @@ export class StaffComponent implements OnInit {
     const dialogRef = this.dialog.open(this.adminDialog, { disableClose: true });
   }
   cancelAdminDialog() {
-    // this.form.controls.providerNotes.setValidators([]);
-    // this.form.controls.providerNotes.updateValueAndValidity();
-    // this.form.controls.providerPMCAScore.setValue(this.providerPmcaScoreControl);
-    // this.form.controls.providerNotes.setValue(this.providerNotesControl);
     this.dialog.closeAll();
   }
 
