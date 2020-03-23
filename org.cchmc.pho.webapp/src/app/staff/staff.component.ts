@@ -152,7 +152,7 @@ export class StaffComponent implements OnInit {
           id: 7,
           name: 'ESD Pediatric Group'
       }
-      });
+      }); // Remove this. Trying a temp fix.
       this.logger.log('STAFF', this.staff);
 
       this.dataSourceStaff.filterPredicate = ((data: Staff, filter): boolean => {
