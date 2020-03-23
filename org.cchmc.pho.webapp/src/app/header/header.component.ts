@@ -51,6 +51,7 @@ export class HeaderComponent {
         this.getAlerts();
       }
       //TODO: ALERTS ARE BROKEN UNLESS YOU REFRESH...I need to figure out why this is not responding to subscription
+      this.getPracticeList();
     }
 
     ngAfterViewInit() {
