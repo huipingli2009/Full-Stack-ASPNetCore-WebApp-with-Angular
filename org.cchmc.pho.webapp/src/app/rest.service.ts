@@ -6,7 +6,7 @@ import { Alerts, Population, EdChart, EdChartDetails, Spotlight, Quicklinks } fr
 import { environment } from '../environments/environment';
 import { Patients, PatientDetails, Conditions, Providers, PopSlices, Gender, Insurance, Pmca, States } from './models/patients';
 import { NGXLogger } from 'ngx-logger';
-import { Staff, StaffDetails, Responsibilities } from './models/Staff';
+import { Staff, StaffDetails, Responsibilities, PracticeList } from './models/Staff';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
 
 
@@ -282,7 +282,14 @@ export class RestService {
     );
   }
 
-
+  /* Practice Switch =======================================================*/
+  getPracticeList(): Observable<any> {
+    return this.http.get<any>(`${API_URL}/api/Staff/practicelist/`).pipe(
+      map((data: PracticeList[]) => {
+        return data;
+      })
+    );
+  }
 
 
 

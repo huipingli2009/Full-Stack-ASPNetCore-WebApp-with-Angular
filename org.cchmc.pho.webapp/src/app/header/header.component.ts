@@ -112,4 +112,11 @@ export class HeaderComponent {
       this.isLoggedIn$ = false;
       this.router.navigate(['/login']);
   }
+
+  // Practice Switch -------------------------------
+  getPracticeList() {
+    this.rest.getPracticeList().subscribe(data => {
+      this.logger.log('Practice List', data); // Working here
+    })
+  }
 }
