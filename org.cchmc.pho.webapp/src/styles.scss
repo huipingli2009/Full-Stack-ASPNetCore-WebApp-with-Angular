@@ -197,7 +197,65 @@ h1 {
 }
 
 /* Dashboard =========================================================================== */
-
+/* Practice Selection */
+.practice-select {
+  border-width: 0px 0px 1px 0px;
+  border-color: #DDECEA;
+  padding-bottom: 0;
+  width: auto !important;
+  margin-bottom: -10px;
+  vertical-align: bottom;
+  .mat-select {
+    font-family: 'ArcherSemiBold';
+  font-size: 26px;
+  line-height: 18px;
+  letter-spacing: normal;
+  }
+  .mat-select-value {
+    max-width: 100%;
+    width: auto;
+    padding-right: 22px;
+}  
+.mat-select-value-text {
+  color: var(--primary-color);
+}
+  .mat-form-field-infix {
+    border-top: none;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+  }
+  .mat-select-trigger {
+    background-image: url(assets/icons/practice-select-arrow.svg);
+    background-position: right -3px;
+    background-size: 32px 32px;
+    background-repeat: no-repeat;
+    margin: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+  .mat-select-arrow {
+    border-left: none;
+    border-right: none;
+  }
+  .mat-form-field-underline {
+    display: none;
+    bottom: 0;
+  }
+  .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+}
+.mat-select-panel {
+  max-width: 100% !important;
+}
+.practice-select-text {
+  .mat-option-text {
+    font-size: 16px;
+  }
+}
 /* Dashboard - Alerts*/
 .toast-container {
   margin: 0px 107px 23px;

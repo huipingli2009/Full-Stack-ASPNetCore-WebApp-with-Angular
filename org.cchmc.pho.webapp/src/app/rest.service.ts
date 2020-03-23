@@ -291,6 +291,14 @@ export class RestService {
     );
   }
 
+  switchPractice(staffWithPractice): Observable<any> {
+    console.log('staff with practice', JSON.stringify(staffWithPractice));
+    return this.http.put(`${API_URL}/api/Staff/switchpractice`, JSON.stringify(staffWithPractice), httpOptions).pipe(
+      tap(_ => this.snackBar.openSnackBar(`Current Practice Switched!`
+      , 'Close', 'success-snackbar'))
+    );
+  }
+
 
 
   private handleError<T>(operation = 'operation', result?: T) {
