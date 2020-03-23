@@ -89,7 +89,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("verbiage")]
+        [HttpGet("verbiage")]
         [SwaggerResponse(200, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> PasswordVerbiage()
@@ -118,23 +118,20 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
-        [HttpGet("{userId}")] // put because we're getting a specific user
+        [HttpGet("{staffId}")] // put because we're getting a specific user
         [SwaggerResponse(200, type: typeof(UserViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(401, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> GetUser(int userId)
+        public async Task<IActionResult> GetUser(int staffId)
         {
             try
             {
                 // validate the user provided is a user
-                User user = await _userService.GetUser(userId);
+                User user = await _userService.GetUserByStaffId(staffId);
                 string currentUserName = _userService.GetUserNameFromClaims(User?.Claims);
                 if (user == null)
-                {
-                    _logger.LogInformation($"{currentUserName} tried to access user id {userId}, but that user does not exist.");
                     return BadRequest("User does not exist.");
-                }
 
                 string currentUserRole = _userService.GetRoleNameFromClaims(User?.Claims);
                 // if we're getting a different user, check some additional rules based on roles
@@ -152,7 +149,7 @@ namespace org.cchmc.pho.api.Controllers
                         int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
                         if (!_staff.IsStaffInSamePractice(currentUserId, user.StaffId))
                         {
-                            _logger.LogInformation($"{currentUserName} tried to get info for user id {userId}, but the caller is in another practice.");
+                            _logger.LogInformation($"{currentUserName} tried to get info for staff id {staffId}, but the caller is in another practice.");
                             return BadRequest("Cannot get users in another practice.");
                         }
                     }

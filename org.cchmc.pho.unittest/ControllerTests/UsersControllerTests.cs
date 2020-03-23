@@ -1375,11 +1375,11 @@ namespace org.cchmc.pho.unittest.ControllerTests
         {
             string currentUserName = _user.UserName;
             string currentRole = "Practice Member";
-            _mockUserService.Setup(p => p.GetUser(_user.Id)).Returns(Task.FromResult(_user)).Verifiable();
+            _mockUserService.Setup(p => p.GetUserByStaffId(_user.StaffId)).Returns(Task.FromResult(_user)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(currentUserName).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(currentRole).Verifiable();
 
-            var result = await _userController.GetUser(_user.Id) as ObjectResult;
+            var result = await _userController.GetUser(_user.StaffId) as ObjectResult;
 
             // assert
             Assert.IsNotNull(result);
@@ -1395,11 +1395,11 @@ namespace org.cchmc.pho.unittest.ControllerTests
         {
             string currentUserName = _user.UserName;
             string currentRole = "Practice Admin";
-            _mockUserService.Setup(p => p.GetUser(_user.Id)).Returns(Task.FromResult(_user)).Verifiable();
+            _mockUserService.Setup(p => p.GetUserByStaffId(_user.StaffId)).Returns(Task.FromResult(_user)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(currentUserName).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(currentRole).Verifiable();
 
-            var result = await _userController.GetUser(_user.Id) as ObjectResult;
+            var result = await _userController.GetUser(_user.StaffId) as ObjectResult;
 
             // assert
             Assert.IsNotNull(result);
@@ -1416,12 +1416,13 @@ namespace org.cchmc.pho.unittest.ControllerTests
             string currentUserName = "ASDF";
             string currentRole = "Practice Admin";
             int currentUserId = 999;
-            _mockUserService.Setup(p => p.GetUser(_user.Id)).Returns(Task.FromResult(_user)).Verifiable();
+            _mockUserService.Setup(p => p.GetUserByStaffId(_user.StaffId)).Returns(Task.FromResult(_user)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(currentUserName).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(currentRole).Verifiable();
             _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(currentUserId).Verifiable();
             _mockStaff.Setup(p => p.IsStaffInSamePractice(currentUserId, _user.StaffId)).Returns(true).Verifiable();
-            var result = await _userController.GetUser(_user.Id) as ObjectResult;
+            
+            var result = await _userController.GetUser(_user.StaffId) as ObjectResult;
 
             // assert
             Assert.IsNotNull(result);
@@ -1437,11 +1438,11 @@ namespace org.cchmc.pho.unittest.ControllerTests
         {
             string currentUserName = _user.UserName;
             string currentRole = "PHO Member";
-            _mockUserService.Setup(p => p.GetUser(_user.Id)).Returns(Task.FromResult(_user)).Verifiable();
+            _mockUserService.Setup(p => p.GetUserByStaffId(_user.StaffId)).Returns(Task.FromResult(_user)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(currentUserName).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(currentRole).Verifiable();
 
-            var result = await _userController.GetUser(_user.Id) as ObjectResult;
+            var result = await _userController.GetUser(_user.StaffId) as ObjectResult;
 
             // assert
             Assert.IsNotNull(result);
@@ -1457,11 +1458,11 @@ namespace org.cchmc.pho.unittest.ControllerTests
         {
             string currentUserName = _user.UserName;
             string currentRole = "PHO Admin";
-            _mockUserService.Setup(p => p.GetUser(_user.Id)).Returns(Task.FromResult(_user)).Verifiable();
+            _mockUserService.Setup(p => p.GetUserByStaffId(_user.StaffId)).Returns(Task.FromResult(_user)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(currentUserName).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(currentRole).Verifiable();
 
-            var result = await _userController.GetUser(_user.Id) as ObjectResult;
+            var result = await _userController.GetUser(_user.StaffId) as ObjectResult;
 
             // assert
             Assert.IsNotNull(result);
@@ -1477,10 +1478,11 @@ namespace org.cchmc.pho.unittest.ControllerTests
         {
             string currentUserName = "ASDF";
             string currentRole = "PHO Admin";
-            _mockUserService.Setup(p => p.GetUser(_user.Id)).Returns(Task.FromResult(_user)).Verifiable();
+            _mockUserService.Setup(p => p.GetUserByStaffId(_user.StaffId)).Returns(Task.FromResult(_user)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(currentUserName).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(currentRole).Verifiable();
-            var result = await _userController.GetUser(_user.Id) as ObjectResult;
+            
+            var result = await _userController.GetUser(_user.StaffId) as ObjectResult;
 
             // assert
             Assert.IsNotNull(result);
@@ -1494,9 +1496,9 @@ namespace org.cchmc.pho.unittest.ControllerTests
         [TestMethod]
         public async Task GetUser_UserDoesNotExist_400()
         {
-            _mockUserService.Setup(p => p.GetUser(_user.Id)).Returns(Task.FromResult((User)null)).Verifiable();
+            _mockUserService.Setup(p => p.GetUserByStaffId(_user.StaffId)).Returns(Task.FromResult((User)null)).Verifiable();
             
-            var result = await _userController.GetUser(_user.Id) as ObjectResult;
+            var result = await _userController.GetUser(_user.StaffId) as ObjectResult;
 
             // assert
             Assert.IsNotNull(result);
@@ -1509,11 +1511,11 @@ namespace org.cchmc.pho.unittest.ControllerTests
         {
             string currentUserName = "ASDF";
             string currentRole = "Practice Member";
-            _mockUserService.Setup(p => p.GetUser(_user.Id)).Returns(Task.FromResult(_user)).Verifiable();
+            _mockUserService.Setup(p => p.GetUserByStaffId(_user.StaffId)).Returns(Task.FromResult(_user)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(currentUserName).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(currentRole).Verifiable();
             
-            var result = await _userController.GetUser(_user.Id) as ObjectResult;
+            var result = await _userController.GetUser(_user.StaffId) as ObjectResult;
 
             // assert
             Assert.IsNotNull(result);
@@ -1527,13 +1529,13 @@ namespace org.cchmc.pho.unittest.ControllerTests
             string currentUserName = "ASDF";
             string currentRole = "Practice Admin";
             int currentUserId = 999;
-            _mockUserService.Setup(p => p.GetUser(_user.Id)).Returns(Task.FromResult(_user)).Verifiable();
+            _mockUserService.Setup(p => p.GetUserByStaffId(_user.StaffId)).Returns(Task.FromResult(_user)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(currentUserName).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(currentRole).Verifiable();
             _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(currentUserId).Verifiable();
             _mockStaff.Setup(p => p.IsStaffInSamePractice(currentUserId, _user.StaffId)).Returns(false).Verifiable();
 
-            var result = await _userController.GetUser(_user.Id) as ObjectResult;
+            var result = await _userController.GetUser(_user.StaffId) as ObjectResult;
 
             // assert
             Assert.IsNotNull(result);
@@ -1546,11 +1548,11 @@ namespace org.cchmc.pho.unittest.ControllerTests
         {
             string currentUserName = "ASDF";
             string currentRole = "PHO Member";
-            _mockUserService.Setup(p => p.GetUser(_user.Id)).Returns(Task.FromResult(_user)).Verifiable();
+            _mockUserService.Setup(p => p.GetUserByStaffId(_user.StaffId)).Returns(Task.FromResult(_user)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(currentUserName).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(currentRole).Verifiable();
             
-            var result = await _userController.GetUser(_user.Id) as ObjectResult;
+            var result = await _userController.GetUser(_user.StaffId) as ObjectResult;
 
             // assert
             Assert.IsNotNull(result);
@@ -1561,9 +1563,9 @@ namespace org.cchmc.pho.unittest.ControllerTests
         [TestMethod]
         public async Task GetUser_CatchesException_500()
         {
-            _mockUserService.Setup(p => p.GetUser(_user.Id)).Throws(new Exception()).Verifiable();
+            _mockUserService.Setup(p => p.GetUserByStaffId(_user.StaffId)).Throws(new Exception()).Verifiable();
 
-            var result = await _userController.GetUser(_user.Id) as ObjectResult;
+            var result = await _userController.GetUser(_user.StaffId) as ObjectResult;
 
             // assert
             Assert.IsNotNull(result);
