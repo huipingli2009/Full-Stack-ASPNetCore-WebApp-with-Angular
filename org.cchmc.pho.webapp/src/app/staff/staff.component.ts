@@ -127,12 +127,6 @@ export class StaffComponent implements OnInit {
       this.staff = data;
       this.dataSourceStaff = new MatTableDataSource(this.staff);
       this.dataSourceStaff.data = this.staff;
-      this.staff.forEach(element => {
-        element.myPractice =  {
-          id: 7,
-          name: 'ESD Pediatric Group'
-      }
-      }); // Remove this. Trying a temp fix.
       this.logger.log('STAFF', this.staff);
 
       this.dataSourceStaff.filterPredicate = ((data: Staff, filter): boolean => {
@@ -159,7 +153,7 @@ export class StaffComponent implements OnInit {
 
   getStaffUser(id: number) {
     this.userService.getUserStaff(id).subscribe((data) => {
-      this.logger.log(data);
+      this.logger.log(data, 'Got Staff user');
     },
     error => { this.logger.log(error, 'error'); this.error = error; });
     

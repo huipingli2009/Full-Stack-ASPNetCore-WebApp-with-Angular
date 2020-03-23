@@ -26,7 +26,7 @@ export class AuthenticationService {
         return this.http.post<any>(`${environment.apiURL}/api/Users/authenticate/`, JSON.stringify(user), this.headers)
             .subscribe((res: any) => {
                 localStorage.setItem('access_token', res.user.token);
-                localStorage.setItem('userId', res.user.id);
+                localStorage.setItem('staffId', res.user.staffId);
                 this.logger.log('RESPONSE', res);
                 if (res.user.token !== null) {
                     this.router.navigate(['/dashboard']);
@@ -49,8 +49,8 @@ export class AuthenticationService {
         return (authToken !== null) ? true : false;
     }
 
-    getCurrentUserId() {
-        return localStorage.getItem('userId');
+    getCurrentStaffId() {
+        return localStorage.getItem('staffId');
     }
 
     logout() {

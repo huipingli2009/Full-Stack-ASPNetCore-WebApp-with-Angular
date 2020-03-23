@@ -19,7 +19,7 @@ export class UserService {
     constructor(private http: HttpClient, private authenticationService: AuthenticationService, private logger: NGXLogger) { }
 
     getCurrentUser(): Observable<any> {
-        let currentUserId = this.authenticationService.getCurrentUserId();
+        let currentUserId = this.authenticationService.getCurrentStaffId();
         return this.http.get<any>(`${environment.apiURL}/api/Users/${currentUserId}`).pipe(
             map((data: CurrentUser[]) => {
               this.logger.log('curent user', data);
