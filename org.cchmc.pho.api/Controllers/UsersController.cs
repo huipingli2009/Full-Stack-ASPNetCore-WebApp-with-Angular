@@ -325,6 +325,9 @@ namespace org.cchmc.pho.api.Controllers
                 if (user != null)
                     return BadRequest("User with this username already exists.");
 
+                if (await _userService.GetUserByStaffId(userViewModel.StaffId) != null)
+                    return BadRequest("User with this staff Id already exists.");
+
                 List<Role> rolesInSystem = await _userService.ListRoles();
                 if (userViewModel.Role != null && !rolesInSystem.Any(r => r.Id == userViewModel.Role.Id))
                     return BadRequest("Role not found.");
