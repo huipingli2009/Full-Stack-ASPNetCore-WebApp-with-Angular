@@ -30,9 +30,9 @@
             <mat-form-field>
                 <input matInput [formControl]="staffNameFilter" (keyup)="applySelectedFilter('StaffName','')"
                     placeholder="search staff by name">
-                    <button mat-button matSuffix mat-icon-button aria-label="Search">
-                        <mat-icon>search</mat-icon>
-                      </button>
+                <button mat-button matSuffix mat-icon-button aria-label="Search">
+                    <mat-icon>search</mat-icon>
+                </button>
             </mat-form-field>
         </div>
     </div>
@@ -117,8 +117,9 @@
                 <div fxLayout="row wrap" fxLayoutGap="14px">
                     <div *ngFor="let responsibility of element.responsibilities?.split(',')" fxLayout="column"
                         fxflex="33%" class="responsibility-container">
-                        <div *ngIf="responsibility" class="responsibility-chip" [style.margin-bottom] = "element.responsibilities?.split(',').length > 2 ? '5px' : '0px'"
-                        [style.margin-top] = "element.responsibilities?.split(',').length > 2 ? '5px' : '0px'">
+                        <div *ngIf="responsibility" class="responsibility-chip"
+                            [style.margin-bottom]="element.responsibilities?.split(',').length > 2 ? '5px' : '0px'"
+                            [style.margin-top]="element.responsibilities?.split(',').length > 2 ? '5px' : '0px'">
                             {{ responsibility }}
                         </div>
                     </div>
@@ -148,14 +149,15 @@
         <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
         <ng-container matColumnDef="expandedDetail" #expansionRow>
 
-            <mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+            <mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length"
+                [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
                 <div id="staff-details" fxFlex>
-                <div fxLayout="row" class="detail-heading" fxLayoutAlign="flex-start center">
-                    DEMOGRAPHICS
-                </div>
-                <form [formGroup]="StaffDetailsForm">
-                    <div class="staff-element-detail">
-                            
+                    <div fxLayout="row" class="detail-heading" fxLayoutAlign="flex-start center">
+                        DEMOGRAPHICS
+                    </div>
+                    <form [formGroup]="StaffDetailsForm">
+                        <div class="staff-element-detail">
+
                             <div fxLayout="row" class="form-row" fxLayoutGap="34px">
                                 <div fxLayout="column" fxFlex class="input-w-icon">
                                     <mat-form-field>
@@ -163,7 +165,7 @@
                                         <input matInput formControlName="email" name="email">
                                         <mat-icon matPrefix>
                                             email
-                                            </mat-icon>
+                                        </mat-icon>
                                         <ng-container
                                             *ngIf="(StaffDetailsForm.get('email').touched || StaffDetailsForm.get('email').dirty) && StaffDetailsForm.get('email').errors">
                                             <mat-error *ngIf="StaffDetailsForm.get('email').errors.required">
@@ -172,12 +174,12 @@
                                             <mat-error *ngIf="StaffDetailsForm.get('email').errors.email">
                                                 Enter a valid email address
                                             </mat-error>
-    
+
                                         </ng-container>
                                     </mat-form-field>
-                                  </div>
+                                </div>
 
-                                  <div fxLayout="column" fxFlex class="input-w-icon">
+                                <div fxLayout="column" fxFlex class="input-w-icon">
                                     <mat-form-field>
                                         <mat-label>Phone </mat-label>
                                         <input matInput formControlName="phone">
@@ -190,8 +192,8 @@
                                         </mat-error>
                                     </ng-container>
                                 </div>
-                                
-                                  <div fxLayout="column" fxFlex>
+
+                                <div fxLayout="column" fxFlex>
                                     <mat-form-field>
                                         <mat-label>NPI</mat-label>
                                         <input matInput formControlName="npi">
@@ -202,7 +204,7 @@
                                             </mat-error>
                                         </ng-container>
                                     </mat-form-field>
-                                  </div>
+                                </div>
                             </div>
                             <div fxLayout="row" fxLayoutGap="34px">
                                 <div fxLayout="column" fxFlex class="input-w-icon date-picker-input">
@@ -216,11 +218,11 @@
                                             </mat-icon>
                                         </mat-datepicker-toggle>
                                         <mat-datepicker #picker></mat-datepicker>
-    
+
                                         <mat-error *ngIf="StaffDetailsForm.get('startDate').hasError('required')">
                                             startDate is required
                                         </mat-error>
-    
+
                                     </mat-form-field>
                                 </div>
                                 <div fxLayout="column" fxFlex>
@@ -237,10 +239,10 @@
                                                 Role is required
                                             </mat-error>
                                         </ng-container>
-    
+
                                     </mat-form-field>
                                 </div>
-                               
+
                                 <div fxLayout="column" fxFlex>
                                     <mat-form-field class="multi-select-override">
                                         <mat-label>CREDENTIALS</mat-label>
@@ -248,7 +250,7 @@
                                             <mat-option *ngFor="let credential of credentials" [value]="credential.id">
                                                 {{credential.name}}
                                             </mat-option>
-    
+
                                         </mat-select>
                                         <ng-container
                                             *ngIf="(StaffDetailsForm.get('credentialId').touched || StaffDetailsForm.get('credentialId').dirty) && (StaffDetailsForm.get('credentialId').errors)">
@@ -259,13 +261,14 @@
                                     </mat-form-field>
                                 </div>
 
-                               
-                                
+
+
                             </div>
                             <div fxLayout="row" class="check-row" fxLayoutGap="34px">
                                 <div fxLayout="column">
                                     <div fxLayout="row" class="check-subrow"><label>Responsibilities</label></div>
-                                    <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="34px" class="check-subrow">
+                                    <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="34px"
+                                        class="check-subrow">
                                         <div fxLayout="column">
                                             <mat-checkbox formControlName="isQPLLeader">QI Lead Doc</mat-checkbox>
                                         </div>
@@ -275,7 +278,8 @@
                                             </mat-checkbox>
                                         </div>
                                     </div>
-                                        <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="34px" class="check-subrow">
+                                    <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="34px"
+                                        class="check-subrow">
                                         <div fxLayout="column">
                                             <mat-checkbox formControlName="isQITeam">QI Team</mat-checkbox>
                                         </div>
@@ -287,7 +291,8 @@
                                 </div>
                                 <div fxLayout="column">
                                     <div fxLayout="row" class="check-subrow"><label>Board Membership</label></div>
-                                    <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="34px" class="check-subrow">
+                                    <div fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="34px"
+                                        class="check-subrow">
                                         <mat-checkbox formControlName="isRVPIBoard">RVPI Board</mat-checkbox>
                                         <mat-checkbox formControlName="isOVPCABoard">OVPCA Board</mat-checkbox>
                                         <mat-checkbox formControlName="isPHOBoard">PHO Board</mat-checkbox>
@@ -295,15 +300,110 @@
                                 </div>
 
                             </div>
-                            <div fxLayout="row" fxLayoutAlign="end end">
-                                <button *ngIf="isUserAdmin" mat-flat-button color="accent">ADMIN CHANGE</button>
-                                <button mat-flat-button color="accent" (click)="updateStaff()">SAVE</button>
-                            </div>
-                        
+                            <div fxLayout="row">
+                                <div fxLayout="column" fxLayoutAlign="start end">
+                                    <button *ngIf="isUserAdmin" mat-flat-button color="primary"
+                                        (click)="openAdminDialog()">PHO ADMINISTRATION</button>
+                                </div>
+                                <div fxLayout="column" fxLayoutAlign="end end" fxFlex>
+                                    <button mat-flat-button color="accent" (click)="updateStaff()">SAVE</button>
+                                </div>
+                                <ng-template #adminDialog>
+                                    <div mat-dialog-content class="mat-typography" id="admin-dialog">
+                                        <div fxLayout="row" class="detail-heading">ADD / UPDATE PORTAL
+                                            INFO</div>
+                                        <div fxLayout="row" class="validation-text">
+                                            <p>Valid username = Any lower/uppercase character, digit, or special symbol
+                                            “_-“ only, 3 to 15 characters long. Valid password = 4 to 8 characters with
+                                            at least one number, at least one lowercase letter, 
+                                            <br>and at least one
+                                            uppercase letter.</p>
+                                        </div>
+                                        <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end">
+                                            <!-- <mat-form-field>
+                                                    <mat-label>Email</mat-label>
+                                                    <input matInput formControlName="email" name="email">
+                                                    <mat-icon matPrefix>
+                                                        email
+                                                    </mat-icon>
+                                                    <ng-container
+                                                        *ngIf="(StaffDetailsForm.get('email').touched || StaffDetailsForm.get('email').dirty) && StaffDetailsForm.get('email').errors">
+                                                        <mat-error *ngIf="StaffDetailsForm.get('email').errors.required">
+                                                            Email address is required
+                                                        </mat-error>
+                                                        <mat-error *ngIf="StaffDetailsForm.get('email').errors.email">
+                                                            Enter a valid email address
+                                                        </mat-error>
+            
+                                                    </ng-container>
+                                                </mat-form-field> -->
+                                            <div fxLayout="column" class="input-w-icon">
+                                                <mat-form-field floatLabel="always">
+                                                    <mat-label>USER NAME</mat-label>
+                                                    <input matInput [value]="">
+                                                    <mat-icon matPrefix>
+                                                        person
+                                                    </mat-icon>
+                                                </mat-form-field>
+                                            </div>
+                                            <div fxLayout="column" class="input-w-icon">
+                                                <mat-form-field floatLabel="always">
+                                                    <mat-label>PASSWORD</mat-label>
+                                                    <input matInput [value]="">
+                                                    <mat-icon matPrefix>
+                                                        lock
+                                                    </mat-icon>
+                                                </mat-form-field>
+                                            </div>
+                                            <div fxLayout="column" class="input-w-icon">
+                                                <mat-form-field floatLabel="always">
+                                                    <mat-label>CONFIRM PW</mat-label>
+                                                    <input matInput [value]="">
+                                                    <mat-icon matPrefix>
+                                                        lock
+                                                    </mat-icon>
+                                                </mat-form-field>
+                                            </div>
+                                            <div fxLayout="column">
+                                                <label class="toggle-label">REGISTRY ACCESS</label>
+                                                <mat-slide-toggle ngDefaultControl class="admin-toggle">
+                                              </mat-slide-toggle>
+                                                <!-- <mat-slide-toggle formControlName="activeStatus" [checked]="form.controls.activeStatus"
+                                                name="activeStatus" ngDefaultControl>
+                                              </mat-slide-toggle> -->
+                                            </div>
+                                            <div fxLayout="column">
+                                                <label class="toggle-label">UNLOCK ACCOUNT</label>
+                                                <mat-slide-toggle ngDefaultControl class="admin-toggle">
+                                              </mat-slide-toggle>
+                                                <!-- <mat-slide-toggle formControlName="activeStatus" [checked]="form.controls.activeStatus"
+                                                name="activeStatus" ngDefaultControl>
+                                              </mat-slide-toggle> -->
+                                            </div>
+                                        </div>
+                                        <div fxLayout="row" fxLayoutGap="12px"><label class="toggle-label">ACCESS TYPE:</label></div>
+                                        <div fxLayout="row" fxLayoutGap="10px">
+                                            <div fxLayout="column"><mat-checkbox>Practice Member</mat-checkbox></div>
+                                            <div fxLayout="column"><mat-checkbox>Practice Admin</mat-checkbox></div>
+                                            <div fxLayout="column"><mat-checkbox>PHO Member</mat-checkbox></div>
+                                            <div fxLayout="column"><mat-checkbox>PHO Admin</mat-checkbox></div>
+                                        </div>
+                                        <div fxLayout="row">
+                                            <button mat-flat-button color="accent">SAVE</button>
+                                        </div>
+                                    </div>
+                                    <div mat-dialog-actions align="end">
+                                        <button mat-button (click)="cancelAdminDialog()">Cancel</button>
+                                        <button mat-button>Update</button>
+                                    </div>
+                                </ng-template>
 
-                    </div>
-                </form>
-            </div>
+                            </div>
+
+
+                        </div>
+                    </form>
+                </div>
             </mat-cell>
 
         </ng-container>
@@ -318,37 +418,3 @@
 
     </mat-table>
 </div>
-
-<!-- For Add Update User -->
-<!-- <div fxLayout="column" fxFlex="50%">
-    <div fxLayout="row" fxLayoutAlign="flex-start center">ADD / UPDATE PORTAL INFO</div>
-    <div fxLayout="row" fxLayoutAlign="space-around center">
-        <mat-form-field>
-            <mat-label>USER NAME</mat-label>
-            <input matInput [value]="">
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>PASSWORD</mat-label>
-            <input matInput [value]="">
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>CONFIRM PW</mat-label>
-            <input matInput [value]="">
-        </mat-form-field>
-        <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-            <mat-button-toggle value="bold">Yes</mat-button-toggle>
-            <mat-button-toggle value="italic">No</mat-button-toggle>
-        </mat-button-toggle-group>
-    </div>
-    <div fxLayout="row">
-
-        <mat-checkbox>Practice Member</mat-checkbox>
-        <mat-checkbox>Practice Admin</mat-checkbox>
-        <mat-checkbox>PHO Member</mat-checkbox>
-        <mat-checkbox>PHO Admin</mat-checkbox>
-
-    </div>
-    <div fxLayout="row">
-        <button mat-flat-button color="accent">SAVE</button>
-    </div>
-</div> -->

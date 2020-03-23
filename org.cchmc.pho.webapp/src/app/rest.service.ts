@@ -282,6 +282,14 @@ export class RestService {
     );
   }
 
+  // getStaffAdminVerbiage(): Observable<any> {
+  //   return this.http.post(`${API_URL}/api/Users/verbiage/`, httpOptions).pipe(
+  //     map((data) => {
+  //       this.logger.log('verbiage', data);
+  //       return data;
+  //     })
+  //   );
+  // }
 
 
 

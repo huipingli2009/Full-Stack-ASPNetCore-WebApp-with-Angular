@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { RestService } from '../rest.service';
 import { Staff, Responsibilities, StaffDetails } from '../models/Staff'
 import { MatTableDataSource, MatTable } from '@angular/material/table';
@@ -10,6 +10,7 @@ import { Sort } from '@angular/material/sort';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CurrentUser } from '../models/user';
 import { UserService } from '../services/user.service';
+import { MatDialog } from '@angular/material/dialog';
 
 
 @Component({
@@ -31,6 +32,8 @@ export class StaffComponent implements OnInit {
   isUserAdmin: boolean;
 
   @ViewChild('table') table: MatTable<Staff>;
+  @ViewChild('adminDialog') adminDialog: TemplateRef<any>;
+  @ViewChild('updateUserDialog') updateUserDialog: TemplateRef<any>;
 
   credentials: Credential[];
   filterValues: any = {};
@@ -67,8 +70,28 @@ export class StaffComponent implements OnInit {
     isRVPIBoard: ['']
   });
 
+  // AdminPortalForm = this.fb.group({
+  //   id: [''],
+  //   firstName: [''],
+  //   lastName: [''],
+  //   email: ['', [Validators.required, Validators.email]],
+  //   phone: ['', Validators.required],
+  //   startDate: ['', Validators.required],
+  //   positionId: ['', Validators.required],
+  //   credentialId: ['', Validators.required],
+  //   npi: ['', Validators.required],
+  //   isLeadPhysician: [''],
+  //   isQITeam: [''],
+  //   isPracticeManager: [''],
+  //   isInterventionContact: [''],
+  //   isQPLLeader: [''],
+  //   isPHOBoard: [''],
+  //   isOVPCABoard: [''],
+  //   isRVPIBoard: ['']
+  // });
+
   constructor(private rest: RestService, private logger: NGXLogger, private fb: FormBuilder, private datePipe: DatePipe,
-    private _snackBar: MatSnackBar, private userService: UserService) {
+    private _snackBar: MatSnackBar, private userService: UserService, public dialog: MatDialog) {
     this.dataSourceStaff = new MatTableDataSource;
   }
 
@@ -79,6 +102,7 @@ export class StaffComponent implements OnInit {
     this.getPositions();
     this.getCredentials();
     this.getResponsibilities();
+    // this.getAdminVerbiage();
 
   }
 
@@ -123,6 +147,13 @@ export class StaffComponent implements OnInit {
       this.staff = data;
       this.dataSourceStaff = new MatTableDataSource(this.staff);
       this.dataSourceStaff.data = this.staff;
+      this.staff.forEach(element => {
+        element.myPractice =  {
+          id: 7,
+          name: 'ESD Pediatric Group'
+      }
+      });
+      this.logger.log('STAFF', this.staff);
 
       this.dataSourceStaff.filterPredicate = ((data: Staff, filter): boolean => {
         const filterValues = JSON.parse(filter);
@@ -142,7 +173,16 @@ export class StaffComponent implements OnInit {
       this.staffDetails = data;
       this.StaffDetailsForm.setValue(this.staffDetails);
       this.logger.log(this.StaffDetailsForm.value);
+      this.getStaffUser(data.id);
     });
+  }
+
+  getStaffUser(id: number) {
+    this.userService.getUserStaff(id).subscribe((data) => {
+      this.logger.log(data);
+    },
+    error => { this.logger.log(error, 'error'); this.error = error; });
+    
   }
 
   //update staff record 
@@ -158,6 +198,32 @@ export class StaffComponent implements OnInit {
       error => { this.error = error }
     )
   }
+
+  // Add or Update Staff User
+  updatStaffUser() {
+    let staffUser = [{
+      newPassword: `${this.staffDetails.lastName.substring(0, 3)}${this.staffDetails.firstName.substring(0, 3)}${this.staffDetails.id}!`,
+      firstName: this.staffDetails.firstName,
+      lastName: this.staffDetails.lastName,
+      userName: `${this.staffDetails.firstName.charAt(0)}${this.staffDetails.lastName}`,
+      email: this.staffDetails.email,
+      staffId: this.staffDetails.id,
+      role: {
+        id: 1
+      }
+    }]
+    this.logger.log('Staff User', staffUser);
+    this.userService.createStaffUser(staffUser).subscribe(res => {
+      this.logger.log(res, 'User Post Response');
+    })
+  }
+
+  // Get Verbiage for Admin Panel
+  // getAdminVerbiage() {
+  //   this.rest.getStaffAdminVerbiage().subscribe(res => {
+  //     this.logger.log('verbiage', res);
+  //   })
+  // }
 
   //for confirmation of successful updation of the staff record 
   openSnackBar(message: string, action: string) {
@@ -228,6 +294,19 @@ export class StaffComponent implements OnInit {
     if (this.dataSourceStaff.paginator) {
       this.dataSourceStaff.paginator.firstPage();
     }
+  }
+
+  // Dialogs -------------
+  openAdminDialog() {
+    this.updatStaffUser();
+    const dialogRef = this.dialog.open(this.adminDialog, { disableClose: true });
+  }
+  cancelAdminDialog() {
+    // this.form.controls.providerNotes.setValidators([]);
+    // this.form.controls.providerNotes.updateValueAndValidity();
+    // this.form.controls.providerPMCAScore.setValue(this.providerPmcaScoreControl);
+    // this.form.controls.providerNotes.setValue(this.providerNotesControl);
+    this.dialog.closeAll();
   }
 
 
