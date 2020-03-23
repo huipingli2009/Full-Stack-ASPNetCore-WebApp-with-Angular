@@ -204,6 +204,23 @@ namespace org.cchmc.pho.identity
             }
         }
 
+        public async Task<User> GetUserByStaffId(int staffId)
+        {
+            try
+            {
+                var user = await _context.Login.FirstOrDefaultAsync(p => p.StaffId == staffId);
+                if (user == null)
+                    return null;
+
+                return await GetUserInternal(user);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return null;
+            }
+        }
+
         private async Task<User> GetUserInternal(Login login)
         {
             var userType = await _context.TlkUserType.FirstOrDefaultAsync(ut => ut.Id == login.UserTypeId);

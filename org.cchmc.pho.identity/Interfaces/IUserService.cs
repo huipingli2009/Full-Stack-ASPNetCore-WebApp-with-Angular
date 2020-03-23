@@ -15,6 +15,7 @@ namespace org.cchmc.pho.identity.Interfaces
         string GetUserNameFromClaims(IEnumerable<Claim> claims);
         Task<User> GetUser(int userId);
         Task<User> GetUser(string userName);
+        Task<User> GetUserByStaffId(int staffId);
         Task<User> InsertUser(User user, string userNameMakingChange);
         Task<List<Role>> ListRoles();
         Task<User> Refresh(string tokenString, string refreshToken);
