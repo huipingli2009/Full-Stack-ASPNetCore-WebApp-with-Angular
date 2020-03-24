@@ -11,6 +11,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { CurrentUser } from '../models/user';
 import { UserService } from '../services/user.service';
 import { MatDialog } from '@angular/material/dialog';
+import { HttpErrorResponse } from '@angular/common/http';
+import { AuthenticationService } from '../services/authentication.service';
 
 
 @Component({
@@ -29,6 +31,7 @@ export class StaffComponent implements OnInit {
   displayedColumns: string[] = ['arrow', 'name', 'email', 'phone', 'position', 'credentials', 'isRegistry', 'responsibilities'];
   positions: Position[];
   currentUser: CurrentUser;
+  currentUserId: number;
   isUserAdmin: boolean;
   adminVerbiage: string;
 
@@ -72,7 +75,8 @@ export class StaffComponent implements OnInit {
   });
 
   constructor(private rest: RestService, private logger: NGXLogger, private fb: FormBuilder, private datePipe: DatePipe,
-    private _snackBar: MatSnackBar, private userService: UserService, public dialog: MatDialog) {
+    private _snackBar: MatSnackBar, private userService: UserService, public dialog: MatDialog,
+    private authService: AuthenticationService) {
     this.dataSourceStaff = new MatTableDataSource;
   }
 
@@ -112,6 +116,7 @@ export class StaffComponent implements OnInit {
   getCurrentUser() {
     this.userService.getCurrentUser().subscribe((data) => {
       this.currentUser = data;
+      this.currentUserId = data.id;
       if(data.role.id === 3) {
         this.isUserAdmin = true;
       } else {this.isUserAdmin = false;}
@@ -156,7 +161,17 @@ export class StaffComponent implements OnInit {
     this.userService.getUserStaff(id).subscribe((data) => {
       this.logger.log(data, 'Got Staff user');
     },
-    error => { this.logger.log(error, 'error'); this.error = error; });
+    (error: HttpErrorResponse) => {
+      if (error.error instanceof ErrorEvent) {
+        // A client-side or network error occurred. Handle it accordingly.
+        console.error('An error occurred:', error.error.message);
+      } else {
+        // The backend returned an unsuccessful response code.
+        // The response body may contain clues as to what went wrong,
+        console.error(`Backend returned code ${error}, ` +
+          `body was: ${error.error}`);
+      }
+    });
     
   }
 
@@ -177,6 +192,8 @@ export class StaffComponent implements OnInit {
   // Add or Update Staff User
   updatStaffUser() {
     let staffUser = [{
+      id: this.currentUserId,
+      token: this.authService.getToken(),
       newPassword: `${this.staffDetails.lastName.substring(0, 3)}${this.staffDetails.firstName.substring(0, 3)}${this.staffDetails.id}!`,
       firstName: this.staffDetails.firstName,
       lastName: this.staffDetails.lastName,

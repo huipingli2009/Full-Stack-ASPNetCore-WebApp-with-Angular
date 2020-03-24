@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { User, CurrentUser } from '../models/user';
 import { environment } from 'src/environments/environment';
 import { Subscription, Observable, of } from 'rxjs';
@@ -27,16 +27,31 @@ export class UserService {
             })
           );
         }
+        // getStaffAdminVerbiage(): Observable<any> {
+        //   return this.http.get(`${API_URL}/api/Users/verbiage/`, {responseType: 'text'}).pipe(
+        //     map((res) => {
+        //       return res;
+        //     })
+        //   );
+        // }
 
-        getUserStaff(id): Observable<any> {
-          return this.http.get<any>(`${environment.apiURL}/api/Users/${id}`).pipe(
-              map((data: User[]) => {
-                  this.logger.log('Get Staff User Data', data);
-                  return data;
-              }),
-              catchError(this.handleError<any>('UserDoesNotExist'))
-            );
-          }
+        // getUserStaff(id): Observable<any> {
+        //   return this.http.get(`${environment.apiURL}/api/Users/${id}`, {responseType: 'text'}).pipe(
+        //       map((res) => {
+        //           this.logger.log('Get Staff User Data', res);
+        //           return res;
+        //       })
+        //     );
+        //   }
+
+          getUserStaff(id): Observable<HttpResponse<string>> {
+            return this.http.get<HttpResponse<string>>(`${environment.apiURL}/api/Users/${id}`).pipe(
+                map((res) => {
+                    this.logger.log('Get Staff User Data', res);
+                    return res;
+                })
+              );
+            }
           /* Creates a new user if one does not already exist*/
           createStaffUser(user): Observable<any> {
             return this.http.post<any>(`${environment.apiURL}/api/Users/`, JSON.stringify(user), httpOptions).pipe(
