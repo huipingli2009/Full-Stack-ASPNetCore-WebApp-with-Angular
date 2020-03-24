@@ -16,7 +16,16 @@
   <!-- Submenu - Home -->
   <div fxLayout="row" class="home-submenu"> 
     <div fxLayout="row" fxFlex="20" fxLayoutAlign="start end">
-      <h1 class="practice-title">ESD Pediatric Group</h1>
+      <form [formGroup]="practiceForm">
+      <mat-form-field class="practice-select">
+        <mat-select formControlName="practiceControl" (selectionChange)="switchPractice($event.value)">
+        <mat-option class="practice-select-text" *ngFor="let practice of practiceList" [value]="practice.id">
+          {{practice.name}}
+      </mat-option>
+    </mat-select>
+      </mat-form-field>
+    </form>
+      <!-- <h1 class="practice-title">ESD Pediatric Group</h1> Need to replace with with ngif Admin -->
     </div>
     <div fxLayout="row" fxLayoutAlign="end end" fxFlex>
       <button mat-button routerLink="/dashboard" routerLinkActive="active-submenu">Dashboard</button>
