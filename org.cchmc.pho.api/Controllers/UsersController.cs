@@ -131,7 +131,7 @@ namespace org.cchmc.pho.api.Controllers
                 User user = await _userService.GetUserByStaffId(staffId);
                 string currentUserName = _userService.GetUserNameFromClaims(User?.Claims);
                 if (user == null)
-                    return BadRequest("User does not exist.");
+                    return NotFound("User does not exist.");
 
                 string currentUserRole = _userService.GetRoleNameFromClaims(User?.Claims);
                 // if we're getting a different user, check some additional rules based on roles
@@ -355,7 +355,7 @@ namespace org.cchmc.pho.api.Controllers
                 
                 var userDetails = _mapper.Map<User>(userViewModel);
                 user = await _userService.InsertUser(userDetails, currentUserName);
-                user = await _userService.AssignStaffIdToUser(user.Id, user.StaffId, currentUserName);
+                user = await _userService.AssignStaffIdToUser(user.Id, userViewModel.StaffId, currentUserName);
                 
                 return Ok(_mapper.Map<UserViewModel>(user));
             }
