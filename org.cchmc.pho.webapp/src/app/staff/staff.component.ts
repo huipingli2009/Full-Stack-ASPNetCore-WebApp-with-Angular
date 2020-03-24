@@ -8,7 +8,7 @@ import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { Sort } from '@angular/material/sort';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { CurrentUser } from '../models/user';
+import { CurrentUser, User } from '../models/user';
 import { UserService } from '../services/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -33,6 +33,7 @@ export class StaffComponent implements OnInit {
   currentUser: CurrentUser;
   currentUserId: number;
   isUserAdmin: boolean;
+  staffUser: User;
   adminVerbiage: string;
 
   @ViewChild('table') table: MatTable<Staff>;
@@ -120,7 +121,7 @@ export class StaffComponent implements OnInit {
       if(data.role.id === 3) {
         this.isUserAdmin = true;
       } else {this.isUserAdmin = false;}
-      this.logger.log('Current User in Staff', this.currentUser); //TODO: Working here
+      this.logger.log('Current User in Staff', this.currentUser); 
     });
   }
 
@@ -133,7 +134,6 @@ export class StaffComponent implements OnInit {
       this.staff = data;
       this.dataSourceStaff = new MatTableDataSource(this.staff);
       this.dataSourceStaff.data = this.staff;
-      this.logger.log('STAFF', this.staff);
 
       this.dataSourceStaff.filterPredicate = ((data: Staff, filter): boolean => {
         const filterValues = JSON.parse(filter);
@@ -152,26 +152,18 @@ export class StaffComponent implements OnInit {
       data.startDate = this.datePipe.transform(data.startDate, 'MM/dd/yyyy');
       this.staffDetails = data;
       this.StaffDetailsForm.setValue(this.staffDetails);
-      this.logger.log(this.StaffDetailsForm.value);
       this.getStaffUser(data.id);
     });
   }
 
   getStaffUser(id: number) {
     this.userService.getUserStaff(id).subscribe((data) => {
-      this.logger.log(data, 'Got Staff user');
+      this.staffUser = data;
+      this.logger.log(this.staffUser, 'Got Staff user');
     },
-    (error: HttpErrorResponse) => {
-      if (error.error instanceof ErrorEvent) {
-        // A client-side or network error occurred. Handle it accordingly.
-        console.error('An error occurred:', error.error.message);
-      } else {
-        // The backend returned an unsuccessful response code.
-        // The response body may contain clues as to what went wrong,
-        console.error(`Backend returned code ${error}, ` +
-          `body was: ${error.error}`);
-      }
-    });
+    error => {
+      console.error(error);
+  });
     
   }
 
@@ -191,7 +183,7 @@ export class StaffComponent implements OnInit {
 
   // Add or Update Staff User
   updatStaffUser() {
-    let staffUser = [{
+    let staffUser = {
       id: this.currentUserId,
       token: this.authService.getToken(),
       newPassword: `${this.staffDetails.lastName.substring(0, 3)}${this.staffDetails.firstName.substring(0, 3)}${this.staffDetails.id}!`,
@@ -203,7 +195,7 @@ export class StaffComponent implements OnInit {
       role: {
         id: 1
       }
-    }]
+    };
     this.logger.log('Staff User', staffUser);
     this.userService.createStaffUser(staffUser).subscribe(res => {
       this.logger.log(res, 'User Post Response');

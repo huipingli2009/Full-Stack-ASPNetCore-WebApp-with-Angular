@@ -44,8 +44,8 @@ export class UserService {
         //     );
         //   }
 
-          getUserStaff(id): Observable<HttpResponse<string>> {
-            return this.http.get<HttpResponse<string>>(`${environment.apiURL}/api/Users/${id}`).pipe(
+          getUserStaff(id): Observable<any> {
+            return this.http.get<any>(`${environment.apiURL}/api/Users/${id}`).pipe(
                 map((res) => {
                     this.logger.log('Get Staff User Data', res);
                     return res;
@@ -54,6 +54,7 @@ export class UserService {
             }
           /* Creates a new user if one does not already exist*/
           createStaffUser(user): Observable<any> {
+            this.logger.log('STINGIFIED', JSON.stringify(user));
             return this.http.post<any>(`${environment.apiURL}/api/Users/`, JSON.stringify(user), httpOptions).pipe(
               catchError(this.handleError<any>('UserCreationError'))
             );
