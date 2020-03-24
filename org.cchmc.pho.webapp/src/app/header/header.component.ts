@@ -9,6 +9,7 @@ import { RestService } from '../rest.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NGXLogger } from 'ngx-logger';
 import { take } from 'rxjs/operators';
+import { PracticeList, Practices } from '../models/Staff';
 import { UserService } from '../services/user.service';
 
 @Component({
@@ -29,18 +30,25 @@ export class HeaderComponent {
   currentUser: CurrentUser;
   firstName: string;
   lastName: string;
-  subscription: Subscription;
+    subscription: Subscription;
+    practiceForm: FormGroup;
+    practiceList: Array<Practices>;
+    currentPracticeId: number;
+    currentPractice: string;
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
     private toastr: ToastrService, public fb: FormBuilder, private logger: NGXLogger,
     private authenticationService: AuthenticationService, private userService: UserService) {
     this.logger.log('testing the logging in app.component.ts constructor with NGXLogger');
-
+      this.practiceForm = this.fb.group({
+          practiceControl: ['']
+      });
 
   }
 
   ngOnInit() {
     this.getAlerts();
-    this.getCurrentUser();
+      this.getCurrentUser();
+      this.getPracticeList();
   }
 
   ngAfterViewInit() {
@@ -108,5 +116,28 @@ export class HeaderComponent {
     this.authenticationService.logout();
     this.isLoggedIn$ = false;
     this.router.navigate(['/login']);
+  }
+
+  // Practice Switch -------------------------------
+  getPracticeList() {
+    this.rest.getPracticeList().subscribe(data => {
+      this.practiceList = data.practiceList;
+      this.currentPracticeId = data.currentPracticeId;
+      this.practiceForm.controls['practiceControl'].setValue(data.currentPracticeId);
+      this.logger.log('Practice List', this.practiceList, 'ID', this.currentPracticeId); // Working here
+    })
+  }
+
+  switchPractice(practiceId) {
+    let staffId = 62; //TODO: Need to remove after gettin other branch, also make sure practice select is fidden if not admin
+    let newPractice = {
+      id: staffId,
+      myPractice: {
+        id: practiceId
+      }
+    };
+    this.rest.switchPractice(newPractice).subscribe(res => {
+      this.logger.log('SWITCHED', res);
+    });
   }
 }
