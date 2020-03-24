@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { RestService } from '../rest.service';
 import { Staff, Responsibilities, StaffDetails } from '../models/Staff'
 import { MatTableDataSource, MatTable } from '@angular/material/table';
@@ -8,6 +8,9 @@ import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { Sort } from '@angular/material/sort';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { CurrentUser } from '../models/user';
+import { UserService } from '../services/user.service';
+import { MatDialog } from '@angular/material/dialog';
 
 
 @Component({
@@ -25,8 +28,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class StaffComponent implements OnInit {
   displayedColumns: string[] = ['arrow', 'name', 'email', 'phone', 'position', 'credentials', 'isRegistry', 'responsibilities'];
   positions: Position[];
+  currentUser: CurrentUser;
+  isUserAdmin: boolean;
 
   @ViewChild('table') table: MatTable<Staff>;
+  @ViewChild('adminDialog') adminDialog: TemplateRef<any>;
+  @ViewChild('updateUserDialog') updateUserDialog: TemplateRef<any>;
 
   credentials: Credential[];
   filterValues: any = {};
@@ -63,16 +70,19 @@ export class StaffComponent implements OnInit {
     isRVPIBoard: ['']
   });
 
-  constructor(private rest: RestService, private logger: NGXLogger, private fb: FormBuilder, private datePipe: DatePipe, private _snackBar: MatSnackBar) {
+  constructor(private rest: RestService, private logger: NGXLogger, private fb: FormBuilder, private datePipe: DatePipe,
+    private _snackBar: MatSnackBar, private userService: UserService, public dialog: MatDialog) {
     this.dataSourceStaff = new MatTableDataSource;
   }
 
 
   ngOnInit(): void {
+    this.getCurrentUser();
     this.getStaff();
     this.getPositions();
     this.getCredentials();
     this.getResponsibilities();
+    // this.getAdminVerbiage(); // WIP Ignore this for now
 
   }
 
@@ -98,6 +108,16 @@ export class StaffComponent implements OnInit {
     })
   }
 
+  getCurrentUser() {
+    this.userService.getCurrentUser().subscribe((data) => {
+      this.currentUser = data;
+      if(data.role.id === 3) {
+        this.isUserAdmin = true;
+      } else {this.isUserAdmin = false;}
+      this.logger.log('Current User in Staff', this.currentUser); //TODO: Working here
+    });
+  }
+
 
   // get staff information
 
@@ -107,6 +127,7 @@ export class StaffComponent implements OnInit {
       this.staff = data;
       this.dataSourceStaff = new MatTableDataSource(this.staff);
       this.dataSourceStaff.data = this.staff;
+      this.logger.log('STAFF', this.staff);
 
       this.dataSourceStaff.filterPredicate = ((data: Staff, filter): boolean => {
         const filterValues = JSON.parse(filter);
@@ -126,7 +147,16 @@ export class StaffComponent implements OnInit {
       this.staffDetails = data;
       this.StaffDetailsForm.setValue(this.staffDetails);
       this.logger.log(this.StaffDetailsForm.value);
+      this.getStaffUser(data.id);
     });
+  }
+
+  getStaffUser(id: number) {
+    this.userService.getUserStaff(id).subscribe((data) => {
+      this.logger.log(data, 'Got Staff user');
+    },
+    error => { this.logger.log(error, 'error'); this.error = error; });
+    
   }
 
   //update staff record 
@@ -142,6 +172,32 @@ export class StaffComponent implements OnInit {
       error => { this.error = error }
     )
   }
+
+  // Add or Update Staff User
+  updatStaffUser() {
+    let staffUser = [{
+      newPassword: `${this.staffDetails.lastName.substring(0, 3)}${this.staffDetails.firstName.substring(0, 3)}${this.staffDetails.id}!`,
+      firstName: this.staffDetails.firstName,
+      lastName: this.staffDetails.lastName,
+      userName: `${this.staffDetails.firstName.charAt(0)}${this.staffDetails.lastName}`,
+      email: this.staffDetails.email,
+      staffId: this.staffDetails.id,
+      role: {
+        id: 1
+      }
+    }]
+    this.logger.log('Staff User', staffUser);
+    this.userService.createStaffUser(staffUser).subscribe(res => {
+      this.logger.log(res, 'User Post Response');
+    })
+  }
+
+  // Get Verbiage for Admin Panel
+  // getAdminVerbiage() {
+  //   this.rest.getStaffAdminVerbiage().subscribe(res => {
+  //     this.logger.log('verbiage', res);
+  //   })
+  // }
 
   //for confirmation of successful updation of the staff record 
   openSnackBar(message: string, action: string) {
@@ -212,6 +268,15 @@ export class StaffComponent implements OnInit {
     if (this.dataSourceStaff.paginator) {
       this.dataSourceStaff.paginator.firstPage();
     }
+  }
+
+  // Dialogs -------------
+  openAdminDialog() {
+    this.updatStaffUser();
+    const dialogRef = this.dialog.open(this.adminDialog, { disableClose: true });
+  }
+  cancelAdminDialog() {
+    this.dialog.closeAll();
   }
 
 

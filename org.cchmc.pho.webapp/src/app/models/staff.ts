@@ -1,4 +1,4 @@
-export class Staff {
+export interface Staff {
     id: number;
     firstName: string;
     lastName: string;
@@ -9,6 +9,10 @@ export class Staff {
     credentials: Credentials;
     position: Position;
     legalDisclaimerSigned: string;
+    myPractice: {
+        id: number;
+        name: string;
+    }
 }
 
 export class StaffDetails {

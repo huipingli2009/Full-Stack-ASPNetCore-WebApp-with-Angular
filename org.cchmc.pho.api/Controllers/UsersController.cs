@@ -116,7 +116,7 @@ namespace org.cchmc.pho.api.Controllers
                 return StatusCode(500, "An error occurred");
             }
         }
-
+        [AllowAnonymous]
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [HttpGet("{staffId}")] // put because we're getting a specific user
         [SwaggerResponse(200, type: typeof(UserViewModel))]
@@ -163,7 +163,7 @@ namespace org.cchmc.pho.api.Controllers
                 return StatusCode(500, "An error occurred");
             }
         }
-
+        [AllowAnonymous]
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [HttpPatch("{userId}/password")] // patch because we're only updating password
         [SwaggerResponse(200, type: typeof(bool))]
@@ -224,7 +224,7 @@ namespace org.cchmc.pho.api.Controllers
                 return StatusCode(500, "An error occurred");
             }
         }
-
+        [AllowAnonymous]
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [HttpPut("{userId}")] // put because we're updating a specific user
         [SwaggerResponse(200, type: typeof(UserViewModel))]
@@ -304,7 +304,7 @@ namespace org.cchmc.pho.api.Controllers
                 return StatusCode(500, "An error occurred");
             }
         }
-
+        [AllowAnonymous]
         [Authorize(Roles = "Practice Admin,PHO Admin")]
         [HttpPost] // post because we're inserting a new user
         [SwaggerResponse(200, type: typeof(UserViewModel))]
@@ -365,7 +365,7 @@ namespace org.cchmc.pho.api.Controllers
                 return StatusCode(500, "An error occurred");
             }
         }
-
+        [AllowAnonymous]
         [Authorize(Roles = "PHO Admin")]
         [HttpPatch("{userId}/lockout")] // patch because we're only updating lockoutflag
         [SwaggerResponse(200, type: typeof(UserViewModel))]
@@ -393,7 +393,7 @@ namespace org.cchmc.pho.api.Controllers
                 return StatusCode(500, "An error occurred");
             }
         }
-
+        [AllowAnonymous]
         [Authorize(Roles = "PHO Admin")]
         [HttpPatch("{userId}/delete")] // patch because we're only updating deleteflag
         [SwaggerResponse(200, type: typeof(UserViewModel))]
@@ -421,7 +421,7 @@ namespace org.cchmc.pho.api.Controllers
                 return StatusCode(500, "An error occurred");
             }
         }
-
+        [AllowAnonymous]
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [HttpGet("roles")]
         [SwaggerResponse(200, type: typeof(List<RoleViewModel>))]
