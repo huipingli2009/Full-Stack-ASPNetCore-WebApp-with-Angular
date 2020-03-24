@@ -30,6 +30,7 @@ export class StaffComponent implements OnInit {
   positions: Position[];
   currentUser: CurrentUser;
   isUserAdmin: boolean;
+  adminVerbiage: string;
 
   @ViewChild('table') table: MatTable<Staff>;
   @ViewChild('adminDialog') adminDialog: TemplateRef<any>;
@@ -82,7 +83,7 @@ export class StaffComponent implements OnInit {
     this.getPositions();
     this.getCredentials();
     this.getResponsibilities();
-    // this.getAdminVerbiage(); // WIP Ignore this for now
+    this.getAdminVerbiage();
 
   }
 
@@ -193,11 +194,11 @@ export class StaffComponent implements OnInit {
   }
 
   // Get Verbiage for Admin Panel
-  // getAdminVerbiage() {
-  //   this.rest.getStaffAdminVerbiage().subscribe(res => {
-  //     this.logger.log('verbiage', res);
-  //   })
-  // }
+  getAdminVerbiage() {
+    this.rest.getStaffAdminVerbiage().subscribe((res) => {
+      this.adminVerbiage = res;
+    })
+  }
 
   //for confirmation of successful updation of the staff record 
   openSnackBar(message: string, action: string) {

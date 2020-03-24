@@ -313,11 +313,7 @@
                                         <div fxLayout="row" class="detail-heading">ADD / UPDATE PORTAL
                                             INFO</div>
                                         <div fxLayout="row" class="validation-text">
-                                            <p>Valid username = Any lower/uppercase character, digit, or special symbol
-                                            “_-“ only, 3 to 15 characters long. Valid password = 4 to 8 characters with
-                                            at least one number, at least one lowercase letter, 
-                                            <br>and at least one
-                                            uppercase letter.</p>
+                                            <p>{{adminVerbiage | slice:0:166}}<br>{{adminVerbiage | slice:166:adminVerbiage.length}}</p>
                                         </div>
                                         <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end">
                                             <!-- <mat-form-field>
