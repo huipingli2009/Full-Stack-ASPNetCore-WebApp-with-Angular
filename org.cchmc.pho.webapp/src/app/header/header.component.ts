@@ -4,13 +4,13 @@ import { AuthenticationService } from '../services/authentication.service';
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
 import { Alerts, AlertAction, AlertActionTaken } from '../models/dashboard';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { User } from '../models/user';
+import { User, CurrentUser } from '../models/user';
 import { RestService } from '../rest.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NGXLogger } from 'ngx-logger';
 import { take } from 'rxjs/operators';
 import { PracticeList, Practices } from '../models/Staff';
-import { domainToASCII } from 'url';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-header',
@@ -27,45 +27,40 @@ export class HeaderComponent {
   alertAction: AlertAction;
   alertScheduleId: number;
   updateAlert: FormGroup;
-  currentUser: User;
-  subscription: Subscription;
-  practiceForm: FormGroup;
-  practiceList: Array<Practices>;
-  currentPracticeId: number;
-  currentPractice: string;
-
+  currentUser: CurrentUser;
+  firstName: string;
+  lastName: string;
+    subscription: Subscription;
+    practiceForm: FormGroup;
+    practiceList: Array<Practices>;
+    currentPracticeId: number;
+    currentPractice: string;
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
     private toastr: ToastrService, public fb: FormBuilder, private logger: NGXLogger,
-    private authenticationService: AuthenticationService) {
-    // var id = this.userId.snapshot.paramMap.get('id') TODO: Need User Table;
+    private authenticationService: AuthenticationService, private userService: UserService) {
     this.logger.log('testing the logging in app.component.ts constructor with NGXLogger');
-    //   this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
-    this.practiceForm = this.fb.group({
-      practiceControl: ['']
-    });
-
+      this.practiceForm = this.fb.group({
+          practiceControl: ['']
+      });
 
   }
 
   ngOnInit() {
-    this.subscription = this.authenticationService.isLoggedIn.subscribe(res => {
-      this.isLoggedIn$ = res;
-      if (this.isLoggedIn$ === true) {
-        this.toastr.overlayContainer = this.toastContainer;
-        this.getAlerts();
-      }
-    });
-    this.isLoggedIn$ = this.authenticationService.isUserLoggedIn;
-    if (this.isLoggedIn$ === true) {
-      this.toastr.overlayContainer = this.toastContainer;
-      this.getAlerts();
-    }
-    //TODO: ALERTS ARE BROKEN UNLESS YOU REFRESH...I need to figure out why this is not responding to subscription
-    this.getPracticeList();
+    this.getAlerts();
+      this.getCurrentUser();
+      this.getPracticeList();
   }
 
   ngAfterViewInit() {
     this.toastr.overlayContainer = this.toastContainer;
+  }
+
+  getCurrentUser() {
+    this.userService.getCurrentUser().subscribe((data) => {
+      this.currentUser = data;
+      this.firstName = data.firstName;
+      this.lastName = data.lastName;
+    });
   }
 
   getAlerts() {
@@ -74,7 +69,6 @@ export class HeaderComponent {
       this.alerts = data;
       if (this.alerts.length > 0) {
         this.alerts.forEach(alert => {
-          this.logger.log(alert)
           const toastrMessage = `<i class="fas fa-exclamation-triangle alert-icon" title="${alert.definition}"></i>
           ${alert.message}<a class="alert-link" href="${alert.url}" target="_blank">${alert.linkText}»</a>`;
 

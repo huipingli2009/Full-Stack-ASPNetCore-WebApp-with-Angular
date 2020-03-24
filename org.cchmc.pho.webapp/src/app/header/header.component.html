@@ -1,15 +1,20 @@
 <!-- Main Menu TODO: Add additional pages (Phase 2)-->
-<div fxLayout="row" class="main-menu" *ngIf="isLoggedIn$">
+<div fxLayout="row" class="main-menu">
     <div class="logo-col" fxLayout="row" fxFlex="188px" fxLayoutAlign="start end">
       <img class="logo" src="assets/img/TSCHS_LOGO_PMS-SPOT-COLOR.png">
     </div>
     <div fxLayout="row" fxLayoutAlign="start end" fxFlex>
-      <button mat-button routerLink="dashboard">Home</button>
-      <button mat-button (click)="logout()">Logout</button>
+      <div fxLayout="column" fxLayoutAlign="start end" fxFlex="10%">
+        <button mat-button routerLink="dashboard">Home</button>
+      </div>
+      <div fxLayout="column" fxLayoutAlign="end end" fxFlex class="logout-col">
+        <div><span>Welcome, {{firstName}} {{lastName}}</span>| <button mat-button (click)="logout()">Logout</button></div>
+        
+      </div>
     </div>
   </div>
   <!-- Submenu - Home -->
-  <div fxLayout="row" class="home-submenu" *ngIf="isLoggedIn$"> 
+  <div fxLayout="row" class="home-submenu"> 
     <div fxLayout="row" fxFlex="20" fxLayoutAlign="start end">
       <form [formGroup]="practiceForm">
       <mat-form-field class="practice-select">
@@ -23,14 +28,14 @@
       <!-- <h1 class="practice-title">ESD Pediatric Group</h1> Need to replace with with ngif Admin -->
     </div>
     <div fxLayout="row" fxLayoutAlign="end end" fxFlex>
-      <button mat-button routerLink="dashboard" routerLinkActive="active-submenu">Dashboard</button>
-      <button mat-button routerLink="patients" routerLinkActive="active-submenu">Patients</button>
-      <button mat-button routerLink="staff" routerLinkActive="active-submenu">Staff</button>
-      <button mat-button routerLink="files" routerLinkActive="active-submenu">Files</button>
-      <button mat-button routerLink="workbooks" routerLinkActive="active-submenu">Workbooks</button>
+      <button mat-button routerLink="/dashboard" routerLinkActive="active-submenu">Dashboard</button>
+      <button mat-button routerLink="/patients" routerLinkActive="active-submenu">Patients</button>
+      <button mat-button routerLink="/staff" routerLinkActive="active-submenu">Staff</button>
+      <button mat-button routerLink="/files" routerLinkActive="active-submenu">Files</button>
+      <button mat-button routerLink="/workbooks" routerLinkActive="active-submenu">Workbooks</button>
     </div>
   </div>
-  <div toastContainer class="alert-container" *ngIf="isLoggedIn$"><span></span></div>
+  <div toastContainer class="alert-container"><span></span></div>
   <router-outlet></router-outlet>
 
   

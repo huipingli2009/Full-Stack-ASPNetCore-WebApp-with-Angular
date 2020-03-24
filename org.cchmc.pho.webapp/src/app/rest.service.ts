@@ -282,6 +282,15 @@ export class RestService {
     );
   }
 
+  // Currently not using this.
+  // getStaffAdminVerbiage(): Observable<any> {
+  //   return this.http.post(`${API_URL}/api/Users/verbiage/`, httpOptions).pipe(
+  //     map((data) => {
+  //       this.logger.log('verbiage', data);
+  //       return data;
+  //     })
+  //   );
+  // }
   /* Practice Switch =======================================================*/
   getPracticeList(): Observable<any> {
     return this.http.get<any>(`${API_URL}/api/Staff/practicelist/`).pipe(
