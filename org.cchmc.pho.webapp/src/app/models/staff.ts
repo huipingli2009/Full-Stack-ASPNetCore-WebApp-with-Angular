@@ -50,3 +50,13 @@ export class Responsibilities {
     name: string;
     type: string;
 }
+
+export interface PracticeList {
+    currentPracticeId: number;
+    practiceList: Array<Practices>;
+}
+
+export interface Practices {
+    id: number;
+    name: string;
+}
