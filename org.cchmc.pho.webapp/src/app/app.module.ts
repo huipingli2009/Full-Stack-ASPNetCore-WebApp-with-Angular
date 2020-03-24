@@ -56,6 +56,8 @@ import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { ErrorInterceptor } from './helpers/error.interceptor';
 import { HeaderComponent } from './header/header.component';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
+import { LoginLayoutComponent } from './layouts/login-layout.component';
+import { MainLayoutComponent } from './layouts/main-layout.component';
 
 
 @NgModule({
@@ -68,8 +70,10 @@ import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.compo
     FilesComponent,
     WorkbooksComponent,
     HeaderComponent,
-        LoginComponent,
-        MatSnackBarComponent
+    LoginComponent,
+    MatSnackBarComponent,
+    LoginLayoutComponent,
+    MainLayoutComponent
   ],
   imports: [
     BrowserModule,
@@ -134,7 +138,7 @@ import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.compo
     MatTreeModule
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-      { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }, MatSnackBarComponent],
+  { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }, MatSnackBarComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { AuthenticationService } from '../services/authentication.service';
 import { NGXLogger } from 'ngx-logger';
+import { environment } from 'src/environments/environment';
 
 
 @Component({ templateUrl: 'login.component.html' })
@@ -12,6 +13,8 @@ export class LoginComponent implements OnInit {
     error = '';
     loading = false;
     submitted = false;
+    defaultUrl = environment.apiURL;
+    loginHeaderImg: string;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -22,6 +25,8 @@ export class LoginComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        // this.loginHeaderImg = `${this.defaultUrl}/assets/img/TSCHS_LOGO_PMS-SPOT-COLOR.png`;
+        this.loginHeaderImg = 'assets/img/TSCHS_LOGO_PMS-SPOT-COLOR.png'; //REMOVE: For testing in dev
         this.loginForm = this.formBuilder.group({
             username: ['', Validators.required],
             password: ['', Validators.required]

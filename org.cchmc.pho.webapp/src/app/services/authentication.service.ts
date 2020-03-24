@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, throwError, ReplaySubject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { User, UserAuthenticate } from '../models/user';
@@ -16,9 +16,9 @@ export class AuthenticationService {
             'Content-Type': 'application/json'
         })
     }
-    currentUser = {};
     private loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-
+    // private userLoggedIn = new ReplaySubject<number>();
+    // currentUserId = this.userLoggedIn.asObservable();
     constructor(private http: HttpClient, private logger: NGXLogger, public router: Router) { }
 
     login(user: UserAuthenticate) {
@@ -26,7 +26,7 @@ export class AuthenticationService {
         return this.http.post<any>(`${environment.apiURL}/api/Users/authenticate/`, JSON.stringify(user), this.headers)
             .subscribe((res: any) => {
                 localStorage.setItem('access_token', res.user.token);
-                this.logger.log('Token', res.user.token);
+                localStorage.setItem('staffId', res.user.staffId);
                 this.logger.log('RESPONSE', res);
                 if (res.user.token !== null) {
                     this.router.navigate(['/dashboard']);
@@ -47,6 +47,10 @@ export class AuthenticationService {
     get isUserLoggedIn(): boolean {
         let authToken = localStorage.getItem('access_token'); 
         return (authToken !== null) ? true : false;
+    }
+
+    getCurrentStaffId() {
+        return localStorage.getItem('staffId');
     }
 
     logout() {
