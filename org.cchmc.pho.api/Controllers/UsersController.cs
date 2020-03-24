@@ -355,7 +355,7 @@ namespace org.cchmc.pho.api.Controllers
                 
                 var userDetails = _mapper.Map<User>(userViewModel);
                 user = await _userService.InsertUser(userDetails, currentUserName);
-                user = await _userService.AssignStaffIdToUser(user.Id, user.StaffId, currentUserName);
+                user = await _userService.AssignStaffIdToUser(user.Id, userViewModel.StaffId, currentUserName);
                 
                 return Ok(_mapper.Map<UserViewModel>(user));
             }

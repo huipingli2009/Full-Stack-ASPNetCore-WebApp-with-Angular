@@ -821,6 +821,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 {
                     x.Id = 3;
                     x.IsPending = true;
+                    x.StaffId = 0;
                     tempUser = x;
                     return Task.FromResult(x);
                 }).Verifiable();
