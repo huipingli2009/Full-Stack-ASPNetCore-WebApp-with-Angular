@@ -170,44 +170,6 @@ h1 {
   }
 }
 
-// .mat-slide-toggle-bar {
-//   width: 72px !important;
-//   border-radius: 14px !important;
-//   height: 23px !important;
-//   background-color: rgba(0,168,150,0.22) !important;
-//   color: var(--primary-color) !important;
-// }
-// .mat-slide-toggle-bar::after {
-//   content: "NO";
-//     font-size: 11px;
-//     font-weight: 700;
-//     color: white;
-//     position: absolute;
-//     left: 12px;
-//     top: 2px;
-// }
-// .mat-slide-toggle-thumb-container {
-//   top: 0 !important;
-//     left: 24px !important;
-// }
-// .mat-slide-toggle-thumb {
-//   width: 43px !important;
-//     border-radius: 14px !important;
-//     height: 23px !important;
-//     background-color: var(--primary-darker-color) !important;
-// }
-// .mat-slide-toggle-thumb::after {
-//   content: "YES";
-//     font-size: 11px;
-//     font-weight: 700;
-//     color: white;
-//     position: absolute;
-//     left: 12px;
-//     top: 2px;
-// }
-
-
-
 .success-snackbar {
   background-color: var(--primary-color);
   button {
@@ -391,6 +353,7 @@ h1 {
   max-width: 100% !important;
 }
 .practice-select-text {
+  max-height: 48px;
   .mat-option-text {
     font-size: 16px;
   }
