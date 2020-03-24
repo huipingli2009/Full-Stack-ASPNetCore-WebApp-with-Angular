@@ -1,0 +1,44 @@
+<div>
+    <div class="edreport-title">
+        Daily ED Report
+    </div>
+    <div>
+        <table class="ed-report">
+            <thead>
+                <tr>
+                    <th>Index</th>
+                    <th>Patient MRN</th>
+                    <th>Patient Encounter ID</th>
+                    <th>Facility</th>
+                    <th>Patient Name</th>
+                    <th>Patient DOB</th>
+                    <th>PCP</th>
+                    <th>Hospital Admission</th>
+                    <th>Hospital Discharge</th>
+                    <th>Visit Type</th>
+                    <th>Primary DX</th>
+                    <th>Primary DX_10Code</th>
+                    <th>DX2</th>
+                    <th>DX2_10Code</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of edChartDetails; let i=index;">
+                    <td>{{i+1}}</td>
+                    <td>{{item.patientMRN}}</td>
+                    <td>{{item.patientEncounterID}}</td>
+                    <td>{{item.facility}}</td>
+                    <td>{{item.patientName}}</td>
+                    <td>{{item.patientDOB | date:'shortDate'}}</td>
+                    <td>{{item.pcp}}</td>
+                    <td>{{item.hospitalAdmission | date:'short'}}</td>
+                    <td>{{item.hospitalDischarge | date:'short'}}</td>
+                    <td>{{item.visitType}}</td>
+                    <td>{{item.primaryDX}}</td>
+                    <td>{{item.primaryDX_10Code}}</td>
+                    <td>{{item.dX2}}</td>
+                    <td>{{item.dX2_10Code}}</td>
+                </tr>
+        </table>
+    </div>
+</div>
