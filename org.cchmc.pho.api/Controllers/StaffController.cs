@@ -28,6 +28,7 @@ namespace org.cchmc.pho.api.Controllers
         {
             _logger = logger;
             _mapper = mapper;
+            _userService = userService;
             _staffDal = staffDal;
         }
 
@@ -149,7 +150,6 @@ namespace org.cchmc.pho.api.Controllers
         {
             try
             {
-                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
                 // call the data method
                 var data = await _staffDal.ListPositions();
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
@@ -174,7 +174,6 @@ namespace org.cchmc.pho.api.Controllers
         {
             try
             {
-                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
                 // call the data method
                 var data = await _staffDal.ListCredentials();
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
@@ -199,7 +198,6 @@ namespace org.cchmc.pho.api.Controllers
         {
             try
             {
-                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
                 // call the data method
                 var data = await _staffDal.ListResponsibilities();
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)

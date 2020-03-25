@@ -127,7 +127,6 @@ namespace org.cchmc.pho.unittest.controllertests
                 }
         };
 
-            _mockUserService.Setup(p => p.GetUserByStaffId(_user.StaffId)).Returns(Task.FromResult(_user)).Verifiable();
             _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_user.StaffId).Verifiable();         
             _mockStaffDal.Setup(s => s.ListStaff(_userId)).Returns(Task.FromResult(myStaff)).Verifiable();
             _staffController = new StaffController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockStaffDal.Object);
@@ -165,8 +164,9 @@ namespace org.cchmc.pho.unittest.controllertests
         public async Task ListStaff_DataLayerThrowsException_ReturnsError()
         {
             // setup
-            var userId = 3;
-            _mockStaffDal.Setup(p => p.ListStaff(userId)).Throws(new Exception()).Verifiable();
+
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_user.StaffId).Verifiable();
+            _mockStaffDal.Setup(p => p.ListStaff(_user.StaffId)).Throws(new Exception()).Verifiable();
             _staffController = new StaffController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockStaffDal.Object);
 
             // execute
@@ -201,7 +201,8 @@ namespace org.cchmc.pho.unittest.controllertests
                 IsRVPIBoard = false,
             };
 
-            _mockStaffDal.Setup(s => s.GetStaffDetails(3, 20101)).Returns(Task.FromResult(myStaff)).Verifiable();
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_user.StaffId).Verifiable();
+            _mockStaffDal.Setup(s => s.GetStaffDetails(_user.StaffId, 20101)).Returns(Task.FromResult(myStaff)).Verifiable();
             _staffController = new StaffController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockStaffDal.Object);
 
             // execute
@@ -230,8 +231,8 @@ namespace org.cchmc.pho.unittest.controllertests
         public async Task GetStaffDetails_DataLayerThrowsException_ReturnsError()
         {
             // setup
-            var userId = 3;
-            _mockStaffDal.Setup(s => s.GetStaffDetails(userId, 20101)).Throws(new Exception()).Verifiable();
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_user.StaffId).Verifiable();
+            _mockStaffDal.Setup(s => s.GetStaffDetails(_user.StaffId, 20101)).Throws(new Exception()).Verifiable();
             _staffController = new StaffController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockStaffDal.Object);
 
             // execute
@@ -245,7 +246,7 @@ namespace org.cchmc.pho.unittest.controllertests
         public async Task UpdateStaffDetails_Success()
         {
             // setup
-            var userId = 3;
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_user.StaffId).Verifiable();
             var myStaff = new StaffDetail()
             {
                 Id = 20101,
@@ -266,7 +267,7 @@ namespace org.cchmc.pho.unittest.controllertests
                 IsRVPIBoard = false,
             };
 
-            _mockStaffDal.Setup(p => p.UpdateStaffDetails(userId, myStaff))
+            _mockStaffDal.Setup(p => p.UpdateStaffDetails(_user.StaffId, myStaff))
                 .Returns(Task.FromResult(myStaff)).Verifiable();
             _mockStaffDal.Setup(p => p.IsStaffInSamePractice(It.IsAny<Int32>(), It.IsAny<Int32>())).Returns(true);
             _staffController = new StaffController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockStaffDal.Object);
@@ -284,11 +285,11 @@ namespace org.cchmc.pho.unittest.controllertests
         public async Task UpdateStaffDetails_StaffDetailIsNull_Throws400()
         {
             // setup
-            var staffId = "1";
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_user.StaffId).Verifiable();
             _staffController = new StaffController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockStaffDal.Object);
 
             // execute
-            var result = await _staffController.UpdateStaffDetails(null, staffId) as ObjectResult;
+            var result = await _staffController.UpdateStaffDetails(null, _user.StaffId.ToString()) as ObjectResult;
 
             // assert
             Assert.AreEqual(400, result.StatusCode);
@@ -300,11 +301,11 @@ namespace org.cchmc.pho.unittest.controllertests
         public async Task UpdateStaffDetails_StaffDetailDoesNotMatch_Throws400()
         {
             // setup
-            var staffId = "1";
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_user.StaffId).Verifiable();
             _staffController = new StaffController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockStaffDal.Object);
 
             // execute
-            var result = await _staffController.UpdateStaffDetails(new StaffDetailViewModel(), staffId) as ObjectResult;
+            var result = await _staffController.UpdateStaffDetails(new StaffDetailViewModel(), _user.StaffId.ToString()) as ObjectResult;
 
             // assert
             Assert.AreEqual(400, result.StatusCode);
@@ -338,6 +339,7 @@ namespace org.cchmc.pho.unittest.controllertests
                 IsRVPIBoard = false,
             };
 
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_user.StaffId).Verifiable();
             _staffController = new StaffController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockStaffDal.Object);
             _mockStaffDal.Setup(p => p.IsStaffInSamePractice(It.IsAny<Int32>(), It.IsAny<Int32>())).Returns(false);
 
@@ -354,7 +356,7 @@ namespace org.cchmc.pho.unittest.controllertests
         public async Task UpdateStaffDetails_DataLayerThrowsException_ReturnsError()
         {
             // setup
-            var userId = 3; //todo update to match the hardcoded
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_user.StaffId).Verifiable();
             var myStaff = new StaffDetail()
             {
                 Id = 20101,
@@ -375,7 +377,7 @@ namespace org.cchmc.pho.unittest.controllertests
                 IsRVPIBoard = false,
             };
 
-            _mockStaffDal.Setup(p => p.UpdateStaffDetails(userId, It.IsAny<StaffDetail>())).Throws(new Exception());
+            _mockStaffDal.Setup(p => p.UpdateStaffDetails(_user.StaffId, It.IsAny<StaffDetail>())).Throws(new Exception());
             _mockStaffDal.Setup(p => p.IsStaffInSamePractice(It.IsAny<Int32>(), It.IsAny<Int32>())).Returns(true);
             _staffController = new StaffController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockStaffDal.Object);
             
@@ -533,6 +535,7 @@ namespace org.cchmc.pho.unittest.controllertests
                 }
             };
 
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_user.StaffId).Verifiable();
             _mockStaffDal.Setup(s => s.ListResponsibilities()).Returns(Task.FromResult(myResponsibilities)).Verifiable();
             _staffController = new StaffController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockStaffDal.Object);
 
@@ -554,6 +557,7 @@ namespace org.cchmc.pho.unittest.controllertests
         public async Task ListResponsibilities_DataLayerThrowsException_ReturnsError()
         {
             // setup
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_user.StaffId).Verifiable();
             _mockStaffDal.Setup(p => p.ListResponsibilities()).Throws(new Exception()).Verifiable();
             _staffController = new StaffController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockStaffDal.Object);
 
