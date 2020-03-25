@@ -27,7 +27,6 @@ namespace org.cchmc.pho.unittest.ControllerTests
     {
         private ContentsController _ContentController;
         private Mock<ILogger<ContentsController>> _mockLogger;
-        private Mock<IUserService> _mockUserService;
         private Mock<IContent> _mockContentDal;
         private IMapper _mapper;
 
@@ -69,7 +68,6 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 cfg.AddMaps(Assembly.GetAssembly(typeof(MetricMappings)));
             });
             _mapper = config.CreateMapper();
-            _mockUserService = new Mock<IUserService>();
             _mockContentDal = new Mock<IContent>();
             _mockLogger = new Mock<ILogger<ContentsController>>();
 
@@ -99,7 +97,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 }
             };
             _mockContentDal.Setup(p => p.ListActiveSpotLights()).Returns(Task.FromResult(mySpotlights)).Verifiable();
-            _ContentController = new ContentsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockContentDal.Object);
+            _ContentController = new ContentsController(_mockLogger.Object, _mapper, _mockContentDal.Object);
 
             // execute
             var result = await _ContentController.ListActiveSpotLights() as ObjectResult;
@@ -125,7 +123,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
         {
             // setup
             _mockContentDal.Setup(p => p.ListActiveSpotLights()).Throws(new Exception()).Verifiable();
-            _ContentController = new ContentsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockContentDal.Object);
+            _ContentController = new ContentsController(_mockLogger.Object, _mapper, _mockContentDal.Object);
 
             // execute
             var result = await _ContentController.ListActiveSpotLights() as ObjectResult;
@@ -157,7 +155,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 }
             };
             _mockContentDal.Setup(p => p.ListActiveQuicklinks()).Returns(Task.FromResult(myQuicklinks)).Verifiable();
-            _ContentController = new ContentsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockContentDal.Object);
+            _ContentController = new ContentsController(_mockLogger.Object, _mapper, _mockContentDal.Object);
 
             // execute
             var result = await _ContentController.ListActiveQuicklinks() as ObjectResult;
@@ -181,7 +179,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
         {
             // setup
             _mockContentDal.Setup(p => p.ListActiveQuicklinks()).Throws(new Exception()).Verifiable();
-            _ContentController = new ContentsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockContentDal.Object);
+            _ContentController = new ContentsController(_mockLogger.Object, _mapper, _mockContentDal.Object);
 
             // execute
             var result = await _ContentController.ListActiveQuicklinks() as ObjectResult;

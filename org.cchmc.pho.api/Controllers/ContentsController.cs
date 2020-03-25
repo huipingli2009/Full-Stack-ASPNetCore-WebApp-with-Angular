@@ -19,13 +19,11 @@ namespace org.cchmc.pho.api.Controllers
     {
         private readonly ILogger<ContentsController> _logger;
         private readonly IMapper _mapper;
-        private readonly IUserService _userService;
         private readonly IContent _content;
 
-        public ContentsController(ILogger<ContentsController> logger, IUserService userService, IMapper mapper, IContent content)
+        public ContentsController(ILogger<ContentsController> logger, IMapper mapper, IContent content)
         {
             _logger = logger;
-            _userService = userService;
             _mapper = mapper;
             _content = content;
         }
