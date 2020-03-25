@@ -7,7 +7,9 @@ using Microsoft.Extensions.Logging;
 using org.cchmc.pho.api.ViewModels;
 using org.cchmc.pho.core.Interfaces;
 using org.cchmc.pho.core.Models;
+using org.cchmc.pho.identity.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace org.cchmc.pho.api.Controllers
 {
@@ -17,18 +19,20 @@ namespace org.cchmc.pho.api.Controllers
     {
         private readonly ILogger<ContentsController> _logger;
         private readonly IMapper _mapper;
+        private readonly IUserService _userService;
         private readonly IContent _content;
 
-        public ContentsController(ILogger<ContentsController> logger, IMapper mapper, IContent content)
+        public ContentsController(ILogger<ContentsController> logger, IUserService userService, IMapper mapper, IContent content)
         {
             _logger = logger;
+            _userService = userService;
             _mapper = mapper;
             _content = content;
         }
 
         // GET: api/Content
         [HttpGet("spotlights")]
-
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<SpotLightViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -53,7 +57,7 @@ namespace org.cchmc.pho.api.Controllers
 
         // GET: api/Content
         [HttpGet("quicklinks")]
-
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<QuicklinkViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]

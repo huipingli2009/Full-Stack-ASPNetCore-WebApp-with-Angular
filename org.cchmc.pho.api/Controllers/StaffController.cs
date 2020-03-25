@@ -39,10 +39,10 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> ListStaff()
         {
-            int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
             
             try
             {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
                 // call the data method
                 var data = await _staffDal.ListStaff(currentUserId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
@@ -64,10 +64,7 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> GetStaffDetails(string staff)
-        {
-            // route parameters are strings and need to be translated (and validated) to their proper data type
-            int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
-
+        {            
             if (!int.TryParse(staff, out var staffId))
             {
                 _logger.LogInformation($"Failed to parse staffId - {staff}");
@@ -76,6 +73,7 @@ namespace org.cchmc.pho.api.Controllers
 
             try
             {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
                 // call the data method
                 var data = await _staffDal.GetStaffDetails(currentUserId, staffId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
@@ -97,10 +95,7 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> UpdateStaffDetails([FromBody] StaffDetailViewModel staffDetailVM, string staff)
-        {
-            // route parameters are strings and need to be translated (and validated) to their proper data type
-            int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
-
+        {            
             if (!int.TryParse(staff, out var staffId))
             {
                 _logger.LogInformation($"Failed to parse staffId - {staff}");
@@ -119,14 +114,17 @@ namespace org.cchmc.pho.api.Controllers
                 return BadRequest("staff id does not match");
             }
 
-            if (!_staffDal.IsStaffInSamePractice(currentUserId, staffId))
-            {
-                _logger.LogInformation($"staff and user practices do not match");
-                return BadRequest("staff practice does not match user");
-            }
-
             try
             {
+                // route parameters are strings and need to be translated (and validated) to their proper data type
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+
+                if (!_staffDal.IsStaffInSamePractice(currentUserId, staffId))
+                {
+                    _logger.LogInformation($"staff and user practices do not match");
+                    return BadRequest("staff practice does not match user");
+                }
+
                 StaffDetail staffDetail = _mapper.Map<StaffDetail>(staffDetailVM);
                 // call the data layer to mark the action
                 var data = await _staffDal.UpdateStaffDetails(currentUserId, staffDetail);
@@ -248,8 +246,7 @@ namespace org.cchmc.pho.api.Controllers
         public async Task<IActionResult> SignLegalDisclaimer(string staff)
         {
             //TODO: need a method to check the current user has the staff id specified           
-            int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
-
+            
             if (!int.TryParse(staff, out var staffId))
             {
                 _logger.LogInformation($"Failed to parse staffId - {staff}");
@@ -258,6 +255,8 @@ namespace org.cchmc.pho.api.Controllers
 
             try
             {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+
                 var result = await _staffDal.SignLegalDisclaimer(currentUserId);            
                 return Ok(result);
             }
@@ -276,10 +275,9 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> GetPracticeList()
         {
-            int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
-
             try
             {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
                 // call the data method
                 var data = await _staffDal.GetPracticeList(currentUserId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
@@ -303,7 +301,6 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> SwitchPractice([FromBody]StaffViewModel staffVM)
         {
-            int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
 
             if (staffVM.MyPractice == null)
             {               
@@ -312,6 +309,7 @@ namespace org.cchmc.pho.api.Controllers
 
             try
             {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
                 var result = await _staffDal.SwitchPractice(currentUserId, staffVM.MyPractice.Id);
                 return Ok(result);
             }

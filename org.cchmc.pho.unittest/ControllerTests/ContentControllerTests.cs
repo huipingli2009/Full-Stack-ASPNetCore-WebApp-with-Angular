@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -15,6 +16,8 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Threading.Tasks;
+using org.cchmc.pho.identity.Interfaces;
+using org.cchmc.pho.identity.Models;
 
 namespace org.cchmc.pho.unittest.ControllerTests
 {
@@ -24,8 +27,38 @@ namespace org.cchmc.pho.unittest.ControllerTests
     {
         private ContentsController _ContentController;
         private Mock<ILogger<ContentsController>> _mockLogger;
+        private Mock<IUserService> _mockUserService;
         private Mock<IContent> _mockContentDal;
         private IMapper _mapper;
+
+        //Security moq objects
+        private const string _userName = "bblackmore";
+        private const string _password = "P@ssw0rd!";
+        private const int _userId = 3;
+        private User _user;
+        private List<Role> _roles = new List<Role>()
+        {
+            new Role()
+            {
+                Id = 1,
+                Name = "Practice Member"
+            },
+            new Role()
+            {
+                Id = 2,
+                Name = "Practice Admin"
+            },
+            new Role()
+            {
+                Id = 3,
+                Name = "PHO Member"
+            },
+            new Role()
+            {
+                Id = 4,
+                Name = "PHO Admin"
+            }
+        };
 
         [TestInitialize]
         public void Initialize()
@@ -36,6 +69,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 cfg.AddMaps(Assembly.GetAssembly(typeof(MetricMappings)));
             });
             _mapper = config.CreateMapper();
+            _mockUserService = new Mock<IUserService>();
             _mockContentDal = new Mock<IContent>();
             _mockLogger = new Mock<ILogger<ContentsController>>();
 
@@ -65,7 +99,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 }
             };
             _mockContentDal.Setup(p => p.ListActiveSpotLights()).Returns(Task.FromResult(mySpotlights)).Verifiable();
-            _ContentController = new ContentsController(_mockLogger.Object, _mapper, _mockContentDal.Object);
+            _ContentController = new ContentsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockContentDal.Object);
 
             // execute
             var result = await _ContentController.ListActiveSpotLights() as ObjectResult;
@@ -91,7 +125,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
         {
             // setup
             _mockContentDal.Setup(p => p.ListActiveSpotLights()).Throws(new Exception()).Verifiable();
-            _ContentController = new ContentsController(_mockLogger.Object, _mapper, _mockContentDal.Object);
+            _ContentController = new ContentsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockContentDal.Object);
 
             // execute
             var result = await _ContentController.ListActiveSpotLights() as ObjectResult;
@@ -123,7 +157,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 }
             };
             _mockContentDal.Setup(p => p.ListActiveQuicklinks()).Returns(Task.FromResult(myQuicklinks)).Verifiable();
-            _ContentController = new ContentsController(_mockLogger.Object, _mapper, _mockContentDal.Object);
+            _ContentController = new ContentsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockContentDal.Object);
 
             // execute
             var result = await _ContentController.ListActiveQuicklinks() as ObjectResult;
@@ -147,7 +181,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
         {
             // setup
             _mockContentDal.Setup(p => p.ListActiveQuicklinks()).Throws(new Exception()).Verifiable();
-            _ContentController = new ContentsController(_mockLogger.Object, _mapper, _mockContentDal.Object);
+            _ContentController = new ContentsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockContentDal.Object);
 
             // execute
             var result = await _ContentController.ListActiveQuicklinks() as ObjectResult;
