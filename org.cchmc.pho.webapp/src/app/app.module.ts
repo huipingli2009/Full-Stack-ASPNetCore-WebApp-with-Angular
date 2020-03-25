@@ -58,6 +58,7 @@ import { HeaderComponent } from './header/header.component';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
 import { LoginLayoutComponent } from './layouts/login-layout.component';
 import { MainLayoutComponent } from './layouts/main-layout.component';
+import { ReportComponent } from './report/report.component';
 
 import { debounceTime } from 'rxjs/operators';
 @NgModule({
@@ -73,7 +74,8 @@ import { debounceTime } from 'rxjs/operators';
     LoginComponent,
     MatSnackBarComponent,
     LoginLayoutComponent,
-    MainLayoutComponent
+    MainLayoutComponent,
+    ReportComponent
   ],
   imports: [
     BrowserModule,
