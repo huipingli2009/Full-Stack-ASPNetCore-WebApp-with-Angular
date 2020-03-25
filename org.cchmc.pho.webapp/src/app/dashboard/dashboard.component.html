@@ -140,6 +140,7 @@
         <table class="ed-table">
             <thead>
                 <tr>
+                    <th>Index</th>
                     <th>Patient MRN</th>
                     <th>Patient Encounter ID</th>
                     <th>Facility</th>
@@ -157,6 +158,7 @@
             </thead>
             <tbody>
                 <tr *ngFor="let item of edChartDetails; let i=index;">
+                    <td>{{i+1}}</td>
                     <td>{{item.patientMRN}}</td>
                     <td>{{item.patientEncounterID}}</td>
                     <td>{{item.facility}}</td>
@@ -175,7 +177,8 @@
     </div>
     <div mat-dialog-actions align="end">
         <button mat-button mat-dialog-close>Close</button>
-        <button mat-button>View Report</button>
+        <button mat-button (click)="OpenReport()">View Report</button>
+
     </div>
 
 </ng-template>
