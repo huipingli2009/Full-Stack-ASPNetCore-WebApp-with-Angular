@@ -56,6 +56,8 @@ import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { ErrorInterceptor } from './helpers/error.interceptor';
 import { HeaderComponent } from './header/header.component';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
+import { LoginLayoutComponent } from './layouts/login-layout.component';
+import { MainLayoutComponent } from './layouts/main-layout.component';
 
 import { debounceTime } from 'rxjs/operators';
 @NgModule({
@@ -69,7 +71,9 @@ import { debounceTime } from 'rxjs/operators';
     WorkbooksComponent,
     HeaderComponent,
     LoginComponent,
-    MatSnackBarComponent
+    MatSnackBarComponent,
+    LoginLayoutComponent,
+    MainLayoutComponent
   ],
   imports: [
     BrowserModule,

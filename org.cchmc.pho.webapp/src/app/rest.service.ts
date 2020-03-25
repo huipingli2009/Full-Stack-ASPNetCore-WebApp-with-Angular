@@ -6,7 +6,7 @@ import { Alerts, Population, EdChart, EdChartDetails, Spotlight, Quicklinks } fr
 import { environment } from '../environments/environment';
 import { Patients, PatientDetails, Conditions, Providers, PopSlices, Gender, Insurance, Pmca, States, PatientForWorkbook } from './models/patients';
 import { NGXLogger } from 'ngx-logger';
-import { Staff, StaffDetails, Responsibilities } from './models/Staff';
+import { Staff, StaffDetails, Responsibilities, PracticeList } from './models/Staff';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
 import { WorkbookReportingMonths, WorkbookProvider, WorkbookPatient, Followup } from './models/workbook';
 import { URLSearchParams } from 'url';
@@ -284,6 +284,23 @@ export class RestService {
     );
   }
 
+  // Currently not using this.
+  // getStaffAdminVerbiage(): Observable<any> {
+  //   return this.http.post(`${API_URL}/api/Users/verbiage/`, httpOptions).pipe(
+  //     map((data) => {
+  //       this.logger.log('verbiage', data);
+  //       return data;
+  //     })
+  //   );
+  // }
+  /* Practice Switch =======================================================*/
+  getPracticeList(): Observable<any> {
+    return this.http.get<any>(`${API_URL}/api/Staff/practicelist/`).pipe(
+      map((data: PracticeList[]) => {
+        return data;
+      })
+    );
+  }
 
   /* Workbook Component =======================================================*/
 
@@ -342,6 +359,13 @@ export class RestService {
     this.logger.log(JSON.stringify(workbookPatient));
     return this.http.post<number>(`${API_URL}/api/Workbooks/Patients/${workbookPatient.patientId}`, JSON.stringify(workbookPatient), httpOptions).pipe(
       catchError(this.handleError<any>('adding patient to the workbook'))
+    );
+  }
+  switchPractice(staffWithPractice): Observable<any> {
+    console.log('staff with practice', JSON.stringify(staffWithPractice));
+    return this.http.put(`${API_URL}/api/Staff/switchpractice`, JSON.stringify(staffWithPractice), httpOptions).pipe(
+      tap(_ => this.snackBar.openSnackBar(`Current Practice Switched!`
+      , 'Close', 'success-snackbar'))
     );
   }
 

@@ -1,4 +1,4 @@
-export class Staff {
+export interface Staff {
     id: number;
     firstName: string;
     lastName: string;
@@ -9,6 +9,10 @@ export class Staff {
     credentials: Credentials;
     position: Position;
     legalDisclaimerSigned: string;
+    myPractice: {
+        id: number;
+        name: string;
+    }
 }
 
 export class StaffDetails {
@@ -45,4 +49,14 @@ export class Responsibilities {
     id: number;
     name: string;
     type: string;
+}
+
+export interface PracticeList {
+    currentPracticeId: number;
+    practiceList: Array<Practices>;
+}
+
+export interface Practices {
+    id: number;
+    name: string;
 }

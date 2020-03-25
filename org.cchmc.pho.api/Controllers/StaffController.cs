@@ -8,6 +8,7 @@ using org.cchmc.pho.api.ViewModels;
 using org.cchmc.pho.core.Interfaces;
 using org.cchmc.pho.core.DataModels;
 using Swashbuckle.AspNetCore.Annotations;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace org.cchmc.pho.api.Controllers
@@ -28,7 +29,7 @@ namespace org.cchmc.pho.api.Controllers
             _mapper = mapper;
             _staffDal = staffDal;
         }
-
+        [AllowAnonymous]
         [HttpGet()]
         [SwaggerResponse(200, type: typeof(List<StaffViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
@@ -58,7 +59,7 @@ namespace org.cchmc.pho.api.Controllers
                 return StatusCode(500, "An error occurred");
             }
         }
-
+        [AllowAnonymous]
         [HttpGet("{staff}")]
         [SwaggerResponse(200, type: typeof(StaffDetailViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
@@ -94,7 +95,7 @@ namespace org.cchmc.pho.api.Controllers
                 return StatusCode(500, "An error occurred");
             }
         }
-
+        [AllowAnonymous]
         [HttpPut("{staff}")]
         [SwaggerResponse(200, type: typeof(StaffDetailViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
