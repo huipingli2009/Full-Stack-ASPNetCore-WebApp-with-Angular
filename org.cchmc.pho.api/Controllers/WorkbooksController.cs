@@ -179,11 +179,11 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [HttpDelete("patients/{id}")]
+        [HttpDelete("patients/{formResponseId}/{id}")]
         [SwaggerResponse(200, type: typeof(bool))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> DeletePatientFromWorkbooks(int id, [FromBody] WorkbooksPatientViewModel workbookspatientVM)
+        public async Task<IActionResult> DeletePatientFromWorkbooks(int formResponseId,int id)
         {
             // route parameters are strings and need to be translated (and validated) to their proper data type
             if (!int.TryParse(_DEFAULT_USER, out var userId))
@@ -194,7 +194,7 @@ namespace org.cchmc.pho.api.Controllers
 
             try
             {
-                var result = await _workbooks.RemovePatientFromWorkbooks(userId, workbookspatientVM.FormResponseId, id);
+                var result = await _workbooks.RemovePatientFromWorkbooks(userId, formResponseId, id);
                 return Ok(result);
             }
             catch (Exception ex)

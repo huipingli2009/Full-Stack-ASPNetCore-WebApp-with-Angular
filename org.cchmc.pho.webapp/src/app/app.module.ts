@@ -57,7 +57,7 @@ import { ErrorInterceptor } from './helpers/error.interceptor';
 import { HeaderComponent } from './header/header.component';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
 
-
+import { debounceTime } from 'rxjs/operators';
 @NgModule({
   declarations: [
     AppComponent,
@@ -68,8 +68,8 @@ import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.compo
     FilesComponent,
     WorkbooksComponent,
     HeaderComponent,
-        LoginComponent,
-        MatSnackBarComponent
+    LoginComponent,
+    MatSnackBarComponent
   ],
   imports: [
     BrowserModule,
@@ -133,9 +133,10 @@ import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.compo
     MatTooltipModule,
     MatTreeModule,
     MatLineModule
+
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-      { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }, MatSnackBarComponent],
+  { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }, MatSnackBarComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

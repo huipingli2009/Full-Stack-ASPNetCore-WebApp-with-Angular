@@ -23,5 +23,18 @@ export class WorkbookPatient {
     dateOfService: string;
     phQ9_Score: string;
     actionFollowUp: boolean;
-    improvement: boolean;
+    improvement: string;
+}
+
+export class Followup {
+    formResponseId: number;
+    patientId: number;
+    actionPlanGiven: boolean;
+    managedByExternalProvider: boolean;
+    dateOfLastCommunicationByExternalProvider: string;
+    followupPhoneCallOneToTwoWeeks: boolean;
+    dateOfFollowupCall: string;
+    oneMonthFollowupVisit: boolean;
+    dateOfOneMonthVisit: string;
+    oneMonthFolllowupPHQ9Score: number;
 }
