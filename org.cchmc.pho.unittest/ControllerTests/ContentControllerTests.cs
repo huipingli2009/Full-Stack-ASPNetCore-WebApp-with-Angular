@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -15,6 +16,8 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Threading.Tasks;
+using org.cchmc.pho.identity.Interfaces;
+using org.cchmc.pho.identity.Models;
 
 namespace org.cchmc.pho.unittest.ControllerTests
 {
@@ -26,6 +29,35 @@ namespace org.cchmc.pho.unittest.ControllerTests
         private Mock<ILogger<ContentsController>> _mockLogger;
         private Mock<IContent> _mockContentDal;
         private IMapper _mapper;
+
+        //Security moq objects
+        private const string _userName = "bblackmore";
+        private const string _password = "P@ssw0rd!";
+        private const int _userId = 3;
+        private User _user;
+        private List<Role> _roles = new List<Role>()
+        {
+            new Role()
+            {
+                Id = 1,
+                Name = "Practice Member"
+            },
+            new Role()
+            {
+                Id = 2,
+                Name = "Practice Admin"
+            },
+            new Role()
+            {
+                Id = 3,
+                Name = "PHO Member"
+            },
+            new Role()
+            {
+                Id = 4,
+                Name = "PHO Admin"
+            }
+        };
 
         [TestInitialize]
         public void Initialize()

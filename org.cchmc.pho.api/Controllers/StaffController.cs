@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using org.cchmc.pho.api.ViewModels;
 using org.cchmc.pho.core.Interfaces;
 using org.cchmc.pho.core.DataModels;
+using org.cchmc.pho.identity.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 using Microsoft.AspNetCore.Authorization;
 
@@ -19,34 +20,31 @@ namespace org.cchmc.pho.api.Controllers
     {
         private readonly ILogger<StaffController> _logger;
         private readonly IMapper _mapper;
+        private readonly IUserService _userService;
         private readonly IStaff _staffDal;
 
-        private readonly string _DEFAULT_USER = "3";
 
-        public StaffController(ILogger<StaffController> logger, IMapper mapper, IStaff staffDal)
+        public StaffController(ILogger<StaffController> logger, IUserService userService, IMapper mapper, IStaff staffDal)
         {
             _logger = logger;
             _mapper = mapper;
+            _userService = userService;
             _staffDal = staffDal;
         }
-        [AllowAnonymous]
+
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [HttpGet()]
         [SwaggerResponse(200, type: typeof(List<StaffViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> ListStaff()
         {
-            // route parameters are strings and need to be translated (and validated) to their proper data type
-            if (!int.TryParse(_DEFAULT_USER, out var userId))
-            {
-                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
-                return BadRequest("user is not a valid integer");
-            }
-
+            
             try
             {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
                 // call the data method
-                var data = await _staffDal.ListStaff(userId);
+                var data = await _staffDal.ListStaff(currentUserId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
                 var result = _mapper.Map<List<StaffViewModel>>(data);
                 // return the result in a "200 OK" response
@@ -59,20 +57,14 @@ namespace org.cchmc.pho.api.Controllers
                 return StatusCode(500, "An error occurred");
             }
         }
-        [AllowAnonymous]
+
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [HttpGet("{staff}")]
         [SwaggerResponse(200, type: typeof(StaffDetailViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> GetStaffDetails(string staff)
-        {
-            // route parameters are strings and need to be translated (and validated) to their proper data type
-            if (!int.TryParse(_DEFAULT_USER, out var userId))
-            {
-                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
-                return BadRequest("user is not a valid integer");
-            }
-
+        {            
             if (!int.TryParse(staff, out var staffId))
             {
                 _logger.LogInformation($"Failed to parse staffId - {staff}");
@@ -81,8 +73,9 @@ namespace org.cchmc.pho.api.Controllers
 
             try
             {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
                 // call the data method
-                var data = await _staffDal.GetStaffDetails(userId, staffId);
+                var data = await _staffDal.GetStaffDetails(currentUserId, staffId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
                 var result = _mapper.Map<StaffDetailViewModel>(data);
                 // return the result in a "200 OK" response
@@ -95,20 +88,14 @@ namespace org.cchmc.pho.api.Controllers
                 return StatusCode(500, "An error occurred");
             }
         }
-        [AllowAnonymous]
+        
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [HttpPut("{staff}")]
         [SwaggerResponse(200, type: typeof(StaffDetailViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> UpdateStaffDetails([FromBody] StaffDetailViewModel staffDetailVM, string staff)
-        {
-            // route parameters are strings and need to be translated (and validated) to their proper data type
-            if (!int.TryParse(_DEFAULT_USER, out var userId))
-            {
-                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
-                return BadRequest("user is not a valid integer");
-            }
-
+        {            
             if (!int.TryParse(staff, out var staffId))
             {
                 _logger.LogInformation($"Failed to parse staffId - {staff}");
@@ -127,17 +114,20 @@ namespace org.cchmc.pho.api.Controllers
                 return BadRequest("staff id does not match");
             }
 
-            if (!_staffDal.IsStaffInSamePractice(userId, staffId))
-            {
-                _logger.LogInformation($"staff and user practices do not match");
-                return BadRequest("staff practice does not match user");
-            }
-
             try
             {
+                // route parameters are strings and need to be translated (and validated) to their proper data type
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+
+                if (!_staffDal.IsStaffInSamePractice(currentUserId, staffId))
+                {
+                    _logger.LogInformation($"staff and user practices do not match");
+                    return BadRequest("staff practice does not match user");
+                }
+
                 StaffDetail staffDetail = _mapper.Map<StaffDetail>(staffDetailVM);
                 // call the data layer to mark the action
-                var data = await _staffDal.UpdateStaffDetails(userId, staffDetail);
+                var data = await _staffDal.UpdateStaffDetails(currentUserId, staffDetail);
                 var result = _mapper.Map<StaffDetailViewModel>(data);
                 return Ok(result);
             }
@@ -150,6 +140,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpGet("positions")]
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<PositionViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -173,6 +164,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpGet("credentials")]
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<CredentialViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -196,6 +188,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpGet("responsibilities")]
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<ResponsibilityViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -219,6 +212,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpGet("providers")]
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<ProviderViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -227,14 +221,10 @@ namespace org.cchmc.pho.api.Controllers
             try
             {
                 // route parameters are strings and need to be translated (and validated) to their proper data type
-                if (!int.TryParse(_DEFAULT_USER, out var userId))
-                {
-                    _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
-                    return BadRequest("user is not a valid integer");
-                }
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
 
                 // call the data method
-                var data = await _staffDal.ListProviders(userId);
+                var data = await _staffDal.ListProviders(currentUserId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
                 var result = _mapper.Map<List<ProviderViewModel>>(data);
                 // return the result in a "200 OK" response
@@ -249,18 +239,14 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpPut("{staff}/legalstatus")]
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(bool))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> SignLegalDisclaimer(string staff)
         {
             //TODO: need a method to check the current user has the staff id specified           
-            if (!int.TryParse(_DEFAULT_USER, out var userId))
-            {
-                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
-                return BadRequest("user is not a valid integer");
-            }
-
+            
             if (!int.TryParse(staff, out var staffId))
             {
                 _logger.LogInformation($"Failed to parse staffId - {staff}");
@@ -269,7 +255,9 @@ namespace org.cchmc.pho.api.Controllers
 
             try
             {
-                var result = await _staffDal.SignLegalDisclaimer(userId);            
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+
+                var result = await _staffDal.SignLegalDisclaimer(currentUserId);            
                 return Ok(result);
             }
             catch (Exception ex)
@@ -281,21 +269,17 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpGet("practicelist")]
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(SelectPracticeViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> GetPracticeList()
         {
-            if (!int.TryParse(_DEFAULT_USER, out var userId))
-            {
-                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
-                return BadRequest("user is not a valid integer");
-            }
-
             try
             {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
                 // call the data method
-                var data = await _staffDal.GetPracticeList(userId);
+                var data = await _staffDal.GetPracticeList(currentUserId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
                 var result = _mapper.Map<SelectPracticeViewModel>(data);
                 // return the result in a "200 OK" response
@@ -311,16 +295,12 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpPut("switchpractice")]
+        [Authorize(Roles = "PHO Admin")]
         [SwaggerResponse(200, type: typeof(bool))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> SwitchPractice([FromBody]StaffViewModel staffVM)
         {
-            if (!int.TryParse(_DEFAULT_USER, out var userId))
-            {
-                _logger.LogInformation($"Failed to parse userId - {_DEFAULT_USER}");
-                return BadRequest("user is not a valid integer");
-            }
 
             if (staffVM.MyPractice == null)
             {               
@@ -329,7 +309,8 @@ namespace org.cchmc.pho.api.Controllers
 
             try
             {
-                var result = await _staffDal.SwitchPractice(userId, staffVM.MyPractice.Id);
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+                var result = await _staffDal.SwitchPractice(currentUserId, staffVM.MyPractice.Id);
                 return Ok(result);
             }
             catch (Exception ex)
