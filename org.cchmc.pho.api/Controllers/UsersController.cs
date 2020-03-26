@@ -35,7 +35,7 @@ namespace org.cchmc.pho.api.Controllers
             _customOptions = customOptions.Value;
             _staff = staffDal;
         }
-
+        [AllowAnonymous]
         [HttpPost("authenticate")]
         [SwaggerResponse(200, type: typeof(AuthenticationResult))]
         [SwaggerResponse(401, description: "User not found or password did not match")]

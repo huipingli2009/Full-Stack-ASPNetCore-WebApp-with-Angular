@@ -313,9 +313,11 @@ export class StaffComponent implements OnInit {
     if (this.isPasswordUpdated === true) {
       this.updatePassword(this.selectedStaffUser, this.adminUserForm.controls.password.value);
       this.updateStaffUser(this.selectedStaffUser, updatedUser);
+      this.dialog.closeAll();
     } else {
       this.logger.log(JSON.stringify(updatedUser), 'updated user')
       this.updateStaffUser(this.selectedStaffUser, updatedUser);
+      this.dialog.closeAll();
     }
   }
 
