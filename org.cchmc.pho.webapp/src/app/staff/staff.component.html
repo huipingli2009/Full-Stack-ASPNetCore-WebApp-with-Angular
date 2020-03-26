@@ -310,13 +310,35 @@
                                 </div>
                                 <ng-template #adminDialog>
                                     <div mat-dialog-content class="mat-typography" id="admin-dialog">
-                                        <div fxLayout="row" class="detail-heading">ADD / UPDATE PORTAL
-                                            INFO</div>
-                                        <div fxLayout="row" class="validation-text">
-                                            <p>{{adminVerbiage | slice:0:166}}<br>{{adminVerbiage | slice:166:adminVerbiage.length}}</p>
-                                        </div>
-                                        <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end">
-                                            <!-- <mat-form-field>
+                                        <form [formGroup]="adminUserForm" (ngSubmit)="confirmStaffUserUpdate()">
+                                            <div fxLayout="row" class="detail-heading">ADD / UPDATE PORTAL
+                                                INFO</div>
+                                            <div fxLayout="row" class="validation-text">
+                                                <p>{{adminVerbiage | slice:0:141}}<br>{{adminVerbiage | slice:141:adminVerbiage.length}}
+                                                </p>
+                                            </div>
+                                            <div fxLayout="row">
+                                                <div fxLayout="column" fxFlex="25%">
+                                                    <label class="toggle-label">REMOVE REGISTRY ACCESS</label>
+                                                    <mat-slide-toggle ngDefaultControl class="admin-toggle"
+                                                        [checked]="isDeleted" (change)="removeUserRegAccess($event)">
+                                                    </mat-slide-toggle>
+                                                    <!-- <mat-slide-toggle formControlName="activeStatus" [checked]="form.controls.activeStatus"
+                                                name="activeStatus" ngDefaultControl>
+                                              </mat-slide-toggle> -->
+                                                </div>
+                                                <div fxLayout="column">
+                                                    <label class="toggle-label">ACCOUNT LOCKED</label>
+                                                    <mat-slide-toggle ngDefaultControl class="admin-toggle"
+                                                        [checked]="isLockedOut" (change)="lockoutUser($event)">
+                                                    </mat-slide-toggle>
+                                                    <!-- <mat-slide-toggle formControlName="activeStatus" [checked]="form.controls.activeStatus"
+                                                name="activeStatus" ngDefaultControl>
+                                              </mat-slide-toggle> -->
+                                                </div>
+                                            </div>
+                                            <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end">
+                                                <!-- <mat-form-field>
                                                     <mat-label>Email</mat-label>
                                                     <input matInput formControlName="email" name="email">
                                                     <mat-icon matPrefix>
@@ -333,64 +355,64 @@
             
                                                     </ng-container>
                                                 </mat-form-field> -->
-                                            <div fxLayout="column" class="input-w-icon">
-                                                <mat-form-field floatLabel="always">
-                                                    <mat-label>USER NAME</mat-label>
-                                                    <input matInput [value]="">
-                                                    <mat-icon matPrefix>
-                                                        person
-                                                    </mat-icon>
-                                                </mat-form-field>
+                                                <div fxLayout="column" class="input-w-icon">
+                                                    <mat-form-field floatLabel="always">
+                                                        <mat-label>USER NAME</mat-label>
+                                                        <input matInput formControlName="userName" name="userName">
+                                                        <mat-icon matPrefix>
+                                                            person
+                                                        </mat-icon>
+                                                        <mat-error>You must include a username</mat-error>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div fxLayout="column" class="input-w-icon">
+                                                    <mat-form-field floatLabel="always">
+                                                        <mat-label>PASSWORD</mat-label>
+                                                        <input matInput type="password" formControlName="password"
+                                                            name="password" (change)="passwordChanged()" [errorStateMatcher]="matcher">
+                                                        <mat-icon matPrefix>
+                                                            lock
+                                                        </mat-icon>
+                                                        <mat-error>Passwords Must Match</mat-error>
+                                                        
+                                                    </mat-form-field>
+                                                </div>
+                                                <div fxLayout="column" class="input-w-icon">
+                                                    <mat-form-field floatLabel="always">
+                                                        <mat-label>CONFIRM PW</mat-label>
+                                                        <input matInput type="password"
+                                                            formControlName="confirmPassword" name="confirmPassword"
+                                                            (change)="passwordChanged()" [errorStateMatcher]="matcher">
+                                                        <mat-icon matPrefix>
+                                                            lock
+                                                        </mat-icon>
+                                                        <mat-error>Passwords Must Match</mat-error>
+                                                    </mat-form-field>
+                                                </div>
                                             </div>
-                                            <div fxLayout="column" class="input-w-icon">
-                                                <mat-form-field floatLabel="always">
-                                                    <mat-label>PASSWORD</mat-label>
-                                                    <input matInput [value]="">
-                                                    <mat-icon matPrefix>
-                                                        lock
-                                                    </mat-icon>
-                                                </mat-form-field>
+                                            <div fxLayout="row" fxLayoutGap="12px"><label class="toggle-label">ACCESS
+                                                    TYPE:</label></div>
+                                            <div fxLayout="row" fxLayoutGap="10px" *ngIf="userRoleList">
+                                                <div fxLayout="column" formArrayName="roles"
+                                                    *ngFor="let role of roleOptions.controls; let i = index">
+                                                    <mat-checkbox [formControlName]="i">{{userRoleList[i].name}}
+                                                    </mat-checkbox>
+                                                </div>
                                             </div>
-                                            <div fxLayout="column" class="input-w-icon">
-                                                <mat-form-field floatLabel="always">
-                                                    <mat-label>CONFIRM PW</mat-label>
-                                                    <input matInput [value]="">
-                                                    <mat-icon matPrefix>
-                                                        lock
-                                                    </mat-icon>
-                                                </mat-form-field>
+                                        </form>
+                                        <ng-template #updateUserDialog>
+                                            <div mat-dialog-content class="mat-typography">
+                                              <h3>Are you sure you want to save changes to this user?</h3>
                                             </div>
-                                            <div fxLayout="column">
-                                                <label class="toggle-label">REGISTRY ACCESS</label>
-                                                <mat-slide-toggle ngDefaultControl class="admin-toggle">
-                                              </mat-slide-toggle>
-                                                <!-- <mat-slide-toggle formControlName="activeStatus" [checked]="form.controls.activeStatus"
-                                                name="activeStatus" ngDefaultControl>
-                                              </mat-slide-toggle> -->
-                                            </div>
-                                            <div fxLayout="column">
-                                                <label class="toggle-label">UNLOCK ACCOUNT</label>
-                                                <mat-slide-toggle ngDefaultControl class="admin-toggle">
-                                              </mat-slide-toggle>
-                                                <!-- <mat-slide-toggle formControlName="activeStatus" [checked]="form.controls.activeStatus"
-                                                name="activeStatus" ngDefaultControl>
-                                              </mat-slide-toggle> -->
-                                            </div>
-                                        </div>
-                                        <div fxLayout="row" fxLayoutGap="12px"><label class="toggle-label">ACCESS TYPE:</label></div>
-                                        <div fxLayout="row" fxLayoutGap="10px">
-                                            <div fxLayout="column"><mat-checkbox>Practice Member</mat-checkbox></div>
-                                            <div fxLayout="column"><mat-checkbox>Practice Admin</mat-checkbox></div>
-                                            <div fxLayout="column"><mat-checkbox>PHO Member</mat-checkbox></div>
-                                            <div fxLayout="column"><mat-checkbox>PHO Admin</mat-checkbox></div>
-                                        </div>
-                                        <div fxLayout="row">
-                                            <button mat-flat-button color="accent">SAVE</button>
-                                        </div>
+                                            <div mat-dialog-actions align="end">
+                                              <button mat-button mat-dialog-close>Cancel</button>
+                                              <button mat-flat-button color="accent" mat-dialog-close (click)="submitForm()">Save and Update User</button>
+                                          </div>
+                                          </ng-template>
                                     </div>
                                     <div mat-dialog-actions align="end">
                                         <button mat-button (click)="cancelAdminDialog()">Cancel</button>
-                                        <button mat-button>Update</button>
+                                        <button mat-flat-button (click)="confirmStaffUserUpdate()" color="accent">SAVE</button>
                                     </div>
                                 </ng-template>
 

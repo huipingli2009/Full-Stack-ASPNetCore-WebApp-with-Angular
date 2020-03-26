@@ -28,27 +28,29 @@ export class HeaderComponent {
   alertScheduleId: number;
   updateAlert: FormGroup;
   currentUser: CurrentUser;
+  isUserAdmin: boolean;
   firstName: string;
   lastName: string;
-    subscription: Subscription;
-    practiceForm: FormGroup;
-    practiceList: Array<Practices>;
-    currentPracticeId: number;
-    currentPractice: string;
+  subscription: Subscription;
+  practiceForm: FormGroup;
+  practiceList: Array<Practices>;
+  currentPracticeId: number;
+  currentPractice: string;
+  userPracticeName: string;
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
     private toastr: ToastrService, public fb: FormBuilder, private logger: NGXLogger,
     private authenticationService: AuthenticationService, private userService: UserService) {
     this.logger.log('testing the logging in app.component.ts constructor with NGXLogger');
-      this.practiceForm = this.fb.group({
-          practiceControl: ['']
-      });
+    this.practiceForm = this.fb.group({
+      practiceControl: ['']
+    });
 
   }
 
   ngOnInit() {
     this.getAlerts();
-      this.getCurrentUser();
-      this.getPracticeList();
+    this.getCurrentUser();
+    this.getPracticeList();
   }
 
   ngAfterViewInit() {
@@ -60,6 +62,9 @@ export class HeaderComponent {
       this.currentUser = data;
       this.firstName = data.firstName;
       this.lastName = data.lastName;
+      if (data.role.id === 3) {
+        this.isUserAdmin = true;
+      } else { this.isUserAdmin = false; }
     });
   }
 

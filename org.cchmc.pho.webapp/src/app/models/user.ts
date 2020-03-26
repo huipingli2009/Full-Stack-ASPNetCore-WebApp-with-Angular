@@ -17,10 +17,7 @@ export interface User {
     lastUpdatedBy: string;
     deactivatedDate: Date;
     deactivatedBy: string;
-    role: {
-        id: number;
-        name: string;
-    }
+    role: Array<UserRoles>;
 }
 
 export interface UserAuthenticate {
@@ -55,4 +52,9 @@ export interface CurrentUser {
         }
     };
     refreshToken: string;
+}
+
+export interface UserRoles {
+    id: number;
+    name: string;
 }
