@@ -168,7 +168,7 @@ namespace org.cchmc.pho.api.Controllers
             try
             {
                 int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
-                var result = await _workbooks.RemovePatientFromWorkbooks(userId, formResponseId, id);
+                var result = await _workbooks.RemovePatientFromWorkbooks(currentUserId, formResponseId, id);
                 return Ok(result);
             }
             catch (Exception ex)
