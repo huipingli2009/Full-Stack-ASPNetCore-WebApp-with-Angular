@@ -215,7 +215,7 @@ export class DashboardComponent implements OnInit {
   }
 
   OpenReport() {
-    window.open('/edreport', "_blank");
+    window.open(`${this.defaultUrl}/edreport`, "_blank");
   }
 
 
