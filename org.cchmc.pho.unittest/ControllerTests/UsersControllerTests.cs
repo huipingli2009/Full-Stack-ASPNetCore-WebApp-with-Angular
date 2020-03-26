@@ -817,7 +817,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userIdMakingChange).Verifiable();
             _mockStaff.Setup(p => p.IsStaffInSamePractice(userIdMakingChange, newUser.StaffId)).Returns(true).Verifiable();
             _mockUserService.Setup(p => p.InsertUser(It.IsAny<User>(), newUser.NewPassword, userMakingChange))
-                .Returns<User, string>((x, y) =>
+                .Returns<User, string, string>((x, z, y) =>
                 {
                     x.Id = 3;
                     x.IsPending = true;
