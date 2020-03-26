@@ -40,7 +40,7 @@ export class StaffComponent implements OnInit {
   isUserAdmin: boolean;
   staffUser: User;
   adminVerbiage: string;
-  userRoleList: Array<UserRoles>;
+  userRoleList: {};
   compareFn: ((f1: any, f2: any) => boolean) | null = this.compareByValue;
   adminUserForm: FormGroup;
   isLockedOut: boolean;
@@ -96,7 +96,7 @@ export class StaffComponent implements OnInit {
       userName: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['', Validators.required],
-      roles: [null]
+      roles: ['']
     }, {
       validator: comparePasswords('password', 'confirmPassword')
     });
@@ -188,19 +188,11 @@ export class StaffComponent implements OnInit {
         this.isDeleted = data.body.isDeleted;
         this.userStatus = data.status;
         this.logger.log(this.staffUser, 'Got Staff user');
-        const selectedRoles = [];
-        if (data.body.role.length > 1) {
-          this.staffUser.role.forEach(role => {
-            selectedRoles.push(role);
-          });
-        } else {
-          selectedRoles.push(this.staffUser.role);
-        }
         const selectedValues = {
           userName: data.body.userName,
           password: '********',
           confirmPassword: '********',
-          roles: selectedRoles
+          roles: this.staffUser.role
         }
         this.logger.log('Selected Values', selectedValues);
         this.adminUserForm.setValue(selectedValues);
@@ -300,6 +292,12 @@ export class StaffComponent implements OnInit {
       this.logger.log('Password Updated', res);
     })
   }
+  /*Update User */
+  updateStaffUser(id, user) {
+    this.userService.updateUser(id, user).subscribe(res => {
+      this.logger.log('update user res in taff', res);
+    })
+  }
 
   submitForm() {
     const updatedUser = {
@@ -307,16 +305,17 @@ export class StaffComponent implements OnInit {
       token: this.authService.getToken(),
       userName: this.adminUserForm.controls.userName.value,
       staffId: this.staffDetails.id,
-      role: this.adminUserForm.controls.roles.value
+      role: {
+        id: this.adminUserForm.controls.roles.value.id,
+        name: this.adminUserForm.controls.roles.value.name
+      }
     };
     if (this.isPasswordUpdated === true) {
       this.updatePassword(this.selectedStaffUser, this.adminUserForm.controls.password.value);
-      this.userService.updateUser(this.selectedStaffUser, updatedUser);
+      this.updateStaffUser(this.selectedStaffUser, updatedUser);
     } else {
       this.logger.log(JSON.stringify(updatedUser), 'updated user')
-      this.userService.updateUser(this.selectedStaffUser, updatedUser).subscribe(res => {
-        this.logger.log('update user res in taff', res);
-      })
+      this.updateStaffUser(this.selectedStaffUser, updatedUser);
     }
   }
 

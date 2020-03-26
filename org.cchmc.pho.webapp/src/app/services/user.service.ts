@@ -81,8 +81,10 @@ export class UserService {
   }
   /* Update User */
   updateUser(userid, user): Observable<any> {
-    this.logger.log('stringy updated user', JSON.stringify(user));
-    return this.http.put<any>(`${environment.apiURL}/api/Users/${userid}`, JSON.stringify(user), httpOptions).pipe(
+    this.logger.log('stringy updated user',userid, JSON.stringify(user));
+    return this.http.put(`${environment.apiURL}/api/Users/${userid}`, JSON.stringify(user), httpOptions).pipe(
+      tap(_ => this.snackBar.openSnackBar(`User Updated: ${user.username}`
+      , 'Close', 'success-snackbar')),
       catchError(this.handleError<any>('User Update Failed'))
     );
   }

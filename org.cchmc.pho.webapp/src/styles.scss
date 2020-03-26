@@ -1481,6 +1481,42 @@ tr.mat-row {
       font-size: 11px;
     }
   }
+  .multi-select-override {
+    border-width: 0px 0px 1px 0px;
+    border-color: #DDECEA;
+    padding-bottom: 4px;
+    color: #4a4a4a;
+    font-size: 13px;
+    line-height: 18px;
+    letter-spacing: normal;
+    .mat-form-field-infix {
+      border-top: none;
+      padding-top: 0px !important;
+    }
+    .mat-select-trigger {
+      background-image: url(assets/icons/keyboard_arrow_down-24px.svg);
+      background-position: right;
+      background-size: 25px 25px;
+      background-repeat: no-repeat;
+      margin: 0;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+    }
+    .mat-select-arrow {
+      border-left: none;
+      border-right: none;
+    }
+    .mat-form-field-underline {
+      background-color: #DDECEA;
+      bottom: 0;
+    }
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
+  }
 }
 
   /* Workbook =========================================================================== */

@@ -373,9 +373,8 @@
                                                     TYPE:</label></div>
                                             <div fxLayout="row" fxLayoutGap="10px" *ngIf="userRoleList">
                                                 <div fxLayout="column" fxFlex fxFill>
-                                                    <label for="conditions">USER ROLES</label>
                                                     <mat-form-field class="multi-select-override">
-                                                        <mat-select matNativeControl multiple
+                                                        <mat-select matNativeControl
                                                             formControlName="roles" [compareWith]="compareFn">
                                                             <mat-option *ngFor="let item of userRoleList"
                                                                 [value]="item">{{item.name}}</mat-option>
