@@ -264,11 +264,11 @@ namespace org.cchmc.pho.identity
             }
         }
 
-        public async Task<User> InsertUser(User user, string userNameMakingChange)
+        public async Task<User> InsertUser(User user, string password, string userNameMakingChange)
         {
             try
             {
-                var hashedPassword = _passwordHasher.HashPassword(user, Guid.NewGuid().ToString());
+                var hashedPassword = _passwordHasher.HashPassword(user, password);
                 Login userRecord = new Login()
                 {
                     CreatedBy = userNameMakingChange,

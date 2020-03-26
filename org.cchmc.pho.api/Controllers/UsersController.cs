@@ -347,7 +347,7 @@ namespace org.cchmc.pho.api.Controllers
                     return BadRequest("Cannot add users from another practice.");
                 
                 var userDetails = _mapper.Map<User>(userViewModel);
-                user = await _userService.InsertUser(userDetails, currentUserName);
+                user = await _userService.InsertUser(userDetails, userViewModel.NewPassword, currentUserName);
                 user = await _userService.AssignStaffIdToUser(user.Id, userViewModel.StaffId, currentUserName);
                 
                 return Ok(_mapper.Map<UserViewModel>(user));
