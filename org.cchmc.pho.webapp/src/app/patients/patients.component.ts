@@ -297,6 +297,7 @@ export class PatientsComponent implements OnInit {
         },
         zip: data.zip
       };
+      this.logger.log(JSON.stringify(selectedValues), 'CONDITON DSIFSNDIND')
       this.form.setValue(selectedValues);
     });
   }

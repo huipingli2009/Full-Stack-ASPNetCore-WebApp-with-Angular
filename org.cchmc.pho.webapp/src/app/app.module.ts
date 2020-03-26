@@ -142,7 +142,7 @@ import { debounceTime } from 'rxjs/operators';
 
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-  { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }, MatSnackBarComponent],
+  { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }, MatSnackBarComponent, ErrorInterceptor],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
