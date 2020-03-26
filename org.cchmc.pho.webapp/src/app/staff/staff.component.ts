@@ -41,6 +41,7 @@ export class StaffComponent implements OnInit {
   staffUser: User;
   adminVerbiage: string;
   userRoleList: Array<UserRoles>;
+  compareFn: ((f1: any, f2: any) => boolean) | null = this.compareByValue;
   adminUserForm: FormGroup;
   isLockedOut: boolean;
   isDeleted: boolean;
@@ -95,7 +96,7 @@ export class StaffComponent implements OnInit {
       userName: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['', Validators.required],
-      roles: new FormArray([])
+      roles: [null]
     }, {
       validator: comparePasswords('password', 'confirmPassword')
     });
@@ -187,20 +188,23 @@ export class StaffComponent implements OnInit {
         this.isDeleted = data.body.isDeleted;
         this.userStatus = data.status;
         this.logger.log(this.staffUser, 'Got Staff user');
-        this.adminUserForm.controls.userName.setValue(data.body.userName);
-        this.adminUserForm.controls.password.setValue('********');
-        this.adminUserForm.controls.confirmPassword.setValue('********');
         const selectedRoles = [];
         selectedRoles.length = 0;
         if (selectedRoles.length > 1) {
           this.staffUser.role.forEach(role => {
-            selectedRoles.push(role);
-            this.roleOptions.at(role.id - 1).patchValue(selectedRoles);
+            selectedRoles.push({role});
           });
         } else {
           selectedRoles.push(this.staffUser.role);
-          this.roleOptions.at(data.body.role.id - 1).patchValue(selectedRoles);
         }
+        const selectedValues = {
+          userName: data.body.userName,
+          password: '********',
+          confirmPassword: '********',
+          roles: selectedRoles
+        }
+        this.logger.log('Selected Values', selectedValues);
+        this.adminUserForm.setValue(selectedValues);
       }
 
     },
@@ -214,15 +218,7 @@ export class StaffComponent implements OnInit {
   getUserRoles() {
     this.userService.getUserRoles().subscribe((data) => {
       this.userRoleList = data;
-      this.userRoleList.forEach((r, i) => {
-        const control = new FormControl(data.id);
-        (this.adminUserForm.controls.roles as FormArray).push(control);
-      });
     });
-  }
-
-  get roleOptions() {
-    return this.adminUserForm ? this.adminUserForm.get('roles') as FormArray : null;
   }
 
   // update staff record
@@ -319,29 +315,15 @@ export class StaffComponent implements OnInit {
       this.logger.log('Password needs to be updated seperately')
       this.userService.updateUser(this.selectedStaffUser, updatedUser);
     } else {
+      this.logger.log(JSON.stringify(updatedUser), 'updated user')
       // this.userService.updateUser(this.selectedStaffUser, updatedUser).subscribe(res => {
       //   this.logger.log('update user res in taff', res);
       // })
-      this.logger.log('Normal Form Submission');
-      // let roles = this.adminUserForm.value.roles;
-      // const selectedRoleIds = Object.assign({}, roles , {
-      //   role: roles.map((v, i) => (v ? this.userRoleList[i].id : null))
-      // .filter(v => v !== null)
-      // }
-    //   let roles = this.adminUserForm.value.roles;
-    //   const selectedRoleIds = Object.assign({}, roles , {
-    //     role: roles.map((v, i) => {
-    //       return {
-    //         id: this.userRoleList[i].id
-    //       }
-    //     })
-    //   .filter(v => v !== null)
-    //   }
-      
-      
-    //   );
-    // console.log(JSON.stringify(selectedRoleIds));
     }
+  }
+
+  compareByValue(o1, o2): boolean {
+    return o1.name === o2.name;
   }
 
 

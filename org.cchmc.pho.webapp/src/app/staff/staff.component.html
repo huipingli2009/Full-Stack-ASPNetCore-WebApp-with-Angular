@@ -369,12 +369,13 @@
                                                     <mat-form-field floatLabel="always">
                                                         <mat-label>PASSWORD</mat-label>
                                                         <input matInput type="password" formControlName="password"
-                                                            name="password" (change)="passwordChanged()" [errorStateMatcher]="matcher">
+                                                            name="password" (change)="passwordChanged()"
+                                                            [errorStateMatcher]="matcher">
                                                         <mat-icon matPrefix>
                                                             lock
                                                         </mat-icon>
                                                         <mat-error>Passwords Must Match</mat-error>
-                                                        
+
                                                     </mat-form-field>
                                                 </div>
                                                 <div fxLayout="column" class="input-w-icon">
@@ -393,26 +394,33 @@
                                             <div fxLayout="row" fxLayoutGap="12px"><label class="toggle-label">ACCESS
                                                     TYPE:</label></div>
                                             <div fxLayout="row" fxLayoutGap="10px" *ngIf="userRoleList">
-                                                <div fxLayout="column" formArrayName="roles"
-                                                    *ngFor="let role of roleOptions.controls; let i = index">
-                                                    <mat-checkbox [formControlName]="i">{{userRoleList[i].name}}
-                                                    </mat-checkbox>
+                                                <div fxLayout="column" fxFlex fxFill>
+                                                    <label for="conditions">USER ROLES</label>
+                                                    <mat-form-field class="multi-select-override">
+                                                        <mat-select matNativeControl multiple
+                                                            formControlName="roles">
+                                                            <mat-option *ngFor="let item of userRoleList"
+                                                                [value]="item">{{item.name}}</mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
                                                 </div>
                                             </div>
                                         </form>
                                         <ng-template #updateUserDialog>
                                             <div mat-dialog-content class="mat-typography">
-                                              <h3>Are you sure you want to save changes to this user?</h3>
+                                                <h3>Are you sure you want to save changes to this user?</h3>
                                             </div>
                                             <div mat-dialog-actions align="end">
-                                              <button mat-button mat-dialog-close>Cancel</button>
-                                              <button mat-flat-button color="accent" mat-dialog-close (click)="submitForm()">Save and Update User</button>
-                                          </div>
-                                          </ng-template>
+                                                <button mat-button mat-dialog-close>Cancel</button>
+                                                <button mat-flat-button color="accent" mat-dialog-close
+                                                    (click)="submitForm()">Save and Update User</button>
+                                            </div>
+                                        </ng-template>
                                     </div>
                                     <div mat-dialog-actions align="end">
                                         <button mat-button (click)="cancelAdminDialog()">Cancel</button>
-                                        <button mat-flat-button (click)="confirmStaffUserUpdate()" color="accent">SAVE</button>
+                                        <button mat-flat-button (click)="confirmStaffUserUpdate()"
+                                            color="accent">SAVE</button>
                                     </div>
                                 </ng-template>
 
