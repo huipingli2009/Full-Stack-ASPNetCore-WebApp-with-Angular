@@ -158,17 +158,17 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [HttpDelete("patients/{id}")]
+        [HttpDelete("patients/{formResponseId}/{id}")]        
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(bool))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> DeletePatientFromWorkbooks(int id, [FromBody] WorkbooksPatientViewModel workbookspatientVM)
+        public async Task<IActionResult> DeletePatientFromWorkbooks(int formResponseId,int id)
         {
             try
             {
                 int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
-                var result = await _workbooks.RemovePatientFromWorkbooks(currentUserId, workbookspatientVM.FormResponseId, id);
+                var result = await _workbooks.RemovePatientFromWorkbooks(currentUserId, formResponseId, id);
                 return Ok(result);
             }
             catch (Exception ex)

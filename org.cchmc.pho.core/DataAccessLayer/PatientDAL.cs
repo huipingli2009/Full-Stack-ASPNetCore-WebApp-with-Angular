@@ -174,7 +174,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     //Execute Stored Procedure
                     sqlCommand.ExecuteNonQuery();
 
-                    return await GetPatientDetails(patientDetail.Id);
+                    return await GetPatientDetails(userId, patientDetail.Id);
 
                 }
             }
@@ -269,7 +269,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             return insurances;
         }
 
-        public async Task<PatientDetails> GetPatientDetails(int patientId)
+        public async Task<PatientDetails> GetPatientDetails(int userId, int patientId)
         {
             DataTable dataTable = new DataTable();
             PatientDetails details = null;
@@ -279,6 +279,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add("@id", SqlDbType.Int).Value = patientId;
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
                     await sqlConnection.OpenAsync();
                     // Define the data adapter and fill the dataset
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))

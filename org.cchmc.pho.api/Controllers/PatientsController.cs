@@ -46,7 +46,7 @@ namespace org.cchmc.pho.api.Controllers
                 var data = await _patient.ListActivePatient(currentUserId, staffID, popmeasureID, watch, chronic, conditionIDs, namesearch,sortcolumn,sortdirection,pagenumber,rowsPerPage);
                 var result = _mapper.Map<SearchResultsViewModel<PatientViewModel>>(data);
 
-                // return the result in a "200 OK" response
+                // return the result in a "200 OK" response 
                 return Ok(result);
             }
             catch (Exception ex)
@@ -56,7 +56,6 @@ namespace org.cchmc.pho.api.Controllers
                 return StatusCode(500, "An error occurred");
             }
         }
-
 
         [HttpGet("{patient}")]
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
@@ -74,8 +73,9 @@ namespace org.cchmc.pho.api.Controllers
 
             try
             {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
                 // call the data method
-                var data = await _patient.GetPatientDetails(patientId);
+                var data = await _patient.GetPatientDetails(currentUserId, patientId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
                 var result = _mapper.Map<PatientDetailsViewModel>(data);
                 // return the result in a "200 OK" response
