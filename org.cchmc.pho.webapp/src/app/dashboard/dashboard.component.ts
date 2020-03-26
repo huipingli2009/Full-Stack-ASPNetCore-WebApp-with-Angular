@@ -213,4 +213,11 @@ export class DashboardComponent implements OnInit {
 
     // });
   }
+
+  OpenReport() {
+    window.open('/edreport', "_blank");
+  }
+
+
+
 }

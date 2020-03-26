@@ -58,6 +58,7 @@ import { HeaderComponent } from './header/header.component';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
 import { LoginLayoutComponent } from './layouts/login-layout.component';
 import { MainLayoutComponent } from './layouts/main-layout.component';
+import { ReportComponent } from './report/report.component';
 
 
 @NgModule({
@@ -73,7 +74,8 @@ import { MainLayoutComponent } from './layouts/main-layout.component';
     LoginComponent,
     MatSnackBarComponent,
     LoginLayoutComponent,
-    MainLayoutComponent
+    MainLayoutComponent,
+    ReportComponent
   ],
   imports: [
     BrowserModule,
@@ -135,7 +137,7 @@ import { MainLayoutComponent } from './layouts/main-layout.component';
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
-    MatTreeModule
+    MatTreeModule  
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
   { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }, MatSnackBarComponent, ErrorInterceptor],

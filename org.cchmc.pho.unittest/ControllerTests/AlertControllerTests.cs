@@ -1,4 +1,5 @@
 using AutoMapper;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -15,6 +16,8 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Threading.Tasks;
+using org.cchmc.pho.identity.Interfaces;
+using org.cchmc.pho.identity.Models;
 
 namespace org.cchmc.pho.unittest.ControllerTests
 {
@@ -24,9 +27,39 @@ namespace org.cchmc.pho.unittest.ControllerTests
     {
         private AlertsController _alertController;
         private Mock<ILogger<AlertsController>> _mockLogger;
+        private Mock<IUserService> _mockUserService;
         private Mock<IAlert> _mockAlertDal;
         private Mock<IOptions<CustomOptions>> _mockOptions;
         private IMapper _mapper;
+
+        //Security moq objects
+        private const string _userName = "bblackmore";
+        private const string _password = "P@ssw0rd!";
+        private const int _userId = 3;
+        private User _user;
+        private List<Role> _roles = new List<Role>()
+        {
+            new Role()
+            {
+                Id = 1,
+                Name = "Practice Member"
+            },
+            new Role()
+            {
+                Id = 2,
+                Name = "Practice Admin"
+            },
+            new Role()
+            {
+                Id = 3,
+                Name = "PHO Member"
+            },
+            new Role()
+            {
+                Id = 4,
+                Name = "PHO Admin"
+            }
+        };
 
         [TestInitialize]
         public void Initialize()
@@ -37,6 +70,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 cfg.AddMaps(Assembly.GetAssembly(typeof(AlertMappings)));
             });
             _mapper = config.CreateMapper();
+            _mockUserService = new Mock<IUserService>();
             _mockAlertDal = new Mock<IAlert>();
             _mockLogger = new Mock<ILogger<AlertsController>>();
             _mockOptions = new Mock<IOptions<CustomOptions>>();
@@ -49,7 +83,6 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task ListActiveAlert_Mapping_Success()
         {
             // setup
-            var userId = 3;
             var myAlerts = new List<Alert>()
             {
                 new Alert()
@@ -71,8 +104,9 @@ namespace org.cchmc.pho.unittest.ControllerTests
                     Url = "http://www.example2.com"
                 }
             };
-            _mockAlertDal.Setup(p => p.ListActiveAlerts(userId)).Returns(Task.FromResult(myAlerts)).Verifiable();
-            _alertController = new AlertsController(_mockLogger.Object, _mapper, _mockAlertDal.Object);
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
+            _mockAlertDal.Setup(p => p.ListActiveAlerts(_userId)).Returns(Task.FromResult(myAlerts)).Verifiable();
+            _alertController = new AlertsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockAlertDal.Object);
 
             // execute
             var result = await _alertController.ListActiveAlerts() as ObjectResult;
@@ -101,7 +135,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
         {
             // setup
             var userId = "asdf";
-            _alertController = new AlertsController(_mockLogger.Object, _mapper, _mockAlertDal.Object);
+            _alertController = new AlertsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockAlertDal.Object);
 
             // execute
             var result = await _alertController.ListActiveAlerts() as ObjectResult;
@@ -116,9 +150,9 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task ListActiveAlert_DataLayerThrowsException_ReturnsError()
         {
             // setup
-            var userId = 3; //todo update to match the hardcoded
-            _mockAlertDal.Setup(p => p.ListActiveAlerts(userId)).Throws(new Exception()).Verifiable();
-            _alertController = new AlertsController(_mockLogger.Object, _mapper, _mockAlertDal.Object);
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
+            _mockAlertDal.Setup(p => p.ListActiveAlerts(_userId)).Throws(new Exception()).Verifiable();
+            _alertController = new AlertsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockAlertDal.Object);
 
             // execute
             var result = await _alertController.ListActiveAlerts() as ObjectResult;
@@ -131,14 +165,14 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task MarkAlertAction_Success()
         {
             // setup
-            var userId = 5;
             var alertSchedule = 7;
             var alertActionId = 9;
             var alertDateTime = DateTime.Parse("1/19/20");
 
-            _mockAlertDal.Setup(p => p.MarkAlertAction(alertSchedule,userId, alertActionId))
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
+            _mockAlertDal.Setup(p => p.MarkAlertAction(alertSchedule, _userId, alertActionId))
                 .Returns(Task.CompletedTask).Verifiable();
-            _alertController = new AlertsController(_mockLogger.Object, _mapper, _mockAlertDal.Object);
+            _alertController = new AlertsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockAlertDal.Object);
 
             // execute
             var result = await _alertController.MarkAlertAction(alertSchedule.ToString(),  new AlertActionViewModel()
@@ -157,12 +191,12 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task MarkAlertAction_UserIdDoesNotValidate_Throws400()
         {
             // setup
-            var userId = "asdf";
             var alertSchedule = 7;
             var alertActionId = 9;
             var alertDateTime = DateTime.Parse("1/19/20");
 
-            _alertController = new AlertsController(_mockLogger.Object, _mapper, _mockAlertDal.Object);
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
+            _alertController = new AlertsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockAlertDal.Object);
 
             // execute
             var result = await _alertController.MarkAlertAction(alertSchedule.ToString(),new AlertActionViewModel()
@@ -180,11 +214,11 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task MarkAlertAction_AlertScheduleDoesNotValidate_Throws400()
         {
             // setup
-            var userId = 5;
             var alertSchedule = "asdf";
             var alertActionId = 9;
 
-            _alertController = new AlertsController(_mockLogger.Object, _mapper, _mockAlertDal.Object);
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
+            _alertController = new AlertsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockAlertDal.Object);
 
             // execute
             var result = await _alertController.MarkAlertAction(alertSchedule.ToString(),new AlertActionViewModel()
@@ -202,13 +236,14 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task MarkAlertAction_DataLayerThrowsException_ReturnsError()
         {
             // setup
-            var userId = 3; //todo update to match the hardcoded
+            //var userId = 3; //todo update to match the hardcoded
             var alertSchedule = 7;
             var alertActionId = 9;
 
-            _mockAlertDal.Setup(p => p.MarkAlertAction(alertSchedule,userId,alertActionId))
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
+            _mockAlertDal.Setup(p => p.MarkAlertAction(alertSchedule,_userId,alertActionId))
                 .Throws(new Exception()).Verifiable();
-            _alertController = new AlertsController(_mockLogger.Object, _mapper, _mockAlertDal.Object);
+            _alertController = new AlertsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockAlertDal.Object);
 
             // execute
             var result = await _alertController.MarkAlertAction(alertSchedule.ToString(), new AlertActionViewModel()

@@ -1482,3 +1482,37 @@ tr.mat-row {
     }
   }
 }
+
+  /* ED report =========================================================================== */
+.ed-report {
+  color: #333;
+  background: white;
+  border: 1px solid grey;
+  font-size: 12pt;
+  border-collapse: collapse;
+  margin-bottom: 1em;
+  margin-left: 50px;
+  margin-right: 50px;
+
+  thead th,
+  tfoot th {
+    color: #777;
+    background: rgba(0, 0, 0, 0.1);
+  }
+  caption {
+    padding: 0.5em;
+  }
+  th,
+  td {
+    padding: 0.5em;
+    border: 1px solid lightgrey;
+    font-size: 12px;
+  }
+}
+
+.edreport-title
+{
+ font-size: 15px;
+ font-weight: bold; 
+ margin-left: 50px;
+}
