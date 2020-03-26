@@ -323,38 +323,16 @@
                                                     <mat-slide-toggle ngDefaultControl class="admin-toggle"
                                                         [checked]="isDeleted" (change)="removeUserRegAccess($event)">
                                                     </mat-slide-toggle>
-                                                    <!-- <mat-slide-toggle formControlName="activeStatus" [checked]="form.controls.activeStatus"
-                                                name="activeStatus" ngDefaultControl>
-                                              </mat-slide-toggle> -->
                                                 </div>
                                                 <div fxLayout="column">
                                                     <label class="toggle-label">ACCOUNT LOCKED</label>
                                                     <mat-slide-toggle ngDefaultControl class="admin-toggle"
                                                         [checked]="isLockedOut" (change)="lockoutUser($event)">
                                                     </mat-slide-toggle>
-                                                    <!-- <mat-slide-toggle formControlName="activeStatus" [checked]="form.controls.activeStatus"
-                                                name="activeStatus" ngDefaultControl>
-                                              </mat-slide-toggle> -->
                                                 </div>
                                             </div>
                                             <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end">
-                                                <!-- <mat-form-field>
-                                                    <mat-label>Email</mat-label>
-                                                    <input matInput formControlName="email" name="email">
-                                                    <mat-icon matPrefix>
-                                                        email
-                                                    </mat-icon>
-                                                    <ng-container
-                                                        *ngIf="(StaffDetailsForm.get('email').touched || StaffDetailsForm.get('email').dirty) && StaffDetailsForm.get('email').errors">
-                                                        <mat-error *ngIf="StaffDetailsForm.get('email').errors.required">
-                                                            Email address is required
-                                                        </mat-error>
-                                                        <mat-error *ngIf="StaffDetailsForm.get('email').errors.email">
-                                                            Enter a valid email address
-                                                        </mat-error>
-            
-                                                    </ng-container>
-                                                </mat-form-field> -->
+        
                                                 <div fxLayout="column" class="input-w-icon">
                                                     <mat-form-field floatLabel="always">
                                                         <mat-label>USER NAME</mat-label>
