@@ -146,7 +146,6 @@ export class RestService {
 
   /*Update Patient Details*/
   savePatientDetails(patientId, patient): Observable<any> {
-    console.log('PatientPutInest', JSON.stringify(patient))
     return this.http.put(`${API_URL}/api/Patients/${patientId}`, JSON.stringify(patient), httpOptions).pipe(
       tap(_ => this.snackBar.openSnackBar(`Patient ${patient.firstName} ${patient.lastName} has been updated!`
         , 'Close', 'success-snackbar'))
@@ -214,7 +213,6 @@ export class RestService {
 
   /*Updates Staff*/
   updateStaff(StaffDetails): Observable<any> {
-    console.log(JSON.stringify(StaffDetails));
     return this.http.put<StaffDetails>(`${API_URL}/api/Staff/${StaffDetails.id}`, JSON.stringify(StaffDetails), httpOptions).pipe(
       catchError(this.handleError<any>('updateStaff'))
     );
@@ -327,7 +325,6 @@ export class RestService {
 
   /*Update workbook for Staff*/
   updateWorkbookForProvider(WorkbookProvider: WorkbookProvider): Observable<any> {
-    console.log(JSON.stringify(WorkbookProvider));
     return this.http.put(`${API_URL}/api/Workbooks/provider/${WorkbookProvider.staffID}`, JSON.stringify(WorkbookProvider), httpOptions).pipe(
       catchError(this.handleError<any>('update staff workbook'))
     );
@@ -362,10 +359,9 @@ export class RestService {
     );
   }
   switchPractice(staffWithPractice): Observable<any> {
-    console.log('staff with practice', JSON.stringify(staffWithPractice));
     return this.http.put(`${API_URL}/api/Staff/switchpractice`, JSON.stringify(staffWithPractice), httpOptions).pipe(
       tap(_ => this.snackBar.openSnackBar(`Current Practice Switched!`
-      , 'Close', 'success-snackbar'))
+        , 'Close', 'success-snackbar'))
     );
   }
 
