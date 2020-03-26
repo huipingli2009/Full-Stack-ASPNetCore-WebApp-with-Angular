@@ -816,7 +816,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             int userIdMakingChange = 34;
             _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userIdMakingChange).Verifiable();
             _mockStaff.Setup(p => p.IsStaffInSamePractice(userIdMakingChange, newUser.StaffId)).Returns(true).Verifiable();
-            _mockUserService.Setup(p => p.InsertUser(It.IsAny<User>(), userMakingChange))
+            _mockUserService.Setup(p => p.InsertUser(It.IsAny<User>(), newUser.NewPassword, userMakingChange))
                 .Returns<User, string>((x, y) =>
                 {
                     x.Id = 3;
@@ -849,7 +849,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
 
             Assert.IsNotNull(result);
             Assert.AreEqual(400, result.StatusCode);
-            _mockUserService.Verify(p => p.InsertUser(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.Verify(p => p.InsertUser(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
             _mockUserService.Verify(p => p.AssignStaffIdToUser(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>()), Times.Never);
             _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
@@ -876,7 +876,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
 
             Assert.IsNotNull(result);
             Assert.AreEqual(400, result.StatusCode);
-            _mockUserService.Verify(p => p.InsertUser(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.Verify(p => p.InsertUser(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
             _mockUserService.Verify(p => p.AssignStaffIdToUser(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>()), Times.Never);
             _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
@@ -903,7 +903,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
 
             Assert.IsNotNull(result);
             Assert.AreEqual(400, result.StatusCode);
-            _mockUserService.Verify(p => p.InsertUser(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.Verify(p => p.InsertUser(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
             _mockUserService.Verify(p => p.AssignStaffIdToUser(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>()), Times.Never);
             _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
@@ -938,7 +938,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
 
             Assert.IsNotNull(result);
             Assert.AreEqual(400, result.StatusCode);
-            _mockUserService.Verify(p => p.InsertUser(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.Verify(p => p.InsertUser(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
             _mockUserService.Verify(p => p.AssignStaffIdToUser(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>()), Times.Never);
             _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
@@ -974,7 +974,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
 
             Assert.IsNotNull(result);
             Assert.AreEqual(400, result.StatusCode);
-            _mockUserService.Verify(p => p.InsertUser(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.Verify(p => p.InsertUser(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
             _mockUserService.Verify(p => p.AssignStaffIdToUser(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>()), Times.Never);
             _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
@@ -1012,7 +1012,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
 
             Assert.IsNotNull(result);
             Assert.AreEqual(400, result.StatusCode);
-            _mockUserService.Verify(p => p.InsertUser(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.Verify(p => p.InsertUser(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
             _mockUserService.Verify(p => p.AssignStaffIdToUser(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>()), Times.Never);
             _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
@@ -1034,8 +1034,6 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 StaffId = 7,
                 NewPassword = "P@ssw0rd"
             };
-            string userMakingChange = "sdffhasdf";
-            string roleMakingChange = "PHO Admin";
             User tempUser = new User();
             _mockUserService.Setup(p => p.GetUser(newUser.UserName)).Returns(Task.FromResult((User)null)).Verifiable();
             _mockUserService.Setup(p => p.GetUserByStaffId(newUser.StaffId)).Returns(Task.FromResult(new User())).Verifiable();
@@ -1043,7 +1041,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
 
             Assert.IsNotNull(result);
             Assert.AreEqual(400, result.StatusCode);
-            _mockUserService.Verify(p => p.InsertUser(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.Verify(p => p.InsertUser(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
             _mockUserService.Verify(p => p.AssignStaffIdToUser(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>()), Times.Never);
             _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
@@ -1071,7 +1069,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
 
             Assert.IsNotNull(result);
             Assert.AreEqual(400, result.StatusCode);
-            _mockUserService.Verify(p => p.InsertUser(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.Verify(p => p.InsertUser(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
             _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
@@ -1105,7 +1103,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
 
             Assert.IsNotNull(result);
             Assert.AreEqual(400, result.StatusCode);
-            _mockUserService.Verify(p => p.InsertUser(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.Verify(p => p.InsertUser(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
             _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
@@ -1135,7 +1133,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
 
             Assert.IsNotNull(result);
             Assert.AreEqual(400, result.StatusCode);
-            _mockUserService.Verify(p => p.InsertUser(It.IsAny<User>(), userMakingChange), Times.Never);
+            _mockUserService.Verify(p => p.InsertUser(It.IsAny<User>(), It.IsAny<string>(), userMakingChange), Times.Never);
             _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
@@ -1167,7 +1165,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             int userIdMakingChange = 34;
             _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userIdMakingChange).Verifiable();
             _mockStaff.Setup(p => p.IsStaffInSamePractice(userIdMakingChange, newUser.StaffId)).Returns(true).Verifiable();
-            _mockUserService.Setup(p => p.InsertUser(It.IsAny<User>(), userMakingChange))
+            _mockUserService.Setup(p => p.InsertUser(It.IsAny<User>(), It.IsAny<string>(), userMakingChange))
                 .Throws(new Exception()).Verifiable();
 
             var result = await _userController.InsertUser(newUser) as ObjectResult;
