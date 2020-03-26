@@ -303,7 +303,7 @@ export class StaffComponent implements OnInit {
 
   submitForm() {
     const updatedUser = {
-      id: this.currentUserId,
+      id: this.selectedStaffUser,
       token: this.authService.getToken(),
       userName: this.adminUserForm.controls.userName.value,
       staffId: this.staffDetails.id,
@@ -311,13 +311,12 @@ export class StaffComponent implements OnInit {
     };
     if (this.isPasswordUpdated === true) {
       this.updatePassword(this.selectedStaffUser, this.adminUserForm.controls.password.value);
-      this.logger.log('Password needs to be updated seperately')
       this.userService.updateUser(this.selectedStaffUser, updatedUser);
     } else {
       this.logger.log(JSON.stringify(updatedUser), 'updated user')
-      // this.userService.updateUser(this.selectedStaffUser, updatedUser).subscribe(res => {
-      //   this.logger.log('update user res in taff', res);
-      // })
+      this.userService.updateUser(this.selectedStaffUser, updatedUser).subscribe(res => {
+        this.logger.log('update user res in taff', res);
+      })
     }
   }
 
