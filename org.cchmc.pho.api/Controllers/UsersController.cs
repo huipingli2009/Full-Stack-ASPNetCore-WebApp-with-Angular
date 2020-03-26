@@ -131,7 +131,7 @@ namespace org.cchmc.pho.api.Controllers
                 User user = await _userService.GetUserByStaffId(staffId);
                 string currentUserName = _userService.GetUserNameFromClaims(User?.Claims);
                 if (user == null)
-                    return BadRequest("User does not exist.");
+                    return NotFound("User does not exist.");
 
                 string currentUserRole = _userService.GetRoleNameFromClaims(User?.Claims);
                 // if we're getting a different user, check some additional rules based on roles

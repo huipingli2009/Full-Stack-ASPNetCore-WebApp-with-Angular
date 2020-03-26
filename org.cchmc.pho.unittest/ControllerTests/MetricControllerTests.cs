@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Claims;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -14,6 +15,8 @@ using org.cchmc.pho.api.Mappings;
 using org.cchmc.pho.api.ViewModels;
 using org.cchmc.pho.core.DataModels;
 using org.cchmc.pho.core.Interfaces;
+using org.cchmc.pho.identity.Interfaces;
+using org.cchmc.pho.identity.Models;
 
 namespace org.cchmc.pho.unittest.ControllerTests
 {
@@ -23,8 +26,38 @@ namespace org.cchmc.pho.unittest.ControllerTests
     {
         private MetricsController _MetricController;
         private Mock<ILogger<MetricsController>> _mockLogger;
+        private Mock<IUserService> _mockUserService;
         private Mock<IMetric> _mockMetricDal;
         private IMapper _mapper;
+
+        //Security moq objects
+        private const string _userName = "bblackmore";
+        private const string _password = "P@ssw0rd!";
+        private const int _userId = 3;
+        private User _user;
+        private List<Role> _roles = new List<Role>()
+        {
+            new Role()
+            {
+                Id = 1,
+                Name = "Practice Member"
+            },
+            new Role()
+            {
+                Id = 2,
+                Name = "Practice Admin"
+            },
+            new Role()
+            {
+                Id = 3,
+                Name = "PHO Member"
+            },
+            new Role()
+            {
+                Id = 4,
+                Name = "PHO Admin"
+            }
+        };
 
         [TestInitialize]
         public void Initialize()
@@ -35,6 +68,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 cfg.AddMaps(Assembly.GetAssembly(typeof(MetricMappings)));
             });
             _mapper = config.CreateMapper();
+            _mockUserService = new Mock<IUserService>();
             _mockMetricDal = new Mock<IMetric>();
             _mockLogger = new Mock<ILogger<MetricsController>>();
 
@@ -44,7 +78,6 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task ListDashboardMetrics_Mapping_Success()
         {
             // setup
-            var userId = 3;
             var myMetrics = new List<DashboardMetric>()
             {
                 new DashboardMetric()
@@ -66,8 +99,9 @@ namespace org.cchmc.pho.unittest.ControllerTests
                     NetworkTotal = 132
                 }
             };
-            _mockMetricDal.Setup(p => p.ListDashboardMetrics(userId)).Returns(Task.FromResult(myMetrics)).Verifiable();
-            _MetricController = new MetricsController(_mockLogger.Object, _mapper, _mockMetricDal.Object);
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
+            _mockMetricDal.Setup(p => p.ListDashboardMetrics(_userId)).Returns(Task.FromResult(myMetrics)).Verifiable();
+            _MetricController = new MetricsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockMetricDal.Object);
 
             // execute
             var result = await _MetricController.ListDashboardMetrics() as ObjectResult;
@@ -95,8 +129,8 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task ListDashboardMetrics_UserIdDoesNotValidate_Throws400()
         {
             // setup
-            var userId = "asdf";
-            _MetricController = new MetricsController(_mockLogger.Object, _mapper, _mockMetricDal.Object);
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
+            _MetricController = new MetricsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockMetricDal.Object);
 
             // execute
             var result = await _MetricController.ListDashboardMetrics() as ObjectResult;
@@ -111,9 +145,9 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task ListDashboardMetrics_DataLayerThrowsException_ReturnsError()
         {
             // setup
-            var userId = 3;
-            _mockMetricDal.Setup(p => p.ListDashboardMetrics(userId)).Throws(new Exception()).Verifiable();
-            _MetricController = new MetricsController(_mockLogger.Object, _mapper, _mockMetricDal.Object);
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
+            _mockMetricDal.Setup(p => p.ListDashboardMetrics(_userId)).Throws(new Exception()).Verifiable();
+            _MetricController = new MetricsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockMetricDal.Object);
 
             // execute
             var result = await _MetricController.ListDashboardMetrics() as ObjectResult;
@@ -126,7 +160,6 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task ListEDChart_Mapping_Success()
         {
             // setup
-            var userId = 3;
             var myMetrics = new List<EDChart>()
             {
                 new EDChart()
@@ -146,8 +179,9 @@ namespace org.cchmc.pho.unittest.ControllerTests
                     EDVisits = 12
                 }
             };
-            _mockMetricDal.Setup(p => p.ListEDChart(userId)).Returns(Task.FromResult(myMetrics)).Verifiable();
-            _MetricController = new MetricsController(_mockLogger.Object, _mapper, _mockMetricDal.Object);
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
+            _mockMetricDal.Setup(p => p.ListEDChart(_userId)).Returns(Task.FromResult(myMetrics)).Verifiable();
+            _MetricController = new MetricsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockMetricDal.Object);
 
             // execute
             var result = await _MetricController.ListEDChart() as ObjectResult;
@@ -173,8 +207,8 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task ListEDChart_UserIdDoesNotValidate_Throws400()
         {
             // setup
-            var userId = "asdf";
-            _MetricController = new MetricsController(_mockLogger.Object, _mapper, _mockMetricDal.Object);
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
+            _MetricController = new MetricsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockMetricDal.Object);
 
             // execute
             var result = await _MetricController.ListEDChart() as ObjectResult;
@@ -189,9 +223,9 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task ListEDChart_DataLayerThrowsException_ReturnsError()
         {
             // setup
-            var userId = 3;
-            _mockMetricDal.Setup(p => p.ListEDChart(userId)).Throws(new Exception()).Verifiable();
-            _MetricController = new MetricsController(_mockLogger.Object, _mapper, _mockMetricDal.Object);
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
+            _mockMetricDal.Setup(p => p.ListEDChart(_userId)).Throws(new Exception()).Verifiable();
+            _MetricController = new MetricsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockMetricDal.Object);
 
             // execute
             var result = await _MetricController.ListEDChart() as ObjectResult;
@@ -206,7 +240,6 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task ListEDDetails_Mapping_Success()
         {
             // setup
-            var userId = 3;
             var admitDate = "20201201";
             bool converstionResult = DateTime.TryParseExact(admitDate, "yyyyMMdd", CultureInfo.CurrentCulture, DateTimeStyles.None, out var admitDateTime);
             var myMetrics = new List<EDDetail>()
@@ -244,8 +277,9 @@ namespace org.cchmc.pho.unittest.ControllerTests
                     DX2_10Code = "11"
                 }
             };
-            _mockMetricDal.Setup(p => p.ListEDDetails(userId, admitDateTime)).Returns(Task.FromResult(myMetrics)).Verifiable();
-            _MetricController = new MetricsController(_mockLogger.Object, _mapper, _mockMetricDal.Object);
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
+            _mockMetricDal.Setup(p => p.ListEDDetails(_userId, admitDateTime)).Returns(Task.FromResult(myMetrics)).Verifiable();
+            _MetricController = new MetricsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockMetricDal.Object);
 
             // execute
             var result = await _MetricController.ListEDDetails(admitDate.ToString()) as ObjectResult;
@@ -286,10 +320,9 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task ListEDDetails_UserIdDoesNotValidate_Throws400()
         {
             // setup
-            var userId = "asdf";
             var admitDate = "12/1/2020 12:00:00 AM";
             DateTime admitDateTime = Convert.ToDateTime(admitDate);
-            _MetricController = new MetricsController(_mockLogger.Object, _mapper, _mockMetricDal.Object);
+            _MetricController = new MetricsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockMetricDal.Object);
 
             // execute
             var result = await _MetricController.ListEDDetails(admitDate) as ObjectResult;
@@ -304,9 +337,8 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task ListEDDetails_AdmitDateDoesNotValidate_Throws400()
         {
             // setup
-            var userId = "3";
             var admitDate = "asdf";
-            _MetricController = new MetricsController(_mockLogger.Object, _mapper, _mockMetricDal.Object);
+            _MetricController = new MetricsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockMetricDal.Object);
 
             // execute
             var result = await _MetricController.ListEDDetails(admitDate) as ObjectResult;
@@ -321,11 +353,11 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task ListEDDetails_DataLayerThrowsException_ReturnsError()
         {
             // setup
-            var userId = 3; 
             var admitDate = "20201201";
             bool converstionResult = DateTime.TryParseExact(admitDate, "yyyyMMdd", CultureInfo.CurrentCulture, DateTimeStyles.None, out var admitDateTime);
-            _mockMetricDal.Setup(p => p.ListEDDetails(userId, admitDateTime)).Throws(new Exception()).Verifiable();
-            _MetricController = new MetricsController(_mockLogger.Object, _mapper, _mockMetricDal.Object);
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
+            _mockMetricDal.Setup(p => p.ListEDDetails(_userId, admitDateTime)).Throws(new Exception()).Verifiable();
+            _MetricController = new MetricsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockMetricDal.Object);
 
             // execute
             var result = await _MetricController.ListEDDetails(admitDate) as ObjectResult;

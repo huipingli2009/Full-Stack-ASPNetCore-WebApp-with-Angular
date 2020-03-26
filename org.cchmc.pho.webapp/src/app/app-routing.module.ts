@@ -9,6 +9,7 @@ import { AuthGuard } from './helpers/auth.guard';
 import { LoginComponent } from './login/login.component';
 import { MainLayoutComponent } from './layouts/main-layout.component';
 import { LoginLayoutComponent } from './layouts/login-layout.component';
+import { ReportComponent } from './report/report.component';
 
 const routes: Routes = [
   {
@@ -53,6 +54,11 @@ const routes: Routes = [
       {
         path: 'login',
         component: LoginComponent
+      },
+      {
+        path: 'edreport',
+        component: ReportComponent
+
       }
     ]
   },

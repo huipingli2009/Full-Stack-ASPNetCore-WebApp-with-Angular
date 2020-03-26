@@ -821,6 +821,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 {
                     x.Id = 3;
                     x.IsPending = true;
+                    x.StaffId = 0;
                     tempUser = x;
                     return Task.FromResult(x);
                 }).Verifiable();
@@ -1530,7 +1531,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
         }
 
         [TestMethod]
-        public async Task GetUser_UserDoesNotExist_400()
+        public async Task GetUser_UserDoesNotExist_404()
         {
             _mockUserService.Setup(p => p.GetUserByStaffId(_user.StaffId)).Returns(Task.FromResult((User)null)).Verifiable();
             
@@ -1538,7 +1539,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
 
             // assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(400, result.StatusCode);
+            Assert.AreEqual(404, result.StatusCode);
             _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 

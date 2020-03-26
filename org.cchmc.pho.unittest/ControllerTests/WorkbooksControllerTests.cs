@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Claims;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
@@ -15,6 +16,8 @@ using org.cchmc.pho.api.ViewModels;
 using org.cchmc.pho.core.DataModels;
 using org.cchmc.pho.core.Interfaces;
 using org.cchmc.pho.core.Models;
+using org.cchmc.pho.identity.Interfaces;
+using org.cchmc.pho.identity.Models;
 
 namespace org.cchmc.pho.unittest.ControllerTests
 {
@@ -24,9 +27,39 @@ namespace org.cchmc.pho.unittest.ControllerTests
     {
         private WorkbooksController _workbooksController;
         private Mock<ILogger<WorkbooksController>> _mockLogger;
+        private Mock<IUserService> _mockUserService;
         private Mock<IOptions<CustomOptions>> _mockOptions;
         private Mock<IWorkbooks> _mockWorkbooksDal;
         private IMapper _mapper;
+
+        //Security moq objects
+        private const string _userName = "bblackmore";
+        private const string _password = "P@ssw0rd!";
+        private const int _userId = 3;
+        private User _user;
+        private List<Role> _roles = new List<Role>()
+        {
+            new Role()
+            {
+                Id = 1,
+                Name = "Practice Member"
+            },
+            new Role()
+            {
+                Id = 2,
+                Name = "Practice Admin"
+            },
+            new Role()
+            {
+                Id = 3,
+                Name = "PHO Member"
+            },
+            new Role()
+            {
+                Id = 4,
+                Name = "PHO Admin"
+            }
+        };
 
         [TestInitialize]
         public void Initialize()
@@ -37,6 +70,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 cfg.AddMaps(Assembly.GetAssembly(typeof(WorkbooksMappings)));
             });
             _mapper = config.CreateMapper();
+            _mockUserService = new Mock<IUserService>();
             _mockWorkbooksDal = new Mock<IWorkbooks>();
             _mockLogger = new Mock<ILogger<WorkbooksController>>();
             _mockOptions = new Mock<IOptions<CustomOptions>>();
@@ -49,7 +83,6 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task ListPatients_Mapping_Success()
         {
             // setup  
-            var userId = 3;
             var formResponseId = 109;
 
             var myWorkbooksPatients = new List<WorkbooksPatient>
@@ -77,9 +110,9 @@ namespace org.cchmc.pho.unittest.ControllerTests
                      ActionFollowUp = true
                 },
             };
-
-            _mockWorkbooksDal.Setup(s => s.ListPatients(userId,formResponseId)).Returns(Task.FromResult(myWorkbooksPatients)).Verifiable();
-            _workbooksController = new WorkbooksController(_mockLogger.Object, _mapper, _mockWorkbooksDal.Object);
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
+            _mockWorkbooksDal.Setup(s => s.ListPatients(_userId,formResponseId)).Returns(Task.FromResult(myWorkbooksPatients)).Verifiable();
+            _workbooksController = new WorkbooksController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockWorkbooksDal.Object);
 
             // execute
             var result = await _workbooksController.ListPatients(109) as ObjectResult;
@@ -100,11 +133,11 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task ListPatients_DataLayerThrowsException_ReturnsError()
         {
             // setup  
-            var userId = 3;
             var formResponseId = 109;
 
-            _mockWorkbooksDal.Setup(s => s.ListPatients(userId,formResponseId)).Throws(new Exception()).Verifiable();
-            _workbooksController = new WorkbooksController(_mockLogger.Object, _mapper, _mockWorkbooksDal.Object);
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
+            _mockWorkbooksDal.Setup(s => s.ListPatients(_userId,formResponseId)).Throws(new Exception()).Verifiable();
+            _workbooksController = new WorkbooksController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockWorkbooksDal.Object);
 
             //execute
             var result = await _workbooksController.ListPatients(formResponseId) as ObjectResult;
@@ -117,7 +150,6 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task GetPracticeWorkbooks_Success()
         {
             // setup  
-            var userId = 3;
             var formResponseId = 109;
 
             var myWorkbooksPractice = new WorkbooksPractice()
@@ -129,9 +161,10 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 JobAidURL = "https://cchmc.sharepoint.com/",
                 Line3 = "Patients had a PHQ-9 score of 10 or above"
             };
-            
-            _mockWorkbooksDal.Setup(s => s.GetPracticeWorkbooks(userId, formResponseId)).Returns(Task.FromResult(myWorkbooksPractice)).Verifiable();
-            _workbooksController = new WorkbooksController(_mockLogger.Object, _mapper, _mockWorkbooksDal.Object);
+
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
+            _mockWorkbooksDal.Setup(s => s.GetPracticeWorkbooks(_userId, formResponseId)).Returns(Task.FromResult(myWorkbooksPractice)).Verifiable();
+            _workbooksController = new WorkbooksController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockWorkbooksDal.Object);
 
             // execute
             var result = await _workbooksController.GetPracticeWorkbooks(formResponseId) as ObjectResult;
@@ -150,7 +183,6 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task GetPracticeWorkbooksProviders_Success()
         {
             // setup  
-            var userId = 3;
             var formResponseId = 109;
 
             var workbooksproviders = new List<WorkbooksProvider>
@@ -182,9 +214,9 @@ namespace org.cchmc.pho.unittest.ControllerTests
                     TOTAL = 12
                 }
             };
-
-            _mockWorkbooksDal.Setup(s => s.GetPracticeWorkbooksProviders(userId, formResponseId)).Returns(Task.FromResult(workbooksproviders)).Verifiable();
-            _workbooksController = new WorkbooksController(_mockLogger.Object, _mapper, _mockWorkbooksDal.Object);
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
+            _mockWorkbooksDal.Setup(s => s.GetPracticeWorkbooksProviders(_userId, formResponseId)).Returns(Task.FromResult(workbooksproviders)).Verifiable();
+            _workbooksController = new WorkbooksController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockWorkbooksDal.Object);
 
             // execute
             var result = await _workbooksController.GetPracticeWorkbooksProviders(formResponseId) as ObjectResult;
@@ -213,8 +245,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
         [TestMethod]
         public async Task AddPatientToWorkbooks_Success()
         {
-            //set up
-            var userId = 3;           
+            //set up        
             var patientId = 10809;
             int expected = 1;
 
@@ -232,10 +263,11 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 ActionFollowUp = true
             };
 
-            _mockWorkbooksDal.Setup(s => s.AddPatientToWorkbooks(userId, selectedPatient.FormResponseId, selectedPatient.PatientId, selectedPatient.ProviderId, selectedPatient.DateOfService, int.Parse(selectedPatient.PHQ9_Score), selectedPatient.ActionFollowUp))
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
+            _mockWorkbooksDal.Setup(s => s.AddPatientToWorkbooks(_userId, selectedPatient.FormResponseId, selectedPatient.PatientId, selectedPatient.ProviderId, selectedPatient.DateOfService, int.Parse(selectedPatient.PHQ9_Score), selectedPatient.ActionFollowUp))
                              .Returns(Task.FromResult(expected))
                              .Verifiable();
-            _workbooksController = new WorkbooksController(_mockLogger.Object, _mapper, _mockWorkbooksDal.Object);
+            _workbooksController = new WorkbooksController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockWorkbooksDal.Object);
 
             // execute
             var result = await _workbooksController.AddPatientToWorkbooks(patientId, selectedPatient) as ObjectResult;
