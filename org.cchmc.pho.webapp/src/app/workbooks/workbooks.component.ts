@@ -41,7 +41,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   phqsFinal: number;
   totalFinal: number;
 
-  constructor(private rest: RestService, private fb: FormBuilder, private datePipe: DatePipe, private logger: NGXLogger, private ref: ChangeDetectorRef, private dialog: MatDialog, private _snackBar: MatSnackBar) { }
+  constructor(private rest: RestService, private fb: FormBuilder, private datePipe: DatePipe, private logger: NGXLogger, private dialog: MatDialog, private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.getWorkbookReportingMonths();
@@ -153,8 +153,9 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
         let parsedtotal = parseInt(x.get('total').value)
         this.phqsFinal += parsedphqs
         this.totalFinal += parsedtotal
-        this.ref.detectChanges()
+
       });
+
     })
   }
 
