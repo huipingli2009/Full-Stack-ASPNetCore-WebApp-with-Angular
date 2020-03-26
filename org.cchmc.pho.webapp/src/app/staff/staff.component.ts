@@ -189,10 +189,9 @@ export class StaffComponent implements OnInit {
         this.userStatus = data.status;
         this.logger.log(this.staffUser, 'Got Staff user');
         const selectedRoles = [];
-        selectedRoles.length = 0;
-        if (selectedRoles.length > 1) {
+        if (data.body.role.length > 1) {
           this.staffUser.role.forEach(role => {
-            selectedRoles.push({role});
+            selectedRoles.push(role);
           });
         } else {
           selectedRoles.push(this.staffUser.role);
