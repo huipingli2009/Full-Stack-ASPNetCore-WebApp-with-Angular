@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Claims;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
@@ -13,6 +14,8 @@ using org.cchmc.pho.api.Mappings;
 using org.cchmc.pho.api.ViewModels;
 using org.cchmc.pho.core.DataModels;
 using org.cchmc.pho.core.Interfaces;
+using org.cchmc.pho.identity.Interfaces;
+using org.cchmc.pho.identity.Models;
 
 namespace org.cchmc.pho.unittest.ControllerTests
 {
@@ -22,8 +25,38 @@ namespace org.cchmc.pho.unittest.ControllerTests
     {
         private PatientsController _PatientController;
         private Mock<ILogger<PatientsController>> _mockLogger;
+        private Mock<IUserService> _mockUserService;
         private Mock<IPatient> _mockPatientDal;
         private IMapper _mapper;
+
+        //Security moq objects
+        private const string _userName = "bblackmore";
+        private const string _password = "P@ssw0rd!";
+        private const int _userId = 3;
+        private User _user;
+        private List<Role> _roles = new List<Role>()
+        {
+            new Role()
+            {
+                Id = 1,
+                Name = "Practice Member"
+            },
+            new Role()
+            {
+                Id = 2,
+                Name = "Practice Admin"
+            },
+            new Role()
+            {
+                Id = 3,
+                Name = "PHO Member"
+            },
+            new Role()
+            {
+                Id = 4,
+                Name = "PHO Admin"
+            }
+        };
 
         [TestInitialize]
         public void Initialize()
@@ -34,6 +67,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 cfg.AddMaps(Assembly.GetAssembly(typeof(PatientMappings)));
             });
             _mapper = config.CreateMapper();
+            _mockUserService = new Mock<IUserService>();
             _mockPatientDal = new Mock<IPatient>();
             _mockLogger = new Mock<ILogger<PatientsController>>();
         }
@@ -93,7 +127,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             };
 
             _mockPatientDal.Setup(p => p.GetPatientDetails(patientId)).Returns(Task.FromResult(myPatientDetails)).Verifiable();
-            _PatientController = new PatientsController(_mockLogger.Object, _mapper, _mockPatientDal.Object);
+            _PatientController = new PatientsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockPatientDal.Object);
 
             // execute
             var result = await _PatientController.GetPatientDetails(patientId.ToString()) as ObjectResult;
@@ -151,7 +185,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
         {
             // setup
             var patientId = "asdf";
-            _PatientController = new PatientsController(_mockLogger.Object, _mapper, _mockPatientDal.Object);
+            _PatientController = new PatientsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockPatientDal.Object);
 
             // execute
             var result = await _PatientController.GetPatientDetails(patientId) as ObjectResult;
@@ -169,7 +203,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             // setup
             var patientId = 5;
             _mockPatientDal.Setup(p => p.GetPatientDetails(patientId)).Throws(new Exception()).Verifiable();
-            _PatientController = new PatientsController(_mockLogger.Object, _mapper, _mockPatientDal.Object);
+            _PatientController = new PatientsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockPatientDal.Object);
 
             // execute
             var result = await _PatientController.GetPatientDetails(patientId.ToString()) as ObjectResult;
@@ -249,7 +283,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             _mockPatientDal.Setup(p => p.UpdatePatientDetails(userId, myPatientDetails))
                 .Returns(Task.FromResult(myPatientDetails)).Verifiable();
             _mockPatientDal.Setup(p => p.IsPatientInSamePractice(It.IsAny<Int32>(), It.IsAny<Int32>())).Returns(true);
-            _PatientController = new PatientsController(_mockLogger.Object, _mapper, _mockPatientDal.Object);
+            _PatientController = new PatientsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockPatientDal.Object);
 
             // execute
             var result = await _PatientController.UpdatePatientDetails(_mapper.Map<PatientDetailsViewModel>(myPatientDetails), "20101");
@@ -265,7 +299,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
         {
             // setup
             var patientId = "1";
-            _PatientController = new PatientsController(_mockLogger.Object, _mapper, _mockPatientDal.Object);
+            _PatientController = new PatientsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockPatientDal.Object);
 
             // execute
             var result = await _PatientController.UpdatePatientDetails(null, patientId) as ObjectResult;
@@ -281,7 +315,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
         {
             // setup
             var patientId = "1";
-            _PatientController = new PatientsController(_mockLogger.Object, _mapper, _mockPatientDal.Object);
+            _PatientController = new PatientsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockPatientDal.Object);
 
             // execute
             var result = await _PatientController.UpdatePatientDetails(new PatientDetailsViewModel(), patientId) as ObjectResult;
@@ -341,7 +375,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 CCHMCAppointment = Convert.ToDateTime("2016-02-03T19:00:00")
             };
 
-            _PatientController = new PatientsController(_mockLogger.Object, _mapper, _mockPatientDal.Object);
+            _PatientController = new PatientsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockPatientDal.Object);
             _mockPatientDal.Setup(p => p.IsPatientInSamePractice(It.IsAny<Int32>(), It.IsAny<Int32>())).Returns(false);
 
             // execute
@@ -357,7 +391,6 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task UpdatePatientDetails_DataLayerThrowsException_ReturnsError()
         {
             // setup
-            var userId = 3; //todo update to match the hardcoded
 
             List<PatientConditionViewModel> conditions = new List<PatientConditionViewModel>();
             PatientConditionViewModel condition1 = new PatientConditionViewModel();
@@ -409,9 +442,10 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 CCHMCAppointment = Convert.ToDateTime("2016-02-03T19:00:00")
             };
 
-            _mockPatientDal.Setup(p => p.UpdatePatientDetails(userId, It.IsAny<PatientDetails>())).Throws(new Exception());
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
+            _mockPatientDal.Setup(p => p.UpdatePatientDetails(_userId, It.IsAny<PatientDetails>())).Throws(new Exception());
             _mockPatientDal.Setup(p => p.IsPatientInSamePractice(It.IsAny<Int32>(), It.IsAny<Int32>())).Returns(true);
-            _PatientController = new PatientsController(_mockLogger.Object, _mapper, _mockPatientDal.Object);
+            _PatientController = new PatientsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockPatientDal.Object);
 
 
             // execute

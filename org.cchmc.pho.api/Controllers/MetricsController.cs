@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using org.cchmc.pho.api.ViewModels;
 using org.cchmc.pho.core.Interfaces;
+using org.cchmc.pho.identity.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Globalization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace org.cchmc.pho.api.Controllers
 {
@@ -17,34 +19,29 @@ namespace org.cchmc.pho.api.Controllers
     {
         private readonly ILogger<MetricsController> _logger;
         private readonly IMapper _mapper;
+        private readonly IUserService _userService;
         private readonly IMetric _metricDal;
 
-        public MetricsController(ILogger<MetricsController> logger, IMapper mapper, IMetric metricDal)
+        public MetricsController(ILogger<MetricsController> logger, IUserService userService, IMapper mapper, IMetric metricDal)
         {
             _logger = logger;
+            _userService = userService;
             _mapper = mapper;
             _metricDal = metricDal;
         }
 
         [HttpGet("kpis")]
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<DashboardMetricViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> ListDashboardMetrics()
         {
-
-            string user = "3"; //todo: default for now
-            // route parameters are strings and need to be translated (and validated) to their proper data type
-            if (!int.TryParse(user, out var userId))
-            {
-                _logger.LogInformation($"Failed to parse userId - {user}");
-                return BadRequest("user is not a valid integer");
-            }
-
             try
             {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
                 // call the data method
-                var data = await _metricDal.ListDashboardMetrics(userId);
+                var data = await _metricDal.ListDashboardMetrics(currentUserId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
                 var result = _mapper.Map<List<DashboardMetricViewModel>>(data);
                 // return the result in a "200 OK" response
@@ -58,6 +55,7 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
         [HttpGet("pop")]
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<PopulationMetricViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -81,24 +79,18 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpGet("edcharts")]
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<EDChartViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> ListEDChart()
         {
-            string user = "3"; //todo :hard coded for now replace later from sessions
-
-            // route parameters are strings and need to be translated (and validated) to their proper data type
-            if (!int.TryParse(user, out var userId))
-            {
-                _logger.LogInformation($"Failed to parse userId - {user}");
-                return BadRequest("user is not a valid integer");
-            }
 
             try
             {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
                 // call the data method
-                var data = await _metricDal.ListEDChart(userId);
+                var data = await _metricDal.ListEDChart(currentUserId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
                 var result = _mapper.Map<List<EDChartViewModel>>(data);
                 // return the result in a "200 OK" response
@@ -113,24 +105,15 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpGet("edcharts/{admitdate}")]
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<EDDetailViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> ListEDDetails(string admitdate)
         {
             //todo: look at describign a date format as yyyymmdd : eg 20200227
-            string user = "3"; //todo :hard coded for now replace later from sessions
 
-            // route parameters are strings and need to be translated (and validated) to their proper data type
-            if (!int.TryParse(user, out var userId))
-            {
-                _logger.LogInformation($"Failed to parse userId - {user}");
-                return BadRequest("user is not a valid integer");
-            }
-
-
-            // route parameters are strings and need to be translated (and validated) to their proper data type
-           
+            // route parameters are strings and need to be translated (and validated) to their proper data type           
             if (!DateTime.TryParseExact(admitdate, "yyyyMMdd",CultureInfo.CurrentCulture, DateTimeStyles.None,out var admitDateTime))
             {
                 _logger.LogInformation($"Failed to parse admitDate - {admitdate}");
@@ -139,8 +122,9 @@ namespace org.cchmc.pho.api.Controllers
 
             try
             {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
                 // call the data method
-                var data = await _metricDal.ListEDDetails(userId, admitDateTime);
+                var data = await _metricDal.ListEDDetails(currentUserId, admitDateTime);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
                 var result = _mapper.Map<List<EDDetailViewModel>>(data);
                 // return the result in a "200 OK" response
