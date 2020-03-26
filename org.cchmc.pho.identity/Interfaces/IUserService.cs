@@ -16,7 +16,7 @@ namespace org.cchmc.pho.identity.Interfaces
         Task<User> GetUser(int userId);
         Task<User> GetUser(string userName);
         Task<User> GetUserByStaffId(int staffId);
-        Task<User> InsertUser(User user, string userNameMakingChange);
+        Task<User> InsertUser(User user, string password, string userNameMakingChange);
         Task<List<Role>> ListRoles();
         Task<User> Refresh(string tokenString, string refreshToken);
         Task<User> RemoveLockoutFromUser(int userId, string userNameMakingChange);
