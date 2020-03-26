@@ -1,1 +1,508 @@
-<p>workbooks works!</p>
+<div class="content-main">
+    <div>
+        <mat-label class="workbook-detail-heading">
+            DEPRESSION WORKBOOK FOR
+        </mat-label>
+        <mat-form-field>
+            <mat-select [formControl]="selectedFormResponseID" (selectionChange)="onReportingDateSelectionChange()">
+                <mat-label>
+                    select the reporting date
+                </mat-label>
+                <mat-option *ngFor="let reportingdate of workbookReportingMonths"
+                    [value]="reportingdate.formResponseID">
+                    {{reportingdate.reportingMonth}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <div fxLayout="column" class="header-filter">
+            <mat-form-field appearance="fill">
+                <input matInput [formControl]="PatientNameFilter" autocomplete="off" placeholder="search patient: Name">
+            </mat-form-field>
+        </div>
+    </div>
+    <div *ngIf="phqsFinal" class="providerSummary">
+
+        <div class="ProviderWorkbookSummary ">
+
+            You have completed <b>{{phqsFinal}} </b> of <b>{{totalFinal}}</b> PHO screenings for this period
+        </div>
+        <div class="ProviderWorkbookSummary">
+            For <b>{{totalFinal}}</b> total 12-17 year olds seen for WCC in this reporting period, <b>{{phqsFinal}}
+            </b>
+            had a PHQ Screening during their
+            visit
+        </div>
+
+    </div>
+    <form [formGroup]="ProvidersForWorkbookForm">
+        <div>
+            <ng-container *ngIf="workbookProviders">
+                <div class="workbook-detail-heading">
+                    Patients with a Completed PHQ screen vs. patients seen by doctor:
+                </div>
+                <div>
+                    <ng-container formArrayName="ProviderWorkbookArray">
+                        <div fxLayout="row" fxLayoutAlign="space-around center">
+                            <div>
+                                <mat-label class="workbook-detail-heading">Provider</mat-label>
+                            </div>
+                            <div>
+                                <mat-label class="workbook-detail-heading">PHQS</mat-label>
+                            </div>
+                            <div>
+                                <mat-label class="workbook-detail-heading">TOTAL</mat-label>
+                            </div>
+                        </div>
+                        <div *ngFor="let provider of ProviderWorkbookArray.controls;index as i">
+                            <ng-container [formGroupName]="i">
+                                <div fxLayout="row" fxLayoutAlign="space-around center">
+                                    <div>
+                                        <mat-form-field>
+                                            <input matInput formControlName="provider" readonly>
+                                        </mat-form-field>
+                                    </div>
+                                    <div>
+                                        <mat-form-field>
+                                            <input matInput (change)="onProviderWorkbookChange(i)"
+                                                formControlName="phqs">
+
+                                        </mat-form-field>
+                                    </div>
+                                    <div>
+                                        <mat-form-field>
+                                            <input matInput (change)="onProviderWorkbookChange(i)"
+                                                formControlName="total">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </ng-container>
+                </div>
+            </ng-container>
+        </div>
+    </form>
+    <div *ngIf="dataSourceWorkbook">
+        <div class="workbook-header">
+            All Patients with PHQ-9 scores of 10 or Above Follow Up Patients
+        </div>
+        <div>
+            <table #table mat-table [dataSource]="dataSourceWorkbook" matSort class="mat-elevation-z8" id=workbook
+                (matSortChange)="onSortData($event)" [trackBy]="trackPatients" multiTemplateDataRows>
+
+                <!-- DropDown Column -->
+                <ng-container matColumnDef="action">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <button mat-icon-button color="accent" (click)="OnRemovePatientClick(element)">
+                            <mat-icon>remove_circle_outline</mat-icon>
+                        </button>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Patient Name Column -->
+                <ng-container matColumnDef="patient">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+                    <td mat-cell *matCellDef="let element">
+                        <div *ngIf="element ==0;else elseDiv">
+                            <i class="material-icons rotate-icon">
+                                email
+                            </i>
+                        </div>
+                        <ng-template #elseDiv>
+                            {{element.patient}}
+                        </ng-template>
+
+                    </td>
+                </ng-container>
+
+                <!-- Date of birth  Column -->
+                <ng-container matColumnDef="dob">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> DOB </th>
+                    <td mat-cell *matCellDef="let element"> {{element.dob | date:'shortDate' }} </td>
+                </ng-container>
+
+
+                <!-- phone Column -->
+                <ng-container matColumnDef="phone">
+                    <th mat-header-cell *matHeaderCellDef> PHONE </th>
+                    <td mat-cell *matCellDef="let element"> {{element.phone}} </td>
+                </ng-container>
+
+                <!-- Provider Column -->
+                <ng-container matColumnDef="provider">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> PROVIDER </th>
+                    <td mat-cell *matCellDef="let element"> {{element.provider }} </td>
+                </ng-container>
+
+                <!-- Date of Service Column -->
+                <ng-container matColumnDef="dateOfService">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> SERVICE </th>
+                    <td mat-cell *matCellDef="let element"> {{element.dateOfService  | date:'shortDate'}} </td>
+                </ng-container>
+
+
+                <!-- PHO9 Score Column -->
+                <ng-container matColumnDef="phQ9_Score">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> PHO9 </th>
+                    <td mat-cell *matCellDef="let element">{{element.phQ9_Score}}
+                    </td>
+                </ng-container>
+
+
+                <!-- Improvement Column -->
+                <ng-container matColumnDef="improvement">
+                    <th mat-header-cell *matHeaderCellDef> IMPROVEMENT </th>
+                    <td mat-cell *matCellDef="let element">{{element.improvement}}
+                    </td>
+                </ng-container>
+
+
+                <!-- Action Follow up Column -->
+                <ng-container matColumnDef="actionFollowUp">
+                    <th mat-header-cell *matHeaderCellDef> ACTION PLAN </th>
+                    <td mat-cell *matCellDef="let element">
+                        <ng-container *ngIf="element.actionFollowUp; else actionElse">
+                            Yes
+                        </ng-container>
+                        <ng-template #actionElse>
+                            No
+                        </ng-template>
+                    </td>
+                </ng-container>
+                <!-- Action Follow up Column -->
+                <ng-container matColumnDef="followUp">
+                    <th mat-header-cell *matHeaderCellDef> FOLLOW UP </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-raised-button color="accent" (click)="FollowUpForPatient(element)">FOLLOW
+                            UP</button>
+                    </td>
+                </ng-container>
+
+                <!-- Second Header Columns===============================================================-->
+                <div form [formGroup]="PatientForWorkbookForm">
+                    <!-- Action button to add patients -->
+                    <ng-container matColumnDef="addaction">
+                        <th mat-header-cell *matHeaderCellDef>
+                            <button type="submit" mat-icon-button [disabled]="!PatientForWorkbookForm.valid"
+                                color="accent" (click)="AddPatientForWorkbook()">
+                                <mat-icon>add_circle_outline</mat-icon>
+                            </button>
+                        </th>
+                    </ng-container>
+
+                    <!-- Patient Name Column -->
+                    <ng-container matColumnDef="addpatient">
+                        <th mat-header-cell *matHeaderCellDef>
+                            <mat-form-field>
+                                <mat-select formControlName="patientInfo" (selectionChange)="onSelectedPatient($event)"
+                                    required>
+
+                                    <input matInput [formControl]="searchPatient" autocomplete="off"
+                                        placeholder="Patient Name">
+                                    <mat-option></mat-option>
+                                    <mat-option *ngFor="let patient of SearchPatients;trackBy: trackByForPatientSearch"
+                                        [value]="patient"
+                                        matTooltip="{{patient.firstName}} {{patient.lastName}} Date of Birth: {{patient.dob  | date:'shortDate'}} Phone: {{patient.phone}}">
+                                        {{patient.firstName}} {{patient.lastName}}
+                                    </mat-option>
+                                </mat-select>
+                                <ng-container
+                                    *ngIf="(PatientForWorkbookForm.get('patientId').touched || PatientForWorkbookForm.get('patientId').dirty) && PatientForWorkbookForm.get('patientId').errors">
+                                    <mat-error *ngIf="PatientForWorkbookForm.get('patientId').errors.required">
+                                        Please select a patient
+                                    </mat-error>
+                                </ng-container>
+                            </mat-form-field>
+                        </th>
+                    </ng-container>
+
+                    <!-- Date of birth Column -->
+                    <ng-container matColumnDef="adddob">
+                        <th mat-header-cell *matHeaderCellDef>
+                            <mat-form-field>
+                                <input matInput formControlName="dob" placeholder="MM/DD/YYYY" readonly>
+                            </mat-form-field>
+
+                        </th>
+                    </ng-container>
+
+                    <!-- Phone Column -->
+                    <ng-container matColumnDef="addphone">
+                        <th mat-header-cell *matHeaderCellDef>
+                            <mat-form-field>
+                                <input matInput placeholder="phone" formControlName="phone" readonly>
+                            </mat-form-field>
+                        </th>
+                    </ng-container>
+                    <!-- Provider Column -->
+                    <ng-container matColumnDef="addprovider">
+                        <th mat-header-cell *matHeaderCellDef>
+                            <mat-form-field>
+                                <mat-select formControlName="providerStaffID" required>
+                                    <mat-label>
+                                        select Provider
+                                    </mat-label>
+                                    <mat-option *ngFor="let provider of workbookProviders" [value]="provider.staffID">
+                                        {{provider.provider}}
+                                    </mat-option>
+                                </mat-select>
+                                <ng-container
+                                    *ngIf="(PatientForWorkbookForm.get('providerStaffID').touched || PatientForWorkbookForm.get('providerStaffID').dirty) && PatientForWorkbookForm.get('providerStaffID').errors">
+                                    <mat-error *ngIf="PatientForWorkbookForm.get('providerStaffID').errors.required">
+                                        Please select a provider
+                                    </mat-error>
+
+
+                                </ng-container>
+                            </mat-form-field>
+                        </th>
+                    </ng-container>
+                    <!-- Date of Service Column -->
+                    <ng-container matColumnDef="adddateOfService">
+                        <th mat-header-cell *matHeaderCellDef>
+
+                            <mat-form-field class="staff-full-width">
+                                <mat-label>Date of Service</mat-label>
+                                <input matInput placeholder="MM/DD/YYYY" formControlName="dateOfService"
+                                    [matDatepicker]="picker" required>
+                                <mat-datepicker-toggle matPrefix [for]="picker">
+                                    <mat-icon matDatepickerToggleIcon class="icons-white-mail-input mat-icon-staff">
+                                        calendar_today
+                                    </mat-icon>
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+
+                                <ng-container
+                                    *ngIf="(PatientForWorkbookForm.get('dateOfService').touched || PatientForWorkbookForm.get('dateOfService').dirty) && PatientForWorkbookForm.get('dateOfService').errors">
+                                    <mat-error *ngIf="PatientForWorkbookForm.get('dateOfService').errors.daterequired">
+                                        Date of service is required in MM/DD/YYYY format
+                                    </mat-error>
+                                </ng-container>
+                            </mat-form-field>
+                        </th>
+                    </ng-container>
+                    <!-- PHQ9 score Column -->
+                    <ng-container matColumnDef="addphQ9_Score">
+                        <th mat-header-cell *matHeaderCellDef>
+                            <mat-form-field>
+                                <input matInput formControlName="pHQ9Score" required placeholder="Score">
+                                <ng-container
+                                    *ngIf="(PatientForWorkbookForm.get('pHQ9Score').touched || PatientForWorkbookForm.get('pHQ9Score').dirty) && PatientForWorkbookForm.get('pHQ9Score').errors">
+                                    <mat-error *ngIf="PatientForWorkbookForm.get('pHQ9Score').errors.required">
+                                        pHQ9Score is required
+                                    </mat-error>
+
+                                </ng-container>
+                            </mat-form-field>
+                        </th>
+                    </ng-container>
+                    <!-- Improvement Column -->
+                    <ng-container matColumnDef="addimprovement">
+                        <th mat-header-cell *matHeaderCellDef>
+
+                        </th>
+                    </ng-container>
+                    <!-- Patient Name Column -->
+                    <ng-container matColumnDef="addactionFollowUp">
+                        <th mat-header-cell *matHeaderCellDef>
+
+                            <mat-button-toggle-group formControlName="action">
+                                <mat-button-toggle value="Yes">Yes</mat-button-toggle>
+                                <mat-button-toggle value="No">No</mat-button-toggle>
+                            </mat-button-toggle-group>
+                            <ng-container
+                                *ngIf="(PatientForWorkbookForm.get('action').touched || PatientForWorkbookForm.get('action').dirty) && PatientForWorkbookForm.get('action').errors">
+                                <mat-error *ngIf="PatientForWorkbookForm.get('action').errors.required">
+                                    Please select a action Followup
+                                </mat-error>
+
+
+                            </ng-container>
+                        </th>
+                    </ng-container>
+
+                    <!-- Action Follow up Column -->
+                    <ng-container matColumnDef="addfollowUp">
+                        <th mat-header-cell *matHeaderCellDef> </th>
+
+                    </ng-container>
+
+                </div>
+                <!-- Hidden Columns===============================================================-->
+                <!-- formResponseId Column -->
+                <ng-container matColumnDef="formResponseId">
+                    <th mat-header-cell *matHeaderCellDef> formResponseId </th>
+                    <td mat-cell *matCellDef="let element"> {{element.formResponseId}} </td>
+                </ng-container>
+
+                <!-- patientId Column -->
+                <ng-container matColumnDef="patientId">
+                    <th mat-header-cell *matHeaderCellDef> patientId </th>
+                    <td mat-cell *matCellDef="let element"> {{element.patientId}} </td>
+                </ng-container>
+
+                <!-- providerId Column -->
+                <ng-container matColumnDef="providerId">
+                    <th mat-header-cell *matHeaderCellDef> providerId </th>
+                    <td mat-cell *matCellDef="let element"> {{element.providerId}} </td>
+                </ng-container>
+
+
+                <!-- Column for adding patient-->
+                <ng-container matColumnDef="addingPatient">
+                    <th mat-header-cell *matHeaderCellDef> providerId </th>
+                    <td mat-cell *matCellDef="let element"> {{element.providerId}} </td>
+                </ng-container>
+
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-header-row
+                    *matHeaderRowDef="['addaction','addpatient','adddob', 'addphone','addprovider','adddateOfService','addphQ9_Score','addimprovement','addactionFollowUp','addfollowUp']">
+                </tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+                </tr>
+
+
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Dialog ===============================================================-->
+<ng-template #FollowUp>
+
+    <div form [formGroup]="FollowupForm">
+        <h2 mat-dialog-title>Follow up questions </h2>
+        <mat-dialog-content>
+            <div>
+                Action Plan Given?
+                <mat-button-toggle-group formControlName="actionPlanGiven" required>
+                    <mat-button-toggle value="Yes">Yes</mat-button-toggle>
+                    <mat-button-toggle value="No">No</mat-button-toggle>
+                </mat-button-toggle-group>
+                <ng-container
+                    *ngIf="(FollowupForm.get('actionPlanGiven').touched || FollowupForm.get('actionPlanGiven').dirty) && FollowupForm.get('actionPlanGiven').errors">
+                    <mat-error *ngIf="FollowupForm.get('actionPlanGiven').errors.required">
+                        Please select
+                    </mat-error>
+                </ng-container>
+
+            </div>
+            <div>
+                Managed by External Provider?
+                <mat-button-toggle-group formControlName="managedByExternalProvider" required>
+                    <mat-button-toggle value="Yes">Yes</mat-button-toggle>
+                    <mat-button-toggle value="No">No</mat-button-toggle>
+                </mat-button-toggle-group>
+                <ng-container
+                    *ngIf="(FollowupForm.get('managedByExternalProvider').touched || FollowupForm.get('managedByExternalProvider').dirty) && FollowupForm.get('managedByExternalProvider').errors">
+                    <mat-error *ngIf="FollowupForm.get('managedByExternalProvider').errors.required">
+                        Please select
+                    </mat-error>
+                </ng-container>
+            </div>
+            <div>
+                Date of Last Communication by External Provider ?
+                <mat-form-field class="staff-full-width">
+                    <mat-label>Date of Service</mat-label>
+                    <input matInput placeholder="MM/DD/YYYY" formControlName="dateOfLastCommunicationByExternalProvider"
+                        [matDatepicker]="picker" required>
+                    <mat-datepicker-toggle matPrefix [for]="picker">
+                        <mat-icon matDatepickerToggleIcon class="icons-white-mail-input mat-icon-staff">
+                            calendar_today
+                        </mat-icon>
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    <ng-container
+                        *ngIf="(FollowupForm.get('dateOfLastCommunicationByExternalProvider').touched || FollowupForm.get('dateOfLastCommunicationByExternalProvider').dirty) && FollowupForm.get('dateOfLastCommunicationByExternalProvider').errors">
+                        <mat-error
+                            *ngIf="FollowupForm.get('dateOfLastCommunicationByExternalProvider').errors.daterequired">
+                            Date is required in MM/DD/YYYY format
+                        </mat-error>
+                    </ng-container>
+                </mat-form-field>
+            </div>
+            <div>
+                1-2 Week follow-up call?
+                <mat-button-toggle-group formControlName="followupPhoneCallOneToTwoWeeks" required>
+                    <mat-button-toggle value="Yes">Yes</mat-button-toggle>
+                    <mat-button-toggle value="No">No</mat-button-toggle>
+                </mat-button-toggle-group>
+                <ng-container
+                    *ngIf="(FollowupForm.get('followupPhoneCallOneToTwoWeeks').touched || FollowupForm.get('followupPhoneCallOneToTwoWeeks').dirty) && FollowupForm.get('followupPhoneCallOneToTwoWeeks').errors">
+                    <mat-error *ngIf="FollowupForm.get('followupPhoneCallOneToTwoWeeks').errors.required">
+                        Please select
+                    </mat-error>
+                </ng-container>
+            </div>
+            <div>
+                Date of follow-up call?
+                <mat-form-field class="staff-full-width">
+                    <mat-label>Date of Service</mat-label>
+                    <input matInput placeholder="MM/DD/YYYY" formControlName="dateOfFollowupCall"
+                        [matDatepicker]="picker1" required>
+                    <mat-datepicker-toggle matPrefix [for]="picker1">
+                        <mat-icon matDatepickerToggleIcon class="icons-white-mail-input mat-icon-staff">
+                            calendar_today
+                        </mat-icon>
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                    <ng-container
+                        *ngIf="(FollowupForm.get('dateOfFollowupCall').touched || FollowupForm.get('dateOfFollowupCall').dirty) && FollowupForm.get('dateOfFollowupCall').errors">
+                        <mat-error *ngIf="FollowupForm.get('dateOfFollowupCall').errors.daterequired">
+                            Date is required in MM/DD/YYYY format
+                        </mat-error>
+                    </ng-container>
+                </mat-form-field>
+
+            </div>
+            <div>
+                1 Month follow-up visit?
+                <mat-button-toggle-group formControlName="oneMonthFollowupVisit" required>
+                    <mat-button-toggle value="Yes">Yes</mat-button-toggle>
+                    <mat-button-toggle value="No">No</mat-button-toggle>
+                </mat-button-toggle-group>
+                <ng-container
+                    *ngIf="(FollowupForm.get('oneMonthFollowupVisit').touched || FollowupForm.get('oneMonthFollowupVisit').dirty) && FollowupForm.get('oneMonthFollowupVisit').errors">
+                    <mat-error *ngIf="FollowupForm.get('oneMonthFollowupVisit').errors.required">
+                        Please select
+                    </mat-error>
+                </ng-container>
+            </div>
+            <div>
+                Date of 1 month visit (optional)
+                <mat-form-field class="staff-full-width">
+                    <mat-label>Date of Service</mat-label>
+                    <input matInput placeholder="MM/DD/YYYY" formControlName="dateOfOneMonthVisit"
+                        [matDatepicker]="picker2">
+                    <mat-datepicker-toggle matPrefix [for]="picker2">
+                        <mat-icon matDatepickerToggleIcon class="icons-white-mail-input mat-icon-staff">
+                            calendar_today
+                        </mat-icon>
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+
+                </mat-form-field>
+            </div>
+            <div>
+                1 Month follow-up PHQ-9 Score ?
+                <mat-form-field>
+                    <input matInput formControlName="oneMonthFolllowupPHQ9Score" required placeholder="Score">
+                    <ng-container
+                        *ngIf="(FollowupForm.get('oneMonthFolllowupPHQ9Score').touched || FollowupForm.get('oneMonthFolllowupPHQ9Score').dirty) && FollowupForm.get('oneMonthFolllowupPHQ9Score').errors">
+                        <mat-error *ngIf="FollowupForm.get('oneMonthFolllowupPHQ9Score').errors.required">
+                            PHQ-9 score is required
+                        </mat-error>
+                    </ng-container>
+                </mat-form-field>
+            </div>
+
+        </mat-dialog-content>
+        <mat-dialog-actions>
+            <button mat-button mat-dialog-close>CANCEL</button>
+            <button mat-button [mat-dialog-close]="true" [disabled]="!FollowupForm.valid" Color="accent"
+                (click)="updateFollowUpQuestion()">SAVE ACTION INFO</button>
+        </mat-dialog-actions>
+    </div>
+</ng-template>
