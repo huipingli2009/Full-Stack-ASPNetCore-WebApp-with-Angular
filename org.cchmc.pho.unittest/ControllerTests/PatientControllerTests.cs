@@ -126,7 +126,9 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 CCHMCAppointment = Convert.ToDateTime("2016-02-03T19:00:00")
             };
 
-            _mockPatientDal.Setup(p => p.GetPatientDetails(patientId)).Returns(Task.FromResult(myPatientDetails)).Verifiable();
+
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
+            _mockPatientDal.Setup(p => p.GetPatientDetails(_userId, patientId)).Returns(Task.FromResult(myPatientDetails)).Verifiable();
             _PatientController = new PatientsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockPatientDal.Object);
 
             // execute
@@ -193,7 +195,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             // assert
             Assert.AreEqual(400, result.StatusCode);
             Assert.AreEqual("patient is not a valid integer", result.Value);
-            _mockPatientDal.Verify(p => p.GetPatientDetails(It.IsAny<int>()), Times.Never);
+            _mockPatientDal.Verify(p => p.GetPatientDetails(It.IsAny<int>(), It.IsAny<int>()), Times.Never);
         }
 
       
@@ -202,7 +204,9 @@ namespace org.cchmc.pho.unittest.ControllerTests
         {
             // setup
             var patientId = 5;
-            _mockPatientDal.Setup(p => p.GetPatientDetails(patientId)).Throws(new Exception()).Verifiable();
+
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
+            _mockPatientDal.Setup(p => p.GetPatientDetails(_userId, patientId)).Throws(new Exception()).Verifiable();
             _PatientController = new PatientsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockPatientDal.Object);
 
             // execute
@@ -307,7 +311,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             // assert
             Assert.AreEqual(400, result.StatusCode);
             Assert.AreEqual("patient is null", result.Value);
-            _mockPatientDal.Verify(p => p.GetPatientDetails(It.IsAny<int>()), Times.Never);
+            _mockPatientDal.Verify(p => p.GetPatientDetails(It.IsAny<int>(), It.IsAny<int>()), Times.Never);
         }
 
         [TestMethod]
@@ -323,7 +327,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             // assert
             Assert.AreEqual(400, result.StatusCode);
             Assert.AreEqual("patient id does not match", result.Value);
-            _mockPatientDal.Verify(p => p.GetPatientDetails(It.IsAny<int>()), Times.Never);
+            _mockPatientDal.Verify(p => p.GetPatientDetails(It.IsAny<int>(), It.IsAny<int>()), Times.Never);
         }
 
         [TestMethod]
@@ -384,7 +388,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             // assert
             Assert.AreEqual(400, result.StatusCode);
             Assert.AreEqual("patient practice does not match user", result.Value);
-            _mockPatientDal.Verify(p => p.GetPatientDetails(It.IsAny<int>()), Times.Never);
+            _mockPatientDal.Verify(p => p.GetPatientDetails(It.IsAny<int>(), It.IsAny<int>()), Times.Never);
         }
 
         [TestMethod]
