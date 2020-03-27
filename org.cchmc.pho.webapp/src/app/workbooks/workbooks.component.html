@@ -1,20 +1,22 @@
-<div class="content-main">
-    <div>
-        <mat-label class="workbook-detail-heading">
-            DEPRESSION WORKBOOK FOR
-        </mat-label>
-        <mat-form-field>
-            <mat-select [formControl]="selectedFormResponseID" (selectionChange)="onReportingDateSelectionChange()">
-                <mat-label>
-                    select the reporting date
-                </mat-label>
-                <mat-option *ngFor="let reportingdate of workbookReportingMonths"
-                    [value]="reportingdate.formResponseID">
-                    {{reportingdate.reportingMonth}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-        <div fxLayout="column" class="header-filter">
+<div class="content-main" id="workbooks">
+    <div class="top-date-container" fxLayout="row">
+        <div fxLayout="column" fxLayoutAlign="start center" class="main-date">
+                DEPRESSION WORKBOOK FOR
+        </div>
+        <div fxLayout="column" fxLayoutAlign="start center">
+            <mat-form-field class="select-override main-date-select">
+                <mat-select [formControl]="selectedFormResponseID" (selectionChange)="onReportingDateSelectionChange()">
+                    <mat-label>
+                        select the reporting date
+                    </mat-label>
+                    <mat-option *ngFor="let reportingdate of workbookReportingMonths"
+                        [value]="reportingdate.formResponseID">
+                        {{reportingdate.reportingMonth}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div fxLayout="column"fxLayoutAlign="end end" fxFlex fxFill>
             <mat-form-field appearance="fill">
                 <input matInput [formControl]="PatientNameFilter" autocomplete="off" placeholder="search patient: Name">
             </mat-form-field>
