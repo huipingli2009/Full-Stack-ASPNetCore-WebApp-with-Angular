@@ -181,6 +181,14 @@ h1 {
   background-color: var(--warn-darker-color);
 }
 
+.login-error {
+  color: var(--warn-color);
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-align: center;
+  margin: 12px auto 0;
+}
+
 .form-error, .error {
   color: var(--warn-color);
   font-weight: 600;

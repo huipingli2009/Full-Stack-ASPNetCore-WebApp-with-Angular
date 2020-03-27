@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { User, CurrentUser, UserRoles } from '../models/user';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { CurrentUser, UserRoles } from '../models/user';
 import { environment } from 'src/environments/environment';
-import { Subscription, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
 import { map, catchError, tap } from 'rxjs/operators';
 import { NGXLogger } from 'ngx-logger';
