@@ -142,8 +142,8 @@ export class HeaderComponent {
       }
     };
     this.rest.switchPractice(newPractice).subscribe(res => {
-      location.reload();
       this.logger.log('SWITCHED', res);
+      location.reload();
     });
   }
 }
