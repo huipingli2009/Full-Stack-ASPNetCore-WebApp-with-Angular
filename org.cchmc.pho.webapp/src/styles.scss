@@ -785,11 +785,15 @@ button.toast-close-button {
   #patients,#staff,#workbook {
     width: 100%;
     border: solid 1px var(--primary-color);
+    box-shadow: none;
 
   table {
     width: 100%;
     border-bottom-right-radius: 7px;
     border-bottom-left-radius: 7px;
+  }
+  .mat-row {
+    cursor: pointer;
   }
 
   .mat-row:nth-child(even) {
@@ -870,7 +874,7 @@ button.toast-close-button {
 /* Patient Expansion Panels*/
 .element-row {
   position: relative;
-  height: 57px !important;
+  min-height: 57px !important;
 }
 
 .element-row:not(.expanded) {
