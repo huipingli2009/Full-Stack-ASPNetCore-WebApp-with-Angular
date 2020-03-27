@@ -10,7 +10,7 @@ using org.cchmc.pho.core.DataModels;
 using org.cchmc.pho.identity.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 using Microsoft.AspNetCore.Authorization;
-
+using Microsoft.AspNetCore.Http;
 
 namespace org.cchmc.pho.api.Controllers
 {
@@ -39,7 +39,7 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> ListStaff()
         {
-            
+
             try
             {
                 int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
@@ -64,7 +64,7 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> GetStaffDetails(string staff)
-        {            
+        {
             if (!int.TryParse(staff, out var staffId))
             {
                 _logger.LogInformation($"Failed to parse staffId - {staff}");
@@ -88,14 +88,14 @@ namespace org.cchmc.pho.api.Controllers
                 return StatusCode(500, "An error occurred");
             }
         }
-        
+
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [HttpPut("{staff}")]
         [SwaggerResponse(200, type: typeof(StaffDetailViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> UpdateStaffDetails([FromBody] StaffDetailViewModel staffDetailVM, string staff)
-        {            
+        {
             if (!int.TryParse(staff, out var staffId))
             {
                 _logger.LogInformation($"Failed to parse staffId - {staff}");
@@ -238,26 +238,27 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [HttpPut("{staff}/legalstatus")]
+
+        [HttpPut("legalstatus")]
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(bool))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> SignLegalDisclaimer(string staff)
+        public async Task<IActionResult> SignLegalDisclaimer()
         {
-            //TODO: need a method to check the current user has the staff id specified           
-            
-            if (!int.TryParse(staff, out var staffId))
-            {
-                _logger.LogInformation($"Failed to parse staffId - {staff}");
-                return BadRequest("staff is not a valid integer");
-            }         
-
             try
             {
+                //get user from the current claims
                 int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+                if(currentUserId == 0)
+                {
+                    //NOTE: technically i guess this shouldn't happen... but just in case
+                    //checking to make sure a valid userid returns
+                    _logger.LogError($"Failed to Sign Legal Disclaimer, Current users return back as : {currentUserId}");
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Failed to sign legal disclaimer");
+                }
 
-                var result = await _staffDal.SignLegalDisclaimer(currentUserId);            
+                var result = await _staffDal.SignLegalDisclaimer(currentUserId);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -291,7 +292,7 @@ namespace org.cchmc.pho.api.Controllers
                 _logger.LogError(ex, "An error occurred");
                 return StatusCode(500, "An error occurred");
             }
-            
+
         }
 
         [HttpPut("switchpractice")]
@@ -303,9 +304,9 @@ namespace org.cchmc.pho.api.Controllers
         {
 
             if (staffVM.MyPractice == null)
-            {               
+            {
                 return BadRequest("You didn't select a practice");
-            }           
+            }
 
             try
             {

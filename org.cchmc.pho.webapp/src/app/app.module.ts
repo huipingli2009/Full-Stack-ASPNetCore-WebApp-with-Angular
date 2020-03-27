@@ -59,6 +59,8 @@ import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.compo
 import { LoginLayoutComponent } from './layouts/login-layout.component';
 import { MainLayoutComponent } from './layouts/main-layout.component';
 import { ReportComponent } from './report/report.component';
+import { FooterComponent } from './footer/footer.component';
+import { LegalDisclaimerComponent } from './legal-disclaimer/legal-disclaimer.component';
 
 import { debounceTime } from 'rxjs/operators';
 @NgModule({
@@ -75,7 +77,9 @@ import { debounceTime } from 'rxjs/operators';
     MatSnackBarComponent,
     LoginLayoutComponent,
     MainLayoutComponent,
-    ReportComponent
+    ReportComponent,
+    FooterComponent,
+    LegalDisclaimerComponent
   ],
   imports: [
     BrowserModule,
@@ -94,7 +98,7 @@ import { debounceTime } from 'rxjs/operators';
       positionClass: 'inline'
     }),
     LoggerModule.forRoot({
-      // serverLoggingUrl: `${environment.apiURL}/api/logs`, TODO: uncomment when the Logging Controller is ready in the web API 
+      // serverLoggingUrl: `${environment.apiURL}/api/logs`, TODO: uncomment when the Logging Controller is ready in the web API
       level: environment.logLevel,
       serverLogLevel: environment.serverLogLevel,
       disableConsoleLogging: environment.disableConsoleLogging
