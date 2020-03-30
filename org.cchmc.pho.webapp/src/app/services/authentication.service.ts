@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { BehaviorSubject, Observable, throwError, ReplaySubject } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { User, UserAuthenticate } from '../models/user';
+import { UserAuthenticate } from '../models/user';
 import { NGXLogger } from 'ngx-logger';
 import { Router } from '@angular/router';
 
@@ -17,8 +16,8 @@ export class AuthenticationService {
         })
     }
     private loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    // private userLoggedIn = new ReplaySubject<number>();
-    // currentUserId = this.userLoggedIn.asObservable();
+    loginErrorMsg: BehaviorSubject<string> =  new BehaviorSubject<string>('');
+
     constructor(private http: HttpClient, private logger: NGXLogger, public router: Router) { }
 
     login(user: UserAuthenticate) {
@@ -32,16 +31,13 @@ export class AuthenticationService {
                     this.router.navigate(['/dashboard']);
                     this.loggedIn.next(true);
                 }
+            }, error => {
+                this.loginErrorMsg.next(error);
             })
     }
 
     getToken() {
         return localStorage.getItem('access_token');
-    }
-
-    get isLoggedIn() {
-        this.logger.log('islogged in', this.loggedIn.value)
-        return this.loggedIn.asObservable();
     }
 
     get isUserLoggedIn(): boolean {
@@ -58,17 +54,5 @@ export class AuthenticationService {
         if (removeToken == null) {
             this.router.navigate(['/login']);
         }
-    }
-
-    handleError(error: HttpErrorResponse) {
-        let msg = '';
-        if (error.error instanceof ErrorEvent) {
-            // client-side error
-            msg = error.error.message;
-        } else {
-            // server-side error
-            msg = `Error Code: ${error.status}\nMessage: ${error.message}`;
-        }
-        return throwError(msg);
     }
 }

@@ -111,9 +111,13 @@
     <ng-container matColumnDef="conditions">
       <mat-header-cell *matHeaderCellDef> Conditions </mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <div fxLayout="row" fxLayoutGap="14px">
-          <div *ngFor="let item of element.conditions" class="condition-chip" fxLayout="column" fxflex="33%">
-            {{item.name}}
+        <div fxLayout="row wrap" fxLayoutGap="14px">
+          <div *ngFor="let item of element.conditions" class="condition-container" fxLayout="column" fxflex="33%">
+            <div *ngIf="conditions" class="condition-chip"
+                  [style.margin-bottom]="element.conditions?.length > 2 ? '5px' : '0px'"
+                  [style.margin-top]="element.conditions?.length > 2 ? '5px' : '0px'">
+                  {{item.name}}
+              </div>
           </div>
         </div>
       </mat-cell>

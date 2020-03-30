@@ -22,8 +22,8 @@
           </mat-form-field>
         </mat-card-content>
         <button mat-flat-button color="accent" [disabled]="loading" class="btn-block">Log in</button>
-        <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
       </form>
+      <div class="login-error">{{errorMessage}}</div>
       <p class="version-text">
         <app-version></app-version>
       </p>

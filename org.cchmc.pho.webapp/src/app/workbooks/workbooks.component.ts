@@ -133,6 +133,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     if (providerArray.length > 0) {
       providerArray.removeAt(0);
     }
+    this.logger.log(this.workbookProviders, 'providers')
     this.workbookProviders.forEach(provider => {
       providerArray.push(this.fb.group(provider));
     });
