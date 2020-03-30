@@ -151,7 +151,7 @@ export class PatientsComponent implements OnInit {
   }
 
   compareByValue(o1, o2): boolean {
-    return o1.name === o2.name;
+    return o1.id === o2.id;
   }
 
   compareByShortValue(o1, o2): boolean {
@@ -374,6 +374,7 @@ export class PatientsComponent implements OnInit {
   getInsuranceList() {
     this.rest.getInsurance().subscribe((data) => {
       this.insuranceList = data;
+      this.logger.log('insuranc elist', this.insuranceList);
     });
   }
   getGenderList() {

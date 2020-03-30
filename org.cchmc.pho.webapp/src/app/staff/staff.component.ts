@@ -399,10 +399,6 @@ export class StaffComponent implements OnInit {
   }
 
   cancelAdminDialog() {
-    const control = <FormArray>this.adminUserForm.controls.roles;
-    for (let i = control.length - 1; i >= 0; i--) {
-      control.removeAt(i);
-    }
     this.getUserRoles();
     this.isPasswordUpdated = false;
     this.dialog.closeAll();
