@@ -11,7 +11,7 @@
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/org.cchmc.pho.api/bin/Debug/netcoreapp3.1/org.cchmc.pho.api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/org.cchmc.pho.api",
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",
@@ -23,13 +23,6 @@
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"
             }
-        },
-        {
-            "type": "chrome",
-            "request": "launch",
-            "name": "Launch Chrome against localhost",
-            "url": "http://localhost:4200",
-            "webRoot": "${workspaceFolder}"
         }
     ]
 }

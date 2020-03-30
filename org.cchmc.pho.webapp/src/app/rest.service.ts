@@ -289,7 +289,7 @@ export class RestService {
       })
     );
   }
- 
+
   /* Practice Switch =======================================================*/
   getPracticeList(): Observable<any> {
     return this.http.get<any>(`${API_URL}/api/Staff/practicelist/`).pipe(
@@ -403,6 +403,16 @@ export class RestService {
       map((data: WorkbookReportingMonths[]) => {
         return data;
       })
+    );
+  }
+  //update user legal disclaimer
+  updateUserLegalDisclaimer(): Observable<any> {
+    return this.http.put<boolean>(`${API_URL}/api/Staff/legalstatus`, httpOptions).pipe(
+      map((data: boolean) => {
+        this.logger.log(data);
+        return data;
+      }
+      )
     );
   }
 

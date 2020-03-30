@@ -177,6 +177,22 @@ h1 {
   }
 }
 
+#footer{
+  color:#989390;
+  padding:8px 0;
+
+  &>span:not(:first-child):before{
+    content:'|';
+    padding: 0 .5em;
+  }
+
+  .link{
+    text-decoration: underline;
+    font-weight: bold;
+    cursor: pointer;
+  }
+}
+
 .warn-snackbar {
   background-color: var(--warn-darker-color);
 }
@@ -1419,6 +1435,7 @@ button.toast-close-button {
   tr.staff-detail-row {
     height: 0;
   }
+  
 }
 #staff {
   width: 100%;
