@@ -184,7 +184,7 @@ export class DashboardComponent implements OnInit {
             max = item.edVisits;
           }
       });
-      this.patientsMax = max + 1;
+      this.patientsMax = max + 1; // This is here to add space above each bar in the chart (Max Number of patients, plus one empty tick on the y-axis)
       this.edBarChart.config.options.scales.yAxes[0].ticks.max = this.patientsMax;
     });
   }

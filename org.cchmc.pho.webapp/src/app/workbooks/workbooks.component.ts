@@ -28,6 +28,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   }
 
   @ViewChild('FollowUp') followUp: TemplateRef<any>;
+  @ViewChild('DeletePatient') DeletePatient: TemplateRef<any>;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild('table') table: MatTable<WorkbookPatient>;
 
@@ -46,6 +47,8 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   formResponseId: number;
   phqsFinal: number;
   totalFinal: number;
+  deletingPatientName: string;
+  deletingPatientId: number;
 
   selectedFormResponseID = new FormControl('');
   searchPatient = new FormControl('');
@@ -238,14 +241,17 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   }
 
   //For removing patient from the workbook
+  onPatientDelete(element:any) {
+    this.deletingPatientName = element.patient;
+    this.deletingPatientId = element.patientId;
+    this.dialog.open(this.DeletePatient);
+  }
 
-  OnRemovePatientClick(element: any) {
-    if (confirm(`Are you sure you want to delete ${element.patient}?`)) {
+  OnRemovePatientClick() {
       this.removeWorkbookPatient = new WorkbookPatient();
       this.removeWorkbookPatient.formResponseId = this.selectedFormResponseID.value;
-      this.removeWorkbookPatient.patientId = element.patientId;
+      this.removeWorkbookPatient.patientId = this.deletingPatientId;
       this.RemovePatientFromWorkbook(this.removeWorkbookPatient);
-    }
   }
 
   RemovePatientFromWorkbook(removeWorkbookPatient: WorkbookPatient) {

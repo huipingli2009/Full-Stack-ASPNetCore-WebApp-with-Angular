@@ -99,7 +99,7 @@
                 <ng-container matColumnDef="action">
                     <mat-header-cell *matHeaderCellDef></mat-header-cell>
                     <mat-cell *matCellDef="let element">
-                        <button mat-icon-button color="accent" (click)="OnRemovePatientClick(element)">
+                        <button mat-icon-button color="accent" (click)="onPatientDelete(element)">
                             <mat-icon>remove_circle</mat-icon>
                         </button>
                     </mat-cell>
@@ -523,3 +523,13 @@
         </mat-dialog-actions>
     </div>
 </ng-template>
+
+<ng-template #DeletePatient>
+    <div mat-dialog-content class="mat-typography">
+        <h3>Are you sure you want to delete {{deletingPatientName}}?</h3>
+      </div>
+      <div mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Cancel</button>
+        <button mat-flat-button color="warn" mat-dialog-close (click)="OnRemovePatientClick()">Delete</button>
+    </div>
+  </ng-template>
