@@ -21,6 +21,12 @@ import { DateRequiredValidator } from '../shared/customValidators/customValidato
 })
 export class WorkbooksComponent implements OnInit, OnDestroy {
 
+  constructor(private rest: RestService, private fb: FormBuilder, private datePipe: DatePipe, private logger: NGXLogger, private dialog: MatDialog, private _snackBar: MatSnackBar) { }
+
+  get ProviderWorkbookArray() {
+    return this.ProvidersForWorkbookForm.get('ProviderWorkbookArray') as FormArray;
+  }
+
   @ViewChild('FollowUp') followUp: TemplateRef<any>;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild('table') table: MatTable<WorkbookPatient>;
@@ -40,20 +46,6 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   formResponseId: number;
   phqsFinal: number;
   totalFinal: number;
-
-  constructor(private rest: RestService, private fb: FormBuilder, private datePipe: DatePipe, private logger: NGXLogger, private dialog: MatDialog, private _snackBar: MatSnackBar) { }
-
-  ngOnInit(): void {
-    this.getWorkbookReportingMonths();
-    this.onProviderValueChanges();
-    this.onPatientSearchValueChanges();
-    this.onWorkbooksForPatientSearchValueChanges();
-  }
-
-  ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-  }
 
   selectedFormResponseID = new FormControl('');
   searchPatient = new FormControl('');
@@ -99,6 +91,18 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     }
   );
 
+  ngOnInit(): void {
+    this.getWorkbookReportingMonths();
+    this.onProviderValueChanges();
+    this.onPatientSearchValueChanges();
+    this.onWorkbooksForPatientSearchValueChanges();
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
 
   //for getting the reporting months for a workbook
   getWorkbookReportingMonths() {
@@ -124,23 +128,21 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   getWorkbookProviders(formResponseid: number) {
     this.rest.getWorkbookProviders(formResponseid).pipe(take(1)).subscribe((data) => {
       this.workbookProviders = data;
+      this.logger.log('provider workboos', this.workbookProviders)
       this.AssignProviderWorkbookArray();
     })
   }
 
   AssignProviderWorkbookArray() {
     const providerArray = this.ProviderWorkbookArray;
+    let clearArray = this.ProvidersForWorkbookForm.controls['ProviderWorkbookArray'] as FormArray;
+    clearArray.clear();
     if (providerArray.length > 0) {
       providerArray.removeAt(0);
     }
-    this.logger.log(this.workbookProviders, 'providers')
     this.workbookProviders.forEach(provider => {
       providerArray.push(this.fb.group(provider));
     });
-  }
-
-  get ProviderWorkbookArray() {
-    return this.ProvidersForWorkbookForm.get('ProviderWorkbookArray') as FormArray;
   }
 
   //for updating the provider values
