@@ -13,6 +13,7 @@ export interface Staff {
         id: number;
         name: string;
     }
+    positionType: String;
 }
 
 export class StaffDetails {
