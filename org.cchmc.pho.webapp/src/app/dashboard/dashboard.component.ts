@@ -46,10 +46,11 @@ export class DashboardComponent implements OnInit {
   edBarChart: any;
   selectedBar: string;
   isLoggedIn$: boolean;
+  patientsMax: number;
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
-    public fb: FormBuilder, public dialog: MatDialog, private datePipe: DatePipe, private logger: NGXLogger,
-    private authenticationService: AuthenticationService) {
+              public fb: FormBuilder, public dialog: MatDialog, private datePipe: DatePipe, private logger: NGXLogger,
+              private authenticationService: AuthenticationService) {
     // var id = this.userId.snapshot.paramMap.get('id') TODO: Need User Table;
     this.dataSourceOne = new MatTableDataSource;
     this.dataSourceTwo = new MatTableDataSource;
@@ -99,6 +100,11 @@ export class DashboardComponent implements OnInit {
               }
             }
           }],
+          yAxes: [{
+            ticks: {
+                max: this.patientsMax
+            }
+        }]
 
         },
         tooltips: {
@@ -166,6 +172,7 @@ export class DashboardComponent implements OnInit {
   /* ED Chart =========================================*/
   getEdChart() {
     this.edChart = [];
+    let max = 0;
     this.rest.getEdChartByUser().subscribe((data) => {
       this.edChart = data;
       this.edChartTitle = this.edChart[0].chartTitle;
@@ -173,7 +180,12 @@ export class DashboardComponent implements OnInit {
         this.addData(this.edBarChart,
           this.transformToolTipDate(item.admitDate),
           item.edVisits); // Getting data to the chart, will be easier to update if needed
+        if (item.edVisits > max) {
+            max = item.edVisits;
+          }
       });
+      this.patientsMax = max + 1;
+      this.edBarChart.config.options.scales.yAxes[0].ticks.max = this.patientsMax;
     });
   }
 
