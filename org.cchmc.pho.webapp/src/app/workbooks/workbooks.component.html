@@ -47,36 +47,6 @@
                         <div fxLayout="row" class="workbook-detail-heading">
                             Patients with a Completed PHQ screen vs. patients seen by doctor:
                         </div>
-                        <!-- <div fxLayout="row" fxLayoutGap="64px">
-                            <div fxLayout="column">
-                                <div fxLayout="row">
-                                    <div fxLayout="column" fxFlex="100px"></div>
-                                <div fxLayout="column" fxFlex="56px">PHQS</div>
-                                <div fxLayout="column" fxFlex="56px">TOTAL</div>
-                                </div>
-                            </div>
-                            <div fxLayout="column">
-                                <div fxLayout="row">
-                                    <div fxLayout="column" fxFlex="100px"></div>
-                                <div fxLayout="column" fxFlex="56px">PHQS</div>
-                                <div fxLayout="column" fxFlex="56px">TOTAL</div>
-                                </div>
-                            </div>
-                            <div fxLayout="column">
-                                <div fxLayout="row">
-                                    <div fxLayout="column" fxFlex="100px"></div>
-                                <div fxLayout="column" fxFlex="56px">PHQS</div>
-                                <div fxLayout="column" fxFlex="56px">TOTAL</div>
-                                </div>
-                            </div>
-                            <div fxLayout="column">
-                                <div fxLayout="row">
-                                    <div fxLayout="column" fxFlex="100px"></div>
-                                <div fxLayout="column" fxFlex="56px">PHQS</div>
-                                <div fxLayout="column" fxFlex="56px">TOTAL</div>
-                                </div>
-                            </div>
-                        </div> -->
                         <div fxLayout="row">
                             <ng-container formArrayName="ProviderWorkbookArray">
                                 <div fxLayout="row wrap" fxLayoutGap="64px">
@@ -109,41 +79,6 @@
                                     </ng-container>
                                     </div>
                                 </div> 
-                                <!-- <div fxLayout="row" fxLayoutAlign="space-around center">
-                                    <div>
-                                        <mat-label class="workbook-detail-heading">Provider</mat-label>
-                                    </div>
-                                    <div>
-                                        <mat-label class="workbook-detail-heading">PHQS</mat-label>
-                                    </div>
-                                    <div>
-                                        <mat-label class="workbook-detail-heading">TOTAL</mat-label>
-                                    </div>
-                                </div> -->
-                                <!-- <div *ngFor="let provider of ProviderWorkbookArray.controls;index as i">
-                                    <ng-container [formGroupName]="i">
-                                        <div fxLayout="row" fxLayoutAlign="space-around center">
-                                            <div>
-                                                <mat-form-field>
-                                                    <input matInput formControlName="provider" readonly>
-                                                </mat-form-field>
-                                            </div>
-                                            <div>
-                                                <mat-form-field>
-                                                    <input matInput (change)="onProviderWorkbookChange(i)"
-                                                        formControlName="phqs">
-
-                                                </mat-form-field>
-                                            </div>
-                                            <div>
-                                                <mat-form-field>
-                                                    <input matInput (change)="onProviderWorkbookChange(i)"
-                                                        formControlName="total">
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                    </ng-container>
-                                </div> -->
                             </ng-container>
                         </div>
                     </ng-container>

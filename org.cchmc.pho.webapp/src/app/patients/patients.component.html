@@ -113,7 +113,7 @@
       <mat-cell *matCellDef="let element">
         <div fxLayout="row wrap" fxLayoutGap="14px">
           <div *ngFor="let item of element.conditions" class="condition-container" fxLayout="column" fxflex="33%">
-            <div *ngIf="conditions" class="condition-chip"
+            <div class="condition-chip"
                   [style.margin-bottom]="element.conditions?.length > 2 ? '5px' : '0px'"
                   [style.margin-top]="element.conditions?.length > 2 ? '5px' : '0px'">
                   {{item.name}}
@@ -235,7 +235,7 @@
                   </div>
                   <label for="providerNotes">Provider Notes</label>
                   <div fxLayout="row">
-                    <textarea formControlName="providerNotes" name="providerNotes"></textarea>
+                    <textarea class="provider-notes-textarea" formControlName="providerNotes" name="providerNotes"></textarea>
                   </div>
                   <div *ngIf="form.controls.providerPMCAScore.touched && form.controls.providerNotes.errors?.required"
                   class="form-error" fxLayout="row">
