@@ -47,6 +47,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   formResponseId: number;
   phqsFinal: number;
   totalFinal: number;
+  patientTableHeader: number;
   deletingPatientName: string;
   deletingPatientId: number;
 
@@ -183,6 +184,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   getWorkbookPatients(formResponseid: number) {
     this.rest.getWorkbookPatients(formResponseid).pipe(take(1)).subscribe((data) => {
       this.workbookPatient = data;
+      this.patientTableHeader = this.workbookPatient.length;
       this.dataSourceWorkbook = new MatTableDataSource(this.workbookPatient);
       this.dataSourceWorkbook.data = this.workbookPatient;
     })

@@ -2028,6 +2028,11 @@ button.toast-close-button {
       width: 94px;
     }
   }
+  .mat-column-addfollowUp {
+    .mat-button-base {
+      padding: 8px 16px;
+    }
+  }
   .mat-slide-toggle {
     .mat-slide-toggle-thumb::after {
       top: 0;
