@@ -19,9 +19,10 @@
                 </mat-form-field>
             </div>
             <div fxLayout="column" fxLayoutAlign="end end" class="search-input" fxFlex fxFill>
+                <span class="search-header">Search for a patient across all workbooks:</span>
                 <mat-form-field>
                     <input matInput [formControl]="PatientNameFilter" autocomplete="off"
-                        placeholder="search patient: Name">
+                        placeholder="Search Patient: Name">
                     <button mat-button matSuffix mat-icon-button aria-label="Search">
                         <mat-icon>search</mat-icon>
                     </button>
@@ -442,29 +443,12 @@
     <div form [formGroup]="FollowupForm" class="follow-up-form">
         <h2 mat-dialog-title class="workbook-detail-heading">Follow up questions </h2>
         <mat-dialog-content>
-            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="32px" class="first-question">
-                <div fxLayout="column" class="question">
-                    Action Plan Given?
-                </div>
-                <div fxLayout="column">
-                    <mat-button-toggle-group formControlName="actionPlanGiven" required>
-                        <mat-button-toggle value="Yes">Yes</mat-button-toggle>
-                        <mat-button-toggle value="No">No</mat-button-toggle>
-                    </mat-button-toggle-group>
-                    <ng-container
-                        *ngIf="(FollowupForm.get('actionPlanGiven').touched || FollowupForm.get('actionPlanGiven').dirty) && FollowupForm.get('actionPlanGiven').errors">
-                        <mat-error *ngIf="FollowupForm.get('actionPlanGiven').errors.required">
-                            Please select
-                        </mat-error>
-                    </ng-container>
-                </div>
-            </div>
             <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="32px">
                 <div fxLayout="column" class="question">
                     Managed by External Provider?
                 </div>
                 <div fxLayout="column">
-                    <mat-button-toggle-group formControlName="managedByExternalProvider" required>
+                    <mat-button-toggle-group formControlName="managedByExternalProvider">
                         <mat-button-toggle value="Yes">Yes</mat-button-toggle>
                         <mat-button-toggle value="No">No</mat-button-toggle>
                     </mat-button-toggle-group>
@@ -484,7 +468,7 @@
                     <mat-form-field class="staff-full-width">
                         <mat-label>Date of Service</mat-label>
                         <input matInput placeholder="MM/DD/YYYY" formControlName="dateOfLastCommunicationByExternalProvider"
-                            [matDatepicker]="picker" required>
+                            [matDatepicker]="picker">
                         <mat-datepicker-toggle matPrefix [for]="picker">
                             <mat-icon matDatepickerToggleIcon class="icons-white-mail-input mat-icon-staff">
                                 calendar_today
@@ -506,7 +490,7 @@
                     1-2 Week follow-up call?
                 </div>
                 <div fxLayout="column">
-                    <mat-button-toggle-group formControlName="followupPhoneCallOneToTwoWeeks" required>
+                    <mat-button-toggle-group formControlName="followupPhoneCallOneToTwoWeeks">
                         <mat-button-toggle value="Yes">Yes</mat-button-toggle>
                         <mat-button-toggle value="No">No</mat-button-toggle>
                     </mat-button-toggle-group>
@@ -526,7 +510,7 @@
                     <mat-form-field class="staff-full-width">
                         <mat-label>Date of Service</mat-label>
                         <input matInput placeholder="MM/DD/YYYY" formControlName="dateOfFollowupCall"
-                            [matDatepicker]="picker1" required>
+                            [matDatepicker]="picker1">
                         <mat-datepicker-toggle matPrefix [for]="picker1">
                             <mat-icon matDatepickerToggleIcon class="icons-white-mail-input mat-icon-staff">
                                 calendar_today
@@ -548,7 +532,7 @@
                     1 Month follow-up visit?
                 </div>
                 <div fxLayout="column">
-                    <mat-button-toggle-group formControlName="oneMonthFollowupVisit" required>
+                    <mat-button-toggle-group formControlName="oneMonthFollowupVisit">
                         <mat-button-toggle value="Yes">Yes</mat-button-toggle>
                         <mat-button-toggle value="No">No</mat-button-toggle>
                     </mat-button-toggle-group>
@@ -585,7 +569,7 @@
                 </div>
                 <div fxLayout="column">
                     <mat-form-field>
-                        <input matInput formControlName="oneMonthFolllowupPHQ9Score" required placeholder="Score">
+                        <input matInput formControlName="oneMonthFolllowupPHQ9Score" placeholder="Score">
                         <ng-container
                             *ngIf="(FollowupForm.get('oneMonthFolllowupPHQ9Score').touched || FollowupForm.get('oneMonthFolllowupPHQ9Score').dirty) && FollowupForm.get('oneMonthFolllowupPHQ9Score').errors">
                             <mat-error *ngIf="FollowupForm.get('oneMonthFolllowupPHQ9Score').errors.required">

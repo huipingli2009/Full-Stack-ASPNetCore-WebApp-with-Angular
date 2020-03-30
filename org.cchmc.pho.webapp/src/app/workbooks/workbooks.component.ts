@@ -79,14 +79,14 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     {
       formResponseId: [''],
       patientId: [''],
-      actionPlanGiven: ['', Validators.required],
-      managedByExternalProvider: ['', Validators.required],
-      dateOfLastCommunicationByExternalProvider: ['', [DateRequiredValidator]],
-      followupPhoneCallOneToTwoWeeks: ['', Validators.required],
-      dateOfFollowupCall: ['', [DateRequiredValidator]],
-      oneMonthFollowupVisit: ['', Validators.required],
+      actionPlanGiven: [''],
+      managedByExternalProvider: [''],
+      dateOfLastCommunicationByExternalProvider: [''],
+      followupPhoneCallOneToTwoWeeks: [''],
+      dateOfFollowupCall: [''],
+      oneMonthFollowupVisit: [''],
       dateOfOneMonthVisit: [''],
-      oneMonthFolllowupPHQ9Score: ['', Validators.required]
+      oneMonthFolllowupPHQ9Score: ['']
 
     }
   );
