@@ -1,22 +1,18 @@
-import { Component, OnInit, ViewChild, Input, HostListener, TemplateRef } from '@angular/core';
-import { Patients, PatientDetails, Gender, Conditions } from '../models/patients';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { RestService } from '../rest.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { NGXLogger } from 'ngx-logger';
-import { trigger, state, style, transition, animate } from '@angular/animations';
-import { Observable, of } from 'rxjs';
-import { tap, startWith, map } from 'rxjs/operators';
-import { DataSource } from '@angular/cdk/collections';
-import { get } from 'https';
-import { PatientsDataSource } from './patients.datasource';
-import { MatDialog } from '@angular/material/dialog';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DatePipe } from '@angular/common';
-import { validateBasis } from '@angular/flex-layout';
+import { Component, HostListener, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSort } from '@angular/material/sort';
+import { ActivatedRoute } from '@angular/router';
+import { NGXLogger } from 'ngx-logger';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { Conditions, Gender, PatientDetails, Patients } from '../models/patients';
+import { RestService } from '../rest.service';
+import { PatientsDataSource } from './patients.datasource';
 
 
 @Component({
@@ -55,7 +51,7 @@ export class PatientsComponent implements OnInit {
   watchFlag: string;
   pcP_StaffID: string;
   gender: string;
-  genderMap: any = {M: 'Male', F : 'Female', U : 'Unknown'};
+  genderMap: any = { M: 'Male', F: 'Female', U: 'Unknown' };
   state: string;
   insurance: string;
   pcpId: number;
@@ -101,7 +97,7 @@ export class PatientsComponent implements OnInit {
   isExpansionDetailRow = (i: number, row: object) => row.hasOwnProperty('detailRow');
 
   constructor(public rest: RestService, private route: ActivatedRoute, public fb: FormBuilder,
-              private logger: NGXLogger, public dialog: MatDialog, private datePipe: DatePipe, public snackBar: MatSnackBar) {
+    private logger: NGXLogger, public dialog: MatDialog, private datePipe: DatePipe, public snackBar: MatSnackBar) {
     this.form = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -309,7 +305,7 @@ export class PatientsComponent implements OnInit {
   }
 
   updatePmcaScore() {
-    const {value, valid} = this.form;
+    const { value, valid } = this.form;
     if (valid) {
       this.providerPmcaScoreControl = this.form.controls.providerPMCAScore.value;
       this.providerNotesControl = this.form.controls.providerNotes.value;
@@ -333,9 +329,9 @@ export class PatientsComponent implements OnInit {
   }
 
   openPatientSaveDialog() {
-    const {value, valid} = this.form;
+    const { value, valid } = this.form;
     if (valid) {
-    this.dialog.open(this.callPatientSaveDialog, { disableClose: true });
+      this.dialog.open(this.callPatientSaveDialog, { disableClose: true });
     }
   }
 

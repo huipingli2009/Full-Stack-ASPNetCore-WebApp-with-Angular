@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthenticationService } from '../services/authentication.service';
 import { NGXLogger } from 'ngx-logger';
 import { environment } from 'src/environments/environment';
+import { AuthenticationService } from '../services/authentication.service';
 
 
 @Component({ templateUrl: 'login.component.html' })
@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.loginHeaderImg = 'assets/img/TSCHS_LOGO_PMS-SPOT-COLOR.png'; 
+        this.loginHeaderImg = 'assets/img/TSCHS_LOGO_PMS-SPOT-COLOR.png';
         this.loginForm = this.formBuilder.group({
             username: ['', Validators.required],
             password: ['', Validators.required]
@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
 
     // convenience getter for easy access to form fields
     get f() { return this.loginForm.controls; }
-    
+
 
     onSubmit() {
         this.submitted = true;
@@ -39,9 +39,9 @@ export class LoginComponent implements OnInit {
 
         this.logger.log('On Submit', this.loginForm.value);
         this.authenticationService.login(this.loginForm.value);
-        this.authenticationService.loginErrorMsg.subscribe( res => {
+        this.authenticationService.loginErrorMsg.subscribe(res => {
             this.errorMessage = res;
-            if(this.errorMessage !== '') {
+            if (this.errorMessage !== '') {
                 this.loading = false;
             }
         });
