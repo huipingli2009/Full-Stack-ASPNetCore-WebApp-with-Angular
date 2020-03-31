@@ -6,7 +6,7 @@
 
         </div>
         <div fxLayout="column" class="header-filter filter-btn">
-            <button mat-button (click)="applySelectedFilter('position','Medical Assistant')">Clinical Staff</button>
+            <button mat-button (click)="applySelectedFilter('position','Clinical Staff')">Clinical Staff</button>
         </div>
         <div fxLayout="column" class="header-filter filter-btn">
             <button mat-button (click)="applySelectedFilter('position','Support Staff')">Support Staff</button>
@@ -39,7 +39,7 @@
     <div>
     </div>
     <mat-table #table [dataSource]="dataSourceStaff" matSort (matSortChange)="onSortData($event)"
-        class="mat-elevation-z8" id="staff" multiTemplateDataRows>
+        class="mat-elevation-z8" id="staff" [trackBy]="trackStaff" multiTemplateDataRows>
 
         <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
@@ -162,7 +162,7 @@
                                 <div fxLayout="column" fxFlex class="input-w-icon">
                                     <mat-form-field>
                                         <mat-label>Email</mat-label>
-                                        <input matInput formControlName="email" name="email">
+                                        <input matInput formControlName="email" name="email" required>
                                         <mat-icon matPrefix>
                                             email
                                         </mat-icon>
@@ -182,7 +182,7 @@
                                 <div fxLayout="column" fxFlex class="input-w-icon">
                                     <mat-form-field>
                                         <mat-label>Phone </mat-label>
-                                        <input matInput formControlName="phone">
+                                        <input matInput formControlName="phone" required>
                                         <mat-icon matPrefix>phone</mat-icon>
                                     </mat-form-field>
                                     <ng-container
@@ -196,7 +196,7 @@
                                 <div fxLayout="column" fxFlex>
                                     <mat-form-field>
                                         <mat-label>NPI</mat-label>
-                                        <input matInput formControlName="npi">
+                                        <input matInput formControlName="npi" required>
                                         <ng-container
                                             *ngIf="(StaffDetailsForm.get('npi').touched || StaffDetailsForm.get('npi').dirty) && (StaffDetailsForm.get('npi').errors)">
                                             <mat-error *ngIf="StaffDetailsForm.get('npi').errors.required">
@@ -210,25 +210,27 @@
                                 <div fxLayout="column" fxFlex class="input-w-icon date-picker-input">
                                     <mat-form-field class="multi-select-override" floatLabel="always">
                                         <mat-label>START DATE</mat-label>
+
                                         <input matInput placeholder="MM/DD/YYYY" formControlName="startDate"
-                                            [matDatepicker]="picker">
+                                            [matDatepicker]="picker" required>
                                         <mat-datepicker-toggle matPrefix [for]="picker">
                                             <mat-icon matDatepickerToggleIcon>
                                                 calendar_today
                                             </mat-icon>
                                         </mat-datepicker-toggle>
                                         <mat-datepicker #picker></mat-datepicker>
-
-                                        <mat-error *ngIf="StaffDetailsForm.get('startDate').hasError('required')">
-                                            startDate is required
-                                        </mat-error>
-
+                                        <ng-container
+                                            *ngIf="(StaffDetailsForm.get('startDate').touched || StaffDetailsForm.get('startDate').dirty) && StaffDetailsForm.get('startDate').errors">
+                                            <mat-error *ngIf="StaffDetailsForm.get('startDate').errors.daterequired">
+                                                Start Date is required in MM/DD/YYYY format
+                                            </mat-error>
+                                        </ng-container>
                                     </mat-form-field>
                                 </div>
                                 <div fxLayout="column" fxFlex>
                                     <mat-form-field class="multi-select-override">
                                         <mat-label>ROLE</mat-label>
-                                        <mat-select formControlName="positionId">
+                                        <mat-select formControlName="positionId" required>
                                             <mat-option *ngFor="let position of positions" [value]="position.id">
                                                 {{position.name}}
                                             </mat-option>
@@ -246,7 +248,7 @@
                                 <div fxLayout="column" fxFlex>
                                     <mat-form-field class="multi-select-override">
                                         <mat-label>CREDENTIALS</mat-label>
-                                        <mat-select formControlName="credentialId">
+                                        <mat-select formControlName="credentialId" required>
                                             <mat-option *ngFor="let credential of credentials" [value]="credential.id">
                                                 {{credential.name}}
                                             </mat-option>
@@ -306,7 +308,8 @@
                                         (click)="openAdminDialog()">PHO ADMINISTRATION</button>
                                 </div>
                                 <div fxLayout="column" fxLayoutAlign="end end" fxFlex>
-                                    <button mat-flat-button color="accent" (click)="updateStaff()">SAVE</button>
+                                    <button mat-flat-button color="accent" (click)="updateStaff()"
+                                        [disabled]="!StaffDetailsForm.valid">SAVE</button>
                                 </div>
                                 <ng-template #adminDialog>
                                     <div mat-dialog-content class="mat-typography" id="admin-dialog">
@@ -332,7 +335,7 @@
                                                 </div>
                                             </div>
                                             <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end">
-        
+
                                                 <div fxLayout="column" class="input-w-icon">
                                                     <mat-form-field floatLabel="always">
                                                         <mat-label>USER NAME</mat-label>
@@ -374,8 +377,8 @@
                                             <div fxLayout="row" fxLayoutGap="10px" *ngIf="userRoleList">
                                                 <div fxLayout="column" fxFlex fxFill>
                                                     <mat-form-field class="multi-select-override">
-                                                        <mat-select matNativeControl
-                                                            formControlName="roles" [compareWith]="compareFn">
+                                                        <mat-select matNativeControl formControlName="roles"
+                                                            [compareWith]="compareFn">
                                                             <mat-option *ngFor="let item of userRoleList"
                                                                 [value]="item">{{item.name}}</mat-option>
                                                         </mat-select>

@@ -47,7 +47,9 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 Phone = dr["Phone"].ToString(),
                                 IsRegistry = (dr["RegistryYN"] != DBNull.Value && Convert.ToBoolean(dr["RegistryYN"])),
                                 Responsibilities = dr["Responsibilities"].ToString(),
-                                LegalDisclaimerSigned = dr["LegalDisclaimerSigned"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LegalDisclaimerSigned"].ToString())
+                                LegalDisclaimerSigned = dr["LegalDisclaimerSigned"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LegalDisclaimerSigned"].ToString()),
+                                
+
                             };
                             if (dr["CredentialId"] != DBNull.Value && int.TryParse(dr["CredentialId"].ToString(), out int intCredential))
                             {
@@ -61,6 +63,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 Position pos = new Position();
                                 pos.Id = intPosition;
                                 pos.Name = dr["Position"].ToString();
+                                pos.PositionType= dr["PositionType"].ToString();
                                 record.Position = pos;
                             }
                             staff.Add(record);

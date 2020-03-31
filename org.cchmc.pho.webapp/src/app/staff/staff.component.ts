@@ -8,6 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Sort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { NGXLogger } from 'ngx-logger';
+import { take } from 'rxjs/operators';
 import { ErrorInterceptor } from '../helpers/error.interceptor';
 import { comparePasswords } from '../helpers/password-match.validator';
 import { Responsibilities, Staff, StaffDetails } from '../models/Staff';
@@ -15,6 +16,7 @@ import { CurrentUser, User } from '../models/user';
 import { RestService } from '../rest.service';
 import { AuthenticationService } from '../services/authentication.service';
 import { UserService } from '../services/user.service';
+import { DateRequiredValidator } from '../shared/customValidators/customValidator';
 
 
 @Component({
@@ -72,7 +74,7 @@ export class StaffComponent implements OnInit {
     lastName: [''],
     email: ['', [Validators.required, Validators.email]],
     phone: ['', Validators.required],
-    startDate: ['', Validators.required],
+    startDate: ['', [DateRequiredValidator]],
     positionId: ['', Validators.required],
     credentialId: ['', Validators.required],
     npi: ['', Validators.required],
@@ -116,25 +118,25 @@ export class StaffComponent implements OnInit {
   // look up calls to the web api
 
   getPositions() {
-    this.rest.getPositions().subscribe((data) => {
+    this.rest.getPositions().pipe(take(1)).subscribe((data) => {
       this.positions = data;
     });
   }
 
   getCredentials() {
-    this.rest.getCredentials().subscribe((data) => {
+    this.rest.getCredentials().pipe(take(1)).subscribe((data) => {
       this.credentials = data;
     });
   }
 
   getResponsibilities() {
-    this.rest.getResponsibilities().subscribe((data) => {
+    this.rest.getResponsibilities().pipe(take(1)).subscribe((data) => {
       this.responsibilities = data;
     });
   }
 
   getCurrentUser() {
-    this.userService.getCurrentUser().subscribe((data) => {
+    this.userService.getCurrentUser().pipe(take(1)).subscribe((data) => {
       this.currentUser = data;
       this.currentUserId = data.id;
       if (data.role.id === 3) {
@@ -148,7 +150,7 @@ export class StaffComponent implements OnInit {
 
   getStaff() {
     this.staff = [];
-    this.rest.getStaff().subscribe((data) => {
+    this.rest.getStaff().pipe(take(1)).subscribe((data) => {
       this.staff = data;
       this.dataSourceStaff = new MatTableDataSource(this.staff);
       this.dataSourceStaff.data = this.staff;
@@ -156,7 +158,7 @@ export class StaffComponent implements OnInit {
       this.dataSourceStaff.filterPredicate = ((data: Staff, filter): boolean => {
         const filterValues = JSON.parse(filter);
 
-        return (this.positionFilter.value ? data.position.name.toString().trim()
+        return (this.positionFilter.value ? data.position.positionType.toString().trim()
           .toLowerCase().indexOf(filterValues.position.toLowerCase()) !== -1 : true)
           && (this.responsibilityFilter.value ? data.responsibilities
             .toString().trim().toLowerCase().indexOf(filterValues.responsibilities.toLowerCase()) !== -1 : true)
@@ -170,15 +172,14 @@ export class StaffComponent implements OnInit {
   }
 
   getStaffDetails(id: number) {
-    this.rest.getStaffDetails(id).subscribe((data) => {
-      data.startDate = this.datePipe.transform(data.startDate, 'MM/dd/yyyy');
+    this.rest.getStaffDetails(id).pipe(take(1)).subscribe((data) => {
       this.staffDetails = data;
       this.StaffDetailsForm.setValue(this.staffDetails);
       this.getStaffUser(data.id);
     });
   }
   getStaffUser(id: number) {
-    this.userService.getUserStaff(id).subscribe((data) => {
+    this.userService.getUserStaff(id).pipe(take(1)).subscribe((data) => {
       this.staffUser = data.body;
       if (this.staffUser) {
         this.selectedStaffUser = data.body.id;
@@ -205,7 +206,7 @@ export class StaffComponent implements OnInit {
   }
 
   getUserRoles() {
-    this.userService.getUserRoles().subscribe((data) => {
+    this.userService.getUserRoles().pipe(take(1)).subscribe((data) => {
       this.userRoleList = data;
     });
   }
@@ -214,7 +215,7 @@ export class StaffComponent implements OnInit {
 
   updateStaff() {
     this.staffDetails = this.StaffDetailsForm.value;
-    this.rest.updateStaff(this.staffDetails).subscribe(res => {
+    this.rest.updateStaff(this.staffDetails).pipe(take(1)).subscribe(res => {
       this.staffDetails = res;
       this.StaffDetailsForm.setValue(this.staffDetails);
       this.openSnackBar(`Details updated for ${this.staffDetails.lastName} ${this.staffDetails.firstName}`, 'Success');
@@ -240,7 +241,7 @@ export class StaffComponent implements OnInit {
         id: 1
       }
     };
-    this.userService.createStaffUser(staffUser).subscribe(res => {
+    this.userService.createStaffUser(staffUser).pipe(take(1)).subscribe(res => {
       this.getStaffUser(this.staffDetails.id);
       this.logger.log('post', res);
     });
@@ -249,14 +250,14 @@ export class StaffComponent implements OnInit {
   //Remove Users Registry Access
   removeUserRegAccess(e) {
     this.logger.log('selected user', e.checked)
-    this.userService.removeUserFromRegistry(this.selectedStaffUser, e.checked).subscribe(res => {
+    this.userService.removeUserFromRegistry(this.selectedStaffUser, e.checked).pipe(take(1)).subscribe(res => {
       this.logger.log('remived', res);
     });
   }
 
   //Lockout User
   lockoutUser(e) {
-    this.userService.lockoutUser(this.selectedStaffUser).subscribe(res => {
+    this.userService.lockoutUser(this.selectedStaffUser).pipe(take(1)).subscribe(res => {
       this.logger.log(res);
     });
   }
@@ -268,7 +269,7 @@ export class StaffComponent implements OnInit {
 
   // Get Verbiage for Admin Panel
   getAdminVerbiage() {
-    this.rest.getStaffAdminVerbiage().subscribe((res) => {
+    this.rest.getStaffAdminVerbiage().pipe(take(1)).subscribe((res) => {
       this.adminVerbiage = res;
     });
   }
@@ -286,13 +287,13 @@ export class StaffComponent implements OnInit {
       token: this.authService.getToken(),
       newPassword: password
     };
-    this.userService.updateUserPassword(userId, updatedPass).subscribe(res => {
+    this.userService.updateUserPassword(userId, updatedPass).pipe(take(1)).subscribe(res => {
       this.logger.log('Password Updated', res);
     })
   }
   /*Update User */
   updateStaffUser(id, user) {
-    this.userService.updateUser(id, user).subscribe(res => {
+    this.userService.updateUser(id, user).pipe(take(1)).subscribe(res => {
       this.logger.log('update user res in taff', res);
     })
   }
@@ -410,8 +411,12 @@ export class StaffComponent implements OnInit {
     }
   }
 
-
+  trackStaff(index: number, item: Staff): string {
+    return '${item.id}';
+  }
 }
+
+
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
