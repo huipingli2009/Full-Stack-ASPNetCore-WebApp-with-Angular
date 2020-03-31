@@ -160,7 +160,7 @@ export class StaffComponent implements OnInit {
       this.dataSourceStaff.filterPredicate = ((data: Staff, filter): boolean => {
         const filterValues = JSON.parse(filter);
 
-        return (this.positionFilter.value ? data.positionType.toString().trim()
+        return (this.positionFilter.value ? data.position.positionType.toString().trim()
           .toLowerCase().indexOf(filterValues.position.toLowerCase()) !== -1 : true)
           && (this.responsibilityFilter.value ? data.responsibilities
             .toString().trim().toLowerCase().indexOf(filterValues.responsibilities.toLowerCase()) !== -1 : true)

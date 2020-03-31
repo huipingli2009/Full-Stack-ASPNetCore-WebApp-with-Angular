@@ -13,7 +13,7 @@ export interface Staff {
         id: number;
         name: string;
     }
-    positionType: String;
+
 }
 
 export class StaffDetails {
@@ -39,6 +39,7 @@ export class StaffDetails {
 export class Position {
     id: number;
     name: string;
+    positionType: String;
 }
 
 export class Credentials {
