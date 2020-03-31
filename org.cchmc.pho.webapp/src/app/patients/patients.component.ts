@@ -370,7 +370,6 @@ export class PatientsComponent implements OnInit {
   getInsuranceList() {
     this.rest.getInsurance().subscribe((data) => {
       this.insuranceList = data;
-      this.logger.log('insuranc elist', this.insuranceList);
     });
   }
   getGenderList() {

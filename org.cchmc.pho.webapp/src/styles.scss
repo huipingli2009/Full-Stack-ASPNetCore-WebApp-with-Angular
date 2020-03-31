@@ -1839,6 +1839,14 @@ button.toast-close-button {
       padding-bottom: 0;
     }
   }
+  .search-header {
+    font-size: 12px;
+    line-height: 20px;
+    letter-spacing: 0.2px;
+    font-weight: 600;
+    color: var(--primary-darker-color);
+    text-transform: uppercase;
+  }
   .search-input {
     input {
       background-color: rgba(209, 236, 233, 0.92);
@@ -2018,6 +2026,11 @@ button.toast-close-button {
   .mat-column-adddob {
     .mat-form-field-infix {
       width: 94px;
+    }
+  }
+  .mat-column-addfollowUp {
+    .mat-button-base {
+      padding: 8px 16px;
     }
   }
   .mat-slide-toggle {
