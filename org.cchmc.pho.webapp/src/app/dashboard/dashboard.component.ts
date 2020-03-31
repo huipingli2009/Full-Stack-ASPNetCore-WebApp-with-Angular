@@ -1,15 +1,14 @@
-import { Component, OnInit, ViewChild, Inject, TemplateRef } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RestService } from '../rest.service';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { Alerts, Population, EdChart, EdChartDetails, Spotlight, Quicklinks } from '../models/dashboard';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import * as Chart from 'chart.js';
-import { EventEmitter } from 'protractor';
-import { environment } from 'src/environments/environment';
 import { DatePipe } from '@angular/common';
-import { NGXLogger, LoggerConfig } from 'ngx-logger';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
+import * as Chart from 'chart.js';
+import { NGXLogger } from 'ngx-logger';
+import { environment } from 'src/environments/environment';
+import { EdChart, EdChartDetails, Population, Quicklinks, Spotlight } from '../models/dashboard';
+import { RestService } from '../rest.service';
 import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
@@ -49,8 +48,8 @@ export class DashboardComponent implements OnInit {
   patientsMax: number;
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
-              public fb: FormBuilder, public dialog: MatDialog, private datePipe: DatePipe, private logger: NGXLogger,
-              private authenticationService: AuthenticationService) {
+    public fb: FormBuilder, public dialog: MatDialog, private datePipe: DatePipe, private logger: NGXLogger,
+    private authenticationService: AuthenticationService) {
     // var id = this.userId.snapshot.paramMap.get('id') TODO: Need User Table;
     this.dataSourceOne = new MatTableDataSource;
     this.dataSourceTwo = new MatTableDataSource;
@@ -102,9 +101,9 @@ export class DashboardComponent implements OnInit {
           }],
           yAxes: [{
             ticks: {
-                max: this.patientsMax
+              max: this.patientsMax
             }
-        }]
+          }]
 
         },
         tooltips: {
@@ -181,8 +180,8 @@ export class DashboardComponent implements OnInit {
           this.transformToolTipDate(item.admitDate),
           item.edVisits); // Getting data to the chart, will be easier to update if needed
         if (item.edVisits > max) {
-            max = item.edVisits;
-          }
+          max = item.edVisits;
+        }
       });
       this.patientsMax = max + 1;
       this.edBarChart.config.options.scales.yAxes[0].ticks.max = this.patientsMax;

@@ -1,17 +1,16 @@
-import { Component, OnInit, ViewChild, TemplateRef, OnDestroy, AfterViewInit } from '@angular/core';
-import { RestService } from '../rest.service';
-import { WorkbookReportingMonths, WorkbookProvider, WorkbookPatient, Followup } from '../models/workbook';
 import { DatePipe } from '@angular/common';
-import { NGXLogger } from 'ngx-logger';
-import { FormBuilder, FormControl, FormArray, AbstractControl, Validators } from '@angular/forms';
-import { ChangeDetectorRef } from '@angular/core';
-import { MatTableDataSource, MatTable } from '@angular/material/table';
-import { PatientForWorkbook } from '../models/patients';
-import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subject } from 'rxjs';
 import { MatSort, Sort } from '@angular/material/sort';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { NGXLogger } from 'ngx-logger';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { PatientForWorkbook } from '../models/patients';
+import { Followup, WorkbookPatient, WorkbookProvider, WorkbookReportingMonths } from '../models/workbook';
+import { RestService } from '../rest.service';
 import { DateRequiredValidator } from '../shared/customValidators/customValidator';
 
 @Component({
@@ -162,7 +161,6 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
 
   onProviderWorkbookChange(index: number) {
     let provider = this.ProviderWorkbookArray.at(index);
-    console.log(this.workbookProviderDetail);
     this.workbookProviderDetail = provider.value;
     this.workbookProviderDetail.phqs = Number(this.workbookProviderDetail.phqs);
     this.workbookProviderDetail.total = Number(this.workbookProviderDetail.total);

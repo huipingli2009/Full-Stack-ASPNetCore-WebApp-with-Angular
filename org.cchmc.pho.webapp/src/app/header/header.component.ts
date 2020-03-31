@@ -1,15 +1,15 @@
-import { Component, OnInit, ViewChild, SimpleChanges } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import { AuthenticationService } from '../services/authentication.service';
-import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
-import { Alerts, AlertAction, AlertActionTaken } from '../models/dashboard';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { User, CurrentUser } from '../models/user';
-import { RestService } from '../rest.service';
+import { Component, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NGXLogger } from 'ngx-logger';
+import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { PracticeList, Practices } from '../models/Staff';
+import { AlertAction, AlertActionTaken, Alerts } from '../models/dashboard';
+import { Practices } from '../models/Staff';
+import { CurrentUser } from '../models/user';
+import { RestService } from '../rest.service';
+import { AuthenticationService } from '../services/authentication.service';
 import { UserService } from '../services/user.service';
 
 @Component({

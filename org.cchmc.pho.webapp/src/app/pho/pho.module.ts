@@ -1,9 +1,9 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { PhoRoutingModule } from './pho-routing.module';
-import { PhoMainComponent } from './pho-main/pho-main.component';
+import { NgModule } from '@angular/core';
 import { MainMenuComponent } from './main-menu/main-menu.component';
+import { PhoMainComponent } from './pho-main/pho-main.component';
+import { PhoRoutingModule } from './pho-routing.module';
+
 
 
 @NgModule({

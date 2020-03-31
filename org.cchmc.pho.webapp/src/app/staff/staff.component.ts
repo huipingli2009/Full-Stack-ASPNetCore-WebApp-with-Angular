@@ -1,22 +1,20 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import { RestService } from '../rest.service';
-import { Staff, Responsibilities, StaffDetails } from '../models/Staff';
-import { MatTableDataSource, MatTable } from '@angular/material/table';
-import { trigger, state, style, transition, animate } from '@angular/animations';
-import { NGXLogger } from 'ngx-logger';
-import { FormBuilder, Validators, FormControl, FormArray, FormGroup, AbstractControl, NgForm, FormGroupDirective } from '@angular/forms';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DatePipe } from '@angular/common';
-import { Sort } from '@angular/material/sort';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { CurrentUser, User, UserRoles } from '../models/user';
-import { UserService } from '../services/user.service';
-import { MatDialog } from '@angular/material/dialog';
-import { HttpErrorResponse } from '@angular/common/http';
-import { AuthenticationService } from '../services/authentication.service';
-import { ErrorInterceptor } from '../helpers/error.interceptor';
-import { BehaviorSubject } from 'rxjs';
-import { comparePasswords } from '../helpers/password-match.validator';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Sort } from '@angular/material/sort';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { NGXLogger } from 'ngx-logger';
+import { ErrorInterceptor } from '../helpers/error.interceptor';
+import { comparePasswords } from '../helpers/password-match.validator';
+import { Responsibilities, Staff, StaffDetails } from '../models/Staff';
+import { CurrentUser, User } from '../models/user';
+import { RestService } from '../rest.service';
+import { AuthenticationService } from '../services/authentication.service';
+import { UserService } from '../services/user.service';
 
 
 @Component({

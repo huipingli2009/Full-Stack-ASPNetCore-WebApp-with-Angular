@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { CurrentUser, UserRoles } from '../models/user';
-import { environment } from 'src/environments/environment';
-import { Observable, of } from 'rxjs';
-import { AuthenticationService } from './authentication.service';
-import { map, catchError, tap } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
+import { Observable, of } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
+import { CurrentUser, UserRoles } from '../models/user';
 import { MatSnackBarComponent } from '../shared/mat-snack-bar/mat-snack-bar.component';
+import { AuthenticationService } from './authentication.service';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -33,7 +33,7 @@ export class UserService {
   /*Checks if a user exists*/
   getUserStaff(id): Observable<any> {
     return this.http.get<any>(`${environment.apiURL}/api/Users/${id}`,
-    {observe: 'response'}
+      { observe: 'response' }
     ).pipe(
       map((res) => {
         this.logger.log('Get Staff User Data', res);
@@ -61,7 +61,7 @@ export class UserService {
   removeUserFromRegistry(id, isDeleted) {
     return this.http.patch<any>(`${environment.apiURL}/api/Users/${id}/delete/`, isDeleted, httpOptions).pipe(
       tap(_ => this.snackBar.openSnackBar(`User Removed: ${isDeleted}`
-      , 'Close', 'success-snackbar')),
+        , 'Close', 'success-snackbar')),
       catchError(this.handleError<any>('Cannot Remove User'))
     );
   }
@@ -81,10 +81,10 @@ export class UserService {
   }
   /* Update User */
   updateUser(userid, user): Observable<any> {
-    this.logger.log('stringy updated user',userid, JSON.stringify(user));
+    this.logger.log('stringy updated user', userid, JSON.stringify(user));
     return this.http.put(`${environment.apiURL}/api/Users/${userid}`, JSON.stringify(user), httpOptions).pipe(
       tap(_ => this.snackBar.openSnackBar(`User Updated: ${user.username}`
-      , 'Close', 'success-snackbar')),
+        , 'Close', 'success-snackbar')),
       catchError(this.handleError<any>('User Update Failed'))
     );
   }

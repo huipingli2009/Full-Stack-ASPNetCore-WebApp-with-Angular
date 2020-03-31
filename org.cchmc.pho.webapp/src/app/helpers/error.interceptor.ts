@@ -1,10 +1,10 @@
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpResponse } from '@angular/common/http';
-import { Observable, throwError, of, BehaviorSubject, Subject } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { AuthenticationService } from '../services/authentication.service';
 import { Router } from '@angular/router';
 import { NGXLogger } from 'ngx-logger';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { AuthenticationService } from '../services/authentication.service';
 
 
 @Injectable()
@@ -25,8 +25,8 @@ export class ErrorInterceptor implements HttpInterceptor {
                     status: err.status,
                     statusText: err.statusText,
                     url: err.url
-                  });
-                console.log('404 User Not Found');
+                });
+                this.logger.log('404 User Not Found');
                 return of(res);
             } else {
                 const error = err.error.message || err.error.status;
