@@ -137,9 +137,8 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [AllowAnonymous]
         [HttpPost("patients/{id}")]
-        //[Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(string))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -147,7 +146,7 @@ namespace org.cchmc.pho.api.Controllers
         {
             try
             {
-                int currentUserId = 3; // _userService.GetUserIdFromClaims(User?.Claims);
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
                 var result = await _workbooks.AddPatientToWorkbooks(currentUserId, workbookspatientVM.FormResponseId, id, workbookspatientVM.ProviderId, workbookspatientVM.DateOfService, int.Parse(workbookspatientVM.PHQ9_Score), workbookspatientVM.ActionFollowUp);
                 return Ok(result);
             }
