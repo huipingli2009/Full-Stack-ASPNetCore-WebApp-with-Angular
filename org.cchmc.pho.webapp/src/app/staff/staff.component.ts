@@ -37,6 +37,7 @@ export class StaffComponent implements OnInit {
   positions: Position[];
   currentUser: CurrentUser;
   currentUserId: number;
+  currentPracticeId: number;
   isUserAdmin: boolean;
   staffUser: User;
   adminVerbiage: string;
@@ -111,6 +112,7 @@ export class StaffComponent implements OnInit {
     this.getCredentials();
     this.getResponsibilities();
     this.getAdminVerbiage();
+    this.getCurrentPractice();
   }
 
 
@@ -210,6 +212,12 @@ export class StaffComponent implements OnInit {
       this.userRoleList = data;
     });
   }
+  // Get current practice
+  getCurrentPractice() {
+    this.rest.getPracticeList().pipe(take(1)).subscribe((data) => {
+      this.currentPracticeId = data.currentPracticeId;
+    })
+  }
 
   // update staff record
 
@@ -227,13 +235,17 @@ export class StaffComponent implements OnInit {
 
   // Add Staff User
   createStaffUser() {
+    let practiceIdForUsername = '';
+    if (this.currentPracticeId < 10) {
+      practiceIdForUsername = `0${this.currentPracticeId}`;
+    } else {practiceIdForUsername = this.currentPracticeId.toString()}
     const staffUser = {
       id: this.currentUserId,
       token: this.authService.getToken(),
       newPassword: `${this.staffDetails.lastName.substring(0, 3)}${this.staffDetails.firstName.substring(0, 3)}${this.staffDetails.id}!`,
       firstName: this.staffDetails.firstName,
       lastName: this.staffDetails.lastName,
-      userName: `${this.staffDetails.firstName.charAt(0)}${this.staffDetails.lastName}`,
+      userName: `${this.staffDetails.firstName.charAt(0)}${this.staffDetails.lastName}${this.staffDetails.id}${practiceIdForUsername}`,
       email: this.staffDetails.email,
       staffId: this.staffDetails.id,
       isLockedOut: true,
