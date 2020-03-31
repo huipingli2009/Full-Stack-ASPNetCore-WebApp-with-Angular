@@ -247,7 +247,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
         {
             //set up        
             var patientId = 10809;
-            int expected = 1;
+            bool expected = true;
 
             WorkbooksPatientViewModel selectedPatient = new WorkbooksPatientViewModel()
             {
