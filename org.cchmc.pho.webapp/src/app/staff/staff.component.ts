@@ -8,6 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Sort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { NGXLogger } from 'ngx-logger';
+import { take } from 'rxjs/operators';
 import { ErrorInterceptor } from '../helpers/error.interceptor';
 import { comparePasswords } from '../helpers/password-match.validator';
 import { Responsibilities, Staff, StaffDetails } from '../models/Staff';
@@ -15,9 +16,7 @@ import { CurrentUser, User } from '../models/user';
 import { RestService } from '../rest.service';
 import { AuthenticationService } from '../services/authentication.service';
 import { UserService } from '../services/user.service';
-import { ErrorStateMatcher } from '@angular/material/core';
 import { DateRequiredValidator } from '../shared/customValidators/customValidator';
-import { take } from 'rxjs/operators';
 
 
 @Component({
