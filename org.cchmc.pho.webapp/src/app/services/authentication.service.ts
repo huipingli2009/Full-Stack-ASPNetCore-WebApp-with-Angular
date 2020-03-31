@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { NGXLogger } from 'ngx-logger';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { UserAuthenticate } from '../models/user';
-import { NGXLogger } from 'ngx-logger';
-import { Router } from '@angular/router';
 
 
 @Injectable({ providedIn: 'root' })
@@ -16,7 +16,7 @@ export class AuthenticationService {
         })
     }
     private loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    loginErrorMsg: BehaviorSubject<string> =  new BehaviorSubject<string>('');
+    loginErrorMsg: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
     constructor(private http: HttpClient, private logger: NGXLogger, public router: Router) { }
 
@@ -24,8 +24,8 @@ export class AuthenticationService {
         this.logger.log(JSON.stringify(user), 'IN AUTH SERVICE')
         return this.http.post<any>(`${environment.apiURL}/api/Users/authenticate/`, JSON.stringify(user), this.headers)
             .subscribe((res: any) => {
-                localStorage.setItem('access_token', res.user.token);
-                localStorage.setItem('staffId', res.user.staffId);
+                sessionStorage.setItem('access_token', res.user.token);
+                sessionStorage.setItem('staffId', res.user.staffId);
                 this.logger.log('RESPONSE', res);
                 if (res.user.token !== null) {
                     this.router.navigate(['/dashboard']);
@@ -37,20 +37,21 @@ export class AuthenticationService {
     }
 
     getToken() {
-        return localStorage.getItem('access_token');
+        return sessionStorage.getItem('access_token');
     }
 
     get isUserLoggedIn(): boolean {
-        let authToken = localStorage.getItem('access_token'); 
+        let authToken = sessionStorage.getItem('access_token'); 
         return (authToken !== null) ? true : false;
     }
 
     getCurrentStaffId() {
-        return localStorage.getItem('staffId');
+        return sessionStorage.getItem('staffId');
     }
 
     logout() {
-        let removeToken = localStorage.removeItem('access_token');
+        let removeToken = sessionStorage.removeItem('access_token');
+        sessionStorage.removeItem('staffId');
         if (removeToken == null) {
             this.router.navigate(['/login']);
         }
