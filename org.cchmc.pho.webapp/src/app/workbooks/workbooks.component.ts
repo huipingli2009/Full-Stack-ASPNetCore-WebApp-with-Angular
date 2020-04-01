@@ -241,17 +241,17 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   }
 
   //For removing patient from the workbook
-  onPatientDelete(element:any) {
+  onPatientDelete(element: any) {
     this.deletingPatientName = element.patient;
     this.deletingPatientId = element.patientId;
     this.dialog.open(this.DeletePatient);
   }
 
   OnRemovePatientClick() {
-      this.removeWorkbookPatient = new WorkbookPatient();
-      this.removeWorkbookPatient.formResponseId = this.selectedFormResponseID.value;
-      this.removeWorkbookPatient.patientId = this.deletingPatientId;
-      this.RemovePatientFromWorkbook(this.removeWorkbookPatient);
+    this.removeWorkbookPatient = new WorkbookPatient();
+    this.removeWorkbookPatient.formResponseId = this.selectedFormResponseID.value;
+    this.removeWorkbookPatient.patientId = this.deletingPatientId;
+    this.RemovePatientFromWorkbook(this.removeWorkbookPatient);
   }
 
   RemovePatientFromWorkbook(removeWorkbookPatient: WorkbookPatient) {
@@ -322,7 +322,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   UpdateFollowUpQuestionResponses(followUp: Followup) {
     this.rest.UpdateFollowUpQuestionResponses(followUp).pipe(take(1)).subscribe((data) => {
       this.CloseDialog();
-
+      this.getWorkbookPatients(this.formResponseId);
     })
   }
 
