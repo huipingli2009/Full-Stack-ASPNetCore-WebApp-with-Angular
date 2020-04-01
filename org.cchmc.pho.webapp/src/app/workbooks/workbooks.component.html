@@ -43,16 +43,17 @@
         </div>
         <div fxLayout="row" class="side-border-container provider-list-container">
             <form [formGroup]="ProvidersForWorkbookForm">
-                    <ng-container *ngIf="workbookProviders">
-                        <div fxLayout="row" class="workbook-detail-heading">
-                            Patients with a Completed PHQ screen vs. patients seen by doctor:
-                        </div>
-                        <div fxLayout="row">
-                            <ng-container formArrayName="ProviderWorkbookArray">
-                                <div fxLayout="row wrap" fxLayoutGap="64px">
-                                    <div fxLayout="column" *ngFor="let provider of ProviderWorkbookArray.controls;index as i" fxFlex="18"
+                <ng-container *ngIf="workbookProviders">
+                    <div fxLayout="row" class="workbook-detail-heading">
+                        Patients with a Completed PHQ screen vs. patients seen by doctor:
+                    </div>
+                    <div fxLayout="row">
+                        <ng-container formArrayName="ProviderWorkbookArray">
+                            <div fxLayout="row wrap" fxLayoutGap="64px">
+                                <div fxLayout="column"
+                                    *ngFor="let provider of ProviderWorkbookArray.controls;index as i" fxFlex="18"
                                     class="workbook-item">
-                                        <ng-container [formGroupName]="i">
+                                    <ng-container [formGroupName]="i">
                                         <div fxLayout="row">
                                             <div fxLayout="column" fxFlex fxLayoutAlign="center start" fxFlex="100px">
                                                 <div class="title-col hidden-name">NAME</div>
@@ -60,28 +61,28 @@
                                                     <input matInput formControlName="provider" readonly>
                                                 </mat-form-field>
                                             </div>
-                                        <div fxLayout="column" fxFlex="60.5px" class="workbook-inputs-col">
-                                            <div class="title-col">PHQS</div>
-                                            <mat-form-field class="workbook-input">
-                                                <input matInput (change)="onProviderWorkbookChange(i)"
-                                                    formControlName="phqs">
+                                            <div fxLayout="column" fxFlex="60.5px" class="workbook-inputs-col">
+                                                <div class="title-col">PHQS</div>
+                                                <mat-form-field class="workbook-input">
+                                                    <input matInput (change)="onProviderWorkbookChange(i)"
+                                                        formControlName="phqs">
 
-                                            </mat-form-field>
-                                        </div>
-                                        <div fxLayout="column" fxFlex="60.5px">
-                                            <div class="title-col">TOTAL</div>
-                                            <mat-form-field class="workbook-input">
-                                                <input matInput (change)="onProviderWorkbookChange(i)"
-                                                    formControlName="total">
-                                            </mat-form-field>
-                                        </div>
+                                                </mat-form-field>
+                                            </div>
+                                            <div fxLayout="column" fxFlex="60.5px">
+                                                <div class="title-col">TOTAL</div>
+                                                <mat-form-field class="workbook-input">
+                                                    <input matInput (change)="onProviderWorkbookChange(i)"
+                                                        formControlName="total">
+                                                </mat-form-field>
+                                            </div>
                                         </div>
                                     </ng-container>
-                                    </div>
-                                </div> 
-                            </ng-container>
-                        </div>
-                    </ng-container>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </ng-container>
             </form>
         </div>
     </div>
@@ -268,7 +269,6 @@
                         <mat-header-cell *matHeaderCellDef class="date-picker-input">
 
                             <mat-form-field class="staff-full-width">
-                                <mat-label>MM/DD/YYYY</mat-label>
                                 <input matInput placeholder="MM/DD/YYYY" formControlName="dateOfService"
                                     [matDatepicker]="picker" required>
                                 <mat-datepicker-toggle matPrefix [for]="picker">
@@ -311,8 +311,8 @@
                     <!-- Patient Name Column -->
                     <ng-container matColumnDef="addactionFollowUp">
                         <mat-header-cell *matHeaderCellDef>
-                            <mat-slide-toggle formControlName="action" [checked]="PatientForWorkbookForm.controls.action"
-                                name="action" ngDefaultControl>
+                            <mat-slide-toggle formControlName="action"
+                                [checked]="PatientForWorkbookForm.controls.action" name="action" ngDefaultControl>
                             </mat-slide-toggle>
                             <ng-container
                                 *ngIf="(PatientForWorkbookForm.get('action').touched || PatientForWorkbookForm.get('action').dirty) && PatientForWorkbookForm.get('action').errors">
@@ -328,8 +328,8 @@
                     <!-- Action Follow up Column -->
                     <ng-container matColumnDef="addfollowUp">
                         <mat-header-cell *matHeaderCellDef>
-                            <button mat-flat-button [disabled]="!PatientForWorkbookForm.valid"
-                            color="accent" (click)="AddPatientForWorkbook()">ADD PATIENT</button>
+                            <button mat-flat-button [disabled]="!PatientForWorkbookForm.valid" color="accent"
+                                (click)="AddPatientForWorkbook()">ADD PATIENT</button>
                         </mat-header-cell>
 
                     </ng-container>
@@ -405,8 +405,8 @@
                 <div fxLayout="column">
                     <mat-form-field class="staff-full-width">
                         <mat-label>Date of Service</mat-label>
-                        <input matInput placeholder="MM/DD/YYYY" formControlName="dateOfLastCommunicationByExternalProvider"
-                            [matDatepicker]="picker">
+                        <input matInput placeholder="MM/DD/YYYY"
+                            formControlName="dateOfLastCommunicationByExternalProvider" [matDatepicker]="picker">
                         <mat-datepicker-toggle matPrefix [for]="picker">
                             <mat-icon matDatepickerToggleIcon class="icons-white-mail-input mat-icon-staff">
                                 calendar_today
@@ -464,7 +464,7 @@
                     </mat-form-field>
                 </div>
             </div>
-          
+
             <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="32px">
                 <div fxLayout="column" class="question">
                     1 Month follow-up visit?
@@ -497,7 +497,7 @@
                             </mat-icon>
                         </mat-datepicker-toggle>
                         <mat-datepicker #picker2></mat-datepicker>
-    
+
                     </mat-form-field>
                 </div>
             </div>
@@ -530,9 +530,9 @@
 <ng-template #DeletePatient>
     <div mat-dialog-content class="mat-typography">
         <h3>Are you sure you want to delete {{deletingPatientName}}?</h3>
-      </div>
-      <div mat-dialog-actions align="end">
+    </div>
+    <div mat-dialog-actions align="end">
         <button mat-button mat-dialog-close>Cancel</button>
         <button mat-flat-button color="warn" mat-dialog-close (click)="OnRemovePatientClick()">Delete</button>
     </div>
-  </ng-template>
+</ng-template>
