@@ -85,7 +85,7 @@
 
                         <ng-container matColumnDef="practiceTotal">
                             <th mat-header-cell *matHeaderCellDef> Practice </th>
-                            <td mat-cell *matCellDef="let element"> {{element.practiceTotal}} </td>
+                            <td mat-cell *matCellDef="let element" (click)="toFilteredPatients(element)"> {{element.practiceTotal}} </td>
                         </ng-container>
 
 
