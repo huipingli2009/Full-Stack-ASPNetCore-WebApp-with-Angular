@@ -310,6 +310,7 @@ export class StaffComponent implements OnInit {
       token: this.authService.getToken(),
       userName: this.adminUserForm.controls.userName.value,
       staffId: this.staffDetails.id,
+      email: this.staffDetails.email,
       role: {
         id: this.adminUserForm.controls.roles.value.id,
         name: this.adminUserForm.controls.roles.value.name
