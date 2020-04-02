@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
-import { AuthenticationService } from '../services/authentication.service';
 import { NGXLogger } from 'ngx-logger';
 import { environment } from 'src/environments/environment';
+import { AuthenticationService } from '../services/authentication.service';
 
 
 @Component({ templateUrl: 'login.component.html' })
@@ -15,18 +13,16 @@ export class LoginComponent implements OnInit {
     submitted = false;
     defaultUrl = environment.apiURL;
     loginHeaderImg: string;
+    errorMessage;
 
     constructor(
         private formBuilder: FormBuilder,
-        private route: ActivatedRoute,
-        private router: Router,
         private authenticationService: AuthenticationService,
         private logger: NGXLogger
     ) { }
 
     ngOnInit() {
-        // this.loginHeaderImg = `${this.defaultUrl}/assets/img/TSCHS_LOGO_PMS-SPOT-COLOR.png`;
-        this.loginHeaderImg = 'assets/img/TSCHS_LOGO_PMS-SPOT-COLOR.png'; //REMOVE: For testing in dev
+        this.loginHeaderImg = 'assets/img/TSCHS_LOGO_PMS-SPOT-COLOR.png';
         this.loginForm = this.formBuilder.group({
             username: ['', Validators.required],
             password: ['', Validators.required]
@@ -36,11 +32,18 @@ export class LoginComponent implements OnInit {
     // convenience getter for easy access to form fields
     get f() { return this.loginForm.controls; }
 
+
     onSubmit() {
         this.submitted = true;
         this.loading = true;
 
         this.logger.log('On Submit', this.loginForm.value);
         this.authenticationService.login(this.loginForm.value);
+        this.authenticationService.loginErrorMsg.subscribe(res => {
+            this.errorMessage = res;
+            if (this.errorMessage !== '') {
+                this.loading = false;
+            }
+        });
     }
 }

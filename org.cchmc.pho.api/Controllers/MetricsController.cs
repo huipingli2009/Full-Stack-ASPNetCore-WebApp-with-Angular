@@ -104,6 +104,7 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpGet("edcharts/{admitdate}")]
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<EDDetailViewModel>))]

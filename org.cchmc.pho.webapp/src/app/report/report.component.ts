@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { RestService } from '../rest.service';
-import { EdChartDetails } from '../models/dashboard';
 import { take } from 'rxjs/operators';
+import { EdChartDetails } from '../models/dashboard';
+import { RestService } from '../rest.service';
 const parameter: string = '19010101';
 @Component({
   selector: 'app-report',

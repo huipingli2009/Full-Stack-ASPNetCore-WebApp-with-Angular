@@ -8,7 +8,7 @@ import { VERSION } from '../../environments/version';
   selector: 'app-version',
   //todo: add class file here
   template: `
-  <div class="">{{appVersion}}</div>
+  <span class="">{{appVersion}}</span>
   `
 })
 

@@ -33,6 +33,7 @@ namespace org.cchmc.pho.api.Controllers
 
         // GET: api/Workbooks
         [HttpGet("patients")]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<WorkbooksPatientViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
@@ -201,6 +202,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpGet("patientfollowup")]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(WorkbooksPatientFollowupViewModel))]
         [SwaggerResponse(400, type: typeof(string))]

@@ -1,17 +1,16 @@
-import { Component, OnInit, ViewChild, TemplateRef, OnDestroy, AfterViewInit } from '@angular/core';
-import { RestService } from '../rest.service';
-import { WorkbookReportingMonths, WorkbookProvider, WorkbookPatient, Followup } from '../models/workbook';
 import { DatePipe } from '@angular/common';
-import { NGXLogger } from 'ngx-logger';
-import { FormBuilder, FormControl, FormArray, AbstractControl, Validators } from '@angular/forms';
-import { ChangeDetectorRef } from '@angular/core';
-import { MatTableDataSource, MatTable } from '@angular/material/table';
-import { PatientForWorkbook } from '../models/patients';
-import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subject } from 'rxjs';
 import { MatSort, Sort } from '@angular/material/sort';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { NGXLogger } from 'ngx-logger';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { PatientForWorkbook } from '../models/patients';
+import { Followup, WorkbookPatient, WorkbookProvider, WorkbookReportingMonths } from '../models/workbook';
+import { RestService } from '../rest.service';
 import { DateRequiredValidator } from '../shared/customValidators/customValidator';
 
 @Component({
@@ -21,7 +20,14 @@ import { DateRequiredValidator } from '../shared/customValidators/customValidato
 })
 export class WorkbooksComponent implements OnInit, OnDestroy {
 
+  constructor(private rest: RestService, private fb: FormBuilder, private datePipe: DatePipe, private logger: NGXLogger, private dialog: MatDialog, private _snackBar: MatSnackBar) { }
+
+  get ProviderWorkbookArray() {
+    return this.ProvidersForWorkbookForm.get('ProviderWorkbookArray') as FormArray;
+  }
+
   @ViewChild('FollowUp') followUp: TemplateRef<any>;
+  @ViewChild('DeletePatient') DeletePatient: TemplateRef<any>;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild('table') table: MatTable<WorkbookPatient>;
 
@@ -40,20 +46,9 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   formResponseId: number;
   phqsFinal: number;
   totalFinal: number;
-
-  constructor(private rest: RestService, private fb: FormBuilder, private datePipe: DatePipe, private logger: NGXLogger, private dialog: MatDialog, private _snackBar: MatSnackBar) { }
-
-  ngOnInit(): void {
-    this.getWorkbookReportingMonths();
-    this.onProviderValueChanges();
-    this.onPatientSearchValueChanges();
-    this.onWorkbooksForPatientSearchValueChanges();
-  }
-
-  ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-  }
+  patientTableHeader: number;
+  deletingPatientName: string;
+  deletingPatientId: number;
 
   selectedFormResponseID = new FormControl('');
   searchPatient = new FormControl('');
@@ -87,17 +82,29 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     {
       formResponseId: [''],
       patientId: [''],
-      actionPlanGiven: ['', Validators.required],
-      managedByExternalProvider: ['', Validators.required],
-      dateOfLastCommunicationByExternalProvider: ['', [DateRequiredValidator]],
-      followupPhoneCallOneToTwoWeeks: ['', Validators.required],
-      dateOfFollowupCall: ['', [DateRequiredValidator]],
-      oneMonthFollowupVisit: ['', Validators.required],
+      actionPlanGiven: [''],
+      managedByExternalProvider: [''],
+      dateOfLastCommunicationByExternalProvider: [''],
+      followupPhoneCallOneToTwoWeeks: [''],
+      dateOfFollowupCall: [''],
+      oneMonthFollowupVisit: [''],
       dateOfOneMonthVisit: [''],
-      oneMonthFolllowupPHQ9Score: ['', Validators.required]
+      oneMonthFolllowupPHQ9Score: ['']
 
     }
   );
+
+  ngOnInit(): void {
+    this.getWorkbookReportingMonths();
+    this.onProviderValueChanges();
+    this.onPatientSearchValueChanges();
+    this.onWorkbooksForPatientSearchValueChanges();
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 
 
   //for getting the reporting months for a workbook
@@ -124,22 +131,21 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   getWorkbookProviders(formResponseid: number) {
     this.rest.getWorkbookProviders(formResponseid).pipe(take(1)).subscribe((data) => {
       this.workbookProviders = data;
+      this.logger.log('provider workboos', this.workbookProviders)
       this.AssignProviderWorkbookArray();
     })
   }
 
   AssignProviderWorkbookArray() {
     const providerArray = this.ProviderWorkbookArray;
+    let clearArray = this.ProvidersForWorkbookForm.controls['ProviderWorkbookArray'] as FormArray;
+    clearArray.clear();
     if (providerArray.length > 0) {
       providerArray.removeAt(0);
     }
     this.workbookProviders.forEach(provider => {
       providerArray.push(this.fb.group(provider));
     });
-  }
-
-  get ProviderWorkbookArray() {
-    return this.ProvidersForWorkbookForm.get('ProviderWorkbookArray') as FormArray;
   }
 
   //for updating the provider values
@@ -161,7 +167,6 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
 
   onProviderWorkbookChange(index: number) {
     let provider = this.ProviderWorkbookArray.at(index);
-    console.log(this.workbookProviderDetail);
     this.workbookProviderDetail = provider.value;
     this.workbookProviderDetail.phqs = Number(this.workbookProviderDetail.phqs);
     this.workbookProviderDetail.total = Number(this.workbookProviderDetail.total);
@@ -177,6 +182,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   getWorkbookPatients(formResponseid: number) {
     this.rest.getWorkbookPatients(formResponseid).pipe(take(1)).subscribe((data) => {
       this.workbookPatient = data;
+      this.patientTableHeader = this.workbookPatient.length;
       this.dataSourceWorkbook = new MatTableDataSource(this.workbookPatient);
       this.dataSourceWorkbook.data = this.workbookPatient;
     })
@@ -235,14 +241,17 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   }
 
   //For removing patient from the workbook
+  onPatientDelete(element:any) {
+    this.deletingPatientName = element.patient;
+    this.deletingPatientId = element.patientId;
+    this.dialog.open(this.DeletePatient);
+  }
 
-  OnRemovePatientClick(element: any) {
-    if (confirm(`Are you sure you want to delete ${element.patient}?`)) {
+  OnRemovePatientClick() {
       this.removeWorkbookPatient = new WorkbookPatient();
       this.removeWorkbookPatient.formResponseId = this.selectedFormResponseID.value;
-      this.removeWorkbookPatient.patientId = element.patientId;
+      this.removeWorkbookPatient.patientId = this.deletingPatientId;
       this.RemovePatientFromWorkbook(this.removeWorkbookPatient);
-    }
   }
 
   RemovePatientFromWorkbook(removeWorkbookPatient: WorkbookPatient) {

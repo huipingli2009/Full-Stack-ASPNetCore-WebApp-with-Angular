@@ -7,8 +7,8 @@
 trigger:
   branches:
     include:
-      - 'develop'
-      - 'release/*'
+      - develop
+      - release/*
   paths:
     exclude:
       - readme.md

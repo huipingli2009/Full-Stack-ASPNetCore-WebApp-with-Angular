@@ -1,15 +1,14 @@
-import { Component, OnInit, ViewChild, Inject, TemplateRef } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RestService } from '../rest.service';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { Alerts, Population, EdChart, EdChartDetails, Spotlight, Quicklinks } from '../models/dashboard';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import * as Chart from 'chart.js';
-import { EventEmitter } from 'protractor';
-import { environment } from 'src/environments/environment';
 import { DatePipe } from '@angular/common';
-import { NGXLogger, LoggerConfig } from 'ngx-logger';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
+import * as Chart from 'chart.js';
+import { NGXLogger } from 'ngx-logger';
+import { environment } from 'src/environments/environment';
+import { EdChart, EdChartDetails, Population, Quicklinks, Spotlight } from '../models/dashboard';
+import { RestService } from '../rest.service';
 import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
@@ -46,6 +45,7 @@ export class DashboardComponent implements OnInit {
   edBarChart: any;
   selectedBar: string;
   isLoggedIn$: boolean;
+  patientsMax: number;
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
     public fb: FormBuilder, public dialog: MatDialog, private datePipe: DatePipe, private logger: NGXLogger,
@@ -99,6 +99,11 @@ export class DashboardComponent implements OnInit {
               }
             }
           }],
+          yAxes: [{
+            ticks: {
+              max: this.patientsMax
+            }
+          }]
 
         },
         tooltips: {
@@ -166,6 +171,7 @@ export class DashboardComponent implements OnInit {
   /* ED Chart =========================================*/
   getEdChart() {
     this.edChart = [];
+    let max = 0;
     this.rest.getEdChartByUser().subscribe((data) => {
       this.edChart = data;
       this.edChartTitle = this.edChart[0].chartTitle;
@@ -173,7 +179,12 @@ export class DashboardComponent implements OnInit {
         this.addData(this.edBarChart,
           this.transformToolTipDate(item.admitDate),
           item.edVisits); // Getting data to the chart, will be easier to update if needed
+        if (item.edVisits > max) {
+          max = item.edVisits;
+        }
       });
+      this.patientsMax = max + 1; // This is here to add space above each bar in the chart (Max Number of patients, plus one empty tick on the y-axis)
+      this.edBarChart.config.options.scales.yAxes[0].ticks.max = this.patientsMax;
     });
   }
 
@@ -215,7 +226,7 @@ export class DashboardComponent implements OnInit {
   }
 
   OpenReport() {
-    window.open('/edreport', "_blank");
+    window.open(`${this.defaultUrl}/edreport`, "_blank");
   }
 
 

@@ -1,11 +1,10 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { BehaviorSubject, Observable, throwError, ReplaySubject } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
-import { User, UserAuthenticate } from '../models/user';
-import { NGXLogger } from 'ngx-logger';
 import { Router } from '@angular/router';
+import { NGXLogger } from 'ngx-logger';
+import { BehaviorSubject } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { UserAuthenticate } from '../models/user';
 
 
 @Injectable({ providedIn: 'root' })
@@ -17,58 +16,44 @@ export class AuthenticationService {
         })
     }
     private loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    // private userLoggedIn = new ReplaySubject<number>();
-    // currentUserId = this.userLoggedIn.asObservable();
+    loginErrorMsg: BehaviorSubject<string> = new BehaviorSubject<string>('');
+
     constructor(private http: HttpClient, private logger: NGXLogger, public router: Router) { }
 
     login(user: UserAuthenticate) {
         this.logger.log(JSON.stringify(user), 'IN AUTH SERVICE')
         return this.http.post<any>(`${environment.apiURL}/api/Users/authenticate/`, JSON.stringify(user), this.headers)
             .subscribe((res: any) => {
-                localStorage.setItem('access_token', res.user.token);
-                localStorage.setItem('staffId', res.user.staffId);
+                sessionStorage.setItem('access_token', res.user.token);
+                sessionStorage.setItem('staffId', res.user.staffId);
                 this.logger.log('RESPONSE', res);
                 if (res.user.token !== null) {
                     this.router.navigate(['/dashboard']);
                     this.loggedIn.next(true);
                 }
+            }, error => {
+                this.loginErrorMsg.next(error);
             })
     }
 
     getToken() {
-        return localStorage.getItem('access_token');
-    }
-
-    get isLoggedIn() {
-        this.logger.log('islogged in', this.loggedIn.value)
-        return this.loggedIn.asObservable();
+        return sessionStorage.getItem('access_token');
     }
 
     get isUserLoggedIn(): boolean {
-        let authToken = localStorage.getItem('access_token'); 
+        let authToken = sessionStorage.getItem('access_token'); 
         return (authToken !== null) ? true : false;
     }
 
     getCurrentStaffId() {
-        return localStorage.getItem('staffId');
+        return sessionStorage.getItem('staffId');
     }
 
     logout() {
-        let removeToken = localStorage.removeItem('access_token');
+        let removeToken = sessionStorage.removeItem('access_token');
+        sessionStorage.removeItem('staffId');
         if (removeToken == null) {
             this.router.navigate(['/login']);
         }
-    }
-
-    handleError(error: HttpErrorResponse) {
-        let msg = '';
-        if (error.error instanceof ErrorEvent) {
-            // client-side error
-            msg = error.error.message;
-        } else {
-            // server-side error
-            msg = `Error Code: ${error.status}\nMessage: ${error.message}`;
-        }
-        return throwError(msg);
     }
 }

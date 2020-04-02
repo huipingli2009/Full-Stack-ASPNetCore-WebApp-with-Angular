@@ -1,15 +1,14 @@
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse, HttpClientModule, HttpParams } from '@angular/common/http';
-import { Observable, of, Subject } from 'rxjs';
-import { map, catchError, tap } from 'rxjs/operators';
-import { Alerts, Population, EdChart, EdChartDetails, Spotlight, Quicklinks } from './models/dashboard';
-import { environment } from '../environments/environment';
-import { Patients, PatientDetails, Conditions, Providers, PopSlices, Gender, Insurance, Pmca, States, PatientForWorkbook } from './models/patients';
 import { NGXLogger } from 'ngx-logger';
-import { Staff, StaffDetails, Responsibilities, PracticeList } from './models/Staff';
+import { Observable, of } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
+import { environment } from '../environments/environment';
+import { Alerts, EdChart, EdChartDetails, Population, Quicklinks, Spotlight } from './models/dashboard';
+import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Patients, Pmca, PopSlices, Providers, States } from './models/patients';
+import { PracticeList, Responsibilities, Staff, StaffDetails } from './models/Staff';
+import { Followup, WorkbookPatient, WorkbookProvider, WorkbookReportingMonths } from './models/workbook';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
-import { WorkbookReportingMonths, WorkbookProvider, WorkbookPatient, Followup } from './models/workbook';
-import { URLSearchParams } from 'url';
 
 
 
@@ -282,15 +281,14 @@ export class RestService {
     );
   }
 
-  // Currently not using this.
-  // getStaffAdminVerbiage(): Observable<any> {
-  //   return this.http.post(`${API_URL}/api/Users/verbiage/`, httpOptions).pipe(
-  //     map((data) => {
-  //       this.logger.log('verbiage', data);
-  //       return data;
-  //     })
-  //   );
-  // }
+  getStaffAdminVerbiage(): Observable<any> {
+    return this.http.get(`${API_URL}/api/Users/verbiage/`, { responseType: 'text' }).pipe(
+      map((res) => {
+        return res;
+      })
+    );
+  }
+
   /* Practice Switch =======================================================*/
   getPracticeList(): Observable<any> {
     return this.http.get<any>(`${API_URL}/api/Staff/practicelist/`).pipe(
@@ -404,6 +402,16 @@ export class RestService {
       map((data: WorkbookReportingMonths[]) => {
         return data;
       })
+    );
+  }
+  //update user legal disclaimer
+  updateUserLegalDisclaimer(): Observable<any> {
+    return this.http.put<boolean>(`${API_URL}/api/Staff/legalstatus`, httpOptions).pipe(
+      map((data: boolean) => {
+        this.logger.log(data);
+        return data;
+      }
+      )
     );
   }
 

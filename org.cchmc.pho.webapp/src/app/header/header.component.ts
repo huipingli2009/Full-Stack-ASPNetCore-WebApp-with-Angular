@@ -1,15 +1,15 @@
-import { Component, OnInit, ViewChild, SimpleChanges } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import { AuthenticationService } from '../services/authentication.service';
-import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
-import { Alerts, AlertAction, AlertActionTaken } from '../models/dashboard';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { User, CurrentUser } from '../models/user';
-import { RestService } from '../rest.service';
+import { Component, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NGXLogger } from 'ngx-logger';
+import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { PracticeList, Practices } from '../models/Staff';
+import { AlertAction, AlertActionTaken, Alerts } from '../models/dashboard';
+import { Practices } from '../models/Staff';
+import { CurrentUser } from '../models/user';
+import { RestService } from '../rest.service';
+import { AuthenticationService } from '../services/authentication.service';
 import { UserService } from '../services/user.service';
 
 @Component({
@@ -28,27 +28,29 @@ export class HeaderComponent {
   alertScheduleId: number;
   updateAlert: FormGroup;
   currentUser: CurrentUser;
+  isUserAdmin: boolean;
   firstName: string;
   lastName: string;
-    subscription: Subscription;
-    practiceForm: FormGroup;
-    practiceList: Array<Practices>;
-    currentPracticeId: number;
-    currentPractice: string;
+  subscription: Subscription;
+  practiceForm: FormGroup;
+  practiceList: Array<Practices>;
+  currentPracticeId: number;
+  currentPractice: string;
+  userPracticeName: string;
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
     private toastr: ToastrService, public fb: FormBuilder, private logger: NGXLogger,
     private authenticationService: AuthenticationService, private userService: UserService) {
     this.logger.log('testing the logging in app.component.ts constructor with NGXLogger');
-      this.practiceForm = this.fb.group({
-          practiceControl: ['']
-      });
+    this.practiceForm = this.fb.group({
+      practiceControl: ['']
+    });
 
   }
 
   ngOnInit() {
     this.getAlerts();
-      this.getCurrentUser();
-      this.getPracticeList();
+    this.getCurrentUser();
+    this.getPracticeList();
   }
 
   ngAfterViewInit() {
@@ -60,6 +62,9 @@ export class HeaderComponent {
       this.currentUser = data;
       this.firstName = data.firstName;
       this.lastName = data.lastName;
+      if (data.role.id === 3) {
+        this.isUserAdmin = true;
+      } else { this.isUserAdmin = false; }
     });
   }
 
@@ -138,6 +143,7 @@ export class HeaderComponent {
     };
     this.rest.switchPractice(newPractice).subscribe(res => {
       this.logger.log('SWITCHED', res);
+      location.reload();
     });
   }
 }
