@@ -324,6 +324,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   }
   UpdateFollowUpQuestionResponses(followUp: Followup) {
     this.rest.UpdateFollowUpQuestionResponses(followUp).pipe(take(1)).subscribe((data) => {
+      this.getWorkbookPatients(this.formResponseId);
       this.CloseDialog();
 
     })
