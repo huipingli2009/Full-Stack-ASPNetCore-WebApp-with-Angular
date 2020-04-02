@@ -134,9 +134,9 @@ export class HeaderComponent {
   }
 
   switchPractice(practiceId) {
-    let staffId = 62; //TODO: Need to remove after gettin other branch, also make sure practice select is fidden if not admin
+    let staffId = this.authenticationService.getCurrentStaffId();
     let newPractice = {
-      id: staffId,
+      id: Number(staffId),
       myPractice: {
         id: practiceId
       }
