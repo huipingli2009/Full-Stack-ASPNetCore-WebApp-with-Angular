@@ -10,6 +10,8 @@ import { environment } from 'src/environments/environment';
 import { EdChart, EdChartDetails, Population, Quicklinks, Spotlight } from '../models/dashboard';
 import { RestService } from '../rest.service';
 import { AuthenticationService } from '../services/authentication.service';
+import { BehaviorSubject } from 'rxjs';
+import { FilterService } from '../services/filter.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -48,8 +50,8 @@ export class DashboardComponent implements OnInit {
   patientsMax: number;
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
-    public fb: FormBuilder, public dialog: MatDialog, private datePipe: DatePipe, private logger: NGXLogger,
-    private authenticationService: AuthenticationService) {
+              public fb: FormBuilder, public dialog: MatDialog, private datePipe: DatePipe, private logger: NGXLogger,
+              private authenticationService: AuthenticationService, private filterService: FilterService) {
     // var id = this.userId.snapshot.paramMap.get('id') TODO: Need User Table;
     this.dataSourceOne = new MatTableDataSource;
     this.dataSourceTwo = new MatTableDataSource;
@@ -66,7 +68,7 @@ export class DashboardComponent implements OnInit {
     this.getEdChart();
   }
   ngAfterViewInit() {
-    let $this = this; // This is the only way to get the bar chart to work using functions out of scope.(Fat arrow does not work)
+    const $this = this; // This is the only way to get the bar chart to work using functions out of scope.(Fat arrow does not work)
     this.canvas = document.getElementById('edChart');
     this.ctx = this.canvas.getContext('2d');
     this.edBarChart = new Chart(this.ctx, {
@@ -94,7 +96,7 @@ export class DashboardComponent implements OnInit {
         scales: {
           xAxes: [{
             ticks: {
-              callback: function (value, index, values) {
+              callback (value, index, values) {
                 return $this.transformDate(value);
               }
             }
@@ -109,8 +111,8 @@ export class DashboardComponent implements OnInit {
         tooltips: {
           enabled: true
         },
-        onClick: function (e) {
-          var element = this.getElementAtEvent(e);
+        onClick (e) {
+          let element = this.getElementAtEvent(e);
           if (element.length) {
             // this.selectedBar = element[0]._model.label;
           }
@@ -152,7 +154,8 @@ export class DashboardComponent implements OnInit {
             dashboardLabel: item.dashboardLabel,
             measureDesc: item.measureDesc,
             practiceTotal: item.practiceTotal,
-            networkTotal: item.networkTotal
+            networkTotal: item.networkTotal,
+            measureId: item.measureId
           });
           this.dataSourceOne.data = this.popData;
         }
@@ -168,6 +171,15 @@ export class DashboardComponent implements OnInit {
       });
     });
   }
+
+  // Send click to Filtered Patients
+  toFilteredPatients(element) {
+    this.filterService.updateIsFilteringPatients(true);
+    this.filterService.updateFilterType(element.measureId);
+    this.router.navigate(['/patients']);
+  }
+
+
   /* ED Chart =========================================*/
   getEdChart() {
     this.edChart = [];
@@ -226,7 +238,7 @@ export class DashboardComponent implements OnInit {
   }
 
   OpenReport() {
-    window.open(`${this.defaultUrl}/edreport`, "_blank");
+    window.open(`${this.defaultUrl}/edreport`, '_blank');
   }
 
 

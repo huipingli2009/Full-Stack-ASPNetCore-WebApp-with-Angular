@@ -8,11 +8,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute } from '@angular/router';
 import { NGXLogger } from 'ngx-logger';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Conditions, Gender, PatientDetails, Patients } from '../models/patients';
 import { RestService } from '../rest.service';
 import { PatientsDataSource } from './patients.datasource';
+import { FilterService } from '../services/filter.service';
 
 
 @Component({
@@ -93,11 +94,15 @@ export class PatientsComponent implements OnInit {
   savedPatientData: any;
   isDisabled: boolean;
   isFormValid = this.form;
+  subscription: Subscription;
+  isFilteringPatients: boolean;
+  filterType: string;
 
   isExpansionDetailRow = (i: number, row: object) => row.hasOwnProperty('detailRow');
 
   constructor(public rest: RestService, private route: ActivatedRoute, public fb: FormBuilder,
-    private logger: NGXLogger, public dialog: MatDialog, private datePipe: DatePipe, public snackBar: MatSnackBar) {
+              private logger: NGXLogger, public dialog: MatDialog, private datePipe: DatePipe, public snackBar: MatSnackBar,
+              private filterService: FilterService) {
     this.form = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -116,6 +121,11 @@ export class PatientsComponent implements OnInit {
       state: ['', Validators.required],
       zip: ['', Validators.required]
     });
+
+    this.subscription = this.filterService.getIsFilteringPatients().subscribe (res => {
+      this.isFilteringPatients = res;
+    });
+    this.subscription = this.filterService.getFilterType().subscribe(res => this.filterType = res);
   }
 
   ngOnInit() {
@@ -139,6 +149,12 @@ export class PatientsComponent implements OnInit {
       .subscribe();
   }
 
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+    this.filterService.updateIsFilteringPatients(false);
+    this.filterService.updateFilterType('');
+  }
+
   @HostListener('matSortChange', ['$event'])
   sortChange(e) {
     this.defaultSortedRow = e.active;
@@ -155,6 +171,9 @@ export class PatientsComponent implements OnInit {
   }
 
   loadPatientsWithFilters() {
+    if (this.isFilteringPatients === true) { // This is to handle if the user is coming from Dashboard or not.
+      this.popSlices = this.filterType;
+    }
     this.dataSource.loadPatients(this.defaultSortedRow, this.defaultSortDirection, 0, 20, this.chronic, this.watchFlag, this.conditions,
       this.providers, this.popSlices, this.patientNameSearch);
     this.rest.findPatients(this.defaultSortedRow, this.defaultSortDirection, 0, 20, this.chronic, this.watchFlag, this.conditions,
@@ -293,7 +312,7 @@ export class PatientsComponent implements OnInit {
         },
         zip: data.zip
       };
-      this.logger.log(JSON.stringify(selectedValues), 'CONDITON DSIFSNDIND')
+      this.logger.log(JSON.stringify(selectedValues), 'CONDITON DSIFSNDIND');
       this.form.setValue(selectedValues);
     });
   }

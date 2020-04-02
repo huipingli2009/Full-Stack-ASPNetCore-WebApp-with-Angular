@@ -34,6 +34,7 @@ export class Quicklinks {
 export class Population {
     practiceId: number;
     dashboardLabel: string;
+    measureId: number;
     measureDesc: string;
     measureType: string;
     practiceTotal: number;
