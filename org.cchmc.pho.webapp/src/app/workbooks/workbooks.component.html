@@ -34,8 +34,15 @@
                 this period
             </div>
             <div fxLayout="row">
-                For <strong>{{totalFinal}} total</strong> 12-17 year olds seen for WCC in this reporting period,
-                <strong>{{phqsFinal}} had a PHQ Screening</strong> during their visit.
+                <div fxLayout="column" fxFlex="90">
+                    <span>For <strong>{{totalFinal}} total</strong> 12-17 year olds seen for WCC in this reporting
+                        period, <strong>{{phqsFinal}} had a PHQ Screening</strong> during their visit.</span>
+                </div>
+                <div fxLayout="column" fxLayoutAlign="end end" fxFlex>
+                    <a href='{{workbookPractice.jobAidURL}}' target="_blank">Job Aid</a>
+                </div>
+
+
             </div>
         </div>
         <div fxLayout="row" class="side-border-container provider-list-container">

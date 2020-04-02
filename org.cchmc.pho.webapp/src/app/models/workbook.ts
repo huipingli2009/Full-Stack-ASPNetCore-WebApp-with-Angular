@@ -38,3 +38,12 @@ export class Followup {
     dateOfOneMonthVisit: string;
     oneMonthFolllowupPHQ9Score: number;
 }
+
+export class WorkbookPractice {
+    formResponseId: number;
+    header: string;
+    line1: string;
+    line2: string;
+    jobAidURL: string;
+    line3: string;
+}

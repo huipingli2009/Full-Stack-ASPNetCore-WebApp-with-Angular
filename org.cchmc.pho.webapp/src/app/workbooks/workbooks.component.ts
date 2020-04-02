@@ -8,7 +8,7 @@ import { NGXLogger } from 'ngx-logger';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { PatientForWorkbook } from '../models/patients';
-import { Followup, WorkbookPatient, WorkbookProvider, WorkbookReportingMonths } from '../models/workbook';
+import { Followup, WorkbookPatient, WorkbookProvider, WorkbookReportingMonths, WorkbookPractice } from '../models/workbook';
 import { RestService } from '../rest.service';
 import { DateRequiredValidator } from '../shared/customValidators/customValidator';
 import { MatSnackBarComponent } from '../shared/mat-snack-bar/mat-snack-bar.component';
@@ -36,6 +36,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   workbookReportingMonths: WorkbookReportingMonths[];
   workbookProviders: WorkbookProvider[];
   workbookPatient: WorkbookPatient[];
+  workbookPractice: WorkbookPractice;
   sortedData: WorkbookPatient[];
   SearchPatients: PatientForWorkbook[];
   followUpQuestions: Followup;
@@ -96,6 +97,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   );
 
   ngOnInit(): void {
+
     this.getWorkbookReportingMonths();
     this.onProviderValueChanges();
     this.onPatientSearchValueChanges();
@@ -126,6 +128,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.formResponseId = this.selectedFormResponseID.value;
     this.getWorkbookProviders(this.formResponseId);
     this.getWorkbookPatients(this.formResponseId);
+    this.getWorkbookPractice(this.formResponseId);
   }
 
   //for getting workbook providers
@@ -210,6 +213,13 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
 
   trackByForPatientSearch(index, patient): string {
     return '${patient.patientId}';
+  }
+
+  //get workbook practice
+  getWorkbookPractice(formResponseid: number) {
+    this.rest.getWorkbookPractice(formResponseid).pipe(take(1)).subscribe((data) => {
+      this.workbookPractice = data;
+    })
   }
 
   //adding patient to the workbook

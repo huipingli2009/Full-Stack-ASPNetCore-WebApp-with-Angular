@@ -7,7 +7,7 @@ import { environment } from '../environments/environment';
 import { Alerts, EdChart, EdChartDetails, Population, Quicklinks, Spotlight } from './models/dashboard';
 import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Patients, Pmca, PopSlices, Providers, States } from './models/patients';
 import { PracticeList, Responsibilities, Staff, StaffDetails } from './models/Staff';
-import { Followup, WorkbookPatient, WorkbookProvider, WorkbookReportingMonths } from './models/workbook';
+import { Followup, WorkbookPatient, WorkbookProvider, WorkbookReportingMonths, WorkbookPractice } from './models/workbook';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
 
 
@@ -371,6 +371,17 @@ export class RestService {
     );
   }
 
+
+  /*getting workbook Practice details*/
+  getWorkbookPractice(formResponseid: number): Observable<any> {
+    let paramsValue = new HttpParams();
+    paramsValue = paramsValue.append("formResponseId", formResponseid.toString());
+    return this.http.get<WorkbookPractice>(`${API_URL}/api/Workbooks/practice`, { params: paramsValue }).pipe(
+      map((data: WorkbookPractice) => {
+        return data;
+      })
+    );
+  }
 
   /* for getting follow-up question for a patient */
   getFollowUpQuestions(formResponseid: number, patientID: number): Observable<any> {
