@@ -2,7 +2,6 @@ import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { NGXLogger } from 'ngx-logger';
@@ -12,6 +11,7 @@ import { PatientForWorkbook } from '../models/patients';
 import { Followup, WorkbookPatient, WorkbookProvider, WorkbookReportingMonths } from '../models/workbook';
 import { RestService } from '../rest.service';
 import { DateRequiredValidator } from '../shared/customValidators/customValidator';
+import { MatSnackBarComponent } from '../shared/mat-snack-bar/mat-snack-bar.component';
 
 @Component({
   selector: 'app-workbooks',
@@ -20,7 +20,7 @@ import { DateRequiredValidator } from '../shared/customValidators/customValidato
 })
 export class WorkbooksComponent implements OnInit, OnDestroy {
 
-  constructor(private rest: RestService, private fb: FormBuilder, private datePipe: DatePipe, private logger: NGXLogger, private dialog: MatDialog, private _snackBar: MatSnackBar) { }
+  constructor(private rest: RestService, private fb: FormBuilder, private datePipe: DatePipe, private logger: NGXLogger, private dialog: MatDialog, private snackBar: MatSnackBarComponent) { }
 
   get ProviderWorkbookArray() {
     return this.ProvidersForWorkbookForm.get('ProviderWorkbookArray') as FormArray;
@@ -49,6 +49,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   patientTableHeader: number;
   deletingPatientName: string;
   deletingPatientId: number;
+  addingPatientName: string;
 
   selectedFormResponseID = new FormControl('');
   searchPatient = new FormControl('');
@@ -217,6 +218,8 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.PatientForWorkbookForm.get('dob').setValue(this.datePipe.transform(event.value.dob, 'MM/dd/yyyy'));
     this.PatientForWorkbookForm.get('phone').setValue(event.value.phone);
     this.PatientForWorkbookForm.get('patientId').setValue(event.value.patientId);
+    this.addingPatientName = `${event.value.firstName} ${event.value.lastName}`;
+
   }
 
   AddPatientForWorkbook() {
@@ -228,37 +231,37 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.newWorkbookPatient.dateOfService = this.PatientForWorkbookForm.get('dateOfService').value;
     this.newWorkbookPatient.phQ9_Score = this.PatientForWorkbookForm.get('pHQ9Score').value;
     this.newWorkbookPatient.actionFollowUp = (Boolean)(this.PatientForWorkbookForm.get('action').value);
-    this.AddPatientToWorkbook(this.newWorkbookPatient);
+    this.AddPatientToWorkbook(this.newWorkbookPatient, this.addingPatientName);
   }
 
-  AddPatientToWorkbook(newWorkbookPatient: WorkbookPatient) {
+  AddPatientToWorkbook(newWorkbookPatient: WorkbookPatient, patientName: string) {
     this.rest.AddPatientToWorkbook(this.newWorkbookPatient).pipe(take(1)).subscribe(res => {
       this.PatientForWorkbookForm.reset();
       this.getWorkbookPatients(this.selectedFormResponseID.value);
       this.searchPatient.reset();
-      this.openSnackBar(`Patient added to the workbook`, "Success")
+      (res) ? this.snackBar.openSnackBar(`Patient ${patientName} added to the workbook`, 'Close', 'success-snackbar') : this.snackBar.openSnackBar(`Patient ${patientName} already exists on another workbook`, 'Close', 'warn-snackbar')
     })
   }
 
   //For removing patient from the workbook
-  onPatientDelete(element:any) {
+  onPatientDelete(element: any) {
     this.deletingPatientName = element.patient;
     this.deletingPatientId = element.patientId;
     this.dialog.open(this.DeletePatient);
   }
 
   OnRemovePatientClick() {
-      this.removeWorkbookPatient = new WorkbookPatient();
-      this.removeWorkbookPatient.formResponseId = this.selectedFormResponseID.value;
-      this.removeWorkbookPatient.patientId = this.deletingPatientId;
-      this.RemovePatientFromWorkbook(this.removeWorkbookPatient);
+    this.removeWorkbookPatient = new WorkbookPatient();
+    this.removeWorkbookPatient.formResponseId = this.selectedFormResponseID.value;
+    this.removeWorkbookPatient.patientId = this.deletingPatientId;
+    this.RemovePatientFromWorkbook(this.removeWorkbookPatient);
   }
 
   RemovePatientFromWorkbook(removeWorkbookPatient: WorkbookPatient) {
     this.rest.RemovePatientFromWorkbook(this.removeWorkbookPatient).pipe(take(1)).subscribe(res => {
       this.PatientForWorkbookForm.reset();
       this.getWorkbookPatients(this.selectedFormResponseID.value);
-      this.openSnackBar(`Patient removed from the workbook`, "Success")
+      this.snackBar.openSnackBar(`Patient ${this.deletingPatientName} removed from the workbook`, 'Close', 'success-snackbar')
     })
   }
 
@@ -363,11 +366,6 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
-  openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: 2000,
-      panelClass: ['green-snackbar']
-    });
-  }
+
 
 }

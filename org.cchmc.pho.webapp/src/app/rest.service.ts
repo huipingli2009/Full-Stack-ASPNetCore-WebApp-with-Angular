@@ -352,7 +352,7 @@ export class RestService {
   /*addition of patient to the work book*/
   AddPatientToWorkbook(workbookPatient: WorkbookPatient): Observable<any> {
     this.logger.log(JSON.stringify(workbookPatient));
-    return this.http.post<number>(`${API_URL}/api/Workbooks/Patients/${workbookPatient.patientId}`, JSON.stringify(workbookPatient), httpOptions).pipe(
+    return this.http.post<boolean>(`${API_URL}/api/Workbooks/Patients/${workbookPatient.patientId}`, JSON.stringify(workbookPatient), httpOptions).pipe(
       catchError(this.handleError<any>('adding patient to the workbook'))
     );
   }

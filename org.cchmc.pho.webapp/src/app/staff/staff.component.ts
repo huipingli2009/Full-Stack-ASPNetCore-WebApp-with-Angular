@@ -4,7 +4,6 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Sort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { NGXLogger } from 'ngx-logger';
@@ -17,6 +16,7 @@ import { RestService } from '../rest.service';
 import { AuthenticationService } from '../services/authentication.service';
 import { UserService } from '../services/user.service';
 import { DateRequiredValidator } from '../shared/customValidators/customValidator';
+import { MatSnackBarComponent } from '../shared/mat-snack-bar/mat-snack-bar.component';
 
 
 @Component({
@@ -90,7 +90,7 @@ export class StaffComponent implements OnInit {
   });
 
   constructor(private rest: RestService, private logger: NGXLogger, private fb: FormBuilder, private datePipe: DatePipe,
-    private _snackBar: MatSnackBar, private userService: UserService, public dialog: MatDialog,
+    private snackBar: MatSnackBarComponent, private userService: UserService, public dialog: MatDialog,
     private authService: AuthenticationService, private errorIntercept: ErrorInterceptor) {
     this.dataSourceStaff = new MatTableDataSource;
     this.adminUserForm = this.fb.group({
@@ -226,7 +226,8 @@ export class StaffComponent implements OnInit {
     this.rest.updateStaff(this.staffDetails).pipe(take(1)).subscribe(res => {
       this.staffDetails = res;
       this.StaffDetailsForm.setValue(this.staffDetails);
-      this.openSnackBar(`Details updated for ${this.staffDetails.lastName} ${this.staffDetails.firstName}`, 'Success');
+      this.snackBar.openSnackBar(`Details updated for ${this.staffDetails.lastName} ${this.staffDetails.firstName}`, 'Close', 'success-snackbar')
+
       this.getStaff();
     },
       error => { this.error = error; }
@@ -238,7 +239,7 @@ export class StaffComponent implements OnInit {
     let practiceIdForUsername = '';
     if (this.currentPracticeId < 10) {
       practiceIdForUsername = `0${this.currentPracticeId}`;
-    } else {practiceIdForUsername = this.currentPracticeId.toString()}
+    } else { practiceIdForUsername = this.currentPracticeId.toString() }
     const staffUser = {
       id: this.currentUserId,
       token: this.authService.getToken(),
@@ -286,13 +287,6 @@ export class StaffComponent implements OnInit {
     });
   }
 
-  // for confirmation of successful updation of the staff record
-  openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: 2000,
-      panelClass: ['green-snackbar']
-    });
-  }
   // Update Password
   updatePassword(userId, password) {
     let updatedPass = {
