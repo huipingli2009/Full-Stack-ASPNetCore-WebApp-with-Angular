@@ -8,9 +8,6 @@
                 <mat-form-field class="select-override main-date-select">
                     <mat-select [formControl]="selectedFormResponseID"
                         (selectionChange)="onReportingDateSelectionChange()">
-                        <mat-label>
-                            select the reporting date
-                        </mat-label>
                         <mat-option *ngFor="let reportingdate of workbookReportingMonths"
                             [value]="reportingdate.formResponseID">
                             {{reportingdate.reportingMonth}}
