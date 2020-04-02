@@ -121,6 +121,7 @@ namespace org.cchmc.pho.api
             {
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
+                app.UseXfo(options => options.SameOrigin());
             }
 
             app.UseHttpsRedirection();
@@ -128,8 +129,6 @@ namespace org.cchmc.pho.api
             //NOTE: https://docs.microsoft.com/en-us/aspnet/core/fundamentals/static-files?view=aspnetcore-3.1 needed to add this package : Microsoft.AspNetCore.App metapackage
             app.UseDefaultFiles();
             app.UseStaticFiles();
-
-            app.UseHttpsRedirection();
 
             app.UseRouting();
 

@@ -71,7 +71,9 @@ namespace org.cchmc.pho.api.Controllers
                 if (refreshRequest == null || string.IsNullOrWhiteSpace(refreshRequest.RefreshToken))
                     return Unauthorized("Token not valid");
 
-                User user = await _userService.Refresh(refreshRequest.Token, refreshRequest.RefreshToken);
+                int userId = _userService.GetUserIdFromClaims(User?.Claims);
+
+                User user = await _userService.Refresh(userId, refreshRequest.RefreshToken);
                 if (user == null) return Unauthorized(new AuthenticationResult { Status = "Token not valid" });
 
                 // manually mapping the refresh token so that we can ignore it in AutoMapper.

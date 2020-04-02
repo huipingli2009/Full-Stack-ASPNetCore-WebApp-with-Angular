@@ -1300,11 +1300,12 @@ namespace org.cchmc.pho.unittest.ControllerTests
         {
             var refreshModel = new AuthenticationRefreshRequest()
             {
-                RefreshToken = "ASDF",
-                Token = "DSAAESRTFDJ"
+                RefreshToken = "ASDF"
             };
+            int userId = 5;
 
-            _mockUserService.Setup(p => p.Refresh(refreshModel.Token, refreshModel.RefreshToken))
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userId).Verifiable();
+            _mockUserService.Setup(p => p.Refresh(userId, refreshModel.RefreshToken))
                 .Returns(Task.FromResult(_user)).Verifiable();
 
             var result = await _userController.Refresh(refreshModel) as ObjectResult;
@@ -1325,7 +1326,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             // assert
             Assert.IsNotNull(result);
             Assert.AreEqual(401, result.StatusCode);
-            _mockUserService.Verify(p => p.Refresh(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.Verify(p => p.Refresh(It.IsAny<int>(), It.IsAny<string>()), Times.Never);
             _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
@@ -1335,7 +1336,6 @@ namespace org.cchmc.pho.unittest.ControllerTests
             var refreshModel = new AuthenticationRefreshRequest()
             {
                 RefreshToken = null,
-                Token = "DSAAESRTFDJ"
             };
 
             var result = await _userController.Refresh(refreshModel) as ObjectResult;
@@ -1343,7 +1343,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             // assert
             Assert.IsNotNull(result);
             Assert.AreEqual(401, result.StatusCode);
-            _mockUserService.Verify(p => p.Refresh(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.Verify(p => p.Refresh(It.IsAny<int>(), It.IsAny<string>()), Times.Never);
             _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
@@ -1353,7 +1353,6 @@ namespace org.cchmc.pho.unittest.ControllerTests
             var refreshModel = new AuthenticationRefreshRequest()
             {
                 RefreshToken = " ",
-                Token = "DSAAESRTFDJ"
             };
 
             var result = await _userController.Refresh(refreshModel) as ObjectResult;
@@ -1361,7 +1360,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             // assert
             Assert.IsNotNull(result);
             Assert.AreEqual(401, result.StatusCode);
-            _mockUserService.Verify(p => p.Refresh(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _mockUserService.Verify(p => p.Refresh(It.IsAny<int>(), It.IsAny<string>()), Times.Never);
             _mockUserService.VerifyAll(); _mockStaff.VerifyAll();
         }
 
@@ -1371,10 +1370,11 @@ namespace org.cchmc.pho.unittest.ControllerTests
             var refreshModel = new AuthenticationRefreshRequest()
             {
                 RefreshToken = "ASDF",
-                Token = "DSAAESRTFDJ"
             };
+            int userId = 5;
 
-            _mockUserService.Setup(p => p.Refresh(refreshModel.Token, refreshModel.RefreshToken))
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userId).Verifiable();
+            _mockUserService.Setup(p => p.Refresh(userId, refreshModel.RefreshToken))
                 .Returns(Task.FromResult((User)null)).Verifiable();
 
             var result = await _userController.Refresh(refreshModel) as ObjectResult;
@@ -1391,10 +1391,11 @@ namespace org.cchmc.pho.unittest.ControllerTests
             var refreshModel = new AuthenticationRefreshRequest()
             {
                 RefreshToken = "ASDF",
-                Token = "DSAAESRTFDJ"
             };
+            int userId = 5;
 
-            _mockUserService.Setup(p => p.Refresh(refreshModel.Token, refreshModel.RefreshToken))
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userId).Verifiable();
+            _mockUserService.Setup(p => p.Refresh(userId, refreshModel.RefreshToken))
                 .Throws(new Exception()).Verifiable();
 
             var result = await _userController.Refresh(refreshModel) as ObjectResult;
