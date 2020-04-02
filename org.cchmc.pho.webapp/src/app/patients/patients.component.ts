@@ -263,10 +263,6 @@ export class PatientsComponent implements OnInit {
     });
   }
 
-  changeWatchFlag(id, index) {
-    this.logger.log(index);
-  }
-
 
   /*Patient Details */
   getPatientDetails(id) {
@@ -312,7 +308,6 @@ export class PatientsComponent implements OnInit {
         },
         zip: data.zip
       };
-      this.logger.log(JSON.stringify(selectedValues), 'CONDITON DSIFSNDIND');
       this.form.setValue(selectedValues);
     });
   }
