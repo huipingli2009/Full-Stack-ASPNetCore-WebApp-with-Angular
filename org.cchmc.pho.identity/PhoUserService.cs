@@ -104,25 +104,10 @@ namespace org.cchmc.pho.identity
             }
         }
 
-        public async Task<User> Refresh(string tokenString, string refreshToken)
+        public async Task<User> Refresh(int userId, string refreshToken)
         {
             try
             {
-                if (!_tokenHandler.CanReadToken(tokenString))
-                    return null;
-
-                JwtSecurityToken myToken = _tokenHandler.ReadJwtToken(tokenString);
-                int userId = GetUserIdFromClaims(myToken.Claims);
-                string userName = GetUserNameFromClaims(myToken.Claims);
-
-                _logger.LogInformation($"User {userName} attempting to refresh token.");
-
-                if(myToken.ValidTo < DateTime.Now)
-                {
-                    _logger.LogInformation($"User {userName} unable to refresh because current token is expired.");
-                    return null;
-                }
-
                 User user = await GetUser(userId);
                 if (user == null || user.IsPending || user.IsDeleted)
                 {
@@ -133,13 +118,15 @@ namespace org.cchmc.pho.identity
                             reason = "the user is pending activation";
                         else reason = "the user is deleted";
                     }
-                    _logger.LogInformation($"User {userName} unable to refresh because { reason }");
+                    _logger.LogInformation($"User {user.UserName} unable to refresh because { reason }");
                     return null;
                 }
 
+                _logger.LogInformation($"User {user.UserName} attempting to refresh token.");              
+
                 if (user.RefreshToken != refreshToken)
                 {
-                    _logger.LogInformation($"User {userName} unable to refresh because refresh tokens don't match.");
+                    _logger.LogInformation($"User {user.UserName} unable to refresh because refresh tokens don't match.");
                     return null;
                 }
 
@@ -151,12 +138,12 @@ namespace org.cchmc.pho.identity
                 identity.AddClaim(new Claim(ClaimTypes.UserData, user.StaffId.ToString()));
                 identity.AddClaim(new Claim(ClaimTypes.Role, user.Role?.Name));
 
-                myToken = new JwtSecurityToken(_jwtConfig.ValidIssuer, _jwtConfig.ValidAudience, identity.Claims,
+                var newToken = new JwtSecurityToken(_jwtConfig.ValidIssuer, _jwtConfig.ValidAudience, identity.Claims,
                     null, DateTime.Now.AddHours(_tokenExpirationInHours), _signingCredentials);
 
-                user.Token = _tokenHandler.WriteToken(myToken);
+                user.Token = _tokenHandler.WriteToken(newToken);
 
-                var login = await _context.Login.FirstOrDefaultAsync(l => l.UserName == userName);
+                var login = await _context.Login.FirstOrDefaultAsync(l => l.UserName == user.UserName);
 
                 // This refresh token will get overwritten if a user logs in with more than one device. Per Brad, this is acceptable.
                 user.RefreshToken = await GenerateAndWriteRefreshToken(login);
