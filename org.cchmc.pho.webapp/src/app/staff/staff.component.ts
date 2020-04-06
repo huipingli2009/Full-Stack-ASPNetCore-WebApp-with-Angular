@@ -176,6 +176,7 @@ export class StaffComponent implements OnInit {
   getStaffDetails(id: number) {
     this.rest.getStaffDetails(id).pipe(take(1)).subscribe((data) => {
       this.staffDetails = data;
+      this.logger.log('STAFF DETAILS', this.staffDetails);
       this.StaffDetailsForm.setValue(this.staffDetails);
       this.getStaffUser(data.id);
     });
@@ -223,6 +224,8 @@ export class StaffComponent implements OnInit {
 
   updateStaff() {
     this.staffDetails = this.StaffDetailsForm.value;
+    this.logger.log('Staff Details Form', this.staffDetails);
+    this.staffDetails.npi = Number(this.StaffDetailsForm.controls.npi.value);
     this.rest.updateStaff(this.staffDetails).pipe(take(1)).subscribe(res => {
       this.staffDetails = res;
       this.StaffDetailsForm.setValue(this.staffDetails);

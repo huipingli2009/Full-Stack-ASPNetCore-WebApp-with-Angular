@@ -74,8 +74,9 @@ export class UserService {
 
   /*Update User Password*/
   updateUserPassword(userid, password): Observable<any> {
-    this.logger.log('stringy pass user', JSON.stringify(password));
     return this.http.patch<any>(`${environment.apiURL}/api/Users/${userid}/password/`, JSON.stringify(password), httpOptions).pipe(
+      tap(_ => this.snackBar.openSnackBar(`Password Updated! Please login with new password.`
+        , 'Close', 'success-snackbar')),
       catchError(this.handleError<any>('Password Update Failed'))
     );
   }
