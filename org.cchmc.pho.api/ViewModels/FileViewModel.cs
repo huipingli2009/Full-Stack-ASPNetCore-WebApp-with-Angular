@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace org.cchmc.pho.core.DataModels
+namespace org.cchmc.pho.api.ViewModels
 {
-    public class File
+    public class FileViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -13,20 +15,20 @@ namespace org.cchmc.pho.core.DataModels
         public bool WatchFlag { get; set; }
         public string FileSize { get; set; }
         public string FileURL { get; set; }
-        public List<FileTag> Tags { get; set; }
+        public List<FileTagViewModel> Tags { get; set; }
         public string Description { get; set; }
     }
 
-    public class FileTag
+    public class FileTagViewModel
     {
         public string Name { get; set; }
     }
-    public class Initiative
+    public class InitiativeViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
     }
-    public class Resource
+    public class ResourceViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }

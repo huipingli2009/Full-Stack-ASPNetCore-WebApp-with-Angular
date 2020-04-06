@@ -14,10 +14,13 @@ namespace org.cchmc.pho.core.DataAccessLayer
 {
     public class FileDAL
     {
-        private readonly ConnectionStrings _connectionStrings;
+        private readonly ConnectionStrings _connectionStrings; 
+        private readonly ILogger<FileDAL> _logger;
+
         public FileDAL(IOptions<ConnectionStrings> options, ILogger<FileDAL> logger)
         {
             _connectionStrings = options.Value;
+            _logger = logger;
         }
 
 
@@ -41,33 +44,64 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
                         da.Fill(dataTable);
+                        List<FileTag> fileTags = await GetFileTagsAll();
                         foreach (DataRow dr in dataTable.Rows)
                         {
                             var record = new File()
                             {
-                                Id = (dr["StaffID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StaffID"].ToString()))
-
-
+                                Id = (dr["Id"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Id"].ToString())),
+                                Name = dr["Name"].ToString(),
+                                DateCreated = (dr["DateCreated"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["DateCreated"].ToString())),
+                                LastViewed = (dr["LastViewed"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LastViewed"].ToString())),
+                                WatchFlag = (dr["WatchFlag"] != DBNull.Value && Convert.ToBoolean(dr["WatchFlag"])),
+                                FileSize = dr["FileSize"].ToString(),
+                                FileURL = dr["FileURL"].ToString(),
+                                Tags = new List<FileTag>()
                             };
-                            //if (dr["CredentialId"] != DBNull.Value && int.TryParse(dr["CredentialId"].ToString(), out int intCredential))
-                            //{
-                            //    Credential cred = new Credential();
-                            //    cred.Id = intCredential;
-                            //    cred.Name = dr["CredentialName"].ToString();
-                            //    record.Credentials = cred;
-                            //}
-                            //if (dr["PositionId"] != DBNull.Value && int.TryParse(dr["PositionId"].ToString(), out int intPosition))
-                            //{
-                            //    Position pos = new Position();
-                            //    pos.Id = intPosition;
-                            //    pos.Name = dr["Position"].ToString();
-                            //    pos.PositionType = dr["PositionType"].ToString();
-                            //    record.Position = pos;
-                            //}
+                            if (!string.IsNullOrWhiteSpace(dr["Tags"].ToString()))
+                            {
+                                foreach (string tagName in dr["Tags"].ToString().Split(',').Select(t => Convert.ToString(t)))
+                                {
+                                    if (fileTags.Any(f => f.Name == tagName))
+                                        record.Tags.Add(fileTags.First(f => f.Name == tagName));
+                                    else
+                                        _logger.LogError("An unmapped file tag was returned by the database ");
+                                }
+                            }
                             file.Add(record);
                         }
                     }
                     return file;
+                }
+            }
+        }
+
+
+        public async Task<List<FileTag>> GetFileTagsAll()
+        {
+            DataTable dataTable = new DataTable();
+            List<FileTag> fileTags = new List<FileTag>();
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetResourceTags", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    sqlConnection.Open();
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        foreach (DataRow dr in dataTable.Rows)
+                        {
+                            var record = new FileTag()
+                            {
+                                Name = dr["Name"].ToString()
+                            };
+                            fileTags.Add(record);
+                        }
+                    }
+                    return fileTags;
                 }
             }
         }
