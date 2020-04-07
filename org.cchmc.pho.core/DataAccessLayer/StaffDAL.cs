@@ -99,9 +99,9 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                            Email = dr["EmailAddress"].ToString(),
                                            Phone = dr["Phone"].ToString(),
                                            StartDate = (dr["StartDate"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["StartDate"].ToString())),
-                                           PositionId = (dr["StaffPositionId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StaffPositionId"].ToString())),
-                                           CredentialId = (dr["CredentialId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CredentialId"].ToString())),
-                                           NPI = (dr["NPI"] == DBNull.Value ? 0 : Convert.ToInt32(dr["NPI"].ToString())),
+                                           PositionId = (dr["StaffPositionId"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["StaffPositionId"].ToString())),
+                                           CredentialId = (dr["CredentialId"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["CredentialId"].ToString())),
+                                           NPI = (dr["NPI"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["NPI"].ToString())),
                                            IsLeadPhysician = (dr["LeadPhysician"] != DBNull.Value && Convert.ToBoolean(dr["LeadPhysician"])),
                                            IsQITeam = (dr["QITeam"] != DBNull.Value && Convert.ToBoolean(dr["QITeam"])),
                                            IsPracticeManager = (dr["PracticeManager"] != DBNull.Value && Convert.ToBoolean(dr["PracticeManager"])),
@@ -135,26 +135,26 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     {
                         da.Fill(dataTable);
                         staffDetail = (from DataRow dr in dataTable.Rows
-                                 select new StaffDetail()
-                                 {
-                                     Id = (dr["StaffID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StaffID"].ToString())),
-                                     FirstName = dr["FirstName"].ToString(),
-                                     LastName = dr["LastName"].ToString(),
-                                     Email = dr["EmailAddress"].ToString(),
-                                     Phone = dr["Phone"].ToString(),
-                                     StartDate = (dr["StartDate"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["StartDate"].ToString())),
-                                     PositionId = (dr["StaffPositionId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StaffPositionId"].ToString())),
-                                     CredentialId = (dr["CredentialId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["CredentialId"].ToString())),
-                                     NPI = (dr["NPI"] == DBNull.Value ? 0 : Convert.ToInt32(dr["NPI"].ToString())),
-                                     IsLeadPhysician = (dr["LeadPhysician"] != DBNull.Value && Convert.ToBoolean(dr["LeadPhysician"])),
-                                     IsQITeam = (dr["QITeam"] != DBNull.Value && Convert.ToBoolean(dr["QITeam"])),
-                                     IsPracticeManager = (dr["PracticeManager"] != DBNull.Value && Convert.ToBoolean(dr["PracticeManager"])),
-                                     IsInterventionContact = (dr["InterventionContact"] != DBNull.Value && Convert.ToBoolean(dr["InterventionContact"])),
-                                     IsQPLLeader = (dr["QPLLeader"] != DBNull.Value && Convert.ToBoolean(dr["QPLLeader"])),
-                                     IsPHOBoard = (dr["PHOBoard"] != DBNull.Value && Convert.ToBoolean(dr["PHOBoard"])),
-                                     IsOVPCABoard = (dr["OVPCABoard"] != DBNull.Value && Convert.ToBoolean(dr["OVPCABoard"])),
-                                     IsRVPIBoard = (dr["RVPIBoard"] != DBNull.Value && Convert.ToBoolean(dr["RVPIBoard"])),
-                                 }
+                                       select new StaffDetail()
+                                       {
+                                           Id = (dr["StaffID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StaffID"].ToString())),
+                                           FirstName = dr["FirstName"].ToString(),
+                                           LastName = dr["LastName"].ToString(),
+                                           Email = dr["EmailAddress"].ToString(),
+                                           Phone = dr["Phone"].ToString(),
+                                           StartDate = (dr["StartDate"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["StartDate"].ToString())),
+                                           PositionId = (dr["StaffPositionId"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["StaffPositionId"].ToString())), 
+                                           CredentialId = (dr["CredentialId"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["CredentialId"].ToString())), 
+                                           NPI = (dr["NPI"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["NPI"].ToString())),
+                                           IsLeadPhysician = (dr["LeadPhysician"] != DBNull.Value && Convert.ToBoolean(dr["LeadPhysician"])),
+                                           IsQITeam = (dr["QITeam"] != DBNull.Value && Convert.ToBoolean(dr["QITeam"])),
+                                           IsPracticeManager = (dr["PracticeManager"] != DBNull.Value && Convert.ToBoolean(dr["PracticeManager"])),
+                                           IsInterventionContact = (dr["InterventionContact"] != DBNull.Value && Convert.ToBoolean(dr["InterventionContact"])),
+                                           IsQPLLeader = (dr["QPLLeader"] != DBNull.Value && Convert.ToBoolean(dr["QPLLeader"])),
+                                           IsPHOBoard = (dr["PHOBoard"] != DBNull.Value && Convert.ToBoolean(dr["PHOBoard"])),
+                                           IsOVPCABoard = (dr["OVPCABoard"] != DBNull.Value && Convert.ToBoolean(dr["OVPCABoard"])),
+                                           IsRVPIBoard = (dr["RVPIBoard"] != DBNull.Value && Convert.ToBoolean(dr["RVPIBoard"])),
+                                       }
                         ).SingleOrDefault();
                     }
                     return staffDetail;
@@ -177,9 +177,9 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@EmailAddress", SqlDbType.VarChar).Value = staffDetail.Email;
                     sqlCommand.Parameters.Add("@Phone", SqlDbType.VarChar).Value = staffDetail.Phone;
                     sqlCommand.Parameters.Add("@StartDate", SqlDbType.Date).Value = staffDetail.StartDate;
-                    sqlCommand.Parameters.Add("@StaffPositionId", SqlDbType.Int).Value = staffDetail.PositionId;
-                    sqlCommand.Parameters.Add("@CredentialId", SqlDbType.Int).Value = staffDetail.CredentialId;
-                    sqlCommand.Parameters.Add("@NPI", SqlDbType.Int).Value = staffDetail.NPI;
+                    sqlCommand.Parameters.Add("@StaffPositionId", SqlDbType.Int).Value = (!staffDetail.PositionId.HasValue ? (int?)null : staffDetail.PositionId.Value);
+                    sqlCommand.Parameters.Add("@CredentialId", SqlDbType.Int).Value = (!staffDetail.CredentialId.HasValue ? (int?)null : staffDetail.CredentialId.Value);
+                    sqlCommand.Parameters.Add("@NPI", SqlDbType.Int).Value = (!staffDetail.NPI.HasValue ? (int?)null : staffDetail.NPI.Value);
                     sqlCommand.Parameters.Add("@LeadPhysician", SqlDbType.Bit).Value = staffDetail.IsLeadPhysician;
                     sqlCommand.Parameters.Add("@QITeam", SqlDbType.Bit).Value = staffDetail.IsQITeam;
                     sqlCommand.Parameters.Add("@PracticeManager", SqlDbType.Bit).Value = staffDetail.IsPracticeManager;

@@ -191,6 +191,7 @@ namespace org.cchmc.pho.unittest.controllertests
                 StartDate = Convert.ToDateTime("12-30-2011 12:00:00 AM"),
                 PositionId = 37,
                 CredentialId = 76,
+                NPI = null,
                 IsLeadPhysician = false,
                 IsQITeam = true,
                 IsPracticeManager = false,
