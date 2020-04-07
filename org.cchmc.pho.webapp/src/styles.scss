@@ -170,6 +170,33 @@ h1 {
   }
 }
 
+// Button Toggle Styles (Could be used to iverride default)
+
+.mat-button-toggle-group-appearance-standard {
+  border-radius: 14px !important;
+  height: 26px;
+  background: rgba(0, 168, 150, 0.22);
+  border: none;
+}
+.mat-button-toggle-label-content {
+  line-height: 26px !important;
+  text-transform: uppercase;
+}
+.mat-button-toggle-appearance-standard {
+  color: #006d63;
+  background: none;
+}
+.mat-button-toggle-group-appearance-standard .mat-button-toggle + .mat-button-toggle {
+  border-left: solid 1px rgba(0, 0, 0, 0.12);
+  border-radius: 14px;
+}
+.mat-button-toggle-checked.mat-button-toggle-appearance-standard {
+  color: white;
+  border-radius: 14px;
+  font-weight: bold;
+  background-color: var(--primary-darker-color);
+}
+
 .success-snackbar {
   background-color: var(--primary-color);
   button {
@@ -907,13 +934,15 @@ button.toast-close-button {
   .mat-header-row {
     background-color: rgba(0, 168, 150, 0.16);
     height: 47px;
+    .mat-header-cell {
+      color: var(--primary-darker-color);
+    }
     .mat-header-cell,
     button {
       font-size: 13px;
       font-weight: bold;
       line-height: 19px;
       letter-spacing: 1px;
-      color: var(--primary-darker-color);
       text-align: left;
       text-transform: uppercase !important;
 
@@ -1644,6 +1673,15 @@ button.toast-close-button {
   margin-bottom: 15px;
 }
 
+.workbook-select-search-hidden {
+  height: 0.1em !important;
+}
+.workbook-select-search {
+  height: 3em;
+  padding-left: 1.2em;
+  padding-right: 1.2em;
+}
+
 .workbook-header {
   border-top-right-radius: 7px;
   border-top-left-radius: 7px;
@@ -2046,32 +2084,7 @@ button.toast-close-button {
     }
   }
 
-  // Button Toggle Styles (Could be used to iverride default)
-
-  .mat-button-toggle-group-appearance-standard {
-    border-radius: 14px;
-    height: 26px;
-    background: rgba(0, 168, 150, 0.22);
-    border: none;
-  }
-  .mat-button-toggle-label-content {
-    line-height: 26px !important;
-    text-transform: uppercase;
-  }
-  .mat-button-toggle-appearance-standard {
-    color: #006d63;
-    background: none;
-  }
-  .mat-button-toggle-group-appearance-standard .mat-button-toggle + .mat-button-toggle {
-    border-left: solid 1px rgba(0, 0, 0, 0.12);
-    border-radius: 14px;
-  }
-  .mat-button-toggle-checked.mat-button-toggle-appearance-standard {
-    color: white;
-    border-radius: 14px;
-    font-weight: bold;
-    background-color: var(--primary-darker-color);
-  }
+  
   .first-question {
     margin-bottom: 15px;
   }

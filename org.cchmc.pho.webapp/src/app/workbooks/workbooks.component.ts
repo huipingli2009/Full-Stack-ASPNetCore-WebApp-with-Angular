@@ -75,7 +75,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     providerStaffID: ['', Validators.required],
     dateOfService: ['', [DateRequiredValidator]],
     pHQ9Score: ['', Validators.required],
-    action: ['', Validators.required],
+    action: ['false'],
     dob: [''],
     phone: ['']
   });
@@ -135,7 +135,6 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   getWorkbookProviders(formResponseid: number) {
     this.rest.getWorkbookProviders(formResponseid).pipe(take(1)).subscribe((data) => {
       this.workbookProviders = data;
-      this.logger.log('provider workboos', this.workbookProviders)
       this.AssignProviderWorkbookArray();
     })
   }
@@ -186,6 +185,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   getWorkbookPatients(formResponseid: number) {
     this.rest.getWorkbookPatients(formResponseid).pipe(take(1)).subscribe((data) => {
       this.workbookPatient = data;
+      this.logger.log(this.workbookPatient, 'Workbook Patient')
       this.patientTableHeader = this.workbookPatient.length;
       this.dataSourceWorkbook = new MatTableDataSource(this.workbookPatient);
       this.dataSourceWorkbook.data = this.workbookPatient;
@@ -240,7 +240,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.newWorkbookPatient.providerId = this.PatientForWorkbookForm.get('providerStaffID').value;
     this.newWorkbookPatient.dateOfService = this.PatientForWorkbookForm.get('dateOfService').value;
     this.newWorkbookPatient.phQ9_Score = this.PatientForWorkbookForm.get('pHQ9Score').value;
-    this.newWorkbookPatient.actionFollowUp = (Boolean)(this.PatientForWorkbookForm.get('action').value);
+    this.newWorkbookPatient.actionFollowUp = JSON.parse(this.PatientForWorkbookForm.controls.action.value);
     this.AddPatientToWorkbook(this.newWorkbookPatient, this.addingPatientName);
   }
 
@@ -249,7 +249,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
       this.PatientForWorkbookForm.reset();
       this.getWorkbookPatients(this.selectedFormResponseID.value);
       this.searchPatient.reset();
-      (res) ? this.snackBar.openSnackBar(`Patient ${patientName} added to the workbook`, 'Close', 'success-snackbar') : this.snackBar.openSnackBar(`Patient ${patientName} already exists on another workbook`, 'Close', 'warn-snackbar')
+      (res) ? this.snackBar.openSnackBar(`Patient ${patientName} added to the workbook`, 'Close', 'success-snackbar') : this.snackBar.openSnackBar(`Patient ${patientName} already exists on the current workbook`, 'Close', 'warn-snackbar')
     })
   }
 
