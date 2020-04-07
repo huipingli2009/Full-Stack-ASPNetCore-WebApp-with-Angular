@@ -6,6 +6,9 @@ namespace org.cchmc.pho.core.Interfaces
 {
     public interface IFiles
     {
-        Task<List<File>> ListFiles(int userId, int resourceTypeId, int initiativeId, string tag, bool watch, string name);
+        Task<List<File>> ListFiles(int userId, int? resourceTypeId, int? initiativeId, string tag, bool? watch, string name);
+        Task<List<FileTag>> GetFileTagsAll();
+        Task<List<Resource>> GetResourceAll();
+        Task<List<Initiative>> GetInitiativeAll();
     }
 }

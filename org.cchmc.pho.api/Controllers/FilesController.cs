@@ -32,31 +32,32 @@ namespace org.cchmc.pho.api.Controllers
             _filesDAL = filesDal;
         }
 
+        [AllowAnonymous]
         //[Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
-        //[HttpGet()]
-        //[SwaggerResponse(200, type: typeof(List<FilesViewModel>))]
-        //[SwaggerResponse(400, type: typeof(string))]
-        //[SwaggerResponse(500, type: typeof(string))]
-        //public async Task<IActionResult> ListFiles()
-        //{
+        [HttpGet()]
+        [SwaggerResponse(200, type: typeof(List<FileViewModel>))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> ListFiles(int? resourceTypeId, int? initiativeId, string tag, bool? watch, string name)
+        {
 
-        //    try
-        //    {
-        //        int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
-        //        // call the data method
-        //        var data = await _filesDAL.ListFiles(currentUserId);
-        //        // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
-        //        var result = _mapper.Map<List<FilesViewModel>>(data);
-        //        // return the result in a "200 OK" response
-        //        return Ok(result);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // log any exceptions that happen and return the error to the user
-        //        _logger.LogError(ex, "An error occurred");
-        //        return StatusCode(500, "An error occurred");
-        //    }
-        //}
+            try
+            {
+                int currentUserId = 16; //_userService.GetUserIdFromClaims(User?.Claims);
+                // call the data method
+                var data = await _filesDAL.ListFiles(currentUserId, resourceTypeId, initiativeId, tag, watch, name);
+                // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
+                var result = _mapper.Map<List<FileViewModel>>(data);
+                // return the result in a "200 OK" response
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
 
         //[Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         //[HttpGet("{files}")]
@@ -139,5 +140,79 @@ namespace org.cchmc.pho.api.Controllers
         //    }
         //}
 
+
+        [HttpGet("tags")]
+        [AllowAnonymous]
+        //[Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [SwaggerResponse(200, type: typeof(List<FileTagViewModel>))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> GetFileTagsAll()
+        {
+            try
+            {
+                // call the data method
+                var data = await _filesDAL.GetFileTagsAll();
+                // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
+                var result = _mapper.Map<List<FileTagViewModel>>(data);
+                // return the result in a "200 OK" response
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+        [HttpGet("resources")]
+        [AllowAnonymous]
+        //[Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [SwaggerResponse(200, type: typeof(List<ResourceViewModel>))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> GetResourcesAll()
+        {
+            try
+            {
+                // call the data method
+                var data = await _filesDAL.GetResourceAll();
+                // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
+                var result = _mapper.Map<List<ResourceViewModel>>(data);
+                // return the result in a "200 OK" response
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+       [HttpGet("initiatives")]
+       [AllowAnonymous]
+       //[Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+       [SwaggerResponse(200, type: typeof(List<InitiativeViewModel>))]
+       [SwaggerResponse(400, type: typeof(string))]
+       [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> GetInitiativesAll()
+        {
+            try
+            {
+                // call the data method
+                var data = await _filesDAL.GetInitiativeAll();
+                // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
+                var result = _mapper.Map<List<InitiativeViewModel>>(data);
+                // return the result in a "200 OK" response
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
     }
 }

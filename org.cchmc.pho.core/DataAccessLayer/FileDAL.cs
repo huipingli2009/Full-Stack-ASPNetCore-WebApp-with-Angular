@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace org.cchmc.pho.core.DataAccessLayer
 {
-    public class FileDAL
+    public class FileDAL : IFiles
     {
         private readonly ConnectionStrings _connectionStrings; 
         private readonly ILogger<FileDAL> _logger;
@@ -24,7 +24,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         }
 
 
-        public async Task<List<File>> ListFiles(int userId, int resourceTypeId, int initiativeId, string tag, bool watch, string name)
+        public async Task<List<File>> ListFiles(int userId, int? resourceTypeId, int? initiativeId, string tag, bool? watch, string name)
         {
             DataTable dataTable = new DataTable();
             List<File> file = new List<File>();
@@ -56,6 +56,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 WatchFlag = (dr["WatchFlag"] != DBNull.Value && Convert.ToBoolean(dr["WatchFlag"])),
                                 FileSize = dr["FileSize"].ToString(),
                                 FileURL = dr["FileURL"].ToString(),
+                                Description = dr["Description"].ToString(),
                                 Tags = new List<FileTag>()
                             };
                             if (!string.IsNullOrWhiteSpace(dr["Tags"].ToString()))
@@ -96,7 +97,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                         {
                             var record = new FileTag()
                             {
-                                Name = dr["Name"].ToString()
+                                Name = dr["Tag"].ToString()
                             };
                             fileTags.Add(record);
                         }
@@ -106,6 +107,65 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
+        public async Task<List<Resource>> GetResourceAll()
+        {
+            DataTable dataTable = new DataTable();
+            List<Resource> resources = new List<Resource>();
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetResourceTypeList", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    sqlConnection.Open();
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        foreach (DataRow dr in dataTable.Rows)
+                        {
+                            var record = new Resource()
+                            {
+                                Id = (dr["Id"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Id"].ToString())),
+                                Name = dr["Name"].ToString()
+                            };
+                            resources.Add(record);
+                        }
+                    }
+                    return resources;
+                }
+            }
+        }
+
+        public async Task<List<Initiative>> GetInitiativeAll()
+        {
+            DataTable dataTable = new DataTable();
+            List<Initiative> initiatives = new List<Initiative>();
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetInitiativeList", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    sqlConnection.Open();
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        foreach (DataRow dr in dataTable.Rows)
+                        {
+                            var record = new Initiative()
+                            {
+                                Id = (dr["Id"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Id"].ToString())),
+                                Name = dr["ShortName"].ToString()
+                            };
+                            initiatives.Add(record);
+                        }
+                    }
+                    return initiatives;
+                }
+            }
+        }
 
     }
 }
