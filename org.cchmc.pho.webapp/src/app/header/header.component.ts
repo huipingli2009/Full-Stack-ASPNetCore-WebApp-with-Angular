@@ -152,7 +152,6 @@ export class HeaderComponent {
       this.practiceList = data.practiceList;
       this.currentPracticeId = data.currentPracticeId;
       this.practiceForm.controls.practiceControl.setValue(data.currentPracticeId);
-      this.logger.log('Practice List', this.practiceList, 'ID', this.currentPracticeId); // Working here
     });
   }
 
