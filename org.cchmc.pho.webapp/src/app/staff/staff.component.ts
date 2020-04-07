@@ -78,7 +78,7 @@ export class StaffComponent implements OnInit {
     startDate: ['', [DateRequiredValidator]],
     positionId: ['', Validators.required],
     credentialId: ['', Validators.required],
-    npi: ['', Validators.required],
+    npi: ['', [Validators.required, Validators.pattern('^((?!(0))[0-9]{10})$')]],
     isLeadPhysician: [''],
     isQITeam: [''],
     isPracticeManager: [''],
@@ -145,6 +145,11 @@ export class StaffComponent implements OnInit {
         this.isUserAdmin = true;
       } else { this.isUserAdmin = false; }
     });
+  }
+
+  // Multi Error Check
+  checkError(controlName: string, errorName: string) {
+    return this.StaffDetailsForm.controls[controlName].hasError(errorName);
   }
 
 
