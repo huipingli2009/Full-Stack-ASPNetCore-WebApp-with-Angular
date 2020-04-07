@@ -272,6 +272,7 @@ h1 {
     }
     span {
       padding-right: 9px;
+      cursor: pointer;
     }
   }
 }
@@ -386,6 +387,10 @@ h1 {
     padding-top: 0px;
     border-bottom: 1.8px solid var(--primary-darker-color);
   }
+}
+
+.account-icon {
+  vertical-align: bottom;
 }
 
 /* Dashboard =========================================================================== */
@@ -1513,7 +1518,7 @@ button.toast-close-button {
   }
 }
 
-#admin-dialog {
+#admin-dialog, #passwordChangeForm {
   overflow: visible;
   .detail-heading {
     font-family: "ArcherBold";
