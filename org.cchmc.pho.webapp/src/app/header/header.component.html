@@ -8,7 +8,7 @@
         <button mat-button routerLink="dashboard">Home</button>
       </div>
       <div fxLayout="column" fxLayoutAlign="end end" fxFlex class="logout-col">
-        <div><span>Welcome, {{firstName}} {{lastName}}</span>| <button mat-button (click)="logout()">Logout</button></div>
+        <div><span (click)="openPasswordDialog()">Welcome, {{firstName}} {{lastName}} <mat-icon class="account-icon">account_box</mat-icon></span>| <button mat-button (click)="logout()">Logout</button></div>
         
       </div>
     </div>
@@ -35,6 +35,74 @@
     </div>
   </div>
   <div toastContainer class="alert-container"><span></span></div>
+
+  <ng-template #passwordDialog>
+    <div mat-dialog-content class="mat-typography">
+    <form [formGroup]="updateUserForm" id="passwordChangeForm">
+      <div fxLayout="row" class="detail-heading">CHANGE PASSWORD</div>
+      <div fxLayout="row" class="validation-text">
+          <p>{{passwordVerbiage | slice:0:141}}<br>{{passwordVerbiage | slice:141:passwordVerbiage.length}}
+          </p>
+      </div>
+      <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end">
+
+          <div fxLayout="column" class="input-w-icon">
+              <mat-form-field floatLabel="always">
+                  <mat-label>USER NAME</mat-label>
+                  <input matInput [disabled]="true" value="{{currentUsername}}">
+                  <mat-icon matPrefix>
+                      person
+                  </mat-icon>
+              </mat-form-field>
+          </div>
+          <div fxLayout="column" class="input-w-icon">
+              <mat-form-field floatLabel="always">
+                  <mat-label>PASSWORD</mat-label>
+                  <input matInput type="password" formControlName="password"
+                      name="password" (change)="passwordChanged()"
+                      [errorStateMatcher]="matcher">
+                  <mat-icon matPrefix>
+                      lock
+                  </mat-icon>
+
+              </mat-form-field>
+          </div>
+          <div fxLayout="column" class="input-w-icon">
+              <mat-form-field floatLabel="always">
+                  <mat-label>CONFIRM PW</mat-label>
+                  <input matInput type="password"
+                      formControlName="confirmPassword" name="confirmPassword"
+                      (change)="passwordChanged()" [errorStateMatcher]="matcher">
+                  <mat-icon matPrefix>
+                      lock
+                  </mat-icon>
+                  <mat-error>Passwords Must Match</mat-error>
+              </mat-form-field>
+          </div>
+      </div>
+      <div fxLayout="row" *ngIf="updateUserForm.get('password').touched">
+        <mat-error *ngIf="checkError('password', 'minlength')">Password should be more than 8 characters.</mat-error>
+                  <mat-error *ngIf="checkError('password', 'cannotContainSpace')"> Password cannot contain any spaces.</mat-error>
+                  <mat-error *ngIf="checkError('password', 'pattern')"> Password must meet the above pattern.</mat-error>
+      </div>
+      </form>
+    </div>
+    <div mat-dialog-actions align="end">
+      <button mat-button (click)="cancelPasswordUpdateDialog()">Cancel</button>
+      <button mat-flat-button color="accent" (click)="confirmPasswordUpdate()" [disabled]="!updateUserForm.valid">Save</button>
+  </div>
+  </ng-template>
+
+  <ng-template #updatePassConfirmDialog>
+    <div mat-dialog-content class="mat-typography">
+        <h3>Are you sure you want to update your password?</h3>
+    </div>
+    <div mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Cancel</button>
+        <button mat-flat-button color="accent" mat-dialog-close
+            (click)="updatePassword()">Save and Update Password</button>
+    </div>
+</ng-template>
   
 
   

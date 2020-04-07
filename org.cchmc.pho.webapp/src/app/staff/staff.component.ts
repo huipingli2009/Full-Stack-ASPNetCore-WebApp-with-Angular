@@ -78,7 +78,7 @@ export class StaffComponent implements OnInit {
     startDate: ['', [DateRequiredValidator]],
     positionId: ['', Validators.required],
     credentialId: ['', Validators.required],
-    npi: ['', Validators.required],
+    npi: ['', [Validators.required, Validators.pattern('^((?!(0))[0-9]{10})$')]],
     isLeadPhysician: [''],
     isQITeam: [''],
     isPracticeManager: [''],
@@ -147,6 +147,11 @@ export class StaffComponent implements OnInit {
     });
   }
 
+  // Multi Error Check
+  checkError(controlName: string, errorName: string) {
+    return this.StaffDetailsForm.controls[controlName].hasError(errorName);
+  }
+
 
   // get staff information
 
@@ -195,7 +200,6 @@ export class StaffComponent implements OnInit {
           confirmPassword: '********',
           roles: this.staffUser.role
         }
-        this.logger.log('Selected Values', selectedValues);
         this.adminUserForm.setValue(selectedValues);
       }
 
@@ -223,6 +227,7 @@ export class StaffComponent implements OnInit {
 
   updateStaff() {
     this.staffDetails = this.StaffDetailsForm.value;
+    this.staffDetails.npi = Number(this.StaffDetailsForm.controls.npi.value);
     this.rest.updateStaff(this.staffDetails).pipe(take(1)).subscribe(res => {
       this.staffDetails = res;
       this.StaffDetailsForm.setValue(this.staffDetails);

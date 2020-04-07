@@ -1,5 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, ViewChild, TemplateRef } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NGXLogger } from 'ngx-logger';
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
@@ -11,6 +11,10 @@ import { CurrentUser } from '../models/user';
 import { RestService } from '../rest.service';
 import { AuthenticationService } from '../services/authentication.service';
 import { UserService } from '../services/user.service';
+import { MatDialog } from '@angular/material/dialog';
+import { MyErrorStateMatcher } from '../staff/staff.component';
+import { comparePasswords } from '../helpers/password-match.validator';
+import { NoSpaceValidator } from '../helpers/no-spaces.validator';
 
 @Component({
   selector: 'app-header',
@@ -21,6 +25,8 @@ export class HeaderComponent {
   isLoggedIn$: boolean;
 
   @ViewChild(ToastContainerDirective, { static: false }) toastContainer: ToastContainerDirective;
+  @ViewChild('passwordDialog') passwordDialog: TemplateRef<any>;
+  @ViewChild('updatePassConfirmDialog') updatePassConfirmDialog: TemplateRef<any>;
   error: any;
   title = 'phoweb';
   alerts: Alerts[];
@@ -36,13 +42,27 @@ export class HeaderComponent {
   practiceList: Array<Practices>;
   currentPracticeId: number;
   currentPractice: string;
+  currentUsername: string;
+  currentUserId: string;
   userPracticeName: string;
+  matcher = new MyErrorStateMatcher();
+  updateUserForm: FormGroup;
+  isPasswordUpdated: boolean;
+  passwordVerbiage: string;
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
-    private toastr: ToastrService, public fb: FormBuilder, private logger: NGXLogger,
-    private authenticationService: AuthenticationService, private userService: UserService) {
+              private toastr: ToastrService, public fb: FormBuilder, private logger: NGXLogger,
+              private authenticationService: AuthenticationService, private userService: UserService,
+              public dialog: MatDialog) {
     this.logger.log('testing the logging in app.component.ts constructor with NGXLogger');
     this.practiceForm = this.fb.group({
       practiceControl: ['']
+    });
+    this.updateUserForm = this.fb.group({
+      password: ['', [Validators.required, Validators.minLength(8), NoSpaceValidator.cannotContainSpace,
+        Validators.pattern('((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,30})')]],
+      confirmPassword: ['', Validators.required]
+    }, {
+      validator: comparePasswords('password', 'confirmPassword')
     });
 
   }
@@ -51,6 +71,7 @@ export class HeaderComponent {
     this.getAlerts();
     this.getCurrentUser();
     this.getPracticeList();
+    this.getPasswordVerbiage();
   }
 
   ngAfterViewInit() {
@@ -60,6 +81,8 @@ export class HeaderComponent {
   getCurrentUser() {
     this.userService.getCurrentUser().subscribe((data) => {
       this.currentUser = data;
+      this.currentUserId = data.id;
+      this.currentUsername = data.userName;
       this.firstName = data.firstName;
       this.lastName = data.lastName;
       if (data.role.id === 3) {
@@ -78,7 +101,7 @@ export class HeaderComponent {
           ${alert.message}<a class="alert-link" href="${alert.url}" target="_blank">${alert.linkText}»</a>`;
 
 
-          let activeToastr = this.toastr.success(toastrMessage, alert.alertScheduleId.toString(), {
+          const activeToastr = this.toastr.success(toastrMessage, alert.alertScheduleId.toString(), {
             closeButton: true,
             disableTimeOut: true,
             enableHtml: true,
@@ -128,14 +151,13 @@ export class HeaderComponent {
     this.rest.getPracticeList().subscribe(data => {
       this.practiceList = data.practiceList;
       this.currentPracticeId = data.currentPracticeId;
-      this.practiceForm.controls['practiceControl'].setValue(data.currentPracticeId);
-      this.logger.log('Practice List', this.practiceList, 'ID', this.currentPracticeId); // Working here
-    })
+      this.practiceForm.controls.practiceControl.setValue(data.currentPracticeId);
+    });
   }
 
   switchPractice(practiceId) {
-    let staffId = this.authenticationService.getCurrentStaffId();
-    let newPractice = {
+    const staffId = this.authenticationService.getCurrentStaffId();
+    const newPractice = {
       id: Number(staffId),
       myPractice: {
         id: practiceId
@@ -145,5 +167,56 @@ export class HeaderComponent {
       this.logger.log('SWITCHED', res);
       location.reload();
     });
+  }
+
+  /* Password Change */
+  getPasswordVerbiage() {
+    this.rest.getStaffAdminVerbiage().pipe(take(1)).subscribe((res) => {
+      this.passwordVerbiage = res;
+    });
+  }
+
+ // Pass Validation
+ checkError(controlName: string, errorName: string) {
+  return this.updateUserForm.controls[controlName].hasError(errorName);
+}
+
+  passwordChanged() {
+    this.isPasswordUpdated = true;
+  }
+
+  openPasswordDialog() {
+    const selectedValues = {
+      password: '********',
+      confirmPassword: '********'
+    }
+    this.updateUserForm.setValue(selectedValues);
+    this.dialog.open(this.passwordDialog, { disableClose: true });
+  }
+
+  confirmPasswordUpdate() {
+    const { value, valid } = this.updateUserForm;
+    if (valid) {
+      this.dialog.open(this.updatePassConfirmDialog, { disableClose: true });
+    }
+  }
+
+  updatePassword() {
+    let userId = this.currentUserId;
+    let updatedPass = {
+      token: this.authenticationService.getToken(),
+      newPassword: this.updateUserForm.controls.password.value
+    };
+    this.userService.updateUserPassword(userId, updatedPass).pipe(take(1)).subscribe(res => {
+      if (res === true) {
+        this.dialog.closeAll();
+        setTimeout(() => {  this.logout(); }, 2000);
+      }
+    });
+  }
+
+  cancelPasswordUpdateDialog() {
+    this.isPasswordUpdated = false;
+    this.dialog.closeAll();
   }
 }
