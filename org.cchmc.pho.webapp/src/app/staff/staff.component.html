@@ -196,13 +196,11 @@
                                 <div fxLayout="column" fxFlex>
                                     <mat-form-field>
                                         <mat-label>NPI</mat-label>
-                                        <input matInput formControlName="npi" required>
+                                        <input matInput formControlName="npi">
                                         <ng-container
                                             *ngIf="(StaffDetailsForm.get('npi').touched || StaffDetailsForm.get('npi').dirty) && (StaffDetailsForm.get('npi').errors)">
-                                            <mat-error *ngIf="StaffDetailsForm.get('npi').errors.required">
-                                                NPI is required
-                                            </mat-error>
-                                            <mat-error *ngIf="checkError('npi', 'pattern')"> NPI Must be 10 Digits and Cannot Start with 0.</mat-error>
+                                            <mat-error *ngIf="checkError('npi', 'pattern')"> NPI Must be 10 Digits and
+                                                Cannot Start with 0.</mat-error>
                                         </ng-container>
                                     </mat-form-field>
                                 </div>
@@ -249,18 +247,12 @@
                                 <div fxLayout="column" fxFlex>
                                     <mat-form-field class="multi-select-override">
                                         <mat-label>CREDENTIALS</mat-label>
-                                        <mat-select formControlName="credentialId" required>
+                                        <mat-select formControlName="credentialId">
                                             <mat-option *ngFor="let credential of credentials" [value]="credential.id">
                                                 {{credential.name}}
                                             </mat-option>
 
                                         </mat-select>
-                                        <ng-container
-                                            *ngIf="(StaffDetailsForm.get('credentialId').touched || StaffDetailsForm.get('credentialId').dirty) && (StaffDetailsForm.get('credentialId').errors)">
-                                            <mat-error *ngIf="StaffDetailsForm.get('credentialId').errors.required">
-                                                credentials are required
-                                            </mat-error>
-                                        </ng-container>
                                     </mat-form-field>
                                 </div>
 

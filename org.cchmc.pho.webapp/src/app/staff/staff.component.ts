@@ -1,13 +1,13 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Sort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { NGXLogger } from 'ngx-logger';
-import { take } from 'rxjs/operators';
+import { take, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { ErrorInterceptor } from '../helpers/error.interceptor';
 import { comparePasswords } from '../helpers/password-match.validator';
 import { Responsibilities, Staff, StaffDetails } from '../models/Staff';
@@ -17,6 +17,7 @@ import { AuthenticationService } from '../services/authentication.service';
 import { UserService } from '../services/user.service';
 import { DateRequiredValidator } from '../shared/customValidators/customValidator';
 import { MatSnackBarComponent } from '../shared/mat-snack-bar/mat-snack-bar.component';
+import { Subject } from 'rxjs';
 
 
 @Component({
@@ -31,7 +32,8 @@ import { MatSnackBarComponent } from '../shared/mat-snack-bar/mat-snack-bar.comp
     ]),
   ],
 })
-export class StaffComponent implements OnInit {
+export class StaffComponent implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject();
   matcher = new MyErrorStateMatcher();
   displayedColumns: string[] = ['arrow', 'name', 'email', 'phone', 'position', 'credentials', 'isRegistry', 'responsibilities'];
   positions: Position[];
@@ -77,8 +79,8 @@ export class StaffComponent implements OnInit {
     phone: ['', Validators.required],
     startDate: ['', [DateRequiredValidator]],
     positionId: ['', Validators.required],
-    credentialId: ['', Validators.required],
-    npi: ['', [Validators.required, Validators.pattern('^((?!(0))[0-9]{10})$')]],
+    credentialId: [''],
+    npi: [''],
     isLeadPhysician: [''],
     isQITeam: [''],
     isPracticeManager: [''],
@@ -113,6 +115,7 @@ export class StaffComponent implements OnInit {
     this.getResponsibilities();
     this.getAdminVerbiage();
     this.getCurrentPractice();
+    this.validateNPI();
   }
 
 
@@ -152,6 +155,21 @@ export class StaffComponent implements OnInit {
     return this.StaffDetailsForm.controls[controlName].hasError(errorName);
   }
 
+  //validate NPI 
+  validateNPI(): void {
+    this.StaffDetailsForm.controls.npi.valueChanges.pipe(debounceTime(1000), distinctUntilChanged(), takeUntil(this.unsubscribe$)).subscribe(values => {
+      const npiControl = this.StaffDetailsForm.get('npi');
+      if (values != "") {
+        npiControl.setValidators([Validators.pattern('^((?!(0))[0-9]{10})$')]);
+        npiControl.updateValueAndValidity();
+      }
+      else {
+        npiControl.clearValidators();
+        npiControl.updateValueAndValidity();
+      }
+
+    });
+  }
 
   // get staff information
 
@@ -425,6 +443,10 @@ export class StaffComponent implements OnInit {
 
   trackStaff(index: number, item: Staff): string {
     return '${item.id}';
+  }
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }
 
