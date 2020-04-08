@@ -48,14 +48,16 @@ namespace org.cchmc.pho.identity
             {
                 _logger.LogInformation($"User {userName} attempting to log in.");
                 User user = await GetUser(userName);
-                if (user == null || user.IsPending || user.IsDeleted)
+                if (user == null || user.IsPending || user.IsDeleted || user.IsLockedOut)
                 {
                     string reason = "there is no such user";
                     if(user != null)
                     {
                         if (user.IsPending)
                             reason = "the user is pending activation";
-                        else reason = "the user is deleted";
+                        else if (user.IsDeleted)
+                            reason = "the user is deleted";
+                        else reason = "the user is locked out";
                     }
                     _logger.LogInformation($"User {userName} unable to log in because { reason }");
                     return null;
@@ -109,14 +111,16 @@ namespace org.cchmc.pho.identity
             try
             {
                 User user = await GetUser(userId);
-                if (user == null || user.IsPending || user.IsDeleted)
+                if (user == null || user.IsPending || user.IsDeleted || user.IsLockedOut)
                 {
                     string reason = "there is no such user";
                     if (user != null)
                     {
                         if (user.IsPending)
                             reason = "the user is pending activation";
-                        else reason = "the user is deleted";
+                        else if (user.IsDeleted)
+                            reason = "the user is deleted";
+                        else reason = "the user is locked out";
                     }
                     _logger.LogInformation($"User {user.UserName} unable to refresh because { reason }");
                     return null;
