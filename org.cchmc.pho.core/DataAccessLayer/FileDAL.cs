@@ -78,6 +78,62 @@ namespace org.cchmc.pho.core.DataAccessLayer
         }
 
 
+
+        public async Task<FileDetails> GetFileDetails(int userId, int fileId)
+        {
+            DataTable dataTable = new DataTable();
+            FileDetails details = null;
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetFileDetails", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@Id", SqlDbType.Int).Value = fileId;
+                    sqlConnection.Open();
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        List<FileTag> fileTags = await GetFileTagsAll();
+
+
+                        foreach (DataRow dr in dataTable.Rows)
+                        {
+                            details = new FileDetails()
+                            {
+                                Id = (dr["Id"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Id"].ToString())),
+                                Name = dr["Name"].ToString(),
+                                Author = dr["Author"].ToString(),
+                                DateCreated = (dr["DateCreated"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["DateCreated"].ToString())),
+                                LastViewed = (dr["LastViewed"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LastViewed"].ToString())),
+                                WatchFlag = (dr["WatchFlag"] != DBNull.Value && Convert.ToBoolean(dr["WatchFlag"])),
+                                FileSize = dr["FileSize"].ToString(),
+                                FileURL = dr["FileURL"].ToString(),
+                                Description = dr["Description"].ToString(),
+                                Tags = new List<FileTag>()
+                            };
+
+                            if (!string.IsNullOrWhiteSpace(dr["Tags"].ToString()))
+                            {
+                                foreach (string tagName in dr["Tags"].ToString().Split(',').Select(t => Convert.ToString(t)))
+                                {
+                                    if (fileTags.Any(f => f.Name == tagName))
+                                        details.Tags.Add(fileTags.First(f => f.Name == tagName));
+                                    else
+                                        _logger.LogError("An unmapped file tag was returned by the database ");
+                                }
+                            }
+                        }
+
+
+                    }
+                }
+            }
+
+            return details;
+        }
+
         public async Task<List<FileTag>> GetFileTagsAll()
         {
             DataTable dataTable = new DataTable();
