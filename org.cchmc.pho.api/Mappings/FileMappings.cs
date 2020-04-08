@@ -9,9 +9,10 @@ namespace org.cchmc.pho.api.Mappings
         public FileMappings()
         {
             CreateMap<File, FileViewModel>();
-            //CreateMap<StaffDetail, StaffDetailViewModel>();
-            //CreateMap<StaffDetailViewModel, StaffDetail>();
+            CreateMap<FileDetails, FileDetailsViewModel>();
+            CreateMap<FileDetailsViewModel, FileDetails>();
             CreateMap<FileTag, FileTagViewModel>();
+            CreateMap<FileTagViewModel, FileTag>();
             CreateMap<Initiative, InitiativeViewModel>();
             CreateMap<Resource, ResourceViewModel>();
         }

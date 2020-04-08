@@ -32,8 +32,7 @@ namespace org.cchmc.pho.api.Controllers
             _filesDAL = filesDal;
         }
 
-        [AllowAnonymous]
-        //[Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [HttpGet()]
         [SwaggerResponse(200, type: typeof(List<FileViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
@@ -43,7 +42,7 @@ namespace org.cchmc.pho.api.Controllers
 
             try
             {
-                int currentUserId = 16; //_userService.GetUserIdFromClaims(User?.Claims);
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
                 // call the data method
                 var data = await _filesDAL.ListFiles(currentUserId, resourceTypeId, initiativeId, tag, watch, name);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
@@ -60,15 +59,15 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
-        [HttpGet("{files}")]
+        [HttpGet("{file}")]
         [SwaggerResponse(200, type: typeof(FileDetailsViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> GetFilesDetails(string files)
+        public async Task<IActionResult> GetFileDetails(string file)
         {
-            if (!int.TryParse(files, out var filesId))
+            if (!int.TryParse(file, out var fileId))
             {
-                _logger.LogInformation($"Failed to parse filesId - {files}");
+                _logger.LogInformation($"Failed to parse filesId - {file}");
                 return BadRequest("files is not a valid integer");
             }
 
@@ -76,9 +75,9 @@ namespace org.cchmc.pho.api.Controllers
             {
                 int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
                 // call the data method
-                var data = await _filesDAL.GetFilesDetails(currentUserId, filesId);
+                var data = await _filesDAL.GetFileDetails(currentUserId, fileId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
-                var result = _mapper.Map<FilesDetailViewModel>(data);
+                var result = _mapper.Map<FileDetailsViewModel>(data);
                 // return the result in a "200 OK" response
                 return Ok(result);
             }
@@ -90,60 +89,73 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        //[Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
-        //[HttpPut("{files}")]
-        //[SwaggerResponse(200, type: typeof(FilesDetailViewModel))]
-        //[SwaggerResponse(400, type: typeof(string))]
-        //[SwaggerResponse(500, type: typeof(string))]
-        //public async Task<IActionResult> UpdateFilesDetails([FromBody] FilesDetailViewModel filesDetailVM, string files)
-        //{
-        //    if (!int.TryParse(files, out var filesId))
-        //    {
-        //        _logger.LogInformation($"Failed to parse filesId - {files}");
-        //        return BadRequest("files is not a valid integer");
-        //    }
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [HttpPut()]
+        [SwaggerResponse(200, type: typeof(FileDetailsViewModel))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> UpdateFileDetails([FromBody] FileDetailsViewModel filesDetailVM)
+        {
+            if (filesDetailVM == null)
+            {
+                _logger.LogInformation($"filesDetails object is null");
+                return BadRequest("files is null");
+            }
 
-        //    if (filesDetailVM == null)
-        //    {
-        //        _logger.LogInformation($"filesDetails object is null");
-        //        return BadRequest("files is null");
-        //    }
+            try
+            {
+                // route parameters are strings and need to be translated (and validated) to their proper data type
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
 
-        //    if (filesDetailVM.Id != filesId)
-        //    {
-        //        _logger.LogInformation($"filesDetails.Id and filesId to not match");
-        //        return BadRequest("files id does not match");
-        //    }
+                FileDetails filesDetail = _mapper.Map<FileDetails>(filesDetailVM);
+                // call the data layer to mark the action
+                var data = await _filesDAL.UpdateFileDetails(currentUserId, filesDetail);
+                var result = _mapper.Map<FileDetailsViewModel>(data);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
 
-        //    try
-        //    {
-        //        // route parameters are strings and need to be translated (and validated) to their proper data type
-        //        int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [HttpPost()]
+        [SwaggerResponse(200, type: typeof(FileDetailsViewModel))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> AddFileDetails([FromBody] FileDetailsViewModel filesDetailVM)
+        {
+            if (filesDetailVM == null)
+            {
+                _logger.LogInformation($"filesDetails object is null");
+                return BadRequest("files is null");
+            }
 
-        //        if (!_filesDAL.IsFilesInSamePractice(currentUserId, filesId))
-        //        {
-        //            _logger.LogInformation($"files and user practices do not match");
-        //            return BadRequest("files practice does not match user");
-        //        }
+            try
+            {
+                // route parameters are strings and need to be translated (and validated) to their proper data type
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
 
-        //        FilesDetail filesDetail = _mapper.Map<FilesDetail>(filesDetailVM);
-        //        // call the data layer to mark the action
-        //        var data = await _filesDAL.UpdateFilesDetails(currentUserId, filesDetail);
-        //        var result = _mapper.Map<FilesDetailViewModel>(data);
-        //        return Ok(result);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // log any exceptions that happen and return the error to the user
-        //        _logger.LogError(ex, "An error occurred");
-        //        return StatusCode(500, "An error occurred");
-        //    }
-        //}
+                FileDetails filesDetail = _mapper.Map<FileDetails>(filesDetailVM);
+                // call the data layer to mark the action
+                var data = await _filesDAL.AddFileDetails(currentUserId, filesDetail);
+                var result = _mapper.Map<FileDetailsViewModel>(data);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
 
 
         [HttpGet("tags")]
-        [AllowAnonymous]
-        //[Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<FileTagViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -166,8 +178,7 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
         [HttpGet("resources")]
-        [AllowAnonymous]
-        //[Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<ResourceViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -191,8 +202,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
        [HttpGet("initiatives")]
-       [AllowAnonymous]
-       //[Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+       [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
        [SwaggerResponse(200, type: typeof(List<InitiativeViewModel>))]
        [SwaggerResponse(400, type: typeof(string))]
        [SwaggerResponse(500, type: typeof(string))]

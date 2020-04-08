@@ -97,13 +97,15 @@ namespace org.cchmc.pho.core.DataAccessLayer
                         da.Fill(dataTable);
                         List<FileTag> fileTags = await GetFileTagsAll();
 
-
                         foreach (DataRow dr in dataTable.Rows)
                         {
                             details = new FileDetails()
                             {
                                 Id = (dr["Id"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Id"].ToString())),
                                 Name = dr["Name"].ToString(),
+                                ResourceTypeId = (dr["ResourceTypeId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ResourceTypeId"].ToString())),
+                                InitiativeId = (dr["InitiativeId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["InitiativeId"].ToString())),
+                                Format = dr["Format"].ToString(),
                                 Author = dr["Author"].ToString(),
                                 DateCreated = (dr["DateCreated"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["DateCreated"].ToString())),
                                 LastViewed = (dr["LastViewed"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LastViewed"].ToString())),
@@ -111,6 +113,8 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 FileSize = dr["FileSize"].ToString(),
                                 FileURL = dr["FileURL"].ToString(),
                                 Description = dr["Description"].ToString(),
+                                PublishFlag = (dr["Published"] != DBNull.Value && Convert.ToBoolean(dr["Published"])),
+                                PracticeOnly = (dr["PracticeOnly"] != DBNull.Value && Convert.ToBoolean(dr["PracticeOnly"])),
                                 Tags = new List<FileTag>()
                             };
 
@@ -132,6 +136,85 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
 
             return details;
+        }
+
+
+        public async Task<FileDetails> UpdateFileDetails(int userId, FileDetails fileDetails)
+        {
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spUpdateFile", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@Id", SqlDbType.Int).Value = fileDetails.Id;
+                    sqlCommand.Parameters.Add("@Name", SqlDbType.VarChar).Value = fileDetails.Name;
+                    sqlCommand.Parameters.Add("@ResourceTypeId", SqlDbType.Int).Value = fileDetails.ResourceTypeId;
+                    sqlCommand.Parameters.Add("@InitiativeId", SqlDbType.Int).Value = fileDetails.InitiativeId;
+                    sqlCommand.Parameters.Add("@Description", SqlDbType.VarChar).Value = fileDetails.Description;
+                    sqlCommand.Parameters.Add("@Format", SqlDbType.VarChar).Value = fileDetails.Format;
+                    sqlCommand.Parameters.Add("@FileURL", SqlDbType.VarChar).Value = fileDetails.FileURL;
+                    sqlCommand.Parameters.Add("@FileSize", SqlDbType.VarChar).Value = fileDetails.FileSize;
+                    sqlCommand.Parameters.Add("@WatchFlag", SqlDbType.Bit).Value = fileDetails.WatchFlag;
+                    sqlCommand.Parameters.Add("@Author", SqlDbType.VarChar).Value = fileDetails.Author;
+                    sqlCommand.Parameters.Add("@SearchTags", SqlDbType.VarChar).Value = string.Join(",", (from f in fileDetails.Tags select f.Name).ToArray());
+                    sqlCommand.Parameters.Add("@Published", SqlDbType.Bit).Value = fileDetails.PublishFlag;
+                    sqlCommand.Parameters.Add("@PracticeOnlyFlag", SqlDbType.Bit).Value = fileDetails.PracticeOnly;
+                    sqlCommand.Parameters.Add("@CreateAlertFlag", SqlDbType.Bit).Value = fileDetails.CreateAlert;
+
+                    await sqlConnection.OpenAsync();
+
+                    //Execute Stored Procedure
+                    if ((bool)sqlCommand.ExecuteScalar() == true)
+                    {
+                        return await GetFileDetails(userId, fileDetails.Id);
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+        }
+        public async Task<FileDetails> AddFileDetails(int userId, FileDetails fileDetails)
+        {
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spAddFile", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@Name", SqlDbType.VarChar).Value = fileDetails.Name;
+                    sqlCommand.Parameters.Add("@ResourceTypeId", SqlDbType.Int).Value = fileDetails.ResourceTypeId;
+                    sqlCommand.Parameters.Add("@InitiativeId", SqlDbType.Int).Value = fileDetails.InitiativeId;
+                    sqlCommand.Parameters.Add("@Description", SqlDbType.VarChar).Value = fileDetails.Description;
+                    sqlCommand.Parameters.Add("@Format", SqlDbType.VarChar).Value = fileDetails.Format;
+                    sqlCommand.Parameters.Add("@FileURL", SqlDbType.VarChar).Value = fileDetails.FileURL;
+                    sqlCommand.Parameters.Add("@FileSize", SqlDbType.VarChar).Value = fileDetails.FileSize;
+                    sqlCommand.Parameters.Add("@WatchFlag", SqlDbType.Bit).Value = fileDetails.WatchFlag;
+                    sqlCommand.Parameters.Add("@Author", SqlDbType.VarChar).Value = fileDetails.Author;
+                    sqlCommand.Parameters.Add("@SearchTags", SqlDbType.VarChar).Value = string.Join(",", (from f in fileDetails.Tags select f.Name).ToArray());
+                    sqlCommand.Parameters.Add("@Published", SqlDbType.Bit).Value = fileDetails.PublishFlag;
+                    sqlCommand.Parameters.Add("@PracticeOnlyFlag", SqlDbType.Bit).Value = fileDetails.PracticeOnly;
+                    sqlCommand.Parameters.Add("@CreateAlertFlag", SqlDbType.Bit).Value = fileDetails.CreateAlert;
+
+                    await sqlConnection.OpenAsync();
+
+                    //Execute Stored Procedure
+                    int? fileId = (int)sqlCommand.ExecuteScalar();
+                    if (fileId.HasValue && fileId > 0)
+                    {
+                        return await GetFileDetails(userId, fileId.Value);
+                    }
+                    else 
+                    { 
+                        return null; 
+                    }
+
+                }
+            }
         }
 
         public async Task<List<FileTag>> GetFileTagsAll()

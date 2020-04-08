@@ -7,6 +7,9 @@ namespace org.cchmc.pho.core.Interfaces
     public interface IFiles
     {
         Task<List<File>> ListFiles(int userId, int? resourceTypeId, int? initiativeId, string tag, bool? watch, string name);
+        Task<FileDetails> GetFileDetails(int userId, int fileId);
+        Task<FileDetails> UpdateFileDetails(int userId, FileDetails fileDetails);
+        Task<FileDetails> AddFileDetails(int userId, FileDetails fileDetails);
         Task<List<FileTag>> GetFileTagsAll();
         Task<List<Resource>> GetResourceAll();
         Task<List<Initiative>> GetInitiativeAll();
