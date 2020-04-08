@@ -202,6 +202,7 @@
                                             <mat-error *ngIf="StaffDetailsForm.get('npi').errors.required">
                                                 NPI is required
                                             </mat-error>
+                                            <mat-error *ngIf="checkError('npi', 'pattern')"> NPI Must be 10 Digits and Cannot Start with 0.</mat-error>
                                         </ng-container>
                                     </mat-form-field>
                                 </div>

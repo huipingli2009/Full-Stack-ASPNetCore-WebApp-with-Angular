@@ -55,10 +55,10 @@
                         <ng-container formArrayName="ProviderWorkbookArray">
                             <div fxLayout="row wrap" fxLayoutGap="64px">
                                 <div fxLayout="column"
-                                    *ngFor="let provider of ProviderWorkbookArray.controls;index as i" fxFlex="18"
+                                    *ngFor="let provider of ProviderWorkbookArray.controls;index as i"
                                     class="workbook-item">
                                     <ng-container [formGroupName]="i">
-                                        <div fxLayout="row">
+                                        <div fxLayout="row" fxFill>
                                             <div fxLayout="column" fxFlex fxLayoutAlign="center start" fxFlex="100px">
                                                 <div class="title-col hidden-name">NAME</div>
                                                 <mat-form-field class="workbook-provider">
@@ -209,8 +209,8 @@
                                 <mat-select formControlName="patientInfo" (selectionChange)="onSelectedPatient($event)"
                                     required>
 
-                                    <input matInput [formControl]="searchPatient" autocomplete="off">
-                                    <mat-option></mat-option>
+                                    <input matInput [formControl]="searchPatient" autocomplete="off" class="workbook-select-search">
+                                    <mat-option class="workbook-select-search-hidden"></mat-option>
                                     <mat-option *ngFor="let patient of SearchPatients;trackBy: trackByForPatientSearch"
                                         [value]="patient"
                                         matTooltip="{{patient.firstName}} {{patient.lastName}} Date of Birth: {{patient.dob  | date:'shortDate'}} Phone: {{patient.phone}}">
@@ -315,9 +315,10 @@
                     <!-- Patient Name Column -->
                     <ng-container matColumnDef="addactionFollowUp">
                         <mat-header-cell *matHeaderCellDef>
-                            <mat-slide-toggle formControlName="action"
-                                [checked]="PatientForWorkbookForm.controls.action" name="action" ngDefaultControl>
-                            </mat-slide-toggle>
+                            <mat-button-toggle-group formControlName="action">
+                                <mat-button-toggle value="true">Yes</mat-button-toggle>
+                                <mat-button-toggle value="false">No</mat-button-toggle>
+                            </mat-button-toggle-group>
                             <ng-container
                                 *ngIf="(PatientForWorkbookForm.get('action').touched || PatientForWorkbookForm.get('action').dirty) && PatientForWorkbookForm.get('action').errors">
                                 <mat-error *ngIf="PatientForWorkbookForm.get('action').errors.required">
