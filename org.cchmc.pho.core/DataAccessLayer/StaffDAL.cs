@@ -99,6 +99,8 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                            Email = dr["EmailAddress"].ToString(),
                                            Phone = dr["Phone"].ToString(),
                                            StartDate = (dr["StartDate"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["StartDate"].ToString())),
+                                           DeletedDate = (dr["DeletedDate"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["DeletedDate"].ToString())),
+                                           DeletedFlag = (dr["DeletedFlag"] != DBNull.Value && Convert.ToBoolean(dr["DeletedFlag"])),
                                            PositionId = (dr["StaffPositionId"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["StaffPositionId"].ToString())),
                                            CredentialId = (dr["CredentialId"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["CredentialId"].ToString())),
                                            NPI = (dr["NPI"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["NPI"].ToString())),
@@ -143,6 +145,8 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                            Email = dr["EmailAddress"].ToString(),
                                            Phone = dr["Phone"].ToString(),
                                            StartDate = (dr["StartDate"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["StartDate"].ToString())),
+                                           DeletedDate = (dr["DeletedDate"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["DeletedDate"].ToString())),
+                                           DeletedFlag = (dr["DeletedFlag"] != DBNull.Value && Convert.ToBoolean(dr["DeletedFlag"])),
                                            PositionId = (dr["StaffPositionId"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["StaffPositionId"].ToString())), 
                                            CredentialId = (dr["CredentialId"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["CredentialId"].ToString())), 
                                            NPI = (dr["NPI"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["NPI"].ToString())),
@@ -177,6 +181,8 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@EmailAddress", SqlDbType.VarChar).Value = staffDetail.Email;
                     sqlCommand.Parameters.Add("@Phone", SqlDbType.VarChar).Value = staffDetail.Phone;
                     sqlCommand.Parameters.Add("@StartDate", SqlDbType.Date).Value = staffDetail.StartDate;
+                    sqlCommand.Parameters.Add("@DeletedDate", SqlDbType.Date).Value = staffDetail.DeletedDate;
+                    sqlCommand.Parameters.Add("@DeletedFlag", SqlDbType.Bit).Value = staffDetail.DeletedFlag;
                     sqlCommand.Parameters.Add("@StaffPositionId", SqlDbType.Int).Value = (!staffDetail.PositionId.HasValue ? (int?)null : staffDetail.PositionId.Value);
                     sqlCommand.Parameters.Add("@CredentialId", SqlDbType.Int).Value = (!staffDetail.CredentialId.HasValue ? (int?)null : staffDetail.CredentialId.Value);
                     sqlCommand.Parameters.Add("@NPI", SqlDbType.Int).Value = (!staffDetail.NPI.HasValue ? (int?)null : staffDetail.NPI.Value);
