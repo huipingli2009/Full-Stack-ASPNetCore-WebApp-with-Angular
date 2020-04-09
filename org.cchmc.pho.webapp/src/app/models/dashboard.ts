@@ -6,6 +6,7 @@ export class Alerts {
     url: string;
     linkText: string;
     definition: string;
+    target: string;
 }
 
 export interface AlertAction {

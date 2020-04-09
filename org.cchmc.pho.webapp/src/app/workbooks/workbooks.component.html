@@ -51,22 +51,74 @@
                     <div fxLayout="row" class="workbook-detail-heading">
                         Patients with a Completed PHQ screen vs. patients seen by doctor:
                     </div>
+                    <div fxLayout="row wrap" fxLayoutGap="64px">
+                        <div fxLayout="column" class="workbook-item">
+                                <div fxLayout="row">
+                                    <div fxLayout="column" fxFlex fxLayoutAlign="center start" fxFlex="100px">
+                                        <div class="title-col hidden-name">NAME</div>
+                                    </div>
+                                    <div fxLayout="column" fxFlex="60.5px" class="workbook-inputs-col">
+                                        <div class="title-col">PHQS</div>
+                                    </div>
+                                    <div fxLayout="column" fxFlex="60.5px">
+                                        <div class="title-col">TOTAL</div>
+                                    </div>
+                                </div>
+                        </div>
+                        <div fxLayout="column" class="workbook-item wokbook-col-title-2">
+                            <div fxLayout="row">
+                                <div fxLayout="column" fxFlex fxLayoutAlign="center start" fxFlex="100px">
+                                    <div class="title-col hidden-name">NAME</div>
+                                </div>
+                                <div fxLayout="column" fxFlex="60.5px" class="workbook-inputs-col">
+                                    <div class="title-col">PHQS</div>
+                                </div>
+                                <div fxLayout="column" fxFlex="60.5px">
+                                    <div class="title-col">TOTAL</div>
+                                </div>
+                            </div>
+                    </div>
+                    <div fxLayout="column" class="workbook-item wokbook-col-title-3">
+                        <div fxLayout="row">
+                            <div fxLayout="column" fxFlex fxLayoutAlign="center start" fxFlex="100px">
+                                <div class="title-col hidden-name">NAME</div>
+                            </div>
+                            <div fxLayout="column" fxFlex="60.5px" class="workbook-inputs-col">
+                                <div class="title-col">PHQS</div>
+                            </div>
+                            <div fxLayout="column" fxFlex="60.5px">
+                                <div class="title-col">TOTAL</div>
+                            </div>
+                        </div>
+                </div>
+                <div fxLayout="column" class="workbook-item wokbook-col-title-4">
+                    <div fxLayout="row">
+                        <div fxLayout="column" fxFlex fxLayoutAlign="center start" fxFlex="100px">
+                            <div class="title-col hidden-name">NAME</div>
+                        </div>
+                        <div fxLayout="column" fxFlex="60.5px" class="workbook-inputs-col">
+                            <div class="title-col">PHQS</div>
+                        </div>
+                        <div fxLayout="column" fxFlex="60.5px">
+                            <div class="title-col">TOTAL</div>
+                        </div>
+                    </div>
+            </div>
+                    </div>
                     <div fxLayout="row">
                         <ng-container formArrayName="ProviderWorkbookArray">
                             <div fxLayout="row wrap" fxLayoutGap="64px">
                                 <div fxLayout="column"
-                                    *ngFor="let provider of ProviderWorkbookArray.controls;index as i"
-                                    class="workbook-item">
+                                    *ngFor="let provider of ProviderWorkbookArray.controls; index as i"
+                                    class="workbook-item workbook-patient-item">
                                     <ng-container [formGroupName]="i">
                                         <div fxLayout="row" fxFill>
                                             <div fxLayout="column" fxFlex fxLayoutAlign="center start" fxFlex="100px">
-                                                <div class="title-col hidden-name">NAME</div>
                                                 <mat-form-field class="workbook-provider">
                                                     <input matInput formControlName="provider" readonly>
                                                 </mat-form-field>
                                             </div>
                                             <div fxLayout="column" fxFlex="60.5px" class="workbook-inputs-col">
-                                                <div class="title-col">PHQS</div>
                                                 <mat-form-field class="workbook-input">
                                                     <input matInput (change)="onProviderWorkbookChange(i)"
                                                         formControlName="phqs">
@@ -74,7 +126,6 @@
                                                 </mat-form-field>
                                             </div>
                                             <div fxLayout="column" fxFlex="60.5px">
-                                                <div class="title-col">TOTAL</div>
                                                 <mat-form-field class="workbook-input">
                                                     <input matInput (change)="onProviderWorkbookChange(i)"
                                                         formControlName="total">

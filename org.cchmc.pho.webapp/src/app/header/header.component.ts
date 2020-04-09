@@ -95,10 +95,20 @@ export class HeaderComponent {
     this.alerts = [];
     this.rest.getAlerts().subscribe((data) => {
       this.alerts = data;
+      this.logger.log(this.alerts, 'ALERTS');
       if (this.alerts.length > 0) {
         this.alerts.forEach(alert => {
-          const toastrMessage = `<i class="fas fa-exclamation-triangle alert-icon" title="${alert.definition}"></i>
-          ${alert.message}<a class="alert-link" href="${alert.url}" target="_blank">${alert.linkText}»</a>`;
+          let toastrMessage = `<i class="fas fa-exclamation-triangle alert-icon" title="${alert.definition}"></i>
+          ${alert.message}<a class="alert-link" href="${alert.url}" target="${alert.target}">${alert.linkText}»</a>`;
+          if (alert.target === '') {
+            toastrMessage = `<i class="fas fa-exclamation-triangle alert-icon" title="${alert.definition}"></i>
+          ${alert.message}<a class="alert-link" href="${alert.url}">${alert.linkText}»</a>`;
+          this.logger.log('Blank Target');
+          }
+          if (alert.url === '') {
+            toastrMessage = `<i class="fas fa-exclamation-triangle alert-icon" title="${alert.definition}"></i>
+          ${alert.message}`;
+          }
 
 
           const activeToastr = this.toastr.success(toastrMessage, alert.alertScheduleId.toString(), {
