@@ -13,3 +13,17 @@ export interface FilesList {
     ];
     description: string;
 }
+
+export interface FileTags {
+    name: string;
+}
+
+export interface FileResources {
+    id: number;
+    name: string;
+}
+
+export interface FileInitiatives {
+    id: number;
+    name: string;
+}

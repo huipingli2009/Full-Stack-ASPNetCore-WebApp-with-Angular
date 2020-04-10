@@ -2150,3 +2150,20 @@ button.toast-close-button {
     font-weight: bold;
   }
 }
+
+/* FILES ===============================================================*/
+#files {
+  td {
+    height: 57px;
+  }
+  .mat-column-name {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    -webkit-box-flex: 0 !important;
+    flex: 0 0 23% !important;
+    width: 23% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+  }
+}

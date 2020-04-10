@@ -16,8 +16,12 @@ export class FilesComponent implements OnInit {
 
   fileList: FileList[];
   watchFlag: string;
+  resources: string;
+  resourcesList: any[] = [];
+  initiativesList: any[] = [];
+  tagList: any[] = [];
 
-  displayedColumns: string[] = ['name', 'dateCreated', 'lastViewed', 'watchFlag'
+  displayedColumns: string[] = ['icon', 'name', 'dateCreated', 'lastViewed', 'watchFlag'
   , 'fileType', 'actions', 'tags'];
   dataSource: MatTableDataSource<FileList>;
 
@@ -30,6 +34,7 @@ export class FilesComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllFiles();
+    this.getResourceTypes();
   }
 
   getAllFiles() {
@@ -40,6 +45,23 @@ export class FilesComponent implements OnInit {
       this.dataSource.sort = this.sort;
       this.logger.log(this.fileList, 'FILES');
     })
+  }
+
+  updateWatchlistStatus(id, index) {
+    // this.rest.updateWatchlistStatus(id).subscribe((data) => {
+    // });
+    this.logger.log(id, index);
+  }
+
+  /* Gets / Sorts for Filtering */
+  getResourceTypes() {
+    this.rest.getFileResources().pipe(take(1)).subscribe((data) => {
+      this.resourcesList = data;
+    })
+  }
+
+  resourceTypeSelection() {
+    this.logger.log('Resource Selected');
   }
 
 }

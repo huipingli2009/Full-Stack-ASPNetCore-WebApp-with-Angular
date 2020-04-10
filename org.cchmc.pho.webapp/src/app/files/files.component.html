@@ -1,9 +1,28 @@
 <div class="content-main">
     <div fxLayout="row" class="patients-header">
         <div fxLayout="column" class="header-filter">
-        </div>
+            <mat-form-field>
+              <mat-label>Resource Type</mat-label>
+              <mat-select [(ngModel)]="resources" (selectionChange)="resourceTypeSelection()">
+                <mat-option *ngFor="let type of resourcesList" [value]="type.id">
+                  {{type.name}}
+                </mat-option>
+                <mat-option>All</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
     </div>
         <table mat-table [dataSource]="dataSource" matSort id="files">
+
+            <!-- Icon Column -->
+            <ng-container matColumnDef="icon">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let row">
+                    <i class="material-icons text-secondary">
+                        description
+                      </i>
+                </td>
+            </ng-container>
 
             <!-- File Name Column -->
             <ng-container matColumnDef="name">
@@ -29,7 +48,14 @@
                     <!-- <mat-checkbox class="table-header-checkbox" [(ngModel)]="watchFlag" (change)="isOnWatchlist($event)">
                     </mat-checkbox> -->
                  </th>
-                <td mat-cell *matCellDef="let row"> {{row.watchFlag}} </td>
+                <td mat-cell *matCellDef="let row; let i = renderIndex;"
+                (click)="updateWatchlistStatus(row, i)" (click)="row.watchFlag = !row.watchFlag">
+                <button mat-icon-button>
+                    <i class="material-icons watchlist-icon" [ngClass]="row.watchFlag ? 'on-watchlist' : 'off-watchlist'">
+                      remove_red_eye
+                    </i>
+                  </button>
+            </td>
             </ng-container>
 
             <!-- File Type Column -->
@@ -40,14 +66,35 @@
 
             <!-- Actions Column -->
             <ng-container matColumnDef="actions">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
-                <td mat-cell *matCellDef="let row"> {{row.actions}} </td>
+                <th mat-header-cell *matHeaderCellDef> Actions </th>
+                <td mat-cell *matCellDef="let row">
+                    <button mat-icon-button>
+                        <i class="material-icons text-secondary">
+                          get_app
+                        </i>
+                      </button>    
+                      <button mat-icon-button>
+                        <i class="material-icons text-warn">
+                          delete
+                        </i>
+                      </button>    
+                </td>
             </ng-container>
 
             <!-- Tags Column -->
             <ng-container matColumnDef="tags">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Tags </th>
-                <td mat-cell *matCellDef="let row"> {{row.tags}} </td>
+                <th mat-header-cell *matHeaderCellDef> Tags </th>
+                <td mat-cell *matCellDef="let row"> 
+                    <div fxLayout="row wrap" fxLayoutGap="14px">
+                        <div *ngFor="let item of row.tags" class="condition-container" fxLayout="column" fxflex="33%">
+                          <div class="condition-chip"
+                                [style.margin-bottom]="row.tags?.length > 2 ? '5px' : '0px'"
+                                [style.margin-top]="row.tags?.length > 2 ? '5px' : '0px'">
+                                {{item.name}}
+                            </div>
+                        </div>
+                      </div>
+                     </td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
