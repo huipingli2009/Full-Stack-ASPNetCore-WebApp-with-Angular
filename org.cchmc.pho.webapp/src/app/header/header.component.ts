@@ -103,7 +103,6 @@ export class HeaderComponent {
           if (alert.target === '') {
             toastrMessage = `<i class="fas fa-exclamation-triangle alert-icon" title="${alert.definition}"></i>
           ${alert.message}<a class="alert-link" href="${alert.url}">${alert.linkText}»</a>`;
-          this.logger.log('Blank Target');
           }
           if (alert.url === '') {
             toastrMessage = `<i class="fas fa-exclamation-triangle alert-icon" title="${alert.definition}"></i>
