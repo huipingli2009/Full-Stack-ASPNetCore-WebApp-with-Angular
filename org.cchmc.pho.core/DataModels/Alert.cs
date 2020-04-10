@@ -9,5 +9,8 @@
         public string LinkText { get; set; }
         public string Definition { get; set; }
         public string Target { get; set; }
+        public string FilterType { get; set; }
+        public string FilterName { get; set; }
+        public int ? FilterValue { get; set; }        
     }
 }

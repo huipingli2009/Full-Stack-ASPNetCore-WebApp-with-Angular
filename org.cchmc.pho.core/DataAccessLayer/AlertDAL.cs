@@ -22,8 +22,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         public AlertDAL(IOptions<ConnectionStrings> options, ILogger<AlertDAL> logger)
         {
             _connectionStrings = options.Value;
-        }
-
+        }        
       
         public async Task<List<Alert>> ListActiveAlerts(int userId)
         {
@@ -50,11 +49,13 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                         Url = dr["URL"].ToString(),
                                         LinkText = dr["URL_Label"].ToString(),
                                         Definition = dr["AlertDefinition"].ToString(),
-                                        Target = dr["Target"].ToString()
+                                        Target = dr["Target"].ToString(),
+                                        FilterType = dr["FilterType"].ToString(),
+                                        FilterName = dr["FilterName"].ToString(),
+                                        FilterValue = (dr["FilterValue"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FilterValue"].ToString()))
                                     }
 
-                            ).ToList();
-                            
+                                  ).ToList();                            
                     }
                    
                     return alerts;
