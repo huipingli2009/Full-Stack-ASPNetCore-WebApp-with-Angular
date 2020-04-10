@@ -426,6 +426,16 @@ export class RestService {
     );
   }
 
+  /* Files Content =======================================================*/
+  /* Get all files */
+  getAllFiles(): Observable<any> {
+    return this.http.get<any>(`${API_URL}/api/Files/`).pipe(
+      map((data: FileList[]) => {
+        return data;
+      })
+    );
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
 
