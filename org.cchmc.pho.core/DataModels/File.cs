@@ -11,8 +11,9 @@ namespace org.cchmc.pho.core.DataModels
         public DateTime? DateCreated { get; set; }
         public DateTime? LastViewed { get; set; }
         public bool WatchFlag { get; set; }
-        public string FileSize { get; set; }
         public string FileURL { get; set; }
+        public int FileTypeId { get; set; }
+        public string FileType { get; set; }
         public List<FileTag> Tags { get; set; }
         public string Description { get; set; }
     }
