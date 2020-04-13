@@ -120,16 +120,6 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 Locations = new List<Location>()
                             };
 
-                            //if (!string.IsNullOrWhiteSpace(dr["LocationID"].ToString()))
-                            //{
-                            //    foreach (int locationId in dr["LocationID"].ToString().Split(',').Select(p => int.Parse(p)))
-                            //    {
-                            //        if (locations.Any(l => l.Id == locationId))
-                            //            staffDetail.Locations.Add(locations.First(p => p.Id == locationId));
-                            //        else
-                            //            _logger.LogError("An unmapped location id was returned by the database ");
-                            //    }
-                            //}
                         }
                         return staffDetail;
                     }
