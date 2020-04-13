@@ -1,5 +1,7 @@
 ﻿using System;
 
+using System.Collections.Generic;
+
 namespace org.cchmc.pho.core.DataModels
 {
     public class StaffDetail
@@ -10,7 +12,7 @@ namespace org.cchmc.pho.core.DataModels
         public string Email { get; set; }
         public string Phone { get; set; }
         public DateTime? StartDate { get; set; }
-        public DateTime? DeletedDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public bool? DeletedFlag { get; set; }
         public int? PositionId { get; set; }
         public int? CredentialId { get; set; }
@@ -23,5 +25,6 @@ namespace org.cchmc.pho.core.DataModels
         public bool IsPHOBoard { get; set; }
         public bool IsOVPCABoard { get; set; }
         public bool IsRVPIBoard { get; set; }
+        public List<Location> Locations { get; set; }
     }
 }

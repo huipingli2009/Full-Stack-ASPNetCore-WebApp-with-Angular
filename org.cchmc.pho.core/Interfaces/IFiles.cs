@@ -10,6 +10,8 @@ namespace org.cchmc.pho.core.Interfaces
         Task<FileDetails> GetFileDetails(int userId, int fileId);
         Task<FileDetails> UpdateFileDetails(int userId, FileDetails fileDetails);
         Task<FileDetails> AddFileDetails(int userId, FileDetails fileDetails);
+        Task<bool> UpdateFileWatch(int userId, int resourceId);
+        Task<bool> RemoveFile(int userId, int resourceId);
         Task<List<FileTag>> GetFileTagsAll();
         Task<List<Resource>> GetResourceAll();
         Task<List<Initiative>> GetInitiativeAll();
