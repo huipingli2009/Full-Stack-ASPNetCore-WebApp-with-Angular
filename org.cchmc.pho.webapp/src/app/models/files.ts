@@ -4,8 +4,9 @@ export interface FilesList {
     dateCreated: Date;
     lastViewed: Date;
     watchFlag: boolean;
-    fileSize: string;
     fileURL: string;
+    fileTypeId: number;
+    fileType: string;
     tags: [
         {
             name: string;

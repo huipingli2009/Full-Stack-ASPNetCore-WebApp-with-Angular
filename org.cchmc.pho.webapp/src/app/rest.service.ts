@@ -436,6 +436,27 @@ export class RestService {
       })
     );
   }
+  /* FInd Files by Filter*/
+  findFiles(
+    resourceTypeId = 0, initiativeId = 0, tag = '', watch = false,
+    name = ''): Observable<FileList[]> {
+
+    return this.http.get(`${API_URL}/api/Files`, {
+      params: new HttpParams()
+        .set('resourceTypeId', resourceTypeId.toString())
+        .set('initiativeId', initiativeId.toString())
+        .set('tag', tag)
+        .set('watch', watch.toString())
+        .set('name', name)
+    }).pipe(
+      map(res => {
+        var filteredFiles: FileList[];
+
+        filteredFiles = res['results'];
+        return filteredFiles;
+      })
+    );
+  }
   /* Get File Details */
 
   /*Get File Tags*/

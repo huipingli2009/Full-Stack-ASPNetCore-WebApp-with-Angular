@@ -3,7 +3,7 @@
         <div fxLayout="column" class="header-filter">
             <mat-form-field>
               <mat-label>Resource Type</mat-label>
-              <mat-select [(ngModel)]="resources" (selectionChange)="resourceTypeSelection()">
+              <mat-select [(ngModel)]="resources" (selectionChange)="resourceTypeSelection($event)">
                 <mat-option *ngFor="let type of resourcesList" [value]="type.id">
                   {{type.name}}
                 </mat-option>

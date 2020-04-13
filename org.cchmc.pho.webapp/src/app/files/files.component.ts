@@ -21,6 +21,13 @@ export class FilesComponent implements OnInit {
   initiativesList: any[] = [];
   tagList: any[] = [];
 
+  // Filters
+  resourceTypeIdFilter: number;
+  initiativeIdFilter: number;
+  tagFilter: string;
+  watchFilter: boolean;
+  nameFilter: string;
+
   displayedColumns: string[] = ['icon', 'name', 'dateCreated', 'lastViewed', 'watchFlag'
   , 'fileType', 'actions', 'tags'];
   dataSource: MatTableDataSource<FileList>;
@@ -54,14 +61,27 @@ export class FilesComponent implements OnInit {
   }
 
   /* Gets / Sorts for Filtering */
+  findFilesFilter() {
+    this.rest.findFiles(this.resourceTypeIdFilter, this.initiativeIdFilter, this.tagFilter,
+      this.watchFilter, this.nameFilter).pipe(take(1)).subscribe((res) => {
+        this.dataSource = new MatTableDataSource(res);
+        this.logger.log(res, 'FIND FILTER FILES');
+      })
+  }
   getResourceTypes() {
     this.rest.getFileResources().pipe(take(1)).subscribe((data) => {
       this.resourcesList = data;
     })
   }
 
-  resourceTypeSelection() {
-    this.logger.log('Resource Selected');
+  resourceTypeSelection(event) {
+    this.resourceTypeIdFilter = event.value;
+    if (this.resourceTypeIdFilter === undefined) {
+      this.getAllFiles();
+    } else {
+      this.logger.log('type', this.resourceTypeIdFilter);
+    this.findFilesFilter();
+    }
   }
 
 }
