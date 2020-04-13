@@ -16,9 +16,11 @@ namespace org.cchmc.pho.core.DataAccessLayer
     public class StaffDAL: IStaff
     {
         private readonly ConnectionStrings _connectionStrings;
+        private readonly ILogger<StaffDAL> _logger;
         public StaffDAL(IOptions<ConnectionStrings> options, ILogger<StaffDAL> logger)
         {
             _connectionStrings = options.Value;
+            _logger = logger;            
         }
 
         public async Task<List<Staff>> ListStaff(int userId)
@@ -74,11 +76,11 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
-
+        //NOTE: This method exists for Chris's code to doublecheck something in the UserController. It simply doesn't require a userId, that's the only difference. It is not consumed by the StaffController.
         public async Task<StaffDetail> GetStaffDetailsById(int staffId)
         {
             DataTable dataTable = new DataTable();
-            StaffDetail staffDetails;
+            StaffDetail staffDetail = null;
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spGetStaffDetailUsingStaffID", sqlConnection))
@@ -90,32 +92,47 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
                         da.Fill(dataTable);
-                        staffDetails = (from DataRow dr in dataTable.Rows
-                                       select new StaffDetail()
-                                       {
-                                           Id = (dr["StaffID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StaffID"].ToString())),
-                                           FirstName = dr["FirstName"].ToString(),
-                                           LastName = dr["LastName"].ToString(),
-                                           Email = dr["EmailAddress"].ToString(),
-                                           Phone = dr["Phone"].ToString(),
-                                           StartDate = (dr["StartDate"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["StartDate"].ToString())),
-                                           DeletedDate = (dr["DeletedDate"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["DeletedDate"].ToString())),
-                                           DeletedFlag = (dr["DeletedFlag"] != DBNull.Value && Convert.ToBoolean(dr["DeletedFlag"])),
-                                           PositionId = (dr["StaffPositionId"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["StaffPositionId"].ToString())),
-                                           CredentialId = (dr["CredentialId"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["CredentialId"].ToString())),
-                                           NPI = (dr["NPI"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["NPI"].ToString())),
-                                           IsLeadPhysician = (dr["LeadPhysician"] != DBNull.Value && Convert.ToBoolean(dr["LeadPhysician"])),
-                                           IsQITeam = (dr["QITeam"] != DBNull.Value && Convert.ToBoolean(dr["QITeam"])),
-                                           IsPracticeManager = (dr["PracticeManager"] != DBNull.Value && Convert.ToBoolean(dr["PracticeManager"])),
-                                           IsInterventionContact = (dr["InterventionContact"] != DBNull.Value && Convert.ToBoolean(dr["InterventionContact"])),
-                                           IsQPLLeader = (dr["QPLLeader"] != DBNull.Value && Convert.ToBoolean(dr["QPLLeader"])),
-                                           IsPHOBoard = (dr["PHOBoard"] != DBNull.Value && Convert.ToBoolean(dr["PHOBoard"])),
-                                           IsOVPCABoard = (dr["OVPCABoard"] != DBNull.Value && Convert.ToBoolean(dr["OVPCABoard"])),
-                                           IsRVPIBoard = (dr["RVPIBoard"] != DBNull.Value && Convert.ToBoolean(dr["RVPIBoard"]))
-                                       }
-                        ).SingleOrDefault();
+                        //List<Location> locations = await ListLocations(userId);
+
+                        foreach (DataRow dr in dataTable.Rows)
+                        {
+                            staffDetail = new StaffDetail()
+                            {
+                                Id = (dr["StaffID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StaffID"].ToString())),
+                                FirstName = dr["FirstName"].ToString(),
+                                LastName = dr["LastName"].ToString(),
+                                Email = dr["EmailAddress"].ToString(),
+                                Phone = dr["Phone"].ToString(),
+                                StartDate = (dr["StartDate"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["StartDate"].ToString())),
+                                EndDate = (dr["EndDate"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["EndDate"].ToString())),
+                                DeletedFlag = (dr["DeletedFlag"] != DBNull.Value && Convert.ToBoolean(dr["DeletedFlag"])),
+                                PositionId = (dr["StaffPositionId"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["StaffPositionId"].ToString())),
+                                CredentialId = (dr["CredentialId"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["CredentialId"].ToString())),
+                                NPI = (dr["NPI"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["NPI"].ToString())),
+                                IsLeadPhysician = (dr["LeadPhysician"] != DBNull.Value && Convert.ToBoolean(dr["LeadPhysician"])),
+                                IsQITeam = (dr["QITeam"] != DBNull.Value && Convert.ToBoolean(dr["QITeam"])),
+                                IsPracticeManager = (dr["PracticeManager"] != DBNull.Value && Convert.ToBoolean(dr["PracticeManager"])),
+                                IsInterventionContact = (dr["InterventionContact"] != DBNull.Value && Convert.ToBoolean(dr["InterventionContact"])),
+                                IsQPLLeader = (dr["QPLLeader"] != DBNull.Value && Convert.ToBoolean(dr["QPLLeader"])),
+                                IsPHOBoard = (dr["PHOBoard"] != DBNull.Value && Convert.ToBoolean(dr["PHOBoard"])),
+                                IsOVPCABoard = (dr["OVPCABoard"] != DBNull.Value && Convert.ToBoolean(dr["OVPCABoard"])),
+                                IsRVPIBoard = (dr["RVPIBoard"] != DBNull.Value && Convert.ToBoolean(dr["RVPIBoard"])),
+                                Locations = new List<Location>()
+                            };
+
+                            //if (!string.IsNullOrWhiteSpace(dr["LocationID"].ToString()))
+                            //{
+                            //    foreach (int locationId in dr["LocationID"].ToString().Split(',').Select(p => int.Parse(p)))
+                            //    {
+                            //        if (locations.Any(l => l.Id == locationId))
+                            //            staffDetail.Locations.Add(locations.First(p => p.Id == locationId));
+                            //        else
+                            //            _logger.LogError("An unmapped location id was returned by the database ");
+                            //    }
+                            //}
+                        }
+                        return staffDetail;
                     }
-                    return staffDetails;
                 }
             }
         }
@@ -123,7 +140,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         public async Task<StaffDetail> GetStaffDetails(int userId, int staffId)
         {
             DataTable dataTable = new DataTable();
-            StaffDetail staffDetail;
+            StaffDetail staffDetail = null;
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spGetStaffDetail", sqlConnection))
@@ -136,36 +153,51 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
                         da.Fill(dataTable);
-                        staffDetail = (from DataRow dr in dataTable.Rows
-                                       select new StaffDetail()
-                                       {
-                                           Id = (dr["StaffID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StaffID"].ToString())),
-                                           FirstName = dr["FirstName"].ToString(),
-                                           LastName = dr["LastName"].ToString(),
-                                           Email = dr["EmailAddress"].ToString(),
-                                           Phone = dr["Phone"].ToString(),
-                                           StartDate = (dr["StartDate"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["StartDate"].ToString())),
-                                           DeletedDate = (dr["DeletedDate"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["DeletedDate"].ToString())),
-                                           DeletedFlag = (dr["DeletedFlag"] != DBNull.Value && Convert.ToBoolean(dr["DeletedFlag"])),
-                                           PositionId = (dr["StaffPositionId"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["StaffPositionId"].ToString())), 
-                                           CredentialId = (dr["CredentialId"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["CredentialId"].ToString())), 
-                                           NPI = (dr["NPI"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["NPI"].ToString())),
-                                           IsLeadPhysician = (dr["LeadPhysician"] != DBNull.Value && Convert.ToBoolean(dr["LeadPhysician"])),
-                                           IsQITeam = (dr["QITeam"] != DBNull.Value && Convert.ToBoolean(dr["QITeam"])),
-                                           IsPracticeManager = (dr["PracticeManager"] != DBNull.Value && Convert.ToBoolean(dr["PracticeManager"])),
-                                           IsInterventionContact = (dr["InterventionContact"] != DBNull.Value && Convert.ToBoolean(dr["InterventionContact"])),
-                                           IsQPLLeader = (dr["QPLLeader"] != DBNull.Value && Convert.ToBoolean(dr["QPLLeader"])),
-                                           IsPHOBoard = (dr["PHOBoard"] != DBNull.Value && Convert.ToBoolean(dr["PHOBoard"])),
-                                           IsOVPCABoard = (dr["OVPCABoard"] != DBNull.Value && Convert.ToBoolean(dr["OVPCABoard"])),
-                                           IsRVPIBoard = (dr["RVPIBoard"] != DBNull.Value && Convert.ToBoolean(dr["RVPIBoard"])),
-                                       }
-                        ).SingleOrDefault();
+                        List<Location> locations = await ListLocations(userId);
+
+                        foreach (DataRow dr in dataTable.Rows)
+                        {
+                            staffDetail = new StaffDetail()
+                            {
+                                Id = (dr["StaffID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StaffID"].ToString())),
+                                FirstName = dr["FirstName"].ToString(),
+                                LastName = dr["LastName"].ToString(),
+                                Email = dr["EmailAddress"].ToString(),
+                                Phone = dr["Phone"].ToString(),
+                                StartDate = (dr["StartDate"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["StartDate"].ToString())),
+                                EndDate = (dr["EndDate"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["EndDate"].ToString())),
+                                DeletedFlag = (dr["DeletedFlag"] != DBNull.Value && Convert.ToBoolean(dr["DeletedFlag"])),
+                                PositionId = (dr["StaffPositionId"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["StaffPositionId"].ToString())),
+                                CredentialId = (dr["CredentialId"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["CredentialId"].ToString())),
+                                NPI = (dr["NPI"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["NPI"].ToString())),
+                                IsLeadPhysician = (dr["LeadPhysician"] != DBNull.Value && Convert.ToBoolean(dr["LeadPhysician"])),
+                                IsQITeam = (dr["QITeam"] != DBNull.Value && Convert.ToBoolean(dr["QITeam"])),
+                                IsPracticeManager = (dr["PracticeManager"] != DBNull.Value && Convert.ToBoolean(dr["PracticeManager"])),
+                                IsInterventionContact = (dr["InterventionContact"] != DBNull.Value && Convert.ToBoolean(dr["InterventionContact"])),
+                                IsQPLLeader = (dr["QPLLeader"] != DBNull.Value && Convert.ToBoolean(dr["QPLLeader"])),
+                                IsPHOBoard = (dr["PHOBoard"] != DBNull.Value && Convert.ToBoolean(dr["PHOBoard"])),
+                                IsOVPCABoard = (dr["OVPCABoard"] != DBNull.Value && Convert.ToBoolean(dr["OVPCABoard"])),
+                                IsRVPIBoard = (dr["RVPIBoard"] != DBNull.Value && Convert.ToBoolean(dr["RVPIBoard"])),
+                                Locations = new List<Location>()
+                            };
+
+                            if (!string.IsNullOrWhiteSpace(dr["LocationID"].ToString()))
+                            {
+                                foreach (int locationId in dr["LocationID"].ToString().Split(',').Select(p => int.Parse(p)))
+                                {
+                                    if (locations.Any(l => l.Id == locationId))
+                                        staffDetail.Locations.Add(locations.First(p => p.Id == locationId));
+                                    else
+                                        _logger.LogError("An unmapped location id was returned by the database ");
+                                }
+                            }
+
+                        }
+                        return staffDetail;
                     }
-                    return staffDetail;
                 }
             }
         }
-
         public async Task<StaffDetail> UpdateStaffDetails(int userId, StaffDetail staffDetail)
         {
 
@@ -181,7 +213,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@EmailAddress", SqlDbType.VarChar).Value = staffDetail.Email;
                     sqlCommand.Parameters.Add("@Phone", SqlDbType.VarChar).Value = staffDetail.Phone;
                     sqlCommand.Parameters.Add("@StartDate", SqlDbType.Date).Value = staffDetail.StartDate;
-                    sqlCommand.Parameters.Add("@DeletedDate", SqlDbType.Date).Value = staffDetail.DeletedDate;
+                    sqlCommand.Parameters.Add("@EndDate", SqlDbType.Date).Value = staffDetail.EndDate;
                     sqlCommand.Parameters.Add("@DeletedFlag", SqlDbType.Bit).Value = staffDetail.DeletedFlag;
                     sqlCommand.Parameters.Add("@StaffPositionId", SqlDbType.Int).Value = (!staffDetail.PositionId.HasValue ? (int?)null : staffDetail.PositionId.Value);
                     sqlCommand.Parameters.Add("@CredentialId", SqlDbType.Int).Value = (!staffDetail.CredentialId.HasValue ? (int?)null : staffDetail.CredentialId.Value);
@@ -194,6 +226,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@PHOBoard", SqlDbType.Bit).Value = staffDetail.IsPHOBoard;
                     sqlCommand.Parameters.Add("@OVPCABoard", SqlDbType.Bit).Value = staffDetail.IsOVPCABoard;
                     sqlCommand.Parameters.Add("@RVPIBoard", SqlDbType.Bit).Value = staffDetail.IsRVPIBoard;
+                    sqlCommand.Parameters.Add("@LocationIds", SqlDbType.VarChar).Value = string.Join(",", (from l in staffDetail.Locations select l.Id).ToArray());
 
                     sqlConnection.Open();
 
@@ -314,6 +347,37 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 }
             }
             return providers;
+        }
+
+        public async Task<List<Location>> ListLocations(int userId)
+        {
+            DataTable dataTable = new DataTable();
+            List<Location> locations = new List<Location>();
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetLocationList", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+
+                    sqlConnection.Open();
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        foreach (DataRow dr in dataTable.Rows)
+                        {
+                            var record = new Location()
+                            {
+                                Id = (dr["Id"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Id"].ToString())),
+                                Name = dr["LocationName"].ToString()
+                            };
+                            locations.Add(record);
+                        }
+                    }
+                    return locations;
+                }
+            }
         }
 
         public bool IsStaffInSamePractice(int userId, int staffId)

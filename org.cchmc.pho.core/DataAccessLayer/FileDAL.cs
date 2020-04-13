@@ -54,8 +54,9 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 DateCreated = (dr["DateCreated"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["DateCreated"].ToString())),
                                 LastViewed = (dr["LastViewed"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LastViewed"].ToString())),
                                 WatchFlag = (dr["WatchFlag"] != DBNull.Value && Convert.ToBoolean(dr["WatchFlag"])),
-                                FileSize = dr["FileSize"].ToString(),
+                                FileTypeId = (dr["FileTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FileTypeID"].ToString())),
                                 FileURL = dr["FileURL"].ToString(),
+                                FileType = dr["FileType"].ToString(),
                                 Description = dr["Description"].ToString(),
                                 Tags = new List<FileTag>()
                             };
@@ -105,13 +106,13 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 Name = dr["Name"].ToString(),
                                 ResourceTypeId = (dr["ResourceTypeId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ResourceTypeId"].ToString())),
                                 InitiativeId = (dr["InitiativeId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["InitiativeId"].ToString())),
-                                Format = dr["Format"].ToString(),
+                                FileTypeId = (dr["FileTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FileTypeID"].ToString())),
                                 Author = dr["Author"].ToString(),
                                 DateCreated = (dr["DateCreated"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["DateCreated"].ToString())),
                                 LastViewed = (dr["LastViewed"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LastViewed"].ToString())),
                                 WatchFlag = (dr["WatchFlag"] != DBNull.Value && Convert.ToBoolean(dr["WatchFlag"])),
-                                FileSize = dr["FileSize"].ToString(),
                                 FileURL = dr["FileURL"].ToString(),
+                                FileType = dr["FileType"].ToString(),
                                 Description = dr["Description"].ToString(),
                                 PublishFlag = (dr["Published"] != DBNull.Value && Convert.ToBoolean(dr["Published"])),
                                 PracticeOnly = (dr["PracticeOnly"] != DBNull.Value && Convert.ToBoolean(dr["PracticeOnly"])),
@@ -153,9 +154,9 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@ResourceTypeId", SqlDbType.Int).Value = fileDetails.ResourceTypeId;
                     sqlCommand.Parameters.Add("@InitiativeId", SqlDbType.Int).Value = fileDetails.InitiativeId;
                     sqlCommand.Parameters.Add("@Description", SqlDbType.VarChar).Value = fileDetails.Description;
-                    sqlCommand.Parameters.Add("@Format", SqlDbType.VarChar).Value = fileDetails.Format;
+                    sqlCommand.Parameters.Add("@FileTypeID", SqlDbType.Int).Value = fileDetails.FileTypeId;
+                    sqlCommand.Parameters.Add("@FileType", SqlDbType.VarChar).Value = fileDetails.FileType;
                     sqlCommand.Parameters.Add("@FileURL", SqlDbType.VarChar).Value = fileDetails.FileURL;
-                    sqlCommand.Parameters.Add("@FileSize", SqlDbType.VarChar).Value = fileDetails.FileSize;
                     sqlCommand.Parameters.Add("@WatchFlag", SqlDbType.Bit).Value = fileDetails.WatchFlag;
                     sqlCommand.Parameters.Add("@Author", SqlDbType.VarChar).Value = fileDetails.Author;
                     sqlCommand.Parameters.Add("@SearchTags", SqlDbType.VarChar).Value = string.Join(",", (from f in fileDetails.Tags select f.Name).ToArray());
@@ -190,9 +191,8 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@ResourceTypeId", SqlDbType.Int).Value = fileDetails.ResourceTypeId;
                     sqlCommand.Parameters.Add("@InitiativeId", SqlDbType.Int).Value = fileDetails.InitiativeId;
                     sqlCommand.Parameters.Add("@Description", SqlDbType.VarChar).Value = fileDetails.Description;
-                    sqlCommand.Parameters.Add("@Format", SqlDbType.VarChar).Value = fileDetails.Format;
+                    sqlCommand.Parameters.Add("@FileTypeID", SqlDbType.Int).Value = fileDetails.FileTypeId;
                     sqlCommand.Parameters.Add("@FileURL", SqlDbType.VarChar).Value = fileDetails.FileURL;
-                    sqlCommand.Parameters.Add("@FileSize", SqlDbType.VarChar).Value = fileDetails.FileSize;
                     sqlCommand.Parameters.Add("@WatchFlag", SqlDbType.Bit).Value = fileDetails.WatchFlag;
                     sqlCommand.Parameters.Add("@Author", SqlDbType.VarChar).Value = fileDetails.Author;
                     sqlCommand.Parameters.Add("@SearchTags", SqlDbType.VarChar).Value = string.Join(",", (from f in fileDetails.Tags select f.Name).ToArray());
@@ -213,6 +213,43 @@ namespace org.cchmc.pho.core.DataAccessLayer
                         return null; 
                     }
 
+                }
+            }
+        }
+
+        public async Task<bool> UpdateFileWatch(int userId, int resourceId)
+        {
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spUpdateFileWatch", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@ResourceID", SqlDbType.Int).Value = resourceId;
+
+                    await sqlConnection.OpenAsync();
+
+                    //Execute Stored Procedure
+                    return (bool)sqlCommand.ExecuteScalar();
+                }
+            }
+        }
+        public async Task<bool> RemoveFile(int userId, int resourceId)
+        {
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spRemoveFile", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@ResourceID", SqlDbType.Int).Value = resourceId;
+
+                    await sqlConnection.OpenAsync();
+
+                    //Execute Stored Procedure
+                    return (bool)sqlCommand.ExecuteScalar();
                 }
             }
         }

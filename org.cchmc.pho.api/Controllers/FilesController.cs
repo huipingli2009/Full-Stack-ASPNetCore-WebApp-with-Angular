@@ -152,6 +152,63 @@ namespace org.cchmc.pho.api.Controllers
                 return StatusCode(500, "An error occurred");
             }
         }
+        
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [HttpDelete("{file}")]
+        [SwaggerResponse(200, type: typeof(FileDetailsViewModel))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> DeleteFile(string file)
+        {
+            if (!int.TryParse(resource, out var resourceId))
+                return BadRequest("resource is not a valid integer");
+
+            try
+            {
+                // route parameters are strings and need to be translated (and validated) to their proper data type
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+
+                // call the data layer to mark the action
+                var data = await _filesDAL.RemoveFile(currentUserId, resourceId);
+
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+        [AllowAnonymous]
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [HttpPut("watch/{file}")]
+        [SwaggerResponse(200, type: typeof(FileDetailsViewModel))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> UpdateFileWatchList(string file)
+        {
+            if (!int.TryParse(resource, out var resourceId))
+                return BadRequest("resource is not a valid integer");
+
+            try
+            {
+                // route parameters are strings and need to be translated (and validated) to their proper data type
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+
+                // call the data layer to mark the action
+                var data = await _filesDAL.UpdateFileWatch(currentUserId, resourceId);
+
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
 
 
         [HttpGet("tags")]
