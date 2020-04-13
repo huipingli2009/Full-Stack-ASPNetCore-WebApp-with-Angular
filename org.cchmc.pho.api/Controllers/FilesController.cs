@@ -160,8 +160,8 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> DeleteFile(string file)
         {
-            if (!int.TryParse(resource, out var resourceId))
-                return BadRequest("resource is not a valid integer");
+            if (!int.TryParse(file, out var fileId))
+                return BadRequest("file is not a valid integer");
 
             try
             {
@@ -169,7 +169,7 @@ namespace org.cchmc.pho.api.Controllers
                 int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
 
                 // call the data layer to mark the action
-                var data = await _filesDAL.RemoveFile(currentUserId, resourceId);
+                var data = await _filesDAL.RemoveFile(currentUserId, fileId);
 
                 return Ok(data);
             }
@@ -189,7 +189,7 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> UpdateFileWatchList(string file)
         {
-            if (!int.TryParse(resource, out var resourceId))
+            if (!int.TryParse(file, out var fileId))
                 return BadRequest("resource is not a valid integer");
 
             try
@@ -198,7 +198,7 @@ namespace org.cchmc.pho.api.Controllers
                 int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
 
                 // call the data layer to mark the action
-                var data = await _filesDAL.UpdateFileWatch(currentUserId, resourceId);
+                var data = await _filesDAL.UpdateFileWatch(currentUserId, fileId);
 
                 return Ok(data);
             }
