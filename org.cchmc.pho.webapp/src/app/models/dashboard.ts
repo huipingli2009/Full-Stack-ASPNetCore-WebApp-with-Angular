@@ -6,6 +6,10 @@ export class Alerts {
     url: string;
     linkText: string;
     definition: string;
+    target: string;
+    filterType: string;
+    filterName: string;
+    filterValue: number;
 }
 
 export interface AlertAction {
