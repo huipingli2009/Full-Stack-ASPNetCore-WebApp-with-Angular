@@ -369,6 +369,23 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 }
             }
         }
+        public async Task<bool> RemoveStaff(int userId, int staffId, DateTime endDate, bool? deletedFlag)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spRemoveStaff", sqlConnection))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@StaffID", SqlDbType.Int).Value = staffId;
+                    sqlCommand.Parameters.Add("@EndDate", SqlDbType.Date).Value = endDate;
+                    sqlCommand.Parameters.Add("@DeletedFlag", SqlDbType.Bit).Value = deletedFlag;
+                    sqlConnection.Open();
+
+                    return (bool)sqlCommand.ExecuteScalar();
+                }
+            }
+        }
 
         public bool IsStaffInSamePractice(int userId, int staffId)
         {

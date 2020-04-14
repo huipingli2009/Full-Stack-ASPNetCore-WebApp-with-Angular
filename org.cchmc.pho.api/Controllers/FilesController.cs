@@ -181,7 +181,6 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [AllowAnonymous]
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [HttpPut("watch/{file}")]
         [SwaggerResponse(200, type: typeof(FileDetailsViewModel))]

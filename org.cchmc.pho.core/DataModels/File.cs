@@ -14,6 +14,7 @@ namespace org.cchmc.pho.core.DataModels
         public string FileURL { get; set; }
         public int FileTypeId { get; set; }
         public string FileType { get; set; }
+        public bool? PublishFlag { get; set; }
         public List<FileTag> Tags { get; set; }
         public string Description { get; set; }
     }
