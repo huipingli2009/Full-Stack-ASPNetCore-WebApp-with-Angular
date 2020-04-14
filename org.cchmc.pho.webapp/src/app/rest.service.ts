@@ -9,7 +9,7 @@ import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Pati
 import { PracticeList, Responsibilities, Staff, StaffDetails } from './models/Staff';
 import { Followup, WorkbookPatient, WorkbookProvider, WorkbookReportingMonths, WorkbookPractice } from './models/workbook';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
-import { FileTags, FileResources, FileInitiatives } from './models/files';
+import { FileTags, FileResources, FileInitiatives, FileDetails } from './models/files';
 
 
 
@@ -474,6 +474,13 @@ export class RestService {
   }
   
   /* Get File Details */
+  getFileDetails(fileId): Observable<any> {
+    return this.http.get<any>(`${API_URL}/api/Files/${fileId}`).pipe(
+      map((data: FileDetails[]) => {
+        return data;
+      })
+    );
+  }
 
   /*Get File Tags*/
   getFileTags(): Observable<any> {
@@ -499,6 +506,7 @@ export class RestService {
       })
     );
   }
+
 
 
   private handleError<T>(operation = 'operation', result?: T) {

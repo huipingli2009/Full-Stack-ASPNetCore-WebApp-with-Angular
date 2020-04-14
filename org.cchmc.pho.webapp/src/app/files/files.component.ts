@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -6,6 +6,8 @@ import { RestService } from '../rest.service';
 import { take } from 'rxjs/operators';
 import { NGXLogger } from 'ngx-logger';
 import { MatDialog } from '@angular/material/dialog';
+import { UserService } from '../services/user.service';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-files',
@@ -22,6 +24,8 @@ export class FilesComponent implements OnInit {
   resourcesList: any[] = [];
   initiativesList: any[] = [];
   tagList: any[] = [];
+  isUserAdmin: boolean;
+  adminFileForm: FormGroup;
 
   // Filters
   resourceTypeIdFilter: number;
@@ -36,16 +40,41 @@ export class FilesComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild('adminDialog') adminDialog: TemplateRef<any>;
+  @ViewChild('adminConfirmDialog') adminConfirmDialog: TemplateRef<any>;
+  @ViewChild('adminConfirmDeleteDialog') adminConfirmDeleteDialog: TemplateRef<any>;
 
-  constructor(private rest: RestService, private logger: NGXLogger, private dialog: MatDialog) {
+  constructor(private rest: RestService, private logger: NGXLogger, private dialog: MatDialog,
+    private userService: UserService, private fb: FormBuilder) {
+
+    this.adminFileForm = this.fb.group({
+      practiceOnly: ['', Validators.required],
+      name: ['', Validators.required],
+      fileURL: ['', Validators.required],
+      tags: ['', Validators.required],
+      author: ['', Validators.required],
+      fileType: ['', Validators.required],
+      description: ['', Validators.required],
+      resourceTypeId: ['', Validators.required],
+      initiativeId: ['', Validators.required]
+    });
 
   }
 
   ngOnInit(): void {
+    this.getCurrentUser();
     this.getAllFiles();
     this.getResourceTypes();
     this.getInitiatives();
     this.getTagsList();
+  }
+
+  getCurrentUser() {
+    this.userService.getCurrentUser().subscribe((data) => {
+      if (data.role.id === 3) {
+        this.isUserAdmin = true;
+      } else { this.isUserAdmin = false; }
+    });
   }
 
   getAllFiles() {
@@ -56,6 +85,40 @@ export class FilesComponent implements OnInit {
       this.dataSource.sort = this.sort;
       this.logger.log(this.fileList, 'FILES');
     })
+  }
+
+  getFileDetials(fileId) {
+    this.rest.getFileDetails(fileId).pipe(take(1)).subscribe((data) => {
+      this.logger.log('FILE DETAILS', data);
+      const selectedFileValues = {
+        practiceOnly: data.practiceOnly,
+        name: data.name,
+        fileURL: data.fileURL,
+        tags: {
+          name: data.tags.name
+        },
+        author: data.author,
+        fileType: data.fileType,
+        description: data.description,
+        resourceTypeId: data.resourceTypeId,
+        initiativeId: data.initiativeId
+      };
+      this.adminFileForm.setValue(selectedFileValues);
+    })
+  }
+
+  submitFileAddUpdate() {
+    // const updatedUser = {
+    //   id: this.selectedStaffUser,
+    //   token: this.authService.getToken(),
+    //   userName: this.adminUserForm.controls.userName.value,
+    //   staffId: this.staffDetails.id,
+    //   email: this.staffDetails.email,
+    //   role: {
+    //     id: this.adminUserForm.controls.roles.value.id,
+    //     name: this.adminUserForm.controls.roles.value.name
+    //   }
+    // };
   }
 
   updateWatchlistStatus(id, index) {
@@ -113,6 +176,28 @@ export class FilesComponent implements OnInit {
     } else {
       this.findFilesFilter();
     }
+  }
+  isOnWatchlist(event) {
+    this.watchFilter = event.value;
+    if (this.watchFilter === undefined) {
+      this.getAllFiles();
+    } else {
+      this.findFilesFilter();
+    }
+  }
+
+  /* Dialogs -------------*/
+  openAdminDialog(fileId) {
+    this.getFileDetials(fileId);
+    this.dialog.open(this.adminDialog, { disableClose: true });
+  }
+
+  openAdminConfirmDialog() {
+    this.dialog.open(this.adminConfirmDialog, { disableClose: true });
+  }
+
+  cancelAdminDialog() {
+    this.dialog.closeAll();
   }
 
 }
