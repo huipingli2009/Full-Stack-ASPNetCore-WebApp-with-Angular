@@ -138,7 +138,59 @@ namespace org.cchmc.pho.api.Controllers
                 return StatusCode(500, "An error occurred");
             }
         }
-        
+
+
+        [Authorize(Roles = "Practice Admin,PHO Admin")]
+        [HttpPut("remove/{staff}")]
+        [SwaggerResponse(200, type: typeof(bool))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> RemoveStaff(string staff, string endDate, string deletedFlag)
+        {
+            if (!int.TryParse(staff, out var staffId))
+            {
+                _logger.LogInformation($"Failed to parse staffId - {staff}");
+                return BadRequest("staff is not a valid integer");
+            }
+            if (!DateTime.TryParse(endDate, out var dtEndDate))
+            {
+                _logger.LogInformation($"Failed to parse endDate - {endDate}");
+                return BadRequest("endDate is not a valid date");
+            }
+            if (string.IsNullOrWhiteSpace(deletedFlag))
+            {
+                _logger.LogInformation($"Failed to parse deletedFlag - {deletedFlag}");
+                return BadRequest("deletedFlag is blank");
+            }
+            if (!Boolean.TryParse(deletedFlag, out var bDeletedFlag))
+            {
+                _logger.LogInformation($"Failed to parse deletedFlag - {deletedFlag}");
+                return BadRequest("deletedFlag is not a valid boolean");
+            }            
+
+            try
+            {
+                // route parameters are strings and need to be translated (and validated) to their proper data type
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+
+                if (!_staffDal.IsStaffInSamePractice(currentUserId, staffId))
+                {
+                    _logger.LogInformation($"staff and user practices do not match");
+                    return BadRequest("staff practice does not match user");
+                }
+
+                // call the data layer to mark the action
+                var data = await _staffDal.RemoveStaff(currentUserId, staffId, dtEndDate, bDeletedFlag);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
         [HttpGet("locations")]
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<LocationViewModel>))]
