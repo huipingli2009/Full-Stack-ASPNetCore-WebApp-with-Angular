@@ -145,26 +145,26 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(200, type: typeof(bool))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> RemoveStaff(string staff, string endDate, string deletedFlag)
+        public async Task<IActionResult> RemoveStaff(string staff, string end, string deleted)
         {
             if (!int.TryParse(staff, out var staffId))
             {
                 _logger.LogInformation($"Failed to parse staffId - {staff}");
                 return BadRequest("staff is not a valid integer");
             }
-            if (!DateTime.TryParse(endDate, out var dtEndDate))
+            if (!DateTime.TryParse(end, out var endDate))
             {
-                _logger.LogInformation($"Failed to parse endDate - {endDate}");
+                _logger.LogInformation($"Failed to parse endDate - {end}");
                 return BadRequest("endDate is not a valid date");
             }
-            if (string.IsNullOrWhiteSpace(deletedFlag))
+            if (string.IsNullOrWhiteSpace(deleted))
             {
-                _logger.LogInformation($"Failed to parse deletedFlag - {deletedFlag}");
+                _logger.LogInformation($"Failed to parse deletedFlag - {deleted}");
                 return BadRequest("deletedFlag is blank");
             }
-            if (!Boolean.TryParse(deletedFlag, out var bDeletedFlag))
+            if (!Boolean.TryParse(deleted, out var deletedFlag))
             {
-                _logger.LogInformation($"Failed to parse deletedFlag - {deletedFlag}");
+                _logger.LogInformation($"Failed to parse deletedFlag - {deleted}");
                 return BadRequest("deletedFlag is not a valid boolean");
             }            
 
@@ -180,7 +180,7 @@ namespace org.cchmc.pho.api.Controllers
                 }
 
                 // call the data layer to mark the action
-                var data = await _staffDal.RemoveStaff(currentUserId, staffId, dtEndDate, bDeletedFlag);
+                var data = await _staffDal.RemoveStaff(currentUserId, staffId, endDate, deletedFlag);
                 return Ok(data);
             }
             catch (Exception ex)
