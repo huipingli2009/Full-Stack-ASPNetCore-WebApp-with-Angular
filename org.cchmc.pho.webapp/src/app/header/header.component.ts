@@ -15,6 +15,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MyErrorStateMatcher } from '../staff/staff.component';
 import { comparePasswords } from '../helpers/password-match.validator';
 import { NoSpaceValidator } from '../helpers/no-spaces.validator';
+import { FilterService } from '../services/filter.service';
 
 @Component({
   selector: 'app-header',
@@ -52,7 +53,7 @@ export class HeaderComponent {
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
               private toastr: ToastrService, public fb: FormBuilder, private logger: NGXLogger,
               private authenticationService: AuthenticationService, private userService: UserService,
-              public dialog: MatDialog) {
+              public dialog: MatDialog, private filterService: FilterService) {
     this.logger.log('testing the logging in app.component.ts constructor with NGXLogger');
     this.practiceForm = this.fb.group({
       practiceControl: ['']
@@ -95,10 +96,23 @@ export class HeaderComponent {
     this.alerts = [];
     this.rest.getAlerts().subscribe((data) => {
       this.alerts = data;
+      this.logger.log(this.alerts, 'ALERTS');
       if (this.alerts.length > 0) {
         this.alerts.forEach(alert => {
-          const toastrMessage = `<i class="fas fa-exclamation-triangle alert-icon" title="${alert.definition}"></i>
-          ${alert.message}<a class="alert-link" href="${alert.url}" target="_blank">${alert.linkText}»</a>`;
+          let toastrMessage = `<i class="fas fa-exclamation-triangle alert-icon" title="${alert.definition}"></i>
+          ${alert.message}<a class="alert-link" href="${alert.url}" target="${alert.target}">${alert.linkText}»</a>`;
+          if (alert.target === '') {
+            toastrMessage = `<i class="fas fa-exclamation-triangle alert-icon" title="${alert.definition}"></i>
+          ${alert.message}<a class="alert-link" href="${alert.url}">${alert.linkText}»</a>`;
+          }
+          if (alert.url === '') {
+            toastrMessage = `<i class="fas fa-exclamation-triangle alert-icon" title="${alert.definition}"></i>
+          ${alert.message}`;
+          }
+          if(alert.filterType === 'PatientList') {
+            toastrMessage = `<i class="fas fa-exclamation-triangle alert-icon" title="${alert.definition}"></i>
+          ${alert.message}<span class="alert-link">${alert.linkText}»</span>`;
+          }
 
 
           const activeToastr = this.toastr.success(toastrMessage, alert.alertScheduleId.toString(), {
@@ -112,7 +126,8 @@ export class HeaderComponent {
             .subscribe((data) => this.toastrCloseHandler(alert.alertScheduleId));
           activeToastr.onTap
             .pipe(take(1))
-            .subscribe((data) => this.toastrClickHandler(alert.alertScheduleId, alert.url));
+            .subscribe((data) => this.toastrClickHandler(alert.alertScheduleId, alert.url, alert.filterType, alert.filterValue));
+            // In order to make this viable for other types of alerts. You will want to add the alert filter Name.
 
         });
       }
@@ -129,9 +144,11 @@ export class HeaderComponent {
       });
   }
 
-  toastrClickHandler(alertScheduleId: number, url: string) {
+  toastrClickHandler(alertScheduleId: number, url: string, filterType: string, FilterValue: number) {
     this.alertAction = { alertActionId: AlertActionTaken.click };
-    window.open(url, '_blank');
+    if (filterType === 'PatientList') {
+      this.toFilteredPatients(FilterValue);
+    }
     this.rest.updateAlertActivity(alertScheduleId, this.alertAction).subscribe(res => { },
       error => {
         this.error = error;
@@ -144,6 +161,13 @@ export class HeaderComponent {
     this.authenticationService.logout();
     this.isLoggedIn$ = false;
     this.router.navigate(['/login']);
+  }
+
+  // Send alert to Filtered Patients
+  toFilteredPatients(measureId) {
+    this.filterService.updateIsFilteringPatients(true);
+    this.filterService.updateFilterType(measureId);
+    this.router.navigate(['/patients']);
   }
 
   // Practice Switch -------------------------------

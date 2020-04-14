@@ -1679,6 +1679,32 @@ button.toast-close-button {
   margin-bottom: 15px;
 }
 
+// Remove Header Column if screen size is smaller
+@media only screen and (max-width: 1528px) {
+  .wokbook-col-title-4 {
+    display: none !important;
+  }
+
+}
+@media only screen and (max-width: 1228px) {
+  .wokbook-col-title-3 {
+    margin-right: 0 !important;
+  }
+  .workbook-patient-item:nth-child(3) {
+    margin-right: 0 !important;
+  }
+
+}
+@media only screen and (max-width: 1164px) {
+  .wokbook-col-title-3 {
+    display: none !important;
+  }
+  .workbook-patient-item:nth-child(3) {
+    margin-right: 64px !important;
+  }
+
+}
+
 .workbook-select-search-hidden {
   height: 0.1em !important;
 }
