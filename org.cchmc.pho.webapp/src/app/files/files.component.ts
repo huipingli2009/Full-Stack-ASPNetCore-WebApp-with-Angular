@@ -26,6 +26,41 @@ export class FilesComponent implements OnInit {
   tagList: any[] = [];
   isUserAdmin: boolean;
   adminFileForm: FormGroup;
+  compareFn: ((f1: any, f2: any) => boolean) | null = this.compareByValue;
+  fileTypeList = [
+    {
+      id: 1,
+      name: 'PDF'
+    },
+    {
+      id: 2,
+      name: 'DOCX'
+    },
+    {
+      id: 3,
+      name: 'EXCEL'
+    },
+    {
+      id: 4,
+      name: 'PPT'
+    },
+    {
+      id: 5,
+      name: 'CSV'
+    },
+    {
+      id: 6,
+      name: 'JPEG'
+    },
+    {
+      id: 7,
+      name: 'PNG'
+    },
+    {
+      id: 8,
+      name: 'ZIP'
+    }
+  ];
 
   // Filters
   resourceTypeIdFilter: number;
@@ -69,6 +104,10 @@ export class FilesComponent implements OnInit {
     this.getTagsList();
   }
 
+  compareByValue(o1, o2): boolean {
+    return o1 === o2;
+  }
+
   getCurrentUser() {
     this.userService.getCurrentUser().subscribe((data) => {
       if (data.role.id === 3) {
@@ -90,15 +129,18 @@ export class FilesComponent implements OnInit {
   getFileDetials(fileId) {
     this.rest.getFileDetails(fileId).pipe(take(1)).subscribe((data) => {
       this.logger.log('FILE DETAILS', data);
+      let joinedTags = [];
+      data.tags.forEach(tag => {
+        joinedTags.push(tag.name);
+      });
+      this.logger.log(joinedTags, 'Tags')
       const selectedFileValues = {
         practiceOnly: data.practiceOnly,
         name: data.name,
         fileURL: data.fileURL,
-        tags: {
-          name: data.tags.name
-        },
+        tags: joinedTags.join(', '),
         author: data.author,
-        fileType: data.fileType,
+        fileType: data.fileTypeId,
         description: data.description,
         resourceTypeId: data.resourceTypeId,
         initiativeId: data.initiativeId

@@ -131,9 +131,10 @@
   <!--Dialogs ===========================-->
   <ng-template #adminDialog>
     <div mat-dialog-content class="mat-typography" id="admin-dialog">
-      <form [formGroup]="adminFileForm" (ngSubmit)="submitFileAddUpdate()">
+      <form [formGroup]="adminFileForm" (ngSubmit)="submitFileAddUpdate()" class="default-input-override">
         <div fxLayout="row" class="detail-heading">ADD / UPDATE RESOURCE
           FILE</div>
+          <br>
         <div fxLayout="row">
           <label class="toggle-label">Practice Only</label>
           <mat-slide-toggle ngDefaultControl class="admin-toggle" formControlName="practiceOnly"
@@ -155,11 +156,21 @@
               <mat-label>FILE URL</mat-label>
               <input matInput formControlName="fileURL" name="fileURL">
               <mat-icon matPrefix>
-                get_app
+                link
               </mat-icon>
               <mat-error>You must include a file link</mat-error>
             </mat-form-field>
         </div>
+        <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end" class="input-w-icon">
+          <mat-form-field floatLabel="always" class="fill-form-field">
+            <mat-label>DESCRIPTION</mat-label>
+            <input matInput formControlName="description" name="description">
+            <mat-icon matPrefix>
+              art_track
+            </mat-icon>
+            <mat-error>You must include a description</mat-error>
+          </mat-form-field>
+      </div>
         <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end">
 
           <div fxLayout="column" class="input-w-icon">
@@ -167,7 +178,7 @@
               <mat-label>TAGS</mat-label>
               <input matInput formControlName="tags" name="tags">
               <mat-icon matPrefix>
-                get_app
+                local_offer
               </mat-icon>
               <mat-error>You must include a tags</mat-error>
             </mat-form-field>
@@ -177,55 +188,59 @@
               <mat-label>AUTHOR</mat-label>
               <input matInput formControlName="author" name="author">
               <mat-icon matPrefix>
-                get_app
+                person
               </mat-icon>
               <mat-error>You must include an author</mat-error>
             </mat-form-field>
           </div>
-          <div fxLayout="column" class="input-w-icon">
-            <mat-form-field floatLabel="always">
+          <div fxLayout="column" class="input-w-icon multiselect-with-icon">
+            <mat-form-field floatLabel="always" class="select-style-override">
               <mat-label>FORMAT</mat-label>
-              <input matInput formControlName="fileType" name="fileType">
+              <mat-select matNativeControl formControlName="fileType" class="insurance" [compareWith]="compareFn">
+                <mat-option *ngFor="let item of fileTypeList" [value]="item.id">
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
               <mat-icon matPrefix>
-                get_app
+                build
               </mat-icon>
               <mat-error>You must include an author</mat-error>
             </mat-form-field>
           </div>
+          
         </div>
-
-        <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end">
-
-          <div fxLayout="column" class="input-w-icon">
-            <mat-form-field floatLabel="always">
-              <mat-label>DESCRIPTION</mat-label>
-              <input matInput formControlName="description" name="description">
-              <mat-icon matPrefix>
-                get_app
-              </mat-icon>
-              <mat-error>You must include a description</mat-error>
+        <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end" class="select-row">
+          <div fxLayout="column">
+            <mat-form-field floatLabel="always" class="select-style-override">
+              <mat-label>RESOURCE TYPE</mat-label>
+              <mat-select matNativeControl formControlName="resourceTypeId" class="insurance" [compareWith]="compareFn">
+                <mat-option *ngFor="let item of resourcesList" [value]="item.id">
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
+              <mat-error>You must include a Resource Type</mat-error>
             </mat-form-field>
           </div>
-        </div>
-        <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end">
-          <mat-form-field floatLabel="always">
-            <mat-label>RESOURCE TYPE</mat-label>
-            <input matInput formControlName="resourceTypeId" name="resourceTypeId">
-            <mat-error>You must include a Resource Type</mat-error>
-          </mat-form-field>
-        </div>
-        <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end">
-          <mat-form-field floatLabel="always">
-            <mat-label>INITIATIVE</mat-label>
-            <input matInput formControlName="initiativeId" name="initiativeId">
-            <mat-error>You must include an Initiative</mat-error>
-          </mat-form-field>
+          <div fxLayout="column">
+            <mat-form-field floatLabel="always" class="select-style-override">
+              <mat-label>INITIATIVE</mat-label>
+              <mat-select matNativeControl formControlName="initiativeId" class="insurance" [compareWith]="compareFn">
+                <mat-option *ngFor="let item of initiativesList" [value]="item.id">
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
+              <mat-error>You must include an Initiative</mat-error>
+            </mat-form-field>
+          </div>
+          
         </div>
       </form>
     </div>
-    <div mat-dialog-actions align="end">
+    <div mat-dialog-actions align="end" class="select-row">
       <button mat-button (click)="cancelAdminDialog()">Cancel</button>
-      <button mat-flat-button color="accent">SAVE</button>
+      <button mat-flat-button color="accent">SAVE DRAFT</button>
+      <button mat-flat-button color="accent">PUBLISH FILE</button>
+      <button mat-flat-button color="accent">PUBLISH FILE WITH ALERT</button>
     </div>
   </ng-template>
   <ng-template #adminConfirmDialog>
