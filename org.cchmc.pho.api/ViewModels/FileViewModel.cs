@@ -16,6 +16,7 @@ namespace org.cchmc.pho.api.ViewModels
         public string FileURL { get; set; }
         public int FileTypeId { get; set; }
         public string FileType { get; set; }
+        public bool? PublishFlag { get; set; }
         public List<FileTagViewModel> Tags { get; set; }
         public string Description { get; set; }
     }
