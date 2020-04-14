@@ -438,25 +438,41 @@ export class RestService {
   }
   /* FInd Files by Filter*/
   findFiles(
-    resourceTypeId = 0, initiativeId = 0, tag = '', watch = false,
-    name = ''): Observable<FileList[]> {
+    resourceTypeId, initiativeId, tag = '', watch,
+    name = ''): Observable<any> {
+      if (resourceTypeId != null) {
+        resourceTypeId.toString();
+      }
+      if (initiativeId != null) {
+        initiativeId.toString();
+      }
+      if (watch != null) {
+        watch.toString();
+      }
+      if (resourceTypeId === undefined) {
+        resourceTypeId = '';
+      }
+      if (initiativeId === undefined) {
+        initiativeId = '';
+      }
+      if (watch === undefined) {
+        watch = '';
+      }
 
-    return this.http.get(`${API_URL}/api/Files`, {
+      return this.http.get(`${API_URL}/api/Files`, {
       params: new HttpParams()
-        .set('resourceTypeId', resourceTypeId.toString())
-        .set('initiativeId', initiativeId.toString())
+        .set('resourceTypeId', resourceTypeId)
+        .set('initiativeId', initiativeId)
         .set('tag', tag)
         .set('watch', watch.toString())
         .set('name', name)
     }).pipe(
       map(res => {
-        var filteredFiles: FileList[];
-
-        filteredFiles = res['results'];
-        return filteredFiles;
+        return res;
       })
     );
   }
+  
   /* Get File Details */
 
   /*Get File Tags*/
