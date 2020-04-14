@@ -11,6 +11,28 @@
               </mat-select>
             </mat-form-field>
           </div>
+          <div fxLayout="column" class="header-filter">
+            <mat-form-field>
+              <mat-label>Initiative</mat-label>
+              <mat-select [(ngModel)]="initiatives" (selectionChange)="initiativesSelection($event)">
+                <mat-option *ngFor="let type of initiativesList" [value]="type.id">
+                  {{type.name}}
+                </mat-option>
+                <mat-option>All</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div fxLayout="column" class="header-filter">
+            <mat-form-field>
+              <mat-label>Tags</mat-label>
+              <mat-select [(ngModel)]="tags" (selectionChange)="tagsSelection($event)">
+                <mat-option *ngFor="let type of tagList" [value]="type.name">
+                  {{type.name}}
+                </mat-option>
+                <mat-option>All</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
     </div>
         <table mat-table [dataSource]="dataSource" matSort id="files">
 

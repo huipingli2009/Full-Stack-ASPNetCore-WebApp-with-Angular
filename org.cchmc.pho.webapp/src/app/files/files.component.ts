@@ -17,6 +17,8 @@ export class FilesComponent implements OnInit {
   fileList: FileList[];
   watchFlag: string;
   resources: string;
+  initiatives: string;
+  tags: string;
   resourcesList: any[] = [];
   initiativesList: any[] = [];
   tagList: any[] = [];
@@ -29,19 +31,21 @@ export class FilesComponent implements OnInit {
   nameFilter: string;
 
   displayedColumns: string[] = ['icon', 'name', 'dateCreated', 'lastViewed', 'watchFlag'
-  , 'fileType', 'actions', 'tags'];
+    , 'fileType', 'actions', 'tags'];
   dataSource: MatTableDataSource<FileList>;
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(private rest: RestService, private logger: NGXLogger, private dialog: MatDialog) {
-    
-   }
+
+  }
 
   ngOnInit(): void {
     this.getAllFiles();
     this.getResourceTypes();
+    this.getInitiatives();
+    this.getTagsList();
   }
 
   getAllFiles() {
@@ -79,8 +83,35 @@ export class FilesComponent implements OnInit {
     if (this.resourceTypeIdFilter === undefined) {
       this.getAllFiles();
     } else {
-      this.logger.log('type', this.resourceTypeIdFilter);
-    this.findFilesFilter();
+      this.findFilesFilter();
+    }
+  }
+  getInitiatives() {
+    this.rest.getFileInitiatives().pipe(take(1)).subscribe((data) => {
+      this.initiativesList = data;
+    })
+  }
+
+  initiativesSelection(event) {
+    this.initiativeIdFilter = event.value;
+    if (this.initiativeIdFilter === undefined) {
+      this.getAllFiles();
+    } else {
+      this.findFilesFilter();
+    }
+  }
+  getTagsList() {
+    this.rest.getFileTags().pipe(take(1)).subscribe((data) => {
+      this.tagList = data;
+    })
+  }
+
+  tagsSelection(event) {
+    this.tagFilter = event.value;
+    if (this.tagFilter === undefined) {
+      this.getAllFiles();
+    } else {
+      this.findFilesFilter();
     }
   }
 
