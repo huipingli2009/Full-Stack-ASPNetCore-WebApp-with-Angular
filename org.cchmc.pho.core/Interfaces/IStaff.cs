@@ -12,6 +12,7 @@ namespace org.cchmc.pho.core.Interfaces
         Task<StaffDetail> GetStaffDetails(int userId, int staffId);
         Task<StaffDetail> GetStaffDetailsById(int staffId);
         Task<StaffDetail> UpdateStaffDetails(int userId, StaffDetail staffDetail);
+        Task<bool> RemoveStaff(int userId, int staffId, DateTime endDate, bool? deletedFlag);
         Task<List<Position>> ListPositions();
         Task<List<Credential>> ListCredentials();
         Task<List<Responsibility>> ListResponsibilities();

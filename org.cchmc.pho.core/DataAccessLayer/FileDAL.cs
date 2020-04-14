@@ -57,6 +57,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 FileTypeId = (dr["FileTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FileTypeID"].ToString())),
                                 FileURL = dr["FileURL"].ToString(),
                                 FileType = dr["FileType"].ToString(),
+                                PublishFlag = (dr["Published"] != DBNull.Value && Convert.ToBoolean(dr["Published"])),
                                 Description = dr["Description"].ToString(),
                                 Tags = new List<FileTag>()
                             };
