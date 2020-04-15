@@ -284,6 +284,36 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
+        public async Task<List<FileType>> GetFileTypesAll()
+        {
+            DataTable dataTable = new DataTable();
+            List<FileType> fileTypes = new List<FileType>();
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetFileTypeList", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    sqlConnection.Open();
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        foreach (DataRow dr in dataTable.Rows)
+                        {
+                            var record = new FileType()
+                            {
+                                Id = (dr["Id"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Id"].ToString())),
+                                Name = dr["Name"].ToString()
+                            };
+                            fileTypes.Add(record);
+                        }
+                    }
+                    return fileTypes;
+                }
+            }
+        }
+
         public async Task<List<Resource>> GetResourceAll()
         {
             DataTable dataTable = new DataTable();
