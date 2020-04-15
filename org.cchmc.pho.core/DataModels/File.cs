@@ -23,6 +23,11 @@ namespace org.cchmc.pho.core.DataModels
     {
         public string Name { get; set; }
     }
+    public class FileType
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
     public class Initiative
     {
         public int Id { get; set; }
