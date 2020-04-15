@@ -15,5 +15,6 @@ namespace org.cchmc.pho.core.Interfaces
         Task<List<FileTag>> GetFileTagsAll();
         Task<List<Resource>> GetResourceAll();
         Task<List<Initiative>> GetInitiativeAll();
+        Task<List<FileType>> GetFileTypesAll();
     }
 }
