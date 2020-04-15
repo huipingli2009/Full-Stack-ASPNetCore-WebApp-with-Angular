@@ -342,10 +342,11 @@
                             <div fxLayout="row" fxLayoutGap="34px">
                                 <div fxLayout="column" fxLayoutAlign="start end">
                                     <button *ngIf="isUserAdmin" mat-flat-button color="primary"
-                                        (click)="openAdminDialog()">PHO ADMINISTRATION</button>
+                                        (click)="openAdminDialog()">USER ADMINISTRATION</button>
                                 </div>
                                 <div fxLayout="column">
-                                    <button mat-flat-button color="primary" (click)="openStaffAdminDialog()">STAFF
+                                    <button *ngIf="isUserAdmin" mat-flat-button color="primary"
+                                        (click)="openStaffAdminDialog()">STAFF
                                         ADMINISTRATION</button>
                                 </div>
                                 <div fxLayout="column" fxLayoutAlign="end end" fxFlex>
