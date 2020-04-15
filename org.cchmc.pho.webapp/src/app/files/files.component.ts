@@ -30,6 +30,10 @@ export class FilesComponent implements OnInit {
   isSavingDraft: boolean;
   isPublishingFile: boolean;
   isPublishingWithAlert: boolean;
+  currentFileId: number;
+  currentDateCreated: Date;
+  currentLastViewed: Date;
+  currentWatchFlag: boolean;
   fileTypeList = [
     {
       id: 1,
@@ -108,7 +112,7 @@ export class FilesComponent implements OnInit {
   }
 
   compareByValue(o1, o2): boolean {
-    return o1 === o2;
+    return o1.id === o2.id;
   }
 
   getCurrentUser() {
@@ -130,24 +134,32 @@ export class FilesComponent implements OnInit {
   }
 
   getFileDetials(fileId) {
+    this.currentFileId = fileId;
     this.rest.getFileDetails(fileId).pipe(take(1)).subscribe((data) => {
       this.logger.log('FILE DETAILS', data);
+      this.currentDateCreated = data.dateCreated;
+      this.currentLastViewed = data.lastViewed;
+      this.currentWatchFlag = data.watchFlag;
       let joinedTags = [];
       data.tags.forEach(tag => {
         joinedTags.push(tag.name);
       });
-      this.logger.log(joinedTags, 'Tags')
+      
       const selectedFileValues = {
         practiceOnly: data.practiceOnly,
         name: data.name,
         fileURL: data.fileURL,
         tags: joinedTags.join(', '),
         author: data.author,
-        fileType: data.fileTypeId,
+        fileType: {
+          id: data.fileTypeId,
+          name: data.fileType
+        },
         description: data.description,
         resourceTypeId: data.resourceTypeId,
         initiativeId: data.initiativeId
       };
+      this.logger.log(selectedFileValues, 'SELECTED FILE')
       this.adminFileForm.setValue(selectedFileValues);
     })
   }
@@ -163,19 +175,27 @@ export class FilesComponent implements OnInit {
       publishFile = true;
     } else { publishFile = false; }
     const fileFormValues = {
-      practiceOnly: this.adminFileForm.controls.practiceOnly.value,
+      id: this.currentFileId,
       name: this.adminFileForm.controls.name.value,
-      fileURL: this.adminFileForm.controls.fileURL.value,
-      tags: tagsSplit,
-      author: this.adminFileForm.controls.author.value,
-      fileTypeId: this.adminFileForm.controls.fileType.value,
-      description: this.adminFileForm.controls.description.value,
       resourceTypeId: this.adminFileForm.controls.resourceTypeId.value,
       initiativeId: this.adminFileForm.controls.initiativeId.value,
+      author: this.adminFileForm.controls.author.value,
+      fileTypeId: this.adminFileForm.controls.fileType.value.id,
+      fileType: this.adminFileForm.controls.fileType.value.name,
+      dateCreated: this.currentDateCreated,
+      lastViewed: this.currentLastViewed,
+      watchFlag: this.currentWatchFlag,
+      tags: tagsSplit,
+      fileURL: this.adminFileForm.controls.fileURL.value,
+      description: this.adminFileForm.controls.description.value,
+      practiceOnly: this.adminFileForm.controls.practiceOnly.value,
       publishFlag: publishFile,
       createAlert: this.isPublishingWithAlert
     };
     this.logger.log(fileFormValues, 'FORM SUBMISSION');
+    this.rest.updateFileDetails(fileFormValues).pipe(take(1)).subscribe((data) => {
+      this.logger.log(data, 'PUT FILES');
+    });
     this.cancelAdminDialog();
   }
 
@@ -254,12 +274,18 @@ export class FilesComponent implements OnInit {
   openAdminConfirmDialog(type) {
     if (type === 1) {
       this.isSavingDraft = true;
+      this.isPublishingWithAlert = false;
+      this.isPublishingFile = false;
     }
     if (type === 2) {
       this.isPublishingFile = true;
+      this.isPublishingWithAlert = false;
+      this.isSavingDraft = false;
     }
     if (type === 3) {
       this.isPublishingWithAlert = true;
+      this.isPublishingFile = true;
+      this.isSavingDraft = false;
     }
     this.dialog.open(this.adminConfirmDialog, { disableClose: true });
   }

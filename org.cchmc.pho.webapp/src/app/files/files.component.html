@@ -197,7 +197,7 @@
             <mat-form-field floatLabel="always" class="select-style-override">
               <mat-label>FORMAT</mat-label>
               <mat-select matNativeControl formControlName="fileType" class="insurance" [compareWith]="compareFn">
-                <mat-option *ngFor="let item of fileTypeList" [value]="item.id">
+                <mat-option *ngFor="let item of fileTypeList" [value]="item">
                   {{item.name}}
                 </mat-option>
               </mat-select>

@@ -31,7 +31,7 @@ namespace org.cchmc.pho.api.Controllers
             _userService = userService;
             _filesDAL = filesDal;
         }
-        [AllowAnonymous]
+        
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [HttpGet()]
         [SwaggerResponse(200, type: typeof(List<FileViewModel>))]
@@ -88,7 +88,7 @@ namespace org.cchmc.pho.api.Controllers
                 return StatusCode(500, "An error occurred");
             }
         }
-
+        [AllowAnonymous]
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [HttpPut()]
         [SwaggerResponse(200, type: typeof(FileDetailsViewModel))]

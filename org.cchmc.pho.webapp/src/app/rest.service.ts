@@ -474,7 +474,14 @@ export class RestService {
   }
 
   /*Update Files*/
-  
+  updateFileDetails(fileDetails): Observable<any> {
+    this.logger.log('FILE DETAILS IN REST', fileDetails);
+    return this.http.put(`${API_URL}/api/Files/`, JSON.stringify(fileDetails), httpOptions).pipe(
+      tap(_ => this.snackBar.openSnackBar(`File has been updated!`
+        , 'Close', 'success-snackbar'))
+    );
+  }
+
   /* Get File Details */
   getFileDetails(fileId): Observable<any> {
     return this.http.get<any>(`${API_URL}/api/Files/${fileId}`).pipe(
