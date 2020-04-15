@@ -1381,6 +1381,9 @@ button.toast-close-button {
     .input-w-icon .mat-form-field-label-wrapper {
       margin-left: -23px;
     }
+
+  
+    
     label {
       font-size: 14px;
     }
@@ -1417,6 +1420,8 @@ button.toast-close-button {
       }
     }
   }
+
+
 
   .green-snackbar {
     background: var(--tertiary-green);
@@ -1547,7 +1552,7 @@ button.toast-close-button {
   }
 }
 
-#admin-dialog, #passwordChangeForm {
+#admin-dialog, #passwordChangeForm ,#Staff-admin-dialog {
   overflow: visible;
   .detail-heading {
     font-family: "ArcherBold";
@@ -1666,6 +1671,10 @@ button.toast-close-button {
       padding-bottom: 0;
     }
   }
+}
+
+.input-date-icon .mat-form-field-label-wrapper {
+  margin-left: -18px;
 }
 
 /* Workbook =========================================================================== */
