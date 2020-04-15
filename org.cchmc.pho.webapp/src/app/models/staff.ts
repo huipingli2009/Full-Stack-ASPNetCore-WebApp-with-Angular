@@ -67,7 +67,7 @@ export interface PracticeList {
 }
 
 export interface StaffAdmin {
-    id: number;
+    id: string;
     deletedFlag: boolean;
     endDate: string;
 }

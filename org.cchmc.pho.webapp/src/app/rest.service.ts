@@ -222,7 +222,7 @@ export class RestService {
   /*Remove Staff*/
   RemoveStaff(staffAdmin: StaffAdmin): Observable<any> {
     this.logger.log(JSON.stringify(staffAdmin));
-    staffAdmin.deletedFlag = "true";
+    staffAdmin.deletedFlag = true;
     return this.http.put<boolean>(`${API_URL}/api/Staff/remove/${staffAdmin.id}`, JSON.stringify(staffAdmin), httpOptions).pipe(
       catchError(this.handleError<any>('RemoveStaff'))
     );

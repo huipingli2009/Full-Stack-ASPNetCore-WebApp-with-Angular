@@ -159,17 +159,7 @@ namespace org.cchmc.pho.api.Controllers
                 _logger.LogInformation($"Failed to parse EndDate - {staffAdmin.EndDate}");
                 return BadRequest("EndDate is not a valid datetime");
             }
-
-            if (string.IsNullOrWhiteSpace(staffAdmin.DeletedFlag))
-            {
-                _logger.LogInformation($"Failed to parse deletedFlag - {staffAdmin.DeletedFlag}");
-                return BadRequest("deletedFlag is blank");
-            }
-            if (!Boolean.TryParse(staffAdmin.DeletedFlag, out var deletedFlag))
-            {
-                _logger.LogInformation($"Failed to parse deletedFlag - {staffAdmin.DeletedFlag}");
-                return BadRequest("deletedFlag is not a valid boolean");
-            }            
+                    
 
             try
             {
@@ -183,7 +173,7 @@ namespace org.cchmc.pho.api.Controllers
                 }
 
                 // call the data layer to mark the action
-                var data = await _staffDal.RemoveStaff(currentUserId, staffId, endDate, deletedFlag);
+                var data = await _staffDal.RemoveStaff(currentUserId, staffId, endDate, staffAdmin.DeletedFlag);
                 return Ok(data);
             }
             catch (Exception ex)

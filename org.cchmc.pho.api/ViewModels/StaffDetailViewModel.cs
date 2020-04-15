@@ -29,7 +29,7 @@ namespace org.cchmc.pho.api.ViewModels
     public class StaffAdmin
     {
         public string Id { get; set; }
-        public string DeletedFlag { get; set; }
+        public bool? DeletedFlag { get; set; }
         public string EndDate { get; set; }
     }
 

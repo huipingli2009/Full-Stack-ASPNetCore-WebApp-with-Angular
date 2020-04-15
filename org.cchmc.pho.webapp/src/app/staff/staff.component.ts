@@ -103,7 +103,7 @@ export class StaffComponent implements OnInit, OnDestroy {
   StaffAdminForm = this.fb.group(
     {
       id: [''],
-      deletedFlag: [""],
+      deletedFlag: true,
       endDate: [null, [DateRequiredValidator]]
     }
   )
