@@ -27,6 +27,9 @@ export class FilesComponent implements OnInit {
   isUserAdmin: boolean;
   adminFileForm: FormGroup;
   compareFn: ((f1: any, f2: any) => boolean) | null = this.compareByValue;
+  isSavingDraft: boolean;
+  isPublishingFile: boolean;
+  isPublishingWithAlert: boolean;
   fileTypeList = [
     {
       id: 1,
@@ -150,17 +153,30 @@ export class FilesComponent implements OnInit {
   }
 
   submitFileAddUpdate() {
-    // const updatedUser = {
-    //   id: this.selectedStaffUser,
-    //   token: this.authService.getToken(),
-    //   userName: this.adminUserForm.controls.userName.value,
-    //   staffId: this.staffDetails.id,
-    //   email: this.staffDetails.email,
-    //   role: {
-    //     id: this.adminUserForm.controls.roles.value.id,
-    //     name: this.adminUserForm.controls.roles.value.name
-    //   }
-    // };
+    let tagsSplit = this.adminFileForm.controls.tags.value.replace(/\s*,\s*/g, ",");
+    tagsSplit = tagsSplit.split(',');
+    tagsSplit = tagsSplit.map(function(e) {
+      return { name: e};
+    });
+    let publishFile;
+    if (this.isPublishingFile === true || this.isPublishingWithAlert === true) {
+      publishFile = true;
+    } else { publishFile = false; }
+    const fileFormValues = {
+      practiceOnly: this.adminFileForm.controls.practiceOnly.value,
+      name: this.adminFileForm.controls.name.value,
+      fileURL: this.adminFileForm.controls.fileURL.value,
+      tags: tagsSplit,
+      author: this.adminFileForm.controls.author.value,
+      fileTypeId: this.adminFileForm.controls.fileType.value,
+      description: this.adminFileForm.controls.description.value,
+      resourceTypeId: this.adminFileForm.controls.resourceTypeId.value,
+      initiativeId: this.adminFileForm.controls.initiativeId.value,
+      publishFlag: publishFile,
+      createAlert: this.isPublishingWithAlert
+    };
+    this.logger.log(fileFormValues, 'FORM SUBMISSION');
+    this.cancelAdminDialog();
   }
 
   updateWatchlistStatus(id, index) {
@@ -234,12 +250,31 @@ export class FilesComponent implements OnInit {
     this.dialog.open(this.adminDialog, { disableClose: true });
   }
 
-  openAdminConfirmDialog() {
+  // Type = submission type. 1 = Save Draft / 2 = Publish File / 3 = Publish with Alert
+  openAdminConfirmDialog(type) {
+    if (type === 1) {
+      this.isSavingDraft = true;
+    }
+    if (type === 2) {
+      this.isPublishingFile = true;
+    }
+    if (type === 3) {
+      this.isPublishingWithAlert = true;
+    }
     this.dialog.open(this.adminConfirmDialog, { disableClose: true });
   }
 
   cancelAdminDialog() {
+    this.isSavingDraft = false;
+    this.isPublishingFile = false;
+    this.isPublishingWithAlert = false;
     this.dialog.closeAll();
+  }
+
+  cancelConfirmDialog() {
+    this.isSavingDraft = false;
+    this.isPublishingFile = false;
+    this.isPublishingWithAlert = false;
   }
 
 }

@@ -472,6 +472,8 @@ export class RestService {
       })
     );
   }
+
+  /*Update Files*/
   
   /* Get File Details */
   getFileDetails(fileId): Observable<any> {

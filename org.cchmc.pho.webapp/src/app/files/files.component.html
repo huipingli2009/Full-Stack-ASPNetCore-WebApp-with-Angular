@@ -131,7 +131,7 @@
   <!--Dialogs ===========================-->
   <ng-template #adminDialog>
     <div mat-dialog-content class="mat-typography" id="admin-dialog">
-      <form [formGroup]="adminFileForm" (ngSubmit)="submitFileAddUpdate()" class="default-input-override">
+      <form [formGroup]="adminFileForm" class="default-input-override">
         <div fxLayout="row" class="detail-heading">ADD / UPDATE RESOURCE
           FILE</div>
           <br>
@@ -238,18 +238,25 @@
     </div>
     <div mat-dialog-actions align="end" class="select-row">
       <button mat-button (click)="cancelAdminDialog()">Cancel</button>
-      <button mat-flat-button color="accent">SAVE DRAFT</button>
-      <button mat-flat-button color="accent">PUBLISH FILE</button>
-      <button mat-flat-button color="accent">PUBLISH FILE WITH ALERT</button>
+      <button mat-flat-button color="accent" (click)="openAdminConfirmDialog(1)">SAVE DRAFT</button>
+      <button mat-flat-button color="accent" (click)="openAdminConfirmDialog(2)">PUBLISH FILE</button>
+      <button mat-flat-button color="accent" (click)="openAdminConfirmDialog(3)">PUBLISH FILE WITH ALERT</button>
     </div>
   </ng-template>
   <ng-template #adminConfirmDialog>
     <div mat-dialog-content class="mat-typography">
-      <h3>Are you sure you want to update file?</h3>
+      <h3 *ngIf="isSavingDraft">Are you sure you want to save this file as a Draft?</h3>
+      <h3 *ngIf="isPublishingFile">Are you sure you want to publish this file?</h3>
+      <h3 *ngIf="isPublishingWithAlert">Are you sure you want to publish this file with an alert?</h3>
     </div>
     <div mat-dialog-actions align="end">
-      <button mat-button mat-dialog-close>Cancel</button>
-      <button mat-flat-button color="accent" mat-dialog-close>Save and Update User</button>
+      <button mat-button mat-dialog-close (click)="cancelConfirmDialog()">Cancel</button>
+      <button mat-flat-button color="accent" mat-dialog-close (click)="submitFileAddUpdate()" *ngIf="isSavingDraft">
+        Save File as Draft</button>
+        <button mat-flat-button color="accent" mat-dialog-close (click)="submitFileAddUpdate()" *ngIf="isPublishingFile">
+          Publish File</button>
+          <button mat-flat-button color="accent" mat-dialog-close (click)="submitFileAddUpdate()" *ngIf="isPublishingWithAlert">
+            Publish File With Alert</button>
     </div>
   </ng-template>
 
