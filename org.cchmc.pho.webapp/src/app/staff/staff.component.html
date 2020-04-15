@@ -193,6 +193,12 @@
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
+                                    <ng-container
+                                        *ngIf="(StaffDetailsForm.get('locations').touched || StaffDetailsForm.get('locations').dirty) && (StaffDetailsForm.get('locations').errors)">
+                                        <mat-error *ngIf="StaffDetailsForm.get('locations').errors.required">
+                                            Please select the Location
+                                        </mat-error>
+                                    </ng-container>
                                 </div>
                             </div>
 
@@ -441,20 +447,18 @@
 
                                 <ng-template #StaffadminDialog>
                                     <div mat-dialog-content class="mat-typography" id="Staff-admin-dialog">
-                                        <form [formGroup]="StaffAdminForm" (ngSubmit)="confirmStaffUserUpdate()">
+                                        <form [formGroup]="StaffAdminForm" (ngSubmit)="confirmStaffAdminUpdate()">
                                             <div fxLayout="row" class="detail-heading">STAFF ADMINISTRATION</div>
-                                            <div fxLayout="row" class="validation-text">
-                                                <p>{{adminVerbiage | slice:0:141}}<br>{{adminVerbiage | slice:141:adminVerbiage.length}}
-                                                </p>
-                                            </div>
-                                            <div fxLayout="row">
-                                                <div fxLayout="column" fxFlex="25%">
-                                                    <label class="toggle-label">REMOVE STAFF</label>
-                                                    <mat-slide-toggle ngDefaultControl class="admin-toggle">
-                                                    </mat-slide-toggle>
 
+                                            <div fxLayout="row" fxLayoutGap="12px">
+                                                <div fxLayout="column" fxLayoutAlign="center center">
+                                                    <mat-form-field>
+                                                        <mat-label>Staff Name </mat-label>
+                                                        <input matInput [value]="StaffName" readonly>
+                                                    </mat-form-field>
                                                 </div>
-                                                <div fxLayout="column" class="input-w-icon">
+                                                <div fxLayout="column" fxLayoutAlign="center center"
+                                                    class="input-w-icon">
                                                     <mat-form-field class="multi-select-override" floatLabel="always">
                                                         <mat-label>END DATE</mat-label>
 
@@ -475,24 +479,31 @@
                                                         </ng-container>
                                                     </mat-form-field>
                                                 </div>
+                                                <div fxLayout="column" class="validation-text"
+                                                    fxLayoutAlign="center end">
+
+                                                    <p><b>{{StaffAdminVerbiage | slice:0:9 }}</b>{{StaffAdminVerbiage | slice:9:58}}<br>{{StaffAdminVerbiage | slice:59:StaffAdminVerbiage.length}}
+                                                    </p>
+
+                                                </div>
                                             </div>
 
                                         </form>
                                         <ng-template #updateStaffDialog>
                                             <div mat-dialog-content class="mat-typography">
-                                                <h3>Are you sure you want to save changes to this Staff?</h3>
+                                                <h3>Are you sure you want to remove {{StaffName}}?</h3>
                                             </div>
                                             <div mat-dialog-actions align="end">
                                                 <button mat-button mat-dialog-close>Cancel</button>
                                                 <button mat-flat-button color="accent" mat-dialog-close
-                                                    (click)="submitForm()">Save and Update Staff</button>
+                                                    (click)="RemoveStaffDetails()">REMOVE</button>
                                             </div>
                                         </ng-template>
                                     </div>
                                     <div mat-dialog-actions align="end">
                                         <button mat-button (click)="cancelStaffAdminDialog()">Cancel</button>
-                                        <button mat-flat-button (click)="confirmStaffUserUpdate()"
-                                            color="accent">SAVE</button>
+                                        <button mat-flat-button (click)="confirmStaffAdminUpdate()" color="accent"
+                                            [disabled]="!StaffAdminForm.valid">REMOVE STAFF</button>
                                     </div>
                                 </ng-template>
 
@@ -502,6 +513,7 @@
 
                         </div>
                     </form>
+
                 </div>
             </mat-cell>
 

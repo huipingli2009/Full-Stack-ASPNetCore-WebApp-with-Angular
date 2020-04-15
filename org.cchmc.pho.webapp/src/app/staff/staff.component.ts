@@ -10,7 +10,7 @@ import { NGXLogger } from 'ngx-logger';
 import { take, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { ErrorInterceptor } from '../helpers/error.interceptor';
 import { comparePasswords } from '../helpers/password-match.validator';
-import { Responsibilities, Staff, StaffDetails } from '../models/Staff';
+import { Responsibilities, Staff, StaffDetails, StaffAdmin } from '../models/Staff';
 import { CurrentUser, User } from '../models/user';
 import { RestService } from '../rest.service';
 import { AuthenticationService } from '../services/authentication.service';
@@ -51,11 +51,15 @@ export class StaffComponent implements OnInit, OnDestroy {
   userStatus: number;
   selectedStaffUser: number;
   isPasswordUpdated: boolean;
-
+  staffAdmin: StaffAdmin;
+  StaffName: string;
+  StaffAdminVerbiage: string = " Warning! This staff member will be removed from your list.Please contact your PIC if you would like to add them back.";
   @ViewChild('table') table: MatTable<Staff>;
   @ViewChild('adminDialog') adminDialog: TemplateRef<any>;
   @ViewChild('StaffadminDialog') StaffAdminDialog: TemplateRef<any>;
   @ViewChild('updateUserDialog') updateUserDialog: TemplateRef<any>;
+  @ViewChild('updateStaffDialog') updateStaffDialog: TemplateRef<any>;
+
 
   credentials: Credential[];
   filterValues: any = {};
@@ -91,7 +95,7 @@ export class StaffComponent implements OnInit, OnDestroy {
     isPHOBoard: [''],
     isOVPCABoard: [''],
     isRVPIBoard: [''],
-    locations: [null],
+    locations: [null, Validators.required],
     endDate: [null],
     deletedFlag: false
   });
@@ -99,8 +103,8 @@ export class StaffComponent implements OnInit, OnDestroy {
   StaffAdminForm = this.fb.group(
     {
       id: [''],
-      deletedFlag: false,
-      endDate: [null]
+      deletedFlag: [""],
+      endDate: [null, [DateRequiredValidator]]
     }
   )
 
@@ -170,7 +174,9 @@ export class StaffComponent implements OnInit, OnDestroy {
       } else { this.isUserAdmin = false; }
     });
   }
-
+  transformEndDate(date) {
+    return this.datePipe.transform(date, 'yyyyMMdd');
+  }
 
   compareByLocationName(o1, o2): boolean {
     return o1.name === o2.name;
@@ -245,10 +251,12 @@ export class StaffComponent implements OnInit, OnDestroy {
       this.StaffDetailsForm.get('isRVPIBoard').setValue(this.staffDetails.isRVPIBoard);
       this.StaffDetailsForm.get('locations').setValue(this.staffDetails.locations);
 
-      this.StaffAdminForm.get('id').setValue(this.staffDetails.id);
-      this.StaffAdminForm.get('deletedFlag').setValue(this.staffDetails.deletedFlag);
+      this.StaffAdminForm.get('id').setValue(this.staffDetails.id.toString());
+      this.StaffAdminForm.get('deletedFlag').setValue(this.staffDetails.deletedFlag.toString());
       this.StaffAdminForm.get('endDate').setValue(this.staffDetails.endDate);
-  
+
+      this.StaffName = `${this.staffDetails.firstName} ${this.staffDetails.lastName}`;
+
       this.getStaffUser(data.id);
     });
   }
@@ -276,6 +284,19 @@ export class StaffComponent implements OnInit, OnDestroy {
           console.error('Not found');
         }
       });
+  }
+
+  RemoveStaffDetails() {
+    this.staffAdmin = this.StaffAdminForm.value;
+    this.staffAdmin.endDate = this.transformEndDate(this.staffAdmin.endDate);
+    this.RemoveStaff(this.staffAdmin);
+  }
+  RemoveStaff(staffAdmin: StaffAdmin) {
+    this.rest.RemoveStaff(staffAdmin).pipe(take(1)).subscribe(res => {
+      (res) ? this.snackBar.openSnackBar(`Staff ${this.StaffName} removed`, 'Close', 'success-snackbar') : this.snackBar.openSnackBar(`Staff ${this.StaffName} is not removed`, 'Close', 'warn-snackbar')
+      this.getStaff();
+      this.dialog.closeAll();
+    });
   }
 
   getUserRoles() {
@@ -372,6 +393,8 @@ export class StaffComponent implements OnInit, OnDestroy {
   /*Update User */
   updateStaffUser(id, user) {
     this.userService.updateUser(id, user).pipe(take(1)).subscribe(res => {
+
+      this.snackBar.openSnackBar(`User Updated ${this.StaffName} `, 'Close', 'success-snackbar')
       this.logger.log('update user res in taff', res);
     })
   }
@@ -494,6 +517,14 @@ export class StaffComponent implements OnInit, OnDestroy {
     if (valid) {
       this.logger.log('Form Valid')
       this.dialog.open(this.updateUserDialog, { disableClose: true });
+    }
+  }
+
+  confirmStaffAdminUpdate() {
+    const { value, valid } = this.StaffAdminForm;
+    if (valid) {
+      this.logger.log('Form Valid')
+      this.dialog.open(this.updateStaffDialog, { disableClose: true });
     }
   }
 

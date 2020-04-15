@@ -66,6 +66,12 @@ export interface PracticeList {
     practiceList: Array<Practices>;
 }
 
+export interface StaffAdmin {
+    id: number;
+    deletedFlag: boolean;
+    endDate: string;
+}
+
 export interface Practices {
     id: number;
     name: string;

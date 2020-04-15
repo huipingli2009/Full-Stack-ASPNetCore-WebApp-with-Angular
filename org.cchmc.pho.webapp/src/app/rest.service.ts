@@ -6,7 +6,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from '../environments/environment';
 import { Alerts, EdChart, EdChartDetails, Population, Quicklinks, Spotlight } from './models/dashboard';
 import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Patients, Pmca, PopSlices, Providers, States } from './models/patients';
-import { PracticeList, Responsibilities, Staff, StaffDetails } from './models/Staff';
+import { PracticeList, Responsibilities, Staff, StaffDetails, StaffAdmin } from './models/Staff';
 import { Followup, WorkbookPatient, WorkbookProvider, WorkbookReportingMonths, WorkbookPractice } from './models/workbook';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
 import { Location } from '@angular/common';
@@ -216,6 +216,15 @@ export class RestService {
     this.logger.log(JSON.stringify(StaffDetails));
     return this.http.put<StaffDetails>(`${API_URL}/api/Staff/${StaffDetails.id}`, JSON.stringify(StaffDetails), httpOptions).pipe(
       catchError(this.handleError<any>('updateStaff'))
+    );
+  }
+
+  /*Remove Staff*/
+  RemoveStaff(staffAdmin: StaffAdmin): Observable<any> {
+    this.logger.log(JSON.stringify(staffAdmin));
+    staffAdmin.deletedFlag = "true";
+    return this.http.put<boolean>(`${API_URL}/api/Staff/remove/${staffAdmin.id}`, JSON.stringify(staffAdmin), httpOptions).pipe(
+      catchError(this.handleError<any>('RemoveStaff'))
     );
   }
 

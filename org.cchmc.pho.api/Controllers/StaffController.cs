@@ -11,6 +11,7 @@ using org.cchmc.pho.identity.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using System.Globalization;
 
 namespace org.cchmc.pho.api.Controllers
 {
@@ -145,26 +146,28 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(200, type: typeof(bool))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> RemoveStaff(string staff, string end, string deleted)
+        public async Task<IActionResult> RemoveStaff(string staff,[FromBody]StaffAdmin staffAdmin)
         {
             if (!int.TryParse(staff, out var staffId))
             {
                 _logger.LogInformation($"Failed to parse staffId - {staff}");
                 return BadRequest("staff is not a valid integer");
             }
-            if (!DateTime.TryParse(end, out var endDate))
+          
+            if (!DateTime.TryParseExact(staffAdmin.EndDate, "yyyyMMdd", CultureInfo.CurrentCulture, DateTimeStyles.None, out var endDate))
             {
-                _logger.LogInformation($"Failed to parse endDate - {end}");
-                return BadRequest("endDate is not a valid date");
+                _logger.LogInformation($"Failed to parse EndDate - {staffAdmin.EndDate}");
+                return BadRequest("EndDate is not a valid datetime");
             }
-            if (string.IsNullOrWhiteSpace(deleted))
+
+            if (string.IsNullOrWhiteSpace(staffAdmin.DeletedFlag))
             {
-                _logger.LogInformation($"Failed to parse deletedFlag - {deleted}");
+                _logger.LogInformation($"Failed to parse deletedFlag - {staffAdmin.DeletedFlag}");
                 return BadRequest("deletedFlag is blank");
             }
-            if (!Boolean.TryParse(deleted, out var deletedFlag))
+            if (!Boolean.TryParse(staffAdmin.DeletedFlag, out var deletedFlag))
             {
-                _logger.LogInformation($"Failed to parse deletedFlag - {deleted}");
+                _logger.LogInformation($"Failed to parse deletedFlag - {staffAdmin.DeletedFlag}");
                 return BadRequest("deletedFlag is not a valid boolean");
             }            
 
