@@ -1,7 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, TemplateRef, ViewChild, OnDestroy } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators, FormArray } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Sort } from '@angular/material/sort';
@@ -54,12 +54,14 @@ export class StaffComponent implements OnInit, OnDestroy {
 
   @ViewChild('table') table: MatTable<Staff>;
   @ViewChild('adminDialog') adminDialog: TemplateRef<any>;
+  @ViewChild('StaffadminDialog') StaffAdminDialog: TemplateRef<any>;
   @ViewChild('updateUserDialog') updateUserDialog: TemplateRef<any>;
 
   credentials: Credential[];
   filterValues: any = {};
   sortedData: Staff[];
   responsibilities: Responsibilities[];
+  locationsList: Location[];
   staffDetails: StaffDetails;
   error: any;
   staff: Staff[];
@@ -88,8 +90,20 @@ export class StaffComponent implements OnInit, OnDestroy {
     isQPLLeader: [''],
     isPHOBoard: [''],
     isOVPCABoard: [''],
-    isRVPIBoard: ['']
+    isRVPIBoard: [''],
+    locations: [null],
+    endDate: [null],
+    deletedFlag: false
   });
+
+  StaffAdminForm = this.fb.group(
+    {
+      id: [''],
+      deletedFlag: false,
+      endDate: [null]
+    }
+  )
+
 
   constructor(private rest: RestService, private logger: NGXLogger, private fb: FormBuilder, private datePipe: DatePipe,
     private snackBar: MatSnackBarComponent, private userService: UserService, public dialog: MatDialog,
@@ -113,6 +127,7 @@ export class StaffComponent implements OnInit, OnDestroy {
     this.getPositions();
     this.getCredentials();
     this.getResponsibilities();
+    this.getLocations();
     this.getAdminVerbiage();
     this.getCurrentPractice();
     this.validateNPI();
@@ -140,6 +155,12 @@ export class StaffComponent implements OnInit, OnDestroy {
     });
   }
 
+  getLocations() {
+    this.rest.getLocations().pipe(take(1)).subscribe((data) => {
+      this.locationsList = data;
+    });
+  }
+
   getCurrentUser() {
     this.userService.getCurrentUser().pipe(take(1)).subscribe((data) => {
       this.currentUser = data;
@@ -148,6 +169,11 @@ export class StaffComponent implements OnInit, OnDestroy {
         this.isUserAdmin = true;
       } else { this.isUserAdmin = false; }
     });
+  }
+
+
+  compareByLocationName(o1, o2): boolean {
+    return o1.name === o2.name;
   }
 
   // Multi Error Check
@@ -199,7 +225,30 @@ export class StaffComponent implements OnInit, OnDestroy {
   getStaffDetails(id: number) {
     this.rest.getStaffDetails(id).pipe(take(1)).subscribe((data) => {
       this.staffDetails = data;
-      this.StaffDetailsForm.setValue(this.staffDetails);
+
+      this.StaffDetailsForm.get('id').setValue(this.staffDetails.id);
+      this.StaffDetailsForm.get('firstName').setValue(this.staffDetails.firstName);
+      this.StaffDetailsForm.get('lastName').setValue(this.staffDetails.lastName);
+      this.StaffDetailsForm.get('email').setValue(this.staffDetails.email);
+      this.StaffDetailsForm.get('phone').setValue(this.staffDetails.phone);
+      this.StaffDetailsForm.get('startDate').setValue(this.staffDetails.startDate);
+      this.StaffDetailsForm.get('positionId').setValue(this.staffDetails.positionId);
+      this.StaffDetailsForm.get('credentialId').setValue(this.staffDetails.credentialId);
+      this.StaffDetailsForm.get('npi').setValue(this.staffDetails.npi);
+      this.StaffDetailsForm.get('isLeadPhysician').setValue(this.staffDetails.isLeadPhysician);
+      this.StaffDetailsForm.get('isQITeam').setValue(this.staffDetails.isQITeam);
+      this.StaffDetailsForm.get('isPracticeManager').setValue(this.staffDetails.isPracticeManager);
+      this.StaffDetailsForm.get('isInterventionContact').setValue(this.staffDetails.isInterventionContact);
+      this.StaffDetailsForm.get('isQPLLeader').setValue(this.staffDetails.isQPLLeader);
+      this.StaffDetailsForm.get('isPHOBoard').setValue(this.staffDetails.isPHOBoard);
+      this.StaffDetailsForm.get('isOVPCABoard').setValue(this.staffDetails.isOVPCABoard);
+      this.StaffDetailsForm.get('isRVPIBoard').setValue(this.staffDetails.isRVPIBoard);
+      this.StaffDetailsForm.get('locations').setValue(this.staffDetails.locations);
+
+      this.StaffAdminForm.get('id').setValue(this.staffDetails.id);
+      this.StaffAdminForm.get('deletedFlag').setValue(this.staffDetails.deletedFlag);
+      this.StaffAdminForm.get('endDate').setValue(this.staffDetails.endDate);
+  
       this.getStaffUser(data.id);
     });
   }
@@ -425,10 +474,17 @@ export class StaffComponent implements OnInit, OnDestroy {
     } else { this.getStaffUser(this.staffDetails.id) }
     const dialogRef = this.dialog.open(this.adminDialog, { disableClose: true });
   }
-
   cancelAdminDialog() {
     this.getUserRoles();
     this.isPasswordUpdated = false;
+    this.dialog.closeAll();
+  }
+
+  //for Staff Admin
+  openStaffAdminDialog() {
+    const dialogRefStaffAdmin = this.dialog.open(this.StaffAdminDialog, { disableClose: true });
+  }
+  cancelStaffAdminDialog() {
     this.dialog.closeAll();
   }
 
@@ -440,6 +496,7 @@ export class StaffComponent implements OnInit, OnDestroy {
       this.dialog.open(this.updateUserDialog, { disableClose: true });
     }
   }
+
 
   trackStaff(index: number, item: Staff): string {
     return '${item.id}';

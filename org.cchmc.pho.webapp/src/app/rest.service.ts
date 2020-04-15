@@ -9,6 +9,7 @@ import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Pati
 import { PracticeList, Responsibilities, Staff, StaffDetails } from './models/Staff';
 import { Followup, WorkbookPatient, WorkbookProvider, WorkbookReportingMonths, WorkbookPractice } from './models/workbook';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
+import { Location } from '@angular/common';
 
 
 
@@ -212,6 +213,7 @@ export class RestService {
 
   /*Updates Staff*/
   updateStaff(StaffDetails): Observable<any> {
+    this.logger.log(JSON.stringify(StaffDetails));
     return this.http.put<StaffDetails>(`${API_URL}/api/Staff/${StaffDetails.id}`, JSON.stringify(StaffDetails), httpOptions).pipe(
       catchError(this.handleError<any>('updateStaff'))
     );
@@ -242,6 +244,16 @@ export class RestService {
     const endpoint = `${API_URL}/api/staff/responsibilities`;
     return this.http.get<Responsibilities[]>(endpoint).pipe(
       map((data: Responsibilities[]) => {
+        return data;
+      })
+    );
+  }
+
+  /*Get all Locations */
+  getLocations(): Observable<any> {
+    const endpoint = `${API_URL}/api/staff/locations`;
+    return this.http.get<Location[]>(endpoint).pipe(
+      map((data: Location[]) => {
         return data;
       })
     );

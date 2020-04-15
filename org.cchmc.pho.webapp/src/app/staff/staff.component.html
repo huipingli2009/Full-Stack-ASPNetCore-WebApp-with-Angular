@@ -157,6 +157,44 @@
                     </div>
                     <form [formGroup]="StaffDetailsForm">
                         <div class="staff-element-detail">
+                            <div fxLayout="row" fxLayoutGap="34px">
+                                <div fxLayout="column" fxFlex>
+                                    <mat-form-field>
+                                        <mat-label>First Name </mat-label>
+                                        <input matInput formControlName="firstName" required>
+                                    </mat-form-field>
+                                    <ng-container
+                                        *ngIf="(StaffDetailsForm.get('firstName').touched || StaffDetailsForm.get('firstName').dirty) && (StaffDetailsForm.get('firstName').errors)">
+                                        <mat-error *ngIf="StaffDetailsForm.get('firstName').errors.required">
+                                            First Name is required
+                                        </mat-error>
+                                    </ng-container>
+                                </div>
+                                <div fxLayout="column" fxFlex>
+                                    <mat-form-field>
+                                        <mat-label>Last Name </mat-label>
+                                        <input matInput formControlName="lastName" required>
+                                    </mat-form-field>
+                                    <ng-container
+                                        *ngIf="(StaffDetailsForm.get('lastName').touched || StaffDetailsForm.get('lastName').dirty) && (StaffDetailsForm.get('lastName').errors)">
+                                        <mat-error *ngIf="StaffDetailsForm.get('lastName').errors.required">
+                                            Last Name is required
+                                        </mat-error>
+                                    </ng-container>
+                                </div>
+
+                                <div fxLayout="column" fxFlex>
+                                    <mat-form-field>
+                                        <mat-label>LOCATIONS</mat-label>
+                                        <mat-select formControlName="locations" multiple required
+                                            [compareWith]="compareByLocationName">
+                                            <mat-option *ngFor="let item of locationsList" [value]="item">
+                                                {{item.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
 
                             <div fxLayout="row" class="form-row" fxLayoutGap="34px">
                                 <div fxLayout="column" fxFlex class="input-w-icon">
@@ -295,10 +333,14 @@
                                 </div>
 
                             </div>
-                            <div fxLayout="row">
+                            <div fxLayout="row" fxLayoutGap="34px">
                                 <div fxLayout="column" fxLayoutAlign="start end">
                                     <button *ngIf="isUserAdmin" mat-flat-button color="primary"
                                         (click)="openAdminDialog()">PHO ADMINISTRATION</button>
+                                </div>
+                                <div fxLayout="column">
+                                    <button mat-flat-button color="primary" (click)="openStaffAdminDialog()">STAFF
+                                        ADMINISTRATION</button>
                                 </div>
                                 <div fxLayout="column" fxLayoutAlign="end end" fxFlex>
                                     <button mat-flat-button color="accent" (click)="updateStaff()"
@@ -396,6 +438,64 @@
                                             color="accent">SAVE</button>
                                     </div>
                                 </ng-template>
+
+                                <ng-template #StaffadminDialog>
+                                    <div mat-dialog-content class="mat-typography" id="Staff-admin-dialog">
+                                        <form [formGroup]="StaffAdminForm" (ngSubmit)="confirmStaffUserUpdate()">
+                                            <div fxLayout="row" class="detail-heading">STAFF ADMINISTRATION</div>
+                                            <div fxLayout="row" class="validation-text">
+                                                <p>{{adminVerbiage | slice:0:141}}<br>{{adminVerbiage | slice:141:adminVerbiage.length}}
+                                                </p>
+                                            </div>
+                                            <div fxLayout="row">
+                                                <div fxLayout="column" fxFlex="25%">
+                                                    <label class="toggle-label">REMOVE STAFF</label>
+                                                    <mat-slide-toggle ngDefaultControl class="admin-toggle">
+                                                    </mat-slide-toggle>
+
+                                                </div>
+                                                <div fxLayout="column" class="input-w-icon">
+                                                    <mat-form-field class="multi-select-override" floatLabel="always">
+                                                        <mat-label>END DATE</mat-label>
+
+                                                        <input matInput placeholder="MM/DD/YYYY"
+                                                            formControlName="endDate" [matDatepicker]="picker" required>
+                                                        <mat-datepicker-toggle matPrefix [for]="picker">
+                                                            <mat-icon matDatepickerToggleIcon>
+                                                                calendar_today
+                                                            </mat-icon>
+                                                        </mat-datepicker-toggle>
+                                                        <mat-datepicker #picker></mat-datepicker>
+                                                        <ng-container
+                                                            *ngIf="(StaffAdminForm.get('endDate').touched || StaffAdminForm.get('endDate').dirty) && StaffAdminForm.get('endDate').errors">
+                                                            <mat-error
+                                                                *ngIf="StaffAdminForm.get('endDate').errors.daterequired">
+                                                                End Date is required in MM/DD/YYYY format
+                                                            </mat-error>
+                                                        </ng-container>
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                        <ng-template #updateStaffDialog>
+                                            <div mat-dialog-content class="mat-typography">
+                                                <h3>Are you sure you want to save changes to this Staff?</h3>
+                                            </div>
+                                            <div mat-dialog-actions align="end">
+                                                <button mat-button mat-dialog-close>Cancel</button>
+                                                <button mat-flat-button color="accent" mat-dialog-close
+                                                    (click)="submitForm()">Save and Update Staff</button>
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                    <div mat-dialog-actions align="end">
+                                        <button mat-button (click)="cancelStaffAdminDialog()">Cancel</button>
+                                        <button mat-flat-button (click)="confirmStaffUserUpdate()"
+                                            color="accent">SAVE</button>
+                                    </div>
+                                </ng-template>
+
 
                             </div>
 

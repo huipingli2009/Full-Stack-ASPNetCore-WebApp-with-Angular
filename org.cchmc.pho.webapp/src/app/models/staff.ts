@@ -34,6 +34,9 @@ export class StaffDetails {
     isPHOBoard: boolean;
     isOVPCABoard: boolean;
     isRVPIBoard: boolean;
+    locations: Location[];
+    endDate: string;
+    deletedFlag: boolean;
 }
 
 export class Position {
@@ -42,6 +45,11 @@ export class Position {
     positionType: String;
 }
 
+export class Location {
+    id: number;
+    name: string;
+
+}
 export class Credentials {
     id: number;
     name: string;
