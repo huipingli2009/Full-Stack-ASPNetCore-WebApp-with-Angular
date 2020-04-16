@@ -156,9 +156,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@InitiativeId", SqlDbType.Int).Value = fileDetails.InitiativeId;
                     sqlCommand.Parameters.Add("@Description", SqlDbType.VarChar).Value = fileDetails.Description;
                     sqlCommand.Parameters.Add("@FileTypeID", SqlDbType.Int).Value = fileDetails.FileTypeId;
-                    sqlCommand.Parameters.Add("@FileType", SqlDbType.VarChar).Value = fileDetails.FileType;
                     sqlCommand.Parameters.Add("@FileURL", SqlDbType.VarChar).Value = fileDetails.FileURL;
-                    sqlCommand.Parameters.Add("@WatchFlag", SqlDbType.Bit).Value = fileDetails.WatchFlag;
                     sqlCommand.Parameters.Add("@Author", SqlDbType.VarChar).Value = fileDetails.Author;
                     sqlCommand.Parameters.Add("@SearchTags", SqlDbType.VarChar).Value = string.Join(",", (from f in fileDetails.Tags select f.Name).ToArray());
                     sqlCommand.Parameters.Add("@Published", SqlDbType.Bit).Value = fileDetails.PublishFlag;
@@ -280,6 +278,36 @@ namespace org.cchmc.pho.core.DataAccessLayer
                         }
                     }
                     return fileTags;
+                }
+            }
+        }
+
+        public async Task<List<FileType>> GetFileTypesAll()
+        {
+            DataTable dataTable = new DataTable();
+            List<FileType> fileTypes = new List<FileType>();
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetFileTypeList", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    sqlConnection.Open();
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        foreach (DataRow dr in dataTable.Rows)
+                        {
+                            var record = new FileType()
+                            {
+                                Id = (dr["Id"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Id"].ToString())),
+                                Name = dr["Name"].ToString()
+                            };
+                            fileTypes.Add(record);
+                        }
+                    }
+                    return fileTypes;
                 }
             }
         }

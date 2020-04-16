@@ -1,7 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, TemplateRef, ViewChild, OnDestroy } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators, FormArray } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Sort } from '@angular/material/sort';
@@ -10,7 +10,7 @@ import { NGXLogger } from 'ngx-logger';
 import { take, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { ErrorInterceptor } from '../helpers/error.interceptor';
 import { comparePasswords } from '../helpers/password-match.validator';
-import { Responsibilities, Staff, StaffDetails } from '../models/Staff';
+import { Responsibilities, Staff, StaffDetails, StaffAdmin } from '../models/Staff';
 import { CurrentUser, User } from '../models/user';
 import { RestService } from '../rest.service';
 import { AuthenticationService } from '../services/authentication.service';
@@ -51,15 +51,21 @@ export class StaffComponent implements OnInit, OnDestroy {
   userStatus: number;
   selectedStaffUser: number;
   isPasswordUpdated: boolean;
-
+  staffAdmin: StaffAdmin;
+  StaffName: string;
+  StaffAdminVerbiage: string = " Warning! This staff member will be removed from your list.Please contact your PIC if you would like to add them back.";
   @ViewChild('table') table: MatTable<Staff>;
   @ViewChild('adminDialog') adminDialog: TemplateRef<any>;
+  @ViewChild('StaffadminDialog') StaffAdminDialog: TemplateRef<any>;
   @ViewChild('updateUserDialog') updateUserDialog: TemplateRef<any>;
+  @ViewChild('updateStaffDialog') updateStaffDialog: TemplateRef<any>;
+
 
   credentials: Credential[];
   filterValues: any = {};
   sortedData: Staff[];
   responsibilities: Responsibilities[];
+  locationsList: Location[];
   staffDetails: StaffDetails;
   error: any;
   staff: Staff[];
@@ -88,8 +94,20 @@ export class StaffComponent implements OnInit, OnDestroy {
     isQPLLeader: [''],
     isPHOBoard: [''],
     isOVPCABoard: [''],
-    isRVPIBoard: ['']
+    isRVPIBoard: [''],
+    locations: [null, Validators.required],
+    endDate: [null],
+    deletedFlag: false
   });
+
+  StaffAdminForm = this.fb.group(
+    {
+      id: [''],
+      deletedFlag: true,
+      endDate: [null, [DateRequiredValidator]]
+    }
+  )
+
 
   constructor(private rest: RestService, private logger: NGXLogger, private fb: FormBuilder, private datePipe: DatePipe,
     private snackBar: MatSnackBarComponent, private userService: UserService, public dialog: MatDialog,
@@ -113,6 +131,7 @@ export class StaffComponent implements OnInit, OnDestroy {
     this.getPositions();
     this.getCredentials();
     this.getResponsibilities();
+    this.getLocations();
     this.getAdminVerbiage();
     this.getCurrentPractice();
     this.validateNPI();
@@ -140,6 +159,12 @@ export class StaffComponent implements OnInit, OnDestroy {
     });
   }
 
+  getLocations() {
+    this.rest.getLocations().pipe(take(1)).subscribe((data) => {
+      this.locationsList = data;
+    });
+  }
+
   getCurrentUser() {
     this.userService.getCurrentUser().pipe(take(1)).subscribe((data) => {
       this.currentUser = data;
@@ -148,6 +173,13 @@ export class StaffComponent implements OnInit, OnDestroy {
         this.isUserAdmin = true;
       } else { this.isUserAdmin = false; }
     });
+  }
+  transformEndDate(date) {
+    return this.datePipe.transform(date, 'yyyyMMdd');
+  }
+
+  compareByLocationName(o1, o2): boolean {
+    return o1.name === o2.name;
   }
 
   // Multi Error Check
@@ -199,7 +231,32 @@ export class StaffComponent implements OnInit, OnDestroy {
   getStaffDetails(id: number) {
     this.rest.getStaffDetails(id).pipe(take(1)).subscribe((data) => {
       this.staffDetails = data;
-      this.StaffDetailsForm.setValue(this.staffDetails);
+
+      this.StaffDetailsForm.get('id').setValue(this.staffDetails.id);
+      this.StaffDetailsForm.get('firstName').setValue(this.staffDetails.firstName);
+      this.StaffDetailsForm.get('lastName').setValue(this.staffDetails.lastName);
+      this.StaffDetailsForm.get('email').setValue(this.staffDetails.email);
+      this.StaffDetailsForm.get('phone').setValue(this.staffDetails.phone);
+      this.StaffDetailsForm.get('startDate').setValue(this.staffDetails.startDate);
+      this.StaffDetailsForm.get('positionId').setValue(this.staffDetails.positionId);
+      this.StaffDetailsForm.get('credentialId').setValue(this.staffDetails.credentialId);
+      this.StaffDetailsForm.get('npi').setValue(this.staffDetails.npi);
+      this.StaffDetailsForm.get('isLeadPhysician').setValue(this.staffDetails.isLeadPhysician);
+      this.StaffDetailsForm.get('isQITeam').setValue(this.staffDetails.isQITeam);
+      this.StaffDetailsForm.get('isPracticeManager').setValue(this.staffDetails.isPracticeManager);
+      this.StaffDetailsForm.get('isInterventionContact').setValue(this.staffDetails.isInterventionContact);
+      this.StaffDetailsForm.get('isQPLLeader').setValue(this.staffDetails.isQPLLeader);
+      this.StaffDetailsForm.get('isPHOBoard').setValue(this.staffDetails.isPHOBoard);
+      this.StaffDetailsForm.get('isOVPCABoard').setValue(this.staffDetails.isOVPCABoard);
+      this.StaffDetailsForm.get('isRVPIBoard').setValue(this.staffDetails.isRVPIBoard);
+      this.StaffDetailsForm.get('locations').setValue(this.staffDetails.locations);
+
+      this.StaffAdminForm.get('id').setValue(this.staffDetails.id.toString());
+      this.StaffAdminForm.get('deletedFlag').setValue(this.staffDetails.deletedFlag.toString());
+      this.StaffAdminForm.get('endDate').setValue(this.staffDetails.endDate);
+
+      this.StaffName = `${this.staffDetails.firstName} ${this.staffDetails.lastName}`;
+
       this.getStaffUser(data.id);
     });
   }
@@ -227,6 +284,19 @@ export class StaffComponent implements OnInit, OnDestroy {
           console.error('Not found');
         }
       });
+  }
+
+  RemoveStaffDetails() {
+    this.staffAdmin = this.StaffAdminForm.value;
+    this.staffAdmin.endDate = this.transformEndDate(this.staffAdmin.endDate);
+    this.RemoveStaff(this.staffAdmin);
+  }
+  RemoveStaff(staffAdmin: StaffAdmin) {
+    this.rest.RemoveStaff(staffAdmin).pipe(take(1)).subscribe(res => {
+      (res) ? this.snackBar.openSnackBar(`Staff ${this.StaffName} removed`, 'Close', 'success-snackbar') : this.snackBar.openSnackBar(`Staff ${this.StaffName} is not removed`, 'Close', 'warn-snackbar')
+      this.getStaff();
+      this.dialog.closeAll();
+    });
   }
 
   getUserRoles() {
@@ -323,6 +393,8 @@ export class StaffComponent implements OnInit, OnDestroy {
   /*Update User */
   updateStaffUser(id, user) {
     this.userService.updateUser(id, user).pipe(take(1)).subscribe(res => {
+
+      this.snackBar.openSnackBar(`User Updated ${this.StaffName} `, 'Close', 'success-snackbar')
       this.logger.log('update user res in taff', res);
     })
   }
@@ -425,10 +497,17 @@ export class StaffComponent implements OnInit, OnDestroy {
     } else { this.getStaffUser(this.staffDetails.id) }
     const dialogRef = this.dialog.open(this.adminDialog, { disableClose: true });
   }
-
   cancelAdminDialog() {
     this.getUserRoles();
     this.isPasswordUpdated = false;
+    this.dialog.closeAll();
+  }
+
+  //for Staff Admin
+  openStaffAdminDialog() {
+    const dialogRefStaffAdmin = this.dialog.open(this.StaffAdminDialog, { disableClose: true });
+  }
+  cancelStaffAdminDialog() {
     this.dialog.closeAll();
   }
 
@@ -440,6 +519,15 @@ export class StaffComponent implements OnInit, OnDestroy {
       this.dialog.open(this.updateUserDialog, { disableClose: true });
     }
   }
+
+  confirmStaffAdminUpdate() {
+    const { value, valid } = this.StaffAdminForm;
+    if (valid) {
+      this.logger.log('Form Valid')
+      this.dialog.open(this.updateStaffDialog, { disableClose: true });
+    }
+  }
+
 
   trackStaff(index: number, item: Staff): string {
     return '${item.id}';
