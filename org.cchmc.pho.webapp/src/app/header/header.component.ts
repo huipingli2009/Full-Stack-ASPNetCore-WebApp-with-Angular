@@ -111,7 +111,7 @@ export class HeaderComponent {
           }
           if(alert.filterType === 'PatientList') {
             toastrMessage = `<i class="fas fa-exclamation-triangle alert-icon" title="${alert.definition}"></i>
-          ${alert.message}<span class="alert-link">${alert.linkText}»</span>`;
+          ${alert.message}<a class="alert-link">${alert.linkText}»</a>`;
           }
 
 
