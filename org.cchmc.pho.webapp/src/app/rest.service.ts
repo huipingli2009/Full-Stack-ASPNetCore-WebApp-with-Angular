@@ -543,6 +543,23 @@ export class RestService {
       })
     );
   }
+  /* Update File Watchlist Status*/
+  updateFileWatchlistStatus(FileId): Observable<any> {
+    return this.http.put(`${API_URL}/api/Files/watch/${FileId}`, httpOptions).pipe(
+      map((data) => {
+        return data;
+      })
+    );
+  }
+
+  
+  /* Delete File (Admin Only) */
+  deleteFile(fileId): Observable<any> {
+    return this.http.delete<any>(`${API_URL}/api/Files/${fileId}`).pipe(
+      tap(_ => this.snackBar.openSnackBar(`File has been Deleted!`
+        , 'Close', 'warn-snackbar'))
+    );
+  }
 
 
 

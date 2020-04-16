@@ -35,6 +35,7 @@ export class FilesComponent implements OnInit {
   currentLastViewed: Date;
   currentWatchFlag: boolean;
   isAddingNewFile: boolean;
+  deletingFileId: number;
   fileTypeList = [
     {
       id: 1,
@@ -166,11 +167,6 @@ export class FilesComponent implements OnInit {
     })
   }
 
-  /*Add New File */
-  addNewFile() {
-
-  }
-
   submitFileAddUpdate() {
     let tagsSplit = this.adminFileForm.controls.tags.value.replace(/\s*,\s*/g, ",");
     tagsSplit = tagsSplit.split(',');
@@ -224,13 +220,19 @@ export class FilesComponent implements OnInit {
       });
     }
     this.cancelAdminDialog();
-    this.getAllFiles();
   }
 
   updateWatchlistStatus(id, index) {
-    // this.rest.updateWatchlistStatus(id).subscribe((data) => {
-    // });
-    this.logger.log(id, index);
+    this.rest.updateFileWatchlistStatus(id).subscribe((data) => {
+    });
+  }
+
+  /* Delete File (Admin ONly)*/
+  deleteFile() {
+    this.rest.deleteFile(this.deletingFileId).subscribe((data) => {
+      this.logger.log('File Delete', data);
+    });
+    this.getAllFiles();
   }
 
   /* Gets / Sorts for Filtering */
@@ -329,11 +331,17 @@ export class FilesComponent implements OnInit {
     this.dialog.open(this.adminConfirmDialog, { disableClose: true });
   }
 
+  openFileDeleteDialog(fileId) {
+    this.deletingFileId = fileId;
+    this.dialog.open(this.adminConfirmDeleteDialog, { disableClose: true})
+  }
+
   cancelAdminDialog() {
     this.isSavingDraft = false;
     this.isPublishingFile = false;
     this.isPublishingWithAlert = false;
     this.isAddingNewFile = false;
+    this.getAllFiles();
     this.dialog.closeAll();
   }
 
@@ -342,6 +350,7 @@ export class FilesComponent implements OnInit {
     this.isPublishingFile = false;
     this.isPublishingWithAlert = false;
     this.isAddingNewFile = false;
+    this.deletingFileId = undefined;
   }
 
 }

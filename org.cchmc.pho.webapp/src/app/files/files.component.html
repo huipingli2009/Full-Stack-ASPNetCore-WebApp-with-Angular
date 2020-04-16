@@ -82,7 +82,7 @@
         <mat-checkbox class="table-header-checkbox" [(ngModel)]="watchFlag" (change)="isOnWatchlist($event)">
         </mat-checkbox>
       </th>
-      <td mat-cell *matCellDef="let row; let i = renderIndex;" (click)="updateWatchlistStatus(row, i)"
+      <td mat-cell *matCellDef="let row; let i = renderIndex;" (click)="updateWatchlistStatus(row.id, i)"
         (click)="row.watchFlag = !row.watchFlag">
         <button mat-icon-button>
           <i class="material-icons watchlist-icon" [ngClass]="row.watchFlag ? 'on-watchlist' : 'off-watchlist'">
@@ -108,7 +108,7 @@
           </i>
         </a>
         <a mat-icon-button *ngIf="isUserAdmin">
-          <i class="material-icons text-warn">
+          <i class="material-icons text-warn" (click)="openFileDeleteDialog(row.id)">
             delete
           </i>
         </a>
@@ -146,7 +146,7 @@
           FILE</div>
           <br>
         <div fxLayout="row">
-          <label class="toggle-label">Practice Only</label>
+          <label class="toggle-label practice-label">Practice Only</label>
           <mat-slide-toggle ngDefaultControl class="admin-toggle" formControlName="practiceOnly"
             [checked]="adminFileForm.controls.practiceOnly">
           </mat-slide-toggle>
@@ -267,6 +267,15 @@
           Publish File</button>
           <button mat-flat-button color="accent" mat-dialog-close (click)="submitFileAddUpdate()" *ngIf="isPublishingWithAlert">
             Publish File With Alert</button>
+    </div>
+  </ng-template>
+  <ng-template #adminConfirmDeleteDialog>
+    <div mat-dialog-content class="mat-typography"></div>
+      <h3>Are you sure you want to delete this file?</h3>
+    <div mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close (click)="cancelConfirmDialog()">Cancel</button>
+      <button mat-flat-button color="warn" mat-dialog-close (click)="deleteFile()">
+        Delete File</button>
     </div>
   </ng-template>
 
