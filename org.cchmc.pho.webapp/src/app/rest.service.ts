@@ -496,9 +496,16 @@ export class RestService {
 
   /*Update Files*/
   updateFileDetails(fileDetails): Observable<any> {
-    this.logger.log('FILE DETAILS IN REST', fileDetails);
     return this.http.put(`${API_URL}/api/Files/`, JSON.stringify(fileDetails), httpOptions).pipe(
       tap(_ => this.snackBar.openSnackBar(`File has been updated!`
+        , 'Close', 'success-snackbar'))
+    );
+  }
+  /*Add New File*/
+  addNewFile(fileDetails): Observable<any> {
+    this.logger.log('FILE Add IN REST', fileDetails);
+    return this.http.post(`${API_URL}/api/Files/`, JSON.stringify(fileDetails), httpOptions).pipe(
+      tap(_ => this.snackBar.openSnackBar(`File has been Added!`
         , 'Close', 'success-snackbar'))
     );
   }

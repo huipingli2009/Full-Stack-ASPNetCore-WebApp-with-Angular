@@ -7,6 +7,7 @@ export interface FilesList {
     fileURL: string;
     fileTypeId: number;
     fileType: string;
+    publishFlag: boolean;
     tags: [
         {
             name: string;

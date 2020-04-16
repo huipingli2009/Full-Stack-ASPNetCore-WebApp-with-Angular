@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, ChangeDetectorRef } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -34,6 +34,7 @@ export class FilesComponent implements OnInit {
   currentDateCreated: Date;
   currentLastViewed: Date;
   currentWatchFlag: boolean;
+  isAddingNewFile: boolean;
   fileTypeList = [
     {
       id: 1,
@@ -87,7 +88,7 @@ export class FilesComponent implements OnInit {
   @ViewChild('adminConfirmDeleteDialog') adminConfirmDeleteDialog: TemplateRef<any>;
 
   constructor(private rest: RestService, private logger: NGXLogger, private dialog: MatDialog,
-    private userService: UserService, private fb: FormBuilder) {
+    private userService: UserService, private fb: FormBuilder, private changeDetectorRefs: ChangeDetectorRef) {
 
     this.adminFileForm = this.fb.group({
       practiceOnly: ['', Validators.required],
@@ -131,6 +132,7 @@ export class FilesComponent implements OnInit {
       this.dataSource.sort = this.sort;
       this.logger.log(this.fileList, 'FILES');
     })
+    this.changeDetectorRefs.detectChanges();
   }
 
   getFileDetials(fileId) {
@@ -164,6 +166,11 @@ export class FilesComponent implements OnInit {
     })
   }
 
+  /*Add New File */
+  addNewFile() {
+
+  }
+
   submitFileAddUpdate() {
     let tagsSplit = this.adminFileForm.controls.tags.value.replace(/\s*,\s*/g, ",");
     tagsSplit = tagsSplit.split(',');
@@ -193,10 +200,31 @@ export class FilesComponent implements OnInit {
       createAlert: this.isPublishingWithAlert
     };
     this.logger.log(fileFormValues, 'FORM SUBMISSION');
-    this.rest.updateFileDetails(fileFormValues).pipe(take(1)).subscribe((data) => {
-      this.logger.log(data, 'PUT FILES');
-    });
+    if (this.isAddingNewFile === true) {
+      const fileFormValues = {
+        name: this.adminFileForm.controls.name.value,
+        resourceTypeId: this.adminFileForm.controls.resourceTypeId.value,
+        initiativeId: this.adminFileForm.controls.initiativeId.value,
+        author: this.adminFileForm.controls.author.value,
+        fileTypeId: this.adminFileForm.controls.fileType.value.id,
+        fileType: this.adminFileForm.controls.fileType.value.name,
+        tags: tagsSplit,
+        fileURL: this.adminFileForm.controls.fileURL.value,
+        description: this.adminFileForm.controls.description.value,
+        practiceOnly: this.adminFileForm.controls.practiceOnly.value,
+        publishFlag: publishFile,
+        createAlert: this.isPublishingWithAlert
+      };
+      this.rest.addNewFile(fileFormValues).pipe(take(1)).subscribe((data) => {
+        this.logger.log(data, 'New File');
+      });
+    } else {
+      this.rest.updateFileDetails(fileFormValues).pipe(take(1)).subscribe((data) => {
+        this.logger.log(data, 'PUT FILES');
+      });
+    }
     this.cancelAdminDialog();
+    this.getAllFiles();
   }
 
   updateWatchlistStatus(id, index) {
@@ -212,6 +240,10 @@ export class FilesComponent implements OnInit {
         this.dataSource = new MatTableDataSource(res);
         this.logger.log(res, 'FIND FILTER FILES');
       })
+  }
+  searchByFileName(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
   getResourceTypes() {
     this.rest.getFileResources().pipe(take(1)).subscribe((data) => {
@@ -269,6 +301,13 @@ export class FilesComponent implements OnInit {
     this.getFileDetials(fileId);
     this.dialog.open(this.adminDialog, { disableClose: true });
   }
+  openAdminAddDialog() {
+    this.adminFileForm.controls.practiceOnly.setValue(false);
+    this.adminFileForm.controls.resourceTypeId.setValue(1);
+    this.adminFileForm.controls.initiativeId.setValue(7);
+    this.dialog.open(this.adminDialog, { disableClose: true });
+    this.isAddingNewFile = true;
+  }
 
   // Type = submission type. 1 = Save Draft / 2 = Publish File / 3 = Publish with Alert
   openAdminConfirmDialog(type) {
@@ -294,6 +333,7 @@ export class FilesComponent implements OnInit {
     this.isSavingDraft = false;
     this.isPublishingFile = false;
     this.isPublishingWithAlert = false;
+    this.isAddingNewFile = false;
     this.dialog.closeAll();
   }
 
@@ -301,6 +341,7 @@ export class FilesComponent implements OnInit {
     this.isSavingDraft = false;
     this.isPublishingFile = false;
     this.isPublishingWithAlert = false;
+    this.isAddingNewFile = false;
   }
 
 }

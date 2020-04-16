@@ -88,7 +88,7 @@ namespace org.cchmc.pho.api.Controllers
                 return StatusCode(500, "An error occurred");
             }
         }
-        [AllowAnonymous]
+        
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [HttpPut()]
         [SwaggerResponse(200, type: typeof(FileDetailsViewModel))]
@@ -120,7 +120,7 @@ namespace org.cchmc.pho.api.Controllers
                 return StatusCode(500, "An error occurred");
             }
         }
-
+        [AllowAnonymous]
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [HttpPost()]
         [SwaggerResponse(200, type: typeof(FileDetailsViewModel))]

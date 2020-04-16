@@ -33,6 +33,14 @@
         </mat-select>
       </mat-form-field>
     </div>
+    <div fxLayout="column" class="header-filter search-input" fxFlex fxLayoutAlign="center end">
+      <mat-form-field>
+        <input type="text" matInput placeholder="Search File Name" (keyup)="searchByFileName($event)">
+        <button mat-button matSuffix mat-icon-button aria-label="Search">
+          <mat-icon>search</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
   </div>
   <table mat-table [dataSource]="dataSource" matSort id="files">
 
@@ -44,7 +52,8 @@
           description
         </i>
         <i class="material-icons text-secondary" *ngIf="isUserAdmin" (click)="openAdminDialog(row.id)">
-          description
+          <span *ngIf="row.publishFlag">description</span>
+          <span *ngIf="!row.publishFlag" class="file-draft-icon">file_copy</span>
         </i>
       </td>
     </ng-container>
@@ -108,7 +117,8 @@
 
     <!-- Tags Column -->
     <ng-container matColumnDef="tags">
-      <th mat-header-cell *matHeaderCellDef> Tags </th>
+      <th mat-header-cell *matHeaderCellDef> Tags
+        <button mat-flat-button color="accent" class="add-file-button" *ngIf="isUserAdmin" (click)="openAdminAddDialog()">ADD NEW FILE</button> </th>
       <td mat-cell *matCellDef="let row">
         <div fxLayout="row wrap" fxLayoutGap="14px">
           <div *ngFor="let item of row.tags" class="condition-container" fxLayout="column" fxflex="33%">
