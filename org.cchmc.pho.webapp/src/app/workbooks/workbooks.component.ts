@@ -51,6 +51,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   deletingPatientName: string;
   deletingPatientId: number;
   addingPatientName: string;
+  hasSelectedPatient: boolean;
 
   selectedFormResponseID = new FormControl('');
   searchPatient = new FormControl('');
@@ -107,6 +108,12 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  //Reset Add Patient Form
+  resetAddPatient() {
+    this.PatientForWorkbookForm.reset();
+    this.hasSelectedPatient = false;
   }
 
 
@@ -225,6 +232,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   //adding patient to the workbook
 
   onSelectedPatient(event: any): void {
+    this.hasSelectedPatient = true;
     this.PatientForWorkbookForm.get('dob').setValue(this.datePipe.transform(event.value.dob, 'MM/dd/yyyy'));
     this.PatientForWorkbookForm.get('phone').setValue(event.value.phone);
     this.PatientForWorkbookForm.get('patientId').setValue(event.value.patientId);
@@ -233,6 +241,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   }
 
   AddPatientForWorkbook() {
+    this.hasSelectedPatient = false;
     this.newWorkbookPatient = new WorkbookPatient();
     this.newWorkbookPatient.formResponseId = this.selectedFormResponseID.value;
     this.newWorkbookPatient.patientId = this.PatientForWorkbookForm.get('patientId').value;

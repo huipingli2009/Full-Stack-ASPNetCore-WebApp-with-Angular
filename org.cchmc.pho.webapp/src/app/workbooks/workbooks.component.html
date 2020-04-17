@@ -247,9 +247,12 @@
                     <!-- Action button to add patients -->
                     <ng-container matColumnDef="addaction">
                         <mat-header-cell *matHeaderCellDef>
-                            <button type="submit" mat-icon-button [disabled]="!PatientForWorkbookForm.valid"
-                                color="accent" (click)="AddPatientForWorkbook()">
+                            <button type="submit" mat-icon-button color="accent" *ngIf="!hasSelectedPatient">
                                 <mat-icon>add_circle</mat-icon>
+                            </button>
+                            <button mat-icon-button color="primary"
+                                (click)="resetAddPatient()" *ngIf="hasSelectedPatient">
+                                <mat-icon>clear</mat-icon>
                             </button>
                         </mat-header-cell>
                     </ng-container>
@@ -392,7 +395,6 @@
                         </mat-header-cell>
 
                     </ng-container>
-
                 </div>
                 <!-- Hidden Columns===============================================================-->
                 <!-- formResponseId Column -->
