@@ -16,6 +16,8 @@ namespace org.cchmc.pho.api.Mappings
             CreateMap<FileType, FileTypeViewModel>();
             CreateMap<Initiative, InitiativeViewModel>();
             CreateMap<Resource, ResourceViewModel>();
+            CreateMap<FileAction, FileActionViewModel>();
+            CreateMap<FileActionViewModel, FileAction>();
         }
     }
 }

@@ -68,7 +68,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                     if (fileTags.Any(f => f.Name == tagName))
                                         record.Tags.Add(fileTags.First(f => f.Name == tagName));
                                     else
-                                        _logger.LogError("An unmapped file tag was returned by the database ");
+                                        _logger.LogError($"An unmapped file tag was returned by the database - {tagName}");
                                 }
                             }
                             file.Add(record);
@@ -127,7 +127,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                     if (fileTags.Any(f => f.Name == tagName))
                                         details.Tags.Add(fileTags.First(f => f.Name == tagName));
                                     else
-                                        _logger.LogError("An unmapped file tag was returned by the database ");
+                                        _logger.LogError($"An unmapped file tag was returned by the database - {tagName}");
                                 }
                             }
                         }
@@ -367,6 +367,27 @@ namespace org.cchmc.pho.core.DataAccessLayer
                         }
                     }
                     return initiatives;
+                }
+            }
+        }
+
+        public async Task MarkFileAction(int resourceId, int userId, int actionId)
+        {
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spPostFileAction", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@ResourceId", SqlDbType.Int).Value = resourceId;
+                    sqlCommand.Parameters.Add("@ActionId", SqlDbType.Int).Value = actionId;
+
+                    await sqlConnection.OpenAsync();
+
+                    //Execute Stored Procedure
+                    sqlCommand.ExecuteNonQuery();
+
                 }
             }
         }
