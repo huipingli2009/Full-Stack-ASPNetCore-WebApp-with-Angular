@@ -16,5 +16,6 @@ namespace org.cchmc.pho.core.Interfaces
         Task<List<Resource>> GetResourceAll();
         Task<List<Initiative>> GetInitiativeAll();
         Task<List<FileType>> GetFileTypesAll();
+        Task MarkFileAction(int resourceId, int userId, int actionId);
     }
 }
