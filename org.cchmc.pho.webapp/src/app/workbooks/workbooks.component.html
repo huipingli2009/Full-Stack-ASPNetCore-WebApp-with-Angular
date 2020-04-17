@@ -53,19 +53,6 @@
                     </div>
                     <div fxLayout="row wrap" fxLayoutGap="64px">
                         <div fxLayout="column" class="workbook-item">
-                                <div fxLayout="row">
-                                    <div fxLayout="column" fxFlex fxLayoutAlign="center start" fxFlex="100px">
-                                        <div class="title-col hidden-name">NAME</div>
-                                    </div>
-                                    <div fxLayout="column" fxFlex="60.5px" class="workbook-inputs-col">
-                                        <div class="title-col">PHQS</div>
-                                    </div>
-                                    <div fxLayout="column" fxFlex="60.5px">
-                                        <div class="title-col">TOTAL</div>
-                                    </div>
-                                </div>
-                        </div>
-                        <div fxLayout="column" class="workbook-item wokbook-col-title-2">
                             <div fxLayout="row">
                                 <div fxLayout="column" fxFlex fxLayoutAlign="center start" fxFlex="100px">
                                     <div class="title-col hidden-name">NAME</div>
@@ -77,33 +64,46 @@
                                     <div class="title-col">TOTAL</div>
                                 </div>
                             </div>
-                    </div>
-                    <div fxLayout="column" class="workbook-item wokbook-col-title-3">
-                        <div fxLayout="row">
-                            <div fxLayout="column" fxFlex fxLayoutAlign="center start" fxFlex="100px">
-                                <div class="title-col hidden-name">NAME</div>
+                        </div>
+                        <div fxLayout="column" class="workbook-item wokbook-col-title-2" *ngIf="ProviderWorkbookArray.controls.length > 1">
+                            <div fxLayout="row">
+                                <div fxLayout="column" fxFlex fxLayoutAlign="center start" fxFlex="100px">
+                                    <div class="title-col hidden-name">NAME</div>
+                                </div>
+                                <div fxLayout="column" fxFlex="60.5px" class="workbook-inputs-col">
+                                    <div class="title-col">PHQS</div>
+                                </div>
+                                <div fxLayout="column" fxFlex="60.5px">
+                                    <div class="title-col">TOTAL</div>
+                                </div>
                             </div>
-                            <div fxLayout="column" fxFlex="60.5px" class="workbook-inputs-col">
-                                <div class="title-col">PHQS</div>
+                        </div>
+                        <div fxLayout="column" class="workbook-item wokbook-col-title-3" *ngIf="ProviderWorkbookArray.controls.length > 2">
+                            <div fxLayout="row">
+                                <div fxLayout="column" fxFlex fxLayoutAlign="center start" fxFlex="100px">
+                                    <div class="title-col hidden-name">NAME</div>
+                                </div>
+                                <div fxLayout="column" fxFlex="60.5px" class="workbook-inputs-col">
+                                    <div class="title-col">PHQS</div>
+                                </div>
+                                <div fxLayout="column" fxFlex="60.5px">
+                                    <div class="title-col">TOTAL</div>
+                                </div>
                             </div>
-                            <div fxLayout="column" fxFlex="60.5px">
-                                <div class="title-col">TOTAL</div>
+                        </div>
+                        <div fxLayout="column" class="workbook-item wokbook-col-title-4" *ngIf="ProviderWorkbookArray.controls.length > 3">
+                            <div fxLayout="row">
+                                <div fxLayout="column" fxFlex fxLayoutAlign="center start" fxFlex="100px">
+                                    <div class="title-col hidden-name">NAME</div>
+                                </div>
+                                <div fxLayout="column" fxFlex="60.5px" class="workbook-inputs-col">
+                                    <div class="title-col">PHQS</div>
+                                </div>
+                                <div fxLayout="column" fxFlex="60.5px">
+                                    <div class="title-col">TOTAL</div>
+                                </div>
                             </div>
                         </div>
-                </div>
-                <div fxLayout="column" class="workbook-item wokbook-col-title-4">
-                    <div fxLayout="row">
-                        <div fxLayout="column" fxFlex fxLayoutAlign="center start" fxFlex="100px">
-                            <div class="title-col hidden-name">NAME</div>
-                        </div>
-                        <div fxLayout="column" fxFlex="60.5px" class="workbook-inputs-col">
-                            <div class="title-col">PHQS</div>
-                        </div>
-                        <div fxLayout="column" fxFlex="60.5px">
-                            <div class="title-col">TOTAL</div>
-                        </div>
-                    </div>
-            </div>
                     </div>
                     <div fxLayout="row">
                         <ng-container formArrayName="ProviderWorkbookArray">
@@ -260,7 +260,8 @@
                                 <mat-select formControlName="patientInfo" (selectionChange)="onSelectedPatient($event)"
                                     required>
 
-                                    <input matInput [formControl]="searchPatient" autocomplete="off" class="workbook-select-search">
+                                    <input matInput [formControl]="searchPatient" autocomplete="off"
+                                        class="workbook-select-search">
                                     <mat-option class="workbook-select-search-hidden"></mat-option>
                                     <mat-option *ngFor="let patient of SearchPatients;trackBy: trackByForPatientSearch"
                                         [value]="patient"

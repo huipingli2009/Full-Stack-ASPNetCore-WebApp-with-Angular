@@ -1739,9 +1739,14 @@ button.toast-close-button {
   color: var(--primary-darker-color);
   margin-bottom: 15px;
 }
-
+.workbook-item {
+  width: 20%;
+}
 // Remove Header Column if screen size is smaller
 @media only screen and (max-width: 1528px) {
+  .workbook-item {
+    width: 26%;
+  }
   .wokbook-col-title-4 {
     display: none !important;
   }
@@ -1757,6 +1762,9 @@ button.toast-close-button {
 
 }
 @media only screen and (max-width: 1164px) {
+  .workbook-item {
+    width: 40%;
+  }
   .wokbook-col-title-3 {
     display: none !important;
   }
