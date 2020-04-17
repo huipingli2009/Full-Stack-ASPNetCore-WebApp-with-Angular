@@ -45,7 +45,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   workbookProviderDetail: WorkbookProvider;
   dataSourceWorkbook: MatTableDataSource<WorkbookPatient>;
   formResponseId: number;
-  phqsFinal: number;
+  phqsFinal = 0;
   totalFinal: number;
   patientTableHeader: number;
   deletingPatientName: string;

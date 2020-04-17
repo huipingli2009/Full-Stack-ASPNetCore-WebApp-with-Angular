@@ -1743,7 +1743,7 @@ button.toast-close-button {
   width: 20%;
 }
 // Remove Header Column if screen size is smaller
-@media only screen and (max-width: 1528px) {
+@media only screen and (max-width: 1595px) {
   .workbook-item {
     width: 26%;
   }
@@ -1752,7 +1752,11 @@ button.toast-close-button {
   }
 
 }
+
 @media only screen and (max-width: 1228px) {
+  .workbook-item {
+    width: 40%;
+  }
   .wokbook-col-title-3 {
     margin-right: 0 !important;
   }
@@ -1772,6 +1776,9 @@ button.toast-close-button {
     margin-right: 64px !important;
   }
 
+}
+.only-two-patients {
+  width: 42% !important;
 }
 
 .workbook-select-search-hidden {
