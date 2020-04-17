@@ -52,3 +52,8 @@ export interface FileInitiatives {
     id: number;
     name: string;
 }
+
+export class FileAction {
+    fileResourceId: number;
+    fileActionId: number;
+}

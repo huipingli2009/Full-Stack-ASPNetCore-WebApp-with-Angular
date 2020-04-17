@@ -8,6 +8,7 @@ import { NGXLogger } from 'ngx-logger';
 import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../services/user.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FileAction } from '../models/files';
 
 @Component({
   selector: 'app-files',
@@ -35,7 +36,9 @@ export class FilesComponent implements OnInit {
   currentLastViewed: Date;
   currentWatchFlag: boolean;
   isAddingNewFile: boolean;
+  error: any;
   deletingFileId: number;
+  fileAction: FileAction;
   fileTypeList = [
     {
       id: 1,
@@ -165,6 +168,16 @@ export class FilesComponent implements OnInit {
       this.logger.log(selectedFileValues, 'SELECTED FILE')
       this.adminFileForm.setValue(selectedFileValues);
     })
+  }
+
+  updateFileAction(fileResourceId) {
+    this.logger.log(fileResourceId);
+    this.fileAction = new FileAction();
+    this.fileAction.fileResourceId = fileResourceId;
+    this.fileAction.fileActionId = 1;
+    this.rest.updateFileAction(this.fileAction).pipe(take(1)).subscribe(res => {
+    },
+      error => { this.error = error; });
   }
 
   submitFileAddUpdate() {

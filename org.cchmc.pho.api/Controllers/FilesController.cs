@@ -321,7 +321,7 @@ namespace org.cchmc.pho.api.Controllers
             {
                 int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
                 // call the data layer to mark the action
-                await _filesDAL.MarkFileAction(action.FileScheduleId, currentUserId, action.FileActionId);
+                await _filesDAL.MarkFileAction(action.FileResourceId, currentUserId, action.FileActionId);
                 return Ok();
             }
             catch (Exception ex)

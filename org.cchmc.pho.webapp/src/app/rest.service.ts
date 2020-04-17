@@ -9,7 +9,7 @@ import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Pati
 import { PracticeList, Responsibilities, Staff, StaffDetails, StaffAdmin } from './models/Staff';
 import { Followup, WorkbookPatient, WorkbookProvider, WorkbookReportingMonths, WorkbookPractice } from './models/workbook';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
-import { FileTags, FileResources, FileInitiatives, FileDetails } from './models/files';
+import { FileTags, FileResources, FileInitiatives, FileDetails, FileAction } from './models/files';
 import { Location } from '@angular/common';
 
 
@@ -461,26 +461,26 @@ export class RestService {
   findFiles(
     resourceTypeId, initiativeId, tag = '', watch,
     name = ''): Observable<any> {
-      if (resourceTypeId != null) {
-        resourceTypeId.toString();
-      }
-      if (initiativeId != null) {
-        initiativeId.toString();
-      }
-      if (watch != null) {
-        watch.toString();
-      }
-      if (resourceTypeId === undefined) {
-        resourceTypeId = '';
-      }
-      if (initiativeId === undefined) {
-        initiativeId = '';
-      }
-      if (watch === undefined) {
-        watch = '';
-      }
+    if (resourceTypeId != null) {
+      resourceTypeId.toString();
+    }
+    if (initiativeId != null) {
+      initiativeId.toString();
+    }
+    if (watch != null) {
+      watch.toString();
+    }
+    if (resourceTypeId === undefined) {
+      resourceTypeId = '';
+    }
+    if (initiativeId === undefined) {
+      initiativeId = '';
+    }
+    if (watch === undefined) {
+      watch = '';
+    }
 
-      return this.http.get(`${API_URL}/api/Files`, {
+    return this.http.get(`${API_URL}/api/Files`, {
       params: new HttpParams()
         .set('resourceTypeId', resourceTypeId)
         .set('initiativeId', initiativeId)
@@ -507,6 +507,13 @@ export class RestService {
     return this.http.post(`${API_URL}/api/Files/`, JSON.stringify(fileDetails), httpOptions).pipe(
       tap(_ => this.snackBar.openSnackBar(`File has been Added!`
         , 'Close', 'success-snackbar'))
+    );
+  }
+
+  /*Updates file action*/
+  updateFileAction(fileaction: FileAction): Observable<any> {
+    return this.http.post<any>(`${API_URL}/api/Files/action`, JSON.stringify(fileaction), httpOptions).pipe(
+      catchError(this.handleError<any>('updateFileAction'))
     );
   }
 
@@ -552,7 +559,7 @@ export class RestService {
     );
   }
 
-  
+
   /* Delete File (Admin Only) */
   deleteFile(fileId): Observable<any> {
     return this.http.delete<any>(`${API_URL}/api/Files/${fileId}`).pipe(
