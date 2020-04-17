@@ -209,7 +209,6 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [AllowAnonymous]
         [HttpGet("tags")]
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<FileTagViewModel>))]
