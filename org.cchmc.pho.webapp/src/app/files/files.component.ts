@@ -8,6 +8,7 @@ import { NGXLogger } from 'ngx-logger';
 import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../services/user.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FileAction } from '../models/files';
 
 @Component({
   selector: 'app-files',
@@ -35,7 +36,9 @@ export class FilesComponent implements OnInit {
   currentLastViewed: Date;
   currentWatchFlag: boolean;
   isAddingNewFile: boolean;
+  error: any;
   deletingFileId: number;
+  fileAction: FileAction;
   fileTypeList = [
     {
       id: 1,
@@ -79,7 +82,7 @@ export class FilesComponent implements OnInit {
   nameFilter: string;
 
   displayedColumns: string[] = ['icon', 'name', 'dateCreated', 'lastViewed', 'watchFlag'
-    , 'fileType', 'actions', 'tags'];
+    , 'fileType', 'actions', 'tags', 'button'];
   dataSource: MatTableDataSource<FileList>;
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -95,12 +98,12 @@ export class FilesComponent implements OnInit {
       practiceOnly: ['', Validators.required],
       name: ['', Validators.required],
       fileURL: ['', Validators.required],
-      tags: ['', Validators.required],
-      author: ['', Validators.required],
+      tags: [''],
+      author: [''],
       fileType: ['', Validators.required],
       description: ['', Validators.required],
       resourceTypeId: ['', Validators.required],
-      initiativeId: ['', Validators.required]
+      initiativeId: ['']
     });
 
   }
@@ -147,7 +150,7 @@ export class FilesComponent implements OnInit {
       data.tags.forEach(tag => {
         joinedTags.push(tag.name);
       });
-      
+
       const selectedFileValues = {
         practiceOnly: data.practiceOnly,
         name: data.name,
@@ -167,11 +170,21 @@ export class FilesComponent implements OnInit {
     })
   }
 
+  updateFileAction(fileResourceId) {
+    this.logger.log(fileResourceId);
+    this.fileAction = new FileAction();
+    this.fileAction.fileResourceId = fileResourceId;
+    this.fileAction.fileActionId = 1;
+    this.rest.updateFileAction(this.fileAction).pipe(take(1)).subscribe(res => {
+    },
+      error => { this.error = error; });
+  }
+
   submitFileAddUpdate() {
     let tagsSplit = this.adminFileForm.controls.tags.value.replace(/\s*,\s*/g, ",");
     tagsSplit = tagsSplit.split(',');
-    tagsSplit = tagsSplit.map(function(e) {
-      return { name: e};
+    tagsSplit = tagsSplit.map(function (e) {
+      return { name: e };
     });
     let publishFile;
     if (this.isPublishingFile === true || this.isPublishingWithAlert === true) {
@@ -213,13 +226,16 @@ export class FilesComponent implements OnInit {
       };
       this.rest.addNewFile(fileFormValues).pipe(take(1)).subscribe((data) => {
         this.logger.log(data, 'New File');
+        this.getTagsList();
       });
     } else {
       this.rest.updateFileDetails(fileFormValues).pipe(take(1)).subscribe((data) => {
         this.logger.log(data, 'PUT FILES');
+        this.getTagsList();
       });
     }
     this.cancelAdminDialog();
+
   }
 
   updateWatchlistStatus(id, index) {
@@ -290,7 +306,7 @@ export class FilesComponent implements OnInit {
     }
   }
   isOnWatchlist(event) {
-    this.watchFilter = event.value;
+    this.watchFilter = event.checked;
     if (this.watchFilter === undefined) {
       this.getAllFiles();
     } else {
@@ -304,9 +320,8 @@ export class FilesComponent implements OnInit {
     this.dialog.open(this.adminDialog, { disableClose: true });
   }
   openAdminAddDialog() {
-    this.adminFileForm.controls.practiceOnly.setValue(false);
-    this.adminFileForm.controls.resourceTypeId.setValue(1);
-    this.adminFileForm.controls.initiativeId.setValue(7);
+
+    this.adminFileForm.reset();
     this.dialog.open(this.adminDialog, { disableClose: true });
     this.isAddingNewFile = true;
   }
@@ -333,7 +348,7 @@ export class FilesComponent implements OnInit {
 
   openFileDeleteDialog(fileId) {
     this.deletingFileId = fileId;
-    this.dialog.open(this.adminConfirmDeleteDialog, { disableClose: true})
+    this.dialog.open(this.adminConfirmDeleteDialog, { disableClose: true })
   }
 
   cancelAdminDialog() {

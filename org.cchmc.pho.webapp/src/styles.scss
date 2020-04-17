@@ -2268,6 +2268,11 @@ button.toast-close-button {
     word-wrap: break-word;
     word-break: break-word;
   }
+
+  .mat-header-row button
+  {
+    line-height: 36px;
+  }
   .mat-column-watchFlag {
     text-align: left !important;
   }
@@ -2294,3 +2299,5 @@ button.toast-close-button {
 .practice-label {
   margin-right: 16px;
 }
+
+

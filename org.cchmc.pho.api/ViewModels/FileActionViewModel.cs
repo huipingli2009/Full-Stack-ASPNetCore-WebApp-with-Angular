@@ -2,7 +2,7 @@
 {
     public class FileActionViewModel
     {
-        public int FileScheduleId { get; set; }
+        public int FileResourceId { get; set; }
         public int FileActionId { get; set; }
     }
 }
