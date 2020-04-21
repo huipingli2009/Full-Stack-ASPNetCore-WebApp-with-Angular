@@ -14,6 +14,7 @@ import { Conditions, Gender, PatientDetails, Patients } from '../models/patients
 import { RestService } from '../rest.service';
 import { PatientsDataSource } from './patients.datasource';
 import { FilterService } from '../services/filter.service';
+import { StaffComponent } from '../staff/staff.component';
 
 
 @Component({
@@ -129,6 +130,11 @@ export class PatientsComponent implements OnInit {
   }
 
   ngOnInit() {
+    // this.form = new FormGroup({
+    //   'firstName': new FormControl(this.form.firstName, 
+    //                                 [Validators.required])
+    // });
+
     this.patients = this.route.snapshot.data.patients;
     this.dataSource = new PatientsDataSource(this.rest);
     this.loadPatientsWithFilters();
@@ -345,7 +351,7 @@ export class PatientsComponent implements OnInit {
   openPatientSaveDialog() {
     const { value, valid } = this.form;
     if (valid) {
-      this.dialog.open(this.callPatientSaveDialog, { disableClose: true });
+      this.dialog.open(this.callPatientSaveDialog, { disableClose: true });      
     }
   }
 
@@ -377,7 +383,9 @@ export class PatientsComponent implements OnInit {
     this.logger.log(this.currentPatientId);
     this.rest.savePatientDetails(this.currentPatientId, this.patientDetails).subscribe(data => {
       this.savedPatientData = data;
-    });
+    });    
+    
+    this.loadPatientsPage();    
   }
 
   /* Patient Details - Form Elements*/
