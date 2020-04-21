@@ -91,6 +91,54 @@ h1 {
   color: var(--warn-color);
 }
 // Default Material Override ---------------------------
+.default-input-override {
+  .mat-input-element {
+    color: #4a4a4a;
+    font-size: 13px;
+    line-height: 18px;
+    letter-spacing: normal;
+  }
+}
+
+.select-style-override {
+  border-width: 0px 0px 1px 0px;
+  border-color: #ddecea;
+  padding-bottom: 4px;
+  color: #4a4a4a;
+  font-size: 13px;
+  line-height: 18px;
+  letter-spacing: normal;
+  .mat-select {
+    margin-top: 8px !important;
+  }
+  .mat-form-field-infix {
+    border-top: none;
+    padding-top: 0px !important;
+  }
+  .mat-select-trigger {
+    background-image: url(assets/icons/keyboard_arrow_down-24px.svg);
+    background-position: right;
+    background-size: 25px 25px;
+    background-repeat: no-repeat;
+    margin: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+  .mat-select-arrow {
+    border-left: none;
+    border-right: none;
+  }
+  .mat-form-field-underline {
+    background-color: #ddecea;
+    bottom: 0;
+  }
+  .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+}
 .mat-slide-toggle {
   &.mat-checked {
     .mat-slide-toggle-bar {
@@ -168,6 +216,10 @@ h1 {
       background-color: var(--primary-darker-color) !important;
     }
   }
+}
+
+.fill-form-field {
+  width: 100%;
 }
 
 // Button Toggle Styles (Could be used to iverride default)
@@ -918,7 +970,8 @@ button.toast-close-button {
 
 #patients,
 #staff,
-#workbook {
+#workbook,
+#files {
   width: 100%;
   border: solid 1px var(--primary-color);
   box-shadow: none;
@@ -1686,15 +1739,24 @@ button.toast-close-button {
   color: var(--primary-darker-color);
   margin-bottom: 15px;
 }
-
+.workbook-item {
+  width: 20%;
+}
 // Remove Header Column if screen size is smaller
-@media only screen and (max-width: 1528px) {
+@media only screen and (max-width: 1595px) {
+  .workbook-item {
+    width: 26%;
+  }
   .wokbook-col-title-4 {
     display: none !important;
   }
 
 }
+
 @media only screen and (max-width: 1228px) {
+  .workbook-item {
+    width: 40%;
+  }
   .wokbook-col-title-3 {
     margin-right: 0 !important;
   }
@@ -1704,6 +1766,9 @@ button.toast-close-button {
 
 }
 @media only screen and (max-width: 1164px) {
+  .workbook-item {
+    width: 40%;
+  }
   .wokbook-col-title-3 {
     display: none !important;
   }
@@ -1711,6 +1776,9 @@ button.toast-close-button {
     margin-right: 64px !important;
   }
 
+}
+.only-two-patients {
+  width: 42% !important;
 }
 
 .workbook-select-search-hidden {
@@ -2184,3 +2252,52 @@ button.toast-close-button {
     font-weight: bold;
   }
 }
+
+/* FILES ===============================================================*/
+#files {
+  td {
+    height: 57px;
+  }
+  .mat-column-name {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    -webkit-box-flex: 0 !important;
+    flex: 0 0 23% !important;
+    width: 23% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .mat-header-row button
+  {
+    line-height: 36px;
+  }
+  .mat-column-watchFlag {
+    text-align: left !important;
+  }
+  .action-dl-btn {
+    width: 20px;
+  }
+  .file-draft-icon {
+    color: rgba(122, 122, 122, 0.158);
+  }
+  .add-file-button {
+    float: right;
+  }
+}
+.select-row {
+  margin-top: 10px;
+}
+.multiselect-with-icon {
+  height: 47.16px;
+  .mat-icon {
+    font-size: 108%;
+    vertical-align: text-top;
+  }
+}
+.practice-label {
+  margin-right: 16px;
+}
+
+

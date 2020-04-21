@@ -9,6 +9,7 @@ import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Pati
 import { PracticeList, Responsibilities, Staff, StaffDetails, StaffAdmin } from './models/Staff';
 import { Followup, WorkbookPatient, WorkbookProvider, WorkbookReportingMonths, WorkbookPractice } from './models/workbook';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
+import { FileTags, FileResources, FileInitiatives, FileDetails, FileAction } from './models/files';
 import { Location } from '@angular/common';
 
 
@@ -446,6 +447,128 @@ export class RestService {
       )
     );
   }
+
+  /* Files Content =======================================================*/
+  /* Get all files */
+  getAllFiles(): Observable<any> {
+    return this.http.get<any>(`${API_URL}/api/Files/`).pipe(
+      map((data: FileList[]) => {
+        return data;
+      })
+    );
+  }
+  /* FInd Files by Filter*/
+  findFiles(
+    resourceTypeId, initiativeId, tag = '', watch,
+    name = ''): Observable<any> {
+    if (resourceTypeId != null) {
+      resourceTypeId.toString();
+    }
+    if (initiativeId != null) {
+      initiativeId.toString();
+    }
+    if (watch != null) {
+      watch.toString();
+    }
+    if (resourceTypeId === undefined) {
+      resourceTypeId = '';
+    }
+    if (initiativeId === undefined) {
+      initiativeId = '';
+    }
+    if (watch === undefined) {
+      watch = '';
+    }
+
+    return this.http.get(`${API_URL}/api/Files`, {
+      params: new HttpParams()
+        .set('resourceTypeId', resourceTypeId)
+        .set('initiativeId', initiativeId)
+        .set('tag', tag)
+        .set('watch', watch.toString())
+        .set('name', name)
+    }).pipe(
+      map(res => {
+        return res;
+      })
+    );
+  }
+
+  /*Update Files*/
+  updateFileDetails(fileDetails): Observable<any> {
+    return this.http.put(`${API_URL}/api/Files/`, JSON.stringify(fileDetails), httpOptions).pipe(
+      tap(_ => this.snackBar.openSnackBar(`File has been updated!`
+        , 'Close', 'success-snackbar'))
+    );
+  }
+  /*Add New File*/
+  addNewFile(fileDetails): Observable<any> {
+    this.logger.log('FILE Add IN REST', fileDetails);
+    return this.http.post(`${API_URL}/api/Files/`, JSON.stringify(fileDetails), httpOptions).pipe(
+      tap(_ => this.snackBar.openSnackBar(`File has been Added!`
+        , 'Close', 'success-snackbar'))
+    );
+  }
+
+  /*Updates file action*/
+  updateFileAction(fileaction: FileAction): Observable<any> {
+    return this.http.post<any>(`${API_URL}/api/Files/action`, JSON.stringify(fileaction), httpOptions).pipe(
+      catchError(this.handleError<any>('updateFileAction'))
+    );
+  }
+
+  /* Get File Details */
+  getFileDetails(fileId): Observable<any> {
+    return this.http.get<any>(`${API_URL}/api/Files/${fileId}`).pipe(
+      map((data: FileDetails[]) => {
+        return data;
+      })
+    );
+  }
+
+  /*Get File Tags*/
+  getFileTags(): Observable<any> {
+    return this.http.get<any>(`${API_URL}/api/Files/tags/`).pipe(
+      map((data: FileTags[]) => {
+        return data;
+      })
+    );
+  }
+  /*Get File Resources*/
+  getFileResources(): Observable<any> {
+    return this.http.get<any>(`${API_URL}/api/Files/resources/`).pipe(
+      map((data: FileResources[]) => {
+        return data;
+      })
+    );
+  }
+  /*Get File Initiatives*/
+  getFileInitiatives(): Observable<any> {
+    return this.http.get<any>(`${API_URL}/api/Files/initiatives/`).pipe(
+      map((data: FileInitiatives[]) => {
+        return data;
+      })
+    );
+  }
+  /* Update File Watchlist Status*/
+  updateFileWatchlistStatus(FileId): Observable<any> {
+    return this.http.put(`${API_URL}/api/Files/watch/${FileId}`, httpOptions).pipe(
+      map((data) => {
+        return data;
+      })
+    );
+  }
+
+
+  /* Delete File (Admin Only) */
+  deleteFile(fileId): Observable<any> {
+    return this.http.delete<any>(`${API_URL}/api/Files/${fileId}`).pipe(
+      tap(_ => this.snackBar.openSnackBar(`File has been Deleted!`
+        , 'Close', 'warn-snackbar'))
+    );
+  }
+
+
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {

@@ -31,7 +31,7 @@ namespace org.cchmc.pho.api.Controllers
             _userService = userService;
             _filesDAL = filesDal;
         }
-
+        
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [HttpGet()]
         [SwaggerResponse(200, type: typeof(List<FileViewModel>))]
@@ -88,7 +88,7 @@ namespace org.cchmc.pho.api.Controllers
                 return StatusCode(500, "An error occurred");
             }
         }
-
+        
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [HttpPut()]
         [SwaggerResponse(200, type: typeof(FileDetailsViewModel))]
@@ -120,7 +120,7 @@ namespace org.cchmc.pho.api.Controllers
                 return StatusCode(500, "An error occurred");
             }
         }
-
+        
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [HttpPost()]
         [SwaggerResponse(200, type: typeof(FileDetailsViewModel))]
@@ -209,7 +209,6 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-
         [HttpGet("tags")]
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<FileTagViewModel>))]
@@ -296,6 +295,34 @@ namespace org.cchmc.pho.api.Controllers
                 var result = _mapper.Map<List<InitiativeViewModel>>(data);
                 // return the result in a "200 OK" response
                 return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+
+        [HttpPost("action")]
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [SwaggerResponse(200, type: typeof(string))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> MarkFileAction([FromBody] FileActionViewModel action)
+        {
+
+            // route parameters are strings and need to be translated (and validated) to their proper data type
+            if (action == null)
+                return BadRequest("fileAction is null");
+
+            try
+            {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+                // call the data layer to mark the action
+                await _filesDAL.MarkFileAction(action.FileResourceId, currentUserId, action.FileActionId);
+                return Ok();
             }
             catch (Exception ex)
             {

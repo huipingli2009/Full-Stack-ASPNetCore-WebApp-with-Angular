@@ -1,1 +1,296 @@
-<p>files works!</p>
+<div class="content-main">
+  <div fxLayout="row" class="patients-header">
+    <div fxLayout="column" class="header-filter">
+      <mat-form-field>
+        <mat-label>Resource Type</mat-label>
+        <mat-select [(ngModel)]="resources" (selectionChange)="resourceTypeSelection($event)">
+          <mat-option *ngFor="let type of resourcesList" [value]="type.id">
+            {{type.name}}
+          </mat-option>
+          <mat-option>All</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div fxLayout="column" class="header-filter">
+      <mat-form-field>
+        <mat-label>Initiative</mat-label>
+        <mat-select [(ngModel)]="initiatives" (selectionChange)="initiativesSelection($event)">
+          <mat-option *ngFor="let type of initiativesList" [value]="type.id">
+            {{type.name}}
+          </mat-option>
+          <mat-option>All</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div fxLayout="column" class="header-filter">
+      <mat-form-field>
+        <mat-label>Tags</mat-label>
+        <mat-select [(ngModel)]="tags" (selectionChange)="tagsSelection($event)">
+          <mat-option *ngFor="let type of tagList" [value]="type.name">
+            {{type.name}}
+          </mat-option>
+          <mat-option>All</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div fxLayout="column" class="header-filter search-input" fxFlex fxLayoutAlign="center end">
+      <mat-form-field>
+        <input type="text" matInput placeholder="Search File Name" (keyup)="searchByFileName($event)">
+        <button mat-button matSuffix mat-icon-button aria-label="Search">
+          <mat-icon>search</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+  </div>
+  <table mat-table [dataSource]="dataSource" matSort id="files">
+
+    <!-- Icon Column -->
+    <ng-container matColumnDef="icon">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let row">
+        <i class="material-icons text-secondary" *ngIf="!isUserAdmin">
+          description
+        </i>
+        <i class="material-icons text-secondary" *ngIf="isUserAdmin" (click)="openAdminDialog(row.id)">
+          <span *ngIf="row.publishFlag">description</span>
+          <span *ngIf="!row.publishFlag" class="file-draft-icon">file_copy</span>
+        </i>
+      </td>
+    </ng-container>
+
+    <!-- File Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> File Name </th>
+      <td mat-cell *matCellDef="let row" matTooltip={{row.description}}> {{row.name}} </td>
+    </ng-container>
+
+    <!-- Created Date Column -->
+    <ng-container matColumnDef="dateCreated">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Created Date </th>
+      <td mat-cell *matCellDef="let row"> {{row.dateCreated | date:'MM/dd/yyyy'}} </td>
+    </ng-container>
+
+    <!-- Last Viewed Column -->
+    <ng-container matColumnDef="lastViewed">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Viewed </th>
+      <td mat-cell *matCellDef="let row"> {{row.lastViewed | date:'MM/dd/yyyy'}} </td>
+    </ng-container>
+
+    <!-- Watch List Column -->
+    <ng-container matColumnDef="watchFlag">
+      <th mat-header-cell *matHeaderCellDef> Watch List
+        <mat-checkbox class="table-header-checkbox" [(ngModel)]="watchFlag" (change)="isOnWatchlist($event)">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row; let i = renderIndex;" (click)="updateWatchlistStatus(row.id, i)"
+        (click)="row.watchFlag = !row.watchFlag">
+        <button mat-icon-button>
+          <i class="material-icons watchlist-icon" [ngClass]="row.watchFlag ? 'on-watchlist' : 'off-watchlist'">
+            remove_red_eye
+          </i>
+        </button>
+      </td>
+    </ng-container>
+
+    <!-- File Type Column -->
+    <ng-container matColumnDef="fileType">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> File Type </th>
+      <td mat-cell *matCellDef="let row"> {{row.fileType}} </td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let row">
+        <a mat-icon-button class="action-dl-btn" target="_blank" (click)="updateFileAction(row.id)"
+          href="{{row.fileURL}}" download>
+          <i class="material-icons text-secondary">
+            get_app
+          </i>
+        </a>
+        <a mat-icon-button *ngIf="isUserAdmin">
+          <i class="material-icons text-secondary" (click)="openFileDeleteDialog(row.id)">
+            delete
+          </i>
+        </a>
+      </td>
+    </ng-container>
+
+    <!-- Tags Column -->
+    <ng-container matColumnDef="tags">
+      <th mat-header-cell *matHeaderCellDef> Tags
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <div fxLayout="row wrap" fxLayoutGap="14px">
+          <div *ngFor="let item of row.tags" class="condition-container" fxLayout="column" fxflex="33%">
+            <div class="condition-chip" [style.margin-bottom]="row.tags?.length > 2 ? '5px' : '0px'"
+              [style.margin-top]="row.tags?.length > 2 ? '5px' : '0px'">
+              {{item.name}}
+            </div>
+          </div>
+        </div>
+      </td>
+    </ng-container>
+
+    <!-- button Column -->
+    <ng-container matColumnDef="button">
+      <th mat-header-cell *matHeaderCellDef>
+        <button mat-flat-button color="accent" class="add-file-button" *ngIf="isUserAdmin"
+          (click)="openAdminAddDialog()">ADD NEW FILE</button>
+      </th>
+      <td mat-cell *matCellDef="let row">
+      </td>
+    </ng-container>
+
+
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+    </tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+
+  <!--Dialogs ===========================-->
+  <ng-template #adminDialog>
+    <div mat-dialog-content class="mat-typography" id="admin-dialog">
+      <form [formGroup]="adminFileForm" class="default-input-override">
+        <div fxLayout="row" class="detail-heading">ADD / UPDATE RESOURCE
+          FILE</div>
+        <br>
+        <div fxLayout="row">
+          <label class="toggle-label practice-label">Practice Only</label>
+          <mat-slide-toggle ngDefaultControl class="admin-toggle" formControlName="practiceOnly"
+            [checked]="adminFileForm.controls.practiceOnly">
+          </mat-slide-toggle>
+        </div>
+        <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end" class="input-w-icon">
+          <mat-form-field floatLabel="always" class="fill-form-field">
+            <mat-label>FILE NAME</mat-label>
+            <input matInput formControlName="name" name="name">
+            <mat-icon matPrefix>
+              get_app
+            </mat-icon>
+            <mat-error>You must include a file name</mat-error>
+          </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end" class="input-w-icon">
+          <mat-form-field floatLabel="always" class="fill-form-field">
+            <mat-label>FILE URL</mat-label>
+            <input matInput formControlName="fileURL" name="fileURL">
+            <mat-icon matPrefix>
+              link
+            </mat-icon>
+            <mat-error>You must include a file link</mat-error>
+          </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end" class="input-w-icon">
+          <mat-form-field floatLabel="always" class="fill-form-field">
+            <mat-label>DESCRIPTION</mat-label>
+            <input matInput formControlName="description" name="description">
+            <mat-icon matPrefix>
+              art_track
+            </mat-icon>
+            <mat-error>You must include a description</mat-error>
+          </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end">
+
+          <div fxLayout="column" class="input-w-icon">
+            <mat-form-field floatLabel="always">
+              <mat-label>TAGS</mat-label>
+              <input matInput formControlName="tags" name="tags">
+              <mat-icon matPrefix>
+                local_offer
+              </mat-icon>
+            </mat-form-field>
+          </div>
+          <div fxLayout="column" class="input-w-icon">
+            <mat-form-field floatLabel="always">
+              <mat-label>AUTHOR</mat-label>
+              <input matInput formControlName="author" name="author">
+              <mat-icon matPrefix>
+                person
+              </mat-icon>
+
+            </mat-form-field>
+          </div>
+          <div fxLayout="column" class="input-w-icon multiselect-with-icon">
+            <mat-form-field floatLabel="always" class="select-style-override">
+              <mat-label>FILE TYPE</mat-label>
+              <mat-select matNativeControl formControlName="fileType" class="insurance" [compareWith]="compareFn">
+                <mat-option *ngFor="let item of fileTypeList" [value]="item">
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
+              <mat-icon matPrefix>
+                build
+              </mat-icon>
+              <mat-error>You must include an author</mat-error>
+            </mat-form-field>
+          </div>
+
+        </div>
+        <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end" class="select-row">
+          <div fxLayout="column">
+            <mat-form-field floatLabel="always" class="select-style-override">
+              <mat-label>RESOURCE TYPE</mat-label>
+              <mat-select matNativeControl formControlName="resourceTypeId" class="insurance" [compareWith]="compareFn">
+                <mat-option *ngFor="let item of resourcesList" [value]="item.id">
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
+              <mat-error>You must include a Resource Type</mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="column">
+            <mat-form-field floatLabel="always" class="select-style-override">
+              <mat-label>INITIATIVE</mat-label>
+              <mat-select matNativeControl formControlName="initiativeId" class="insurance" [compareWith]="compareFn">
+                <mat-option *ngFor="let item of initiativesList" [value]="item.id">
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
+
+            </mat-form-field>
+          </div>
+
+        </div>
+      </form>
+    </div>
+    <div mat-dialog-actions align="end" class="select-row">
+      <button mat-button (click)="cancelAdminDialog()">Cancel</button>
+      <button mat-flat-button color="accent" (click)="openAdminConfirmDialog(1)">SAVE DRAFT</button>
+      <button mat-flat-button color="accent" (click)="openAdminConfirmDialog(2)">PUBLISH FILE</button>
+      <button mat-flat-button color="accent" (click)="openAdminConfirmDialog(3)">PUBLISH FILE WITH ALERT</button>
+    </div>
+  </ng-template>
+  <ng-template #adminConfirmDialog>
+    <div mat-dialog-content class="mat-typography">
+      <h3 *ngIf="isSavingDraft">Are you sure you want to save this file as a Draft?</h3>
+      <h3 *ngIf="isPublishingFile">Are you sure you want to publish this file?</h3>
+      <h3 *ngIf="isPublishingWithAlert">Are you sure you want to publish this file with an alert?</h3>
+    </div>
+    <div mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close (click)="cancelConfirmDialog()">Cancel</button>
+      <button mat-flat-button color="accent" mat-dialog-close (click)="submitFileAddUpdate()" *ngIf="isSavingDraft">
+        Save File as Draft</button>
+      <button mat-flat-button color="accent" mat-dialog-close (click)="submitFileAddUpdate()" *ngIf="isPublishingFile">
+        Publish File</button>
+      <button mat-flat-button color="accent" mat-dialog-close (click)="submitFileAddUpdate()"
+        *ngIf="isPublishingWithAlert">
+        Publish File With Alert</button>
+    </div>
+  </ng-template>
+  <ng-template #adminConfirmDeleteDialog>
+    <div mat-dialog-content class="mat-typography"></div>
+    <h3>Are you sure you want to delete this file?</h3>
+    <div mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close (click)="cancelConfirmDialog()">Cancel</button>
+      <button mat-flat-button color="warn" mat-dialog-close (click)="deleteFile()">
+        Delete File</button>
+    </div>
+  </ng-template>
+
+</div>
