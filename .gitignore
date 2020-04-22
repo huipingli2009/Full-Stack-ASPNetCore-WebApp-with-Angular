@@ -356,3 +356,5 @@ MigrationBackup/
 **/*.secrets.json
 org.cchmc.pho.webapp/src/environments/version.ts
 
+**/*launchSettings.json
+**/Properties/launchSettings.json
