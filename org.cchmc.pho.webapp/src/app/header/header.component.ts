@@ -109,14 +109,14 @@ export class HeaderComponent {
             toastrMessage = `<i class="fas fa-exclamation-triangle alert-icon" title="${alert.definition}"></i>
           ${alert.message}`;
           }
-          if(alert.filterType === 'PatientList') {
+          if (alert.filterType === 'PatientList') {
             toastrMessage = `<i class="fas fa-exclamation-triangle alert-icon" title="${alert.definition}"></i>
-          ${alert.message}<a class="alert-link" href="${alert.url}">${alert.linkText}»</a>`;
+          ${alert.message}<span class="alert-link">${alert.linkText}»</span>`;
           }
 
 
           const activeToastr = this.toastr.success(toastrMessage, alert.alertScheduleId.toString(), {
-            closeButton: true,
+            closeButton: true,   
             disableTimeOut: true,
             enableHtml: true,
             tapToDismiss: false
