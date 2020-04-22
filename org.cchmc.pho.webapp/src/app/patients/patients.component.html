@@ -146,29 +146,23 @@
                 <label for="patientMRNId">Epic MRN</label>
                 {{epicMrn}}
               </div>
-              <div fxLayout="column" fxFlex>               
-                <mat-form-field>
-                  <mat-label>First Name </mat-label>
-                  <input matInput formControlName="firstName" name = "firstName" required>
-                </mat-form-field>
+              <div fxLayout="column" fxFlex>
+                <label for="firstName">First Name*</label>
+                <input formControlName="firstName" name="firstName" />
                 <div *ngIf="form.controls.firstName.errors?.required && form.controls.firstName.touched" class="error">
                   *Required
                 </div>
               </div>
               <div fxLayout="column" fxFlex>
-                <mat-form-field>
-                  <mat-label>Last Name </mat-label>
-                  <input matInput formControlName="lastName" name="lastName" required>
-                </mat-form-field>
+                <label for="lastName">Last Name*</label>
+                <input formControlName="lastName" name="lastName" />
                 <div *ngIf="form.controls.lastName.errors?.required && form.controls.lastName.touched" class="error">
                   *Required
                 </div>
               </div>
               <div fxLayout="column" fxFlex>
-                <mat-form-field>
-                  <mat-label>Date of Birth</mat-label>
-                  <input matInput formControlName="dob" name="dob" required>
-              </mat-form-field>
+                <label for="dob">Date of Birth*</label>
+                <input formControlName="dob" name="dob" />
                 <div *ngIf="form.controls.dob.errors?.required && form.controls.dob.touched" class="error">
                   *Required
                 </div>
@@ -263,25 +257,15 @@
             <div fxLayout="row" fxLayoutGap="34px">
               <div fxLayout="column">
                 <label for="phone1">Phone</label>
-                <input formControlName="phone1" name="phone1" />
-                <div *ngIf="form.controls.phone1.errors?.required && form.controls.phone1.touched" class="error">
-                  *Required
-                </div>
+                <input formControlName="phone1" name="phone1" />               
               </div>
               <div fxLayout="column" fxFlex="288px">
                 <label for="addressLine1">Address</label>
-                <input formControlName="addressLine1" name="addressLine1" />
-                <div *ngIf="form.controls.addressLine1.errors?.required && form.controls.addressLine1.touched"
-                  class="error">
-                  *Required
-                </div>
+                <input formControlName="addressLine1" name="addressLine1" />                
               </div>
               <div fxLayout="column" fxFlex>
                 <label for="city">City</label>
-                <input formControlName="city" name="city" />
-                <div *ngIf="form.controls.city.errors?.required && form.controls.city.touched" class="error">
-                  *Required
-                </div>
+                <input formControlName="city" name="city" />               
               </div>
               <div fxLayout="column" fxFlex>
                 <label for="state">State</label>
@@ -295,10 +279,7 @@
               </div>
               <div fxLayout="column" fxFlex>
                 <label for="zip">Zip</label>
-                <input formControlName="zip" name="zip" />
-                <div *ngIf="form.controls.zip.errors?.required && form.controls.zip.touched" class="error">
-                  *Required
-                </div>
+                <input formControlName="zip" name="zip" />               
               </div>
               <div fxLayout="column" fxLayoutAlign="end" fxFlex="96px">
                 <button mat-flat-button color="accent" [disabled]="!form.valid">Save</button>
