@@ -115,10 +115,10 @@ export class PatientsComponent implements OnInit {
       providerPMCAScore: [''],
       providerNotes: [''],
       phone1: [''],
-      addressLine1: ['', Validators.required],
-      city: ['', Validators.required],
-      state: ['', Validators.required],
-      zip: ['', Validators.required]
+      addressLine1: [''],
+      city: [''],
+      state: [''],
+      zip: ['']
     });
 
     this.subscription = this.filterService.getIsFilteringPatients().subscribe (res => {
