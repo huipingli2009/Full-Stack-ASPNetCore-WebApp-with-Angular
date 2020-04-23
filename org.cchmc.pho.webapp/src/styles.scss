@@ -582,6 +582,11 @@ h1 {
   margin-left: 18px;
   text-decoration: underline;
   color: var(--primary-color);
+  font-size: 13px;
+}
+span.alert-filter-link:hover {
+  color: black;
+text-decoration: none;
 }
 .toast-close-button {
   position: relative;
