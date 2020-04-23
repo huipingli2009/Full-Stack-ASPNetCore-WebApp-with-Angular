@@ -577,6 +577,12 @@ h1 {
   font-weight: bold;
   margin-left: 18px;
 }
+.alert-filter-link {
+  font-weight: bold;
+  margin-left: 18px;
+  text-decoration: underline;
+  color: var(--primary-color);
+}
 .toast-close-button {
   position: relative;
   right: -0.3em;
