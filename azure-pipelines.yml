@@ -57,7 +57,7 @@ jobs:
           displayName: "Use .NET Core 3.1.x"
           inputs:
             version: '3.1.x'
-            packageType: sdk
+            packageType: 'sdk'
         - script: dotnet build --configuration $(buildConfiguration) /p:SourceRevisionId=$(Build.SourceVersion)
           displayName: 'dotnet build $(buildConfiguration)'
 
