@@ -51,16 +51,16 @@ export class HeaderComponent {
   isPasswordUpdated: boolean;
   passwordVerbiage: string;
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
-              private toastr: ToastrService, public fb: FormBuilder, private logger: NGXLogger,
-              private authenticationService: AuthenticationService, private userService: UserService,
-              public dialog: MatDialog, private filterService: FilterService) {
+    private toastr: ToastrService, public fb: FormBuilder, private logger: NGXLogger,
+    private authenticationService: AuthenticationService, private userService: UserService,
+    public dialog: MatDialog, private filterService: FilterService) {
     this.logger.log('testing the logging in app.component.ts constructor with NGXLogger');
     this.practiceForm = this.fb.group({
       practiceControl: ['']
     });
     this.updateUserForm = this.fb.group({
       password: ['', [Validators.required, Validators.minLength(8), NoSpaceValidator.cannotContainSpace,
-        Validators.pattern('((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,30})')]],
+      Validators.pattern('((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,30})')]],
       confirmPassword: ['', Validators.required]
     }, {
       validator: comparePasswords('password', 'confirmPassword')
@@ -111,12 +111,12 @@ export class HeaderComponent {
           }
           if (alert.filterType === 'PatientList') {
             toastrMessage = `<i class="fas fa-exclamation-triangle alert-icon" title="${alert.definition}"></i>
-          ${alert.message}<span class="alert-link">${alert.linkText}»</span>`;
+          ${alert.message}<span class="alert-filter-link">${alert.linkText}»</span>`;
           }
 
 
           const activeToastr = this.toastr.success(toastrMessage, alert.alertScheduleId.toString(), {
-            closeButton: true,   
+            closeButton: true,
             disableTimeOut: true,
             enableHtml: true,
             tapToDismiss: false
@@ -127,7 +127,7 @@ export class HeaderComponent {
           activeToastr.onTap
             .pipe(take(1))
             .subscribe((data) => this.toastrClickHandler(alert.alertScheduleId, alert.url, alert.filterType, alert.filterValue));
-            // In order to make this viable for other types of alerts. You will want to add the alert filter Name.
+          // In order to make this viable for other types of alerts. You will want to add the alert filter Name.
 
         });
       }
@@ -200,10 +200,10 @@ export class HeaderComponent {
     });
   }
 
- // Pass Validation
- checkError(controlName: string, errorName: string) {
-  return this.updateUserForm.controls[controlName].hasError(errorName);
-}
+  // Pass Validation
+  checkError(controlName: string, errorName: string) {
+    return this.updateUserForm.controls[controlName].hasError(errorName);
+  }
 
   passwordChanged() {
     this.isPasswordUpdated = true;
@@ -234,7 +234,7 @@ export class HeaderComponent {
     this.userService.updateUserPassword(userId, updatedPass).pipe(take(1)).subscribe(res => {
       if (res === true) {
         this.dialog.closeAll();
-        setTimeout(() => {  this.logout(); }, 2000);
+        setTimeout(() => { this.logout(); }, 2000);
       }
     });
   }

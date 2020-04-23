@@ -307,10 +307,10 @@ export class FilesComponent implements OnInit {
   }
   isOnWatchlist(event) {
     this.watchFilter = event.checked;
-    if (this.watchFilter === undefined) {
-      this.getAllFiles();
-    } else {
+    if (this.watchFilter) {
       this.findFilesFilter();
+    } else {
+      this.getAllFiles();
     }
   }
 
