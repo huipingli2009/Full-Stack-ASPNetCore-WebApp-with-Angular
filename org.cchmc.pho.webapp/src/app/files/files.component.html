@@ -168,31 +168,48 @@
         <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end" class="input-w-icon">
           <mat-form-field floatLabel="always" class="fill-form-field">
             <mat-label>FILE NAME</mat-label>
-            <input matInput formControlName="name" name="name">
+            <input matInput formControlName="name" name="name" required>
             <mat-icon matPrefix>
               get_app
             </mat-icon>
-            <mat-error>You must include a file name</mat-error>
+            <ng-container
+              *ngIf="(adminFileForm.get('name').touched ||  adminFileForm.get('name').dirty) && (adminFileForm.get('name').errors)">
+              <mat-error *ngIf="adminFileForm.get('name').errors.required">
+                You must include a file name
+              </mat-error>
+            </ng-container>
+
           </mat-form-field>
         </div>
         <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end" class="input-w-icon">
           <mat-form-field floatLabel="always" class="fill-form-field">
             <mat-label>FILE URL</mat-label>
-            <input matInput formControlName="fileURL" name="fileURL">
+            <input matInput formControlName="fileURL" name="fileURL" required>
             <mat-icon matPrefix>
               link
             </mat-icon>
-            <mat-error>You must include a file link</mat-error>
+
+            <ng-container
+              *ngIf="(adminFileForm.get('fileURL').touched ||  adminFileForm.get('fileURL').dirty) && (adminFileForm.get('fileURL').errors)">
+              <mat-error *ngIf="adminFileForm.get('fileURL').errors.required">
+                You must include a file link
+              </mat-error>
+            </ng-container>
           </mat-form-field>
         </div>
         <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end" class="input-w-icon">
           <mat-form-field floatLabel="always" class="fill-form-field">
             <mat-label>DESCRIPTION</mat-label>
-            <input matInput formControlName="description" name="description">
+            <input matInput formControlName="description" name="description" required>
             <mat-icon matPrefix>
               art_track
             </mat-icon>
-            <mat-error>You must include a description</mat-error>
+            <ng-container
+              *ngIf="(adminFileForm.get('description').touched ||  adminFileForm.get('description').dirty) && (adminFileForm.get('description').errors)">
+              <mat-error *ngIf="adminFileForm.get('description').errors.required">
+                You must include a description
+              </mat-error>
+            </ng-container>
           </mat-form-field>
         </div>
         <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end">
@@ -219,7 +236,8 @@
           <div fxLayout="column" class="input-w-icon multiselect-with-icon">
             <mat-form-field floatLabel="always" class="select-style-override">
               <mat-label>FILE TYPE</mat-label>
-              <mat-select matNativeControl formControlName="fileType" class="insurance" [compareWith]="compareFn">
+              <mat-select matNativeControl formControlName="fileType" class="insurance" [compareWith]="compareFn"
+                required>
                 <mat-option *ngFor="let item of fileTypeList" [value]="item">
                   {{item.name}}
                 </mat-option>
@@ -227,7 +245,12 @@
               <mat-icon matPrefix>
                 build
               </mat-icon>
-              <mat-error>You must include an author</mat-error>
+              <ng-container
+                *ngIf="(adminFileForm.get('fileType').touched ||  adminFileForm.get('fileType').dirty) && (adminFileForm.get('fileType').errors)">
+                <mat-error *ngIf="adminFileForm.get('fileType').errors.required">
+                  You must include File type
+                </mat-error>
+              </ng-container>
             </mat-form-field>
           </div>
 
@@ -236,12 +259,18 @@
           <div fxLayout="column">
             <mat-form-field floatLabel="always" class="select-style-override">
               <mat-label>RESOURCE TYPE</mat-label>
-              <mat-select matNativeControl formControlName="resourceTypeId" class="insurance" [compareWith]="compareFn">
+              <mat-select matNativeControl formControlName="resourceTypeId" required class="insurance"
+                [compareWith]="compareFn">
                 <mat-option *ngFor="let item of resourcesList" [value]="item.id">
                   {{item.name}}
                 </mat-option>
               </mat-select>
-              <mat-error>You must include a Resource Type</mat-error>
+              <ng-container
+                *ngIf="(adminFileForm.get('resourceTypeId').touched ||  adminFileForm.get('resourceTypeId').dirty) && (adminFileForm.get('resourceTypeId').errors)">
+                <mat-error *ngIf="adminFileForm.get('resourceTypeId').errors.required">
+                  You must include a Resource Type
+                </mat-error>
+              </ng-container>
             </mat-form-field>
           </div>
           <div fxLayout="column">
@@ -261,9 +290,12 @@
     </div>
     <div mat-dialog-actions align="end" class="select-row">
       <button mat-button (click)="cancelAdminDialog()">Cancel</button>
-      <button mat-flat-button color="accent" (click)="openAdminConfirmDialog(1)">SAVE DRAFT</button>
-      <button mat-flat-button color="accent" (click)="openAdminConfirmDialog(2)">PUBLISH FILE</button>
-      <button mat-flat-button color="accent" (click)="openAdminConfirmDialog(3)">PUBLISH FILE WITH ALERT</button>
+      <button mat-flat-button [disabled]="!adminFileForm.valid" color="accent" (click)="openAdminConfirmDialog(1)">SAVE
+        DRAFT</button>
+      <button mat-flat-button [disabled]="!adminFileForm.valid" color="accent"
+        (click)="openAdminConfirmDialog(2)">PUBLISH FILE</button>
+      <button mat-flat-button [disabled]="!adminFileForm.valid" color="accent"
+        (click)="openAdminConfirmDialog(3)">PUBLISH FILE WITH ALERT</button>
     </div>
   </ng-template>
   <ng-template #adminConfirmDialog>
