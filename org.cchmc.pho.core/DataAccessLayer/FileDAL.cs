@@ -252,6 +252,163 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
+
+        public async Task<List<File>> ListFilesRecentlyCreated(int userId, bool toggleTop5)
+        {
+            DataTable dataTable = new DataTable();
+            List<File> file = new List<File>();
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetFilesMostRecent", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@Top5", SqlDbType.Bit).Value = toggleTop5;
+                    sqlConnection.Open();
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        //List<FileTag> fileTags = await GetFileTagsAll();
+                        foreach (DataRow dr in dataTable.Rows)
+                        {
+                            var record = new File()
+                            {
+                                Id = (dr["Id"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Id"].ToString())),
+                                Name = dr["Name"].ToString(),
+                                DateCreated = (dr["DateCreated"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["DateCreated"].ToString())),
+                                //LastViewed = (dr["LastViewed"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LastViewed"].ToString())),
+                                //WatchFlag = (dr["WatchFlag"] != DBNull.Value && Convert.ToBoolean(dr["WatchFlag"])),
+                                //FileTypeId = (dr["FileTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FileTypeID"].ToString())),
+                                FileURL = dr["FileURL"].ToString(),
+                                FileType = dr["FileType"].ToString(),
+                                //PublishFlag = (dr["Published"] != DBNull.Value && Convert.ToBoolean(dr["Published"])),
+                                Description = dr["Description"].ToString(),
+                                Tags = new List<FileTag>()
+                            };
+                            //if (!string.IsNullOrWhiteSpace(dr["Tags"].ToString()))
+                            //{
+                            //    foreach (string tagName in dr["Tags"].ToString().Split(',').Select(t => Convert.ToString(t)))
+                            //    {
+                            //        if (fileTags.Any(f => f.Name == tagName))
+                            //            record.Tags.Add(fileTags.First(f => f.Name == tagName));
+                            //        else
+                            //            _logger.LogError($"An unmapped file tag was returned by the database - {tagName}");
+                            //    }
+                            //}
+                            file.Add(record);
+                        }
+                    }
+                    return file;
+                }
+            }
+        }
+
+
+        public async Task<List<File>> ListFilesRecentlyViewed(int userId, bool toggleTop5)
+        {
+            DataTable dataTable = new DataTable();
+            List<File> file = new List<File>();
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetFilesRecentlyViewed", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@Top5", SqlDbType.Bit).Value = toggleTop5;
+                    sqlConnection.Open();
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        //List<FileTag> fileTags = await GetFileTagsAll();
+                        foreach (DataRow dr in dataTable.Rows)
+                        {
+                            var record = new File()
+                            {
+                                Id = (dr["Id"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Id"].ToString())),
+                                Name = dr["Name"].ToString(),
+                                //DateCreated = (dr["DateCreated"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["DateCreated"].ToString())),
+                                LastViewed = (dr["LastViewed"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LastViewed"].ToString())),
+                                //WatchFlag = (dr["WatchFlag"] != DBNull.Value && Convert.ToBoolean(dr["WatchFlag"])),
+                                //FileTypeId = (dr["FileTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FileTypeID"].ToString())),
+                                FileURL = dr["FileURL"].ToString(),
+                                FileType = dr["FileType"].ToString(),
+                                //PublishFlag = (dr["Published"] != DBNull.Value && Convert.ToBoolean(dr["Published"])),
+                                Description = dr["Description"].ToString(),
+                                Tags = new List<FileTag>()
+                            };
+                            //if (!string.IsNullOrWhiteSpace(dr["Tags"].ToString()))
+                            //{
+                            //    foreach (string tagName in dr["Tags"].ToString().Split(',').Select(t => Convert.ToString(t)))
+                            //    {
+                            //        if (fileTags.Any(f => f.Name == tagName))
+                            //            record.Tags.Add(fileTags.First(f => f.Name == tagName));
+                            //        else
+                            //            _logger.LogError($"An unmapped file tag was returned by the database - {tagName}");
+                            //    }
+                            //}
+                            file.Add(record);
+                        }
+                    }
+                    return file;
+                }
+            }
+        }
+
+
+        public async Task<List<PopularFile>> ListFilesMostPopular(int userId, bool toggleTop5)
+        {
+            DataTable dataTable = new DataTable();
+            List<PopularFile> file = new List<PopularFile>();
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetFilesMostPopular", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@Top5", SqlDbType.Bit).Value = toggleTop5;
+                    sqlConnection.Open();
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        //List<FileTag> fileTags = await GetFileTagsAll();
+                        foreach (DataRow dr in dataTable.Rows)
+                        {
+                            var record = new PopularFile()
+                            {
+                                Id = (dr["Id"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Id"].ToString())),
+                                Name = dr["Name"].ToString(),
+                                //DateCreated = (dr["DateCreated"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["DateCreated"].ToString())),
+                                //LastViewed = (dr["LastViewed"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LastViewed"].ToString())),
+                                //WatchFlag = (dr["WatchFlag"] != DBNull.Value && Convert.ToBoolean(dr["WatchFlag"])),
+                                //FileTypeId = (dr["FileTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FileTypeID"].ToString())),
+                                ViewCount = (dr["Views"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Views"].ToString())),
+                                FileURL = dr["FileURL"].ToString(),
+                                FileType = dr["FileType"].ToString(),
+                                //PublishFlag = (dr["Published"] != DBNull.Value && Convert.ToBoolean(dr["Published"])),
+                                Description = dr["Description"].ToString(),
+                                Tags = new List<FileTag>()
+                            };
+                            //if (!string.IsNullOrWhiteSpace(dr["Tags"].ToString()))
+                            //{
+                            //    foreach (string tagName in dr["Tags"].ToString().Split(',').Select(t => Convert.ToString(t)))
+                            //    {
+                            //        if (fileTags.Any(f => f.Name == tagName))
+                            //            record.Tags.Add(fileTags.First(f => f.Name == tagName));
+                            //        else
+                            //            _logger.LogError($"An unmapped file tag was returned by the database - {tagName}");
+                            //    }
+                            //}
+                            file.Add(record);
+                        }
+                    }
+                    return file;
+                }
+            }
+        }
+
         public async Task<List<FileTag>> GetFileTagsAll()
         {
             DataTable dataTable = new DataTable();

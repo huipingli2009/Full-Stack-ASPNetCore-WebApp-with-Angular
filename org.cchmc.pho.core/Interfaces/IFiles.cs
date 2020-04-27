@@ -10,6 +10,9 @@ namespace org.cchmc.pho.core.Interfaces
         Task<FileDetails> GetFileDetails(int userId, int fileId);
         Task<FileDetails> UpdateFileDetails(int userId, FileDetails fileDetails);
         Task<FileDetails> AddFileDetails(int userId, FileDetails fileDetails);
+        Task<List<File>> ListFilesRecentlyCreated(int userId, bool toggleTop5);
+        Task<List<File>> ListFilesRecentlyViewed(int userId, bool toggleTop5);
+        Task<List<PopularFile>> ListFilesMostPopular(int userId, bool toggleTop5);
         Task<bool> UpdateFileWatch(int userId, int resourceId);
         Task<bool> RemoveFile(int userId, int resourceId);
         Task<List<FileTag>> GetFileTagsAll();
