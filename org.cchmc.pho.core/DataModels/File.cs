@@ -19,6 +19,11 @@ namespace org.cchmc.pho.core.DataModels
         public string Description { get; set; }
     }
 
+    public class PopularFile : File
+    {
+        public int ViewCount { get; set; }
+    }
+
     public class FileTag
     {
         public string Name { get; set; }

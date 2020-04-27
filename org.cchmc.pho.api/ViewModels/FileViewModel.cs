@@ -7,7 +7,6 @@ namespace org.cchmc.pho.api.ViewModels
     {
         public int Id { get; set; }
         public string Name { get; set; }
-
         public DateTime? DateCreated { get; set; }
         public DateTime? LastViewed { get; set; }
         public bool WatchFlag { get; set; }
@@ -18,7 +17,10 @@ namespace org.cchmc.pho.api.ViewModels
         public List<FileTagViewModel> Tags { get; set; }
         public string Description { get; set; }
     }
-
+    public class PopularFileViewModel : FileViewModel
+    {
+        public int ViewCount { get; set; }
+    }
     public class FileTagViewModel
     {
         public string Name { get; set; }
