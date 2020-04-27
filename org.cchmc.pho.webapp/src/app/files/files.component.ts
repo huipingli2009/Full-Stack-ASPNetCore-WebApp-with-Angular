@@ -91,6 +91,9 @@ export class FilesComponent implements OnInit {
   @ViewChild('adminConfirmDialog') adminConfirmDialog: TemplateRef<any>;
   @ViewChild('adminConfirmDeleteDialog') adminConfirmDeleteDialog: TemplateRef<any>;
 
+  //Files Analytics
+  RecentlyAddedFiles: FileList[];
+
   constructor(private rest: RestService, private logger: NGXLogger, private dialog: MatDialog,
     private userService: UserService, private fb: FormBuilder, private changeDetectorRefs: ChangeDetectorRef) {
 
@@ -137,6 +140,13 @@ export class FilesComponent implements OnInit {
       this.logger.log(this.fileList, 'FILES');
     })
     this.changeDetectorRefs.detectChanges();
+  }
+
+  getRecentlyAddedFiles() {
+    this.rest.getRecentlyAddedFiles().pipe(take(1)).subscribe((data) => {
+      this.RecentlyAddedFiles = data;      
+      this.logger.log(this.RecentlyAddedFiles, 'RECENTLY ADDED FILES');
+    })   
   }
 
   getFileDetials(fileId) {
