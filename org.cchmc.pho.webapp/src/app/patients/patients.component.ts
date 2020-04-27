@@ -15,7 +15,6 @@ import { RestService } from '../rest.service';
 import { PatientsDataSource } from './patients.datasource';
 import { FilterService } from '../services/filter.service';
 
-
 @Component({
   selector: 'app-patients',
   templateUrl: './patients.component.html',
@@ -116,10 +115,10 @@ export class PatientsComponent implements OnInit {
       providerPMCAScore: [''],
       providerNotes: [''],
       phone1: [''],
-      addressLine1: ['', Validators.required],
-      city: ['', Validators.required],
-      state: ['', Validators.required],
-      zip: ['', Validators.required]
+      addressLine1: [''],
+      city: [''],
+      state: [''],
+      zip: ['']
     });
 
     this.subscription = this.filterService.getIsFilteringPatients().subscribe (res => {
@@ -128,7 +127,7 @@ export class PatientsComponent implements OnInit {
     this.subscription = this.filterService.getFilterType().subscribe(res => this.filterType = res);
   }
 
-  ngOnInit() {
+  ngOnInit() {    
     this.patients = this.route.snapshot.data.patients;
     this.dataSource = new PatientsDataSource(this.rest);
     this.loadPatientsWithFilters();
@@ -195,7 +194,6 @@ export class PatientsComponent implements OnInit {
       this.popSlices,
       this.patientNameSearch);
   }
-
 
   applySelectedFilter(column: string, filterValue: string) {
     this.filterValues[column] = filterValue;
@@ -345,7 +343,7 @@ export class PatientsComponent implements OnInit {
   openPatientSaveDialog() {
     const { value, valid } = this.form;
     if (valid) {
-      this.dialog.open(this.callPatientSaveDialog, { disableClose: true });
+      this.dialog.open(this.callPatientSaveDialog, { disableClose: true });      
     }
   }
 
@@ -377,7 +375,8 @@ export class PatientsComponent implements OnInit {
     this.logger.log(this.currentPatientId);
     this.rest.savePatientDetails(this.currentPatientId, this.patientDetails).subscribe(data => {
       this.savedPatientData = data;
-    });
+      this.loadPatientsPage(); 
+    });          
   }
 
   /* Patient Details - Form Elements*/

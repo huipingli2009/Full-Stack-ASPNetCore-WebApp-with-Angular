@@ -95,7 +95,7 @@ export class FilesComponent implements OnInit {
     private userService: UserService, private fb: FormBuilder, private changeDetectorRefs: ChangeDetectorRef) {
 
     this.adminFileForm = this.fb.group({
-      practiceOnly: ['', Validators.required],
+      practiceOnly: [''],
       name: ['', Validators.required],
       fileURL: ['', Validators.required],
       tags: [''],
@@ -176,16 +176,21 @@ export class FilesComponent implements OnInit {
     this.fileAction.fileResourceId = fileResourceId;
     this.fileAction.fileActionId = 1;
     this.rest.updateFileAction(this.fileAction).pipe(take(1)).subscribe(res => {
+      this.getAllFiles();
     },
       error => { this.error = error; });
   }
 
   submitFileAddUpdate() {
-    let tagsSplit = this.adminFileForm.controls.tags.value.replace(/\s*,\s*/g, ",");
-    tagsSplit = tagsSplit.split(',');
-    tagsSplit = tagsSplit.map(function (e) {
-      return { name: e };
-    });
+    let tagControl = this.adminFileForm.get('tags');
+    let tagsSplit;
+    if (tagControl.value) {
+      tagsSplit = tagControl.value.replace(/\s*,\s*/g, ",");
+      tagsSplit = tagsSplit.split(',');
+      tagsSplit = tagsSplit.map(function (e) {
+        return { name: e };
+      });
+    }
     let publishFile;
     if (this.isPublishingFile === true || this.isPublishingWithAlert === true) {
       publishFile = true;
@@ -307,10 +312,10 @@ export class FilesComponent implements OnInit {
   }
   isOnWatchlist(event) {
     this.watchFilter = event.checked;
-    if (this.watchFilter === undefined) {
-      this.getAllFiles();
-    } else {
+    if (this.watchFilter) {
       this.findFilesFilter();
+    } else {
+      this.getAllFiles();
     }
   }
 
