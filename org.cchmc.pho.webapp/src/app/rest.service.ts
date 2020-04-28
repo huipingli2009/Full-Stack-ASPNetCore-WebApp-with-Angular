@@ -570,44 +570,26 @@ export class RestService {
 
   /*Get Recently Added Files. Update content after API*/
   getRecentlyAddedFiles(): Observable<any> {
-    return this.http.get<any>(`${API_URL}/api/Files/tags/`).pipe(
-      map((data: FileTags[]) => {
+    return this.http.get<any>(`${API_URL}/api/Files/created`).pipe(
+      map((data: FileList[]) => {
         return data;
       })
     );
   }  
-
-  /*Get TOP 5 Files. Update content after API*/
-  getTOP5Files(): Observable<any> {
-    return this.http.get<any>(`${API_URL}/api/Files/tags/`).pipe(
-      map((data: FileTags[]) => {
-        return data;
-      })
-    );
-  }  
-
-   /*Get Recently Viewed Files. Update content after API*/
+ 
+ /*Get Recently Viewed Files. Update content after API*/
   getRecentlyViewedFiles(): Observable<any> {
-    return this.http.get<any>(`${API_URL}/api/Files/tags/`).pipe(
-      map((data: FileTags[]) => {
+    return this.http.get<any>(`${API_URL}/api/Files/viewed/`).pipe(
+      map((data:  FileList[]) => {
         return data;
       })
     );
   } 
-  
-   /*Get Bottom 5 Files. Update content after API*/
-  getBottom5Files(): Observable<any> {
-    return this.http.get<any>(`${API_URL}/api/Files/tags/`).pipe(
-      map((data: FileTags[]) => {
-        return data;
-      })
-    );
-  }
-  
+
    /*Get Most Popular Files. Update content after API*/
    getMostPopularFiles(): Observable<any> {
-    return this.http.get<any>(`${API_URL}/api/Files/tags/`).pipe(
-      map((data: FileTags[]) => {
+    return this.http.get<any>(`${API_URL}/api/Files/popular/`).pipe(
+      map((data: FileList[]) => {
         return data;
       })
     );

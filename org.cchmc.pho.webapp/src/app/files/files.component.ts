@@ -93,6 +93,8 @@ export class FilesComponent implements OnInit {
 
   //Files Analytics
   RecentlyAddedFiles: FileList[];
+  RecentlyViewedFiles: FileList[];
+  MostPopularFiles: FileList[];
 
   constructor(private rest: RestService, private logger: NGXLogger, private dialog: MatDialog,
     private userService: UserService, private fb: FormBuilder, private changeDetectorRefs: ChangeDetectorRef) {
@@ -117,6 +119,9 @@ export class FilesComponent implements OnInit {
     this.getResourceTypes();
     this.getInitiatives();
     this.getTagsList();
+    this.getRecentlyAddedFiles();
+    this.getRecentlyViewedFiles();
+    this.getMostPopularFiles();
   }
 
   compareByValue(o1, o2): boolean {
@@ -147,6 +152,20 @@ export class FilesComponent implements OnInit {
       this.RecentlyAddedFiles = data;      
       this.logger.log(this.RecentlyAddedFiles, 'RECENTLY ADDED FILES');
     })   
+  }
+
+  getRecentlyViewedFiles(){
+    this.rest.getRecentlyViewedFiles().pipe(take(1)).subscribe((data) => {
+      this.RecentlyViewedFiles = data;      
+      this.logger.log(this.RecentlyViewedFiles, 'RECENTLY VIEWED FILES');
+    })   
+  }
+
+  getMostPopularFiles(){
+    this.rest.getMostPopularFiles().pipe(take(1)).subscribe((data) => {
+      this.MostPopularFiles = data;
+      this.logger.log(this.MostPopularFiles, 'MOST POPULAR FILES');      
+    })
   }
 
   getFileDetials(fileId) {
