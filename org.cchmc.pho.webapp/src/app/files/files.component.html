@@ -324,46 +324,49 @@
 </div>
 
 <!-- Files Analytics -->
-<div class="gridlist-container"> 
-  <mat-grid-list cols="3" rowHeight="3:1" guttersize = "10px">
-    <mat-grid-tile>      
-        <mat-table [dataSource]="recentlyAddedFileList" id="filesNewlyAdded">
-          <ng-container matColumnDef="recentlyAddedFiles">
-            <th mat-header-cell *matHeaderCellDef> RECENTLY ADDED </th>
-            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-          </ng-container>
-          <ng-container matColumnDef="top5">
-            <th mat-header-cell *matHeaderCellDef> TOP 5 </th>
-            <td mat-cell *matCellDef="let element"> {{element.dateCreated}} </td>
-          </ng-container>
+<div class="gridlist-container">
+  <mat-grid-list cols="3" rowHeight="fit" rowHeight = "fit" style="height: 600px" guttersize="10px">
 
-          <tr mat-header-row *matHeaderRowDef="recentlyAddedFilesdisplayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: recentlyAddedFilesdisplayedColumns;">
-          </tr>
-        </mat-table>       
+    <mat-grid-tile>
+      <mat-table [dataSource]="recentlyAddedFileList" id="filesNewlyAdded">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef style="font-style: normal; font-weight: bold;"> RECENTLY ADDED </th>
+          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+        <ng-container matColumnDef="dateCreated">
+          <th mat-header-cell *matHeaderCellDef> TOP 5 </th>
+          <td mat-cell *matCellDef="let element"> {{element.dateCreated}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="recentlyAddedFilesdisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: recentlyAddedFilesdisplayedColumns;">
+        </tr>
+      </mat-table>
     </mat-grid-tile>
+
     <mat-grid-tile>
       <mat-table [dataSource]="recentlyViewedFileList" id="filesRecentlyViewed">
-        <ng-container matColumnDef="recentlyViewedFiles">
+        <ng-container matColumnDef ="name">
           <th mat-header-cell *matHeaderCellDef> RECENTLY VIEWED </th>
           <td mat-cell *matCellDef="let element"> {{element.name}} </td>
         </ng-container>
-        <ng-container matColumnDef="bottom5">
+        <ng-container matColumnDef="lastViewed">
           <th mat-header-cell *matHeaderCellDef> BOTTOM 5 </th>
-          <td mat-cell *matCellDef="let element"> {{element.dateCreated}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.lastViewed}} </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="recentlyViewedFilesdisplayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: recentlyViewedFilesdisplayedColumns;">
         </tr>
       </mat-table>       
     </mat-grid-tile>
+
     <mat-grid-tile>
       <mat-table [dataSource]="mostPopularFileList" id="mostPopularFiles">
-        <ng-container matColumnDef="mostPopularFiles">
+        <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef> MOST POPULAR </th>
           <td mat-cell *matCellDef="let element"> {{element.name}} </td>
         </ng-container>
-        <ng-container matColumnDef="populartop5">
+        <ng-container matColumnDef="viewCount">
           <th mat-header-cell *matHeaderCellDef> TOP 5 </th>
           <td mat-cell *matCellDef="let element"> {{element.viewCount}} </td>
         </ng-container>
@@ -372,8 +375,6 @@
         </tr>
       </mat-table>       
     </mat-grid-tile>
-      
+
   </mat-grid-list>
 </div>
-
-

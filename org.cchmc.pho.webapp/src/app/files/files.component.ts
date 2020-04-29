@@ -85,7 +85,7 @@ export class FilesComponent implements OnInit {
   displayedColumns: string[] = ['icon', 'name', 'dateCreated', 'lastViewed', 'watchFlag'
     , 'fileType', 'actions', 'tags', 'button'];
   dataSource: MatTableDataSource<FileList>;
-  recentlyAddedFileList:MatTableDataSource<FileList>;
+  recentlyAddedFileList: MatTableDataSource<FileList>;
   recentlyViewedFileList: MatTableDataSource<FileList>;
   mostPopularFileList: MatTableDataSource<FileList>;
 
@@ -101,8 +101,8 @@ export class FilesComponent implements OnInit {
   MostPopularFiles: FileList[];
 
   recentlyAddedFilesdisplayedColumns: string[] = ['name', 'dateCreated'];
-  recentlyViewedFilesdisplayedColumns: string[] = ['name', 'dateCreated'];
-  mostPopularFilesdisplayedColumns:string[] = ['name', 'dateCreated'];
+  recentlyViewedFilesdisplayedColumns: string[] = ['name', 'lastViewed'];
+  mostPopularFilesdisplayedColumns: string[] = ['name', 'viewCount'];
 
 
   constructor(private rest: RestService, private logger: NGXLogger, private dialog: MatDialog,
@@ -157,25 +157,25 @@ export class FilesComponent implements OnInit {
 
   getRecentlyAddedFiles() {
     this.rest.getRecentlyAddedFiles().pipe(take(1)).subscribe((data) => {
-      this.RecentlyAddedFiles = data;  
+      this.RecentlyAddedFiles = data;
       this.recentlyAddedFileList = new MatTableDataSource(this.RecentlyAddedFiles); //source data for table       
       this.logger.log(this.RecentlyAddedFiles, 'RECENTLY ADDED FILES');
-    })   
+    })
   }
 
-  getRecentlyViewedFiles(){
+  getRecentlyViewedFiles() {
     this.rest.getRecentlyViewedFiles().pipe(take(1)).subscribe((data) => {
-      this.RecentlyViewedFiles = data;    
-      this.recentlyViewedFileList = new MatTableDataSource(this.RecentlyViewedFiles);        
+      this.RecentlyViewedFiles = data;
+      this.recentlyViewedFileList = new MatTableDataSource(this.RecentlyViewedFiles);
       this.logger.log(this.RecentlyViewedFiles, 'RECENTLY VIEWED FILES');
-    })   
+    })
   }
 
-  getMostPopularFiles(){
+  getMostPopularFiles() {
     this.rest.getMostPopularFiles().pipe(take(1)).subscribe((data) => {
       this.MostPopularFiles = data;
-      this.mostPopularFileList = new MatTableDataSource(this.MostPopularFiles); 
-      this.logger.log(this.MostPopularFiles, 'MOST POPULAR FILES');      
+      this.mostPopularFileList = new MatTableDataSource(this.MostPopularFiles);
+      this.logger.log(this.MostPopularFiles, 'MOST POPULAR FILES');
     })
   }
 
