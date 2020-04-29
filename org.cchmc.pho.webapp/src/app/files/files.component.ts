@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../services/user.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FileAction } from '../models/files';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 @Component({
   selector: 'app-files',
@@ -84,6 +85,9 @@ export class FilesComponent implements OnInit {
   displayedColumns: string[] = ['icon', 'name', 'dateCreated', 'lastViewed', 'watchFlag'
     , 'fileType', 'actions', 'tags', 'button'];
   dataSource: MatTableDataSource<FileList>;
+  recentlyAddedFileList:MatTableDataSource<FileList>;
+  recentlyViewedFileList: MatTableDataSource<FileList>;
+  mostPopularFileList: MatTableDataSource<FileList>;
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -95,6 +99,11 @@ export class FilesComponent implements OnInit {
   RecentlyAddedFiles: FileList[];
   RecentlyViewedFiles: FileList[];
   MostPopularFiles: FileList[];
+
+  recentlyAddedFilesdisplayedColumns: string[] = ['name', 'dateCreated'];
+  recentlyViewedFilesdisplayedColumns: string[] = ['name', 'dateCreated'];
+  mostPopularFilesdisplayedColumns:string[] = ['name', 'dateCreated'];
+
 
   constructor(private rest: RestService, private logger: NGXLogger, private dialog: MatDialog,
     private userService: UserService, private fb: FormBuilder, private changeDetectorRefs: ChangeDetectorRef) {
@@ -110,7 +119,6 @@ export class FilesComponent implements OnInit {
       resourceTypeId: ['', Validators.required],
       initiativeId: ['']
     });
-
   }
 
   ngOnInit(): void {
@@ -149,14 +157,16 @@ export class FilesComponent implements OnInit {
 
   getRecentlyAddedFiles() {
     this.rest.getRecentlyAddedFiles().pipe(take(1)).subscribe((data) => {
-      this.RecentlyAddedFiles = data;      
+      this.RecentlyAddedFiles = data;  
+      this.recentlyAddedFileList = new MatTableDataSource(this.RecentlyAddedFiles); //source data for table       
       this.logger.log(this.RecentlyAddedFiles, 'RECENTLY ADDED FILES');
     })   
   }
 
   getRecentlyViewedFiles(){
     this.rest.getRecentlyViewedFiles().pipe(take(1)).subscribe((data) => {
-      this.RecentlyViewedFiles = data;      
+      this.RecentlyViewedFiles = data;    
+      this.recentlyViewedFileList = new MatTableDataSource(this.RecentlyViewedFiles);        
       this.logger.log(this.RecentlyViewedFiles, 'RECENTLY VIEWED FILES');
     })   
   }
@@ -164,6 +174,7 @@ export class FilesComponent implements OnInit {
   getMostPopularFiles(){
     this.rest.getMostPopularFiles().pipe(take(1)).subscribe((data) => {
       this.MostPopularFiles = data;
+      this.mostPopularFileList = new MatTableDataSource(this.MostPopularFiles); 
       this.logger.log(this.MostPopularFiles, 'MOST POPULAR FILES');      
     })
   }
