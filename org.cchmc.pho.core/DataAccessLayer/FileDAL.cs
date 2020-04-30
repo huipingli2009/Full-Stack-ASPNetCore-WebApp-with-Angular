@@ -54,12 +54,9 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 DateCreated = (dr["DateCreated"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["DateCreated"].ToString())),
                                 LastViewed = (dr["LastViewed"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LastViewed"].ToString())),
                                 WatchFlag = (dr["WatchFlag"] != DBNull.Value && Convert.ToBoolean(dr["WatchFlag"])),
-                                FileTypeId = (dr["FileTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FileTypeID"].ToString())),
                                 FileURL = dr["FileURL"].ToString(),
-                                FileType = dr["FileType"].ToString(),
                                 PublishFlag = (dr["Published"] != DBNull.Value && Convert.ToBoolean(dr["Published"])),
                                 Description = dr["Description"].ToString(),
-                                IconImage = dr["IconImage"].ToString(),
                                 Tags = new List<FileTag>()
                             };
                             if (!string.IsNullOrWhiteSpace(dr["Tags"].ToString()))
@@ -71,6 +68,14 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                     else
                                         _logger.LogError($"An unmapped file tag was returned by the database - {tagName}");
                                 }
+                            }
+                            if (dr["FileTypeID"] != DBNull.Value && int.TryParse(dr["FileTypeID"].ToString(), out int intFileType) && intFileType > 0)
+                            {
+                                FileType type = new FileType();
+                                type.Id = intFileType;
+                                type.Name = dr["FileType"].ToString();
+                                type.ImageIcon = dr["IconImage"].ToString();
+                                record.FileType = type;
                             }
                             file.Add(record);
                         }
@@ -106,13 +111,11 @@ namespace org.cchmc.pho.core.DataAccessLayer
                             {
                                 Id = (dr["Id"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Id"].ToString())),
                                 Name = dr["Name"].ToString(),
-                                FileTypeId = (dr["FileTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FileTypeID"].ToString())),
                                 Author = dr["Author"].ToString(),
                                 DateCreated = (dr["DateCreated"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["DateCreated"].ToString())),
                                 LastViewed = (dr["LastViewed"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LastViewed"].ToString())),
                                 WatchFlag = (dr["WatchFlag"] != DBNull.Value && Convert.ToBoolean(dr["WatchFlag"])),
                                 FileURL = dr["FileURL"].ToString(),
-                                FileType = dr["FileType"].ToString(),
                                 Description = dr["Description"].ToString(),
                                 PublishFlag = (dr["Published"] != DBNull.Value && Convert.ToBoolean(dr["Published"])),
                                 PracticeOnly = (dr["PracticeOnly"] != DBNull.Value && Convert.ToBoolean(dr["PracticeOnly"])),
@@ -130,6 +133,14 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 }
                             }
 
+                            if (dr["FileTypeID"] != DBNull.Value && int.TryParse(dr["FileTypeID"].ToString(), out int intFileType) && intFileType > 0)
+                            {
+                                FileType type = new FileType();
+                                type.Id = intFileType;
+                                type.Name = dr["FileType"].ToString();
+                                type.ImageIcon = dr["IconImage"].ToString();
+                                details.FileType = type;
+                            }
                             if (dr["ResourceTypeId"] != DBNull.Value && int.TryParse(dr["ResourceTypeId"].ToString(), out int intResourceType) && intResourceType > 0)
                             {
                                 ResourceType type = new ResourceType();
@@ -169,7 +180,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@ResourceTypeId", SqlDbType.Int).Value = (fileDetails.ResourceType == null ? (int?)null : fileDetails.ResourceType.Id);
                     sqlCommand.Parameters.Add("@InitiativeId", SqlDbType.Int).Value = (fileDetails.Initiative == null ? (int?)null : fileDetails.Initiative.Id);
                     sqlCommand.Parameters.Add("@Description", SqlDbType.VarChar).Value = fileDetails.Description;
-                    sqlCommand.Parameters.Add("@FileTypeID", SqlDbType.Int).Value = fileDetails.FileTypeId;
+                    sqlCommand.Parameters.Add("@FileTypeID", SqlDbType.Int).Value = (fileDetails.FileType == null ? (int?)null : fileDetails.FileType.Id);
                     sqlCommand.Parameters.Add("@FileURL", SqlDbType.VarChar).Value = fileDetails.FileURL;
                     sqlCommand.Parameters.Add("@Author", SqlDbType.VarChar).Value = fileDetails.Author;
                     sqlCommand.Parameters.Add("@SearchTags", SqlDbType.VarChar).Value = string.Join(",", (from f in fileDetails.Tags select f.Name).ToArray());
@@ -204,7 +215,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@ResourceTypeId", SqlDbType.Int).Value = (fileDetails.ResourceType == null ? (int?)null : fileDetails.ResourceType.Id);
                     sqlCommand.Parameters.Add("@InitiativeId", SqlDbType.Int).Value = (fileDetails.Initiative == null ? (int?)null : fileDetails.Initiative.Id);
                     sqlCommand.Parameters.Add("@Description", SqlDbType.VarChar).Value = fileDetails.Description;
-                    sqlCommand.Parameters.Add("@FileTypeId", SqlDbType.Int).Value = fileDetails.FileTypeId;
+                    sqlCommand.Parameters.Add("@FileTypeId", SqlDbType.Int).Value = (fileDetails.FileType == null ? (int?)null : fileDetails.FileType.Id);
                     sqlCommand.Parameters.Add("@FileURL", SqlDbType.VarChar).Value = fileDetails.FileURL;
                     sqlCommand.Parameters.Add("@Author", SqlDbType.VarChar).Value = fileDetails.Author;
                     sqlCommand.Parameters.Add("@SearchTags", SqlDbType.VarChar).Value = string.Join(",", (from f in fileDetails.Tags select f.Name).ToArray());
@@ -295,11 +306,18 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 //WatchFlag = (dr["WatchFlag"] != DBNull.Value && Convert.ToBoolean(dr["WatchFlag"])),
                                 //FileTypeId = (dr["FileTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FileTypeID"].ToString())),
                                 FileURL = dr["FileURL"].ToString(),
-                                FileType = dr["FileType"].ToString(),
                                 //PublishFlag = (dr["Published"] != DBNull.Value && Convert.ToBoolean(dr["Published"])),
                                 Description = dr["Description"].ToString(),
                                 Tags = new List<FileTag>()
                             };
+                            if (dr["FileTypeID"] != DBNull.Value && int.TryParse(dr["FileTypeID"].ToString(), out int intFileType) && intFileType > 0)
+                            {
+                                FileType type = new FileType();
+                                type.Id = intFileType;
+                                type.Name = dr["FileType"].ToString();
+                                type.ImageIcon = dr["IconImage"].ToString();
+                                record.FileType = type;
+                            }
                             //if (!string.IsNullOrWhiteSpace(dr["Tags"].ToString()))
                             //{
                             //    foreach (string tagName in dr["Tags"].ToString().Split(',').Select(t => Convert.ToString(t)))
@@ -347,11 +365,18 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 //WatchFlag = (dr["WatchFlag"] != DBNull.Value && Convert.ToBoolean(dr["WatchFlag"])),
                                 //FileTypeId = (dr["FileTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FileTypeID"].ToString())),
                                 FileURL = dr["FileURL"].ToString(),
-                                FileType = dr["FileType"].ToString(),
                                 //PublishFlag = (dr["Published"] != DBNull.Value && Convert.ToBoolean(dr["Published"])),
                                 Description = dr["Description"].ToString(),
                                 Tags = new List<FileTag>()
                             };
+                            if (dr["FileTypeID"] != DBNull.Value && int.TryParse(dr["FileTypeID"].ToString(), out int intFileType) && intFileType > 0)
+                            {
+                                FileType type = new FileType();
+                                type.Id = intFileType;
+                                type.Name = dr["FileType"].ToString();
+                                type.ImageIcon = dr["IconImage"].ToString();
+                                record.FileType = type;
+                            }
                             //if (!string.IsNullOrWhiteSpace(dr["Tags"].ToString()))
                             //{
                             //    foreach (string tagName in dr["Tags"].ToString().Split(',').Select(t => Convert.ToString(t)))
@@ -400,11 +425,18 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 //FileTypeId = (dr["FileTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FileTypeID"].ToString())),
                                 ViewCount = (dr["Views"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Views"].ToString())),
                                 FileURL = dr["FileURL"].ToString(),
-                                FileType = dr["FileType"].ToString(),
                                 //PublishFlag = (dr["Published"] != DBNull.Value && Convert.ToBoolean(dr["Published"])),
                                 Description = dr["Description"].ToString(),
                                 Tags = new List<FileTag>()
                             };
+                            if (dr["FileTypeID"] != DBNull.Value && int.TryParse(dr["FileTypeID"].ToString(), out int intFileType) && intFileType > 0)
+                            {
+                                FileType type = new FileType();
+                                type.Id = intFileType;
+                                type.Name = dr["FileType"].ToString();
+                                type.ImageIcon = dr["IconImage"].ToString();
+                                record.FileType = type;
+                            }
                             //if (!string.IsNullOrWhiteSpace(dr["Tags"].ToString()))
                             //{
                             //    foreach (string tagName in dr["Tags"].ToString().Split(',').Select(t => Convert.ToString(t)))
@@ -472,7 +504,8 @@ namespace org.cchmc.pho.core.DataAccessLayer
                             var record = new FileType()
                             {
                                 Id = (dr["Id"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Id"].ToString())),
-                                Name = dr["Name"].ToString()
+                                Name = dr["Name"].ToString(),
+                                ImageIcon = dr["IconImage"].ToString()
                             };
                             fileTypes.Add(record);
                         }
