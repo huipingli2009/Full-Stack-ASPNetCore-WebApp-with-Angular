@@ -16,6 +16,7 @@ namespace org.cchmc.pho.api.ViewModels
         public bool? PublishFlag { get; set; }
         public List<FileTagViewModel> Tags { get; set; }
         public string Description { get; set; }
+        public string IconImage { get; set; }
     }
     public class PopularFileViewModel : FileViewModel
     {
@@ -26,6 +27,11 @@ namespace org.cchmc.pho.api.ViewModels
         public string Name { get; set; }
     }
     public class FileTypeViewModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+    public class ResourceTypeViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }

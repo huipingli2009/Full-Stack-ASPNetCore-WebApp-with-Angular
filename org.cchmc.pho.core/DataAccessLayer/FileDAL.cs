@@ -59,6 +59,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 FileType = dr["FileType"].ToString(),
                                 PublishFlag = (dr["Published"] != DBNull.Value && Convert.ToBoolean(dr["Published"])),
                                 Description = dr["Description"].ToString(),
+                                IconImage = dr["IconImage"].ToString(),
                                 Tags = new List<FileTag>()
                             };
                             if (!string.IsNullOrWhiteSpace(dr["Tags"].ToString()))
@@ -105,8 +106,6 @@ namespace org.cchmc.pho.core.DataAccessLayer
                             {
                                 Id = (dr["Id"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Id"].ToString())),
                                 Name = dr["Name"].ToString(),
-                                ResourceTypeId = (dr["ResourceTypeId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ResourceTypeId"].ToString())),
-                                InitiativeId = (dr["InitiativeId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["InitiativeId"].ToString())),
                                 FileTypeId = (dr["FileTypeID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FileTypeID"].ToString())),
                                 Author = dr["Author"].ToString(),
                                 DateCreated = (dr["DateCreated"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["DateCreated"].ToString())),
@@ -130,6 +129,21 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                         _logger.LogError($"An unmapped file tag was returned by the database - {tagName}");
                                 }
                             }
+
+                            if (dr["ResourceTypeId"] != DBNull.Value && int.TryParse(dr["ResourceTypeId"].ToString(), out int intResourceType) && intResourceType > 0)
+                            {
+                                ResourceType type = new ResourceType();
+                                type.Id = intResourceType;
+                                type.Name = dr["ResourceType"].ToString();
+                                details.ResourceType = type;
+                            }
+                            if (dr["InitiativeId"] != DBNull.Value && int.TryParse(dr["InitiativeId"].ToString(), out int intInitiative) && intInitiative > 0)
+                            {
+                                Initiative init = new Initiative();
+                                init.Id = intInitiative;
+                                init.Name = dr["Initiative"].ToString();
+                                details.Initiative = init;
+                            }
                         }
 
 
@@ -152,8 +166,8 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
                     sqlCommand.Parameters.Add("@Id", SqlDbType.Int).Value = fileDetails.Id;
                     sqlCommand.Parameters.Add("@Name", SqlDbType.VarChar).Value = fileDetails.Name;
-                    sqlCommand.Parameters.Add("@ResourceTypeId", SqlDbType.Int).Value = fileDetails.ResourceTypeId;
-                    sqlCommand.Parameters.Add("@InitiativeId", SqlDbType.Int).Value = fileDetails.InitiativeId;
+                    sqlCommand.Parameters.Add("@ResourceTypeId", SqlDbType.Int).Value = (fileDetails.ResourceType == null ? (int?)null : fileDetails.ResourceType.Id);
+                    sqlCommand.Parameters.Add("@InitiativeId", SqlDbType.Int).Value = (fileDetails.Initiative == null ? (int?)null : fileDetails.Initiative.Id);
                     sqlCommand.Parameters.Add("@Description", SqlDbType.VarChar).Value = fileDetails.Description;
                     sqlCommand.Parameters.Add("@FileTypeID", SqlDbType.Int).Value = fileDetails.FileTypeId;
                     sqlCommand.Parameters.Add("@FileURL", SqlDbType.VarChar).Value = fileDetails.FileURL;
@@ -187,8 +201,8 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
                     sqlCommand.Parameters.Add("@Name", SqlDbType.VarChar).Value = fileDetails.Name;
-                    sqlCommand.Parameters.Add("@ResourceTypeId", SqlDbType.Int).Value = fileDetails.ResourceTypeId;
-                    sqlCommand.Parameters.Add("@InitiativeId", SqlDbType.Int).Value = fileDetails.InitiativeId;
+                    sqlCommand.Parameters.Add("@ResourceTypeId", SqlDbType.Int).Value = (fileDetails.ResourceType == null ? (int?)null : fileDetails.ResourceType.Id);
+                    sqlCommand.Parameters.Add("@InitiativeId", SqlDbType.Int).Value = (fileDetails.Initiative == null ? (int?)null : fileDetails.Initiative.Id);
                     sqlCommand.Parameters.Add("@Description", SqlDbType.VarChar).Value = fileDetails.Description;
                     sqlCommand.Parameters.Add("@FileTypeId", SqlDbType.Int).Value = fileDetails.FileTypeId;
                     sqlCommand.Parameters.Add("@FileURL", SqlDbType.VarChar).Value = fileDetails.FileURL;

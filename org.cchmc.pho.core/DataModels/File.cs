@@ -17,6 +17,7 @@ namespace org.cchmc.pho.core.DataModels
         public bool? PublishFlag { get; set; }
         public List<FileTag> Tags { get; set; }
         public string Description { get; set; }
+        public string IconImage { get; set; }
     }
 
     public class PopularFile : File
@@ -29,6 +30,11 @@ namespace org.cchmc.pho.core.DataModels
         public string Name { get; set; }
     }
     public class FileType
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+    public class ResourceType
     {
         public int Id { get; set; }
         public string Name { get; set; }

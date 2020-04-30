@@ -9,8 +9,8 @@ namespace org.cchmc.pho.api.ViewModels
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int ResourceTypeId { get; set; }
-        public int? InitiativeId { get; set; }
+        public ResourceTypeViewModel ResourceType { get; set; }
+        public InitiativeViewModel Initiative { get; set; }
         public string Author { get; set; }
         public int FileTypeId { get; set; }
         public string FileType { get; set; }
