@@ -204,39 +204,45 @@ namespace org.cchmc.pho.core.DataAccessLayer
         }
         public async Task<FileDetails> AddFileDetails(int userId, FileDetails fileDetails)
         {
-
-            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            try
             {
-                using (SqlCommand sqlCommand = new SqlCommand("spAddFile", sqlConnection))
+                using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
                 {
-                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
-                    sqlCommand.Parameters.Add("@Name", SqlDbType.VarChar).Value = fileDetails.Name;
-                    sqlCommand.Parameters.Add("@ResourceTypeId", SqlDbType.Int).Value = (fileDetails.ResourceType == null ? (int?)null : fileDetails.ResourceType.Id);
-                    sqlCommand.Parameters.Add("@InitiativeId", SqlDbType.Int).Value = (fileDetails.Initiative == null ? (int?)null : fileDetails.Initiative.Id);
-                    sqlCommand.Parameters.Add("@Description", SqlDbType.VarChar).Value = fileDetails.Description;
-                    sqlCommand.Parameters.Add("@FileTypeId", SqlDbType.Int).Value = (fileDetails.FileType == null ? (int?)null : fileDetails.FileType.Id);
-                    sqlCommand.Parameters.Add("@FileURL", SqlDbType.VarChar).Value = fileDetails.FileURL;
-                    sqlCommand.Parameters.Add("@Author", SqlDbType.VarChar).Value = fileDetails.Author;
-                    sqlCommand.Parameters.Add("@SearchTags", SqlDbType.VarChar).Value = string.Join(",", (from f in fileDetails.Tags select f.Name).ToArray());
-                    sqlCommand.Parameters.Add("@Published", SqlDbType.Bit).Value = fileDetails.PublishFlag;
-                    sqlCommand.Parameters.Add("@PracticeOnlyFlag", SqlDbType.Bit).Value = fileDetails.PracticeOnly;
-                    sqlCommand.Parameters.Add("@CreateAlertFlag", SqlDbType.Bit).Value = fileDetails.CreateAlert;
-
-                    await sqlConnection.OpenAsync();
-
-                    //Execute Stored Procedure
-                    int? fileId = (int)sqlCommand.ExecuteScalar();
-                    if (fileId.HasValue && fileId > 0)
+                    using (SqlCommand sqlCommand = new SqlCommand("spAddFile", sqlConnection))
                     {
-                        return await GetFileDetails(userId, fileId.Value);
-                    }
-                    else 
-                    { 
-                        return null; 
-                    }
+                        sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                        sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                        sqlCommand.Parameters.Add("@Name", SqlDbType.VarChar).Value = fileDetails.Name;
+                        sqlCommand.Parameters.Add("@ResourceTypeId", SqlDbType.Int).Value = (fileDetails.ResourceType == null ? (int?)null : fileDetails.ResourceType.Id);
+                        sqlCommand.Parameters.Add("@InitiativeId", SqlDbType.Int).Value = (fileDetails.Initiative == null ? (int?)null : fileDetails.Initiative.Id);
+                        sqlCommand.Parameters.Add("@Description", SqlDbType.VarChar).Value = fileDetails.Description;
+                        sqlCommand.Parameters.Add("@FileTypeId", SqlDbType.Int).Value = (fileDetails.FileType == null ? (int?)null : fileDetails.FileType.Id);
+                        sqlCommand.Parameters.Add("@FileURL", SqlDbType.VarChar).Value = fileDetails.FileURL;
+                        sqlCommand.Parameters.Add("@Author", SqlDbType.VarChar).Value = fileDetails.Author;
+                        sqlCommand.Parameters.Add("@SearchTags", SqlDbType.VarChar).Value = string.Join(",", (from f in fileDetails.Tags select f.Name).ToArray());
+                        sqlCommand.Parameters.Add("@Published", SqlDbType.Bit).Value = fileDetails.PublishFlag;
+                        sqlCommand.Parameters.Add("@PracticeOnlyFlag", SqlDbType.Bit).Value = fileDetails.PracticeOnly;
+                        sqlCommand.Parameters.Add("@CreateAlertFlag", SqlDbType.Bit).Value = fileDetails.CreateAlert;
 
+                        await sqlConnection.OpenAsync();
+
+                        //Execute Stored Procedure
+                        int? fileId = (int)sqlCommand.ExecuteScalar();
+                        if (fileId.HasValue && fileId > 0)
+                        {
+                            return await GetFileDetails(userId, fileId.Value);
+                        }
+                        else
+                        {
+                            return null;
+                        }
+
+                    }
                 }
+            }
+            catch(Exception ex)
+            {
+                return null;
             }
         }
 

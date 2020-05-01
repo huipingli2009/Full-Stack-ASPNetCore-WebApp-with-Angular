@@ -1,108 +1,105 @@
 <!-- Main Menu TODO: Add additional pages (Phase 2)-->
 <div fxLayout="row" class="main-menu">
-    <div class="logo-col" fxLayout="row" fxFlex="188px" fxLayoutAlign="start end">
-      <img class="logo" src="assets/img/TSCHS_LOGO_PMS-SPOT-COLOR.png">
+  <div class="logo-col" fxLayout="row" fxFlex="188px" fxLayoutAlign="start end">
+    <img class="logo" src="assets/img/TSCHS_LOGO_PMS-SPOT-COLOR.png">
+  </div>
+  <div fxLayout="row" fxLayoutAlign="start end" fxFlex>
+    <div fxLayout="column" fxLayoutAlign="start end" fxFlex="10%">
+      <button mat-button routerLink="dashboard">Home</button>
     </div>
-    <div fxLayout="row" fxLayoutAlign="start end" fxFlex>
-      <div fxLayout="column" fxLayoutAlign="start end" fxFlex="10%">
-        <button mat-button routerLink="dashboard">Home</button>
-      </div>
-      <div fxLayout="column" fxLayoutAlign="end end" fxFlex class="logout-col">
-        <div><span (click)="openPasswordDialog()">Welcome, {{firstName}} {{lastName}} <mat-icon class="account-icon">account_box</mat-icon></span>| <button mat-button (click)="logout()">Logout</button></div>
-        
-      </div>
+    <div fxLayout="column" fxLayoutAlign="end end" fxFlex class="logout-col">
+      <div><span (click)="openPasswordDialog()">Welcome, {{firstName}} {{lastName}} <mat-icon class="account-icon">
+            account_box</mat-icon></span>| <button mat-button (click)="logout()">Logout</button></div>
+
     </div>
   </div>
-  <!-- Submenu - Home -->
-  <div fxLayout="row" class="home-submenu"> 
-    <div fxLayout="row" fxFlex="20" fxLayoutAlign="start end">
-      <form [formGroup]="practiceForm">
+</div>
+<!-- Submenu - Home -->
+<div fxLayout="row" class="home-submenu">
+  <div fxLayout="row" fxFlex="20" fxLayoutAlign="start end">
+    <form [formGroup]="practiceForm">
       <mat-form-field class="practice-select">
-        <mat-select formControlName="practiceControl" (selectionChange)="switchPractice($event.value)" [disabled]="!isUserAdmin">
-        <mat-option class="practice-select-text" *ngFor="let practice of practiceList" [value]="practice.id">
-          {{practice.name}}
-      </mat-option>
-    </mat-select>
+        <mat-select formControlName="practiceControl" (selectionChange)="switchPractice($event.value)"
+          [disabled]="!isUserAdmin">
+          <mat-option class="practice-select-text" *ngFor="let practice of practiceList" [value]="practice.id">
+            {{practice.name}}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
     </form>
-    </div>
-    <div fxLayout="row" fxLayoutAlign="end end" fxFlex>
-      <button mat-button routerLink="/dashboard" routerLinkActive="active-submenu">Dashboard</button>
-      <button mat-button routerLink="/patients" routerLinkActive="active-submenu">Patients</button>
-      <button mat-button routerLink="/staff" routerLinkActive="active-submenu">Staff</button>
-      <button mat-button routerLink="/files" routerLinkActive="active-submenu">Files</button>
-      <button mat-button routerLink="/workbooks" routerLinkActive="active-submenu">Workbooks</button>
-    </div>
   </div>
-  <div toastContainer class="alert-container"><span></span></div>
+  <div fxLayout="row" fxLayoutAlign="end end" fxFlex>
+    <button mat-button routerLink="/dashboard" routerLinkActive="active-submenu">Dashboard</button>
+    <button mat-button routerLink="/patients" routerLinkActive="active-submenu">Patients</button>
+    <button mat-button routerLink="/staff" routerLinkActive="active-submenu">Staff</button>
+    <button mat-button routerLink="/files" routerLinkActive="active-submenu">Files and Resources</button>
+    <button mat-button routerLink="/workbooks" routerLinkActive="active-submenu">Workbooks</button>
+  </div>
+</div>
+<div toastContainer class="alert-container"><span></span></div>
 
-  <ng-template #passwordDialog>
-    <div mat-dialog-content class="mat-typography">
+<ng-template #passwordDialog>
+  <div mat-dialog-content class="mat-typography">
     <form [formGroup]="updateUserForm" id="passwordChangeForm">
       <div fxLayout="row" class="detail-heading">CHANGE PASSWORD</div>
       <div fxLayout="row" class="validation-text">
-          <p>{{passwordVerbiage | slice:0:141}}<br>{{passwordVerbiage | slice:141:passwordVerbiage.length}}
-          </p>
+        <p>{{passwordVerbiage | slice:0:141}}<br>{{passwordVerbiage | slice:141:passwordVerbiage.length}}
+        </p>
       </div>
       <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end">
 
-          <div fxLayout="column" class="input-w-icon">
-              <mat-form-field floatLabel="always">
-                  <mat-label>USER NAME</mat-label>
-                  <input matInput [disabled]="true" value="{{currentUsername}}">
-                  <mat-icon matPrefix>
-                      person
-                  </mat-icon>
-              </mat-form-field>
-          </div>
-          <div fxLayout="column" class="input-w-icon">
-              <mat-form-field floatLabel="always">
-                  <mat-label>PASSWORD</mat-label>
-                  <input matInput type="password" formControlName="password"
-                      name="password" (change)="passwordChanged()"
-                      [errorStateMatcher]="matcher">
-                  <mat-icon matPrefix>
-                      lock
-                  </mat-icon>
+        <div fxLayout="column" class="input-w-icon">
+          <mat-form-field floatLabel="always">
+            <mat-label>USER NAME</mat-label>
+            <input matInput [disabled]="true" value="{{currentUsername}}">
+            <mat-icon matPrefix>
+              person
+            </mat-icon>
+          </mat-form-field>
+        </div>
+        <div fxLayout="column" class="input-w-icon">
+          <mat-form-field floatLabel="always">
+            <mat-label>PASSWORD</mat-label>
+            <input matInput type="password" formControlName="password" name="password" (change)="passwordChanged()"
+              [errorStateMatcher]="matcher">
+            <mat-icon matPrefix>
+              lock
+            </mat-icon>
 
-              </mat-form-field>
-          </div>
-          <div fxLayout="column" class="input-w-icon">
-              <mat-form-field floatLabel="always">
-                  <mat-label>CONFIRM PW</mat-label>
-                  <input matInput type="password"
-                      formControlName="confirmPassword" name="confirmPassword"
-                      (change)="passwordChanged()" [errorStateMatcher]="matcher">
-                  <mat-icon matPrefix>
-                      lock
-                  </mat-icon>
-                  <mat-error>Passwords Must Match</mat-error>
-              </mat-form-field>
-          </div>
+          </mat-form-field>
+        </div>
+        <div fxLayout="column" class="input-w-icon">
+          <mat-form-field floatLabel="always">
+            <mat-label>CONFIRM PW</mat-label>
+            <input matInput type="password" formControlName="confirmPassword" name="confirmPassword"
+              (change)="passwordChanged()" [errorStateMatcher]="matcher">
+            <mat-icon matPrefix>
+              lock
+            </mat-icon>
+            <mat-error>Passwords Must Match</mat-error>
+          </mat-form-field>
+        </div>
       </div>
       <div fxLayout="row" *ngIf="updateUserForm.get('password').touched">
         <mat-error *ngIf="checkError('password', 'minlength')">Password should be more than 8 characters.</mat-error>
-                  <mat-error *ngIf="checkError('password', 'cannotContainSpace')"> Password cannot contain any spaces.</mat-error>
-                  <mat-error *ngIf="checkError('password', 'pattern')"> Password must meet the above pattern.</mat-error>
+        <mat-error *ngIf="checkError('password', 'cannotContainSpace')"> Password cannot contain any spaces.</mat-error>
+        <mat-error *ngIf="checkError('password', 'pattern')"> Password must meet the above pattern.</mat-error>
       </div>
-      </form>
-    </div>
-    <div mat-dialog-actions align="end">
-      <button mat-button (click)="cancelPasswordUpdateDialog()">Cancel</button>
-      <button mat-flat-button color="accent" (click)="confirmPasswordUpdate()" [disabled]="!updateUserForm.valid">Save</button>
+    </form>
   </div>
-  </ng-template>
-
-  <ng-template #updatePassConfirmDialog>
-    <div mat-dialog-content class="mat-typography">
-        <h3>Are you sure you want to update your password?</h3>
-    </div>
-    <div mat-dialog-actions align="end">
-        <button mat-button mat-dialog-close>Cancel</button>
-        <button mat-flat-button color="accent" mat-dialog-close
-            (click)="updatePassword()">Save and Update Password</button>
-    </div>
+  <div mat-dialog-actions align="end">
+    <button mat-button (click)="cancelPasswordUpdateDialog()">Cancel</button>
+    <button mat-flat-button color="accent" (click)="confirmPasswordUpdate()"
+      [disabled]="!updateUserForm.valid">Save</button>
+  </div>
 </ng-template>
-  
 
-  
+<ng-template #updatePassConfirmDialog>
+  <div mat-dialog-content class="mat-typography">
+    <h3>Are you sure you want to update your password?</h3>
+  </div>
+  <div mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-flat-button color="accent" mat-dialog-close (click)="updatePassword()">Save and Update Password</button>
+  </div>
+</ng-template>
