@@ -12,8 +12,7 @@ namespace org.cchmc.pho.api.ViewModels
         public ResourceTypeViewModel ResourceType { get; set; }
         public InitiativeViewModel Initiative { get; set; }
         public string Author { get; set; }
-        public int FileTypeId { get; set; }
-        public string FileType { get; set; }
+        public FileTypeViewModel FileType { get; set; }
         public DateTime? DateCreated { get; set; }
         public DateTime? LastViewed { get; set; }
         public bool WatchFlag { get; set; }

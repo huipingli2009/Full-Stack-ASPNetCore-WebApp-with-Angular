@@ -15,8 +15,11 @@ namespace org.cchmc.pho.api.Mappings
             CreateMap<FileTag, FileTagViewModel>();
             CreateMap<FileTagViewModel, FileTag>();
             CreateMap<FileType, FileTypeViewModel>();
+            CreateMap<FileTypeViewModel, FileType>();
             CreateMap<ResourceType, ResourceTypeViewModel>();
+            CreateMap<ResourceTypeViewModel, ResourceType>();
             CreateMap<Initiative, InitiativeViewModel>();
+            CreateMap<InitiativeViewModel, Initiative>();
             CreateMap<Resource, ResourceViewModel>();
             CreateMap<FileAction, FileActionViewModel>();
             CreateMap<FileActionViewModel, FileAction>();
