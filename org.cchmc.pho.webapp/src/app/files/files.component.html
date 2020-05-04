@@ -321,57 +321,60 @@
         Delete File</button>
     </div>
   </ng-template>
+
+  <!-- Files Part 2: Files Analytics -->
+  <div fxLayout="row" fxLayoutGap="35px">
+    <div fxLayout="column" fxFlex>
+      <mat-table [dataSource]="recentlyAddedFileList" id="filesNewlyAdded">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef fxFlex fxLayoutAlign="center center"> RECENTLY ADDED </th>
+          <td mat-cell *matCellDef="let element" matTooltip={{element.description}} class="td-content2" fxFlex > {{element.name}} </td>
+        </ng-container>
+        <ng-container matColumnDef="dateCreated">
+          <th mat-header-cell *matHeaderCellDef fxFlex fxLayoutAlign="end center">TOP 5</th>
+          <td mat-cell *matCellDef="let element" class="td-content1" fxFlex> {{element.dateCreated | date:'MM/dd/yyyy'}} </td>
+        </ng-container>
+  
+        <tr mat-header-row *matHeaderRowDef="recentlyAddedFilesdisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: recentlyAddedFilesdisplayedColumns;">
+        </tr>
+      </mat-table>
+    </div>
+    <div fxLayout="column" fxFlex>
+      <mat-table [dataSource]="recentlyViewedFileList" id="filesRecentlyViewed" >
+        <ng-container matColumnDef ="name">
+          <th mat-header-cell *matHeaderCellDef fxLayoutAlign="center center" fxFlex> RECENTLY VIEWED </th>
+          <td mat-cell fxFlex *matCellDef="let element" matTooltip={{element.description}} class="td-content2"> {{element.name}} </td>
+        </ng-container>
+        <ng-container matColumnDef="lastViewed">
+          <th mat-header-cell *matHeaderCellDef fxFlex fxLayoutAlign="end center"> BOTTOM 5 </th>
+          <td mat-cell *matCellDef="let element" class="td-content1" fxFlex> {{element.lastViewed | date:'MM/dd/yyyy'}} </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="recentlyViewedFilesdisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: recentlyViewedFilesdisplayedColumns;">
+        </tr>
+      </mat-table>       
+    </div>
+    <div fxLayout="column" fxFlex>
+      <mat-table [dataSource]="mostPopularFileList" id="mostPopularFiles">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef fxLayoutAlign="center center"> MOST POPULAR </th>
+          <td mat-cell *matCellDef="let element" matTooltip={{element.description}}> {{element.name}} </td>
+        </ng-container>
+        <ng-container matColumnDef="viewCount">
+          <th mat-header-cell *matHeaderCellDef fxFlex fxLayoutAlign="end center">TOP 5 </th>
+          <td mat-cell *matCellDef="let element" class="td-content1" fxFlex> {{element.viewCount}} </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="mostPopularFilesdisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: mostPopularFilesdisplayedColumns;">
+        </tr>
+      </mat-table>      
+    </div>
+  </div>  
 </div>
 
-<!-- Files Analytics -->
-<div fxLayout="row" class="content-main" fxLayoutGap="33px">
-  <div fxLayout="column" fxFlex="33%">
-    <mat-table [dataSource]="recentlyAddedFileList" id="filesNewlyAdded">
-      <ng-container matColumnDef="name" class="content-title title-green">
-        <th mat-header-cell *matHeaderCellDef> RECENTLY ADDED </th>
-        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-      </ng-container>
-      <ng-container matColumnDef="dateCreated">
-        <th mat-header-cell *matHeaderCellDef> TOP 5 </th>
-        <td mat-cell *matCellDef="let element"> {{element.dateCreated}} </td>
-      </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="recentlyAddedFilesdisplayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: recentlyAddedFilesdisplayedColumns;">
-      </tr>
-    </mat-table>
-  </div>
-  <div fxLayout="column" fxFlex="33%">
-    <mat-table [dataSource]="recentlyViewedFileList" id="filesRecentlyViewed">
-      <ng-container matColumnDef ="name">
-        <th mat-header-cell *matHeaderCellDef id="nameTitle"> RECENTLY VIEWED </th>
-        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-      </ng-container>
-      <ng-container matColumnDef="lastViewed">
-        <th mat-header-cell *matHeaderCellDef> BOTTOM 5 </th>
-        <td mat-cell *matCellDef="let element"> {{element.lastViewed}} </td>
-      </ng-container>
-      <tr mat-header-row *matHeaderRowDef="recentlyViewedFilesdisplayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: recentlyViewedFilesdisplayedColumns;">
-      </tr>
-    </mat-table>       
-  </div>
-  <div fxLayout="column" fxFlex>
-    <mat-table [dataSource]="mostPopularFileList" id="mostPopularFiles">
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef> MOST POPULAR </th>
-        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-      </ng-container>
-      <ng-container matColumnDef="viewCount">
-        <th mat-header-cell *matHeaderCellDef> TOP 5 </th>
-        <td mat-cell *matCellDef="let element"> {{element.viewCount}} </td>
-      </ng-container>
-      <tr mat-header-row *matHeaderRowDef="mostPopularFilesdisplayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: mostPopularFilesdisplayedColumns;">
-      </tr>
-    </mat-table>      
-  </div>
-</div>  
+
 
   <!-- <mat-grid-list cols="3" rowHeight="fit" rowHeight = "fit" style="height: 600px" guttersize="10px">
 
