@@ -8,11 +8,10 @@ namespace org.cchmc.pho.core.DataModels
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int ResourceTypeId { get; set; }
-        public int InitiativeId { get; set; }
+        public ResourceType ResourceType { get; set; }
+        public Initiative Initiative { get; set; }
+        public FileType FileType { get; set; }
         public string Author { get; set; }
-        public int FileTypeId { get; set; }
-        public string FileType { get; set; }
         public DateTime? DateCreated { get; set; }
         public DateTime? LastViewed { get; set; }
         public bool WatchFlag { get; set; }

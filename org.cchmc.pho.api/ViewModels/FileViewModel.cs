@@ -11,8 +11,7 @@ namespace org.cchmc.pho.api.ViewModels
         public DateTime? LastViewed { get; set; }
         public bool WatchFlag { get; set; }
         public string FileURL { get; set; }
-        public int FileTypeId { get; set; }
-        public string FileType { get; set; }
+        public FileTypeViewModel FileType { get; set; }
         public bool? PublishFlag { get; set; }
         public List<FileTagViewModel> Tags { get; set; }
         public string Description { get; set; }
@@ -26,6 +25,12 @@ namespace org.cchmc.pho.api.ViewModels
         public string Name { get; set; }
     }
     public class FileTypeViewModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string ImageIcon { get; set; }
+    }
+    public class ResourceTypeViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }

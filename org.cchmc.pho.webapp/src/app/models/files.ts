@@ -5,8 +5,7 @@ export interface FilesList {
     lastViewed: Date;
     watchFlag: boolean;
     fileURL: string;
-    fileTypeId: number;
-    fileType: string;
+    fileType: FileType;
     publishFlag: boolean;
     tags: [
         {
@@ -19,36 +18,32 @@ export interface FilesList {
 export interface FileDetails {
     id: number;
     name: string;
-    resourceTypeId: number;
-    initiativeId: number;
+    resourceType: ResourceType;
+    initiative: Initiative;
     author: string;
-    fileTypeId: number;
-    fileType: string;
+    fileType: FileType;
     dateCreated: Date;
     lastViewed: Date;
     watchFlag: boolean;
     fileURL: string;
-    tags: [
-        {
-            name: string;
-        }
-    ];
+    tags: Tag[];
     description: string;
     publishFlag: boolean;
     practiceOnly: boolean;
     createAlert: boolean;
 }
 
-export interface FileTags {
-    name: string;
-}
 
-export interface FileResources {
+export interface ResourceType {
     id: number;
     name: string;
 }
 
-export interface FileInitiatives {
+export interface Tag {
+    name: string;
+}
+
+export interface Initiative {
     id: number;
     name: string;
 }
@@ -56,4 +51,10 @@ export interface FileInitiatives {
 export class FileAction {
     fileResourceId: number;
     fileActionId: number;
+}
+
+export interface FileType {
+    id: number;
+    name: string;
+    imageIcon: string;
 }

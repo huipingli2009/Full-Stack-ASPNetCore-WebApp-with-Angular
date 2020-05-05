@@ -49,18 +49,18 @@
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let row">
         <i class="material-icons text-secondary" *ngIf="!isUserAdmin">
-          description
+          {{row.fileType.imageIcon}}
         </i>
         <i class="material-icons text-secondary" *ngIf="isUserAdmin" (click)="openAdminDialog(row.id)">
-          <span *ngIf="row.publishFlag">description</span>
-          <span *ngIf="!row.publishFlag" class="file-draft-icon">file_copy</span>
+          <span *ngIf="row.publishFlag"> {{row.fileType.imageIcon}}</span>
+          <span *ngIf="!row.publishFlag" class="file-draft-icon"> {{row.fileType.imageIcon}}</span>
         </i>
       </td>
     </ng-container>
 
     <!-- File Name Column -->
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> File Name </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
       <td mat-cell *matCellDef="let row" matTooltip={{row.description}}> {{row.name}} </td>
     </ng-container>
 
@@ -95,7 +95,7 @@
     <!-- File Type Column -->
     <ng-container matColumnDef="fileType">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> File Type </th>
-      <td mat-cell *matCellDef="let row"> {{row.fileType}} </td>
+      <td mat-cell *matCellDef="let row"> {{row.fileType.name}} </td>
     </ng-container>
 
     <!-- Actions Column -->
@@ -256,15 +256,15 @@
           <div fxLayout="column">
             <mat-form-field floatLabel="always" class="select-style-override">
               <mat-label>RESOURCE TYPE</mat-label>
-              <mat-select matNativeControl formControlName="resourceTypeId" required class="insurance"
+              <mat-select matNativeControl formControlName="resourceType" required class="insurance"
                 [compareWith]="compareFn">
-                <mat-option *ngFor="let item of resourcesList" [value]="item.id">
+                <mat-option *ngFor="let item of resourcesList" [value]="item">
                   {{item.name}}
                 </mat-option>
               </mat-select>
               <ng-container
-                *ngIf="(adminFileForm.get('resourceTypeId').touched ||  adminFileForm.get('resourceTypeId').dirty) && (adminFileForm.get('resourceTypeId').errors)">
-                <mat-error *ngIf="adminFileForm.get('resourceTypeId').errors.required">
+                *ngIf="(adminFileForm.get('resourceType').touched ||  adminFileForm.get('resourceType').dirty) && (adminFileForm.get('resourceType').errors)">
+                <mat-error *ngIf="adminFileForm.get('resourceType').errors.required">
                   You must include a Resource Type
                 </mat-error>
               </ng-container>
@@ -273,8 +273,8 @@
           <div fxLayout="column">
             <mat-form-field floatLabel="always" class="select-style-override">
               <mat-label>INITIATIVE</mat-label>
-              <mat-select matNativeControl formControlName="initiativeId" class="insurance" [compareWith]="compareFn">
-                <mat-option *ngFor="let item of initiativesList" [value]="item.id">
+              <mat-select matNativeControl formControlName="initiative" class="insurance" [compareWith]="compareFn">
+                <mat-option *ngFor="let item of initiativesList" [value]="item">
                   {{item.name}}
                 </mat-option>
               </mat-select>

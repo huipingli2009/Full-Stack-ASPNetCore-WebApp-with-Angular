@@ -8,8 +8,7 @@ import { NGXLogger } from 'ngx-logger';
 import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../services/user.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { FileAction } from '../models/files';
-import { MatGridListModule } from '@angular/material/grid-list';
+import { FileAction, FileDetails, FileType } from '../models/files';
 
 @Component({
   selector: 'app-files',
@@ -25,6 +24,7 @@ export class FilesComponent implements OnInit {
   tags: string;
   resourcesList: any[] = [];
   initiativesList: any[] = [];
+  fileTypeList: FileType[] = [];
   tagList: any[] = [];
   isUserAdmin: boolean;
   adminFileForm: FormGroup;
@@ -40,40 +40,8 @@ export class FilesComponent implements OnInit {
   error: any;
   deletingFileId: number;
   fileAction: FileAction;
-  fileTypeList = [
-    {
-      id: 1,
-      name: 'PDF'
-    },
-    {
-      id: 2,
-      name: 'DOCX'
-    },
-    {
-      id: 3,
-      name: 'EXCEL'
-    },
-    {
-      id: 4,
-      name: 'PPT'
-    },
-    {
-      id: 5,
-      name: 'CSV'
-    },
-    {
-      id: 6,
-      name: 'JPEG'
-    },
-    {
-      id: 7,
-      name: 'PNG'
-    },
-    {
-      id: 8,
-      name: 'ZIP'
-    }
-  ];
+  selectedFileValues: FileDetails;
+  
 
   // Filters
   resourceTypeIdFilter: number;
@@ -109,15 +77,16 @@ export class FilesComponent implements OnInit {
     private userService: UserService, private fb: FormBuilder, private changeDetectorRefs: ChangeDetectorRef) {
 
     this.adminFileForm = this.fb.group({
-      practiceOnly: [''],
+
+      practiceOnly: false,
       name: ['', Validators.required],
       fileURL: ['', Validators.required],
       tags: [''],
       author: [''],
       fileType: ['', Validators.required],
       description: ['', Validators.required],
-      resourceTypeId: ['', Validators.required],
-      initiativeId: ['']
+      resourceType: ['', Validators.required],
+      initiative: ['']
     });
   }
 
@@ -130,6 +99,7 @@ export class FilesComponent implements OnInit {
     this.getRecentlyAddedFiles();
     this.getRecentlyViewedFiles();
     this.getMostPopularFiles();
+    this.getFileTypes();
   }
 
   compareByValue(o1, o2): boolean {
@@ -190,23 +160,19 @@ export class FilesComponent implements OnInit {
       data.tags.forEach(tag => {
         joinedTags.push(tag.name);
       });
-
-      const selectedFileValues = {
-        practiceOnly: data.practiceOnly,
-        name: data.name,
-        fileURL: data.fileURL,
-        tags: joinedTags.join(', '),
-        author: data.author,
-        fileType: {
-          id: data.fileTypeId,
-          name: data.fileType
-        },
-        description: data.description,
-        resourceTypeId: data.resourceTypeId,
-        initiativeId: data.initiativeId
-      };
-      this.logger.log(selectedFileValues, 'SELECTED FILE')
-      this.adminFileForm.setValue(selectedFileValues);
+   
+      this.selectedFileValues = data;
+               
+      this.logger.log(this.selectedFileValues, 'SELECTED FILE')
+      this.adminFileForm.get('name').setValue(this.selectedFileValues.name);
+      this.adminFileForm.get('fileURL').setValue(this.selectedFileValues.fileURL);
+      this.adminFileForm.get('name').setValue(this.selectedFileValues.name);
+      this.adminFileForm.get('tags').setValue(joinedTags.join(', '));
+      this.adminFileForm.get('author').setValue(this.selectedFileValues.author);
+      this.adminFileForm.get('fileType').setValue(this.selectedFileValues.fileType);
+      this.adminFileForm.get('description').setValue(this.selectedFileValues.description);
+      this.adminFileForm.get('resourceType').setValue(this.selectedFileValues.resourceType);
+      this.adminFileForm.get('initiative').setValue(this.selectedFileValues.initiative);
     })
   }
 
@@ -224,7 +190,7 @@ export class FilesComponent implements OnInit {
   submitFileAddUpdate() {
     let tagControl = this.adminFileForm.get('tags');
     let tagsSplit;
-    if (tagControl.value) {
+    if ((tagControl.value != '') && (tagControl.value != null)) {
       tagsSplit = tagControl.value.replace(/\s*,\s*/g, ",");
       tagsSplit = tagsSplit.split(',');
       tagsSplit = tagsSplit.map(function (e) {
@@ -235,46 +201,26 @@ export class FilesComponent implements OnInit {
     if (this.isPublishingFile === true || this.isPublishingWithAlert === true) {
       publishFile = true;
     } else { publishFile = false; }
-    const fileFormValues = {
-      id: this.currentFileId,
-      name: this.adminFileForm.controls.name.value,
-      resourceTypeId: this.adminFileForm.controls.resourceTypeId.value,
-      initiativeId: this.adminFileForm.controls.initiativeId.value,
-      author: this.adminFileForm.controls.author.value,
-      fileTypeId: this.adminFileForm.controls.fileType.value.id,
-      fileType: this.adminFileForm.controls.fileType.value.name,
-      dateCreated: this.currentDateCreated,
-      lastViewed: this.currentLastViewed,
-      watchFlag: this.currentWatchFlag,
-      tags: tagsSplit,
-      fileURL: this.adminFileForm.controls.fileURL.value,
-      description: this.adminFileForm.controls.description.value,
-      practiceOnly: this.adminFileForm.controls.practiceOnly.value,
-      publishFlag: publishFile,
-      createAlert: this.isPublishingWithAlert
-    };
-    this.logger.log(fileFormValues, 'FORM SUBMISSION');
+    this.selectedFileValues = this.adminFileForm.value;
+    this.selectedFileValues.tags = tagsSplit;
+    this.selectedFileValues.id = this.currentFileId;
+    this.selectedFileValues.dateCreated = this.currentDateCreated;
+    this.selectedFileValues.lastViewed = this.currentLastViewed;
+    this.selectedFileValues.watchFlag = this.currentWatchFlag;
+    this.selectedFileValues.publishFlag = publishFile;
+    this.selectedFileValues.createAlert = this.isPublishingWithAlert;
+    this.logger.log(this.selectedFileValues, 'FORM SUBMISSION');
     if (this.isAddingNewFile === true) {
-      const fileFormValues = {
-        name: this.adminFileForm.controls.name.value,
-        resourceTypeId: this.adminFileForm.controls.resourceTypeId.value,
-        initiativeId: this.adminFileForm.controls.initiativeId.value,
-        author: this.adminFileForm.controls.author.value,
-        fileTypeId: this.adminFileForm.controls.fileType.value.id,
-        fileType: this.adminFileForm.controls.fileType.value.name,
-        tags: tagsSplit,
-        fileURL: this.adminFileForm.controls.fileURL.value,
-        description: this.adminFileForm.controls.description.value,
-        practiceOnly: this.adminFileForm.controls.practiceOnly.value,
-        publishFlag: publishFile,
-        createAlert: this.isPublishingWithAlert
-      };
-      this.rest.addNewFile(fileFormValues).pipe(take(1)).subscribe((data) => {
+      this.selectedFileValues = this.adminFileForm.value;
+      this.selectedFileValues.tags = tagsSplit;
+      this.selectedFileValues.publishFlag = publishFile;
+      this.selectedFileValues.createAlert = this.isPublishingWithAlert;
+      this.rest.addNewFile(this.selectedFileValues).pipe(take(1)).subscribe((data) => {
         this.logger.log(data, 'New File');
         this.getTagsList();
       });
     } else {
-      this.rest.updateFileDetails(fileFormValues).pipe(take(1)).subscribe((data) => {
+      this.rest.updateFileDetails(this.selectedFileValues).pipe(take(1)).subscribe((data) => {
         this.logger.log(data, 'PUT FILES');
         this.getTagsList();
       });
@@ -325,6 +271,12 @@ export class FilesComponent implements OnInit {
   getInitiatives() {
     this.rest.getFileInitiatives().pipe(take(1)).subscribe((data) => {
       this.initiativesList = data;
+    })
+  }
+
+  getFileTypes() {
+    this.rest.getFileTypes().pipe(take(1)).subscribe((data) => {
+      this.fileTypeList = data;
     })
   }
 

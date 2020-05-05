@@ -9,7 +9,7 @@ import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Pati
 import { PracticeList, Responsibilities, Staff, StaffDetails, StaffAdmin } from './models/Staff';
 import { Followup, WorkbookPatient, WorkbookProvider, WorkbookReportingMonths, WorkbookPractice } from './models/workbook';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
-import { FileTags, FileResources, FileInitiatives, FileDetails, FileAction } from './models/files';
+import { FileDetails, FileAction, ResourceType, Tag, Initiative, FileType } from './models/files';
 import { Location } from '@angular/common';
 
 
@@ -495,14 +495,14 @@ export class RestService {
   }
 
   /*Update Files*/
-  updateFileDetails(fileDetails): Observable<any> {
+  updateFileDetails(fileDetails: FileDetails): Observable<any> {
     return this.http.put(`${API_URL}/api/Files/`, JSON.stringify(fileDetails), httpOptions).pipe(
       tap(_ => this.snackBar.openSnackBar(`File has been updated!`
         , 'Close', 'success-snackbar'))
     );
   }
   /*Add New File*/
-  addNewFile(fileDetails): Observable<any> {
+  addNewFile(fileDetails: FileDetails): Observable<any> {
     this.logger.log('FILE Add IN REST', fileDetails);
     return this.http.post(`${API_URL}/api/Files/`, JSON.stringify(fileDetails), httpOptions).pipe(
       tap(_ => this.snackBar.openSnackBar(`File has been Added!`
@@ -529,7 +529,7 @@ export class RestService {
   /*Get File Tags*/
   getFileTags(): Observable<any> {
     return this.http.get<any>(`${API_URL}/api/Files/tags/`).pipe(
-      map((data: FileTags[]) => {
+      map((data: Tag[]) => {
         return data;
       })
     );
@@ -537,15 +537,24 @@ export class RestService {
   /*Get File Resources*/
   getFileResources(): Observable<any> {
     return this.http.get<any>(`${API_URL}/api/Files/resources/`).pipe(
-      map((data: FileResources[]) => {
+      map((data: ResourceType[]) => {
         return data;
       })
     );
   }
+
+  /*Get File Types */
+  getFileTypes(): Observable<FileType[]> {
+    return this.http.get<FileType[]>(`${API_URL}/api/Files/types`).pipe(
+      map((data: FileType[]) => {
+        return data;
+      })
+    )
+  }
   /*Get File Initiatives*/
   getFileInitiatives(): Observable<any> {
     return this.http.get<any>(`${API_URL}/api/Files/initiatives/`).pipe(
-      map((data: FileInitiatives[]) => {
+      map((data: Initiative[]) => {
         return data;
       })
     );
