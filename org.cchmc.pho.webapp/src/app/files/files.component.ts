@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../services/user.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FileAction, FileDetails, FileType } from '../models/files';
+import {MatButtonModule} from '@angular/material/button';
 
 @Component({
   selector: 'app-files',
@@ -68,6 +69,10 @@ export class FilesComponent implements OnInit {
   RecentlyViewedFiles: FileList[];
   MostPopularFiles: FileList[];
 
+  toggle5_RecentlyAdded: boolean = true;
+  toggle5_RecentlyViewed: boolean = true;
+  toggle5_MostPopular: boolean = true;
+
   recentlyAddedFilesdisplayedColumns: string[] = ['name', 'dateCreated'];
   recentlyViewedFilesdisplayedColumns: string[] = ['name', 'lastViewed'];
   mostPopularFilesdisplayedColumns: string[] = ['name', 'viewCount'];
@@ -126,7 +131,7 @@ export class FilesComponent implements OnInit {
   }
 
   getRecentlyAddedFiles() {
-    this.rest.getRecentlyAddedFiles().pipe(take(1)).subscribe((data) => {
+    this.rest.getRecentlyAddedFiles(this.toggle5_RecentlyAdded).pipe(take(1)).subscribe((data) => {
       this.RecentlyAddedFiles = data;
       this.recentlyAddedFileList = new MatTableDataSource(this.RecentlyAddedFiles); //source data for table       
       this.logger.log(this.RecentlyAddedFiles, 'RECENTLY ADDED FILES');
@@ -134,7 +139,7 @@ export class FilesComponent implements OnInit {
   }
 
   getRecentlyViewedFiles() {
-    this.rest.getRecentlyViewedFiles().pipe(take(1)).subscribe((data) => {
+    this.rest.getRecentlyViewedFiles(this.toggle5_RecentlyViewed).pipe(take(1)).subscribe((data) => {
       this.RecentlyViewedFiles = data;
       this.recentlyViewedFileList = new MatTableDataSource(this.RecentlyViewedFiles);
       this.logger.log(this.RecentlyViewedFiles, 'RECENTLY VIEWED FILES');
@@ -142,7 +147,7 @@ export class FilesComponent implements OnInit {
   }
 
   getMostPopularFiles() {
-    this.rest.getMostPopularFiles().pipe(take(1)).subscribe((data) => {
+    this.rest.getMostPopularFiles(this.toggle5_MostPopular).pipe(take(1)).subscribe((data) => {
       this.MostPopularFiles = data;
       this.mostPopularFileList = new MatTableDataSource(this.MostPopularFiles);
       this.logger.log(this.MostPopularFiles, 'MOST POPULAR FILES');
@@ -364,5 +369,40 @@ export class FilesComponent implements OnInit {
     this.isAddingNewFile = false;
     this.deletingFileId = undefined;
   }
+ 
+  toggleRecentlyAddedTop5(): void {
+    this.toggle5_RecentlyAdded = !this.toggle5_RecentlyAdded;
+
+    this.rest.getRecentlyAddedFiles(this.toggle5_RecentlyAdded).pipe(take(1)).subscribe((data) => {
+      this.RecentlyAddedFiles = data;
+      this.recentlyAddedFileList = new MatTableDataSource(this.RecentlyAddedFiles); //source data for table       
+      this.logger.log(this.RecentlyAddedFiles, 'RECENTLY ADDED FILES');
+    })
+   
+  }
+
+  updateFile():void {   
+    this.updateFileAction(34); //using file id = 34 for testing
+  }
+ 
+  toggleRecentlyViewedTop5(): void {
+    this.toggle5_RecentlyViewed = !this.toggle5_RecentlyViewed;
+
+    this.rest.getRecentlyViewedFiles(this.toggle5_RecentlyViewed).pipe(take(1)).subscribe((data) => {
+      this.RecentlyViewedFiles = data;
+      this.recentlyViewedFileList = new MatTableDataSource(this.RecentlyViewedFiles);
+      this.logger.log(this.RecentlyViewedFiles, 'RECENTLY VIEWED FILES');
+    })
+  }
+
+  toggleMostPopular5(): void {
+    this.toggle5_MostPopular = !this.toggle5_MostPopular;
+
+    this.rest.getMostPopularFiles(this.toggle5_MostPopular).pipe(take(1)).subscribe((data) => {
+      this.MostPopularFiles = data;
+      this.mostPopularFileList = new MatTableDataSource(this.MostPopularFiles);
+      this.logger.log(this.MostPopularFiles, 'MOST POPULAR FILES');
+    })
+  } 
 
 }

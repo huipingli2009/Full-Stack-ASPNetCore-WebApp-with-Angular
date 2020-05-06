@@ -2317,108 +2317,130 @@ button.toast-close-button {
 }
 
 /* FILES Part 2 ===============================================================*/
-#filesNewlyAdded {   
-  
+#filesPart2
+{
+  margin-top: 20px;   
+
   .td-content1 {
     text-align: right;
-    font-family: Avenir Next Bold;
-    size:12px;
-    color: #006D63;
-  }
-
-  .td-content2 {
-    text-align: left;
     font-family: Avenir Next Medium;
     size:13px;
-    color:#4A4A4A;
+    color: #4A4A4A;    
   }
 
-  th.mat-header-cell.mat-column-name {
-    color: #FFFFFF;
-    font-family: Archer;
-    font-size: 13px;
-    font-weight: bold;
-    
-    flex-direction: column;
-    justify-content: center;    
-  
-    background-color: #4C9E45; 
-    width: 171.76px;  
-    height: 38px; 
-  }
-
-  th.mat-header-cell.mat-column-dateCreated {
-    color: #00A896;
-    font-family: "Avenir Next";
-    font-size: 12px;
-    font-weight: bold;   
-    text-align: right;    
-
-    flex-direction: column;
-    justify-content: center;  
-  } 
-}
-
-#filesRecentlyViewed{  
-  .td-content1 {
-    text-align: right;
-    font-family: Avenir Next Bold;
-    size:12px;
-    color: #006D63;
-  }
-
-  th.mat-header-cell.mat-column-name {
-    color: #FFFFFF;
-    font-family: Archer;
-    font-size: 13px;
-    font-weight: bold;
-    justify-content: center;
-    vertical-align: middle;
-    background-color: #451B5F;  
-    width: 179.78px;
-    height: 38px; 
-  }
-
-  th.mat-header-cell.mat-column-lastViewed {   
-    color: #00A896;
-    font-family: "Avenir Next";
-    font-size: 12px;
-    font-weight: bold;
-    justify-content: center;
-    vertical-align: middle;
-    text-align: right;    
-  }  
- }
-
- #mostPopularFiles{
-  .td-content1 {
-    text-align: right;
-    font-family: Avenir Next Bold;
-    size:12px;
-    color: #006D63;
-  }
-
-  th.mat-header-cell.mat-column-name {
-    
-    color: #FFFFFF;
-    font-family: Archer;
-    font-size: 13px;
-    font-weight: bold;  
-    vertical-align: middle;
-    background-color: #F0673C; 
-    width: 155.86px; 
-    height: 38px; 
-  }
-
-  th.mat-header-cell.mat-column-viewCount {   
-    color: #00A896;
-    font-family: "Avenir Next";
-    font-size: 12px;
-    font-weight: bold;
-    
+  .TheFives {
     text-align: right; 
-    vertical-align: middle;     
-  } 
+    text-decoration: underline;
+    font-weight: bold;  
+    color: #00A896;    
+    padding-right:0px;    
+  }
+
+  .mat-column-name {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    -webkit-box-flex: 0 !important;
+    flex: 0 0 60% !important;
+    width: 60% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .mat-column-dateCreated {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    -webkit-box-flex: 0 !important;
+    flex: 0 0 40% !important;
+    width: 40% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;       
+  }
+
+  #filesNewlyAdded {    
+
+    .td-content2 {
+      text-align: left;
+      font-family: Avenir Next Medium;
+      size:13px;
+      color:#4A4A4A;
+    } 
+
+    th.mat-header-cell.mat-column-name {
+      color: #FFFFFF;
+      font-family: Archer;
+      font-size: 13px;
+      font-weight: bold;
+      
+      flex-direction: column;
+      justify-content: center;    
+    
+      background-color: #4C9E45; 
+      width: 171.76px;  
+      height: 38px; 
+    }
+
+    th.mat-header-cell.mat-column-dateCreated {
+      color: #00A896;
+      font-family: "Avenir Next Bold";
+      font-size: 12px;
+      font-weight: bold;   
+      text-align: right;    
+
+      flex-direction: column;           
+    } 
+  }
+
+  #filesRecentlyViewed{     
+
+    th.mat-header-cell.mat-column-name {
+      color: #FFFFFF;
+      font-family: Archer;
+      font-size: 13px;
+      font-weight: bold;
+      justify-content: center;
+      vertical-align: middle;
+      background-color: #451B5F;  
+      width: 179.78px;
+      height: 38px; 
+    }
+
+    th.mat-header-cell.mat-column-lastViewed {   
+      color: #00A896;
+      font-family: "Avenir Next Bold";
+      font-size: 12px;
+      font-weight: bold;
+      justify-content: center;
+      vertical-align: middle;
+      text-align: right;    
+    }  
+  }
+
+  #mostPopularFiles{   
+
+    th.mat-header-cell.mat-column-name {
+      
+      color: #FFFFFF;
+      font-family: Archer;
+      font-size: 13px;
+      font-weight: bold;  
+      vertical-align: middle;
+      background-color: #F0673C; 
+      width: 155.86px; 
+      height: 38px; 
+    }
+
+    th.mat-header-cell.mat-column-viewCount {   
+      color: #00A896;
+      font-family: "Avenir Next Bold";
+      font-size: 12px;
+      font-weight: bold;
+      
+      text-align: right; 
+      vertical-align: middle;     
+    } 
+  }
 }
 
 
