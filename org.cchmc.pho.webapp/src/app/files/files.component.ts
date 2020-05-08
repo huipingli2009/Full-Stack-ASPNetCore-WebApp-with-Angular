@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../services/user.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FileAction, FileDetails, FileType } from '../models/files';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-files',
@@ -41,7 +42,8 @@ export class FilesComponent implements OnInit {
   deletingFileId: number;
   fileAction: FileAction;
   selectedFileValues: FileDetails;
-  
+  RecentlyViewedList: any;
+
 
   // Filters
   resourceTypeIdFilter: number;
@@ -53,12 +55,29 @@ export class FilesComponent implements OnInit {
   displayedColumns: string[] = ['icon', 'name', 'dateCreated', 'lastViewed', 'watchFlag'
     , 'fileType', 'actions', 'tags', 'button'];
   dataSource: MatTableDataSource<FileList>;
+  recentlyAddedFileList: MatTableDataSource<FileList>;
+  recentlyViewedFileList: MatTableDataSource<FileList>;
+  mostPopularFileList: MatTableDataSource<FileList>;
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild('adminDialog') adminDialog: TemplateRef<any>;
   @ViewChild('adminConfirmDialog') adminConfirmDialog: TemplateRef<any>;
   @ViewChild('adminConfirmDeleteDialog') adminConfirmDeleteDialog: TemplateRef<any>;
+
+  //Files Analytics
+  RecentlyAddedFiles: FileList[];
+  RecentlyViewedFiles: FileList[];
+  MostPopularFiles: FileList[];
+
+  toggle5_RecentlyAdded: boolean = true;
+  toggle5_RecentlyViewed: boolean = true;
+  toggle5_MostPopular: boolean = true;
+
+  recentlyAddedFilesdisplayedColumns: string[] = ['name', 'dateCreated'];
+  recentlyViewedFilesdisplayedColumns: string[] = ['name', 'lastViewed'];
+  mostPopularFilesdisplayedColumns: string[] = ['name', 'viewCount'];
+
 
   constructor(private rest: RestService, private logger: NGXLogger, private dialog: MatDialog,
     private userService: UserService, private fb: FormBuilder, private changeDetectorRefs: ChangeDetectorRef) {
@@ -75,7 +94,6 @@ export class FilesComponent implements OnInit {
       resourceType: ['', Validators.required],
       initiative: ['']
     });
-
   }
 
   ngOnInit(): void {
@@ -84,6 +102,9 @@ export class FilesComponent implements OnInit {
     this.getResourceTypes();
     this.getInitiatives();
     this.getTagsList();
+    this.getRecentlyAddedFiles();
+    this.getRecentlyViewedFiles();
+    this.getMostPopularFiles();
     this.getFileTypes();
   }
 
@@ -110,6 +131,31 @@ export class FilesComponent implements OnInit {
     this.changeDetectorRefs.detectChanges();
   }
 
+  getRecentlyAddedFiles() {
+    this.rest.getRecentlyAddedFiles(this.toggle5_RecentlyAdded).pipe(take(1)).subscribe((data) => {
+      this.RecentlyAddedFiles = data;
+      this.recentlyAddedFileList = new MatTableDataSource(this.RecentlyAddedFiles); //source data for table       
+      this.logger.log(this.RecentlyAddedFiles, 'RECENTLY ADDED FILES');
+    })
+  }
+
+  getRecentlyViewedFiles() {
+    this.rest.getRecentlyViewedFiles(this.toggle5_RecentlyViewed).pipe(take(1)).subscribe((data) => {
+      this.RecentlyViewedFiles = data;
+      this.recentlyViewedFileList = new MatTableDataSource(this.RecentlyViewedFiles);
+
+      this.logger.log(this.RecentlyViewedFiles, 'RECENTLY VIEWED FILES');
+    })
+  }
+
+  getMostPopularFiles() {
+    this.rest.getMostPopularFiles(this.toggle5_MostPopular).pipe(take(1)).subscribe((data) => {
+      this.MostPopularFiles = data;
+      this.mostPopularFileList = new MatTableDataSource(this.MostPopularFiles);
+      this.logger.log(this.MostPopularFiles, 'MOST POPULAR FILES');
+    })
+  }
+
   getFileDetials(fileId) {
     this.currentFileId = fileId;
     this.rest.getFileDetails(fileId).pipe(take(1)).subscribe((data) => {
@@ -121,9 +167,9 @@ export class FilesComponent implements OnInit {
       data.tags.forEach(tag => {
         joinedTags.push(tag.name);
       });
-   
+
       this.selectedFileValues = data;
-               
+
       this.logger.log(this.selectedFileValues, 'SELECTED FILE')
       this.adminFileForm.get('name').setValue(this.selectedFileValues.name);
       this.adminFileForm.get('fileURL').setValue(this.selectedFileValues.fileURL);
@@ -208,6 +254,7 @@ export class FilesComponent implements OnInit {
     this.rest.findFiles(this.resourceTypeIdFilter, this.initiativeIdFilter, this.tagFilter,
       this.watchFilter, this.nameFilter).pipe(take(1)).subscribe((res) => {
         this.dataSource = new MatTableDataSource(res);
+        this.dataSource.paginator = this.paginator;
         this.logger.log(res, 'FIND FILTER FILES');
       })
   }
@@ -324,6 +371,41 @@ export class FilesComponent implements OnInit {
     this.isPublishingWithAlert = false;
     this.isAddingNewFile = false;
     this.deletingFileId = undefined;
+  }
+
+  toggleRecentlyAddedTop5(): void {
+    this.toggle5_RecentlyAdded = !this.toggle5_RecentlyAdded;
+
+    this.rest.getRecentlyAddedFiles(this.toggle5_RecentlyAdded).pipe(take(1)).subscribe((data) => {
+      this.RecentlyAddedFiles = data;
+      this.recentlyAddedFileList = new MatTableDataSource(this.RecentlyAddedFiles); //source data for table       
+      this.logger.log(this.RecentlyAddedFiles, 'RECENTLY ADDED FILES');
+    })
+
+  }
+
+  updateFile(): void {
+    this.updateFileAction(34); //using file id = 34 for testing
+  }
+
+  toggleRecentlyViewedTop5(): void {
+    this.toggle5_RecentlyViewed = !this.toggle5_RecentlyViewed;
+
+    this.rest.getRecentlyViewedFiles(this.toggle5_RecentlyViewed).pipe(take(1)).subscribe((data) => {
+      this.RecentlyViewedFiles = data;
+      this.recentlyViewedFileList = new MatTableDataSource(this.RecentlyViewedFiles);
+      this.logger.log(this.RecentlyViewedFiles, 'RECENTLY VIEWED FILES');
+    })
+  }
+
+  toggleMostPopular5(): void {
+    this.toggle5_MostPopular = !this.toggle5_MostPopular;
+
+    this.rest.getMostPopularFiles(this.toggle5_MostPopular).pipe(take(1)).subscribe((data) => {
+      this.MostPopularFiles = data;
+      this.mostPopularFileList = new MatTableDataSource(this.MostPopularFiles);
+      this.logger.log(this.MostPopularFiles, 'MOST POPULAR FILES');
+    })
   }
 
 }

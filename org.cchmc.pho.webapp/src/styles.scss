@@ -2266,8 +2266,21 @@ button.toast-close-button {
 
 /* FILES ===============================================================*/
 #files {
+  .content-main {
+    margin: 21px 107px 30px;
+    // margin-left: 21px;
+    // margin-right: 21px;
+  }
   td {
     height: 57px;
+  }
+
+  a{
+    text-decoration: none;
+    color:#4a4a4a;
+    }
+   a:hover{
+    text-decoration: underline;
   }
   .mat-column-name {
     word-wrap: break-word !important;
@@ -2309,6 +2322,187 @@ button.toast-close-button {
 }
 .practice-label {
   margin-right: 16px;
+}
+
+/* FILES Analytics ===============================================================*/
+#files-analytics
+{
+  //margin between File Analytics and File table above
+  margin-top: 20px;  
+
+ 
+  .file-icon{
+    height: 15px;
+  width: 13px;
+  margin-right: 20px;
+  
+  }
+  
+  .mat-cell a:hover {
+    text-decoration: underline;
+  
+  }
+
+  .truncate-cell {
+    // max-width: 40px; 
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .td-content1 {
+    text-align: right;
+    font-family: "Lato" !important;
+    font-weight: bold;
+    font-size:13px;
+    color: #006D63;    
+    padding-top: 10px;
+  }
+
+  .td-content2 {
+    text-align: left;
+    text-decoration: none;    
+    font-size: 13px;
+    font-weight: bold;
+    color:#4A4A4A;
+    height: 19px;
+    width: 123px;
+    font-family: "Lato" !important;  
+    letter-spacing: 0;
+    line-height: 19px;
+   
+  } 
+
+  .TheFives {
+    text-align: right; 
+    text-decoration: underline;  
+    font-family:Avenir Next;
+    size:12px; 
+    font-weight: bold;  
+    color: #00A896;    
+    padding-right:0px;    
+  }   
+
+  .mat-column-name {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    -webkit-box-flex: 0 !important;
+    flex: 0 0 60% !important;
+   // width: 60% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;    
+  }
+
+
+  #filesRecentlyAdded {     
+
+    background-color: #FFFFFF;
+    box-shadow: 1px 1px 4px 0 rgba(0,109,99,0.15);
+
+
+    th.mat-header-cell.mat-column-name {
+     
+      color: #FFFFFF;
+      font-family: Archer;
+      font-size: 13px;
+      font-weight: bold;
+      justify-content: center;
+      vertical-align: middle;
+      background-color: #4C9E45;
+      width: 179.78px;
+      height: 38px; 
+      
+    }
+
+    th.mat-header-cell.mat-column-dateCreated {
+      color: #00A896;
+      font-family: "Avenir Next" !important;
+      font-size: 12px !important;
+      font-weight: bold !important;   
+      justify-content: center;
+      text-align: right;   
+      vertical-align: middle;        
+    } 
+    td.mat-cell{
+      border-bottom-style: none;
+  }
+  th.mat-header-cell{
+    border-bottom-style: none;
+}
+  }
+
+  #filesRecentlyViewed{     
+
+    background-color: #FFFFFF;
+    box-shadow: 1px 1px 4px 0 rgba(0,109,99,0.15);
+
+
+    th.mat-header-cell.mat-column-name {
+      color: #FFFFFF;
+      font-family: Archer;
+      font-size: 13px;
+      font-weight: bold;
+      justify-content: center;
+      vertical-align: middle;
+      background-color: #451B5F;  
+      width: 179.78px;
+      height: 38px; 
+    }
+
+    th.mat-header-cell.mat-column-lastViewed {   
+      color: #00A896;
+      font-family: "Avenir Next Bold";
+      font-size: 12px;
+      font-weight: bold;
+      justify-content: center;
+      vertical-align: middle;
+      text-align: right;    
+    }  
+
+    td.mat-cell{
+      border-bottom-style: none;
+  }
+  th.mat-header-cell{
+    border-bottom-style: none;
+}
+  }
+
+  #mostPopularFiles{   
+
+    background-color: #FFFFFF;
+    box-shadow: 1px 1px 4px 0 rgba(0,109,99,0.15);
+
+
+    th.mat-header-cell.mat-column-name {
+      
+      color: #FFFFFF;
+      font-family: Archer;
+      font-size: 13px;
+      font-weight: bold;  
+      vertical-align: middle;
+      background-color: #F0673C; 
+      width: 179.78px;
+      height: 38px; 
+    }
+
+    th.mat-header-cell.mat-column-viewCount {   
+      color: #00A896;
+      font-family: "Avenir Next Bold";
+      font-size: 12px;
+      font-weight: bold;
+      
+      text-align: right; 
+      vertical-align: middle;     
+    } 
+
+    td.mat-cell{
+      border-bottom-style: none;
+  }
+  th.mat-header-cell{
+    border-bottom-style: none;
+}
+  }
 }
 
 
