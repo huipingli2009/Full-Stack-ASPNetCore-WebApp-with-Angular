@@ -2319,22 +2319,48 @@ button.toast-close-button {
 /* FILES Part 2 ===============================================================*/
 #filesPart2
 {
-  margin-top: 20px;   
+  //margin between File Analytics and File table above
+  margin-top: 20px;  
+  
+  .mat-cell a:hover {
+    text-decoration: underline;
+    color: blue;
+  }
+
+  .truncate-cell {
+    // max-width: 40px; 
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
   .td-content1 {
     text-align: right;
-    font-family: Avenir Next Medium;
-    size:13px;
-    color: #4A4A4A;    
+    font-family: Avenir Next;
+    font-weight: bold;
+    size:12px;
+    color: #006D63;    
   }
+
+  .td-content2 {
+    text-align: left;
+    text-decoration: none;   
+    
+    font-family: Avenir Next;
+    font-size: 13px;
+    font-weight: 500;
+    color:#4A4A4A;
+  } 
 
   .TheFives {
     text-align: right; 
-    text-decoration: underline;
+    text-decoration: underline;  
+    font-family:Avenir Next;
+    size:12px; 
     font-weight: bold;  
     color: #00A896;    
     padding-right:0px;    
-  }
+  }   
 
   .mat-column-name {
     word-wrap: break-word !important;
@@ -2344,28 +2370,21 @@ button.toast-close-button {
     width: 60% !important;
     overflow-wrap: break-word;
     word-wrap: break-word;
-    word-break: break-word;
+    word-break: break-word;    
   }
 
   .mat-column-dateCreated {
     word-wrap: break-word !important;
     white-space: unset !important;
     -webkit-box-flex: 0 !important;
-    flex: 0 0 40% !important;
-    width: 40% !important;
+    flex: 0 0 30% !important;
+    width: 30% !important;
     overflow-wrap: break-word;
     word-wrap: break-word;
     word-break: break-word;       
   }
 
-  #filesNewlyAdded {    
-
-    .td-content2 {
-      text-align: left;
-      font-family: Avenir Next Medium;
-      size:13px;
-      color:#4A4A4A;
-    } 
+  #filesNewlyAdded {     
 
     th.mat-header-cell.mat-column-name {
       color: #FFFFFF;
