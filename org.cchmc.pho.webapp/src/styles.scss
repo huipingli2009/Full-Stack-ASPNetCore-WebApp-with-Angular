@@ -2274,6 +2274,14 @@ button.toast-close-button {
   td {
     height: 57px;
   }
+
+  a{
+    text-decoration: none;
+    color:#4a4a4a;
+    }
+   a:hover{
+    text-decoration: underline;
+  }
   .mat-column-name {
     word-wrap: break-word !important;
     white-space: unset !important;
@@ -2316,15 +2324,23 @@ button.toast-close-button {
   margin-right: 16px;
 }
 
-/* FILES Part 2 ===============================================================*/
-#filesPart2
+/* FILES Analytics ===============================================================*/
+#files-analytics
 {
   //margin between File Analytics and File table above
   margin-top: 20px;  
+
+ 
+  .file-icon{
+    height: 15px;
+  width: 13px;
+  margin-right: 20px;
+  
+  }
   
   .mat-cell a:hover {
     text-decoration: underline;
-    color: blue;
+  
   }
 
   .truncate-cell {
@@ -2336,20 +2352,25 @@ button.toast-close-button {
 
   .td-content1 {
     text-align: right;
-    font-family: Avenir Next;
+    font-family: "Lato" !important;
     font-weight: bold;
-    size:12px;
+    font-size:13px;
     color: #006D63;    
+    padding-top: 10px;
   }
 
   .td-content2 {
     text-align: left;
-    text-decoration: none;   
-    
-    font-family: Avenir Next;
+    text-decoration: none;    
     font-size: 13px;
-    font-weight: 500;
+    font-weight: bold;
     color:#4A4A4A;
+    height: 19px;
+    width: 123px;
+    font-family: "Lato" !important;  
+    letter-spacing: 0;
+    line-height: 19px;
+   
   } 
 
   .TheFives {
@@ -2367,51 +2388,55 @@ button.toast-close-button {
     white-space: unset !important;
     -webkit-box-flex: 0 !important;
     flex: 0 0 60% !important;
-    width: 60% !important;
+   // width: 60% !important;
     overflow-wrap: break-word;
     word-wrap: break-word;
     word-break: break-word;    
   }
 
-  .mat-column-dateCreated {
-    word-wrap: break-word !important;
-    white-space: unset !important;
-    -webkit-box-flex: 0 !important;
-    flex: 0 0 30% !important;
-    width: 30% !important;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    word-break: break-word;       
-  }
 
-  #filesNewlyAdded {     
+  #filesRecentlyAdded {     
+
+    background-color: #FFFFFF;
+    box-shadow: 1px 1px 4px 0 rgba(0,109,99,0.15);
+
 
     th.mat-header-cell.mat-column-name {
+     
       color: #FFFFFF;
       font-family: Archer;
       font-size: 13px;
       font-weight: bold;
-      
-      flex-direction: column;
-      justify-content: center;    
-    
-      background-color: #4C9E45; 
-      width: 171.76px;  
+      justify-content: center;
+      vertical-align: middle;
+      background-color: #4C9E45;
+      width: 179.78px;
       height: 38px; 
+      
     }
 
     th.mat-header-cell.mat-column-dateCreated {
       color: #00A896;
-      font-family: "Avenir Next Bold";
-      font-size: 12px;
-      font-weight: bold;   
-      text-align: right;    
-
-      flex-direction: column;           
+      font-family: "Avenir Next" !important;
+      font-size: 12px !important;
+      font-weight: bold !important;   
+      justify-content: center;
+      text-align: right;   
+      vertical-align: middle;        
     } 
+    td.mat-cell{
+      border-bottom-style: none;
+  }
+  th.mat-header-cell{
+    border-bottom-style: none;
+}
   }
 
   #filesRecentlyViewed{     
+
+    background-color: #FFFFFF;
+    box-shadow: 1px 1px 4px 0 rgba(0,109,99,0.15);
+
 
     th.mat-header-cell.mat-column-name {
       color: #FFFFFF;
@@ -2434,9 +2459,20 @@ button.toast-close-button {
       vertical-align: middle;
       text-align: right;    
     }  
+
+    td.mat-cell{
+      border-bottom-style: none;
+  }
+  th.mat-header-cell{
+    border-bottom-style: none;
+}
   }
 
   #mostPopularFiles{   
+
+    background-color: #FFFFFF;
+    box-shadow: 1px 1px 4px 0 rgba(0,109,99,0.15);
+
 
     th.mat-header-cell.mat-column-name {
       
@@ -2446,7 +2482,7 @@ button.toast-close-button {
       font-weight: bold;  
       vertical-align: middle;
       background-color: #F0673C; 
-      width: 155.86px; 
+      width: 179.78px;
       height: 38px; 
     }
 
@@ -2459,6 +2495,13 @@ button.toast-close-button {
       text-align: right; 
       vertical-align: middle;     
     } 
+
+    td.mat-cell{
+      border-bottom-style: none;
+  }
+  th.mat-header-cell{
+    border-bottom-style: none;
+}
   }
 }
 

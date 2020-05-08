@@ -9,7 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../services/user.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FileAction, FileDetails, FileType } from '../models/files';
-import {MatButtonModule} from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-files',
@@ -42,7 +42,8 @@ export class FilesComponent implements OnInit {
   deletingFileId: number;
   fileAction: FileAction;
   selectedFileValues: FileDetails;
-  
+  RecentlyViewedList: any;
+
 
   // Filters
   resourceTypeIdFilter: number;
@@ -73,9 +74,9 @@ export class FilesComponent implements OnInit {
   toggle5_RecentlyViewed: boolean = true;
   toggle5_MostPopular: boolean = true;
 
-  recentlyAddedFilesdisplayedColumns: string[] = ['icon','name', 'dateCreated'];
-  recentlyViewedFilesdisplayedColumns: string[] = ['icon','name', 'lastViewed'];
-  mostPopularFilesdisplayedColumns: string[] = ['icon','name', 'viewCount'];
+  recentlyAddedFilesdisplayedColumns: string[] = ['name', 'dateCreated'];
+  recentlyViewedFilesdisplayedColumns: string[] = ['name', 'lastViewed'];
+  mostPopularFilesdisplayedColumns: string[] = ['name', 'viewCount'];
 
 
   constructor(private rest: RestService, private logger: NGXLogger, private dialog: MatDialog,
@@ -142,6 +143,7 @@ export class FilesComponent implements OnInit {
     this.rest.getRecentlyViewedFiles(this.toggle5_RecentlyViewed).pipe(take(1)).subscribe((data) => {
       this.RecentlyViewedFiles = data;
       this.recentlyViewedFileList = new MatTableDataSource(this.RecentlyViewedFiles);
+
       this.logger.log(this.RecentlyViewedFiles, 'RECENTLY VIEWED FILES');
     })
   }
@@ -165,9 +167,9 @@ export class FilesComponent implements OnInit {
       data.tags.forEach(tag => {
         joinedTags.push(tag.name);
       });
-   
+
       this.selectedFileValues = data;
-               
+
       this.logger.log(this.selectedFileValues, 'SELECTED FILE')
       this.adminFileForm.get('name').setValue(this.selectedFileValues.name);
       this.adminFileForm.get('fileURL').setValue(this.selectedFileValues.fileURL);
@@ -252,6 +254,7 @@ export class FilesComponent implements OnInit {
     this.rest.findFiles(this.resourceTypeIdFilter, this.initiativeIdFilter, this.tagFilter,
       this.watchFilter, this.nameFilter).pipe(take(1)).subscribe((res) => {
         this.dataSource = new MatTableDataSource(res);
+        this.dataSource.paginator = this.paginator;
         this.logger.log(res, 'FIND FILTER FILES');
       })
   }
@@ -369,7 +372,7 @@ export class FilesComponent implements OnInit {
     this.isAddingNewFile = false;
     this.deletingFileId = undefined;
   }
- 
+
   toggleRecentlyAddedTop5(): void {
     this.toggle5_RecentlyAdded = !this.toggle5_RecentlyAdded;
 
@@ -378,13 +381,13 @@ export class FilesComponent implements OnInit {
       this.recentlyAddedFileList = new MatTableDataSource(this.RecentlyAddedFiles); //source data for table       
       this.logger.log(this.RecentlyAddedFiles, 'RECENTLY ADDED FILES');
     })
-   
+
   }
 
-  updateFile():void {   
+  updateFile(): void {
     this.updateFileAction(34); //using file id = 34 for testing
   }
- 
+
   toggleRecentlyViewedTop5(): void {
     this.toggle5_RecentlyViewed = !this.toggle5_RecentlyViewed;
 
@@ -403,6 +406,6 @@ export class FilesComponent implements OnInit {
       this.mostPopularFileList = new MatTableDataSource(this.MostPopularFiles);
       this.logger.log(this.MostPopularFiles, 'MOST POPULAR FILES');
     })
-  } 
+  }
 
 }
