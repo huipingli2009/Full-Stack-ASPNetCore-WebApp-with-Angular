@@ -74,9 +74,9 @@ export class FilesComponent implements OnInit {
   toggle5_RecentlyViewed: boolean = true;
   toggle5_MostPopular: boolean = true;
 
-  recentlyAddedFilesdisplayedColumns: string[] = ['name', 'dateCreated'];
-  recentlyViewedFilesdisplayedColumns: string[] = ['name', 'lastViewed'];
-  mostPopularFilesdisplayedColumns: string[] = ['name', 'viewCount'];
+  recentlyAddedFilesdisplayedColumns: string[] = ['icon', 'name', 'dateCreated'];
+  recentlyViewedFilesdisplayedColumns: string[] = ['icon', 'name', 'lastViewed'];
+  mostPopularFilesdisplayedColumns: string[] = ['icon', 'name', 'viewCount'];
 
 
   constructor(private rest: RestService, private logger: NGXLogger, private dialog: MatDialog,
@@ -190,6 +190,8 @@ export class FilesComponent implements OnInit {
     this.fileAction.fileActionId = 1;
     this.rest.updateFileAction(this.fileAction).pipe(take(1)).subscribe(res => {
       this.getAllFiles();
+      this.getRecentlyViewedFiles();
+      this.getMostPopularFiles();
     },
       error => { this.error = error; });
   }

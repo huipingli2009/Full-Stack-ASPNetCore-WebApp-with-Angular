@@ -2328,29 +2328,16 @@ button.toast-close-button {
 #files-analytics
 {
   //margin between File Analytics and File table above
-  margin-top: 20px;  
-
- 
+  margin-top: 20px;   
   .file-icon{
     height: 15px;
   width: 13px;
-  margin-right: 20px;
-  
-  }
-  
+  margin-right: 20px;  
+  }  
   .mat-cell a:hover {
-    text-decoration: underline;
-  
+    text-decoration: underline;  
   }
-
-  .truncate-cell {
-    // max-width: 40px; 
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .td-content1 {
+  .td-content-analyticvalue {
     text-align: right;
     font-family: "Lato" !important;
     font-weight: bold;
@@ -2359,7 +2346,16 @@ button.toast-close-button {
     padding-top: 10px;
   }
 
-  .td-content2 {
+  th.mat-header-cell.mat-column-icon {
+    color: #FFFFFF;
+    font-family: Archer;
+    justify-content: center;
+    vertical-align: middle;
+    flex: 0 0 2% !important;
+    width: 2% !important;
+     height: 38px; 
+  }
+  .td-content-name {
     text-align: left;
     text-decoration: none;    
     font-size: 13px;
@@ -2369,10 +2365,14 @@ button.toast-close-button {
     width: 123px;
     font-family: "Lato" !important;  
     letter-spacing: 0;
-    line-height: 19px;
-   
+    line-height: 19px;   
   } 
-
+  .td-content-icon {  
+     color:#4A4A4A;
+    flex: 0 0 13% !important;
+    width: 13% !important;
+    height: 19px;   
+  } 
   .TheFives {
     text-align: right; 
     text-decoration: underline;  
@@ -2383,26 +2383,21 @@ button.toast-close-button {
     padding-right:0px;    
   }   
 
-  .mat-column-name {
-    word-wrap: break-word !important;
-    white-space: unset !important;
-    -webkit-box-flex: 0 !important;
-    flex: 0 0 60% !important;
-   // width: 60% !important;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    word-break: break-word;    
+  .mat-column-name {  
+    flex: 0 0 60% !important;    
   }
 
-
-  #filesRecentlyAdded {     
-
-    background-color: #FFFFFF;
+  #filesRecentlyAdded {    
+    table-layout: fixed; 
+      background-color: #FFFFFF;
     box-shadow: 1px 1px 4px 0 rgba(0,109,99,0.15);
 
-
-    th.mat-header-cell.mat-column-name {
-     
+    th.mat-header-cell.mat-column-icon {
+    
+      background-color: #4C9E45;  
+   
+    }
+    th.mat-header-cell.mat-column-name {     
       color: #FFFFFF;
       font-family: Archer;
       font-size: 13px;
@@ -2411,9 +2406,8 @@ button.toast-close-button {
       vertical-align: middle;
       background-color: #4C9E45;
       width: 179.78px;
-      height: 38px; 
-      
-    }
+      height: 38px;       
+    }    
 
     th.mat-header-cell.mat-column-dateCreated {
       color: #00A896;
@@ -2433,10 +2427,14 @@ button.toast-close-button {
   }
 
   #filesRecentlyViewed{     
-
     background-color: #FFFFFF;
     box-shadow: 1px 1px 4px 0 rgba(0,109,99,0.15);
 
+    th.mat-header-cell.mat-column-icon {
+    
+      background-color: #451B5F;  
+    
+    }
 
     th.mat-header-cell.mat-column-name {
       color: #FFFFFF;
@@ -2469,10 +2467,13 @@ button.toast-close-button {
   }
 
   #mostPopularFiles{   
-
     background-color: #FFFFFF;
     box-shadow: 1px 1px 4px 0 rgba(0,109,99,0.15);
-
+    th.mat-header-cell.mat-column-icon {
+    
+      background-color: #F0673C;  
+    
+    }
 
     th.mat-header-cell.mat-column-name {
       
