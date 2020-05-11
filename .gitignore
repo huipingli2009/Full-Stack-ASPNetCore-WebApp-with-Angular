@@ -357,4 +357,12 @@ MigrationBackup/
 org.cchmc.pho.webapp/src/environments/version.ts
 
 **/*launchSettings.json
+**/launch.json
+**/*launch.json
+*launch.json
+.vscode/*
+**/*environment.ts
+*environment.ts
+.gitignore
+*.gitignore
 **/Properties/launchSettings.json
