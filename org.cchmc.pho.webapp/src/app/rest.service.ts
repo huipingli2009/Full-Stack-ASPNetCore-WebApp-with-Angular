@@ -578,8 +578,8 @@ export class RestService {
   }
 
   /*Get Recently Added Files. Update content after API*/
- 
-  getRecentlyAddedFiles(toggle5_RecentlyAdded: boolean): Observable<any> {
+
+  getRecentlyAddedFiles(toggle5_RecentlyAdded: boolean): Observable<FileList[]> {
     let paramsValue = new HttpParams();
     paramsValue = paramsValue.append("toggleTop5", toggle5_RecentlyAdded.toString());
     return this.http.get<any>(`${API_URL}/api/Files/created`, { params: paramsValue }).pipe(
@@ -587,22 +587,22 @@ export class RestService {
         return data;
       })
     );
-  }  
- 
- /*Get Recently Viewed Files. Update content after API   toggleBottom5*/
-  getRecentlyViewedFiles(toggle5_RecentlyViewed: boolean): Observable<any> {
+  }
+
+  /*Get Recently Viewed Files. Update content after API   toggleBottom5*/
+  getRecentlyViewedFiles(toggle5_RecentlyViewed: boolean): Observable<FileList[]> {
     let paramsValue = new HttpParams();
     paramsValue = paramsValue.append("toggleTop5", toggle5_RecentlyViewed.toString());
 
     return this.http.get<any>(`${API_URL}/api/Files/viewed/`, { params: paramsValue }).pipe(
-      map((data:  FileList[]) => {
+      map((data: FileList[]) => {
         return data;
       })
     );
-  } 
+  }
 
-   /*Get Most Popular Files. Update content after API  togglePopular5*/
-   getMostPopularFiles(toggle5_MostPopular: boolean): Observable<any> {
+  /*Get Most Popular Files. Update content after API  togglePopular5*/
+  getMostPopularFiles(toggle5_MostPopular: boolean): Observable<FileList[]> {
     let paramsValue = new HttpParams();
     paramsValue = paramsValue.append("toggleTop5", toggle5_MostPopular.toString());
 
@@ -611,7 +611,7 @@ export class RestService {
         return data;
       })
     );
-  }  
+  }
 
 
   private handleError<T>(operation = 'operation', result?: T) {
