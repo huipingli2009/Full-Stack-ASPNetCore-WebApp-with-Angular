@@ -2345,6 +2345,16 @@ button.toast-close-button {
     color: #006D63;    
     padding-top: 10px;
   }
+
+  th.mat-header-cell.mat-column-icon {
+    color: #FFFFFF;
+    font-family: Archer;
+    justify-content: center;
+    vertical-align: middle;
+    flex: 0 0 2% !important;
+    width: 2% !important;
+     height: 38px; 
+  }
   .td-content-name {
     text-align: left;
     text-decoration: none;    
@@ -2383,14 +2393,9 @@ button.toast-close-button {
     box-shadow: 1px 1px 4px 0 rgba(0,109,99,0.15);
 
     th.mat-header-cell.mat-column-icon {
-      color: #FFFFFF;
-      font-family: Archer;
-      justify-content: center;
-      vertical-align: middle;
+    
       background-color: #4C9E45;  
-      flex: 0 0 2% !important;
-      width: 2% !important;
-       height: 38px; 
+   
     }
     th.mat-header-cell.mat-column-name {     
       color: #FFFFFF;
@@ -2426,14 +2431,9 @@ button.toast-close-button {
     box-shadow: 1px 1px 4px 0 rgba(0,109,99,0.15);
 
     th.mat-header-cell.mat-column-icon {
-      color: #FFFFFF;
-      font-family: Archer;
-      justify-content: center;
-      vertical-align: middle;
+    
       background-color: #451B5F;  
-      flex: 0 0 2% !important;
-      width: 2% !important;
-       height: 38px; 
+    
     }
 
     th.mat-header-cell.mat-column-name {
@@ -2470,14 +2470,9 @@ button.toast-close-button {
     background-color: #FFFFFF;
     box-shadow: 1px 1px 4px 0 rgba(0,109,99,0.15);
     th.mat-header-cell.mat-column-icon {
-      color: #FFFFFF;
-      font-family: Archer;
-      justify-content: center;
-      vertical-align: middle;
+    
       background-color: #F0673C;  
-      flex: 0 0 2% !important;
-      width: 2% !important;
-       height: 38px; 
+    
     }
 
     th.mat-header-cell.mat-column-name {
