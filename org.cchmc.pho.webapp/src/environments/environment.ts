@@ -7,7 +7,7 @@ export const environment = {
   apiURL: 'https://localhost:44302',
   logLevel: NgxLoggerLevel.TRACE,
   serverLogLevel: NgxLoggerLevel.OFF,
-  disableConsoleLogging: false
+  disableConsoleLogging: false 
 
 };
 

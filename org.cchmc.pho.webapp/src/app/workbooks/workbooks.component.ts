@@ -122,7 +122,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.rest.getWorkbookReportingMonths().pipe(take(1)).subscribe((data) => {
       this.workbookReportingMonths = data;
       this.workbookReportingMonths.forEach((element, index, reportData) => {
-        this.workbookReportingMonths[index].reportingMonth = this.datePipe.transform(this.workbookReportingMonths[index].reportingMonth, 'MM/yyyy');
+        this.workbookReportingMonths[index].reportingMonth = this.datePipe.transform(this.workbookReportingMonths[index].reportingMonth, 'MMM-yyyy');
         this.selectedFormResponseID.setValue(this.workbookReportingMonths[0].formResponseID);
         this.onReportingDateSelectionChange();
       });
