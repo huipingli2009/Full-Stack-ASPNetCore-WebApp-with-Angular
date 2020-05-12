@@ -125,7 +125,7 @@
                     </div>
                 </div>
             </mat-cell>
-        </ng-container>
+        </ng-container>     
 
         <!-- Hidden Columns===============================================================-->
         <!-- id Column -->
@@ -528,5 +528,17 @@
 
         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="staff-detail-row"></tr>
 
-    </mat-table>
+    </mat-table>   
+    
+    <div></div>
+
+    <!-- Add new staff button Column *ngIf="isUserAdmin"-->     
+    <div class="addnewStaff" align="right" style="margin-top: 10px;">
+        <!-- <button mat-flat-button color="accent" class="add-file-button" 
+        (click)="openAdminAddDialog()">ADD NEW STAFF
+    </button>   -->
+    <button mat-flat-button color="accent" class="add-file-button">ADD NEW STAFF</button>  
+    </div>     
 </div>
+
+    
