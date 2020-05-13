@@ -147,21 +147,22 @@
                 {{epicMrn}}
               </div>
               <div fxLayout="column" fxFlex>
-                <label for="firstName">First Name*</label>
+                <label for="firstName">First Name <span class="error-asterix">*</span></label>
                 <input formControlName="firstName" name="firstName" />
                 <div *ngIf="form.controls.firstName.errors?.required && form.controls.firstName.touched" class="error">
                   *Required
                 </div>
               </div>
               <div fxLayout="column" fxFlex>
-                <label for="lastName">Last Name*</label>
+                <label for="lastName">Last Name <span class="error-asterix">*</span></label>
                 <input formControlName="lastName" name="lastName" />
                 <div *ngIf="form.controls.lastName.errors?.required && form.controls.lastName.touched" class="error">
                   *Required
                 </div>
+                <div>test</div>
               </div>
               <div fxLayout="column" fxFlex>
-                <label for="dob">Date of Birth*</label>
+                <label for="dob">Date of Birth <span class="error-asterix">*</span></label>
                 <input formControlName="dob" name="dob" />
                 <div *ngIf="form.controls.dob.errors?.required && form.controls.dob.touched" class="error">
                   *Required
