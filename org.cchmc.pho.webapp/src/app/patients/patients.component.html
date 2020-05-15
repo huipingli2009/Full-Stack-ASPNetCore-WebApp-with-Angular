@@ -98,12 +98,13 @@
         <mat-checkbox class="table-header-checkbox" [(ngModel)]="watchFlag" (change)="isOnWatchlist($event)">
         </mat-checkbox>
       </mat-header-cell>
-      <mat-cell *matCellDef="let element; let i = renderIndex;" (click)="$event.stopPropagation()" (click)="updateWatchlistStatus(element.patientId, i)" (click)="element.watchFlag = !element.watchFlag">
+      <mat-cell *matCellDef="let element; let i = renderIndex;" (click)="$event.stopPropagation()"
+        (click)="updateWatchlistStatus(element.patientId, i)" (click)="element.watchFlag = !element.watchFlag">
         <button mat-icon-button>
           <i class="material-icons watchlist-icon" [ngClass]="element.watchFlag ? 'on-watchlist' : 'off-watchlist'">
             remove_red_eye
           </i>
-        </button> 
+        </button>
       </mat-cell>
     </ng-container>
 
@@ -113,11 +114,10 @@
       <mat-cell *matCellDef="let element">
         <div fxLayout="row wrap" fxLayoutGap="14px">
           <div *ngFor="let item of element.conditions" class="condition-container" fxLayout="column" fxflex="33%">
-            <div class="condition-chip"
-                  [style.margin-bottom]="element.conditions?.length > 2 ? '5px' : '0px'"
-                  [style.margin-top]="element.conditions?.length > 2 ? '5px' : '0px'">
-                  {{item.name}}
-              </div>
+            <div class="condition-chip" [style.margin-bottom]="element.conditions?.length > 2 ? '5px' : '0px'"
+              [style.margin-top]="element.conditions?.length > 2 ? '5px' : '0px'">
+              {{item.name}}
+            </div>
           </div>
         </div>
       </mat-cell>
@@ -159,7 +159,7 @@
                 <div *ngIf="form.controls.lastName.errors?.required && form.controls.lastName.touched" class="error">
                   *Required
                 </div>
-                <div>test</div>
+
               </div>
               <div fxLayout="column" fxFlex>
                 <label for="dob">Date of Birth <span class="error-asterix">*</span></label>
@@ -203,12 +203,13 @@
               <div fxLayout="column" fxFlex>
                 <label for="insuranceName">Insurance</label>
                 <mat-form-field class="multi-select-override">
-                <mat-select matNativeControl formControlName="insuranceName" class="insurance" [compareWith]="compareFn">
-                  <mat-option *ngFor="let item of insuranceList" [value]="item">
-                    {{item.name}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
+                  <mat-select matNativeControl formControlName="insuranceName" class="insurance"
+                    [compareWith]="compareFn">
+                    <mat-option *ngFor="let item of insuranceList" [value]="item">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
               </div>
               <div fxLayout="column" fxFlex fxFill>
                 <label for="conditions">Conditions</label>
@@ -225,28 +226,32 @@
               <div fxLayout="column" fxFlex>
                 <label>Provider PMCA</label>
                 <div mat-icon-button (click)="openPmcaDialog()">
-                  {{providerPmcaScoreControl}} <span class="edit-dialog"><mat-icon>edit</mat-icon> EDIT</span>
-                  
+                  {{providerPmcaScoreControl}} <span class="edit-dialog">
+                    <mat-icon>edit</mat-icon> EDIT
+                  </span>
+
                 </div>
                 <ng-template #pmcaDialog>
                   <div mat-dialog-content class="mat-typography pmca-dialog">
                     <label for="providerPMCAScore">Provider PMCA</label>
                     <div fxLayout="row" class="pmca-dialog-inputs">
-                    <input formControlName="providerPMCAScore" name="providerPMCAScore" (change)="pmcaProviderScoreChanged()" required/>
-                  </div>
-                  <label for="providerNotes">Provider Notes</label>
-                  <div fxLayout="row">
-                    <textarea class="provider-notes-textarea" formControlName="providerNotes" name="providerNotes"></textarea>
-                  </div>
-                  <div *ngIf="form.controls.providerPMCAScore.touched && form.controls.providerNotes.errors?.required"
-                  class="form-error" fxLayout="row">
-                  You must include a note
-                </div>
+                      <input formControlName="providerPMCAScore" name="providerPMCAScore"
+                        (change)="pmcaProviderScoreChanged()" required />
+                    </div>
+                    <label for="providerNotes">Provider Notes</label>
+                    <div fxLayout="row">
+                      <textarea class="provider-notes-textarea" formControlName="providerNotes"
+                        name="providerNotes"></textarea>
+                    </div>
+                    <div *ngIf="form.controls.providerPMCAScore.touched && form.controls.providerNotes.errors?.required"
+                      class="form-error" fxLayout="row">
+                      You must include a note
+                    </div>
                   </div>
                   <div mat-dialog-actions align="end">
                     <button mat-button (click)="cancelPmcaUpdate()">Cancel</button>
                     <button mat-button (click)="updatePmcaScore()">Update</button>
-                </div>
+                  </div>
                 </ng-template>
 
               </div>
@@ -258,15 +263,15 @@
             <div fxLayout="row" fxLayoutGap="34px">
               <div fxLayout="column">
                 <label for="phone1">Phone</label>
-                <input formControlName="phone1" name="phone1" />               
+                <input formControlName="phone1" name="phone1" />
               </div>
               <div fxLayout="column" fxFlex="288px">
                 <label for="addressLine1">Address</label>
-                <input formControlName="addressLine1" name="addressLine1" />                
+                <input formControlName="addressLine1" name="addressLine1" />
               </div>
               <div fxLayout="column" fxFlex>
                 <label for="city">City</label>
-                <input formControlName="city" name="city" />               
+                <input formControlName="city" name="city" />
               </div>
               <div fxLayout="column" fxFlex>
                 <label for="state">State</label>
@@ -280,7 +285,7 @@
               </div>
               <div fxLayout="column" fxFlex>
                 <label for="zip">Zip</label>
-                <input formControlName="zip" name="zip" />               
+                <input formControlName="zip" name="zip" />
               </div>
               <div fxLayout="column" fxLayoutAlign="end" fxFlex="96px">
                 <button mat-flat-button color="accent" [disabled]="!form.valid">Save</button>
@@ -288,13 +293,15 @@
               <ng-template #updatePatientDialog>
                 <div mat-dialog-content class="mat-typography">
                   <h3>Are you sure you want to save changes to this patient?</h3>
-                  <h3 class="text-warn">Patients made Inactive will be removed from the website but remain in the data warehouse for analytical purposes.</h3>
+                  <h3 class="text-warn">Patients made Inactive will be removed from the website but remain in the data
+                    warehouse for analytical purposes.</h3>
                   <h3><strong>Do you still wish to continue?</strong></h3>
                 </div>
                 <div mat-dialog-actions align="end">
                   <button mat-button mat-dialog-close>Cancel</button>
-                  <button mat-flat-button color="accent" mat-dialog-close (click)="submitForm()">Save and Update Patient</button>
-              </div>
+                  <button mat-flat-button color="accent" mat-dialog-close (click)="submitForm()">Save and Update
+                    Patient</button>
+                </div>
               </ng-template>
             </div>
             <div *ngIf="!form.valid" class="entire-form-error" fxLayout="row">
