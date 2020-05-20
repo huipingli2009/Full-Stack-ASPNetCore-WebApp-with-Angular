@@ -120,14 +120,14 @@ export class RestService {
   /*Find Patients by Query*/
   findPatients(
     sortcolumn = 'name', sortdirection = 'Asc',
-    pageNumber = 0, rowsPerPage = 20, chronic = '', watchFlag = '', conditionIDs = '',
+    pageNumber = 1, rowsPerPage = 20, chronic = '', watchFlag = '', conditionIDs = '',
     staffID = '', popmeasureID = '', namesearch = ''): Observable<Patients[]> {
 
     return this.http.get(`${API_URL}/api/Patients`, {
       params: new HttpParams()
         .set('sortcolumn', sortcolumn)
         .set('sortdirection', sortdirection)
-        .set('pagenumber', pageNumber.toString())
+        .set('pagenumber', (pageNumber).toString())
         .set('rowsPerPage', rowsPerPage.toString())
         .set('chronic', chronic.toString())
         .set('watch', watchFlag.toString())
