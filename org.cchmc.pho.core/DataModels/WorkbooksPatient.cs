@@ -15,5 +15,6 @@ namespace org.cchmc.pho.core.DataModels
         public string PHQ9_Score { get; set; }        
         public bool ActionFollowUp { get; set; }
         public string Improvement { get; set; }
+        public bool FollowUpResponse { get; set; }
     }
 }

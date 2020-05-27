@@ -241,7 +241,8 @@
                 <ng-container matColumnDef="followUp">
                     <mat-header-cell *matHeaderCellDef> FOLLOW UP </mat-header-cell>
                     <mat-cell *matCellDef="let element">
-                        <button mat-flat-button color="accent" (click)="FollowUpForPatient(element)">FOLLOW
+                        <button mat-flat-button [color]="element.followUpResponse? 'primary' : 'accent'"
+                            (click)="FollowUpForPatient(element)">FOLLOW
                             UP</button>
                     </mat-cell>
                 </ng-container>
@@ -419,6 +420,12 @@
                     <mat-cell *matCellDef="let element"> {{element.providerId}} </mat-cell>
                 </ng-container>
 
+                <!-- FollowUpResponse Column -->
+                <ng-container matColumnDef="FollowUpResponse">
+                    <mat-header-cell *matHeaderCellDef> formResponseId </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.followUpResponse}} </mat-cell>
+                </ng-container>
+
 
                 <!-- Column for adding patient-->
                 <ng-container matColumnDef="addingPatient">
@@ -448,7 +455,7 @@
         <mat-dialog-content>
             <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="32px">
                 <div fxLayout="column" class="question">
-                    Managed by External Provider?
+                    Medication Managed by External Provider?
                 </div>
                 <div fxLayout="column">
                     <mat-button-toggle-group formControlName="managedByExternalProvider">

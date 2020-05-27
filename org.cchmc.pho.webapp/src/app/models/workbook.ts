@@ -24,6 +24,7 @@ export class WorkbookPatient {
     phQ9_Score: string;
     actionFollowUp: boolean;
     improvement: string;
+    FollowUpResponse: boolean;
 }
 
 export class Followup {
