@@ -179,6 +179,50 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 }
             }
         }
+        public async Task<bool> AddPatient(int userId, Patient patient)
+        {
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spAddPatient", sqlConnection))
+                {
+
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@FirstName", SqlDbType.VarChar).Value = patient.FirstName;
+                    sqlCommand.Parameters.Add("@LastName", SqlDbType.VarChar).Value = patient.LastName;
+                    sqlCommand.Parameters.Add("@DOB", SqlDbType.Date).Value = patient.DOB;
+                    sqlCommand.Parameters.Add("@GenderId", SqlDbType.Int).Value = patient.GenderId;
+                    sqlCommand.Parameters.Add("@PCPId", SqlDbType.Int).Value = patient.PCP_StaffID;
+
+                    await sqlConnection.OpenAsync();
+
+                    //Execute Stored Procedure
+                    return ((bool)sqlCommand.ExecuteScalar());
+                }
+            }
+        }
+        public async Task<bool> IsExistingPatient(int userId, Patient patient)
+        {
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spCheckExistingPatient", sqlConnection))
+                {
+
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@FirstName", SqlDbType.VarChar).Value = patient.FirstName;
+                    sqlCommand.Parameters.Add("@LastName", SqlDbType.VarChar).Value = patient.LastName;
+                    sqlCommand.Parameters.Add("@DOB", SqlDbType.Date).Value = patient.DOB;
+
+                    await sqlConnection.OpenAsync();
+
+                    //Execute Stored Procedure
+                    return ((bool)sqlCommand.ExecuteScalar());
+                }
+            }
+        }
         public async Task<bool> UpdatePatientWatchlist(int userId, int patientId)
         {
 
@@ -192,8 +236,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                     await sqlConnection.OpenAsync();
 
-                    //Execute Stored Procedure
-                    
+                    //Execute Stored Procedure                    
                     return ((bool)sqlCommand.ExecuteScalar());
 
                 }

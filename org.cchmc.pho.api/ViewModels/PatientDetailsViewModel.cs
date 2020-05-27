@@ -31,7 +31,6 @@ namespace org.cchmc.pho.api.ViewModels
         public string ProviderNotes { get; set; }
         public bool ActiveStatus { get; set; }
         public bool PendingStatusConfirmation { get; set; }
-
         public int GenderId { get; set; }
         public string Gender { get; set; }
         public string Email { get; set; }

@@ -98,8 +98,6 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(200, type: typeof(List<SimplifiedPatientViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-
-        //public async Task<IActionResult> ListPatients(int userId, int formResponseId, string nameSearch)
         public async Task<IActionResult> ListPatients(string searchTerm)
         {
             try
@@ -159,6 +157,61 @@ namespace org.cchmc.pho.api.Controllers
                 // call the data layer to mark the action
                 var data = await _patient.UpdatePatientDetails(currentUserId, patientDetail);
                 var result = _mapper.Map<PatientDetailsViewModel>(data);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("")]
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [SwaggerResponse(200, type: typeof(PatientDetailsViewModel))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> AddPatient([FromBody] PatientViewModel patientVM)
+        {
+            if (patientVM == null)
+            {
+                _logger.LogInformation("patientDetails object is null");
+                return BadRequest("patient is null");
+            }
+            if (string.IsNullOrEmpty(patientVM.FirstName))
+            {
+                _logger.LogInformation("first name is blank");
+                return BadRequest("first name is blank");
+            }
+            if (string.IsNullOrEmpty(patientVM.LastName))
+            {
+                _logger.LogInformation("last name is blank");
+                return BadRequest("last name is blank");
+            }
+            if (patientVM.DOB == null)
+            {
+                _logger.LogInformation("patient date of birth is blank");
+                return BadRequest("patient date of birth is blank");
+            }
+
+            try
+            {
+                int currentUserId = 16; // _userService.GetUserIdFromClaims(User?.Claims);
+
+                Patient patient = _mapper.Map<Patient>(patientVM);
+                //check for existing
+                var check = await _patient.IsExistingPatient(currentUserId, patient);
+                bool existing = (bool)_mapper.Map<bool>(check);
+                if (existing)
+                {
+                    _logger.LogInformation("patient already exists");
+                    return BadRequest("patient already exists");
+                }
+                // call the data layer to mark the action
+                var data = await _patient.AddPatient(currentUserId, patient);
+                var result = _mapper.Map<bool>(data);
                 return Ok(result);
             }
             catch (Exception ex)

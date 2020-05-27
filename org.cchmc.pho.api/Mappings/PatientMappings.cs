@@ -11,6 +11,7 @@ namespace org.cchmc.pho.api.Mappings
         public PatientMappings()
         {
             CreateMap<Patient, PatientViewModel>().ForMember(dest => dest.PendingStatusConfirmation, action => action.MapFrom(source => source.PotentiallyActiveStatus));
+            CreateMap<PatientViewModel, Patient>();
             CreateMap<PatientCondition, PatientConditionViewModel>();
             CreateMap<PatientConditionViewModel, PatientCondition>();
             CreateMap<PatientInsurance, PatientInsuranceViewModel>();

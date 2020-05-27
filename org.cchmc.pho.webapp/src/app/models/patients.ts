@@ -63,6 +63,22 @@ export interface PatientDetails {
     cchmcAppointment: Date;
 }
 
+export interface NewPatient {
+    firstName: string;
+    lastName: string;
+    practiceID: number;
+    pcP_StaffID: number;
+    dob: Date;
+    genderId: number;
+    activeStatus: boolean;
+    pendingStatusConfirmation: boolean;
+    lastEDVisit: string;
+    chronic: boolean;
+    watchFlag: boolean;
+    conditions: Array<Conditions>;
+    totalRecords: number;
+}
+
 export class Conditions {
     id: number;
     name: string;

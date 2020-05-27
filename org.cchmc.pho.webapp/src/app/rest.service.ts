@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from '../environments/environment';
 import { Alerts, EdChart, EdChartDetails, Population, Quicklinks, Spotlight } from './models/dashboard';
-import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Patients, Pmca, PopSlices, Providers, States } from './models/patients';
+import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Patients, NewPatient, Pmca, PopSlices, Providers, States } from './models/patients';
 import { PracticeList, Responsibilities, Staff, StaffDetails, StaffAdmin } from './models/Staff';
 import { Followup, WorkbookPatient, WorkbookProvider, WorkbookReportingMonths, WorkbookPractice } from './models/workbook';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
@@ -187,6 +187,14 @@ export class RestService {
       map((data: PatientDetails[]) => {
         return data;
       })
+    );
+  }
+
+  /* Adds a new patient */
+  addPatient(patient: NewPatient): Observable<any> {
+    this.logger.log(JSON.stringify(patient));
+    return this.http.post<boolean>(`${API_URL}/api/Patients`, JSON.stringify(patient), httpOptions).pipe(
+      catchError(this.handleError<any>('adding patient'))
     );
   }
 

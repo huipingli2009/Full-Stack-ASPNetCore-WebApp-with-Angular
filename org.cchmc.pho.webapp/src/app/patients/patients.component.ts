@@ -10,10 +10,11 @@ import { ActivatedRoute } from '@angular/router';
 import { NGXLogger } from 'ngx-logger';
 import { Observable, Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Conditions, Gender, PatientDetails, Patients } from '../models/patients';
+import { Conditions, Gender, PatientDetails, Patients, NewPatient } from '../models/patients';
 import { RestService } from '../rest.service';
 import { PatientsDataSource } from './patients.datasource';
 import { FilterService } from '../services/filter.service';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-patients',
@@ -34,6 +35,8 @@ export class PatientsComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild('pmcaDialog') callPmcaDialog: TemplateRef<any>;
   @ViewChild('updatePatientDialog') callPatientSaveDialog: TemplateRef<any>;
+  @ViewChild('adminDialog') adminDialog: TemplateRef<any>;
+  @ViewChild('adminConfirmDialog') adminConfirmDialog: TemplateRef<any>;
 
   @Input()
   checked: Boolean;
@@ -78,14 +81,16 @@ export class PatientsComponent implements OnInit {
   insuranceList: any[] = [];
   genderList: Gender;
   pmcaList: any[] = [];
-  stateList: any[] = [];
-
+  stateList: any[] = [];  
+  newPatientValues: NewPatient;
+  adminPatientForm: FormGroup;
   isLoading = true;
-
+  isAddingPatientAndContinue : boolean;
+  isAddingPatientAndExit : boolean;
   // Selected Values
   selectedGender;
 
-  displayedColumns: string[] = ['arrow', 'name', 'dob', 'lastEDVisit', 'chronic', 'watchFlag', 'conditions'];
+  displayedColumns: string[] = ['arrow', 'name', 'dob', 'lastEDVisit', 'chronic', 'watchFlag', 'conditions', 'button'];
   compareFn: ((f1: any, f2: any) => boolean) | null = this.compareByValue;
   compareShortFn: ((f1: any, f2: any) => boolean) | null = this.compareByShortValue;
   pageEvent: PageEvent;
@@ -119,6 +124,14 @@ export class PatientsComponent implements OnInit {
       city: [''],
       state: [''],
       zip: ['']
+    });
+
+    this.adminPatientForm = this.fb.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      dob: ['', Validators.required],
+      gender: ['', Validators.required],
+      pcpName: ['', Validators.required]
     });
 
     this.subscription = this.filterService.getIsFilteringPatients().subscribe (res => {
@@ -260,6 +273,62 @@ export class PatientsComponent implements OnInit {
     this.rest.updateWatchlistStatus(id).subscribe((data) => {
     });
   }
+
+  //ADD PATIENT
+  openAdminAddDialog() {
+
+    this.adminPatientForm.reset();
+    this.dialog.open(this.adminDialog, { disableClose: true });
+    this.isActive = true;
+  }
+  
+  // Type = submission type. 1 = Save And Continue / 2 = Save And Exit
+  openAdminConfirmDialog(type) {
+    if (type === 1) {
+      this.isAddingPatientAndContinue = true;
+      this.isAddingPatientAndExit = false;
+    }
+    if (type === 2) {
+      this.isAddingPatientAndContinue = false;
+      this.isAddingPatientAndExit = true;
+    }
+    this.dialog.open(this.adminConfirmDialog, { disableClose: true });
+  }
+
+  
+  submitPatientAddUpdate() {
+    this.newPatientValues = this.adminPatientForm.value;
+    this.newPatientValues.firstName = this.adminPatientForm.controls.firstName.value;
+    this.newPatientValues.lastName = this.adminPatientForm.controls.lastName.value;
+    this.newPatientValues.dob = new Date(this.transformDobForPut(this.adminPatientForm.controls.dob.value));
+    this.newPatientValues.genderId = this.adminPatientForm.controls.gender.value.id;
+    this.newPatientValues.pcP_StaffID = this.adminPatientForm.controls.pcpName.value.id;
+
+
+    this.logger.log('inSubmitPatientAddUpdate', this.newPatientValues);
+    this.logger.log(this.adminPatientForm.value);
+    this.rest.addPatient(this.newPatientValues).subscribe(data => {     
+      this.logger.log(data, 'New Patient');
+      this.cancelAdminDialog(); 
+      if (this.isAddingPatientAndContinue) {
+        this.loadPatientsPage(); 
+      }
+      if (this.isAddingPatientAndExit) {
+        this.loadPatientsPage(); 
+      }
+    });  
+
+  }
+
+
+  cancelAdminDialog() {
+    this.isAddingPatientAndContinue = false;
+    this.isAddingPatientAndExit = false;
+    this.loadPatientsPage();
+    this.dialog.closeAll();
+  }
+
+
 
 
   /*Patient Details */
