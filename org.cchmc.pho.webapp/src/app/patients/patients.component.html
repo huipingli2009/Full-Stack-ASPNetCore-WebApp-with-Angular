@@ -400,54 +400,99 @@
         
         <div fxLayout="row" fxLayoutGap="60px" class="form-row">
           <div fxLayout="column" fxFlex>
-            <label for="firstName">First Name <span class="error-asterix">*</span></label>
-            <input formControlName="firstName" name="firstName" />
-            <div *ngIf="adminPatientForm.controls.firstName.errors?.required && adminPatientForm.controls.firstName.touched" class="error">
-              *Required
-            </div>
+            <mat-form-field floatLabel="always">
+              <mat-label>First Name</mat-label>
+              <input matInput formControlName="firstName" required>
+            </mat-form-field>
+            <ng-container
+              *ngIf="(adminPatientForm.get('firstName').touched || adminPatientForm.get('firstName').dirty) && (adminPatientForm.get('firstName').errors)">
+              <mat-error *ngIf="adminPatientForm.get('firstName').errors.required">
+                  *Required
+              </mat-error>
+            </ng-container>
           </div>
           <div fxLayout="column" fxFlex>
-            <label for="lastName">Last Name <span class="error-asterix">*</span></label>
-            <input formControlName="lastName" name="lastName" />
-            <div *ngIf="adminPatientForm.controls.lastName.errors?.required && adminPatientForm.controls.lastName.touched" class="error">
-              *Required
-            </div>
+
+            <mat-form-field floatLabel="always">
+              <mat-label>Last Name</mat-label>
+              <input matInput formControlName="lastName" required>
+            </mat-form-field>
+            <ng-container
+              *ngIf="(adminPatientForm.get('lastName').touched || adminPatientForm.get('lastName').dirty) && (adminPatientForm.get('lastName').errors)">
+              <mat-error *ngIf="adminPatientForm.get('lastName').errors.required">
+                  *Required
+              </mat-error>
+            </ng-container>
           </div>
 
         </div>
+        <!-- space this guy out-->
+        <div fxLayout="row" fxLayoutGap="60px" class="form-row">
+
+        </div>
+
         <div fxLayout="row" fxLayoutGap="60px" class="form-row">
 
           <div fxLayout="column" fxFlex>
-            <label for="dob">Date of Birth <span class="error-asterix">*</span></label>
-            <input formControlName="dob" name="dob" />
-            <div *ngIf="adminPatientForm.controls.dob.errors?.required && adminPatientForm.controls.dob.touched" class="error">
-              *Required
-            </div>
+            <mat-form-field floatLabel="always">
+              <mat-label>Date Of Birth</mat-label>
+              <!-- <input matInput formControlName="dob" required> -->
+              <input matInput placeholder="MM/DD/YYYY"
+              formControlName="dob" [matDatepicker]="picker" required>
+            <mat-datepicker-toggle matPrefix [for]="picker">
+              <mat-icon matDatepickerToggleIcon>
+                  calendar_today
+              </mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+
+            </mat-form-field>
+            <ng-container
+              *ngIf="(adminPatientForm.get('dob').touched || adminPatientForm.get('dob').dirty) && (adminPatientForm.get('dob').errors)">
+              <mat-error *ngIf="adminPatientForm.get('dob').errors.required">
+                  *Required
+              </mat-error>
+            </ng-container>
           </div>
 
           <div fxLayout="column" class="input-w-icon">
-            <label for="gender">Gender</label>
-            <mat-form-field class="multi-select-override">
-              <mat-select matNativeControl formControlName="gender" [compareWith]="compareShortFn">
+            <mat-form-field class="multi-select-override" floatLabel="always">
+              <mat-label>Gender</mat-label>
+              <mat-select matNativeControl formControlName="gender" [compareWith]="compareShortFn" required>
                 <mat-option *ngFor="let item of genderList" [value]="item">
                   {{item.shortName | i18nSelect: genderMap}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
+            
+            <ng-container
+              *ngIf="(adminPatientForm.get('dob').touched || adminPatientForm.get('dob').dirty) && (adminPatientForm.get('dob').errors)">
+              <mat-error *ngIf="adminPatientForm.get('dob').errors.required">
+                  *Required
+              </mat-error>
+            </ng-container>
           </div>
 
           <div fxLayout="column" fxFlex>
-            <label for="pcpName">PCP</label>
-            <mat-form-field class="multi-select-override">
-              <mat-select matNativeControl formControlName="pcpName" [compareWith]="compareFn">
+            <mat-form-field class="multi-select-override" floatLabel="always">
+              <mat-label>PCP</mat-label>
+              <mat-select matNativeControl formControlName="pcpName" [compareWith]="compareFn" required>
                 <mat-option *ngFor="let item of providersList" [value]="item">
                   {{item.name}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
+            
+            <ng-container
+              *ngIf="(adminPatientForm.get('pcpName').touched || adminPatientForm.get('pcpName').dirty) && (adminPatientForm.get('pcpName').errors)">
+              <mat-error *ngIf="adminPatientForm.get('pcpName').errors.required">
+                  *Required
+              </mat-error>
+            </ng-container>
           </div>
 
         </div>
+        <div fxLayout="row" fxLayoutGap="60px" class="form-row"></div>
       </form>
     </div>
     <div mat-dialog-actions align="end" class="select-row">

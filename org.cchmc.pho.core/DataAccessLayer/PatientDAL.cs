@@ -179,7 +179,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 }
             }
         }
-        public async Task<bool> AddPatient(int userId, Patient patient)
+        public async Task<int> AddPatient(int userId, Patient patient)
         {
 
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
@@ -198,7 +198,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     await sqlConnection.OpenAsync();
 
                     //Execute Stored Procedure
-                    return ((bool)sqlCommand.ExecuteScalar());
+                    return ((int)sqlCommand.ExecuteScalar());
                 }
             }
         }

@@ -4,7 +4,6 @@ import { Component, HostListener, Input, OnInit, TemplateRef, ViewChild } from '
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute } from '@angular/router';
 import { NGXLogger } from 'ngx-logger';
@@ -15,6 +14,7 @@ import { RestService } from '../rest.service';
 import { PatientsDataSource } from './patients.datasource';
 import { FilterService } from '../services/filter.service';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBarComponent } from '../shared/mat-snack-bar/mat-snack-bar.component';
 
 @Component({
   selector: 'app-patients',
@@ -105,7 +105,7 @@ export class PatientsComponent implements OnInit {
   isExpansionDetailRow = (i: number, row: object) => row.hasOwnProperty('detailRow');
 
   constructor(public rest: RestService, private route: ActivatedRoute, public fb: FormBuilder,
-              private logger: NGXLogger, public dialog: MatDialog, private datePipe: DatePipe, public snackBar: MatSnackBar,
+              private logger: NGXLogger, public dialog: MatDialog, private datePipe: DatePipe, private snackBar: MatSnackBarComponent,
               private filterService: FilterService) {
     this.form = this.fb.group({
       firstName: ['', Validators.required],
@@ -307,15 +307,35 @@ export class PatientsComponent implements OnInit {
 
     this.logger.log('inSubmitPatientAddUpdate', this.newPatientValues);
     this.logger.log(this.adminPatientForm.value);
-    this.rest.addPatient(this.newPatientValues).subscribe(data => {     
-      this.logger.log(data, 'New Patient');
+    this.rest.addPatient(this.newPatientValues).subscribe(data => {    
+      if (data){
+        console.info('data is yes');
+        let id = <number>data;
+        this.logger.log(id, 'New Patient');
+        if (this.isAddingPatientAndContinue) {
+          this.loadPatientsWithFilters();
+        }
+        if (this.isAddingPatientAndExit) {
+          this.loadPatientsPage(); 
+        }
+        this.snackBar.openSnackBar(`Patient ${this.newPatientValues.firstName + this.newPatientValues.lastName} added to the registry`, 'Close', 'success-snackbar');
+      } 
+      else 
+      {
+        this.logger.log('patient exists');
+      }
       this.cancelAdminDialog(); 
-      if (this.isAddingPatientAndContinue) {
-        this.loadPatientsPage(); 
-      }
-      if (this.isAddingPatientAndExit) {
-        this.loadPatientsPage(); 
-      }
+
+
+    },
+    error => {
+      console.info('made it to error handling');
+      this.snackBar.openSnackBar(`Patient ${this.newPatientValues.firstName + this.newPatientValues.lastName} already exists in registry`, 'Close', 'warn-snackbar');
+      //console.info(error.status);
+      // if (error.status === 400) {
+      //   console.error('patient already exists');
+      //   this.snackBar.openSnackBar(`Patient ${this.newPatientValues.firstName + this.newPatientValues.lastName} already exists in registry`, 'Close', 'warn-snackbar');
+      // }
     });  
 
   }

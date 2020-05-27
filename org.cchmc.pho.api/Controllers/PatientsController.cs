@@ -170,7 +170,7 @@ namespace org.cchmc.pho.api.Controllers
         [AllowAnonymous]
         [HttpPost("")]
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
-        [SwaggerResponse(200, type: typeof(PatientDetailsViewModel))]
+        [SwaggerResponse(200, type: typeof(int))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> AddPatient([FromBody] PatientViewModel patientVM)
@@ -198,7 +198,7 @@ namespace org.cchmc.pho.api.Controllers
 
             try
             {
-                int currentUserId = 16; // _userService.GetUserIdFromClaims(User?.Claims);
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
 
                 Patient patient = _mapper.Map<Patient>(patientVM);
                 //check for existing
@@ -207,11 +207,11 @@ namespace org.cchmc.pho.api.Controllers
                 if (existing)
                 {
                     _logger.LogInformation("patient already exists");
-                    return BadRequest("patient already exists");
+                    return StatusCode(400, "patient already exists");
                 }
                 // call the data layer to mark the action
                 var data = await _patient.AddPatient(currentUserId, patient);
-                var result = _mapper.Map<bool>(data);
+                var result = _mapper.Map<int>(data);
                 return Ok(result);
             }
             catch (Exception ex)
