@@ -571,11 +571,11 @@ export class StaffComponent implements OnInit, OnDestroy {
   }
 
   saveAddStaffDialog(): void { 
-           
-    this.rest.addNewStaff(this.addStaffForm.value).pipe(take(1)).subscribe((data) => {
+    let staffDetails:StaffDetails = <StaffDetails> this.addStaffForm.value;
+    this.rest.addNewStaff(staffDetails).pipe(take(1)).subscribe((data) => {
      
-        //this.logger.log(data, 'New Staff added')      
-        this.snackBar.openSnackBar(`New staff: ${data.lastName} ${data.firstName} has been added`, 'Close', 'success-snackbar') 
+        this.logger.log(data, 'New Staff added')      
+        //this.snackBar.openSnackBar(`New staff: ${data.lastName} ${data.firstName} has been added`, 'Close', 'success-snackbar') 
     });       
   
     this.getStaff();

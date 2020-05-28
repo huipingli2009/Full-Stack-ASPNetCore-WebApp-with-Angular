@@ -126,9 +126,9 @@
         <ng-container matColumnDef="button">
             <mat-header-cell *matHeaderCellDef >
                 <button mat-flat-button color="accent" *ngIf="isUserAdmin" (click)="openAddStaffDialog()">ADD STAFF</button>
-            </mat-header-cell>
-            <mat-cell>
-                <td mat-cell *matCellDef="let row">  </td>
+            </mat-header-cell>          
+            <mat-cell *matCellDef>       
+              
             </mat-cell>         
         </ng-container>
 
