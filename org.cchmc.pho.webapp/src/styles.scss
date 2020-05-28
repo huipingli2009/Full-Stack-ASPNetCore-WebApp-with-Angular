@@ -1357,7 +1357,7 @@ button.toast-close-button {
     }
     .mat-select-arrow {
       color: white;
-    }
+    }    
     .mat-form-field-appearance-legacy .mat-form-field-underline {
       background-color: white;
     }
@@ -1402,9 +1402,7 @@ button.toast-close-button {
         color: var(--primary-darker-color);
         padding-right: 13px;
         font-size: 18px !important;
-      }
-
-     
+      }         
     }
   }
 
@@ -1582,12 +1580,19 @@ button.toast-close-button {
       letter-spacing: 1px;
       color: var(--primary-darker-color);
       text-align: left;
-      text-transform: uppercase !important;
+      text-transform: uppercase !important; 
+      
+      // .addStaffButton {
+      //   justify-content: flex-end;
+      // }
 
       button {
         text-transform: uppercase;
+        height: 36px;    
+        justify-content: right;                 
       }
     }
+    
   }
 
   .mat-cell {
@@ -1618,7 +1623,7 @@ button.toast-close-button {
   }
 }
 
-#admin-dialog, #passwordChangeForm ,#Staff-admin-dialog {
+#admin-dialog, #passwordChangeForm ,#Staff-admin-dialog, #addstaff-dialog {
   overflow: visible;
   .detail-heading {
     font-family: "ArcherBold";

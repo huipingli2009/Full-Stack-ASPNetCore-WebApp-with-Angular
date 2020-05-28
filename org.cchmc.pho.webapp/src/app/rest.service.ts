@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { Observable, of } from 'rxjs';
@@ -218,7 +218,18 @@ export class RestService {
     return this.http.put<StaffDetails>(`${API_URL}/api/Staff/${StaffDetails.id}`, JSON.stringify(StaffDetails), httpOptions).pipe(
       catchError(this.handleError<any>('updateStaff'))
     );
-  }
+  }  
+
+   /*Add New Staff*/
+   addNewStaff(staffDetails: StaffDetails): Observable<StaffDetails> {
+    this.logger.log('Staff Add IN REST', staffDetails);
+
+    return this.http.post<StaffDetails>(`${API_URL}/api/Staff/`, JSON.stringify(staffDetails), httpOptions).pipe(
+      tap(_ => this.snackBar.openSnackBar(`Staff has been Added!`
+      , 'Close', 'success-snackbar'))
+      // catchError(this.handleError<any>('addStaff'))
+    )
+  }   
 
   /*Remove Staff*/
   RemoveStaff(staffAdmin: StaffAdmin): Observable<any> {
@@ -370,7 +381,6 @@ export class RestService {
     );
   }
 
-
   /*addition of patient to the work book*/
   AddPatientToWorkbook(workbookPatient: WorkbookPatient): Observable<any> {
     this.logger.log(JSON.stringify(workbookPatient));
@@ -392,7 +402,6 @@ export class RestService {
       catchError(this.handleError<any>('removing patient from the workbook'))
     );
   }
-
 
   /*getting workbook Practice details*/
   getWorkbookPractice(formResponseid: number): Observable<any> {
@@ -507,8 +516,7 @@ export class RestService {
     return this.http.post(`${API_URL}/api/Files/`, JSON.stringify(fileDetails), httpOptions).pipe(
       tap(_ => this.snackBar.openSnackBar(`File has been Added!`
         , 'Close', 'success-snackbar'))
-    );
-  }
+    )  }
 
   /*Updates file action*/
   updateFileAction(fileaction: FileAction): Observable<any> {
@@ -613,8 +621,7 @@ export class RestService {
     );
   }
 
-
-  private handleError<T>(operation = 'operation', result?: T) {
+  private handleError<T>(operation = 'operation', result?: T) {    
     return (error: any): Observable<T> => {
 
       this.logger.error(error); // log to console instead
@@ -625,6 +632,7 @@ export class RestService {
       return of(result as T);
     };
   }
+  
 }
 
 

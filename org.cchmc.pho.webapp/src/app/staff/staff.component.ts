@@ -1,13 +1,13 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, TemplateRef, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators, FormArray } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Sort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { NGXLogger } from 'ngx-logger';
-import { take, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { take, debounceTime, distinctUntilChanged, takeUntil, catchError } from 'rxjs/operators';
 import { ErrorInterceptor } from '../helpers/error.interceptor';
 import { comparePasswords } from '../helpers/password-match.validator';
 import { Responsibilities, Staff, StaffDetails, StaffAdmin } from '../models/Staff';
@@ -35,7 +35,7 @@ import { Subject } from 'rxjs';
 export class StaffComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject();
   matcher = new MyErrorStateMatcher();
-  displayedColumns: string[] = ['arrow', 'name', 'email', 'phone', 'position', 'credentials', 'isRegistry', 'responsibilities'];
+  displayedColumns: string[] = ['arrow', 'name', 'email', 'phone', 'position', 'credentials', 'isRegistry', 'responsibilities','button'];
   positions: Position[];
   currentUser: CurrentUser;
   currentUserId: number;
@@ -51,6 +51,8 @@ export class StaffComponent implements OnInit, OnDestroy {
   userStatus: number;
   selectedStaffUser: number;
   isPasswordUpdated: boolean;
+  isSaveAndExit: boolean;
+  isSaveAndContinue: boolean;
   staffAdmin: StaffAdmin;
   StaffName: string;
   StaffAdminVerbiage: string = " Warning! This staff member will be removed from your list.Please contact your PIC if you would like to add them back.";
@@ -59,7 +61,8 @@ export class StaffComponent implements OnInit, OnDestroy {
   @ViewChild('StaffadminDialog') StaffAdminDialog: TemplateRef<any>;
   @ViewChild('updateUserDialog') updateUserDialog: TemplateRef<any>;
   @ViewChild('updateStaffDialog') updateStaffDialog: TemplateRef<any>;
-
+  @ViewChild('addStaffDialog') addStaffDialog: TemplateRef<any>;
+  @ViewChild('addStaffConfirmDialog') addStaffConfirmDialog: TemplateRef<any>;
 
   credentials: Credential[];
   filterValues: any = {};
@@ -75,8 +78,7 @@ export class StaffComponent implements OnInit, OnDestroy {
   responsibilityFilter = new FormControl('');
   staffNameFilter = new FormControl('');
   positionFilter = new FormControl('');
-
-
+  
   StaffDetailsForm = this.fb.group({
     id: [''],
     firstName: [''],
@@ -108,10 +110,20 @@ export class StaffComponent implements OnInit, OnDestroy {
     }
   )
 
+  addStaffForm = this.fb.group({
+    firstName: [''],
+    lastName: [''],
+    email: ['', [Validators.required, Validators.email]],
+    phone: ['', Validators.required],
+    startDate: ['', [DateRequiredValidator]],
+    positionId: ['', Validators.required],
+    locationId: [null, Validators.required]
+  })
 
   constructor(private rest: RestService, private logger: NGXLogger, private fb: FormBuilder, private datePipe: DatePipe,
     private snackBar: MatSnackBarComponent, private userService: UserService, public dialog: MatDialog,
-    private authService: AuthenticationService, private errorIntercept: ErrorInterceptor) {
+    private authService: AuthenticationService, private changeDetectorRefs: ChangeDetectorRef,
+    private errorIntercept: ErrorInterceptor) {
     this.dataSourceStaff = new MatTableDataSource;
     this.adminUserForm = this.fb.group({
       userName: ['', Validators.required],
@@ -121,9 +133,18 @@ export class StaffComponent implements OnInit, OnDestroy {
     }, {
       validator: comparePasswords('password', 'confirmPassword')
     });
-    this.getUserRoles();
-  }
+    this.getUserRoles()
 
+    this.addStaffForm = this.fb.group({
+      firstName: [''],
+      lastName: [''],
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['', Validators.required],
+      startDate: ['', [DateRequiredValidator]],
+      positionId: ['', Validators.required],
+      locationId: [null, Validators.required]     
+    })
+  }
 
   ngOnInit(): void {
     this.getCurrentUser();
@@ -137,10 +158,7 @@ export class StaffComponent implements OnInit, OnDestroy {
     this.validateNPI();
   }
 
-
-
   // look up calls to the web api
-
   getPositions() {
     this.rest.getPositions().pipe(take(1)).subscribe((data) => {
       this.positions = data;
@@ -204,7 +222,6 @@ export class StaffComponent implements OnInit, OnDestroy {
   }
 
   // get staff information
-
   getStaff() {
     this.staff = [];
     this.rest.getStaff().pipe(take(1)).subscribe((data) => {
@@ -452,13 +469,11 @@ export class StaffComponent implements OnInit, OnDestroy {
       }
     });
     this.table.dataSource = this.sortedData;
-
-
   }
+
   compare(a: number | string, b: number | string, isAsc: boolean) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
-
 
   // for filtering the table columns
   applySelectedFilter(column: string, filterValue: string) {
@@ -528,13 +543,51 @@ export class StaffComponent implements OnInit, OnDestroy {
     }
   }
 
-
   trackStaff(index: number, item: Staff): string {
     return '${item.id}';
   }
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+   //for Add Staff
+   openAddStaffDialog() {
+    const dialogRefAddStaff = this.dialog.open(this.addStaffDialog, { disableClose: true });
+  } 
+
+  // Type = submission type. 1 = Save Draft / 2 = Publish File / 3 = Publish with Alert
+  openAddStaffConfirmDialog(type) {
+    if (type === 1) {
+      this.isSaveAndExit = false;
+      this.isSaveAndContinue = true;      
+    }
+    if (type === 2) {
+      this.isSaveAndExit = true;
+      this.isSaveAndContinue = false;      
+    }
+    
+    this.dialog.open(this.addStaffConfirmDialog, { disableClose: true });
+  }
+
+  saveAddStaffDialog(): void { 
+           
+    this.rest.addNewStaff(this.addStaffForm.value).pipe(take(1)).subscribe((data) => {
+     
+        //this.logger.log(data, 'New Staff added')      
+        this.snackBar.openSnackBar(`New staff: ${data.lastName} ${data.firstName} has been added`, 'Close', 'success-snackbar') 
+    });       
+  
+    this.getStaff();
+    //this.dialog.closeAll();       
+  } 
+  
+  cancelAddStaffDialog() {
+    this.dialog.closeAll();
+  }
+
+  cancelConfirmDialog() {    
+    this.dialog.closeAll();
   }
 }
 
