@@ -181,7 +181,7 @@ namespace org.cchmc.pho.unittest.controllertests
         public async Task GetStaffDetails_Mapping_Success()
         {
             // setup            
-            var myStaff = new StaffDetail()
+            var myStaff = new StaffDetails()
             {
                 Id = 20101,
                 FirstName = "Carwood",
@@ -248,7 +248,7 @@ namespace org.cchmc.pho.unittest.controllertests
         {
             // setup
             _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
-            var myStaff = new StaffDetail()
+            var myStaff = new StaffDetails()
             {
                 Id = 20101,
                 FirstName = "Carwood",
@@ -358,7 +358,7 @@ namespace org.cchmc.pho.unittest.controllertests
         {
             // setup
             _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
-            var myStaff = new StaffDetail()
+            var myStaff = new StaffDetails()
             {
                 Id = 20101,
                 FirstName = "Carwood",
@@ -378,7 +378,7 @@ namespace org.cchmc.pho.unittest.controllertests
                 IsRVPIBoard = false,
             };
 
-            _mockStaffDal.Setup(p => p.UpdateStaffDetails(_user.StaffId, It.IsAny<StaffDetail>())).Throws(new Exception());
+            _mockStaffDal.Setup(p => p.UpdateStaffDetails(_user.StaffId, It.IsAny<StaffDetails>())).Throws(new Exception());
             _mockStaffDal.Setup(p => p.IsStaffInSamePractice(It.IsAny<Int32>(), It.IsAny<Int32>())).Returns(true);
             _staffController = new StaffController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockStaffDal.Object);
             
