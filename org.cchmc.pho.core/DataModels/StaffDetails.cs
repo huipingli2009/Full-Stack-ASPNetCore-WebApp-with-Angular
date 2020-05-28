@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace org.cchmc.pho.core.DataModels
 {
-    public class StaffDetail
+    public class StaffDetails
     {
         public int Id { get; set; }
         public string FirstName { get; set; }
@@ -26,5 +26,6 @@ namespace org.cchmc.pho.core.DataModels
         public bool IsOVPCABoard { get; set; }
         public bool IsRVPIBoard { get; set; }
         public List<Location> Locations { get; set; }
+        public int? LocationId { get; set; }
     }
 }

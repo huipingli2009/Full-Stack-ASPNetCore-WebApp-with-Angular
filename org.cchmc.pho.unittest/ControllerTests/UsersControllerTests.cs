@@ -812,7 +812,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             _mockUserService.Setup(p => p.ListRoles()).Returns(Task.FromResult(_roles)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userMakingChange).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(roleMakingChange).Verifiable();
-            _mockStaff.Setup(p => p.GetStaffDetailsById(newUser.StaffId)).Returns(Task.FromResult(new StaffDetail())).Verifiable();
+            _mockStaff.Setup(p => p.GetStaffDetailsById(newUser.StaffId)).Returns(Task.FromResult(new StaffDetails())).Verifiable();
             int userIdMakingChange = 34;
             _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userIdMakingChange).Verifiable();
             _mockStaff.Setup(p => p.IsStaffInSamePractice(userIdMakingChange, newUser.StaffId)).Returns(true).Verifiable();
@@ -969,7 +969,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             _mockUserService.Setup(p => p.ListRoles()).Returns(Task.FromResult(_roles)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userMakingChange).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(roleMakingChange).Verifiable();
-            _mockStaff.Setup(p => p.GetStaffDetailsById(newUser.StaffId)).Returns(Task.FromResult((StaffDetail)null)).Verifiable();
+            _mockStaff.Setup(p => p.GetStaffDetailsById(newUser.StaffId)).Returns(Task.FromResult((StaffDetails)null)).Verifiable();
 
             var result = await _userController.InsertUser(newUser) as ObjectResult;
 
@@ -1005,7 +1005,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             _mockUserService.Setup(p => p.ListRoles()).Returns(Task.FromResult(_roles)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userMakingChange).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(roleMakingChange).Verifiable();
-            _mockStaff.Setup(p => p.GetStaffDetailsById(newUser.StaffId)).Returns(Task.FromResult(new StaffDetail())).Verifiable();
+            _mockStaff.Setup(p => p.GetStaffDetailsById(newUser.StaffId)).Returns(Task.FromResult(new StaffDetails())).Verifiable();
             int userIdMakingChange = 34;
             _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userIdMakingChange).Verifiable();
             _mockStaff.Setup(p => p.IsStaffInSamePractice(userIdMakingChange, newUser.StaffId)).Returns(false).Verifiable();
@@ -1162,7 +1162,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             _mockUserService.Setup(p => p.ListRoles()).Returns(Task.FromResult(_roles)).Verifiable();
             _mockUserService.Setup(p => p.GetUserNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userMakingChange).Verifiable();
             _mockUserService.Setup(p => p.GetRoleNameFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(roleMakingChange).Verifiable();
-            _mockStaff.Setup(p => p.GetStaffDetailsById(newUser.StaffId)).Returns(Task.FromResult(new StaffDetail())).Verifiable();
+            _mockStaff.Setup(p => p.GetStaffDetailsById(newUser.StaffId)).Returns(Task.FromResult(new StaffDetails())).Verifiable();
             int userIdMakingChange = 34;
             _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(userIdMakingChange).Verifiable();
             _mockStaff.Setup(p => p.IsStaffInSamePractice(userIdMakingChange, newUser.StaffId)).Returns(true).Verifiable();

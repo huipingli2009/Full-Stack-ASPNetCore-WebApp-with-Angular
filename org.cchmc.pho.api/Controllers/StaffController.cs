@@ -33,6 +33,7 @@ namespace org.cchmc.pho.api.Controllers
             _staffDal = staffDal;
         }
 
+       
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [HttpGet()]
         [SwaggerResponse(200, type: typeof(List<StaffViewModel>))]
@@ -61,7 +62,7 @@ namespace org.cchmc.pho.api.Controllers
 
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [HttpGet("{staff}")]
-        [SwaggerResponse(200, type: typeof(StaffDetailViewModel))]
+        [SwaggerResponse(200, type: typeof(StaffDetailsViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> GetStaffDetails(string staff)
@@ -78,7 +79,7 @@ namespace org.cchmc.pho.api.Controllers
                 // call the data method
                 var data = await _staffDal.GetStaffDetails(currentUserId, staffId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
-                var result = _mapper.Map<StaffDetailViewModel>(data);
+                var result = _mapper.Map<StaffDetailsViewModel>(data);
                 // return the result in a "200 OK" response
                 return Ok(result);
             }
@@ -92,10 +93,10 @@ namespace org.cchmc.pho.api.Controllers
 
         [Authorize(Roles = "Practice Admin,PHO Admin")]
         [HttpPut("{staff}")]
-        [SwaggerResponse(200, type: typeof(StaffDetailViewModel))]
+        [SwaggerResponse(200, type: typeof(StaffDetailsViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> UpdateStaffDetails([FromBody] StaffDetailViewModel staffDetailVM, string staff)
+        public async Task<IActionResult> UpdateStaffDetails([FromBody] StaffDetailsViewModel staffDetailVM, string staff)
         {
             if (!int.TryParse(staff, out var staffId))
             {
@@ -126,10 +127,10 @@ namespace org.cchmc.pho.api.Controllers
                     return BadRequest("staff practice does not match user");
                 }
 
-                StaffDetail staffDetail = _mapper.Map<StaffDetail>(staffDetailVM);
+                StaffDetails staffDetail = _mapper.Map<StaffDetails>(staffDetailVM);
                 // call the data layer to mark the action
                 var data = await _staffDal.UpdateStaffDetails(currentUserId, staffDetail);
-                var result = _mapper.Map<StaffDetailViewModel>(data);
+                var result = _mapper.Map<StaffDetailsViewModel>(data);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -382,6 +383,38 @@ namespace org.cchmc.pho.api.Controllers
             {
                 int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
                 var result = await _staffDal.SwitchPractice(currentUserId, staffVM.MyPractice.Id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [HttpPost()]
+        [SwaggerResponse(200, type: typeof(StaffDetailsViewModel))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> AddStaff([FromBody] StaffDetailsViewModel staffDetailsVM)        
+        {
+            if (staffDetailsVM == null)
+            {
+                _logger.LogInformation($"staffdetails object is null");
+                return BadRequest("staffdetails is null");
+            }
+
+            try
+            {
+                // route parameters are strings and need to be translated (and validated) to their proper data type
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+
+                StaffDetails staffDetails = _mapper.Map<StaffDetails>(staffDetailsVM);
+                // call the data layer to mark the action               
+                var data = await _staffDal.AddNewStaff(currentUserId, staffDetails);
+                var result = _mapper.Map<StaffDetailsViewModel>(data);
                 return Ok(result);
             }
             catch (Exception ex)
