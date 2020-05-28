@@ -292,6 +292,12 @@ h1 {
   border-top: var(--warn-color) 1.2px solid;
 }
 
+.error-asterix {
+  color: var(--warn-color);
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
 .entire-form-error {
   color: var(--warn-color);
   font-weight: 600;
