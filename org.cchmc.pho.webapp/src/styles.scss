@@ -1079,7 +1079,9 @@ button.toast-close-button {
     height: 0 !important;
   }
   .add-patient-button {
-    float: right;
+    text-transform: uppercase;
+    height: 36px;    
+    justify-content: right;   
   }
 
 }

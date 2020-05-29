@@ -309,16 +309,16 @@ export class PatientsComponent implements OnInit {
     this.logger.log(this.adminPatientForm.value);
     this.rest.addPatient(this.newPatientValues).subscribe(data => {    
       if (data){
-        console.info('data is yes');
         let id = <number>data;
         this.logger.log(id, 'New Patient');
         if (this.isAddingPatientAndContinue) {
+          this.patientNameSearch = id.toString();
           this.loadPatientsWithFilters();
         }
         if (this.isAddingPatientAndExit) {
           this.loadPatientsPage(); 
         }
-        this.snackBar.openSnackBar(`Patient ${this.newPatientValues.firstName + this.newPatientValues.lastName} added to the registry`, 'Close', 'success-snackbar');
+        this.snackBar.openSnackBar(`Patient ${this.newPatientValues.firstName + ' ' + this.newPatientValues.lastName} added to the registry`, 'Close', 'success-snackbar');
       } 
       else 
       {
@@ -330,7 +330,7 @@ export class PatientsComponent implements OnInit {
     },
     error => {
       console.info('made it to error handling');
-      this.snackBar.openSnackBar(`Patient ${this.newPatientValues.firstName + this.newPatientValues.lastName} already exists in registry`, 'Close', 'warn-snackbar');
+      this.snackBar.openSnackBar(`Patient ${this.newPatientValues.firstName + ' ' + this.newPatientValues.lastName} already exists in registry`, 'Close', 'warn-snackbar');
       //console.info(error.status);
       // if (error.status === 400) {
       //   console.error('patient already exists');
