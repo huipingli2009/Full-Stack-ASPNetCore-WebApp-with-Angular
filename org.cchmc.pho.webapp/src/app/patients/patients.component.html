@@ -122,6 +122,17 @@
         </div>
       </mat-cell>
     </ng-container>
+
+    <!-- button Column -->
+    <ng-container matColumnDef="button">
+      <mat-header-cell *matHeaderCellDef>
+        <button mat-flat-button color="accent" class="add-patient-button"
+          (click)="openAdminAddDialog()">ADD PATIENT</button>
+      </mat-header-cell>
+      <mat-cell  *matCellDef="let row">
+      </mat-cell>
+    </ng-container>
+
     <!-- Hidden Columns===============================================================-->
     <!-- PCP Column -->
     <ng-container matColumnDef="pcP_StaffID">
@@ -159,7 +170,6 @@
                 <div *ngIf="form.controls.lastName.errors?.required && form.controls.lastName.touched" class="error">
                   *Required
                 </div>
-
               </div>
               <div fxLayout="column" fxFlex>
                 <label for="dob">Date of Birth <span class="error-asterix">*</span></label>
@@ -386,3 +396,131 @@
   </mat-table>
   <mat-paginator [length]="patientRecords" [pageSize]="20" [pageSizeOptions]="[20, 40, 60]"></mat-paginator>
 </div>
+
+
+  <!--Dialogs ===========================-->
+  <ng-template #adminDialog>
+    <div mat-dialog-content class="mat-typography" id="admin-dialog">
+      <form [formGroup]="adminPatientForm">
+        <div fxLayout="row" class="detail-heading">ADD PATIENT</div>
+        <br>
+        
+        <div fxLayout="row" fxLayoutGap="60px" class="form-row">
+          <div fxLayout="column" fxFlex>
+            <mat-form-field floatLabel="always">
+              <mat-label>First Name</mat-label>
+              <input matInput formControlName="firstName" required>
+            </mat-form-field>
+            <ng-container
+              *ngIf="(adminPatientForm.get('firstName').touched || adminPatientForm.get('firstName').dirty) && (adminPatientForm.get('firstName').errors)">
+              <mat-error *ngIf="adminPatientForm.get('firstName').errors.required">
+                  *Required
+              </mat-error>
+            </ng-container>
+          </div>
+          <div fxLayout="column" fxFlex>
+
+            <mat-form-field floatLabel="always">
+              <mat-label>Last Name</mat-label>
+              <input matInput formControlName="lastName" required>
+            </mat-form-field>
+            <ng-container
+              *ngIf="(adminPatientForm.get('lastName').touched || adminPatientForm.get('lastName').dirty) && (adminPatientForm.get('lastName').errors)">
+              <mat-error *ngIf="adminPatientForm.get('lastName').errors.required">
+                  *Required
+              </mat-error>
+            </ng-container>
+          </div>
+
+        </div>
+        <!-- space this guy out-->
+        <div fxLayout="row" fxLayoutGap="60px" class="form-row">
+
+        </div>
+
+        <div fxLayout="row" fxLayoutGap="60px" class="form-row">
+
+          <div fxLayout="column" fxFlex>
+            <mat-form-field floatLabel="always">
+              <mat-label>Date Of Birth</mat-label>
+              <!-- <input matInput formControlName="dob" required> -->
+              <input matInput placeholder="MM/DD/YYYY"
+              formControlName="dob" [matDatepicker]="picker" required>
+            <mat-datepicker-toggle matPrefix [for]="picker">
+              <mat-icon matDatepickerToggleIcon>
+                  calendar_today
+              </mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+
+            </mat-form-field>
+            <ng-container
+              *ngIf="(adminPatientForm.get('dob').touched || adminPatientForm.get('dob').dirty) && (adminPatientForm.get('dob').errors)">
+              <mat-error *ngIf="adminPatientForm.get('dob').errors.required">
+                  *Required
+              </mat-error>
+            </ng-container>
+          </div>
+
+          <div fxLayout="column" class="input-w-icon">
+            <mat-form-field class="multi-select-override" floatLabel="always">
+              <mat-label>Gender</mat-label>
+              <mat-select matNativeControl formControlName="gender" [compareWith]="compareShortFn" required>
+                <mat-option *ngFor="let item of genderList" [value]="item">
+                  {{item.shortName | i18nSelect: genderMap}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            
+            <ng-container
+              *ngIf="(adminPatientForm.get('dob').touched || adminPatientForm.get('dob').dirty) && (adminPatientForm.get('dob').errors)">
+              <mat-error *ngIf="adminPatientForm.get('dob').errors.required">
+                  *Required
+              </mat-error>
+            </ng-container>
+          </div>
+
+          <div fxLayout="column" fxFlex>
+            <mat-form-field class="multi-select-override" floatLabel="always">
+              <mat-label>PCP</mat-label>
+              <mat-select matNativeControl formControlName="pcpName" [compareWith]="compareFn" required>
+                <mat-option *ngFor="let item of providersList" [value]="item">
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            
+            <ng-container
+              *ngIf="(adminPatientForm.get('pcpName').touched || adminPatientForm.get('pcpName').dirty) && (adminPatientForm.get('pcpName').errors)">
+              <mat-error *ngIf="adminPatientForm.get('pcpName').errors.required">
+                  *Required
+              </mat-error>
+            </ng-container>
+          </div>
+
+        </div>
+        <div fxLayout="row" fxLayoutGap="60px" class="form-row"></div>
+      </form>
+    </div>
+    <div mat-dialog-actions align="end" class="select-row">
+      <button mat-button (click)="cancelAdminDialog()">Cancel</button>
+      <button mat-flat-button [disabled]="!adminPatientForm.valid" color="accent"
+        (click)="openAdminConfirmDialog(1)">SAVE AND CONTINUE</button>
+      <button mat-flat-button [disabled]="!adminPatientForm.valid" color="accent"
+        (click)="openAdminConfirmDialog(2)">SAVE AND EXIT</button>
+    </div>
+  </ng-template>
+
+  <ng-template #adminConfirmDialog>
+    <div mat-dialog-content class="mat-typography">
+      <h3 *ngIf="isAddingPatientAndExit">Are you sure you want to save this patient and exit?</h3>
+      <h3 *ngIf="isAddingPatientAndContinue">Are you sure you want to save this patient and continue?</h3>
+    </div>
+    <div mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close (click)="cancelAdminDialog()">Cancel</button>
+      <button mat-flat-button color="accent" mat-dialog-close (click)="submitPatientAddUpdate()" *ngIf="isAddingPatientAndContinue">
+        Save And Continue</button>
+      <button mat-flat-button color="accent" mat-dialog-close (click)="submitPatientAddUpdate()" *ngIf="isAddingPatientAndExit">
+        Save And Exit</button>
+    </div>
+  </ng-template>
