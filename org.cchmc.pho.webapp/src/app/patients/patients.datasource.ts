@@ -10,6 +10,7 @@ export class PatientsDataSource implements DataSource<Patients> {
     private loadingSubject = new BehaviorSubject<boolean>(false);
 
     public loading$ = this.loadingSubject.asObservable();
+    private pageNumber: number;
 
     constructor(private restService: RestService) { }
 
@@ -27,9 +28,9 @@ export class PatientsDataSource implements DataSource<Patients> {
         staffID = '', popmeasureID = '', namesearch = '') {
 
         this.loadingSubject.next(true);
-
+        this.pageNumber = pageIndex + 1;
         this.restService.findPatients(sortcolumn, sortDirection,
-            pageIndex, pageSize, chronic, watchFlag, conditionIDs, staffID, popmeasureID,
+            this.pageNumber, pageSize, chronic, watchFlag, conditionIDs, staffID, popmeasureID,
             namesearch).pipe(
                 catchError(() => of([])),
                 finalize(() => this.loadingSubject.next(false))
