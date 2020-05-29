@@ -434,10 +434,15 @@
 
         </div>
 
-        <div fxLayout="row" fxLayoutGap="60px" class="select-row" fxLayoutAlign="start end" >
+        <!-- SPACER -->
+        <div fxLayout="row" fxLayoutGap="100px" class="select-row" fxLayoutAlign="start end" ></div>
+        <!-- SPACER -->
+        <div fxLayout="row" fxLayoutGap="100px" class="select-row" fxLayoutAlign="start end" ></div>
 
-          <div fxLayout="column" class="input-w-icon">
-            <mat-form-field floatLabel="always">
+        <div fxLayout="row" fxLayoutGap="60px" class="select-row" fxLayoutAlign="end end" >
+
+          <div fxLayout="column" class="input-w-icon date-picker-input" fxLayoutAlign="end end">
+            <mat-form-field floatLabel="always" class="multi-select-override">
               <mat-label>Date Of Birth</mat-label>
               <!-- <input matInput formControlName="dob" required> -->
               <input matInput placeholder="MM/DD/YYYY"
@@ -458,7 +463,7 @@
             </ng-container>
           </div>
 
-          <div fxLayout="column" class="input-w-icon">
+          <div fxLayout="column" fxLayoutAlign="start end">
             <mat-form-field class="multi-select-override" floatLabel="always">
               <mat-label>Gender</mat-label>
               <mat-select matNativeControl formControlName="gender" [compareWith]="compareShortFn" required>
@@ -476,7 +481,7 @@
             </ng-container>
           </div>
 
-          <div fxLayout="column">
+          <div fxLayout="column" fxLayoutAlign="start end">
             <mat-form-field class="multi-select-override" floatLabel="always">
               <mat-label>PCP</mat-label>
               <mat-select matNativeControl formControlName="pcpName" [compareWith]="compareFn" required>
@@ -497,13 +502,24 @@
         </div>
       </form>
     </div>
-    <div mat-dialog-actions align="end" class="select-row">
-      <button mat-button (click)="cancelAdminDialog()">Cancel</button>
-      <button mat-flat-button [disabled]="!adminPatientForm.valid" color="accent"
+
+        <!-- SPACER -->
+        <div fxLayout="row" fxLayoutGap="100px" class="select-row" fxLayoutAlign="start end" ></div>
+        <!-- SPACER -->
+        <div fxLayout="row" fxLayoutGap="100px" class="select-row" fxLayoutAlign="start end" ></div>
+        <!-- SPACER -->
+        <div fxLayout="row" fxLayoutGap="100px" class="select-row" fxLayoutAlign="start end" ></div>
+
+    <div  fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="space-evenly end">    
+      <div mat-dialog-actions align="center" class="select-row">
+        <button mat-button (click)="cancelAdminDialog()">Cancel</button>
+        <button mat-flat-button [disabled]="!adminPatientForm.valid" color="accent"
         (click)="openAdminConfirmDialog(1)">SAVE AND CONTINUE</button>
-      <button mat-flat-button [disabled]="!adminPatientForm.valid" color="accent"
+        <button mat-flat-button [disabled]="!adminPatientForm.valid" color="accent"
         (click)="openAdminConfirmDialog(2)">SAVE AND EXIT</button>
+      </div>
     </div>
+
   </ng-template>
 
   <ng-template #adminConfirmDialog>
