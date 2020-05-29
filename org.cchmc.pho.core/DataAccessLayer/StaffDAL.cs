@@ -77,10 +77,10 @@ namespace org.cchmc.pho.core.DataAccessLayer
         }
 
         //NOTE: This method exists for Chris's code to doublecheck something in the UserController. It simply doesn't require a userId, that's the only difference. It is not consumed by the StaffController.
-        public async Task<StaffDetail> GetStaffDetailsById(int staffId)
+        public async Task<StaffDetails> GetStaffDetailsById(int staffId)
         {
             DataTable dataTable = new DataTable();
-            StaffDetail staffDetail = null;
+            StaffDetails staffDetail = null;
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spGetStaffDetailUsingStaffID", sqlConnection))
@@ -96,7 +96,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                         foreach (DataRow dr in dataTable.Rows)
                         {
-                            staffDetail = new StaffDetail()
+                            staffDetail = new StaffDetails()
                             {
                                 Id = (dr["StaffID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StaffID"].ToString())),
                                 FirstName = dr["FirstName"].ToString(),
@@ -127,10 +127,10 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
-        public async Task<StaffDetail> GetStaffDetails(int userId, int staffId)
+        public async Task<StaffDetails> GetStaffDetails(int userId, int staffId)
         {
             DataTable dataTable = new DataTable();
-            StaffDetail staffDetail = null;
+            StaffDetails staffDetails = null;
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spGetStaffDetail", sqlConnection))
@@ -147,7 +147,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                         foreach (DataRow dr in dataTable.Rows)
                         {
-                            staffDetail = new StaffDetail()
+                            staffDetails = new StaffDetails()
                             {
                                 Id = (dr["StaffID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StaffID"].ToString())),
                                 FirstName = dr["FirstName"].ToString(),
@@ -176,19 +176,19 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 foreach (int locationId in dr["LocationID"].ToString().Split(',').Select(p => int.Parse(p)))
                                 {
                                     if (locations.Any(l => l.Id == locationId))
-                                        staffDetail.Locations.Add(locations.First(p => p.Id == locationId));
+                                        staffDetails.Locations.Add(locations.First(p => p.Id == locationId));
                                     else
                                         _logger.LogError("An unmapped location id was returned by the database ");
                                 }
                             }
 
                         }
-                        return staffDetail;
+                        return staffDetails;
                     }
                 }
             }
         }
-        public async Task<StaffDetail> UpdateStaffDetails(int userId, StaffDetail staffDetail)
+        public async Task<StaffDetails> UpdateStaffDetails(int userId, StaffDetails staffDetail)
         {
 
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
@@ -473,6 +473,50 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 }
             }
             return selectpractice;
+        }
+      
+        public async Task<StaffDetails> AddNewStaff(int userId, StaffDetails staffDetails)
+        {
+            try
+            {
+                using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+                {
+                    using (SqlCommand sqlCommand = new SqlCommand("spAddNewStaff", sqlConnection))
+                    {                      
+
+                        sqlCommand.CommandType = CommandType.StoredProcedure;
+                        sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+
+                        sqlCommand.Parameters.Add("@StaffPositionId", SqlDbType.Int).Value = staffDetails.PositionId;
+                        sqlCommand.Parameters.Add("@FirstName", SqlDbType.VarChar).Value = staffDetails.FirstName;
+
+                        sqlCommand.Parameters.Add("@LastName", SqlDbType.VarChar).Value = staffDetails.LastName;
+                        sqlCommand.Parameters.Add("@EmailAddress", SqlDbType.VarChar).Value = staffDetails.Email;
+                        sqlCommand.Parameters.Add("@Phone", SqlDbType.VarChar).Value = staffDetails.Phone;
+                        sqlCommand.Parameters.Add("@LocationId", SqlDbType.Int).Value = staffDetails.LocationId;
+                        sqlCommand.Parameters.Add("@StartDate", SqlDbType.DateTime).Value = staffDetails.StartDate;
+
+                        await sqlConnection.OpenAsync();                        
+
+                        //Execute Stored Procedure
+                        int? staffId = (int)sqlCommand.ExecuteScalar();
+                        if (staffId.HasValue && staffId > 0)
+                        {
+                            return await GetStaffDetails(userId, staffId.Value);
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                }
+
+            }
+
+            catch(Exception ex)
+            {
+                    return null;
+            }
         }
     }   
 }

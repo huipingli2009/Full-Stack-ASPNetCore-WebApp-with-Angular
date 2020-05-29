@@ -35,6 +35,7 @@ export class StaffDetails {
     isOVPCABoard: boolean;
     isRVPIBoard: boolean;
     locations: Location[];
+    locationId: number;
     endDate: string;
     deletedFlag: boolean;
 }

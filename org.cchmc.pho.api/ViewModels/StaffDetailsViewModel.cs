@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace org.cchmc.pho.api.ViewModels
 {
-    public class StaffDetailViewModel
+    public class StaffDetailsViewModel
     {
         public int Id { get; set; }
         public string FirstName { get; set; }
@@ -25,6 +25,7 @@ namespace org.cchmc.pho.api.ViewModels
         public bool IsOVPCABoard { get; set; }
         public bool IsRVPIBoard { get; set; }
         public List<LocationViewModel> Locations { get; set; }
+        public int? LocationId { get; set; }
     }
     public class StaffAdmin
     {

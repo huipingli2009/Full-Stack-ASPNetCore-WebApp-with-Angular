@@ -181,7 +181,7 @@ namespace org.cchmc.pho.unittest.controllertests
         public async Task GetStaffDetails_Mapping_Success()
         {
             // setup            
-            var myStaff = new StaffDetail()
+            var myStaff = new StaffDetails()
             {
                 Id = 20101,
                 FirstName = "Carwood",
@@ -208,7 +208,7 @@ namespace org.cchmc.pho.unittest.controllertests
 
             // execute
             var result = await _staffController.GetStaffDetails("20101") as ObjectResult;
-            var resultList = result.Value as StaffDetailViewModel;
+            var resultList = result.Value as StaffDetailsViewModel;
 
             // assert
             Assert.AreEqual(myStaff.Id, resultList.Id);
@@ -248,7 +248,7 @@ namespace org.cchmc.pho.unittest.controllertests
         {
             // setup
             _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
-            var myStaff = new StaffDetail()
+            var myStaff = new StaffDetails()
             {
                 Id = 20101,
                 FirstName = "Carwood",
@@ -274,7 +274,7 @@ namespace org.cchmc.pho.unittest.controllertests
             _staffController = new StaffController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockStaffDal.Object);
 
             // execute
-            var result = await _staffController.UpdateStaffDetails(_mapper.Map<StaffDetailViewModel>(myStaff), "20101");
+            var result = await _staffController.UpdateStaffDetails(_mapper.Map<StaffDetailsViewModel>(myStaff), "20101");
 
             // assert
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
@@ -306,7 +306,7 @@ namespace org.cchmc.pho.unittest.controllertests
             _staffController = new StaffController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockStaffDal.Object);
 
             // execute
-            var result = await _staffController.UpdateStaffDetails(new StaffDetailViewModel(), _user.StaffId.ToString()) as ObjectResult;
+            var result = await _staffController.UpdateStaffDetails(new StaffDetailsViewModel(), _user.StaffId.ToString()) as ObjectResult;
 
             // assert
             Assert.AreEqual(400, result.StatusCode);
@@ -320,7 +320,7 @@ namespace org.cchmc.pho.unittest.controllertests
             // setup
             var staffId = "20101";
 
-            var myStaff = new StaffDetailViewModel()
+            var myStaff = new StaffDetailsViewModel()
             {
                 Id = 20101,
                 FirstName = "Carwood",
@@ -358,7 +358,7 @@ namespace org.cchmc.pho.unittest.controllertests
         {
             // setup
             _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
-            var myStaff = new StaffDetail()
+            var myStaff = new StaffDetails()
             {
                 Id = 20101,
                 FirstName = "Carwood",
@@ -378,13 +378,13 @@ namespace org.cchmc.pho.unittest.controllertests
                 IsRVPIBoard = false,
             };
 
-            _mockStaffDal.Setup(p => p.UpdateStaffDetails(_user.StaffId, It.IsAny<StaffDetail>())).Throws(new Exception());
+            _mockStaffDal.Setup(p => p.UpdateStaffDetails(_user.StaffId, It.IsAny<StaffDetails>())).Throws(new Exception());
             _mockStaffDal.Setup(p => p.IsStaffInSamePractice(It.IsAny<Int32>(), It.IsAny<Int32>())).Returns(true);
             _staffController = new StaffController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockStaffDal.Object);
             
 
             // execute
-            var result = await _staffController.UpdateStaffDetails(new StaffDetailViewModel() 
+            var result = await _staffController.UpdateStaffDetails(new StaffDetailsViewModel() 
             {
                 Id = 20101,
                 FirstName = "Carwood",
