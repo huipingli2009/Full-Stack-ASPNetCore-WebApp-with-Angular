@@ -114,6 +114,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   resetAddPatient() {
     this.PatientForWorkbookForm.reset();
     this.hasSelectedPatient = false;
+    this.PatientForWorkbookForm.get('action').setValue('false');
   }
 
 
@@ -196,6 +197,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
       this.patientTableHeader = this.workbookPatient.length;
       this.dataSourceWorkbook = new MatTableDataSource(this.workbookPatient);
       this.dataSourceWorkbook.data = this.workbookPatient;
+      this.PatientForWorkbookForm.get('action').setValue('false');
     })
   }
 

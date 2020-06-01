@@ -11,6 +11,8 @@ namespace org.cchmc.pho.core.Interfaces
         Task<PatientDetails> GetPatientDetails(int userId, int patientId);
         Task<PatientDetails> UpdatePatientDetails(int userId, PatientDetails patientDetail);
         Task<bool> UpdatePatientWatchlist(int userId, int patientId);
+        Task<int> AddPatient(int userId, Patient patient);
+        Task<bool> IsExistingPatient(int userId, Patient patient);
         Task<List<SimplifiedPatient>> SearchSimplifiedPatients(int userId, string search);
         Task<List<PatientCondition>> GetPatientConditionsAll();
         Task<List<PatientInsurance>> GetPatientInsuranceAll(int userId);

@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from '../environments/environment';
 import { Alerts, EdChart, EdChartDetails, Population, Quicklinks, Spotlight } from './models/dashboard';
-import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Patients, Pmca, PopSlices, Providers, States } from './models/patients';
+import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Patients, NewPatient, Pmca, PopSlices, Providers, States } from './models/patients';
 import { PracticeList, Responsibilities, Staff, StaffDetails, StaffAdmin } from './models/Staff';
 import { Followup, WorkbookPatient, WorkbookProvider, WorkbookReportingMonths, WorkbookPractice } from './models/workbook';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
@@ -120,14 +120,14 @@ export class RestService {
   /*Find Patients by Query*/
   findPatients(
     sortcolumn = 'name', sortdirection = 'Asc',
-    pageNumber = 0, rowsPerPage = 20, chronic = '', watchFlag = '', conditionIDs = '',
+    pageNumber = 1, rowsPerPage = 20, chronic = '', watchFlag = '', conditionIDs = '',
     staffID = '', popmeasureID = '', namesearch = ''): Observable<Patients[]> {
 
     return this.http.get(`${API_URL}/api/Patients`, {
       params: new HttpParams()
         .set('sortcolumn', sortcolumn)
         .set('sortdirection', sortdirection)
-        .set('pagenumber', pageNumber.toString())
+        .set('pagenumber', (pageNumber).toString())
         .set('rowsPerPage', rowsPerPage.toString())
         .set('chronic', chronic.toString())
         .set('watch', watchFlag.toString())
@@ -188,6 +188,13 @@ export class RestService {
         return data;
       })
     );
+  }
+
+  /* Adds a new patient */
+  addPatient(patient: NewPatient): Observable<number> {
+    this.logger.log(JSON.stringify(patient));
+    return this.http.post<NewPatient>(`${API_URL}/api/Patients`, JSON.stringify(patient), httpOptions).pipe(catchError(this.handleError<any>('RemoveStaff'))
+  );
   }
 
   /* Staff Component =======================================================*/

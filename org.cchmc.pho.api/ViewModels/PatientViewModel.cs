@@ -11,6 +11,7 @@ namespace org.cchmc.pho.api.ViewModels
         public int PracticeID { get; set; }       
         public int PCP_StaffID { get; set; }
         public DateTime? DOB { get; set; }
+        public int GenderId { get; set; }
         public bool ActiveStatus { get; set; }
         public bool PendingStatusConfirmation { get; set; }
         public DateTime? LastEDVisit { get; set; }
