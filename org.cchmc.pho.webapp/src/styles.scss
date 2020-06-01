@@ -1327,6 +1327,7 @@ button.toast-close-button {
 /* Staff =========================================================================== */
 
 #staffcomponent {
+ 
   .staff-header {
     border-top-right-radius: 7px;
     border-top-left-radius: 7px;
@@ -1491,8 +1492,6 @@ button.toast-close-button {
     }
   }
 
-
-
   .green-snackbar {
     background: var(--tertiary-green);
     color: white;
@@ -1552,17 +1551,17 @@ button.toast-close-button {
 
   tr.staff-detail-row {
     height: 0;
-  }
+  } 
   
 }
 #staff {
   width: 100%;
-  border: solid 1px var(--primary-color);
+  border: solid 1px var(--primary-color); 
 
   table {
     width: 100%;
     border-bottom-right-radius: 7px;
-    border-bottom-left-radius: 7px;
+    border-bottom-left-radius: 7px;    
   }
 
   .mat-row:nth-child(even) {
@@ -1573,7 +1572,7 @@ button.toast-close-button {
     font-size: 13px;
     line-height: 18px;
     font-weight: bold;
-  }
+  }  
 
   .mat-header-row {
     background-color: rgba(0, 168, 150, 0.16);
@@ -1586,19 +1585,20 @@ button.toast-close-button {
       letter-spacing: 1px;
       color: var(--primary-darker-color);
       text-align: left;
-      text-transform: uppercase !important; 
-      
-      // .addStaffButton {
-      //   justify-content: flex-end;
-      // }
+      text-transform: uppercase !important;    
 
       button {
         text-transform: uppercase;
-        height: 36px;    
-        justify-content: right;                 
-      }
-    }
-    
+        height: 36px;                                            
+      } 
+      
+    } 
+    .staffButtonAlign {        
+      margin-left: 40%; 
+      padding-left: 7%;             
+      //float: right;      
+    }   
+   
   }
 
   .mat-cell {
