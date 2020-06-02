@@ -125,13 +125,14 @@
 
     <!-- button Column -->
     <ng-container matColumnDef="button">
-      <mat-header-cell *matHeaderCellDef>
+      <mat-header-cell *matHeaderCellDef class="patientButtonAlign">
         <button mat-flat-button color="accent" class="add-patient-button"
           (click)="openAdminAddDialog()">ADD PATIENT</button>
       </mat-header-cell>
-      <mat-cell  *matCellDef="let row">
+      <mat-cell *matCellDef="let row">
       </mat-cell>
     </ng-container>
+
 
     <!-- Hidden Columns===============================================================-->
     <!-- PCP Column -->

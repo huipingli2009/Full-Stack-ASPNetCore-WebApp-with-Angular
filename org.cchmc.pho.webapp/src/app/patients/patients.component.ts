@@ -313,7 +313,7 @@ export class PatientsComponent implements OnInit {
         this.logger.log(id, 'New Patient');
         if (this.isAddingPatientAndContinue) {
           this.patientNameSearch = id.toString();
-          this.loadPatientsWithFilters();
+          this.loadPatientsWithFilters();          
         }
         if (this.isAddingPatientAndExit) {
           this.loadPatientsPage(); 
@@ -329,8 +329,24 @@ export class PatientsComponent implements OnInit {
 
     },
     error => {
-      console.info('made it to error handling');
-      this.snackBar.openSnackBar(`Patient ${this.newPatientValues.firstName + ' ' + this.newPatientValues.lastName} already exists in registry`, 'Close', 'warn-snackbar');
+      if (error){
+        console.info('AddPatient Error: ', error);
+        if (error === 'patient already exists'){
+          this.logger.log('patient exists: ' + this.newPatientValues.firstName + ' ' + this.newPatientValues.lastName);
+          this.snackBar.openSnackBar(`Patient ${this.newPatientValues.firstName + ' ' + this.newPatientValues.lastName} already exists in registry`, 'Close', 'warn-snackbar');
+        }
+        else
+        {
+          this.logger.log('unexpected error caught: ' + error)
+          this.snackBar.openSnackBar(`Oops! Something has gone wrong. Please contact your PHO Administrator`, 'Close', 'warn-snackbar');
+        }
+
+      }
+      else
+      {
+        this.snackBar.openSnackBar(`Oops! Something has gone wrong. Please contact your PHO Administrator`, 'Close', 'warn-snackbar');
+      }
+      
       //console.info(error.status);
       // if (error.status === 400) {
       //   console.error('patient already exists');
@@ -464,7 +480,8 @@ export class PatientsComponent implements OnInit {
     this.logger.log(this.currentPatientId);
     this.rest.savePatientDetails(this.currentPatientId, this.patientDetails).subscribe(data => {
       this.savedPatientData = data;
-      this.loadPatientsPage(); 
+      this.patientNameSearch = '';
+      this.loadPatientsWithFilters(); 
     });          
   }
 

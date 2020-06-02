@@ -191,10 +191,13 @@ export class RestService {
   }
 
   /* Adds a new patient */
-  addPatient(patient: NewPatient): Observable<number> {
+  addPatient(patient: NewPatient): Observable<any> {
     this.logger.log(JSON.stringify(patient));
-    return this.http.post<NewPatient>(`${API_URL}/api/Patients`, JSON.stringify(patient), httpOptions).pipe(catchError(this.handleError<any>('RemoveStaff'))
-  );
+    return this.http.post<NewPatient>(`${API_URL}/api/Patients`, JSON.stringify(patient), httpOptions).pipe(
+      map((data) => {
+        return data;
+      })
+    );
   }
 
   /* Staff Component =======================================================*/
