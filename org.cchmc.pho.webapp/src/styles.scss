@@ -1078,12 +1078,6 @@ button.toast-close-button {
   tr.mat-row {
     height: 0 !important;
   }
-  .add-patient-button {
-    text-transform: uppercase;
-    height: 36px;    
-    justify-content: right;   
-  }
-
 }
 /* Patient Expansion Panels*/
 .element-row {
@@ -1332,7 +1326,7 @@ button.toast-close-button {
 
 /* Staff =========================================================================== */
 
-#staffcomponent {
+#staffcomponent {   
  
   .staff-header {
     border-top-right-radius: 7px;
@@ -1562,12 +1556,13 @@ button.toast-close-button {
 }
 #staff {
   width: 100%;
-  border: solid 1px var(--primary-color); 
+  border: solid 1px var(--primary-color);  
 
   table {
     width: 100%;
     border-bottom-right-radius: 7px;
-    border-bottom-left-radius: 7px;    
+    border-bottom-left-radius: 7px;  
+    display:flex;   
   }
 
   .mat-row:nth-child(even) {
@@ -1591,7 +1586,7 @@ button.toast-close-button {
       letter-spacing: 1px;
       color: var(--primary-darker-color);
       text-align: left;
-      text-transform: uppercase !important;    
+      text-transform: uppercase !important;          
 
       button {
         text-transform: uppercase;
@@ -1600,9 +1595,7 @@ button.toast-close-button {
       
     } 
     .staffButtonAlign {        
-      margin-left: 40%; 
-      padding-left: 7%;             
-      //float: right;      
+      justify-content: flex-end;          
     }   
    
   }
@@ -1635,149 +1628,125 @@ button.toast-close-button {
   }
 }
 
-#admin-dialog, #passwordChangeForm, #Staff-admin-dialog, #addstaff-dialog, #patient-admin-dialog {
-    overflow: visible;
-
-    .detail-heading {
-        font-family: "ArcherBold";
-        font-size: 16px;
-        line-height: 17px;
-        letter-spacing: 0.5px;
-        color: var(--primary-darker-color);
-        margin-bottom: 13px;
+#admin-dialog, #passwordChangeForm ,#Staff-admin-dialog, #addstaff-dialog {
+  overflow: visible;
+  .detail-heading {
+    font-family: "ArcherBold";
+    font-size: 16px;
+    line-height: 17px;
+    letter-spacing: 0.5px;
+    color: var(--primary-darker-color);
+    margin-bottom: 13px;
+  }
+  .validation-text {
+    font-size: 11px;
+    line-height: 16px;
+    letter-spacing: normal;
+    text-align: left;
+    color: #4a4a4a;
+    margin-bottom: 13px;
+  }
+  .mat-icon {
+    color: var(--accent-color);
+    width: 14px;
+    margin-right: 10px;
+  }
+  .input-w-icon .mat-form-field-label-wrapper {
+    margin-left: -23px;
+  }
+  label {
+    font-size: 16px;
+    line-height: 19px;
+    letter-spacing: 0.88px;
+    font-weight: 700;
+    color: var(--primary-darker-color);
+    text-transform: uppercase;
+  }
+  .admin-toggle {
+    padding-bottom: 1.25em;
+  }
+  .toggle-label {
+    font-size: 12px;
+  }
+  .mat-checkbox-label {
+    font-size: 13px;
+    text-transform: capitalize;
+    line-height: 18px;
+    letter-spacing: normal;
+    color: #4a4a4a;
+    margin-right: 10px;
+  }
+  .mat-form-field-underline {
+    background-color: #ddecea;
+  }
+  .mat-form-field-empty {
+    margin-left: 23px;
+  }
+  .mat-form-field-appearance-legacy .mat-form-field-infix {
+    padding: 15px 0 0.4375em;
+  }
+  .mat-select {
+    margin-top: 3px;
+  }
+  .date-picker-input {
+    .mat-form-field-label-wrapper {
+      margin-left: -18px;
     }
-
-    .validation-text {
-        font-size: 11px;
-        line-height: 16px;
-        letter-spacing: normal;
-        text-align: left;
-        color: #4a4a4a;
-        margin-bottom: 13px;
-    }
-
     .mat-icon {
-        color: var(--accent-color);
-        width: 14px;
-        margin-right: 10px;
+      font-size: 17px;
     }
-
-    .input-w-icon .mat-form-field-label-wrapper {
-        margin-left: -23px;
+    input {
+      padding-bottom: 0;
+      margin-top: 4px;
+      padding-left: 2px;
     }
-
+  }
+  .check-row {
+    padding-bottom: 1.25em;
+    padding-top: 1.25em;
+  }
+  .check-subrow {
+    margin-bottom: 9px;
     label {
-        font-size: 16px;
-        line-height: 19px;
-        letter-spacing: 0.88px;
-        font-weight: 700;
-        color: var(--primary-darker-color);
-        text-transform: uppercase;
+      font-size: 11px;
     }
-
-    .admin-toggle {
-        padding-bottom: 1.25em;
+  }
+  .multi-select-override {
+    border-width: 0px 0px 1px 0px;
+    border-color: #ddecea;
+    padding-bottom: 4px;
+    color: #4a4a4a;
+    font-size: 13px;
+    line-height: 18px;
+    letter-spacing: normal;
+    .mat-form-field-infix {
+      border-top: none;
+      padding-top: 0px !important;
     }
-
-    .toggle-label {
-        font-size: 12px;
+    .mat-select-trigger {
+      background-image: url(assets/icons/keyboard_arrow_down-24px.svg);
+      background-position: right;
+      background-size: 25px 25px;
+      background-repeat: no-repeat;
+      margin: 0;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      -webkit-appearance: none;
+      -moz-appearance: none;
     }
-
-    .mat-checkbox-label {
-        font-size: 13px;
-        text-transform: capitalize;
-        line-height: 18px;
-        letter-spacing: normal;
-        color: #4a4a4a;
-        margin-right: 10px;
+    .mat-select-arrow {
+      border-left: none;
+      border-right: none;
     }
-
     .mat-form-field-underline {
-        background-color: #ddecea;
+      background-color: #ddecea;
+      bottom: 0;
     }
-
-    .mat-form-field-empty {
-        margin-left: 23px;
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
     }
-
-    .mat-form-field-appearance-legacy .mat-form-field-infix {
-        padding: 15px 0 0.4375em;
-    }
-
-    .mat-select {
-        margin-top: 3px;
-    }
-
-    .date-picker-input {
-        .mat-form-field-label-wrapper {
-            margin-left: -18px;
-        }
-
-        .mat-icon {
-            font-size: 17px;
-        }
-
-        input {
-            padding-bottom: 0;
-            margin-top: 4px;
-            padding-left: 2px;
-        }
-    }
-
-    .check-row {
-        padding-bottom: 1.25em;
-        padding-top: 1.25em;
-    }
-
-    .check-subrow {
-        margin-bottom: 9px;
-
-        label {
-            font-size: 11px;
-        }
-    }
-
-    .multi-select-override {
-        border-width: 0px 0px 1px 0px;
-        border-color: #ddecea;
-        padding-bottom: 4px;
-        color: #4a4a4a;
-        font-size: 13px;
-        line-height: 18px;
-        letter-spacing: normal;
-
-        .mat-form-field-infix {
-            border-top: none;
-            padding-top: 0px !important;
-        }
-
-        .mat-select-trigger {
-            background-image: url(assets/icons/keyboard_arrow_down-24px.svg);
-            background-position: right;
-            background-size: 25px 25px;
-            background-repeat: no-repeat;
-            margin: 0;
-            -webkit-box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            box-sizing: border-box;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-        }
-
-        .mat-select-arrow {
-            border-left: none;
-            border-right: none;
-        }
-
-        .mat-form-field-underline {
-            background-color: #ddecea;
-            bottom: 0;
-        }
-
-        .mat-form-field-wrapper {
-            padding-bottom: 0;
-        }
-    }
+  } 
 }
 
 .input-date-icon .mat-form-field-label-wrapper {
@@ -2349,9 +2318,7 @@ button.toast-close-button {
   .file-draft-icon {
     color: rgba(122, 122, 122, 0.158);
   }
-  .add-file-button {
-    float: right;
-  }
+
 }
 .select-row {
   margin-top: 10px;
