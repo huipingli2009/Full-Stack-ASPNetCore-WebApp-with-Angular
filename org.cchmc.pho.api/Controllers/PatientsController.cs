@@ -11,7 +11,6 @@ using org.cchmc.pho.identity.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 using Microsoft.AspNetCore.Authorization;
 
-
 namespace org.cchmc.pho.api.Controllers
 {
     [Route("api/[controller]")]
@@ -205,8 +204,10 @@ namespace org.cchmc.pho.api.Controllers
                 bool existing = (bool)_mapper.Map<bool>(check);
                 if (existing)
                 {
+                    BadRequestObjectResult res = new BadRequestObjectResult(new { message = "patient already exists" });
+
                     _logger.LogInformation("patient already exists");
-                    return StatusCode(400, "patient already exists");
+                    return res;
                 }
                 // call the data layer to mark the action
                 var data = await _patient.AddPatient(currentUserId, patient);
