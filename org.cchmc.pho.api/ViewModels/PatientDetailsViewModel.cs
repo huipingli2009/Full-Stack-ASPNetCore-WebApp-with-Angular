@@ -17,7 +17,7 @@ namespace org.cchmc.pho.api.ViewModels
         public int PCPId { get; set; }
         public string PCPFirstName { get; set; }
         public string PCPLastName { get; set; }
-        public int InsuranceId { get; set; }
+        public int? InsuranceId { get; set; }
         public string InsuranceName { get; set; }
         public string AddressLine1 { get; set; }
         public string AddressLine2 { get; set; }

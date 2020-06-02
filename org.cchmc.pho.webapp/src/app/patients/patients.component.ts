@@ -313,7 +313,7 @@ export class PatientsComponent implements OnInit {
         this.logger.log(id, 'New Patient');
         if (this.isAddingPatientAndContinue) {
           this.patientNameSearch = id.toString();
-          this.loadPatientsWithFilters();
+          this.loadPatientsWithFilters();          
         }
         if (this.isAddingPatientAndExit) {
           this.loadPatientsPage(); 
@@ -480,7 +480,8 @@ export class PatientsComponent implements OnInit {
     this.logger.log(this.currentPatientId);
     this.rest.savePatientDetails(this.currentPatientId, this.patientDetails).subscribe(data => {
       this.savedPatientData = data;
-      this.loadPatientsPage(); 
+      this.patientNameSearch = '';
+      this.loadPatientsWithFilters(); 
     });          
   }
 
