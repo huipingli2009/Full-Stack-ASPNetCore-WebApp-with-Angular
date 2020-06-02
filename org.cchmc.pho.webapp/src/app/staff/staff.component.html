@@ -121,15 +121,16 @@
                     </div>
                 </div>
             </mat-cell>
-        </ng-container>     
-        
-        <ng-container matColumnDef="button" >
-            <mat-header-cell *matHeaderCellDef >
-                <button mat-flat-button  color="accent" class="staffButtonAlign" *ngIf="isUserAdmin" (click)="openAddStaffDialog()">ADD STAFF</button>
-            </mat-header-cell>          
-            <mat-cell *matCellDef>       
-              
-            </mat-cell>         
+        </ng-container>
+
+        <ng-container matColumnDef="button">
+            <mat-header-cell *matHeaderCellDef class="staffButtonAlign">
+                <button mat-flat-button color="accent" *ngIf="isUserAdmin" (click)="openAddStaffDialog()">ADD
+                    STAFF</button>
+            </mat-header-cell>
+            <mat-cell *matCellDef>
+
+            </mat-cell>
         </ng-container>
 
         <!-- Hidden Columns===============================================================-->
@@ -193,7 +194,7 @@
                                         <mat-label>LOCATIONS</mat-label>
                                         <!-- <mat-select formControlName="locations" multiple required
                                             [compareWith]="compareByLocationName"> -->
-                                            <mat-select formControlName="locations" multiple required>
+                                        <mat-select formControlName="locations" multiple required>
                                             <mat-option *ngFor="let item of locationsList" [value]="item">
                                                 {{item.name}}
                                             </mat-option>
@@ -530,157 +531,156 @@
 
         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="staff-detail-row"></tr>
 
-    </mat-table> 
-    
+    </mat-table>
+
     <!--Dialogs ===========================-->
- <ng-template #addStaffDialog>
-    <div mat-dialog-content class="mat-typography" id="addstaff-dialog">
-      <form [formGroup]="addStaffForm" class="default-input-override">
-        <div fxLayout="row" class="detail-heading" (click)="openAddStaffDialog()">ADD STAFF MEMBER</div>
-        <br>           
-        <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end" class="input-w-icon">
-            <div fxLayout="column" class="input-w-icon">
-                <mat-form-field floatLabel="always" class="fill-form-field">
-                    <mat-label>FIRST NAME</mat-label>
-                    <input matInput formControlName="firstName" name="firstName" required> 
-                    <mat-icon matPrefix>
-                        person                     
-                    </mat-icon>           
-                    <ng-container
-                      *ngIf="(addStaffForm.get('firstName').touched || addStaffForm.get('firstName').dirty) && (addStaffForm.get('firstName').errors)">
-                      <mat-error *ngIf="addStaffForm.get('firstName').errors.required">
-                        First name is required
-                      </mat-error>
-                    </ng-container>        
-                  </mat-form-field>
-            </div>
-            <div fxLayout="column" class="input-w-icon">
-                <mat-form-field floatLabel="always" class="fill-form-field">
-                    <mat-label>LAST NAME</mat-label>
-                    <input matInput formControlName="lastName" name="lastName" required>    
-                    <mat-icon matPrefix>  
-                        person                   
-                    </mat-icon>        
-                    <ng-container
-                      *ngIf="(addStaffForm.get('lastName').touched ||  addStaffForm.get('lastName').dirty) && (addStaffForm.get('lastName').errors)">
-                      <mat-error *ngIf="addStaffForm.get('lastName').errors.required">
-                        Last name is required
-                      </mat-error>
-                    </ng-container>        
-                  </mat-form-field>
-            </div>         
-        </div>       
-        <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end" class="input-w-icon">
-            <div fxLayout="column" class="input-w-icon">
-                <mat-form-field floatLabel="always" class="fill-form-field">
-                    <mat-label>START DATE</mat-label>
-                    <input matInput placeholder="MM/DD/YYYY" formControlName="startDate" name="startDate" [matDatepicker]="picker" required>
-                  
-                <mat-datepicker-toggle matPrefix [for]="picker">
-                    <mat-icon matDatepickerToggleIcon>
-                        calendar_today
-                    </mat-icon>
-                </mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker> 
-                    <ng-container
-                      *ngIf="(addStaffForm.get('startDate').touched ||  addStaffForm.get('startDate').dirty) && (addStaffForm.get('startDate').errors)">
-                      <mat-error *ngIf="addStaffForm.get('startDate').errors.required">
-                        Start date is required. 
-                      </mat-error>
-                    </ng-container>
-                  </mat-form-field>
-            </div>
-            <div fxLayout="column" fxFlex class="input-w-icon">
-                <mat-form-field floatLabel="always" class="fill-form-field">
-                    <mat-label>EMAIL</mat-label>
-                    <input matInput formControlName="email" name="email" required>
-                    <mat-icon matPrefix>   
-                        email                 
-                    </mat-icon>
-                    <ng-container
-                      *ngIf="(addStaffForm.get('email').touched ||  addStaffForm.get('email').dirty) && (addStaffForm.get('email').errors)">
-                      <mat-error *ngIf="addStaffForm.get('email').errors.required">
-                        Email is required
-                      </mat-error>
-                    </ng-container>
-                  </mat-form-field>
-            </div>            
-        </div>       
-        <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end">
-          <div fxLayout="column" class="input-w-icon">
-            <mat-form-field floatLabel="always">
-              <mat-label>PHONE</mat-label>
-              <input matInput formControlName="phone" name="phone" required>
-              <mat-icon matPrefix> 
-                  phone             
-              </mat-icon>
-            </mat-form-field>
-          </div>
-          <div fxLayout="column" class="input-w-icon multiselect-with-icon">
-            <mat-form-field floatLabel="always" class="select-style-override">
-                <mat-label>ROLE</mat-label>
-                <mat-select matNativeControl formControlName="positionId" class="insurance" required>
-                  <mat-option *ngFor="let position  of positions" [value]="position.id">
-                    {{position.name}}
-                  </mat-option>
-                </mat-select>
-                <mat-icon matPrefix>               
-                </mat-icon>
-                <ng-container
-                  *ngIf="(addStaffForm.get('positionId').touched ||  addStaffForm.get('positionId').dirty) && (addStaffForm.get('positionId').errors)">
-                  <mat-error *ngIf="addStaffForm.get('positionId').errors.required">
-                    Please assign a practice location.
-                  </mat-error>
-                </ng-container>
-              </mat-form-field>
-          </div>
-          <div fxLayout="column" class="input-w-icon multiselect-with-icon">
-            <mat-form-field floatLabel="always" class="select-style-override">
-              <mat-label>LOCATIONS</mat-label>
-              <mat-select matNativeControl formControlName="locationId" class="insurance" required>
-                <mat-option *ngFor="let location of locationsList" [value]="location.id">
-                  {{location.name}}
-                </mat-option>
-              </mat-select>
-              <mat-icon matPrefix>               
-              </mat-icon>
-              <ng-container
-                *ngIf="(addStaffForm.get('locationId').touched ||  addStaffForm.get('locationId').dirty) && (addStaffForm.get('locationId').errors)">
-                <mat-error *ngIf="addStaffForm.get('locationId').errors.required">
-                  Please assign a practice location.
-                </mat-error>
-              </ng-container>
-            </mat-form-field>
-          </div>
+    <ng-template #addStaffDialog>
+        <div mat-dialog-content class="mat-typography" id="addstaff-dialog">
+            <form [formGroup]="addStaffForm" class="default-input-override">
+                <div fxLayout="row" class="detail-heading" (click)="openAddStaffDialog()">ADD STAFF MEMBER</div>
+                <br>
+                <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end" class="input-w-icon">
+                    <div fxLayout="column" class="input-w-icon">
+                        <mat-form-field floatLabel="always" class="fill-form-field">
+                            <mat-label>FIRST NAME</mat-label>
+                            <input matInput formControlName="firstName" name="firstName" required>
+                            <mat-icon matPrefix>
+                                person
+                            </mat-icon>
+                            <ng-container
+                                *ngIf="(addStaffForm.get('firstName').touched || addStaffForm.get('firstName').dirty) && (addStaffForm.get('firstName').errors)">
+                                <mat-error *ngIf="addStaffForm.get('firstName').errors.required">
+                                    First name is required
+                                </mat-error>
+                            </ng-container>
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="column" class="input-w-icon">
+                        <mat-form-field floatLabel="always" class="fill-form-field">
+                            <mat-label>LAST NAME</mat-label>
+                            <input matInput formControlName="lastName" name="lastName" required>
+                            <mat-icon matPrefix>
+                                person
+                            </mat-icon>
+                            <ng-container
+                                *ngIf="(addStaffForm.get('lastName').touched ||  addStaffForm.get('lastName').dirty) && (addStaffForm.get('lastName').errors)">
+                                <mat-error *ngIf="addStaffForm.get('lastName').errors.required">
+                                    Last name is required
+                                </mat-error>
+                            </ng-container>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end" class="input-w-icon">
+                    <div fxLayout="column" class="input-w-icon">
+                        <mat-form-field floatLabel="always" class="fill-form-field">
+                            <mat-label>START DATE</mat-label>
+                            <input matInput placeholder="MM/DD/YYYY" formControlName="startDate" name="startDate"
+                                [matDatepicker]="picker" required>
 
-        </div>        
-      </form>
-    </div>
-    <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end">
-        <div mat-dialog-actions align="end" class="select-row">
-            <button mat-button (click)="cancelAddStaffDialog()">Cancel</button>                    
-            <!-- <button mat-flat-button [disabled]="!addStaffForm.valid"  color="accent" mat-dialog-close (click)="openAddStaffConfirmDialog(1)">SAVE AND CONTINUE</button> -->
-            <button mat-flat-button [disabled]="!addStaffForm.valid" color="accent" mat-dialog-close (click)="openAddStaffConfirmDialog(2)">SAVE AND EXIT</button>      
+                            <mat-datepicker-toggle matPrefix [for]="picker">
+                                <mat-icon matDatepickerToggleIcon>
+                                    calendar_today
+                                </mat-icon>
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                            <ng-container
+                                *ngIf="(addStaffForm.get('startDate').touched ||  addStaffForm.get('startDate').dirty) && (addStaffForm.get('startDate').errors)">
+                                <mat-error *ngIf="addStaffForm.get('startDate').errors.required">
+                                    Start date is required.
+                                </mat-error>
+                            </ng-container>
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="column" fxFlex class="input-w-icon">
+                        <mat-form-field floatLabel="always" class="fill-form-field">
+                            <mat-label>EMAIL</mat-label>
+                            <input matInput formControlName="email" name="email" required>
+                            <mat-icon matPrefix>
+                                email
+                            </mat-icon>
+                            <ng-container
+                                *ngIf="(addStaffForm.get('email').touched ||  addStaffForm.get('email').dirty) && (addStaffForm.get('email').errors)">
+                                <mat-error *ngIf="addStaffForm.get('email').errors.required">
+                                    Email is required
+                                </mat-error>
+                            </ng-container>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end">
+                    <div fxLayout="column" class="input-w-icon">
+                        <mat-form-field floatLabel="always">
+                            <mat-label>PHONE</mat-label>
+                            <input matInput formControlName="phone" name="phone" required>
+                            <mat-icon matPrefix>
+                                phone
+                            </mat-icon>
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="column" class="input-w-icon multiselect-with-icon">
+                        <mat-form-field floatLabel="always" class="select-style-override">
+                            <mat-label>ROLE</mat-label>
+                            <mat-select matNativeControl formControlName="positionId" class="insurance" required>
+                                <mat-option *ngFor="let position  of positions" [value]="position.id">
+                                    {{position.name}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-icon matPrefix>
+                            </mat-icon>
+                            <ng-container
+                                *ngIf="(addStaffForm.get('positionId').touched ||  addStaffForm.get('positionId').dirty) && (addStaffForm.get('positionId').errors)">
+                                <mat-error *ngIf="addStaffForm.get('positionId').errors.required">
+                                    Please assign a practice location.
+                                </mat-error>
+                            </ng-container>
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="column" class="input-w-icon multiselect-with-icon">
+                        <mat-form-field floatLabel="always" class="select-style-override">
+                            <mat-label>LOCATIONS</mat-label>
+                            <mat-select matNativeControl formControlName="locationId" class="insurance" required>
+                                <mat-option *ngFor="let location of locationsList" [value]="location.id">
+                                    {{location.name}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-icon matPrefix>
+                            </mat-icon>
+                            <ng-container
+                                *ngIf="(addStaffForm.get('locationId').touched ||  addStaffForm.get('locationId').dirty) && (addStaffForm.get('locationId').errors)">
+                                <mat-error *ngIf="addStaffForm.get('locationId').errors.required">
+                                    Please assign a practice location.
+                                </mat-error>
+                            </ng-container>
+                        </mat-form-field>
+                    </div>
+
+                </div>
+            </form>
         </div>
-    </div>    
-  </ng-template>
+        <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end">
+            <div mat-dialog-actions align="end" class="select-row">
+                <button mat-button (click)="cancelAddStaffDialog()">Cancel</button>
+                <!-- <button mat-flat-button [disabled]="!addStaffForm.valid"  color="accent" mat-dialog-close (click)="openAddStaffConfirmDialog(1)">SAVE AND CONTINUE</button> -->
+                <button mat-flat-button [disabled]="!addStaffForm.valid" color="accent" mat-dialog-close
+                    (click)="openAddStaffConfirmDialog(2)">SAVE AND EXIT</button>
+            </div>
+        </div>
+    </ng-template>
 
-  <ng-template #addStaffConfirmDialog>
-    <div mat-dialog-content class="mat-typography">     
-      <!-- <h3 *ngIf="isSaveAndContinue">Are you sure you want to add this staff and continue to update this staff's information?</h3>      -->
-      <h3 *ngIf="isSaveAndExit">Are you sure you want to add this staff to your practice?</h3>
-    </div>
-    <div mat-dialog-actions align="end">
-      <button mat-button mat-dialog-close (click)="cancelConfirmDialog()">Cancel</button>   
-      <!-- <button mat-flat-button color="accent" mat-dialog-close (click)="saveAddStaffDialog()" *ngIf="isSaveAndContinue">
+    <ng-template #addStaffConfirmDialog>
+        <div mat-dialog-content class="mat-typography">
+            <!-- <h3 *ngIf="isSaveAndContinue">Are you sure you want to add this staff and continue to update this staff's information?</h3>      -->
+            <h3 *ngIf="isSaveAndExit">Are you sure you want to add this staff to your practice?</h3>
+        </div>
+        <div mat-dialog-actions align="end">
+            <button mat-button mat-dialog-close (click)="cancelConfirmDialog()">Cancel</button>
+            <!-- <button mat-flat-button color="accent" mat-dialog-close (click)="saveAddStaffDialog()" *ngIf="isSaveAndContinue">
         Save And Continue</button> -->
-      <button mat-flat-button color="accent" mat-dialog-close (click)="saveAddStaffDialog()" *ngIf="isSaveAndExit">
-        Save And Exit</button>  
-    </div> 
-  </ng-template> 
-      
+            <button mat-flat-button color="accent" mat-dialog-close (click)="saveAddStaffDialog()"
+                *ngIf="isSaveAndExit">
+                Save And Exit</button>
+        </div>
+    </ng-template>
+
 </div>
-
-
-
-
