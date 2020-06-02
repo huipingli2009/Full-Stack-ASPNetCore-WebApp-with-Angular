@@ -996,7 +996,7 @@ button.toast-close-button {
   table {
     width: 100%;
     border-bottom-right-radius: 7px;
-    border-bottom-left-radius: 7px;
+    border-bottom-left-radius: 7px;    
   }
   .mat-row {
     cursor: pointer;
@@ -1562,7 +1562,7 @@ button.toast-close-button {
     width: 100%;
     border-bottom-right-radius: 7px;
     border-bottom-left-radius: 7px;  
-    display:flex;   
+    //display:flex;   
   }
 
   .mat-row:nth-child(even) {
@@ -2278,11 +2278,13 @@ button.toast-close-button {
 
 /* FILES ===============================================================*/
 #files {
+   
   .content-main {
     margin: 21px 107px 30px;
     // margin-left: 21px;
-    // margin-right: 21px;
+    // margin-right: 21px;    
   }
+  
   td {
     height: 57px;
   }
@@ -2307,7 +2309,7 @@ button.toast-close-button {
 
   .mat-header-row button
   {
-    line-height: 36px;
+    line-height: 36px;    
   }
   .mat-column-watchFlag {
     text-align: left !important;
@@ -2318,7 +2320,10 @@ button.toast-close-button {
   .file-draft-icon {
     color: rgba(122, 122, 122, 0.158);
   }
-
+  .add-file-button {    
+    //justify-content: right;
+    justify-self: end;
+  }
 }
 .select-row {
   margin-top: 10px;

@@ -136,8 +136,9 @@
 
     <!-- button Column -->
     <ng-container matColumnDef="button">
-      <th mat-header-cell *matHeaderCellDef>
-        <button mat-flat-button color="accent" *ngIf="isUserAdmin" (click)="openAdminAddDialog()">ADD NEW FILE</button>
+      <th mat-header-cell *matHeaderCellDef >
+        <button mat-flat-button color="accent" class="add-file-button" *ngIf="isUserAdmin"
+          (click)="openAdminAddDialog()">ADD NEW FILE</button>
       </th>
       <td mat-cell *matCellDef="let row">
       </td>

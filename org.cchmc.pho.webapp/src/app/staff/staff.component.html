@@ -571,13 +571,12 @@
                         </mat-form-field>
                     </div>
                 </div>
-                <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end" class="input-w-icon">
-                    <div fxLayout="column" class="input-w-icon">
+                <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end" class="input-w-icon">   
+                    <div fxLayout="column" fxFlex class="input-w-icon">
                         <mat-form-field floatLabel="always" class="fill-form-field">
                             <mat-label>START DATE</mat-label>
                             <input matInput placeholder="MM/DD/YYYY" formControlName="startDate" name="startDate"
-                                [matDatepicker]="picker" required>
-                            <input matInput formControlName="firstName" name="firstName" required>
+                                [matDatepicker]="picker" required>                           
                             <mat-datepicker-toggle matPrefix [for]="picker">
                                 <mat-icon matDatepickerToggleIcon>
                                     calendar_today
@@ -591,8 +590,8 @@
                                 </mat-error>
                             </ng-container>
                         </mat-form-field>
-                    </div>
-                    <div fxLayout="column" fxFlex class="input-w-icon">
+                    </div>                
+                    <div fxLayout="column"  class="input-w-icon">
                         <mat-form-field floatLabel="always" class="fill-form-field">
                             <mat-label>EMAIL</mat-label>
                             <input matInput formControlName="email" name="email" required>
@@ -606,7 +605,7 @@
                                 </mat-error>
                             </ng-container>
                         </mat-form-field>
-                    </div>
+                    </div>                   
                 </div>
                 <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end" class="input-w-icon">
                     <div fxLayout="column" class="input-w-icon">
