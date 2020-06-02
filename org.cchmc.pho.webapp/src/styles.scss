@@ -1081,8 +1081,7 @@ button.toast-close-button {
   .add-patient-button {
     text-transform: uppercase;
     height: 36px;    
-    float: right;   
-    justify-content: flex-end;
+   
   }
   
   .patientButtonAlign {        
@@ -1605,9 +1604,7 @@ button.toast-close-button {
       
     } 
     .staffButtonAlign {        
-      margin-left: 40%; 
-      padding-left: 7%;             
-      //float: right;      
+      justify-content: flex-end;         
     }   
    
   }
