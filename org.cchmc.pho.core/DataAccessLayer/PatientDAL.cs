@@ -346,7 +346,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 PCPId = (dr["PCP_ID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PCP_ID"].ToString())),
                                 PCPFirstName = dr["PCP_FirstName"].ToString(),
                                 PCPLastName = dr["PCP_LastName"].ToString(),
-                                InsuranceId = (dr["InsId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["InsId"].ToString())),
+                                InsuranceId = (dr["InsId"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["InsId"].ToString())),
                                 InsuranceName = dr["InsName"].ToString(),
                                 AddressLine1 = dr["AddressLine1"].ToString(),
                                 AddressLine2 = dr["AddressLine2"].ToString(),
