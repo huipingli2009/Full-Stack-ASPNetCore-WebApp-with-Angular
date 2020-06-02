@@ -981,7 +981,7 @@ button.toast-close-button {
       color: var(--primary-darker-color);
       padding-right: 13px;
       font-size: 18px !important;
-    }
+    }   
   }
 }
 
@@ -1018,8 +1018,8 @@ button.toast-close-button {
       font-weight: bold;
       line-height: 19px;
       letter-spacing: 1px;
-      text-align: left;
       text-transform: uppercase !important;
+      border-bottom-style: none;
 
       button {
         text-transform: uppercase;
@@ -1081,7 +1081,12 @@ button.toast-close-button {
   .add-patient-button {
     text-transform: uppercase;
     height: 36px;    
-    justify-content: right;   
+    float: right;   
+    justify-content: flex-end;
+  }
+  
+  .patientButtonAlign {        
+    justify-content: flex-end;          
   }
 
 }
