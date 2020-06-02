@@ -123,9 +123,9 @@
             </mat-cell>
         </ng-container>     
         
-        <ng-container matColumnDef="button">
+        <ng-container matColumnDef="button" >
             <mat-header-cell *matHeaderCellDef >
-                <button mat-flat-button color="accent" *ngIf="isUserAdmin" (click)="openAddStaffDialog()">ADD STAFF</button>
+                <button mat-flat-button  color="accent" class="staffButtonAlign" *ngIf="isUserAdmin" (click)="openAddStaffDialog()">ADD STAFF</button>
             </mat-header-cell>          
             <mat-cell *matCellDef>       
               
@@ -543,7 +543,8 @@
                 <mat-form-field floatLabel="always" class="fill-form-field">
                     <mat-label>FIRST NAME</mat-label>
                     <input matInput formControlName="firstName" name="firstName" required> 
-                    <mat-icon matPrefix>                     
+                    <mat-icon matPrefix>
+                        person                     
                     </mat-icon>           
                     <ng-container
                       *ngIf="(addStaffForm.get('firstName').touched || addStaffForm.get('firstName').dirty) && (addStaffForm.get('firstName').errors)">
@@ -557,7 +558,8 @@
                 <mat-form-field floatLabel="always" class="fill-form-field">
                     <mat-label>LAST NAME</mat-label>
                     <input matInput formControlName="lastName" name="lastName" required>    
-                    <mat-icon matPrefix>                     
+                    <mat-icon matPrefix>  
+                        person                   
                     </mat-icon>        
                     <ng-container
                       *ngIf="(addStaffForm.get('lastName').touched ||  addStaffForm.get('lastName').dirty) && (addStaffForm.get('lastName').errors)">
@@ -588,7 +590,7 @@
                     </ng-container>
                   </mat-form-field>
             </div>
-            <div fxLayout="column" class="input-w-icon">
+            <div fxLayout="column" fxFlex class="input-w-icon">
                 <mat-form-field floatLabel="always" class="fill-form-field">
                     <mat-label>EMAIL</mat-label>
                     <input matInput formControlName="email" name="email" required>
@@ -678,5 +680,7 @@
   </ng-template> 
       
 </div>
+
+
 
 
