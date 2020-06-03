@@ -258,12 +258,11 @@
                             </div>
                             <div fxLayout="row" fxLayoutGap="34px">
                                 <div fxLayout="column" fxFlex class="input-w-icon date-picker-input">
-                                    <mat-form-field floatLabel="always">
+                                    <mat-form-field class="multi-select-override" floatLabel="always">
                                         <mat-label>START DATE</mat-label>
-
                                         <input matInput placeholder="MM/DD/YYYY" formControlName="startDate"
                                             [matDatepicker]="picker" required>
-                                        <mat-datepicker-toggle  matSuffix  [for]="picker">
+                                            <mat-datepicker-toggle matPrefix [for]="picker">
                                             <mat-icon matDatepickerToggleIcon>
                                                 calendar_today
                                             </mat-icon>
