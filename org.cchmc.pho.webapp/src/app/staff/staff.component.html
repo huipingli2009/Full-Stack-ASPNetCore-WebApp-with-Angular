@@ -260,10 +260,9 @@
                                 <div fxLayout="column" fxFlex class="input-w-icon date-picker-input">
                                     <mat-form-field class="multi-select-override" floatLabel="always">
                                         <mat-label>START DATE</mat-label>
-
                                         <input matInput placeholder="MM/DD/YYYY" formControlName="startDate"
                                             [matDatepicker]="picker" required>
-                                        <mat-datepicker-toggle matPrefix [for]="picker">
+                                            <mat-datepicker-toggle matPrefix [for]="picker">
                                             <mat-icon matDatepickerToggleIcon>
                                                 calendar_today
                                             </mat-icon>
@@ -571,14 +570,13 @@
                         </mat-form-field>
                     </div>
                 </div>
-                <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end" class="input-w-icon">
+                <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end" class="input-w-icon">   
                     <div fxLayout="column" class="input-w-icon">
-                        <mat-form-field floatLabel="always" class="fill-form-field">
-                            <mat-label>START DATE</mat-label>
-                            <input matInput placeholder="MM/DD/YYYY" formControlName="startDate" name="startDate"
-                                [matDatepicker]="picker" required>
-
-                            <mat-datepicker-toggle matPrefix [for]="picker">
+                        <mat-form-field floatLabel="always">
+                            <mat-label class="dialogLabel" >Start Date</mat-label>
+                            <input matInput placeholder="MM/DD/YYYY" formControlName="startDate" name="startDate"                            
+                                [matDatepicker]="picker" required>                           
+                            <mat-datepicker-toggle matPrefix [for]="picker" >
                                 <mat-icon matDatepickerToggleIcon>
                                     calendar_today
                                 </mat-icon>
@@ -587,16 +585,16 @@
                             <ng-container
                                 *ngIf="(addStaffForm.get('startDate').touched ||  addStaffForm.get('startDate').dirty) && (addStaffForm.get('startDate').errors)">
                                 <mat-error *ngIf="addStaffForm.get('startDate').errors.required">
-                                    Start date is required.
+                                    Start date is required
                                 </mat-error>
                             </ng-container>
                         </mat-form-field>
-                    </div>
+                    </div>   
                     <div fxLayout="column" fxFlex class="input-w-icon">
                         <mat-form-field floatLabel="always" class="fill-form-field">
                             <mat-label>EMAIL</mat-label>
                             <input matInput formControlName="email" name="email" required>
-                            <mat-icon matPrefix>
+                            <mat-icon matPrefix class="dialogLabel">
                                 email
                             </mat-icon>
                             <ng-container
@@ -606,9 +604,9 @@
                                 </mat-error>
                             </ng-container>
                         </mat-form-field>
-                    </div>
+                    </div>                   
                 </div>
-                <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end">
+                <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start end" class="input-w-icon">
                     <div fxLayout="column" class="input-w-icon">
                         <mat-form-field floatLabel="always">
                             <mat-label>PHONE</mat-label>
@@ -616,6 +614,12 @@
                             <mat-icon matPrefix>
                                 phone
                             </mat-icon>
+                            <ng-container
+                                *ngIf="(addStaffForm.get('phone').touched ||  addStaffForm.get('phone').dirty) && (addStaffForm.get('phone').errors)">
+                                <mat-error *ngIf="addStaffForm.get('phone').errors.required">
+                                    Phone is required
+                                </mat-error>
+                            </ng-container>
                         </mat-form-field>
                     </div>
                     <div fxLayout="column" class="input-w-icon multiselect-with-icon">
@@ -631,7 +635,7 @@
                             <ng-container
                                 *ngIf="(addStaffForm.get('positionId').touched ||  addStaffForm.get('positionId').dirty) && (addStaffForm.get('positionId').errors)">
                                 <mat-error *ngIf="addStaffForm.get('positionId').errors.required">
-                                    Please assign a practice location.
+                                    Role is required.
                                 </mat-error>
                             </ng-container>
                         </mat-form-field>
@@ -649,12 +653,11 @@
                             <ng-container
                                 *ngIf="(addStaffForm.get('locationId').touched ||  addStaffForm.get('locationId').dirty) && (addStaffForm.get('locationId').errors)">
                                 <mat-error *ngIf="addStaffForm.get('locationId').errors.required">
-                                    Please assign a practice location.
+                                    Location is required.
                                 </mat-error>
                             </ng-container>
                         </mat-form-field>
                     </div>
-
                 </div>
             </form>
         </div>
