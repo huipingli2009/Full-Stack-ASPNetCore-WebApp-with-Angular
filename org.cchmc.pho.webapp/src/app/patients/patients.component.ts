@@ -8,13 +8,15 @@ import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute } from '@angular/router';
 import { NGXLogger } from 'ngx-logger';
 import { Observable, Subscription } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, take } from 'rxjs/operators';
 import { Conditions, Gender, PatientDetails, Patients, NewPatient } from '../models/patients';
 import { RestService } from '../rest.service';
 import { PatientsDataSource } from './patients.datasource';
 import { FilterService } from '../services/filter.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarComponent } from '../shared/mat-snack-bar/mat-snack-bar.component';
+import { UserService } from '../services/user.service';
+import { CurrentUser, User } from '../models/user';
 
 @Component({
   selector: 'app-patients',
@@ -49,6 +51,8 @@ export class PatientsComponent implements OnInit {
   patientFormDetails: Observable<PatientDetails>;
   patientDetails: PatientDetails;
   currentPatientId: number;
+  currentUser: CurrentUser;
+  currentUserId: number;
   filterValues: any = {};
   chronic: string;
   watchFlag: string;
@@ -87,6 +91,7 @@ export class PatientsComponent implements OnInit {
   isLoading = true;
   isAddingPatientAndContinue : boolean;
   isAddingPatientAndExit : boolean;
+  isUserAdmin: boolean;
   // Selected Values
   selectedGender;
 
@@ -104,7 +109,7 @@ export class PatientsComponent implements OnInit {
 
   isExpansionDetailRow = (i: number, row: object) => row.hasOwnProperty('detailRow');
 
-  constructor(public rest: RestService, private route: ActivatedRoute, public fb: FormBuilder,
+  constructor(public rest: RestService, private route: ActivatedRoute, public fb: FormBuilder, private userService: UserService,
               private logger: NGXLogger, public dialog: MatDialog, private datePipe: DatePipe, private snackBar: MatSnackBarComponent,
               private filterService: FilterService) {
     this.form = this.fb.group({
@@ -143,6 +148,7 @@ export class PatientsComponent implements OnInit {
   ngOnInit() {    
     this.patients = this.route.snapshot.data.patients;
     this.dataSource = new PatientsDataSource(this.rest);
+    this.getCurrentUser();
     this.loadPatientsWithFilters();
     this.getConditionsList();
     this.getPCPList();
@@ -180,6 +186,17 @@ export class PatientsComponent implements OnInit {
 
   compareByShortValue(o1, o2): boolean {
     return o1.shortName === o2.shortName;
+  }
+
+  getCurrentUser() {
+    this.userService.getCurrentUser().pipe(take(1)).subscribe((data) => {
+      this.currentUser = data;
+      this.currentUserId = data.id;
+      this.logger.log('role: ' + data.role.id);
+      if (data.role.id === 3) {
+        this.isUserAdmin = true;
+      } else { this.isUserAdmin = false; }
+    });
   }
 
   loadPatientsWithFilters() {
