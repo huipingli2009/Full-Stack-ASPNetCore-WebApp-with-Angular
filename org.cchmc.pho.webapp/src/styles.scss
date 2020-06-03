@@ -1567,7 +1567,7 @@ button.toast-close-button {
 }
 #staff {
   width: 100%;
-  border: solid 1px var(--primary-color);  
+  border: solid 1px var(--primary-color);    
 
   table {
     width: 100%;
@@ -1712,6 +1712,10 @@ button.toast-close-button {
       padding-left: 2px;
     }
   }
+
+  .dialogLabel {
+    margin-left: 8px;
+  }
   .check-row {
     padding-bottom: 1.25em;
     padding-top: 1.25em;
@@ -1756,7 +1760,7 @@ button.toast-close-button {
     }
     .mat-form-field-wrapper {
       padding-bottom: 0;
-    }
+    }   
   } 
 }
 
