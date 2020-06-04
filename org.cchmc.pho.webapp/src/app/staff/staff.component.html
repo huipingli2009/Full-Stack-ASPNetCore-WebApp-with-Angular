@@ -165,7 +165,7 @@
                         <div class="staff-element-detail">
                             <div fxLayout="row" fxLayoutGap="34px">
                                 <div fxLayout="column" fxFlex>
-                                    <mat-form-field>
+                                    <mat-form-field floatLabel="always">
                                         <mat-label>First Name </mat-label>
                                         <input matInput formControlName="firstName" required>
                                     </mat-form-field>
@@ -177,7 +177,7 @@
                                     </ng-container>
                                 </div>
                                 <div fxLayout="column" fxFlex>
-                                    <mat-form-field>
+                                    <mat-form-field floatLabel="always">
                                         <mat-label>Last Name </mat-label>
                                         <input matInput formControlName="lastName" required>
                                     </mat-form-field>
@@ -190,7 +190,7 @@
                                 </div>
 
                                 <div fxLayout="column" fxFlex>
-                                    <mat-form-field>
+                                    <mat-form-field floatLabel="always">
                                         <mat-label>LOCATIONS</mat-label>
                                         <!-- <mat-select formControlName="locations" multiple required
                                             [compareWith]="compareByLocationName"> -->
@@ -211,7 +211,7 @@
 
                             <div fxLayout="row" class="form-row" fxLayoutGap="34px">
                                 <div fxLayout="column" fxFlex class="input-w-icon">
-                                    <mat-form-field>
+                                    <mat-form-field floatLabel="always">
                                         <mat-label>Email</mat-label>
                                         <input matInput formControlName="email" name="email" required>
                                         <mat-icon matPrefix>
@@ -231,7 +231,7 @@
                                 </div>
 
                                 <div fxLayout="column" fxFlex class="input-w-icon">
-                                    <mat-form-field>
+                                    <mat-form-field floatLabel="always">
                                         <mat-label>Phone </mat-label>
                                         <input matInput formControlName="phone" required>
                                         <mat-icon matPrefix>phone</mat-icon>
@@ -245,7 +245,7 @@
                                 </div>
 
                                 <div fxLayout="column" fxFlex>
-                                    <mat-form-field>
+                                    <mat-form-field floatLabel="always">
                                         <mat-label>NPI</mat-label>
                                         <input matInput formControlName="npi">
                                         <ng-container
@@ -277,7 +277,7 @@
                                     </mat-form-field>
                                 </div>
                                 <div fxLayout="column" fxFlex>
-                                    <mat-form-field class="multi-select-override">
+                                    <mat-form-field class="multi-select-override" floatLabel="always">
                                         <mat-label>ROLE</mat-label>
                                         <mat-select formControlName="positionId" required>
                                             <mat-option *ngFor="let position of positions" [value]="position.id">
@@ -295,7 +295,7 @@
                                 </div>
 
                                 <div fxLayout="column" fxFlex>
-                                    <mat-form-field class="multi-select-override">
+                                    <mat-form-field class="multi-select-override" floatLabel="always">
                                         <mat-label>CREDENTIALS</mat-label>
                                         <mat-select formControlName="credentialId">
                                             <mat-option *ngFor="let credential of credentials" [value]="credential.id">
@@ -424,7 +424,7 @@
                                                     TYPE:</label></div>
                                             <div fxLayout="row" fxLayoutGap="10px" *ngIf="userRoleList">
                                                 <div fxLayout="column" fxFlex fxFill>
-                                                    <mat-form-field class="multi-select-override">
+                                                    <mat-form-field class="multi-select-override" floatLabel="always">
                                                         <mat-select matNativeControl formControlName="roles"
                                                             [compareWith]="compareFn">
                                                             <mat-option *ngFor="let item of userRoleList"
@@ -459,14 +459,14 @@
 
                                             <div fxLayout="row" fxLayoutGap="12px">
                                                 <div fxLayout="column" fxLayoutAlign="center center">
-                                                    <mat-form-field>
+                                                    <mat-form-field floatLabel="always">
                                                         <mat-label>Staff Name </mat-label>
                                                         <input matInput [value]="StaffName" readonly>
                                                     </mat-form-field>
                                                 </div>
                                                 <div fxLayout="column" fxLayoutAlign="center end"
                                                     class="input-date-icon">
-                                                    <mat-form-field floatLabel="always">
+                                                    <mat-form-field floatLabel="always" floatLabel="always">
                                                         <mat-label>END DATE</mat-label>
 
                                                         <input matInput placeholder="MM/DD/YYYY"
