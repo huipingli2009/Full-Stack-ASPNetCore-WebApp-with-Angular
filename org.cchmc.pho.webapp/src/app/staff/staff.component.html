@@ -172,7 +172,7 @@
                                     <ng-container
                                         *ngIf="(StaffDetailsForm.get('firstName').touched || StaffDetailsForm.get('firstName').dirty) && (StaffDetailsForm.get('firstName').errors)">
                                         <mat-error *ngIf="StaffDetailsForm.get('firstName').errors.required">
-                                            First Name is required
+                                            Required
                                         </mat-error>
                                     </ng-container>
                                 </div>
@@ -184,7 +184,7 @@
                                     <ng-container
                                         *ngIf="(StaffDetailsForm.get('lastName').touched || StaffDetailsForm.get('lastName').dirty) && (StaffDetailsForm.get('lastName').errors)">
                                         <mat-error *ngIf="StaffDetailsForm.get('lastName').errors.required">
-                                            Last Name is required
+                                            Required
                                         </mat-error>
                                     </ng-container>
                                 </div>
@@ -203,7 +203,7 @@
                                     <ng-container
                                         *ngIf="(StaffDetailsForm.get('locations').touched || StaffDetailsForm.get('locations').dirty) && (StaffDetailsForm.get('locations').errors)">
                                         <mat-error *ngIf="StaffDetailsForm.get('locations').errors.required">
-                                            Please select the Location
+                                            Required
                                         </mat-error>
                                     </ng-container>
                                 </div>
@@ -220,7 +220,7 @@
                                         <ng-container
                                             *ngIf="(StaffDetailsForm.get('email').touched || StaffDetailsForm.get('email').dirty) && StaffDetailsForm.get('email').errors">
                                             <mat-error *ngIf="StaffDetailsForm.get('email').errors.required">
-                                                Email address is required
+                                                Required
                                             </mat-error>
                                             <mat-error *ngIf="StaffDetailsForm.get('email').errors.email">
                                                 Enter a valid email address
@@ -239,7 +239,7 @@
                                     <ng-container
                                         *ngIf="(StaffDetailsForm.get('phone').touched || StaffDetailsForm.get('phone').dirty) && (StaffDetailsForm.get('phone').errors)">
                                         <mat-error *ngIf="StaffDetailsForm.get('phone').errors.required">
-                                            phone number is required
+                                            Required
                                         </mat-error>
                                     </ng-container>
                                 </div>
@@ -271,7 +271,7 @@
                                         <ng-container
                                             *ngIf="(StaffDetailsForm.get('startDate').touched || StaffDetailsForm.get('startDate').dirty) && StaffDetailsForm.get('startDate').errors">
                                             <mat-error *ngIf="StaffDetailsForm.get('startDate').errors.daterequired">
-                                                Start Date is required in MM/DD/YYYY format
+                                                Required
                                             </mat-error>
                                         </ng-container>
                                     </mat-form-field>
@@ -287,7 +287,7 @@
                                         <ng-container
                                             *ngIf="(StaffDetailsForm.get('positionId').touched || StaffDetailsForm.get('positionId').dirty) && (StaffDetailsForm.get('positionId').errors)">
                                             <mat-error *ngIf="StaffDetailsForm.get('positionId').errors.required">
-                                                Role is required
+                                                Required
                                             </mat-error>
                                         </ng-container>
 
@@ -549,7 +549,7 @@
                             <ng-container
                                 *ngIf="(addStaffForm.get('firstName').touched || addStaffForm.get('firstName').dirty) && (addStaffForm.get('firstName').errors)">
                                 <mat-error *ngIf="addStaffForm.get('firstName').errors.required">
-                                    First name is required
+                                    Required
                                 </mat-error>
                             </ng-container>
                         </mat-form-field>
@@ -564,7 +564,7 @@
                             <ng-container
                                 *ngIf="(addStaffForm.get('lastName').touched ||  addStaffForm.get('lastName').dirty) && (addStaffForm.get('lastName').errors)">
                                 <mat-error *ngIf="addStaffForm.get('lastName').errors.required">
-                                    Last name is required
+                                    Required
                                 </mat-error>
                             </ng-container>
                         </mat-form-field>
@@ -585,7 +585,7 @@
                             <ng-container
                                 *ngIf="(addStaffForm.get('startDate').touched ||  addStaffForm.get('startDate').dirty) && (addStaffForm.get('startDate').errors)">
                                 <mat-error *ngIf="addStaffForm.get('startDate').errors.required">
-                                    Start date is required
+                                    Required
                                 </mat-error>
                             </ng-container>
                         </mat-form-field>
@@ -600,7 +600,7 @@
                             <ng-container
                                 *ngIf="(addStaffForm.get('email').touched ||  addStaffForm.get('email').dirty) && (addStaffForm.get('email').errors)">
                                 <mat-error *ngIf="addStaffForm.get('email').errors.required">
-                                    Email is required
+                                    Required
                                 </mat-error>
                             </ng-container>
                         </mat-form-field>
@@ -617,7 +617,7 @@
                             <ng-container
                                 *ngIf="(addStaffForm.get('phone').touched ||  addStaffForm.get('phone').dirty) && (addStaffForm.get('phone').errors)">
                                 <mat-error *ngIf="addStaffForm.get('phone').errors.required">
-                                    Phone is required
+                                    Required
                                 </mat-error>
                             </ng-container>
                         </mat-form-field>
@@ -635,7 +635,7 @@
                             <ng-container
                                 *ngIf="(addStaffForm.get('positionId').touched ||  addStaffForm.get('positionId').dirty) && (addStaffForm.get('positionId').errors)">
                                 <mat-error *ngIf="addStaffForm.get('positionId').errors.required">
-                                    Role is required.
+                                    Required
                                 </mat-error>
                             </ng-container>
                         </mat-form-field>
@@ -653,7 +653,7 @@
                             <ng-container
                                 *ngIf="(addStaffForm.get('locationId').touched ||  addStaffForm.get('locationId').dirty) && (addStaffForm.get('locationId').errors)">
                                 <mat-error *ngIf="addStaffForm.get('locationId').errors.required">
-                                    Location is required.
+                                    Required
                                 </mat-error>
                             </ng-container>
                         </mat-form-field>

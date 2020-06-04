@@ -174,7 +174,7 @@
             <ng-container
               *ngIf="(adminFileForm.get('name').touched ||  adminFileForm.get('name').dirty) && (adminFileForm.get('name').errors)">
               <mat-error *ngIf="adminFileForm.get('name').errors.required">
-                You must include a file name
+                Required
               </mat-error>
             </ng-container>
 
@@ -191,7 +191,7 @@
             <ng-container
               *ngIf="(adminFileForm.get('fileURL').touched ||  adminFileForm.get('fileURL').dirty) && (adminFileForm.get('fileURL').errors)">
               <mat-error *ngIf="adminFileForm.get('fileURL').errors.required">
-                You must include a file link
+                Required
               </mat-error>
             </ng-container>
           </mat-form-field>
@@ -206,7 +206,7 @@
             <ng-container
               *ngIf="(adminFileForm.get('description').touched ||  adminFileForm.get('description').dirty) && (adminFileForm.get('description').errors)">
               <mat-error *ngIf="adminFileForm.get('description').errors.required">
-                You must include a description
+                Required
               </mat-error>
             </ng-container>
           </mat-form-field>
@@ -247,7 +247,7 @@
               <ng-container
                 *ngIf="(adminFileForm.get('fileType').touched ||  adminFileForm.get('fileType').dirty) && (adminFileForm.get('fileType').errors)">
                 <mat-error *ngIf="adminFileForm.get('fileType').errors.required">
-                  You must include File type
+                  Required
                 </mat-error>
               </ng-container>
             </mat-form-field>
@@ -267,7 +267,7 @@
               <ng-container
                 *ngIf="(adminFileForm.get('resourceType').touched ||  adminFileForm.get('resourceType').dirty) && (adminFileForm.get('resourceType').errors)">
                 <mat-error *ngIf="adminFileForm.get('resourceType').errors.required">
-                  You must include a Resource Type
+                  Required
                 </mat-error>
               </ng-container>
             </mat-form-field>
