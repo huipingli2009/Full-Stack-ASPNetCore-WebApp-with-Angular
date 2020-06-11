@@ -146,6 +146,11 @@
                 </ng-container>
             </form>
         </div>
+        <div fxLayout="row" fxLayoutAlign="end center" class="side-border-container">
+            <div fxLayout="column" style="padding: 20px;">
+                <button mat-flat-button color="accent" (click)="openEditProvidersDialog()">EDIT PROVIDERS</button>
+            </div>
+        </div>
     </div>
     <div *ngIf="dataSourceWorkbook">
         <div fxLayout="row" class="workbooks-header">
@@ -608,3 +613,64 @@
         <button mat-flat-button color="warn" mat-dialog-close (click)="OnRemovePatientClick()">Delete</button>
     </div>
 </ng-template>
+
+<ng-template #EditProvidersDialog>
+    <div mat-dialog-content class="mat-typography" id="edit-providers-dialog">
+      <form [formGroup]="editProvidersForm">
+        <div fxLayout="row" class="detail-heading">
+            
+            <h3>EDIT WORKBOOK PROVIDERS</h3>
+        </div>
+        
+
+        <div fxLayout="row" fxLayoutGap="20px" class="select-row">
+
+          <div fxLayout="column" fxLayoutAlign="center"  fxFlex="50" >
+            <mat-form-field class="multi-select-override" floatLabel="always">
+              <mat-label>PCP</mat-label>
+              <mat-select matNativeControl placeholder="Select a Provider" formControlName="pcpName" required>
+                <mat-option *ngFor="let item of allProviders" [value]="item">
+                    {{item.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            
+            <ng-container
+              *ngIf="(editProvidersForm.get('pcpName').touched || editProvidersForm.get('pcpName').dirty) && (editProvidersForm.get('pcpName').errors)">
+              <mat-error *ngIf="editProvidersForm.get('pcpName').errors.required">
+                  *Required
+              </mat-error>
+            </ng-container>
+          </div>
+
+          <div fxLayout="column" fxFlex>
+                <span>
+                  If you do not see a provider, please add them</span>
+                <span>to the Staff list for this practice. Ensure the </span>
+                <span>provider has an NPI assigned.</span>
+                <span>
+                    Note: The provider will only be added or removed
+                </span>
+                <span>
+                    from this workbook.
+                </span>
+          </div>
+
+        </div>
+      </form>
+    </div>
+
+
+    <div  fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="space-evenly end">    
+      <div mat-dialog-actions align="center" class="select-row">
+        <button mat-button (click)="cancelEditProvidersDialog()">Cancel</button>
+        <button mat-flat-button color="accent" [disabled]="!(editProvidersForm.valid && checkForExistingWorkbookProvider(this.editProvidersForm.controls.pcpName.value.id) === 0)"
+        (click)="submitEditProviders(1)">ADD SELECTED PROVIDER</button>
+        <button mat-flat-button color="accent" [disabled]="!(editProvidersForm.valid && checkForExistingWorkbookProvider(this.editProvidersForm.controls.pcpName.value.id) === 1)"
+        (click)="submitEditProviders(2)">REMOVE SELECTED PROVIDER</button>
+      </div>
+    </div>
+
+    <!-- [disabled]="!editProvidersForm.valid" -->
+
+  </ng-template>
