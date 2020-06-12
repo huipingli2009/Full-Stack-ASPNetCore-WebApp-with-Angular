@@ -180,6 +180,49 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
+
+        [HttpPost("provider/{formResponseId}/{providerId}")]
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [SwaggerResponse(200, type: typeof(string))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> AddProviderToWorkbooks(int formResponseId, int providerId)
+        {
+            try
+            {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+                var result = await _workbooks.AddProviderToWorkbooks(currentUserId, formResponseId, providerId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+        [HttpDelete("provider/{formResponseId}/{providerId}")]
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [SwaggerResponse(200, type: typeof(bool))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> DeleteProviderFromWorkbooks(int formResponseId, int providerId)
+        {
+            try
+            {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+                var result = await _workbooks.RemoveProviderFromWorkbooks(currentUserId, formResponseId, providerId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
         [HttpPut("provider/{id}")]
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(string))]

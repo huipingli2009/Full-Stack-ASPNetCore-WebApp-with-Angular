@@ -1,13 +1,13 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { NGXLogger } from 'ngx-logger';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { PatientForWorkbook } from '../models/patients';
+import { PatientForWorkbook, Providers } from '../models/patients';
 import { Followup, WorkbookPatient, WorkbookProvider, WorkbookReportingMonths, WorkbookPractice } from '../models/workbook';
 import { RestService } from '../rest.service';
 import { DateRequiredValidator } from '../shared/customValidators/customValidator';
@@ -20,7 +20,11 @@ import { MatSnackBarComponent } from '../shared/mat-snack-bar/mat-snack-bar.comp
 })
 export class WorkbooksComponent implements OnInit, OnDestroy {
 
-  constructor(private rest: RestService, private fb: FormBuilder, private datePipe: DatePipe, private logger: NGXLogger, private dialog: MatDialog, private snackBar: MatSnackBarComponent) { }
+  constructor(private rest: RestService, private fb: FormBuilder, private datePipe: DatePipe, private logger: NGXLogger, private dialog: MatDialog, private snackBar: MatSnackBarComponent) 
+  { 
+
+
+  }
 
   get ProviderWorkbookArray() {
     return this.ProvidersForWorkbookForm.get('ProviderWorkbookArray') as FormArray;
@@ -30,6 +34,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   @ViewChild('DeletePatient') DeletePatient: TemplateRef<any>;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild('table') table: MatTable<WorkbookPatient>;
+  @ViewChild('EditProvidersDialog') editProvidersDialog: TemplateRef<any>;
 
   private unsubscribe$ = new Subject();
   displayedColumns: string[] = ['action', 'patient', 'dob', 'phone', 'provider', 'dateOfService', 'phQ9_Score', 'improvement', 'actionFollowUp', 'followUp'];
@@ -52,10 +57,11 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   deletingPatientId: number;
   addingPatientName: string;
   hasSelectedPatient: boolean;
-
   selectedFormResponseID = new FormControl('');
   searchPatient = new FormControl('');
   PatientNameFilter = new FormControl('');
+  selectedPCPEdit = new FormControl('');
+  allProviders: Providers[] = [];
 
   ProvidersForWorkbookForm = this.fb.group({
     ProviderWorkbookArray: this.fb.array([
@@ -96,6 +102,10 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
 
     }
   );
+
+  editProvidersForm = this.fb.group({
+    pcpName: ['', Validators.required]
+  });
 
   ngOnInit(): void {
 
@@ -144,6 +154,13 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.rest.getWorkbookProviders(formResponseid).pipe(take(1)).subscribe((data) => {
       this.workbookProviders = data;
       this.AssignProviderWorkbookArray();
+    })
+  }
+
+  //for getting workbook providers
+  getAllProviders() {
+    this.rest.getPCPList().pipe(take(1)).subscribe((data) => {
+      this.allProviders = data;
     })
   }
 
@@ -388,6 +405,84 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
+  openEditProvidersDialog() {
 
+    this.editProvidersForm.reset();
+    this.getAllProviders();
+    this.dialog.open(this.editProvidersDialog, { disableClose: true });
+  }
 
+  cancelEditProvidersDialog() {
+    this.dialog.closeAll();
+  }
+
+  submitEditProviders(type) {
+    let staffId = this.editProvidersForm.controls.pcpName.value.id;
+
+    this.logger.log(staffId, 'StaffId');
+    this.logger.log(this.formResponseId, 'FormResponseId');
+    if (type === 1) {
+      
+    this.rest.AddProviderToWorkbook(staffId, this.formResponseId).subscribe(data => {    
+      if (data){
+        this.logger.log(staffId, 'New Workbook Provider');
+        this.cancelEditProvidersDialog();
+        this.editProvidersForm.reset();
+        this.getWorkbookProviders(this.formResponseId);
+        this.snackBar.openSnackBar(`Provider added to the workbook`, 'Close', 'success-snackbar');
+      } 
+      else 
+      {
+        this.logger.log('AddRemove Provider Error: API return data is null');
+        this.snackBar.openSnackBar(`Oops! Something has gone wrong. Please contact your PHO Administrator`, 'Close', 'warn-snackbar');
+      }
+      },
+      error => {
+        if (error){
+          this.logger.log('unexpected error caught: ' + error)
+          this.snackBar.openSnackBar(`Oops! Something has gone wrong. Please contact your PHO Administrator`, 'Close', 'warn-snackbar');
+        }
+      });  
+    }
+    if (type === 2) {
+      this.rest.RemoveProviderFromWorkbook(staffId, this.formResponseId).subscribe(data => {    
+        if (data){
+          this.logger.log(staffId, 'Removed Workbook Provider');
+          this.cancelEditProvidersDialog();
+          this.editProvidersForm.reset();
+          this.getWorkbookProviders(this.formResponseId);
+          this.snackBar.openSnackBar(`Provider removed from the workbook`, 'Close', 'success-snackbar');
+        } 
+        else 
+        {
+          this.logger.log('patient exists');
+        }
+        },
+        error => {
+          if (error){
+            console.info('AddRemove Provider Error: ', error);
+            this.logger.log('unexpected error caught: ' + error)
+            this.snackBar.openSnackBar(`Oops! Something has gone wrong. Please contact your PHO Administrator`, 'Close', 'warn-snackbar');
+          }
+          else
+          {
+          this.snackBar.openSnackBar(`Oops! Something has gone wrong. Please contact your PHO Administrator`, 'Close', 'warn-snackbar');
+          }
+        });  
+    }
+
+  }
+
+  checkForExistingWorkbookProvider(id){
+    if (this.workbookProviders.filter(x => x.staffID === id).length > 0)
+    {
+      this.logger.log("1", "checkForExistingWorkbookProvider");
+      return 1;
+    }
+    else{
+      this.logger.log("0", "checkForExistingWorkbookProvider");
+      return 0;
+    }
+  }
+  
 }
