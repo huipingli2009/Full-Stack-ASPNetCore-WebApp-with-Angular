@@ -146,8 +146,8 @@
                 </ng-container>
             </form>
         </div>
-        <div fxLayout="row" fxLayoutAlign="end center" class="side-border-container">
-            <div fxLayout="column" style="padding: 20px;">
+        <div fxLayout="row" fxLayoutAlign="end center" class="side-border-container button-container">
+            <div fxLayout="column">
                 <button mat-flat-button color="accent" (click)="openEditProvidersDialog()">EDIT PROVIDERS</button>
             </div>
         </div>
@@ -628,9 +628,13 @@
           <div fxLayout="column" fxLayoutAlign="center"  fxFlex="50" >
             <mat-form-field class="multi-select-override" floatLabel="always">
               <mat-label>PCP</mat-label>
-              <mat-select matNativeControl placeholder="Select a Provider" formControlName="pcpName" required>
+
+              <mat-select matNativeControl align-items="center" placeholder="Select a Provider" formControlName="pcpName" (selectionChange)="onEditProviderSelectionChange($event)" required>
+                <mat-select-trigger>
+                    {{selectedEditProviderDisplay}}
+                </mat-select-trigger>
                 <mat-option *ngFor="let item of allProviders" [value]="item">
-                    {{item.name}}
+                    <mat-icon color="primary" *ngIf="checkForExistingWorkbookProvider(item.id) === 1">check_circle_outline</mat-icon>&nbsp; {{item.name}}
                 </mat-option>
               </mat-select>
             </mat-form-field>

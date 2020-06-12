@@ -62,6 +62,8 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   PatientNameFilter = new FormControl('');
   selectedPCPEdit = new FormControl('');
   allProviders: Providers[] = [];
+  selectedEditProviderDisplay: string;
+  selectedEditProviderId: number;
 
   ProvidersForWorkbookForm = this.fb.group({
     ProviderWorkbookArray: this.fb.array([
@@ -473,16 +475,21 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
 
   }
 
+  
+  onEditProviderSelectionChange(event: any): void {
+    this.logger.log(event.value.name, 'edit provider selection changed');
+    this.selectedEditProviderDisplay = event.value.name;
+    this.selectedEditProviderId = event.value.id;
+    //this.hasSelectedPatient = true;
+    //this.PatientForWorkbookForm.get('dob').setValue(this.datePipe.transform(event.value.dob, 'MM/dd/yyyy'));
+    //this.PatientForWorkbookForm.get('phone').setValue(event.value.phone);
+    //this.PatientForWorkbookForm.get('patientId').setValue(event.value.patientId);
+    //this.addingPatientName = `${event.value.firstName} ${event.value.lastName}`;
+
+  }
+
   checkForExistingWorkbookProvider(id){
-    if (this.workbookProviders.filter(x => x.staffID === id).length > 0)
-    {
-      this.logger.log("1", "checkForExistingWorkbookProvider");
-      return 1;
-    }
-    else{
-      this.logger.log("0", "checkForExistingWorkbookProvider");
-      return 0;
-    }
+    return ((this.workbookProviders.filter(x => x.staffID === id).length > 0) ? 1 : 0);
   }
   
 }
