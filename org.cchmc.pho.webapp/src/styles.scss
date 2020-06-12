@@ -1435,6 +1435,7 @@ button.toast-close-button {
     color: #f0673c;
   }
 
+
   .responsibility-chip {
     background-color: var(--purple-light);
     border-radius: 12.5px;
@@ -1712,6 +1713,20 @@ button.toast-close-button {
     }
   }
 
+  .edit-provider-select {
+    .mat-select-trigger{
+      font-size: 12px;
+      color: primary !important;
+    }
+    .mat-option .mat-option-text .mat-icon{
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      font-size: 18px;
+      color: primary;
+    }
+  }
+
   .dialogLabel {
     margin-left: 8px;
   }
@@ -1931,6 +1946,12 @@ button.toast-close-button {
       font-style: italic;
       margin-bottom: 9px;
     }
+  }
+
+  
+  .button-container {
+    background-color: white;
+    padding: 0px 49px 30px;
   }
 
   .provider-list-container {
