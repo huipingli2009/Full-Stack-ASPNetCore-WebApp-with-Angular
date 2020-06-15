@@ -61,6 +61,7 @@ export interface PatientDetails {
     lastHealthBridgeAdmit: Date;
     lastDiagnosis: string;
     cchmcAppointment: Date;
+    potentialPatient: boolean;
 }
 
 export interface NewPatient {
@@ -76,7 +77,7 @@ export interface NewPatient {
     chronic: boolean;
     watchFlag: boolean;
     conditions: Array<Conditions>;
-    totalRecords: number;
+    totalRecords: number;    
 }
 
 export class Conditions {
@@ -93,6 +94,10 @@ export class Providers {
 export class PopSlices {
     id: number;
     label: string;
+}
+
+export enum potentialPtStaus {
+    PopSlice = 28 //potentialPatient = true   
 }
 
 export class Insurance {
