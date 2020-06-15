@@ -408,6 +408,37 @@ export class RestService {
     );
   }
 
+    /*addition of PCP to the work book*/
+  AddProviderToWorkbook(providerId: number, formResponseId: number): Observable<any> {
+    let paramsValue = new HttpParams();
+    paramsValue = paramsValue.append("formResponseId", formResponseId.toString());
+    paramsValue = paramsValue.append("providerId", providerId.toString());
+
+    this.logger.log(providerId, 'StaffId');
+    this.logger.log(formResponseId, 'FormResponseId');
+    this.logger.log(paramsValue, 'param');
+
+    return this.http.post<boolean>(`${API_URL}/api/Workbooks/Provider/${formResponseId}/${providerId}`, httpOptions).pipe(
+      catchError(this.handleError<any>('adding provider to the workbook'))
+    );
+  }
+
+  
+
+    /*removal of PCP from the work book*/
+  RemoveProviderFromWorkbook(providerId: number, formResponseId: number): Observable<any> {
+    let paramsValue = new HttpParams();
+    paramsValue = paramsValue.append("formResponseId", formResponseId.toString());
+    paramsValue = paramsValue.append("providerId", providerId.toString());
+
+    this.logger.log(providerId, 'StaffId');
+    this.logger.log(formResponseId, 'FormResponseId');
+
+    return this.http.delete<boolean>(`${API_URL}/api/Workbooks/Provider/${formResponseId}/${providerId}`, httpOptions).pipe(
+      catchError(this.handleError<any>('removing provider from the workbook'))
+    );
+  }
+
   /*Removing patient from the work book*/
   RemovePatientFromWorkbook(workbookPatient: WorkbookPatient): Observable<any> {
     this.logger.log(JSON.stringify(workbookPatient));
@@ -433,7 +464,7 @@ export class RestService {
     paramsValue = paramsValue.append("formResponseId", formResponseid.toString());
     paramsValue = paramsValue.append("patientID", patientID.toString());
 
-    return this.http.get<Followup[]>(`${API_URL}/api/Workbooks/patientfollowup`, { params: paramsValue }).pipe(
+    return this.http.get<Followup[]>(`${API_URL}/api/Workbooks/patientfollowup/`, { params: paramsValue }).pipe(
       map((data: Followup[]) => {
         return data;
       })

@@ -214,6 +214,44 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
+        public async Task<bool> AddProviderToWorkbooks(int userId, int formResponseId, int providerId)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spAddPHQ9Provider", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@FormResponseId", SqlDbType.Int).Value = formResponseId;
+                    sqlCommand.Parameters.Add("@ProviderStaffId", SqlDbType.Int).Value = providerId;
+
+                    await sqlConnection.OpenAsync();
+
+                    //Execute Stored Procedure
+                    return (bool)sqlCommand.ExecuteScalar();
+                }
+            }
+        }
+
+        public async Task<bool> RemoveProviderFromWorkbooks(int userId, int formResponseId, int providerId)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spRemovePHQ9Provider", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@FormResponseId", SqlDbType.Int).Value = formResponseId;
+                    sqlCommand.Parameters.Add("@ProviderStaffId", SqlDbType.Int).Value = providerId;
+
+                    await sqlConnection.OpenAsync();
+
+                    //Execute Stored Procedure
+                    return (bool)sqlCommand.ExecuteScalar();
+                }
+            }
+        }
+
         public async Task<int> UpdateWorkbooksProviders(int userId, int formResponseId, int providerstaffID, int phqs, int total)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
