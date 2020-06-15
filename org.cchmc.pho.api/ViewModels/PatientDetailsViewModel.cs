@@ -46,5 +46,6 @@ namespace org.cchmc.pho.api.ViewModels
         public DateTime? LastHealthBridgeAdmit { get; set; }
         public string LastDiagnosis { get; set; }
         public DateTime? CCHMCAppointment { get; set; }
+        public bool potentialPatient { get; }
     }
 }

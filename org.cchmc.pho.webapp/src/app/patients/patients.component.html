@@ -271,7 +271,7 @@
                 {{providerNotesControl | slice:0:17}}...
               </div>
             </div>
-            <div fxLayout="row" fxLayoutGap="34px">
+            <div fxLayout="row" fxLayoutGap="33px">
               <div fxLayout="column">
                 <label for="phone1">Phone</label>
                 <input formControlName="phone1" name="phone1" />
@@ -298,9 +298,17 @@
                 <label for="zip">Zip</label>
                 <input formControlName="zip" name="zip" />
               </div>
-              <div fxLayout="column" fxLayoutAlign="end" fxFlex="96px">
-                <button mat-flat-button color="accent" [disabled]="!form.valid">Save</button>
+            </div>
+            <div fxLayout="row" fxLayoutGap="33px" fxLayoutAlign="end end" class="form-row">
+              <div fxLayout="column" fxLayoutAlign="end">
+                <button mat-flat-button color="accent" [disabled]="!form.valid" *ngIf="isUserAdmin && potentialPatient"
+                (click)="openPatientAdminDialog()">PATIENT ADMIN</button>
               </div>
+              <div fxLayout="column" fxLayoutAlign="end">
+                <button mat-flat-button color="accent" [disabled]="!form.valid" *ngIf="isUserAdmin && !potentialPatient">Save</button>
+              </div>
+            </div>
+            <div *ngIf = "!potentialPatient" >
               <ng-template #updatePatientDialog>
                 <div mat-dialog-content class="mat-typography">
                   <h3>Are you sure you want to save changes to this patient?</h3>
@@ -385,8 +393,6 @@
       </mat-cell>
     </ng-container>
 
-
-
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple class="element-row"
       [class.expanded]="expandedElement == row" (click)="getPatientDetails(row.patientId)"
@@ -397,7 +403,6 @@
   </mat-table>
   <mat-paginator [length]="patientRecords" [pageSize]="20" [pageSizeOptions]="[20, 40, 60]"></mat-paginator>
 </div>
-
 
   <!--Dialogs ===========================-->
   <ng-template #adminDialog>
@@ -536,3 +541,93 @@
         Save And Exit</button>
     </div>
   </ng-template>
+
+
+  <!---------------------- Patient Admin Dialog ------------------------------------->
+<ng-template *ngIf="isUserAdmin && potentialPatient" #patientAdminDialog>
+  <div mat-dialog-content class="mat-typography" id="patientAdmin-dialog">
+    <form [formGroup]="patientAdminForm">
+      <div fxLayout="row" class="detail-heading">PATIENT ADMIN</div>
+      <br>
+
+      <div fxLayout="row" fxLayoutGap="60px" class="form-row" fxLayoutAlign="start end" >
+        <div fxLayout="column">
+          <mat-form-field floatLabel="always">
+            <mat-label>First Name</mat-label>
+            <input matInput formControlName="firstName" required>
+          </mat-form-field>
+          <ng-container
+            *ngIf="(patientAdminForm.get('firstName').touched || patientAdminForm.get('firstName').dirty) && (patientAdminForm.get('firstName').errors)">
+            <mat-error *ngIf="patientAdminForm.get('firstName').errors.required">
+                *Required
+            </mat-error>
+          </ng-container>
+        </div>
+        <div fxLayout="column">
+          <mat-form-field floatLabel="always">
+            <mat-label>Last Name</mat-label>
+            <input matInput formControlName="lastName" required>
+          </mat-form-field>
+          <ng-container
+            *ngIf="(patientAdminForm.get('lastName').touched || patientAdminForm.get('lastName').dirty) && (patientAdminForm.get('lastName').errors)">
+            <mat-error *ngIf="patientAdminForm.get('lastName').errors.required">
+                *Required
+            </mat-error>
+          </ng-container>
+        </div>
+        <div fxLayout="column">
+          <mat-form-field floatLabel="always">
+            <mat-label>MRN</mat-label>
+            <input matInput formControlName="lastName" required>
+          </mat-form-field>
+          <ng-container
+            *ngIf="(patientAdminForm.get('lastName').touched || patientAdminForm.get('lastName').dirty) && (patientAdminForm.get('lastName').errors)">
+            <mat-error *ngIf="patientAdminForm.get('lastName').errors.required">
+                *Required
+            </mat-error>
+          </ng-container>
+        </div>
+      </div>
+
+      <div fxLayout="row" fxLayoutGap="60px" class="form-row" fxLayoutAlign="start end" >
+        <div fxLayout="column">
+          <mat-form-field floatLabel="always">
+            <mat-label>First Name</mat-label>
+            <input matInput formControlName="firstName" required>
+          </mat-form-field>
+          <ng-container
+            *ngIf="(patientAdminForm.get('firstName').touched || patientAdminForm.get('firstName').dirty) && (patientAdminForm.get('firstName').errors)">
+            <mat-error *ngIf="patientAdminForm.get('firstName').errors.required">
+                *Required
+            </mat-error>
+          </ng-container>
+        </div>
+        <div fxLayout="column">
+          <mat-form-field floatLabel="always">
+            <mat-label>Last Name</mat-label>
+            <input matInput formControlName="lastName" required>
+          </mat-form-field>
+          <ng-container
+            *ngIf="(patientAdminForm.get('lastName').touched || patientAdminForm.get('lastName').dirty) && (patientAdminForm.get('lastName').errors)">
+            <mat-error *ngIf="patientAdminForm.get('lastName').errors.required">
+                *Required
+            </mat-error>
+          </ng-container>
+        </div>
+        <div fxLayout="column">
+          <mat-form-field floatLabel="always">
+            <mat-label>MRN</mat-label>
+            <input matInput formControlName="lastName" required>
+          </mat-form-field>
+          <ng-container
+            *ngIf="(patientAdminForm.get('lastName').touched || patientAdminForm.get('lastName').dirty) && (patientAdminForm.get('lastName').errors)">
+            <mat-error *ngIf="patientAdminForm.get('lastName').errors.required">
+                *Required
+            </mat-error>
+          </ng-container>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+

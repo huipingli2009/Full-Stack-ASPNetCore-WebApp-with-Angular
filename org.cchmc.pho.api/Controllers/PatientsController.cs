@@ -57,15 +57,15 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [HttpGet("{patient}")]
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        [HttpGet("{patient}/{potentiallyActive}")]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]      
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<PatientDetailsViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> GetPatientDetails(string patient)
+        public async Task<IActionResult> GetPatientDetails(string patient,bool potentiallyActive)
         {
-            // route parameters are strings and need to be translated (and validated) to their proper data type
+                  
             if (!int.TryParse(patient, out var patientId))
             {
                 _logger.LogInformation($"Failed to parse patientId - {patient}");
@@ -75,8 +75,10 @@ namespace org.cchmc.pho.api.Controllers
             try
             {
                 int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+
                 // call the data method
-                var data = await _patient.GetPatientDetails(currentUserId, patientId);
+                var data = await _patient.GetPatientDetails(currentUserId, patientId, potentiallyActive); 
+
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
                 var result = _mapper.Map<PatientDetailsViewModel>(data);
                 // return the result in a "200 OK" response

@@ -39,6 +39,7 @@ export class PatientsComponent implements OnInit {
   @ViewChild('updatePatientDialog') callPatientSaveDialog: TemplateRef<any>;
   @ViewChild('adminDialog') adminDialog: TemplateRef<any>;
   @ViewChild('adminConfirmDialog') adminConfirmDialog: TemplateRef<any>;
+  @ViewChild('patientAdminDialog') patientAdminDialog: TemplateRef<any>;
 
   @Input()
   checked: Boolean;
@@ -81,6 +82,7 @@ export class PatientsComponent implements OnInit {
   patientNameSearch: string;
   filteredOptions: Observable<string[]>;
   isActive: boolean;
+  potentialPatient: boolean = false;
   form: FormGroup;
   insuranceList: any[] = [];
   genderList: Gender;
@@ -88,6 +90,7 @@ export class PatientsComponent implements OnInit {
   stateList: any[] = [];  
   newPatientValues: NewPatient;
   adminPatientForm: FormGroup;
+  patientAdminForm: FormGroup;
   isLoading = true;
   isAddingPatientAndContinue : boolean;
   isAddingPatientAndExit : boolean;
@@ -138,6 +141,14 @@ export class PatientsComponent implements OnInit {
       gender: ['', Validators.required],
       pcpName: ['', Validators.required]
     });
+
+    this.patientAdminForm = this.fb.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      dob: ['', Validators.required],
+      gender: ['', Validators.required],
+      pcpName: ['', Validators.required]
+    })
 
     this.subscription = this.filterService.getIsFilteringPatients().subscribe (res => {
       this.isFilteringPatients = res;
@@ -200,8 +211,11 @@ export class PatientsComponent implements OnInit {
 
   loadPatientsWithFilters() {
     if (this.isFilteringPatients === true) { // This is to handle if the user is coming from Dashboard or not.
-      this.popSlices = this.filterType;
+      this.popSlices = this.filterType;      
     }
+
+    this.potentialPatient = +(this.popSlices) == 28 ? true:false;
+    
     this.dataSource.loadPatients(this.defaultSortedRow, this.defaultSortDirection, 0, 20, this.chronic, this.watchFlag, this.conditions,
       this.providers, this.popSlices, this.patientNameSearch);
     this.rest.findPatients(this.defaultSortedRow, this.defaultSortDirection, 0, 20, this.chronic, this.watchFlag, this.conditions,
@@ -361,13 +375,8 @@ export class PatientsComponent implements OnInit {
       else
       {
         this.snackBar.openSnackBar(`Oops! Something has gone wrong. Please contact your PHO Administrator`, 'Close', 'warn-snackbar');
-      }
-      
-      //console.info(error.status);
-      // if (error.status === 400) {
-      //   console.error('patient already exists');
-      //   this.snackBar.openSnackBar(`Patient ${this.newPatientValues.firstName + this.newPatientValues.lastName} already exists in registry`, 'Close', 'warn-snackbar');
-      // }
+      }    
+     
     });  
 
   }
@@ -385,7 +394,7 @@ export class PatientsComponent implements OnInit {
 
   /*Patient Details */
   getPatientDetails(id) {
-    this.rest.getPatientDetails(id).subscribe((data) => {
+    this.rest.getPatientDetails(id,this.potentialPatient).subscribe((data) => {
       this.currentPatientId = data.id;
       this.isLoading = false;
       this.patientDetails = data;
@@ -396,6 +405,7 @@ export class PatientsComponent implements OnInit {
       this.providerPmcaScoreControl = data.providerPMCAScore;
       this.providerNotesControl = data.providerNotes;
       this.selectedGender = data.gender;
+      // this.potentialPatient = data.PotentiallyActive;      
 
       const selectedValues = {
         firstName: data.firstName,
@@ -527,7 +537,8 @@ export class PatientsComponent implements OnInit {
     const dialogRef = this.dialog.open(this.callPmcaDialog, { disableClose: true });
   }
 
-
-
+  openPatientAdminDialog() {
+    this.dialog.open(this.patientAdminDialog, { disableClose: true });
+  }
 
 }
