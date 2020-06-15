@@ -375,13 +375,8 @@ export class PatientsComponent implements OnInit {
       else
       {
         this.snackBar.openSnackBar(`Oops! Something has gone wrong. Please contact your PHO Administrator`, 'Close', 'warn-snackbar');
-      }
-      
-      //console.info(error.status);
-      // if (error.status === 400) {
-      //   console.error('patient already exists');
-      //   this.snackBar.openSnackBar(`Patient ${this.newPatientValues.firstName + this.newPatientValues.lastName} already exists in registry`, 'Close', 'warn-snackbar');
-      // }
+      }    
+     
     });  
 
   }

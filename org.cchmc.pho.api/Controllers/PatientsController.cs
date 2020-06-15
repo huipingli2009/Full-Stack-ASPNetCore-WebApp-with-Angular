@@ -58,17 +58,14 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpGet("{patient}/{potentiallyActive}")]
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        //[Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]      
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
-
-        [AllowAnonymous]
         [SwaggerResponse(200, type: typeof(List<PatientDetailsViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> GetPatientDetails(string patient,bool potentiallyActive)
         {
-            // route parameters are strings and need to be translated (and validated) to their proper data type
+                  
             if (!int.TryParse(patient, out var patientId))
             {
                 _logger.LogInformation($"Failed to parse patientId - {patient}");
