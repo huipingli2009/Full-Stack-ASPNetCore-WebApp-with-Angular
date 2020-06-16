@@ -296,15 +296,16 @@
               </div>
               <div fxLayout="column" fxFlex="20">
                 <label for="zip">Zip</label>
-                <input formControlName="zip" name="zip" style="width: 50%;" />
+                <input formControlName="zip" name="zip" class="input-textfield"  />
               </div>
             </div>
-            <div fxLayout="row" fxLayoutGap="33px" fxLayoutAlign="center end">
-              <div fxLayout="column" >
+            <!-- <div fxLayout="row" fxLayoutGap="33px" fxLayoutAlign="center end"> -->
+              <div fxLayout="row"  fxLayoutAlign="end end">
+              <div fxLayout="column"  >
                 <button mat-flat-button color="accent"  [disabled]="!form.valid" *ngIf="isUserAdmin && potentialPatient"
                 (click)="openPatientAdminDialog()">PATIENT ADMIN</button>
               </div>
-              <div fxLayout="column">
+              <div fxLayout="column" fxLayoutAlign="end end">
                 <button mat-flat-button  color="accent" [disabled]="!form.valid" *ngIf="!potentialPatient">Save</button>
               </div>
             </div>
