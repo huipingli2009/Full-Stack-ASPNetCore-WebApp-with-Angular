@@ -305,7 +305,7 @@
                 (click)="openPatientAdminDialog()">PATIENT ADMIN</button>
               </div>
               <div fxLayout="column">
-                <button mat-flat-button  color="accent" [disabled]="!form.valid" *ngIf="isUserAdmin && !potentialPatient">Save</button>
+                <button mat-flat-button  color="accent" [disabled]="!form.valid" *ngIf="!potentialPatient">Save</button>
               </div>
             </div>
             <div *ngIf = "!potentialPatient" >
