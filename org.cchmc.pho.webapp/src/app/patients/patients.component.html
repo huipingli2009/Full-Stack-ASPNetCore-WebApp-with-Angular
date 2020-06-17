@@ -146,7 +146,7 @@
     <ng-container matColumnDef="expandedDetail">
       <mat-cell *matCellDef="let detail" [attr.colspan]="displayedColumns.length"
         [@detailExpand]="detail == expandedElement ? 'expanded' : 'collapsed'">
-        <div id="patient-details" fxFlex>
+        <div id="patient-details" fxFlex >
           <div fxLayout="row" class="detail-heading">DEMOGRAPHICS</div>
           <div fxLayout="row" *ngIf="isLoading">
             <mat-progress-spinner color="primary" mode="indeterminate">
@@ -154,32 +154,32 @@
           </div>
           <form *ngIf="patientDetails" [formGroup]="form" (ngSubmit)="openPatientSaveDialog()">
             <div fxLayout="row" fxLayoutGap="34px" class="form-row">
-              <div fxLayout="column" fxFlex>
+              <div fxLayout="column" fxFlex="9">
                 <label for="patientMRNId">Epic MRN</label>
                 {{epicMrn}}
               </div>
-              <div fxLayout="column" fxFlex>
+              <div fxLayout="column" fxFlex="15">
                 <label for="firstName">First Name <span class="error-asterix">*</span></label>
                 <input formControlName="firstName" name="firstName" />
                 <div *ngIf="form.controls.firstName.errors?.required && form.controls.firstName.touched" class="error">
                   *Required
                 </div>
               </div>
-              <div fxLayout="column" fxFlex>
+              <div fxLayout="column" fxFlex="15">
                 <label for="lastName">Last Name <span class="error-asterix">*</span></label>
                 <input formControlName="lastName" name="lastName" />
                 <div *ngIf="form.controls.lastName.errors?.required && form.controls.lastName.touched" class="error">
                   *Required
                 </div>
               </div>
-              <div fxLayout="column" fxFlex>
+              <div fxLayout="column" fxFlex="15">
                 <label for="dob">Date of Birth <span class="error-asterix">*</span></label>
                 <input formControlName="dob" name="dob" />
                 <div *ngIf="form.controls.dob.errors?.required && form.controls.dob.touched" class="error">
                   *Required
                 </div>
               </div>
-              <div fxLayout="column" fxFlex>
+              <div fxLayout="column" fxFlex="15">
                 <label for="email">Email</label>
                 <input formControlName="email" name="email" />
               </div>
@@ -211,7 +211,7 @@
                   </mat-select>
                 </mat-form-field>
               </div>
-              <div fxLayout="column" fxFlex>
+              <div fxLayout="column" fxFlex="10">
                 <label for="insuranceName">Insurance</label>
                 <mat-form-field class="multi-select-override">
                   <mat-select matNativeControl formControlName="insuranceName" class="insurance"
@@ -222,7 +222,7 @@
                   </mat-select>
                 </mat-form-field>
               </div>
-              <div fxLayout="column" fxFlex fxFill>
+              <div fxLayout="column" fxFlex="10" fxFill>
                 <label for="conditions">Conditions</label>
                 <mat-form-field class="multi-select-override">
                   <mat-select matNativeControl multiple formControlName="conditionsControl" [compareWith]="compareFn">
@@ -284,7 +284,7 @@
                 <label for="city">City</label>
                 <input formControlName="city" name="city" />
               </div>
-              <div fxLayout="column" fxFlex>
+              <div fxLayout="column" fxFlex="10">
                 <label for="state">State</label>
                 <mat-form-field class="multi-select-override">
                   <mat-select matNativeControl formControlName="state" [compareWith]="compareShortFn">
@@ -294,18 +294,18 @@
                   </mat-select>
                 </mat-form-field>
               </div>
-              <div fxLayout="column" fxFlex>
+              <div fxLayout="column" fxFlex="20">
                 <label for="zip">Zip</label>
-                <input formControlName="zip" name="zip" />
+                <input formControlName="zip" name="zip" class="input-textfield"  />
               </div>
-            </div>
-            <div fxLayout="row" fxLayoutGap="33px" fxLayoutAlign="end end" class="form-row">
-              <div fxLayout="column" fxLayoutAlign="end">
-                <button mat-flat-button color="accent" [disabled]="!form.valid" *ngIf="isUserAdmin && potentialPatient"
+            </div>           
+            <div fxLayout="row"  fxLayoutAlign="end end">
+              <div fxLayout="column"  >
+                <button mat-flat-button color="accent"  [disabled]="!form.valid" *ngIf="isUserAdmin && potentialPatient"
                 (click)="openPatientAdminDialog()">PATIENT ADMIN</button>
               </div>
-              <div fxLayout="column" fxLayoutAlign="end">
-                <button mat-flat-button color="accent" [disabled]="!form.valid" *ngIf="isUserAdmin && !potentialPatient">Save</button>
+              <div fxLayout="column" fxLayoutAlign="end end">
+                <button mat-flat-button  color="accent" [disabled]="!form.valid" *ngIf="!potentialPatient">Save</button>
               </div>
             </div>
             <div *ngIf = "!potentialPatient" >
@@ -545,89 +545,31 @@
 
   <!---------------------- Patient Admin Dialog ------------------------------------->
 <ng-template *ngIf="isUserAdmin && potentialPatient" #patientAdminDialog>
-  <div mat-dialog-content class="mat-typography" id="patientAdmin-dialog">
-    <form [formGroup]="patientAdminForm">
-      <div fxLayout="row" class="detail-heading">PATIENT ADMIN</div>
-      <br>
+  <mat-table [dataSource]="dataSource" id="patients" multiTemplateDataRows matSort matSortDisableClear>
+    <div mat-dialog-content class="mat-typography" id="patientAdmin-dialog">
+      <form [formGroup]="patientAdminForm">
+        <div fxLayout="row" fxLayoutGap="34px" class="form-row">
+         
+           <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+      <mat-cell *matCellDef="let element"
+        [ngStyle]="{'color': (element.pendingStatusConfirmation ? '#f0673c' : '#4A4A4A') }">
+        {{element.lastName | titlecase}}, {{element.firstName | titlecase}} </mat-cell>
+    </ng-container>
 
-      <div fxLayout="row" fxLayoutGap="60px" class="form-row" fxLayoutAlign="start end" >
-        <div fxLayout="column">
-          <mat-form-field floatLabel="always">
-            <mat-label>First Name</mat-label>
-            <input matInput formControlName="firstName" required>
-          </mat-form-field>
-          <ng-container
-            *ngIf="(patientAdminForm.get('firstName').touched || patientAdminForm.get('firstName').dirty) && (patientAdminForm.get('firstName').errors)">
-            <mat-error *ngIf="patientAdminForm.get('firstName').errors.required">
-                *Required
-            </mat-error>
-          </ng-container>
+    <!-- DOB Column -->
+    <ng-container matColumnDef="dob">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> DOB </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.dob | date:'MM/dd/yyyy'}} </mat-cell>
+    </ng-container>
         </div>
-        <div fxLayout="column">
-          <mat-form-field floatLabel="always">
-            <mat-label>Last Name</mat-label>
-            <input matInput formControlName="lastName" required>
-          </mat-form-field>
-          <ng-container
-            *ngIf="(patientAdminForm.get('lastName').touched || patientAdminForm.get('lastName').dirty) && (patientAdminForm.get('lastName').errors)">
-            <mat-error *ngIf="patientAdminForm.get('lastName').errors.required">
-                *Required
-            </mat-error>
-          </ng-container>
-        </div>
-        <div fxLayout="column">
-          <mat-form-field floatLabel="always">
-            <mat-label>MRN</mat-label>
-            <input matInput formControlName="lastName" required>
-          </mat-form-field>
-          <ng-container
-            *ngIf="(patientAdminForm.get('lastName').touched || patientAdminForm.get('lastName').dirty) && (patientAdminForm.get('lastName').errors)">
-            <mat-error *ngIf="patientAdminForm.get('lastName').errors.required">
-                *Required
-            </mat-error>
-          </ng-container>
-        </div>
-      </div>
-
-      <div fxLayout="row" fxLayoutGap="60px" class="form-row" fxLayoutAlign="start end" >
-        <div fxLayout="column">
-          <mat-form-field floatLabel="always">
-            <mat-label>First Name</mat-label>
-            <input matInput formControlName="firstName" required>
-          </mat-form-field>
-          <ng-container
-            *ngIf="(patientAdminForm.get('firstName').touched || patientAdminForm.get('firstName').dirty) && (patientAdminForm.get('firstName').errors)">
-            <mat-error *ngIf="patientAdminForm.get('firstName').errors.required">
-                *Required
-            </mat-error>
-          </ng-container>
-        </div>
-        <div fxLayout="column">
-          <mat-form-field floatLabel="always">
-            <mat-label>Last Name</mat-label>
-            <input matInput formControlName="lastName" required>
-          </mat-form-field>
-          <ng-container
-            *ngIf="(patientAdminForm.get('lastName').touched || patientAdminForm.get('lastName').dirty) && (patientAdminForm.get('lastName').errors)">
-            <mat-error *ngIf="patientAdminForm.get('lastName').errors.required">
-                *Required
-            </mat-error>
-          </ng-container>
-        </div>
-        <div fxLayout="column">
-          <mat-form-field floatLabel="always">
-            <mat-label>MRN</mat-label>
-            <input matInput formControlName="lastName" required>
-          </mat-form-field>
-          <ng-container
-            *ngIf="(patientAdminForm.get('lastName').touched || patientAdminForm.get('lastName').dirty) && (patientAdminForm.get('lastName').errors)">
-            <mat-error *ngIf="patientAdminForm.get('lastName').errors.required">
-                *Required
-            </mat-error>
-          </ng-container>
-        </div>
-      </div>
-    </form>
-  </div>
+      </form>
+    </div>
+ 
+  </mat-table>
+  
 </ng-template>
+
+
 
