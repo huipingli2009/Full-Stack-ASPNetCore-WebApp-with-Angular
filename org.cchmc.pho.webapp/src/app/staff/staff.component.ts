@@ -332,15 +332,40 @@ export class StaffComponent implements OnInit, OnDestroy {
 
   updateStaff() {
     this.staffDetails = this.StaffDetailsForm.value;
+    this.logger.log(this.StaffDetailsForm.value);
     this.staffDetails.npi = Number(this.StaffDetailsForm.controls.npi.value);
     this.rest.updateStaff(this.staffDetails).pipe(take(1)).subscribe(res => {
       this.staffDetails = res;
-      this.StaffDetailsForm.setValue(this.staffDetails);
-      this.snackBar.openSnackBar(`Details updated for ${this.staffDetails.lastName} ${this.staffDetails.firstName}`, 'Close', 'success-snackbar')
 
+      this.StaffDetailsForm.get('id').setValue(this.staffDetails.id);
+      this.StaffDetailsForm.get('firstName').setValue(this.staffDetails.firstName);
+      this.StaffDetailsForm.get('lastName').setValue(this.staffDetails.lastName);
+      this.StaffDetailsForm.get('email').setValue(this.staffDetails.email);
+      this.StaffDetailsForm.get('phone').setValue(this.staffDetails.phone);
+      this.StaffDetailsForm.get('startDate').setValue(this.staffDetails.startDate);
+      this.StaffDetailsForm.get('positionId').setValue(this.staffDetails.positionId);
+      this.StaffDetailsForm.get('credentialId').setValue(this.staffDetails.credentialId);
+      this.StaffDetailsForm.get('npi').setValue(this.staffDetails.npi);
+      this.StaffDetailsForm.get('isLeadPhysician').setValue(this.staffDetails.isLeadPhysician);
+      this.StaffDetailsForm.get('isQITeam').setValue(this.staffDetails.isQITeam);
+      this.StaffDetailsForm.get('isPracticeManager').setValue(this.staffDetails.isPracticeManager);
+      this.StaffDetailsForm.get('isInterventionContact').setValue(this.staffDetails.isInterventionContact);
+      this.StaffDetailsForm.get('isQPLLeader').setValue(this.staffDetails.isQPLLeader);
+      this.StaffDetailsForm.get('isPHOBoard').setValue(this.staffDetails.isPHOBoard);
+      this.StaffDetailsForm.get('isOVPCABoard').setValue(this.staffDetails.isOVPCABoard);
+      this.StaffDetailsForm.get('isRVPIBoard').setValue(this.staffDetails.isRVPIBoard);
+      this.StaffDetailsForm.get('locations').setValue(this.staffDetails.locations);
+
+      this.StaffAdminForm.get('id').setValue(this.staffDetails.id.toString());
+      this.StaffAdminForm.get('deletedFlag').setValue(this.staffDetails.deletedFlag.toString());
+      this.StaffAdminForm.get('endDate').setValue(this.staffDetails.endDate);
+
+      //this.StaffDetailsForm.setValue(this.staffDetails);
+      this.snackBar.openSnackBar(`Details updated for ${this.staffDetails.lastName} ${this.staffDetails.firstName}`, 'Close', 'success-snackbar')
+this.logger.log
       this.getStaff();
     },
-      error => { this.error = error; }
+      error => { this.error = error; this.logger.log(error); }
     );
   }
 
