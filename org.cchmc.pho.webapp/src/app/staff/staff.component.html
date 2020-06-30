@@ -192,9 +192,8 @@
                                 <div fxLayout="column" fxFlex>
                                     <mat-form-field floatLabel="always">
                                         <mat-label>LOCATIONS</mat-label>
-                                        <!-- <mat-select formControlName="locations" multiple required
-                                            [compareWith]="compareByLocationName"> -->
-                                        <mat-select formControlName="locations" multiple required>
+                                        <mat-select formControlName="locations" multiple required
+                                            [compareWith]="compareByLocationName">
                                             <mat-option *ngFor="let item of locationsList" [value]="item">
                                                 {{item.name}}
                                             </mat-option>
