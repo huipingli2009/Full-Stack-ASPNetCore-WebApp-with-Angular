@@ -2,7 +2,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { DatePipe } from '@angular/common';
 import { Component, HostListener, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute } from '@angular/router';
@@ -537,8 +537,24 @@ export class PatientsComponent implements OnInit {
     const dialogRef = this.dialog.open(this.callPmcaDialog, { disableClose: true });
   }
 
-  openPatientAdminDialog() {
+  openPatientAdminDialog(id:number) { 
+    
+    //this.adminPatientForm.setValue();
     this.dialog.open(this.patientAdminDialog, { disableClose: true });
+    this.isActive = true;
+    
+    // const data = this.getPatientDetails(this.currentPatientId) ;
+
+    // //populate the form with the patient details info needed
+    
+    // //this.getPatientDetails(id);
+
+    // //this.form.setValue(this.patientDetails);
+    // const dialogConfig = new MatDialogConfig();
+    // dialogConfig.disableClose = true;
+    // dialogConfig.autoFocus = true;
+    // dialogConfig.width = "50%";
+    // this.dialog.open(PatientsComponent, dialogConfig);
   }
 
 }

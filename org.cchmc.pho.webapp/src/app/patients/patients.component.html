@@ -300,9 +300,16 @@
               </div>
             </div>           
             <div fxLayout="row"  fxLayoutAlign="end end">
+              <!-- <mat-header-cell *matHeaderCellDef></mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <div fxLayout="column"  >
+                  <button mat-flat-button color="accent"  [disabled]="!form.valid" *ngIf="isUserAdmin && potentialPatient"
+                  (click)="openPatientAdminDialog(element.id)">PATIENT ADMIN</button>
+                </div>
+              </mat-cell> -->
               <div fxLayout="column"  >
                 <button mat-flat-button color="accent"  [disabled]="!form.valid" *ngIf="isUserAdmin && potentialPatient"
-                (click)="openPatientAdminDialog()">PATIENT ADMIN</button>
+                (click)="openPatientAdminDialog(detail.patientId)">PATIENT ADMIN</button>
               </div>
               <div fxLayout="column" fxLayoutAlign="end end">
                 <button mat-flat-button  color="accent" [disabled]="!form.valid" *ngIf="!potentialPatient">Save</button>
@@ -545,29 +552,76 @@
 
   <!---------------------- Patient Admin Dialog ------------------------------------->
 <ng-template *ngIf="isUserAdmin && potentialPatient" #patientAdminDialog>
-  <mat-table [dataSource]="dataSource" id="patients" multiTemplateDataRows matSort matSortDisableClear>
-    <div mat-dialog-content class="mat-typography" id="patientAdmin-dialog">
-      <form [formGroup]="patientAdminForm">
-        <div fxLayout="row" fxLayoutGap="34px" class="form-row">
-         
-           <!-- Name Column -->
-    <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
-      <mat-cell *matCellDef="let element"
-        [ngStyle]="{'color': (element.pendingStatusConfirmation ? '#f0673c' : '#4A4A4A') }">
-        {{element.lastName | titlecase}}, {{element.firstName | titlecase}} </mat-cell>
-    </ng-container>
-
-    <!-- DOB Column -->
-    <ng-container matColumnDef="dob">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> DOB </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.dob | date:'MM/dd/yyyy'}} </mat-cell>
-    </ng-container>
+   <!---------------------- Potential Patient Reconfirmation ------------------------------------->
+  <div mat-dialog-content class="mat-typography" id="patient-admin-dialog">
+    <form [formGroup]="adminPatientForm">
+      <div fxLayout="row" class="detail-heading">POTENTIAL PATIENT</div>
+      <br>
+      
+      <div fxLayout="row" fxLayoutGap="60px" class="form-row" fxLayoutAlign="start end" >
+        <div fxLayout="column">
+          <mat-form-field floatLabel="always">
+            <mat-label>First Name</mat-label>
+            <input matInput [value]="patientDetails.firstName" readonly>          
+          </mat-form-field>          
         </div>
-      </form>
-    </div>
- 
-  </mat-table>
+        <div fxLayout="column">
+          <mat-form-field floatLabel="always">
+            <mat-label>Last Name</mat-label>
+            <input matInput [value]="patientDetails.lastName" readonly>
+          </mat-form-field>          
+        </div>
+
+        <div fxLayout="column">
+          <mat-form-field floatLabel="always">
+            <mat-label>MRN</mat-label>
+            <input matInput [value]="epicMrn" readonly>
+          </mat-form-field>         
+        </div>
+      </div>
+     
+      <div fxLayout="row" fxLayoutGap="60px" class="form-row" fxLayoutAlign="start end" >
+        <div fxLayout="column" fxLayoutAlign="start end">
+          <mat-form-field floatLabel="always">
+            <mat-label>Date Of Birth</mat-label>           
+            <input matInput [value]="patientDetails.patientDOB| date: 'MM/dd/yyyy'" readonly>         
+          </mat-form-field>          
+        </div>
+
+        <div fxLayout="column" fxLayoutAlign="start end">
+          <mat-form-field floatLabel="always">
+            <mat-label>Gender</mat-label>
+            <input matInput [value]="patientDetails.gender" readonly>
+          </mat-form-field>           
+        </div>
+
+        <div fxLayout="column" fxLayoutAlign="start end">
+          <mat-form-field floatLabel="always">
+            <mat-label>PCP</mat-label>
+            <input matInput [value]="patientDetails.pcpFirstName + '  ' + patientDetails.pcpLastName " readonly>
+          </mat-form-field>          
+        </div>
+      </div>      
+    </form>
+  </div> 
+
+   <!-- SPACER -->
+   <div fxLayout="row" fxLayoutGap="100px" class="select-row" fxLayoutAlign="start end" ></div>
+   <!-- SPACER -->
+   <div fxLayout="row" fxLayoutGap="100px" class="select-row" fxLayoutAlign="start end" ></div>
+   <!-- SPACER -->
+   <div fxLayout="row" fxLayoutGap="100px" class="select-row" fxLayoutAlign="start end" ></div>
+
+<div  fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="space-evenly end">    
+ <div mat-dialog-actions align="center" class="select-row">  
+   <button mat-flat-button color="accent"
+   (click)="openAdminConfirmDialog(1)">DECLINE PATIENT</button>
+   <button mat-flat-button color="accent"
+   (click)="openAdminConfirmDialog(2)">ACCEPT PATIENT</button>
+ </div>
+ <!----------------------End Potential Patient Reconfirmation ------------------------------------->
+  
+</div>
   
 </ng-template>
 
