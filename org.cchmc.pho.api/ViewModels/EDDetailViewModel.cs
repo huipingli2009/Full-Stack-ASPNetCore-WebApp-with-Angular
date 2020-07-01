@@ -17,5 +17,10 @@ namespace org.cchmc.pho.api.ViewModels
         public string PrimaryDX_10Code { get; set; }
         public string DX2 { get; set; }
         public string DX2_10Code { get; set; }
+        public string InpatientVisit { get; set; }
+        public string EDVisitCount { get; set; }
+        public string UCVisitCount { get; set; }
+        public string AdmitCount { get; set; }
+
     }
 }
