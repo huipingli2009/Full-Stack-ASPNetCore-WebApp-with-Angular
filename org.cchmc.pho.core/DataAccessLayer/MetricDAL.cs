@@ -146,7 +146,11 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                        PrimaryDX = dr["PrimaryDX"].ToString(),
                                        PrimaryDX_10Code = dr["PrimaryDX_10Code"].ToString(),
                                        DX2 = dr["DX2"].ToString(),
-                                       DX2_10Code = dr["DX2_10Code"].ToString()
+                                       DX2_10Code = dr["DX2_10Code"].ToString(),
+                                       InpatientVisit = dr["InpatientVisit"].ToString(),
+                                       EDVisitCount = dr["EDVisitCount"].ToString(),
+                                       UCVisitCount = dr["UCVisitCount"].ToString(),
+                                       AdmitCount = dr["AdmitCount"].ToString()
                                    }
                             ).ToList();
                     }

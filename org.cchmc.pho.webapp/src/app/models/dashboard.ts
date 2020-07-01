@@ -66,4 +66,8 @@ export class EdChartDetails {
     primaryDX_10Code: string;
     dX2: string;
     dX2_10Code: string;
+    inpatientVisit: string;
+    edVisitCount: string;
+    ucVisitCount: string;
+    admitCount: string;
 }
