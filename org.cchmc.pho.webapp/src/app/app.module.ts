@@ -146,7 +146,7 @@ import { WorkbooksComponent } from './workbooks/workbooks.component';
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
   { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }, MatSnackBarComponent, ErrorInterceptor],
-  bootstrap: [AppComponent],
-  entryComponents: [PatientsComponent]
+  bootstrap: [AppComponent]
+  // entryComponents: [PatientsComponent]
 })
 export class AppModule { }

@@ -299,16 +299,9 @@
                 <input formControlName="zip" name="zip" class="input-textfield"  />
               </div>
             </div>           
-            <div fxLayout="row"  fxLayoutAlign="end end">
-              <!-- <mat-header-cell *matHeaderCellDef></mat-header-cell>
-              <mat-cell *matCellDef="let element">
-                <div fxLayout="column"  >
-                  <button mat-flat-button color="accent"  [disabled]="!form.valid" *ngIf="isUserAdmin && potentialPatient"
-                  (click)="openPatientAdminDialog(element.id)">PATIENT ADMIN</button>
-                </div>
-              </mat-cell> -->
+            <div fxLayout="row"  fxLayoutAlign="end end">              
               <div fxLayout="column"  >
-                <button mat-flat-button color="accent"  [disabled]="!form.valid" *ngIf="isUserAdmin && potentialPatient"
+                <button mat-flat-button color="accent" [disabled]="!form.valid"  *ngIf="isUserAdmin && potentialPatient"
                 (click)="openPatientAdminDialog(detail.patientId)">PATIENT ADMIN</button>
               </div>
               <div fxLayout="column" fxLayoutAlign="end end">
@@ -541,20 +534,19 @@
       <h3 *ngIf="isAddingPatientAndContinue">Are you sure you want to save this patient and continue?</h3>
     </div>
     <div mat-dialog-actions align="end">
-      <button mat-button mat-dialog-close (click)="cancelAdminDialog()">Cancel</button>
+      <!-- <button mat-button mat-dialog-close (click)="cancelAdminDialog()">Cancel</button> -->
+      <button mat-button mat-dialog-close>Cancel</button>
       <button mat-flat-button color="accent" mat-dialog-close (click)="submitPatientAddUpdate()" *ngIf="isAddingPatientAndContinue">
         Save And Continue</button>
       <button mat-flat-button color="accent" mat-dialog-close (click)="submitPatientAddUpdate()" *ngIf="isAddingPatientAndExit">
         Save And Exit</button>
     </div>
   </ng-template>
-
-
-  <!---------------------- Patient Admin Dialog ------------------------------------->
-<ng-template *ngIf="isUserAdmin && potentialPatient" #patientAdminDialog>
-   <!---------------------- Potential Patient Reconfirmation ------------------------------------->
+  
+<ng-template  #patientAdminDialog>  
   <div mat-dialog-content class="mat-typography" id="patient-admin-dialog">
-    <form [formGroup]="adminPatientForm">
+    <!-- <form [formGroup]="adminPatientForm" (ngSubmit)="confirmStaffUserUpdate()"> -->
+    <form [formGroup]="patientAdminForm">     
       <div fxLayout="row" class="detail-heading">POTENTIAL PATIENT</div>
       <br>
       
@@ -562,13 +554,13 @@
         <div fxLayout="column">
           <mat-form-field floatLabel="always">
             <mat-label>First Name</mat-label>
-            <input matInput [value]="patientDetails.firstName" readonly>          
-          </mat-form-field>          
+            <input matInput formControlName="firstName" readonly>                  
+          </mat-form-field>               
         </div>
         <div fxLayout="column">
           <mat-form-field floatLabel="always">
             <mat-label>Last Name</mat-label>
-            <input matInput [value]="patientDetails.lastName" readonly>
+            <input matInput formControlName="lastName" readonly>
           </mat-form-field>          
         </div>
 
@@ -584,46 +576,42 @@
         <div fxLayout="column" fxLayoutAlign="start end">
           <mat-form-field floatLabel="always">
             <mat-label>Date Of Birth</mat-label>           
-            <input matInput [value]="patientDetails.patientDOB| date: 'MM/dd/yyyy'" readonly>         
+            <input matInput formControlName="patientDOB" readonly>         
           </mat-form-field>          
         </div>
 
         <div fxLayout="column" fxLayoutAlign="start end">
           <mat-form-field floatLabel="always">
             <mat-label>Gender</mat-label>
-            <input matInput [value]="patientDetails.gender" readonly>
+            <input matInput formControlName="gender" readonly>
           </mat-form-field>           
         </div>
 
         <div fxLayout="column" fxLayoutAlign="start end">
           <mat-form-field floatLabel="always">
             <mat-label>PCP</mat-label>
-            <input matInput [value]="patientDetails.pcpFirstName + '  ' + patientDetails.pcpLastName " readonly>
+            <input matInput formControlName = "pcpName" readonly>
           </mat-form-field>          
         </div>
       </div>      
     </form>
+
+      <!-- SPACER -->
+    <div fxLayout="row" fxLayoutGap="100px" class="select-row" fxLayoutAlign="start end" ></div>
+    <!-- SPACER -->
+    <div fxLayout="row" fxLayoutGap="100px" class="select-row" fxLayoutAlign="start end" ></div>
+    <!-- SPACER -->
+    <div fxLayout="row" fxLayoutGap="100px" class="select-row" fxLayoutAlign="start end" ></div>
+
+    <!-- <div  fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="space-evenly end">     -->
+    <div mat-dialog-actions align="center"> 
+      <button mat-flat-button  color="accent" (click)="cancelPatientAdminDialog()">Cancel</button> 
+      <!-- <button mat-button>Cancel</button> -->
+      <button mat-flat-button color="accent"
+      (click)="openPatientAdminDeclineDialog()">DECLINE PATIENT</button>
+      <button mat-flat-button color="accent"
+      (click)="openPatientAdminAcceptDialog()">ACCEPT PATIENT</button>
+    </div>
   </div> 
-
-   <!-- SPACER -->
-   <div fxLayout="row" fxLayoutGap="100px" class="select-row" fxLayoutAlign="start end" ></div>
-   <!-- SPACER -->
-   <div fxLayout="row" fxLayoutGap="100px" class="select-row" fxLayoutAlign="start end" ></div>
-   <!-- SPACER -->
-   <div fxLayout="row" fxLayoutGap="100px" class="select-row" fxLayoutAlign="start end" ></div>
-
-<div  fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="space-evenly end">    
- <div mat-dialog-actions align="center" class="select-row">  
-   <button mat-flat-button color="accent"
-   (click)="openAdminConfirmDialog(1)">DECLINE PATIENT</button>
-   <button mat-flat-button color="accent"
-   (click)="openAdminConfirmDialog(2)">ACCEPT PATIENT</button>
- </div>
- <!----------------------End Potential Patient Reconfirmation ------------------------------------->
-  
-</div>
   
 </ng-template>
-
-
-

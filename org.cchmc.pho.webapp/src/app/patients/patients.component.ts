@@ -142,12 +142,12 @@ export class PatientsComponent implements OnInit {
       pcpName: ['', Validators.required]
     });
 
-    this.patientAdminForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      dob: ['', Validators.required],
-      gender: ['', Validators.required],
-      pcpName: ['', Validators.required]
+    this.patientAdminForm = this.fb.group({      
+      firstName: '',
+      lastName: '',
+      patientDOB: '',
+      gender: '',
+      pcpName: ''
     })
 
     this.subscription = this.filterService.getIsFilteringPatients().subscribe (res => {
@@ -389,7 +389,10 @@ export class PatientsComponent implements OnInit {
     this.dialog.closeAll();
   }
 
-
+  cancelPatientAdminDialog() {    
+    this.dialog.closeAll();   
+    
+  }
 
 
   /*Patient Details */
@@ -539,9 +542,21 @@ export class PatientsComponent implements OnInit {
 
   openPatientAdminDialog(id:number) { 
     
-    //this.adminPatientForm.setValue();
+    this.patientAdminForm.patchValue({
+      firstName: this.patientDetails.firstName,
+      lastName: this.patientDetails.lastName,
+      patientDOB: this.patientDetails.patientDOB,
+      gender: this.patientDetails.gender,
+      // pcpFirstName: this.patientDetails.pcpFirstName,
+      // pcpLastName: this.patientDetails.pcpLastName
+      pcpName: this.patientDetails.pcpFirstName + " " + this.patientDetails.pcpLastName
+
+    });
+    // this.adminPatientForm.enabled;
+   
     this.dialog.open(this.patientAdminDialog, { disableClose: true });
-    this.isActive = true;
+   
+    //this.isActive = false;
     
     // const data = this.getPatientDetails(this.currentPatientId) ;
 
@@ -557,4 +572,23 @@ export class PatientsComponent implements OnInit {
     // this.dialog.open(PatientsComponent, dialogConfig);
   }
 
+ 
+
+  openPatientAdminDeclineDialog() {
+    // if (type === 1) {
+    //   this.isAddingPatientAndContinue = true;
+    //   this.isAddingPatientAndExit = false;
+    // }
+    // if (type === 2) {
+    //   this.isAddingPatientAndContinue = false;
+    //   this.isAddingPatientAndExit = true;
+    // }
+    //this.dialog.open(this.adminConfirmDialog, { disableClose: true });
+    this.dialog.closeAll();   
+  }
+
+  openPatientAdminAcceptDialog(){
+    this.dialog.closeAll();
+  }
+ 
 }
