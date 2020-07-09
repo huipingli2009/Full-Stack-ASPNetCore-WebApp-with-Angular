@@ -181,7 +181,7 @@ export class RestService {
   }
 
   /*Gets base PatientDetails based on Patient Id */
-  getPatientDetails(id,potentiallyActive): Observable<any> {
+  getPatientDetails(id: number,potentiallyActive: boolean): Observable<any> {
     
     //const potentiallyActive=false;
 
@@ -197,6 +197,16 @@ export class RestService {
   addPatient(patient: NewPatient): Observable<any> {
     this.logger.log(JSON.stringify(patient));
     return this.http.post<NewPatient>(`${API_URL}/api/Patients`, JSON.stringify(patient), httpOptions).pipe(
+      map((data) => {
+        return data;
+      })
+    );
+  }
+
+   /* Accept or decline a potential patient as a new patient*/
+   addPotentialPatient(id: number): Observable<any> {
+    this.logger.log(JSON.stringify(id));
+    return this.http.get<any>(`${API_URL}/api/Patients/${id}`).pipe(
       map((data) => {
         return data;
       })

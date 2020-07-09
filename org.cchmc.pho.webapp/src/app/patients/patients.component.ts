@@ -40,6 +40,7 @@ export class PatientsComponent implements OnInit {
   @ViewChild('adminDialog') adminDialog: TemplateRef<any>;
   @ViewChild('adminConfirmDialog') adminConfirmDialog: TemplateRef<any>;
   @ViewChild('patientAdminDialog') patientAdminDialog: TemplateRef<any>;
+  @ViewChild('patientAdminConfirmDialog') patientAdminConfirmDialog: TemplateRef<any>;
 
   @Input()
   checked: Boolean;
@@ -95,6 +96,8 @@ export class PatientsComponent implements OnInit {
   isAddingPatientAndContinue : boolean;
   isAddingPatientAndExit : boolean;
   isUserAdmin: boolean;
+  acceptPatient: boolean;
+  declinePatient: boolean;
   // Selected Values
   selectedGender;
 
@@ -147,6 +150,8 @@ export class PatientsComponent implements OnInit {
       lastName: '',
       patientDOB: '',
       gender: '',
+      genderId: '',
+      pcpId: '',
       pcpName: ''
     })
 
@@ -547,48 +552,48 @@ export class PatientsComponent implements OnInit {
       lastName: this.patientDetails.lastName,
       patientDOB: this.patientDetails.patientDOB,
       gender: this.patientDetails.gender,
+      genderId: this.patientDetails.genderId,
       // pcpFirstName: this.patientDetails.pcpFirstName,
       // pcpLastName: this.patientDetails.pcpLastName
+      pcpId: this.patientDetails.pcpId,
       pcpName: this.patientDetails.pcpFirstName + " " + this.patientDetails.pcpLastName
 
-    });
-    // this.adminPatientForm.enabled;
+    });    
    
-    this.dialog.open(this.patientAdminDialog, { disableClose: true });
-   
-    //this.isActive = false;
-    
-    // const data = this.getPatientDetails(this.currentPatientId) ;
+    this.dialog.open(this.patientAdminDialog, { disableClose: true });     
+  } 
 
-    // //populate the form with the patient details info needed
-    
-    // //this.getPatientDetails(id);
-
-    // //this.form.setValue(this.patientDetails);
-    // const dialogConfig = new MatDialogConfig();
-    // dialogConfig.disableClose = true;
-    // dialogConfig.autoFocus = true;
-    // dialogConfig.width = "50%";
-    // this.dialog.open(PatientsComponent, dialogConfig);
-  }
-
- 
-
-  openPatientAdminDeclineDialog() {
-    // if (type === 1) {
-    //   this.isAddingPatientAndContinue = true;
-    //   this.isAddingPatientAndExit = false;
-    // }
-    // if (type === 2) {
-    //   this.isAddingPatientAndContinue = false;
-    //   this.isAddingPatientAndExit = true;
-    // }
-    //this.dialog.open(this.adminConfirmDialog, { disableClose: true });
-    this.dialog.closeAll();   
+  openPatientAdminConfirmDialog(type) {
+    if (type === 1) {
+      this.acceptPatient = true;
+      this.declinePatient = false;
+    }
+    if (type === 2) {
+      this.acceptPatient = false;
+      this.declinePatient = true;
+    }
+    this.dialog.open(this.patientAdminConfirmDialog, { disableClose: true });
+    //this.dialog.closeAll();   
   }
 
   openPatientAdminAcceptDialog(){
     this.dialog.closeAll();
   }
+
+  submitPotentialPatientForm() {
+
+    const potentialPatientId: number = this.patientDetails.id;
+   
+    
+    this.logger.log('Potential Patient Added');     
+      
+    
+    this.rest.addPotentialPatient(potentialPatientId).subscribe(data => {     
+      this.loadPatientsWithFilters(); 
+    });  
+    
+    this.dialog.closeAll();
+  }
  
 }
+

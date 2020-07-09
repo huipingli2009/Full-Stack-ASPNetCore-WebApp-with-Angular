@@ -202,6 +202,26 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 }
             }
         }
+
+        public async Task<int> AcceptPotentialPatient(int userId, int potentialPatientId)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spAcceptPotentialPatient", sqlConnection))
+                {
+
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@PotentialPatientID", SqlDbType.Int).Value = potentialPatientId;
+                    //sqlCommand.Parameters.Add("@PotentialProcessStatus", SqlDbType.Int).Value = PotentialProcessType;
+
+                    await sqlConnection.OpenAsync();
+
+                    //Execute Stored Procedure
+                    return ((int)sqlCommand.ExecuteScalar());
+                }
+            }
+        }
         public async Task<bool> IsExistingPatient(int userId, Patient patient)
         {
 

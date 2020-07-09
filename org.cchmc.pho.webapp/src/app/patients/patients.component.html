@@ -152,7 +152,7 @@
             <mat-progress-spinner color="primary" mode="indeterminate">
             </mat-progress-spinner>
           </div>
-          <form *ngIf="patientDetails" [formGroup]="form" (ngSubmit)="openPatientSaveDialog()">
+          <form *ngIf="patientDetails" [formGroup]="form">
             <div fxLayout="row" fxLayoutGap="34px" class="form-row">
               <div fxLayout="column" fxFlex="9">
                 <label for="patientMRNId">Epic MRN</label>
@@ -305,7 +305,7 @@
                 (click)="openPatientAdminDialog(detail.patientId)">PATIENT ADMIN</button>
               </div>
               <div fxLayout="column" fxLayoutAlign="end end">
-                <button mat-flat-button  color="accent" [disabled]="!form.valid" *ngIf="!potentialPatient">Save</button>
+                <button mat-flat-button (click)="openPatientSaveDialog()"  color="accent" [disabled]="!form.valid" *ngIf="!potentialPatient">Save</button>
               </div>
             </div>
             <div *ngIf = "!potentialPatient" >
@@ -608,10 +608,25 @@
       <button mat-flat-button  color="accent" (click)="cancelPatientAdminDialog()">Cancel</button> 
       <!-- <button mat-button>Cancel</button> -->
       <button mat-flat-button color="accent"
-      (click)="openPatientAdminDeclineDialog()">DECLINE PATIENT</button>
+      (click)="openPatientAdminConfirmDialog(1)">ACCEPT PATIENT</button>
       <button mat-flat-button color="accent"
-      (click)="openPatientAdminAcceptDialog()">ACCEPT PATIENT</button>
+      (click)="openPatientAdminConfirmDialog(2)">DECLINE PATIENT</button>    
     </div>
   </div> 
   
+</ng-template>
+
+<ng-template #patientAdminConfirmDialog>
+  <div mat-dialog-content class="mat-typography">
+    <h3 *ngIf="acceptPatient">Are you sure you want to accept this patient?</h3>
+    <h3 *ngIf="declinePatient">Are you sure you want to decline this patient?</h3>
+  </div>
+  <div mat-dialog-actions align="end">
+    <!-- <button mat-button mat-dialog-close (click)="cancelAdminDialog()">Cancel</button> -->
+    <button mat-flat-button color="accent" mat-dialog-close (click)="submitPotentialPatientForm()">NO</button>
+    <button mat-flat-button color="accent" mat-dialog-close (click)="submitPotentialPatientForm()" *ngIf="acceptPatient">
+      YES</button>
+    <!-- <button mat-flat-button color="accent" mat-dialog-close (click)="submitPatientAddUpdate()" *ngIf="declinePatient">
+      YES</button>-->
+  </div> 
 </ng-template>
