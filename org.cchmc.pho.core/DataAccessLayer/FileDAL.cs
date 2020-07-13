@@ -155,6 +155,14 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 init.Name = dr["Initiative"].ToString();
                                 details.Initiative = init;
                             }
+
+                            if (dr["WebContentPlacementId"] != DBNull.Value && int.TryParse(dr["WebContentPlacementId"].ToString(), out int intPlacement) && intPlacement > 0)
+                            {
+                                WebPlacement place = new WebPlacement();
+                                place.Id = intPlacement;
+                                place.Name = dr["WebPlacement"].ToString();
+                                details.WebPlacement = place;
+                            }
                         }
 
 
@@ -187,6 +195,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@Published", SqlDbType.Bit).Value = fileDetails.PublishFlag;
                     sqlCommand.Parameters.Add("@PracticeOnlyFlag", SqlDbType.Bit).Value = fileDetails.PracticeOnly;
                     sqlCommand.Parameters.Add("@CreateAlertFlag", SqlDbType.Bit).Value = fileDetails.CreateAlert;
+                    sqlCommand.Parameters.Add("@WebContentPlacementId", SqlDbType.Int).Value = (fileDetails.WebPlacement == null ? (int?)null : fileDetails.WebPlacement.Id);
 
                     await sqlConnection.OpenAsync();
 
@@ -223,6 +232,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                         sqlCommand.Parameters.Add("@Published", SqlDbType.Bit).Value = fileDetails.PublishFlag;
                         sqlCommand.Parameters.Add("@PracticeOnlyFlag", SqlDbType.Bit).Value = fileDetails.PracticeOnly;
                         sqlCommand.Parameters.Add("@CreateAlertFlag", SqlDbType.Bit).Value = fileDetails.CreateAlert;
+                        sqlCommand.Parameters.Add("@WebContentPlacementId", SqlDbType.Int).Value = (fileDetails.WebPlacement == null ? (int?)null : fileDetails.WebPlacement.Id);
 
                         await sqlConnection.OpenAsync();
 
@@ -577,6 +587,37 @@ namespace org.cchmc.pho.core.DataAccessLayer
                         }
                     }
                     return initiatives;
+                }
+            }
+        }
+
+
+        public async Task<List<WebPlacement>> GetWebPlacements()
+        {
+            DataTable dataTable = new DataTable();
+            List<WebPlacement> placements = new List<WebPlacement>();
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetQuicklinkPlacementList", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    sqlConnection.Open();
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        foreach (DataRow dr in dataTable.Rows)
+                        {
+                            var record = new WebPlacement()
+                            {
+                                Id = (dr["Id"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Id"].ToString())),
+                                Name = dr["Name"].ToString()
+                            };
+                            placements.Add(record);
+                        }
+                    }
+                    return placements;
                 }
             }
         }

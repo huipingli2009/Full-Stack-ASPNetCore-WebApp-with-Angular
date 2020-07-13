@@ -258,7 +258,7 @@
           <div fxLayout="column">
             <mat-form-field floatLabel="always" class="select-style-override">
               <mat-label>RESOURCE TYPE</mat-label>
-              <mat-select matNativeControl formControlName="resourceType" required class="insurance"
+              <mat-select matNativeControl formControlName="resourceType" (selectionChange)="onResourceTypeSelectionChange($event)" required class="insurance"
                 [compareWith]="compareFn">
                 <mat-option *ngFor="let item of resourcesList" [value]="item">
                   {{item.name}}
@@ -281,6 +281,16 @@
                 </mat-option>
               </mat-select>
 
+            </mat-form-field>
+          </div>
+          <div fxLayout="column">
+            <mat-form-field floatLabel="always" class="select-style-override" *ngIf="selectedResourceTypeId == 7">
+              <mat-label>QUICK LINK PLACEMENT</mat-label>
+              <mat-select matNativeControl formControlName="placement" class="insurance" [compareWith]="compareFn">
+                <mat-option *ngFor="let item of placementList" [value]="item">
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
             </mat-form-field>
           </div>
 

@@ -31,6 +31,7 @@ export interface FileDetails {
     publishFlag: boolean;
     practiceOnly: boolean;
     createAlert: boolean;
+    webPlacement: ContentPlacement;
 }
 
 
@@ -44,6 +45,11 @@ export interface Tag {
 }
 
 export interface Initiative {
+    id: number;
+    name: string;
+}
+
+export interface ContentPlacement {
     id: number;
     name: string;
 }

@@ -8,7 +8,7 @@ import { NGXLogger } from 'ngx-logger';
 import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../services/user.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { FileAction, FileDetails, FileType } from '../models/files';
+import { FileAction, FileDetails, FileType, ContentPlacement } from '../models/files';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
@@ -26,6 +26,7 @@ export class FilesComponent implements OnInit {
   resourcesList: any[] = [];
   initiativesList: any[] = [];
   fileTypeList: FileType[] = [];
+  placementList: ContentPlacement[] = [];
   tagList: any[] = [];
   isUserAdmin: boolean;
   adminFileForm: FormGroup;
@@ -43,6 +44,7 @@ export class FilesComponent implements OnInit {
   fileAction: FileAction;
   selectedFileValues: FileDetails;
   RecentlyViewedList: any;
+  selectedResourceTypeId: number;
 
 
   // Filters
@@ -92,7 +94,8 @@ export class FilesComponent implements OnInit {
       fileType: ['', Validators.required],
       description: ['', Validators.required],
       resourceType: ['', Validators.required],
-      initiative: ['']
+      initiative: [''],
+      placement: ['']
     });
   }
 
@@ -106,6 +109,7 @@ export class FilesComponent implements OnInit {
     this.getRecentlyViewedFiles();
     this.getMostPopularFiles();
     this.getFileTypes();
+    this.getWebPlacement();
   }
 
   compareByValue(o1, o2): boolean {
@@ -163,6 +167,8 @@ export class FilesComponent implements OnInit {
       this.currentDateCreated = data.dateCreated;
       this.currentLastViewed = data.lastViewed;
       this.currentWatchFlag = data.watchFlag;
+      this.selectedResourceTypeId = data.resourceType.id;
+      this.logger.log('ResourceType', data.resourceType.id);
       let joinedTags = [];
       data.tags.forEach(tag => {
         joinedTags.push(tag.name);
@@ -180,6 +186,7 @@ export class FilesComponent implements OnInit {
       this.adminFileForm.get('description').setValue(this.selectedFileValues.description);
       this.adminFileForm.get('resourceType').setValue(this.selectedFileValues.resourceType);
       this.adminFileForm.get('initiative').setValue(this.selectedFileValues.initiative);
+      this.adminFileForm.get('placement').setValue(this.selectedFileValues.webPlacement);
     })
   }
 
@@ -218,7 +225,10 @@ export class FilesComponent implements OnInit {
     this.selectedFileValues.watchFlag = this.currentWatchFlag;
     this.selectedFileValues.publishFlag = publishFile;
     this.selectedFileValues.createAlert = this.isPublishingWithAlert;
+    this.logger.log(this.adminFileForm.get('placement').value, 'SELECTEDPLACEMENT');
+    this.selectedFileValues.webPlacement = this.adminFileForm.get('placement').value;
     this.logger.log(this.selectedFileValues, 'FORM SUBMISSION');
+
     if (this.isAddingNewFile === true) {
       this.selectedFileValues = this.adminFileForm.value;
       this.selectedFileValues.tags = tagsSplit;
@@ -237,7 +247,6 @@ export class FilesComponent implements OnInit {
     this.cancelAdminDialog();
 
   }
-
   updateWatchlistStatus(id, index) {
     this.rest.updateFileWatchlistStatus(id).subscribe((data) => {
     });
@@ -281,6 +290,11 @@ export class FilesComponent implements OnInit {
   getInitiatives() {
     this.rest.getFileInitiatives().pipe(take(1)).subscribe((data) => {
       this.initiativesList = data;
+    })
+  }
+  getWebPlacement() {
+    this.rest.getWebPlacement().pipe(take(1)).subscribe((data) => {
+      this.placementList = data;
     })
   }
 
@@ -408,6 +422,10 @@ export class FilesComponent implements OnInit {
       this.mostPopularFileList = new MatTableDataSource(this.MostPopularFiles);
       this.logger.log(this.MostPopularFiles, 'MOST POPULAR FILES');
     })
+  }
+    
+  onResourceTypeSelectionChange(event: any): void {
+    this.selectedResourceTypeId = event.value.id;
   }
 
 }

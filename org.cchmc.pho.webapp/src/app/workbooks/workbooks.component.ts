@@ -480,12 +480,6 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.logger.log(event.value.name, 'edit provider selection changed');
     this.selectedEditProviderDisplay = event.value.name;
     this.selectedEditProviderId = event.value.id;
-    //this.hasSelectedPatient = true;
-    //this.PatientForWorkbookForm.get('dob').setValue(this.datePipe.transform(event.value.dob, 'MM/dd/yyyy'));
-    //this.PatientForWorkbookForm.get('phone').setValue(event.value.phone);
-    //this.PatientForWorkbookForm.get('patientId').setValue(event.value.patientId);
-    //this.addingPatientName = `${event.value.firstName} ${event.value.lastName}`;
-
   }
 
   checkForExistingWorkbookProvider(id){
