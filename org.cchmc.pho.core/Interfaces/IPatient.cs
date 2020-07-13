@@ -12,7 +12,7 @@ namespace org.cchmc.pho.core.Interfaces
         Task<PatientDetails> UpdatePatientDetails(int userId, PatientDetails patientDetail);
         Task<bool> UpdatePatientWatchlist(int userId, int patientId);
         Task<int> AddPatient(int userId, Patient patient);
-        Task<int> AcceptPotentialPatient(int currentUserId, int potentialPatientId);
+        Task<int> AcceptPotentialPatient(int currentUserId, int potentialPatientId, int PotentialProcessType);
         Task<bool> IsExistingPatient(int userId, Patient patient);
         Task<List<SimplifiedPatient>> SearchSimplifiedPatients(int userId, string search);
         Task<List<PatientCondition>> GetPatientConditionsAll();

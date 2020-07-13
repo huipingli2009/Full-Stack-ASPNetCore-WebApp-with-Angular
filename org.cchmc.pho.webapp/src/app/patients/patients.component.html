@@ -623,10 +623,10 @@
   </div>
   <div mat-dialog-actions align="end">
     <!-- <button mat-button mat-dialog-close (click)="cancelAdminDialog()">Cancel</button> -->
-    <button mat-flat-button color="accent" mat-dialog-close (click)="submitPotentialPatientForm()">NO</button>
-    <button mat-flat-button color="accent" mat-dialog-close (click)="submitPotentialPatientForm()" *ngIf="acceptPatient">
-      YES</button>
-    <!-- <button mat-flat-button color="accent" mat-dialog-close (click)="submitPatientAddUpdate()" *ngIf="declinePatient">
-      YES</button>-->
+    <button mat-flat-button color="accent" mat-dialog-close >NO</button>
+    <button mat-flat-button color="accent" mat-dialog-close (click)="submitPotentialPatientForm(1)" *ngIf="acceptPatient">
+      YES ACCEPT</button>
+    <button mat-flat-button color="accent" mat-dialog-close (click)="submitPotentialPatientForm(2)" *ngIf="declinePatient">
+      YES DECLINE</button>
   </div> 
 </ng-template>

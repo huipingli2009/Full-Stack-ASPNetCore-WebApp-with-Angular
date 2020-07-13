@@ -203,7 +203,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
-        public async Task<int> AcceptPotentialPatient(int userId, int potentialPatientId)
+        public async Task<int> AcceptPotentialPatient(int userId, int potentialPatientId, int PotentialProcessType)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
@@ -211,9 +211,9 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 {
 
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
                     sqlCommand.Parameters.Add("@PotentialPatientID", SqlDbType.Int).Value = potentialPatientId;
-                    //sqlCommand.Parameters.Add("@PotentialProcessStatus", SqlDbType.Int).Value = PotentialProcessType;
+                    sqlCommand.Parameters.Add("@PotentialProcessStatus", SqlDbType.Int).Value = PotentialProcessType;
 
                     await sqlConnection.OpenAsync();
 

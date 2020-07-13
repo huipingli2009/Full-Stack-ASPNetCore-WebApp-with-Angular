@@ -201,17 +201,26 @@ export class RestService {
         return data;
       })
     );
-  }
+  } 
 
-   /* Accept or decline a potential patient as a new patient*/
-   addPotentialPatient(id: number): Observable<any> {
-    this.logger.log(JSON.stringify(id));
-    return this.http.get<any>(`${API_URL}/api/Patients/${id}`).pipe(
+  addPotentialPatient(id: number, choice: number): Observable<any> {    
+
+    let paramsValue = new HttpParams();
+
+    paramsValue = paramsValue.append("id",id.toString());
+    paramsValue = paramsValue.append("choice",choice.toString());
+    
+    this.logger.log(id, 'PotentialPatientId');
+    this.logger.log(choice, 'PotentialPatientProcessId');
+    this.logger.log(paramsValue, 'param');
+
+    return this.http.get<any>(`${API_URL}/api/Patients/potentialpatient/${id}/${choice}`).pipe(
       map((data) => {
         return data;
       })
     );
-  }
+  } 
+
 
   /* Staff Component =======================================================*/
 

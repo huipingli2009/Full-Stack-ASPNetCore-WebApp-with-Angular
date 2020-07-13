@@ -580,15 +580,21 @@ export class PatientsComponent implements OnInit {
     this.dialog.closeAll();
   }
 
-  submitPotentialPatientForm() {
+  submitPotentialPatientForm(choice: number) {
 
     const potentialPatientId: number = this.patientDetails.id;
    
-    
-    this.logger.log('Potential Patient Added');     
+    if (choice == 1)
+    {
+      this.logger.log('Potential Patient Added'); 
+    }
+    else    
+    {
+      this.logger.log('Potential Patient Declined'); 
+    }
       
     
-    this.rest.addPotentialPatient(potentialPatientId).subscribe(data => {     
+    this.rest.addPotentialPatient(potentialPatientId, choice).subscribe(data => {     
       this.loadPatientsWithFilters(); 
     });  
     
