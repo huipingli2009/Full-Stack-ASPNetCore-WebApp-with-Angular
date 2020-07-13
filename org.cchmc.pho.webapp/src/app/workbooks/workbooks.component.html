@@ -53,7 +53,7 @@
                     </div>
                     <div fxLayout="row wrap" fxLayoutGap="64px">
                         <div fxLayout="column" class="workbook-item"
-                            [ngClass]="{'only-two-patients': ProviderWorkbookArray.controls.length === 2}">
+                            [ngClass]="{'only-two-patients': ProviderWorkbookArray.controls.length === 2, 'only-three-patients': ProviderWorkbookArray.controls.length === 3}">
                             <div fxLayout="row">
                                 <div fxLayout="column" fxFlex fxLayoutAlign="center start" fxFlex="100px">
                                     <div class="title-col hidden-name">NAME</div>
@@ -68,7 +68,7 @@
                         </div>
                         <div fxLayout="column" class="workbook-item wokbook-col-title-2"
                             *ngIf="ProviderWorkbookArray.controls.length > 1"
-                            [ngClass]="{'only-two-patients': ProviderWorkbookArray.controls.length === 2}">
+                            [ngClass]="{'only-two-patients': ProviderWorkbookArray.controls.length === 2, 'only-three-patients': ProviderWorkbookArray.controls.length === 3}">
                             <div fxLayout="row">
                                 <div fxLayout="column" fxFlex fxLayoutAlign="center start" fxFlex="100px">
                                     <div class="title-col hidden-name">NAME</div>
@@ -82,7 +82,8 @@
                             </div>
                         </div>
                         <div fxLayout="column" class="workbook-item wokbook-col-title-3"
-                            *ngIf="ProviderWorkbookArray.controls.length > 2">
+                            *ngIf="ProviderWorkbookArray.controls.length > 2"
+                            [ngClass]="{'only-three-patients': ProviderWorkbookArray.controls.length === 3}">
                             <div fxLayout="row">
                                 <div fxLayout="column" fxFlex fxLayoutAlign="center start" fxFlex="100px">
                                     <div class="title-col hidden-name">NAME</div>
@@ -116,7 +117,7 @@
                                 <div fxLayout="column"
                                     *ngFor="let provider of ProviderWorkbookArray.controls; index as i"
                                     class="workbook-item workbook-patient-item"
-                                    [ngClass]="{'only-two-patients': ProviderWorkbookArray.controls.length === 2}">
+                                    [ngClass]="{'only-two-patients': ProviderWorkbookArray.controls.length === 2, 'only-three-patients': ProviderWorkbookArray.controls.length === 3}">
                                     <ng-container [formGroupName]="i">
                                         <div fxLayout="row" fxFill>
                                             <div fxLayout="column" fxFlex fxLayoutAlign="center start" fxFlex="100px">
