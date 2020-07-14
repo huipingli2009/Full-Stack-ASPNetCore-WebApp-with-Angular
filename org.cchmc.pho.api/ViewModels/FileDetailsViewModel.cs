@@ -22,5 +22,6 @@ namespace org.cchmc.pho.api.ViewModels
         public bool? PublishFlag { get; set; }
         public bool? PracticeOnly { get; set; }
         public bool? CreateAlert { get; set; }
+        public WebPlacementViewModel WebPlacement { get; set; }
     }
 }

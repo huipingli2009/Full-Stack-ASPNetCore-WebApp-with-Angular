@@ -20,5 +20,6 @@ namespace org.cchmc.pho.core.Interfaces
         Task<List<Initiative>> GetInitiativeAll();
         Task<List<FileType>> GetFileTypesAll();
         Task MarkFileAction(int resourceId, int userId, int actionId);
+        Task<List<WebPlacement>> GetQuicklinkPlacement();
     }
 }

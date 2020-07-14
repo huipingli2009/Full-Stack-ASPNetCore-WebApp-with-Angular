@@ -31,6 +31,7 @@ export interface FileDetails {
     publishFlag: boolean;
     practiceOnly: boolean;
     createAlert: boolean;
+    webPlacement: ContentPlacement;
 }
 
 
@@ -48,6 +49,11 @@ export interface Initiative {
     name: string;
 }
 
+export interface ContentPlacement {
+    id: number;
+    name: string;
+}
+
 export class FileAction {
     fileResourceId: number;
     fileActionId: number;
@@ -57,4 +63,15 @@ export interface FileType {
     id: number;
     name: string;
     imageIcon: string;
+}
+
+export enum ResourceTypeEnum {
+    Undefined = 0,
+    JobAid = 1,
+    OperationalDefinition = 2,
+    QuarterlyReport = 3,
+    DataListReport = 4,
+    ProviderResources = 5,
+    Other = 6,
+    Quicklink = 7
 }

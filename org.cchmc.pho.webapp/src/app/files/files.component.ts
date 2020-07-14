@@ -8,7 +8,7 @@ import { NGXLogger } from 'ngx-logger';
 import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../services/user.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { FileAction, FileDetails, FileType } from '../models/files';
+import { FileAction, FileDetails, FileType, ContentPlacement, ResourceTypeEnum } from '../models/files';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
@@ -26,6 +26,7 @@ export class FilesComponent implements OnInit {
   resourcesList: any[] = [];
   initiativesList: any[] = [];
   fileTypeList: FileType[] = [];
+  placementList: ContentPlacement[] = [];
   tagList: any[] = [];
   isUserAdmin: boolean;
   adminFileForm: FormGroup;
@@ -33,6 +34,7 @@ export class FilesComponent implements OnInit {
   isSavingDraft: boolean;
   isPublishingFile: boolean;
   isPublishingWithAlert: boolean;
+  isPublishingQuicklink: boolean;
   currentFileId: number;
   currentDateCreated: Date;
   currentLastViewed: Date;
@@ -92,7 +94,8 @@ export class FilesComponent implements OnInit {
       fileType: ['', Validators.required],
       description: ['', Validators.required],
       resourceType: ['', Validators.required],
-      initiative: ['']
+      initiative: [''],
+      placement: ['']
     });
   }
 
@@ -106,6 +109,7 @@ export class FilesComponent implements OnInit {
     this.getRecentlyViewedFiles();
     this.getMostPopularFiles();
     this.getFileTypes();
+    this.getWebPlacement();
   }
 
   compareByValue(o1, o2): boolean {
@@ -156,13 +160,14 @@ export class FilesComponent implements OnInit {
     })
   }
 
-  getFileDetials(fileId) {
+  getFileDetails(fileId) {
     this.currentFileId = fileId;
     this.rest.getFileDetails(fileId).pipe(take(1)).subscribe((data) => {
       this.logger.log('FILE DETAILS', data);
       this.currentDateCreated = data.dateCreated;
       this.currentLastViewed = data.lastViewed;
       this.currentWatchFlag = data.watchFlag;
+      this.toggleQuicklink(data.resourceType.id);
       let joinedTags = [];
       data.tags.forEach(tag => {
         joinedTags.push(tag.name);
@@ -180,6 +185,7 @@ export class FilesComponent implements OnInit {
       this.adminFileForm.get('description').setValue(this.selectedFileValues.description);
       this.adminFileForm.get('resourceType').setValue(this.selectedFileValues.resourceType);
       this.adminFileForm.get('initiative').setValue(this.selectedFileValues.initiative);
+      this.adminFileForm.get('placement').setValue(this.selectedFileValues.webPlacement);
     })
   }
 
@@ -218,7 +224,11 @@ export class FilesComponent implements OnInit {
     this.selectedFileValues.watchFlag = this.currentWatchFlag;
     this.selectedFileValues.publishFlag = publishFile;
     this.selectedFileValues.createAlert = this.isPublishingWithAlert;
+    if (this.isPublishingQuicklink){
+      this.selectedFileValues.webPlacement = this.adminFileForm.get('placement').value;
+    }
     this.logger.log(this.selectedFileValues, 'FORM SUBMISSION');
+
     if (this.isAddingNewFile === true) {
       this.selectedFileValues = this.adminFileForm.value;
       this.selectedFileValues.tags = tagsSplit;
@@ -237,7 +247,6 @@ export class FilesComponent implements OnInit {
     this.cancelAdminDialog();
 
   }
-
   updateWatchlistStatus(id, index) {
     this.rest.updateFileWatchlistStatus(id).subscribe((data) => {
     });
@@ -283,6 +292,11 @@ export class FilesComponent implements OnInit {
       this.initiativesList = data;
     })
   }
+  getWebPlacement() {
+    this.rest.getWebPlacement().pipe(take(1)).subscribe((data) => {
+      this.placementList = data;
+    })
+  }
 
   getFileTypes() {
     this.rest.getFileTypes().pipe(take(1)).subscribe((data) => {
@@ -323,7 +337,7 @@ export class FilesComponent implements OnInit {
 
   /* Dialogs -------------*/
   openAdminDialog(fileId) {
-    this.getFileDetials(fileId);
+    this.getFileDetails(fileId);
     this.dialog.open(this.adminDialog, { disableClose: true });
   }
   openAdminAddDialog() {
@@ -350,6 +364,7 @@ export class FilesComponent implements OnInit {
       this.isPublishingFile = true;
       this.isSavingDraft = false;
     }
+
     this.dialog.open(this.adminConfirmDialog, { disableClose: true });
   }
 
@@ -363,6 +378,7 @@ export class FilesComponent implements OnInit {
     this.isPublishingFile = false;
     this.isPublishingWithAlert = false;
     this.isAddingNewFile = false;
+    this.toggleQuicklink(0);
     this.getAllFiles();
     this.dialog.closeAll();
   }
@@ -386,9 +402,7 @@ export class FilesComponent implements OnInit {
 
   }
 
-  updateFile(): void {
-    this.updateFileAction(34); //using file id = 34 for testing
-  }
+
 
   toggleRecentlyViewedTop5(): void {
     this.toggle5_RecentlyViewed = !this.toggle5_RecentlyViewed;
@@ -408,6 +422,17 @@ export class FilesComponent implements OnInit {
       this.mostPopularFileList = new MatTableDataSource(this.MostPopularFiles);
       this.logger.log(this.MostPopularFiles, 'MOST POPULAR FILES');
     })
+  }
+    
+  onResourceTypeSelectionChange(event: any): void {
+    this.toggleQuicklink(event.value.id);
+  }
+
+  toggleQuicklink(selectedResourceTypeId: number): void{
+    this.isPublishingQuicklink = false;
+    if (selectedResourceTypeId == ResourceTypeEnum.Quicklink){
+      this.isPublishingQuicklink = true;
+    }
   }
 
 }
