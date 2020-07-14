@@ -64,3 +64,14 @@ export interface FileType {
     name: string;
     imageIcon: string;
 }
+
+export enum ResourceTypeEnum {
+    Undefined = 0,
+    JobAid = 1,
+    OperationalDefinition = 2,
+    QuarterlyReport = 3,
+    DataListReport = 4,
+    ProviderResources = 5,
+    Other = 6,
+    Quicklink = 7
+}

@@ -592,7 +592,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         }
 
 
-        public async Task<List<WebPlacement>> GetWebPlacements()
+        public async Task<List<WebPlacement>> GetQuicklinkPlacement()
         {
             DataTable dataTable = new DataTable();
             List<WebPlacement> placements = new List<WebPlacement>();

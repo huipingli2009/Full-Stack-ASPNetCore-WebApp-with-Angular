@@ -89,7 +89,7 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
         
-        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [Authorize(Roles = "PHO Admin")]
         [HttpPut()]
         [SwaggerResponse(200, type: typeof(FileDetailsViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
@@ -121,7 +121,7 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
         
-        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [Authorize(Roles = "PHO Admin")]
         [HttpPost()]
         [SwaggerResponse(200, type: typeof(FileDetailsViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
@@ -364,12 +364,12 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(200, type: typeof(List<WebPlacementViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> GetQuicklinkPlacements()
+        public async Task<IActionResult> GetQuicklinkPlacement()
         {
             try
             {
                 // call the data method
-                var data = await _filesDAL.GetWebPlacements();
+                var data = await _filesDAL.GetQuicklinkPlacement();
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
                 var result = _mapper.Map<List<WebPlacementViewModel>>(data);
                 // return the result in a "200 OK" response

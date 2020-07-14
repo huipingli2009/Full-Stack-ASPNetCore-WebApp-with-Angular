@@ -284,7 +284,7 @@
             </mat-form-field>
           </div>
           <div fxLayout="column">
-            <mat-form-field floatLabel="always" class="select-style-override" *ngIf="selectedResourceTypeId == 7">
+            <mat-form-field floatLabel="always" class="select-style-override" *ngIf="isPublishingQuicklink">
               <mat-label>QUICK LINK PLACEMENT</mat-label>
               <mat-select matNativeControl formControlName="placement" class="insurance" [compareWith]="compareFn">
                 <mat-option *ngFor="let item of placementList" [value]="item">
@@ -312,6 +312,7 @@
       <h3 *ngIf="isSavingDraft">Are you sure you want to save this file as a Draft?</h3>
       <h3 *ngIf="isPublishingFile">Are you sure you want to publish this file?</h3>
       <h3 *ngIf="isPublishingWithAlert">Are you sure you want to publish this file with an alert?</h3>
+      <h3 *ngIf="isPublishingQuicklink">Quick Links will be replaced on the Dashboard!</h3>
     </div>
     <div mat-dialog-actions align="end">
       <button mat-button mat-dialog-close (click)="cancelConfirmDialog()">Cancel</button>
