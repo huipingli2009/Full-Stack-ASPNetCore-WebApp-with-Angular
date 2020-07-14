@@ -611,8 +611,8 @@ export class RestService {
       })
     );
   }
-  /*Get File Initiatives*/
-  getWebPlacement(): Observable<any> {
+  /*Get Web Placement: Lookup for WebContentPlacement dropdown. Currently for quicklinks*/
+  getWebPlacement(): Observable<ContentPlacement[]> {
     return this.http.get<any>(`${API_URL}/api/Files/placement/`).pipe(
       map((data: ContentPlacement[]) => {
         return data;

@@ -160,7 +160,7 @@ export class FilesComponent implements OnInit {
     })
   }
 
-  getFileDetials(fileId) {
+  getFileDetails(fileId) {
     this.currentFileId = fileId;
     this.rest.getFileDetails(fileId).pipe(take(1)).subscribe((data) => {
       this.logger.log('FILE DETAILS', data);
@@ -337,7 +337,7 @@ export class FilesComponent implements OnInit {
 
   /* Dialogs -------------*/
   openAdminDialog(fileId) {
-    this.getFileDetials(fileId);
+    this.getFileDetails(fileId);
     this.dialog.open(this.adminDialog, { disableClose: true });
   }
   openAdminAddDialog() {
