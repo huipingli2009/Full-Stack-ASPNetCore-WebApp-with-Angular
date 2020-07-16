@@ -547,8 +547,7 @@
   <div mat-dialog-content class="mat-typography" id="patient-admin-dialog">
     <!-- <form [formGroup]="adminPatientForm" (ngSubmit)="confirmStaffUserUpdate()"> -->
     <form [formGroup]="patientAdminForm">     
-      <div fxLayout="row" class="detail-heading">POTENTIAL PATIENT</div>
-      <br>
+      <div fxLayout="row" class="detail-heading">POTENTIAL PATIENT</div>      
       
       <div fxLayout="row" fxLayoutGap="60px" class="form-row" fxLayoutAlign="start end" >
         <div fxLayout="column">
@@ -597,24 +596,94 @@
     </form>
 
       <!-- SPACER -->
-    <div fxLayout="row" fxLayoutGap="100px" class="select-row" fxLayoutAlign="start end" ></div>
+    <!-- <div fxLayout="row" fxLayoutGap="100px" class="select-row" fxLayoutAlign="start end" ></div> -->
     <!-- SPACER -->
-    <div fxLayout="row" fxLayoutGap="100px" class="select-row" fxLayoutAlign="start end" ></div>
+    <!-- <div fxLayout="row" fxLayoutGap="100px" class="select-row" fxLayoutAlign="start end" ></div> -->
     <!-- SPACER -->
-    <div fxLayout="row" fxLayoutGap="100px" class="select-row" fxLayoutAlign="start end" ></div>
+    <!-- <div fxLayout="row" fxLayoutGap="100px" class="select-row" fxLayoutAlign="start end" ></div> -->
 
     <!-- <div  fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="space-evenly end">     -->
     <div mat-dialog-actions align="center"> 
-      <button mat-flat-button  color="accent" (click)="cancelPatientAdminDialog()">Cancel</button> 
-      <!-- <button mat-button>Cancel</button> -->
+      <!-- <button mat-flat-button  color="accent" (click)="cancelPatientAdminDialog()">Cancel</button>       -->
       <button mat-flat-button color="accent"
       (click)="openPatientAdminConfirmDialog(1)">ACCEPT PATIENT</button>
       <button mat-flat-button color="accent"
       (click)="openPatientAdminConfirmDialog(2)">DECLINE PATIENT</button>    
     </div>
+  <!-- </div>  -->
+ 
+  <br>
+  <!-- merge starts -->
+  <form [formGroup]="patientAdminForm">     
+    <div fxLayout="row" class="detail-heading">DUPLICATE PATIENT</div>
+    <!-- <br> -->
+
+    <div fxLayout="row" fxLayoutGap="60px" class="form-row" fxLayoutAlign="start end" >
+      <div fxLayout="column">
+        <mat-form-field floatLabel="always">
+          <mat-label>First Name</mat-label>         
+          <input matInput formControlName="potentialDupFirstName" readonly>                  
+        </mat-form-field>               
+      </div>
+      <div fxLayout="column">
+        <mat-form-field floatLabel="always">
+          <mat-label>Last Name</mat-label>
+          <input matInput  formControlName="potentialDupLastName" readonly>
+        </mat-form-field>          
+      </div>
+
+      <div fxLayout="column">
+        <mat-form-field floatLabel="always">
+          <mat-label>MRN</mat-label>         
+          <input matInput formControlName="potentialDuplicatePatientMRNId" readonly> 
+        </mat-form-field>         
+      </div>
+    </div>
+   
+    <div fxLayout="row" fxLayoutGap="60px" class="form-row" fxLayoutAlign="start end" >
+      <div fxLayout="column" fxLayoutAlign="start end">
+        <mat-form-field floatLabel="always">
+          <mat-label>Date Of Birth</mat-label>           
+          <input matInput formControlName="potentialDuplicateDOB" readonly>         
+        </mat-form-field>          
+      </div>
+
+      <div fxLayout="column" fxLayoutAlign="start end">
+        <mat-form-field floatLabel="always">
+          <mat-label>Gender</mat-label>
+          <input matInput formControlName="potentialDuplicateGender" readonly>
+        </mat-form-field>           
+      </div>
+
+      <div fxLayout="column" fxLayoutAlign="start end">
+        <mat-form-field floatLabel="always">
+          <mat-label>PCP</mat-label>
+          <input matInput formControlName = "potentialDuplicatePCPFirstName + ' ' + potentialDuplicatePCPLastName" readonly>
+        </mat-form-field>          
+      </div>
+    </div>      
+  </form>
+
+    <!-- SPACER -->
+  <!-- <div fxLayout="row" fxLayoutGap="100px" class="select-row" fxLayoutAlign="start end" ></div> -->
+  <!-- SPACER -->
+  <!-- <div fxLayout="row" fxLayoutGap="100px" class="select-row" fxLayoutAlign="start end" ></div> -->
+  <!-- SPACER -->
+  <!-- <div fxLayout="row" fxLayoutGap="100px" class="select-row" fxLayoutAlign="start end" ></div> -->
+
+  <!-- <div  fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="space-evenly end">     -->
+  <div mat-dialog-actions align="center"> 
+    <button mat-button (click)="cancelPatientAdminDialog()">Cancel</button> 
+    <!-- <button mat-button>Cancel</button> -->
+    <button mat-flat-button color="accent"
+    (click)="openPatientAdminConfirmDialog(3)">MERGE WITH NEW NAME</button>
+    <button mat-flat-button color="accent"
+    (click)="openPatientAdminConfirmDialog(4)">MERGE WITH CURRENT NAME</button>    
   </div> 
-  
+  <!--Merge ends-->
+  </div>
 </ng-template>
+
 
 <ng-template #patientAdminConfirmDialog>
   <div mat-dialog-content class="mat-typography">
@@ -623,10 +692,15 @@
   </div>
   <div mat-dialog-actions align="end">
     <!-- <button mat-button mat-dialog-close (click)="cancelAdminDialog()">Cancel</button> -->
-    <button mat-flat-button color="accent" mat-dialog-close >NO</button>
+    <button mat-button (click)="cancelPatientAdminDialog()">Cancel</button> 
     <button mat-flat-button color="accent" mat-dialog-close (click)="submitPotentialPatientForm(1)" *ngIf="acceptPatient">
       YES ACCEPT</button>
     <button mat-flat-button color="accent" mat-dialog-close (click)="submitPotentialPatientForm(2)" *ngIf="declinePatient">
       YES DECLINE</button>
+    <button mat-flat-button color="accent" mat-dialog-close (click)="submitPotentialPatientForm(3)" *ngIf="mergeWithNewPatient">
+      YES MERGE WITH NEW NAME</button>
+    <button mat-flat-button color="accent" mat-dialog-close (click)="submitPotentialPatientForm(4)" *ngIf="mergeWithOldPatient">
+      YES MERGE WITH CURRENT NAME</button>
+    
   </div> 
 </ng-template>

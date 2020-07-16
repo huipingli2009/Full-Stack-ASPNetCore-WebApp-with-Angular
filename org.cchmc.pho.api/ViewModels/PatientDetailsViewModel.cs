@@ -47,5 +47,13 @@ namespace org.cchmc.pho.api.ViewModels
         public string LastDiagnosis { get; set; }
         public DateTime? CCHMCAppointment { get; set; }
         public bool potentialPatient { get; }
+        public string PotentialDuplicateFirstName { get; set; }
+        public string PotentialDuplicateLastName { get; set; }
+        public DateTime? PotentialDuplicateDOB { get; set; }
+        public string PotentialDuplicatePCPFirstName { get; set; }
+        public string PotentialDuplicatePCPLastName { get; set; }
+        public string PotentialDuplicateGender { get; set; }
+        public string PotentialDup_PAT_MRN_ID { get; set; }
+
     }
 }

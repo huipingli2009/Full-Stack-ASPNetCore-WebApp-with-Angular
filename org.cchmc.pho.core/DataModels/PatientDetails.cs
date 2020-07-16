@@ -46,6 +46,13 @@ namespace org.cchmc.pho.core.DataModels
         public DateTime? LastHealthBridgeAdmit { get; set; }
         public string LastDiagnosis { get; set; }
         public DateTime? CCHMCAppointment { get; set; }
+        public string PotentialDuplicateFirstName { get; set; }
+        public string PotentialDuplicateLastName { get; set; }
+        public DateTime? PotentialDuplicateDOB { get; set; }
+        public string PotentialDuplicatePCPFirstName { get; set; }
+        public string PotentialDuplicatePCPLastName { get; set; }
+        public string PotentialDuplicateGender { get; set; }
+        public string PotentialDup_PAT_MRN_ID { get; set; }
 
     }
 }

@@ -98,6 +98,9 @@ export class PatientsComponent implements OnInit {
   isUserAdmin: boolean;
   acceptPatient: boolean;
   declinePatient: boolean;
+  mergeWithNewPatient: boolean;
+  mergeWithOldPatient: boolean;
+
   // Selected Values
   selectedGender;
 
@@ -152,7 +155,14 @@ export class PatientsComponent implements OnInit {
       gender: '',
       genderId: '',
       pcpId: '',
-      pcpName: ''
+      pcpName: '',
+      potentialDupFirstName: '',
+      potentialDupLastName: '',
+      potentialDuplicateDOB: '',
+      potentialDuplicatePCPFirstName: '',
+      potentialDuplicatePCPLastName: '',
+      potentialDuplicateGender: '',
+      potentialDuplicatePatientMRNId: ''
     })
 
     this.subscription = this.filterService.getIsFilteringPatients().subscribe (res => {
@@ -412,13 +422,21 @@ export class PatientsComponent implements OnInit {
       this.pcpFullName = `${data.pcpFirstName} ${data.pcpLastName}`;
       this.providerPmcaScoreControl = data.providerPMCAScore;
       this.providerNotesControl = data.providerNotes;
-      this.selectedGender = data.gender;
-      // this.potentialPatient = data.PotentiallyActive;      
+      this.selectedGender = data.gender;      
+     
+      // this.potentialPatient = data.PotentiallyActive;            
 
       const selectedValues = {
         firstName: data.firstName,
         lastName: data.lastName,
         dob: this.transformDob(data.patientDOB),
+        potentialDuplicateFirstName: data.potentialDuplicateFirstName,
+        potentialDuplicateLastName: data.potentialDuplicateLastName,
+        potentialDuplicateDOB: data.potentialDuplicateDOB,
+        potentialDuplicatePCPFirstName: data.potentialDuplicatePCPFirstName,
+        potentialDuplicatePCPLastName: data.potentialDuplicatePCPLastName,
+        potentialDuplicateGender: data.potentialDuplicateGender,
+        potentialDuplicatePatientMRNId: data.potentialDuplicatePatientMRNId,
         email: data.email,
         activeStatus: data.activeStatus,
         gender: {
@@ -550,13 +568,21 @@ export class PatientsComponent implements OnInit {
     this.patientAdminForm.patchValue({
       firstName: this.patientDetails.firstName,
       lastName: this.patientDetails.lastName,
-      patientDOB: this.patientDetails.patientDOB,
+      patientDOB: this.transformDob(this.patientDetails.patientDOB),
       gender: this.patientDetails.gender,
       genderId: this.patientDetails.genderId,
       // pcpFirstName: this.patientDetails.pcpFirstName,
       // pcpLastName: this.patientDetails.pcpLastName
       pcpId: this.patientDetails.pcpId,
-      pcpName: this.patientDetails.pcpFirstName + " " + this.patientDetails.pcpLastName
+      pcpName: this.patientDetails.pcpFirstName + " " + this.patientDetails.pcpLastName,
+      potentialDupFirstName: this.patientDetails.potentialDuplicateFirstName,
+      potentialDupLastName: this.patientDetails.potentialDuplicateLastName,
+      potentialDuplicateDOB: this.transformDob(this.patientDetails.potentialDuplicateDOB),
+      potentialDuplicatePCPFirstName: this.patientDetails.potentialDuplicatePCPFirstName,
+      potentialDuplicatePCPLastName: this.patientDetails.potentialDuplicatePCPLastName,
+      potentialDuplicateGender: this.patientDetails.potentialDuplicateGender,
+      potentialDuplicatePatientMRNId: this.patientDetails.potentialDuplicatePatientMRNId
+      // potentialDuplicatePCPName: this.patientDetails.potentialDuplicatePCPFirstName + ' ' + this.patientDetails.potentialDuplicatePCPLastName 
 
     });    
    
@@ -567,10 +593,28 @@ export class PatientsComponent implements OnInit {
     if (type === 1) {
       this.acceptPatient = true;
       this.declinePatient = false;
+      this.mergeWithNewPatient = false;
+      this.mergeWithOldPatient = false;
     }
     if (type === 2) {
       this.acceptPatient = false;
       this.declinePatient = true;
+      this.mergeWithNewPatient = false;
+      this.mergeWithOldPatient = false;
+    }
+
+    if (type === 3) {
+      this.acceptPatient = false;
+      this.declinePatient = false;
+      this.mergeWithNewPatient = true;
+      this.mergeWithOldPatient = false;
+    }
+
+    if (type === 4) {
+      this.acceptPatient = false;
+      this.declinePatient = false;
+      this.mergeWithNewPatient = false;
+      this.mergeWithOldPatient = true;
     }
     this.dialog.open(this.patientAdminConfirmDialog, { disableClose: true });
     //this.dialog.closeAll();   
@@ -588,11 +632,21 @@ export class PatientsComponent implements OnInit {
     {
       this.logger.log('Potential Patient Added'); 
     }
-    else    
+
+    if (choice == 2)   
     {
       this.logger.log('Potential Patient Declined'); 
     }
-      
+
+    if (choice == 3)   
+    {
+      this.logger.log('Name merged with new patient'); 
+    }
+
+    if (choice == 4)   
+    {
+      this.logger.log('Name merged with old patient'); 
+    }      
     
     this.rest.addPotentialPatient(potentialPatientId, choice).subscribe(data => {     
       this.loadPatientsWithFilters(); 

@@ -62,6 +62,17 @@ export interface PatientDetails {
     lastDiagnosis: string;
     cchmcAppointment: Date;
     potentialPatient: boolean;
+    
+}
+
+export interface PotentialDuplicatePatient extends PatientDetails{
+    potentialDuplicateFirstName: string;
+    potentialDuplicateLastName: string;
+    potentialDuplicateDOB: Date;
+    potentialDuplicatePCPFirstName: string;
+    potentialDuplicatePCPLastName: string;
+    potentialDuplicateGender: string;
+    potentialDuplicatePatientMRNId: string;
 }
 
 export interface NewPatient {
