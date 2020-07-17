@@ -73,16 +73,6 @@ export interface PatientDetails {
     
 }
 
-export interface PotentialDuplicatePatient extends PatientDetails{
-    potentialDuplicateFirstName: string;
-    potentialDuplicateLastName: string;
-    potentialDuplicateDOB: Date;
-    potentialDuplicatePCPFirstName: string;
-    potentialDuplicatePCPLastName: string;
-    potentialDuplicateGender: string;
-    potentialDuplicatePatientMRNId: string;
-}
-
 export interface NewPatient {
     firstName: string;
     lastName: string;
@@ -148,4 +138,15 @@ export class PatientForWorkbook {
     lastName: string;
     dob: string;
     phone: string;
+}
+
+export enum patientAdminActionTypeEnum {
+    Accept = 1,
+    Decline = 2,
+    Update = 3  
+}
+
+export enum addPatientProcessEnum {
+    SaveAndContinue = 1,
+    SaveAndExit = 2     
 }

@@ -407,7 +407,7 @@
   <!--Dialogs ===========================-->
   <ng-template #adminDialog>
     <div mat-dialog-content class="mat-typography" id="admin-dialog">
-      <form [formGroup]="adminPatientForm">
+      <form [formGroup]="addPatientForm">
         <div fxLayout="row" class="detail-heading">ADD PATIENT</div>
         <br>
         
@@ -418,8 +418,8 @@
               <input matInput formControlName="firstName" required>
             </mat-form-field>
             <ng-container
-              *ngIf="(adminPatientForm.get('firstName').touched || adminPatientForm.get('firstName').dirty) && (adminPatientForm.get('firstName').errors)">
-              <mat-error *ngIf="adminPatientForm.get('firstName').errors.required">
+              *ngIf="(addPatientForm.get('firstName').touched || addPatientForm.get('firstName').dirty) && (addPatientForm.get('firstName').errors)">
+              <mat-error *ngIf="addPatientForm.get('firstName').errors.required">
                   *Required
               </mat-error>
             </ng-container>
@@ -431,8 +431,8 @@
               <input matInput formControlName="lastName" required>
             </mat-form-field>
             <ng-container
-              *ngIf="(adminPatientForm.get('lastName').touched || adminPatientForm.get('lastName').dirty) && (adminPatientForm.get('lastName').errors)">
-              <mat-error *ngIf="adminPatientForm.get('lastName').errors.required">
+              *ngIf="(addPatientForm.get('lastName').touched || addPatientForm.get('lastName').dirty) && (addPatientForm.get('lastName').errors)">
+              <mat-error *ngIf="addPatientForm.get('lastName').errors.required">
                   *Required
               </mat-error>
             </ng-container>
@@ -461,8 +461,8 @@
 
             </mat-form-field>
             <ng-container
-              *ngIf="(adminPatientForm.get('dob').touched || adminPatientForm.get('dob').dirty) && (adminPatientForm.get('dob').errors)">
-              <mat-error *ngIf="adminPatientForm.get('dob').errors.required">
+              *ngIf="(addPatientForm.get('dob').touched || addPatientForm.get('dob').dirty) && (addPatientForm.get('dob').errors)">
+              <mat-error *ngIf="addPatientForm.get('dob').errors.required">
                   *Required
               </mat-error>
             </ng-container>
@@ -479,8 +479,8 @@
             </mat-form-field>
             
             <ng-container
-              *ngIf="(adminPatientForm.get('dob').touched || adminPatientForm.get('dob').dirty) && (adminPatientForm.get('dob').errors)">
-              <mat-error *ngIf="adminPatientForm.get('dob').errors.required">
+              *ngIf="(addPatientForm.get('dob').touched || addPatientForm.get('dob').dirty) && (addPatientForm.get('dob').errors)">
+              <mat-error *ngIf="addPatientForm.get('dob').errors.required">
                   *Required
               </mat-error>
             </ng-container>
@@ -497,8 +497,8 @@
             </mat-form-field>
             
             <ng-container
-              *ngIf="(adminPatientForm.get('pcpName').touched || adminPatientForm.get('pcpName').dirty) && (adminPatientForm.get('pcpName').errors)">
-              <mat-error *ngIf="adminPatientForm.get('pcpName').errors.required">
+              *ngIf="(addPatientForm.get('pcpName').touched || addPatientForm.get('pcpName').dirty) && (addPatientForm.get('pcpName').errors)">
+              <mat-error *ngIf="addPatientForm.get('pcpName').errors.required">
                   *Required
               </mat-error>
             </ng-container>
@@ -518,9 +518,9 @@
     <div  fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="space-evenly end">    
       <div mat-dialog-actions align="center" class="select-row">
         <button mat-button (click)="cancelAdminDialog()">Cancel</button>
-        <button mat-flat-button [disabled]="!adminPatientForm.valid" color="accent"
+        <button mat-flat-button [disabled]="!addPatientForm.valid" color="accent"
         (click)="openAdminConfirmDialog(1)">SAVE AND CONTINUE</button>
-        <button mat-flat-button [disabled]="!adminPatientForm.valid" color="accent"
+        <button mat-flat-button [disabled]="!addPatientForm.valid" color="accent"
         (click)="openAdminConfirmDialog(2)">SAVE AND EXIT</button>
       </div>
     </div>
@@ -651,7 +651,7 @@
     <button mat-flat-button color="accent"
     (click)="openPatientAdminConfirmDialog(3)" matTooltip="Will update the current patient with the new name and MRN"  matTooltipClass="patientAdminDialogtooltip" [disabled]="!possibleDuplicatePatient">UPDATE CURRENT PATIENT</button>  
     <button mat-flat-button color="accent"
-    (click)="openPatientAdminConfirmDialog(2)" matTooltip="Will ignore the new patient. Please contact your PIC to recover any decline patients" matTooltipClass="patientAdminDialogtooltip">DECLINE PATIENT</button>       
+    (click)="openPatientAdminConfirmDialog(2)" matTooltip="Will ignore the new patient. Please contact your PIC to recover any declined patients" matTooltipClass="patientAdminDialogtooltip">DECLINE PATIENT</button>       
   </div> 
   <!--Merge ends-->
   </div>

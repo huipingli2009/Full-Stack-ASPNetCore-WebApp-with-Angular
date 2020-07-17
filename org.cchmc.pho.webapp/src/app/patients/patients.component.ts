@@ -9,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NGXLogger } from 'ngx-logger';
 import { Observable, Subscription } from 'rxjs';
 import { tap, take } from 'rxjs/operators';
-import { Conditions, Gender, PatientDetails, Patients, NewPatient } from '../models/patients';
+import { Conditions, Gender, PatientDetails, Patients, NewPatient, patientAdminActionTypeEnum, potentialPtStaus, addPatientProcessEnum } from '../models/patients';
 import { RestService } from '../rest.service';
 import { PatientsDataSource } from './patients.datasource';
 import { FilterService } from '../services/filter.service';
@@ -90,7 +90,7 @@ export class PatientsComponent implements OnInit {
   pmcaList: any[] = [];
   stateList: any[] = [];  
   newPatientValues: NewPatient;
-  adminPatientForm: FormGroup;
+  addPatientForm: FormGroup;
   patientAdminForm: FormGroup;
   isLoading = true;
   isAddingPatientAndContinue : boolean;
@@ -141,7 +141,7 @@ export class PatientsComponent implements OnInit {
       zip: ['']
     });
 
-    this.adminPatientForm = this.fb.group({
+    this.addPatientForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       dob: ['', Validators.required],
@@ -230,7 +230,7 @@ export class PatientsComponent implements OnInit {
       this.popSlices = this.filterType;      
     }
 
-    this.potentialPatient = +(this.popSlices) == 28 ? true:false;
+    this.potentialPatient = +(this.popSlices) == potentialPtStaus.PopSlice ? true:false;
     
     this.dataSource.loadPatients(this.defaultSortedRow, this.defaultSortDirection, 0, 20, this.chronic, this.watchFlag, this.conditions,
       this.providers, this.popSlices, this.patientNameSearch);
@@ -323,18 +323,18 @@ export class PatientsComponent implements OnInit {
   //ADD PATIENT
   openAdminAddDialog() {
 
-    this.adminPatientForm.reset();
+    this.addPatientForm.reset();
     this.dialog.open(this.adminDialog, { disableClose: true });
     this.isActive = true;
   }
   
   // Type = submission type. 1 = Save And Continue / 2 = Save And Exit
   openAdminConfirmDialog(type) {
-    if (type === 1) {
+    if (type === addPatientProcessEnum.SaveAndContinue) {
       this.isAddingPatientAndContinue = true;
       this.isAddingPatientAndExit = false;
     }
-    if (type === 2) {
+    if (type === addPatientProcessEnum.SaveAndExit) {
       this.isAddingPatientAndContinue = false;
       this.isAddingPatientAndExit = true;
     }
@@ -343,16 +343,16 @@ export class PatientsComponent implements OnInit {
 
   
   submitPatientAddUpdate() {
-    this.newPatientValues = this.adminPatientForm.value;
-    this.newPatientValues.firstName = this.adminPatientForm.controls.firstName.value;
-    this.newPatientValues.lastName = this.adminPatientForm.controls.lastName.value;
-    this.newPatientValues.dob = new Date(this.transformDobForPut(this.adminPatientForm.controls.dob.value));
-    this.newPatientValues.genderId = this.adminPatientForm.controls.gender.value.id;
-    this.newPatientValues.pcP_StaffID = this.adminPatientForm.controls.pcpName.value.id;
+    this.newPatientValues = this.addPatientForm.value;
+    this.newPatientValues.firstName = this.addPatientForm.controls.firstName.value;
+    this.newPatientValues.lastName = this.addPatientForm.controls.lastName.value;
+    this.newPatientValues.dob = new Date(this.transformDobForPut(this.addPatientForm.controls.dob.value));
+    this.newPatientValues.genderId = this.addPatientForm.controls.gender.value.id;
+    this.newPatientValues.pcP_StaffID = this.addPatientForm.controls.pcpName.value.id;
 
 
     this.logger.log('inSubmitPatientAddUpdate', this.newPatientValues);
-    this.logger.log(this.adminPatientForm.value);
+    this.logger.log(this.addPatientForm.value);
     this.rest.addPatient(this.newPatientValues).subscribe(data => {    
       if (data){
         let id = <number>data;
@@ -620,17 +620,17 @@ export class PatientsComponent implements OnInit {
 
     const potentialPatientId: number = this.patientDetails.id;
    
-    if (choice == 1)
+    if (choice == patientAdminActionTypeEnum.Accept)
     {
       this.logger.log('Potential Patient Added'); 
     }
 
-    if (choice == 2)   
+    if (choice == patientAdminActionTypeEnum.Decline)   
     {
       this.logger.log('Potential Patient Declined'); 
     }
 
-    if (choice == 3)   
+    if (choice == patientAdminActionTypeEnum.Update)   
     {
       this.logger.log('Name merged with new patient'); 
     }     

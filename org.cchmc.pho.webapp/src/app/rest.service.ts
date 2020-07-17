@@ -203,7 +203,7 @@ export class RestService {
     );
   } 
 
-  addPotentialPatient(id: number, choice: number): Observable<any> {    
+  addPotentialPatient(id: number, choice: number): Observable<number> {    
 
     let paramsValue = new HttpParams();
 
