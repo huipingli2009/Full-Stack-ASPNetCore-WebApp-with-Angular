@@ -21,5 +21,6 @@ namespace org.cchmc.pho.core.DataModels
         public bool? PublishFlag { get; set; }
         public bool? PracticeOnly { get; set; }
         public bool? CreateAlert { get; set; }
+        public WebPlacement WebPlacement { get; set; }
     }
 }

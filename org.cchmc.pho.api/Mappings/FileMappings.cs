@@ -23,6 +23,8 @@ namespace org.cchmc.pho.api.Mappings
             CreateMap<Resource, ResourceViewModel>();
             CreateMap<FileAction, FileActionViewModel>();
             CreateMap<FileActionViewModel, FileAction>();
+            CreateMap<WebPlacement, WebPlacementViewModel>();
+            CreateMap<WebPlacementViewModel, WebPlacement>();
         }
     }
 }

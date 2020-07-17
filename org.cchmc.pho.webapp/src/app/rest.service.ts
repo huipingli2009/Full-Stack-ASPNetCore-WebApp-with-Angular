@@ -9,7 +9,7 @@ import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Pati
 import { PracticeList, Responsibilities, Staff, StaffDetails, StaffAdmin } from './models/Staff';
 import { Followup, WorkbookPatient, WorkbookProvider, WorkbookReportingMonths, WorkbookPractice } from './models/workbook';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
-import { FileDetails, FileAction, ResourceType, Tag, Initiative, FileType } from './models/files';
+import { FileDetails, FileAction, ResourceType, Tag, Initiative, FileType, ContentPlacement } from './models/files';
 import { Location } from '@angular/common';
 
 
@@ -626,6 +626,14 @@ export class RestService {
   getFileInitiatives(): Observable<any> {
     return this.http.get<any>(`${API_URL}/api/Files/initiatives/`).pipe(
       map((data: Initiative[]) => {
+        return data;
+      })
+    );
+  }
+  /*Get Web Placement: Lookup for WebContentPlacement dropdown. Currently for quicklinks*/
+  getWebPlacement(): Observable<ContentPlacement[]> {
+    return this.http.get<any>(`${API_URL}/api/Files/placement/`).pipe(
+      map((data: ContentPlacement[]) => {
         return data;
       })
     );
