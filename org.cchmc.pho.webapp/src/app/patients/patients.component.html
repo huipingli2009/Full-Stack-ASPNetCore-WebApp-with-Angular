@@ -449,8 +449,7 @@
 
           <div fxLayout="column" class="input-w-icon date-picker-input" fxLayoutAlign="end end">
             <mat-form-field floatLabel="always" class="multi-select-override">
-              <mat-label>Date Of Birth</mat-label>
-              <!-- <input matInput formControlName="dob" required> -->
+              <mat-label>Date Of Birth</mat-label>             
               <input matInput placeholder="MM/DD/YYYY"
               formControlName="dob" [matDatepicker]="picker" required>
             <mat-datepicker-toggle matPrefix [for]="picker">
@@ -533,8 +532,7 @@
       <h3 *ngIf="isAddingPatientAndExit">Are you sure you want to save this patient and exit?</h3>
       <h3 *ngIf="isAddingPatientAndContinue">Are you sure you want to save this patient and continue?</h3>
     </div>
-    <div mat-dialog-actions align="end">
-      <!-- <button mat-button mat-dialog-close (click)="cancelAdminDialog()">Cancel</button> -->
+    <div mat-dialog-actions align="end">    
       <button mat-button mat-dialog-close>Cancel</button>
       <button mat-flat-button color="accent" mat-dialog-close (click)="submitPatientAddUpdate()" *ngIf="isAddingPatientAndContinue">
         Save And Continue</button>
@@ -544,8 +542,7 @@
   </ng-template>
   
 <ng-template  #patientAdminDialog>  
-  <div mat-dialog-content class="mat-typography" id="patient-admin-dialog">
-    <!-- <form [formGroup]="adminPatientForm" (ngSubmit)="confirmStaffUserUpdate()"> -->
+  <div mat-dialog-content class="mat-typography" id="patient-admin-dialog">   
     <form [formGroup]="patientAdminForm">     
       <div fxLayout="row" class="detail-heading">POTENTIAL PATIENT</div>      
       
@@ -593,29 +590,12 @@
           </mat-form-field>          
         </div>
       </div>      
-    </form>
-
-      <!-- SPACER -->
-    <!-- <div fxLayout="row" fxLayoutGap="100px" class="select-row" fxLayoutAlign="start end" ></div> -->
-    <!-- SPACER -->
-    <!-- <div fxLayout="row" fxLayoutGap="100px" class="select-row" fxLayoutAlign="start end" ></div> -->
-    <!-- SPACER -->
-    <!-- <div fxLayout="row" fxLayoutGap="100px" class="select-row" fxLayoutAlign="start end" ></div> -->
-
-    <!-- <div  fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="space-evenly end">     -->
-    <div mat-dialog-actions align="center"> 
-      <!-- <button mat-flat-button  color="accent" (click)="cancelPatientAdminDialog()">Cancel</button>       -->
-      <button mat-flat-button color="accent"
-      (click)="openPatientAdminConfirmDialog(1)">ACCEPT PATIENT</button>
-      <button mat-flat-button color="accent"
-      (click)="openPatientAdminConfirmDialog(2)">DECLINE PATIENT</button>    
-    </div>
-  <!-- </div>  -->
+    </form>   
  
   <br>
   <!-- merge starts -->
   <form [formGroup]="patientAdminForm">     
-    <div fxLayout="row" class="detail-heading">DUPLICATE PATIENT</div>
+    <div fxLayout="row" class="detail-heading">POSSIBLE DUPLICATE WITH CURRENT PATIENT</div>
     <!-- <br> -->
 
     <div fxLayout="row" fxLayoutGap="60px" class="form-row" fxLayoutAlign="start end" >
@@ -658,49 +638,37 @@
       <div fxLayout="column" fxLayoutAlign="start end">
         <mat-form-field floatLabel="always">
           <mat-label>PCP</mat-label>
-          <input matInput formControlName = "potentialDuplicatePCPFirstName + ' ' + potentialDuplicatePCPLastName" readonly>
+          <input matInput formControlName = "potentialDuplicatePCPName" readonly>
         </mat-form-field>          
       </div>
     </div>      
   </form>
-
-    <!-- SPACER -->
-  <!-- <div fxLayout="row" fxLayoutGap="100px" class="select-row" fxLayoutAlign="start end" ></div> -->
-  <!-- SPACER -->
-  <!-- <div fxLayout="row" fxLayoutGap="100px" class="select-row" fxLayoutAlign="start end" ></div> -->
-  <!-- SPACER -->
-  <!-- <div fxLayout="row" fxLayoutGap="100px" class="select-row" fxLayoutAlign="start end" ></div> -->
-
-  <!-- <div  fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="space-evenly end">     -->
-  <div mat-dialog-actions align="center"> 
+  
+  <div mat-dialog-actions align="center" class="potentialPatientDialog"> 
     <button mat-button (click)="cancelPatientAdminDialog()">Cancel</button> 
-    <!-- <button mat-button>Cancel</button> -->
     <button mat-flat-button color="accent"
-    (click)="openPatientAdminConfirmDialog(3)">MERGE WITH NEW NAME</button>
+    (click)="openPatientAdminConfirmDialog(1)" matTooltip="Will add the potential patient to your registry as a new patient" matTooltipClass="patientAdminDialogtooltip" [disabled]="possibleDuplicatePatient">CREATE PATIENT</button>
     <button mat-flat-button color="accent"
-    (click)="openPatientAdminConfirmDialog(4)">MERGE WITH CURRENT NAME</button>    
+    (click)="openPatientAdminConfirmDialog(3)" matTooltip="Will update the current patient with the new name and MRN"  matTooltipClass="patientAdminDialogtooltip" [disabled]="!possibleDuplicatePatient">UPDATE CURRENT PATIENT</button>  
+    <button mat-flat-button color="accent"
+    (click)="openPatientAdminConfirmDialog(2)" matTooltip="Will ignore the new patient. Please contact your PIC to recover any decline patients" matTooltipClass="patientAdminDialogtooltip">DECLINE PATIENT</button>       
   </div> 
   <!--Merge ends-->
   </div>
 </ng-template>
 
-
 <ng-template #patientAdminConfirmDialog>
   <div mat-dialog-content class="mat-typography">
-    <h3 *ngIf="acceptPatient">Are you sure you want to accept this patient?</h3>
+    <h3 *ngIf="acceptPatient">Are you sure you want to add this new patient?</h3>
     <h3 *ngIf="declinePatient">Are you sure you want to decline this patient?</h3>
   </div>
-  <div mat-dialog-actions align="end">
-    <!-- <button mat-button mat-dialog-close (click)="cancelAdminDialog()">Cancel</button> -->
+  <div mat-dialog-actions align="end">   
     <button mat-button (click)="cancelPatientAdminDialog()">Cancel</button> 
     <button mat-flat-button color="accent" mat-dialog-close (click)="submitPotentialPatientForm(1)" *ngIf="acceptPatient">
       YES ACCEPT</button>
     <button mat-flat-button color="accent" mat-dialog-close (click)="submitPotentialPatientForm(2)" *ngIf="declinePatient">
       YES DECLINE</button>
     <button mat-flat-button color="accent" mat-dialog-close (click)="submitPotentialPatientForm(3)" *ngIf="mergeWithNewPatient">
-      YES MERGE WITH NEW NAME</button>
-    <button mat-flat-button color="accent" mat-dialog-close (click)="submitPotentialPatientForm(4)" *ngIf="mergeWithOldPatient">
-      YES MERGE WITH CURRENT NAME</button>
-    
+      YES UPDATE</button>  
   </div> 
 </ng-template>

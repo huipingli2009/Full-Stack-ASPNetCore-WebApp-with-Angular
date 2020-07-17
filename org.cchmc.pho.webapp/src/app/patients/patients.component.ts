@@ -100,6 +100,7 @@ export class PatientsComponent implements OnInit {
   declinePatient: boolean;
   mergeWithNewPatient: boolean;
   mergeWithOldPatient: boolean;
+  possibleDuplicatePatient: boolean;
 
   // Selected Values
   selectedGender;
@@ -422,9 +423,7 @@ export class PatientsComponent implements OnInit {
       this.pcpFullName = `${data.pcpFirstName} ${data.pcpLastName}`;
       this.providerPmcaScoreControl = data.providerPMCAScore;
       this.providerNotesControl = data.providerNotes;
-      this.selectedGender = data.gender;      
-     
-      // this.potentialPatient = data.PotentiallyActive;            
+      this.selectedGender = data.gender;                
 
       const selectedValues = {
         firstName: data.firstName,
@@ -435,6 +434,7 @@ export class PatientsComponent implements OnInit {
         potentialDuplicateDOB: data.potentialDuplicateDOB,
         potentialDuplicatePCPFirstName: data.potentialDuplicatePCPFirstName,
         potentialDuplicatePCPLastName: data.potentialDuplicatePCPLastName,
+        potentialDuplicatePCPName: data.potentialDuplicatePCPFirstName + ' ' + data.potentialDuplicatePCPLastName,
         potentialDuplicateGender: data.potentialDuplicateGender,
         potentialDuplicatePatientMRNId: data.potentialDuplicatePatientMRNId,
         email: data.email,
@@ -570,9 +570,7 @@ export class PatientsComponent implements OnInit {
       lastName: this.patientDetails.lastName,
       patientDOB: this.transformDob(this.patientDetails.patientDOB),
       gender: this.patientDetails.gender,
-      genderId: this.patientDetails.genderId,
-      // pcpFirstName: this.patientDetails.pcpFirstName,
-      // pcpLastName: this.patientDetails.pcpLastName
+      genderId: this.patientDetails.genderId,     
       pcpId: this.patientDetails.pcpId,
       pcpName: this.patientDetails.pcpFirstName + " " + this.patientDetails.pcpLastName,
       potentialDupFirstName: this.patientDetails.potentialDuplicateFirstName,
@@ -580,11 +578,12 @@ export class PatientsComponent implements OnInit {
       potentialDuplicateDOB: this.transformDob(this.patientDetails.potentialDuplicateDOB),
       potentialDuplicatePCPFirstName: this.patientDetails.potentialDuplicatePCPFirstName,
       potentialDuplicatePCPLastName: this.patientDetails.potentialDuplicatePCPLastName,
+      potentialDuplicatePCPName: this.patientDetails.potentialDuplicatePCPFirstName + ' ' + this.patientDetails.potentialDuplicatePCPLastName,
       potentialDuplicateGender: this.patientDetails.potentialDuplicateGender,
-      potentialDuplicatePatientMRNId: this.patientDetails.potentialDuplicatePatientMRNId
-      // potentialDuplicatePCPName: this.patientDetails.potentialDuplicatePCPFirstName + ' ' + this.patientDetails.potentialDuplicatePCPLastName 
-
-    });    
+      potentialDuplicatePatientMRNId: this.patientDetails.potentialDuplicatePatientMRNId    
+    }); 
+    
+    this.possibleDuplicatePatient = +((this.patientDetails.potentialDuplicateFirstName) != '' && (this.patientDetails.potentialDuplicateLastName) != '') ? true:false;
    
     this.dialog.open(this.patientAdminDialog, { disableClose: true });     
   } 
@@ -609,15 +608,8 @@ export class PatientsComponent implements OnInit {
       this.mergeWithNewPatient = true;
       this.mergeWithOldPatient = false;
     }
-
-    if (type === 4) {
-      this.acceptPatient = false;
-      this.declinePatient = false;
-      this.mergeWithNewPatient = false;
-      this.mergeWithOldPatient = true;
-    }
-    this.dialog.open(this.patientAdminConfirmDialog, { disableClose: true });
-    //this.dialog.closeAll();   
+    
+    this.dialog.open(this.patientAdminConfirmDialog, { disableClose: true });      
   }
 
   openPatientAdminAcceptDialog(){
@@ -641,12 +633,7 @@ export class PatientsComponent implements OnInit {
     if (choice == 3)   
     {
       this.logger.log('Name merged with new patient'); 
-    }
-
-    if (choice == 4)   
-    {
-      this.logger.log('Name merged with old patient'); 
-    }      
+    }     
     
     this.rest.addPotentialPatient(potentialPatientId, choice).subscribe(data => {     
       this.loadPatientsWithFilters(); 
