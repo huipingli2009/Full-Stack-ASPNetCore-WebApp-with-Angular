@@ -2,14 +2,14 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { DatePipe } from '@angular/common';
 import { Component, HostListener, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute } from '@angular/router';
 import { NGXLogger } from 'ngx-logger';
 import { Observable, Subscription } from 'rxjs';
 import { tap, take } from 'rxjs/operators';
-import { Conditions, Gender, PatientDetails, Patients, NewPatient } from '../models/patients';
+import { Conditions, Gender, PatientDetails, Patients, NewPatient, patientAdminActionTypeEnum, potentialPtStaus, addPatientProcessEnum } from '../models/patients';
 import { RestService } from '../rest.service';
 import { PatientsDataSource } from './patients.datasource';
 import { FilterService } from '../services/filter.service';
@@ -40,6 +40,7 @@ export class PatientsComponent implements OnInit {
   @ViewChild('adminDialog') adminDialog: TemplateRef<any>;
   @ViewChild('adminConfirmDialog') adminConfirmDialog: TemplateRef<any>;
   @ViewChild('patientAdminDialog') patientAdminDialog: TemplateRef<any>;
+  @ViewChild('patientAdminConfirmDialog') patientAdminConfirmDialog: TemplateRef<any>;
 
   @Input()
   checked: Boolean;
@@ -89,12 +90,20 @@ export class PatientsComponent implements OnInit {
   pmcaList: any[] = [];
   stateList: any[] = [];  
   newPatientValues: NewPatient;
-  adminPatientForm: FormGroup;
+  addPatientForm: FormGroup;
   patientAdminForm: FormGroup;
   isLoading = true;
   isAddingPatientAndContinue : boolean;
   isAddingPatientAndExit : boolean;
   isUserAdmin: boolean;
+  acceptPatient: boolean;
+  declinePatient: boolean;
+  mergeWithNewPatient: boolean;
+  mergeWithOldPatient: boolean;
+  possibleDuplicatePatient: boolean;
+  patientAdminActionEnum = patientAdminActionTypeEnum;
+  addNewPatientProcessEnum = addPatientProcessEnum;
+
   // Selected Values
   selectedGender;
 
@@ -134,7 +143,7 @@ export class PatientsComponent implements OnInit {
       zip: ['']
     });
 
-    this.adminPatientForm = this.fb.group({
+    this.addPatientForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       dob: ['', Validators.required],
@@ -142,12 +151,21 @@ export class PatientsComponent implements OnInit {
       pcpName: ['', Validators.required]
     });
 
-    this.patientAdminForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      dob: ['', Validators.required],
-      gender: ['', Validators.required],
-      pcpName: ['', Validators.required]
+    this.patientAdminForm = this.fb.group({      
+      firstName: '',
+      lastName: '',
+      patientDOB: '',
+      gender: '',
+      genderId: '',
+      pcpId: '',
+      pcpName: '',
+      potentialDupFirstName: '',
+      potentialDupLastName: '',
+      potentialDuplicateDOB: '',
+      potentialDuplicatePCPFirstName: '',
+      potentialDuplicatePCPLastName: '',
+      potentialDuplicateGender: '',
+      potentialDuplicatePatientMRNId: ''
     })
 
     this.subscription = this.filterService.getIsFilteringPatients().subscribe (res => {
@@ -214,7 +232,7 @@ export class PatientsComponent implements OnInit {
       this.popSlices = this.filterType;      
     }
 
-    this.potentialPatient = +(this.popSlices) == 28 ? true:false;
+    this.potentialPatient = +(this.popSlices) == potentialPtStaus.PopSlice ? true:false;
     
     this.dataSource.loadPatients(this.defaultSortedRow, this.defaultSortDirection, 0, 20, this.chronic, this.watchFlag, this.conditions,
       this.providers, this.popSlices, this.patientNameSearch);
@@ -307,18 +325,18 @@ export class PatientsComponent implements OnInit {
   //ADD PATIENT
   openAdminAddDialog() {
 
-    this.adminPatientForm.reset();
+    this.addPatientForm.reset();
     this.dialog.open(this.adminDialog, { disableClose: true });
     this.isActive = true;
   }
   
   // Type = submission type. 1 = Save And Continue / 2 = Save And Exit
   openAdminConfirmDialog(type) {
-    if (type === 1) {
+    if (type === addPatientProcessEnum.SaveAndContinue) {
       this.isAddingPatientAndContinue = true;
       this.isAddingPatientAndExit = false;
     }
-    if (type === 2) {
+    if (type === addPatientProcessEnum.SaveAndExit) {
       this.isAddingPatientAndContinue = false;
       this.isAddingPatientAndExit = true;
     }
@@ -327,16 +345,16 @@ export class PatientsComponent implements OnInit {
 
   
   submitPatientAddUpdate() {
-    this.newPatientValues = this.adminPatientForm.value;
-    this.newPatientValues.firstName = this.adminPatientForm.controls.firstName.value;
-    this.newPatientValues.lastName = this.adminPatientForm.controls.lastName.value;
-    this.newPatientValues.dob = new Date(this.transformDobForPut(this.adminPatientForm.controls.dob.value));
-    this.newPatientValues.genderId = this.adminPatientForm.controls.gender.value.id;
-    this.newPatientValues.pcP_StaffID = this.adminPatientForm.controls.pcpName.value.id;
+    this.newPatientValues = this.addPatientForm.value;
+    this.newPatientValues.firstName = this.addPatientForm.controls.firstName.value;
+    this.newPatientValues.lastName = this.addPatientForm.controls.lastName.value;
+    this.newPatientValues.dob = new Date(this.transformDobForPut(this.addPatientForm.controls.dob.value));
+    this.newPatientValues.genderId = this.addPatientForm.controls.gender.value.id;
+    this.newPatientValues.pcP_StaffID = this.addPatientForm.controls.pcpName.value.id;
 
 
     this.logger.log('inSubmitPatientAddUpdate', this.newPatientValues);
-    this.logger.log(this.adminPatientForm.value);
+    this.logger.log(this.addPatientForm.value);
     this.rest.addPatient(this.newPatientValues).subscribe(data => {    
       if (data){
         let id = <number>data;
@@ -389,7 +407,10 @@ export class PatientsComponent implements OnInit {
     this.dialog.closeAll();
   }
 
-
+  cancelPatientAdminDialog() {    
+    this.dialog.closeAll();   
+    
+  }
 
 
   /*Patient Details */
@@ -404,13 +425,20 @@ export class PatientsComponent implements OnInit {
       this.pcpFullName = `${data.pcpFirstName} ${data.pcpLastName}`;
       this.providerPmcaScoreControl = data.providerPMCAScore;
       this.providerNotesControl = data.providerNotes;
-      this.selectedGender = data.gender;
-      // this.potentialPatient = data.PotentiallyActive;      
+      this.selectedGender = data.gender;                
 
       const selectedValues = {
         firstName: data.firstName,
         lastName: data.lastName,
         dob: this.transformDob(data.patientDOB),
+        potentialDuplicateFirstName: data.potentialDuplicateFirstName,
+        potentialDuplicateLastName: data.potentialDuplicateLastName,
+        potentialDuplicateDOB: data.potentialDuplicateDOB,
+        potentialDuplicatePCPFirstName: data.potentialDuplicatePCPFirstName,
+        potentialDuplicatePCPLastName: data.potentialDuplicatePCPLastName,
+        potentialDuplicatePCPName: data.potentialDuplicatePCPFirstName + ' ' + data.potentialDuplicatePCPLastName,
+        potentialDuplicateGender: data.potentialDuplicateGender,
+        potentialDuplicatePatientMRNId: data.potentialDuplicatePatientMRNId,
         email: data.email,
         activeStatus: data.activeStatus,
         gender: {
@@ -537,8 +565,84 @@ export class PatientsComponent implements OnInit {
     const dialogRef = this.dialog.open(this.callPmcaDialog, { disableClose: true });
   }
 
-  openPatientAdminDialog() {
-    this.dialog.open(this.patientAdminDialog, { disableClose: true });
+  openPatientAdminDialog(id:number) { 
+    
+    this.patientAdminForm.patchValue({
+      firstName: this.patientDetails.firstName,
+      lastName: this.patientDetails.lastName,
+      patientDOB: this.transformDob(this.patientDetails.patientDOB),
+      gender: this.patientDetails.gender,
+      genderId: this.patientDetails.genderId,     
+      pcpId: this.patientDetails.pcpId,
+      pcpName: this.patientDetails.pcpFirstName + " " + this.patientDetails.pcpLastName,
+      potentialDupFirstName: this.patientDetails.potentialDuplicateFirstName,
+      potentialDupLastName: this.patientDetails.potentialDuplicateLastName,
+      potentialDuplicateDOB: this.transformDob(this.patientDetails.potentialDuplicateDOB),
+      potentialDuplicatePCPFirstName: this.patientDetails.potentialDuplicatePCPFirstName,
+      potentialDuplicatePCPLastName: this.patientDetails.potentialDuplicatePCPLastName,
+      potentialDuplicatePCPName: this.patientDetails.potentialDuplicatePCPFirstName + ' ' + this.patientDetails.potentialDuplicatePCPLastName,
+      potentialDuplicateGender: this.patientDetails.potentialDuplicateGender,
+      potentialDuplicatePatientMRNId: this.patientDetails.potentialDuplicatePatientMRNId    
+    }); 
+    
+    this.possibleDuplicatePatient = +((this.patientDetails.potentialDuplicateFirstName) != '' && (this.patientDetails.potentialDuplicateLastName) != '') ? true:false;
+   
+    this.dialog.open(this.patientAdminDialog, { disableClose: true });     
+  } 
+
+  openPatientAdminConfirmDialog(type) {
+    if (type === patientAdminActionTypeEnum.Accept) {
+      this.acceptPatient = true;
+      this.declinePatient = false;
+      this.mergeWithNewPatient = false;
+      this.mergeWithOldPatient = false;
+    }
+    if (type === patientAdminActionTypeEnum.Decline) {
+      this.acceptPatient = false;
+      this.declinePatient = true;
+      this.mergeWithNewPatient = false;
+      this.mergeWithOldPatient = false;
+    }
+
+    if (type === patientAdminActionTypeEnum.Update) {
+      this.acceptPatient = false;
+      this.declinePatient = false;
+      this.mergeWithNewPatient = true;
+      this.mergeWithOldPatient = false;
+    }
+    
+    this.dialog.open(this.patientAdminConfirmDialog, { disableClose: true });      
   }
 
+  openPatientAdminAcceptDialog(){
+    this.dialog.closeAll();
+  }
+
+  submitPotentialPatientForm(choice: number) {
+
+    const potentialPatientId: number = this.patientDetails.id;
+   
+    if (choice == patientAdminActionTypeEnum.Accept)
+    {
+      this.logger.log('Potential Patient Added'); 
+    }
+
+    if (choice == patientAdminActionTypeEnum.Decline)   
+    {
+      this.logger.log('Potential Patient Declined'); 
+    }
+
+    if (choice == patientAdminActionTypeEnum.Update)   
+    {
+      this.logger.log('Updated existing patient with new patient'); 
+    }     
+    
+    this.rest.addPotentialPatient(potentialPatientId, choice).subscribe(data => {     
+      this.loadPatientsWithFilters(); 
+    });  
+    
+    this.dialog.closeAll();
+  }
+ 
 }
+

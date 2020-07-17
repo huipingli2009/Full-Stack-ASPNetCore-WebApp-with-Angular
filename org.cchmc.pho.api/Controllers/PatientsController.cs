@@ -224,6 +224,31 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
+        [HttpGet("potentialpatient/{PotentialPatientId}/{PotentialProcessStatus}")]       
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [SwaggerResponse(200, type: typeof(int))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> AcceptPotentialPatient(int potentialPatientId, int PotentialProcessStatus)
+        {           
+
+            try
+            {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+
+                // call the data layer to mark the action
+                var data = await _patient.AcceptPotentialPatient(currentUserId, potentialPatientId, PotentialProcessStatus);               
+                var result = _mapper.Map<int>(data);
+                return Ok(result);              
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
         [HttpPut("watchlist/{patient}")]
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(bool))]

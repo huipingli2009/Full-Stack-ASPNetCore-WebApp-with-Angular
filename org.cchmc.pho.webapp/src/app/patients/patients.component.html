@@ -152,7 +152,7 @@
             <mat-progress-spinner color="primary" mode="indeterminate">
             </mat-progress-spinner>
           </div>
-          <form *ngIf="patientDetails" [formGroup]="form" (ngSubmit)="openPatientSaveDialog()">
+          <form *ngIf="patientDetails" [formGroup]="form">
             <div fxLayout="row" fxLayoutGap="34px" class="form-row">
               <div fxLayout="column" fxFlex="9">
                 <label for="patientMRNId">Epic MRN</label>
@@ -299,13 +299,13 @@
                 <input formControlName="zip" name="zip" class="input-textfield"  />
               </div>
             </div>           
-            <div fxLayout="row"  fxLayoutAlign="end end">
+            <div fxLayout="row"  fxLayoutAlign="end end">              
               <div fxLayout="column"  >
-                <button mat-flat-button color="accent"  [disabled]="!form.valid" *ngIf="isUserAdmin && potentialPatient"
-                (click)="openPatientAdminDialog()">PATIENT ADMIN</button>
+                <button mat-flat-button color="accent" [disabled]="!form.valid"  *ngIf="isUserAdmin && potentialPatient"
+                (click)="openPatientAdminDialog(detail.patientId)">PATIENT ADMIN</button>
               </div>
               <div fxLayout="column" fxLayoutAlign="end end">
-                <button mat-flat-button  color="accent" [disabled]="!form.valid" *ngIf="!potentialPatient">Save</button>
+                <button mat-flat-button (click)="openPatientSaveDialog()"  color="accent" [disabled]="!form.valid" *ngIf="!potentialPatient">Save</button>
               </div>
             </div>
             <div *ngIf = "!potentialPatient" >
@@ -407,7 +407,7 @@
   <!--Dialogs ===========================-->
   <ng-template #adminDialog>
     <div mat-dialog-content class="mat-typography" id="admin-dialog">
-      <form [formGroup]="adminPatientForm">
+      <form [formGroup]="addPatientForm">
         <div fxLayout="row" class="detail-heading">ADD PATIENT</div>
         <br>
         
@@ -418,8 +418,8 @@
               <input matInput formControlName="firstName" required>
             </mat-form-field>
             <ng-container
-              *ngIf="(adminPatientForm.get('firstName').touched || adminPatientForm.get('firstName').dirty) && (adminPatientForm.get('firstName').errors)">
-              <mat-error *ngIf="adminPatientForm.get('firstName').errors.required">
+              *ngIf="(addPatientForm.get('firstName').touched || addPatientForm.get('firstName').dirty) && (addPatientForm.get('firstName').errors)">
+              <mat-error *ngIf="addPatientForm.get('firstName').errors.required">
                   *Required
               </mat-error>
             </ng-container>
@@ -431,8 +431,8 @@
               <input matInput formControlName="lastName" required>
             </mat-form-field>
             <ng-container
-              *ngIf="(adminPatientForm.get('lastName').touched || adminPatientForm.get('lastName').dirty) && (adminPatientForm.get('lastName').errors)">
-              <mat-error *ngIf="adminPatientForm.get('lastName').errors.required">
+              *ngIf="(addPatientForm.get('lastName').touched || addPatientForm.get('lastName').dirty) && (addPatientForm.get('lastName').errors)">
+              <mat-error *ngIf="addPatientForm.get('lastName').errors.required">
                   *Required
               </mat-error>
             </ng-container>
@@ -449,8 +449,7 @@
 
           <div fxLayout="column" class="input-w-icon date-picker-input" fxLayoutAlign="end end">
             <mat-form-field floatLabel="always" class="multi-select-override">
-              <mat-label>Date Of Birth</mat-label>
-              <!-- <input matInput formControlName="dob" required> -->
+              <mat-label>Date Of Birth</mat-label>             
               <input matInput placeholder="MM/DD/YYYY"
               formControlName="dob" [matDatepicker]="picker" required>
             <mat-datepicker-toggle matPrefix [for]="picker">
@@ -462,8 +461,8 @@
 
             </mat-form-field>
             <ng-container
-              *ngIf="(adminPatientForm.get('dob').touched || adminPatientForm.get('dob').dirty) && (adminPatientForm.get('dob').errors)">
-              <mat-error *ngIf="adminPatientForm.get('dob').errors.required">
+              *ngIf="(addPatientForm.get('dob').touched || addPatientForm.get('dob').dirty) && (addPatientForm.get('dob').errors)">
+              <mat-error *ngIf="addPatientForm.get('dob').errors.required">
                   *Required
               </mat-error>
             </ng-container>
@@ -480,8 +479,8 @@
             </mat-form-field>
             
             <ng-container
-              *ngIf="(adminPatientForm.get('dob').touched || adminPatientForm.get('dob').dirty) && (adminPatientForm.get('dob').errors)">
-              <mat-error *ngIf="adminPatientForm.get('dob').errors.required">
+              *ngIf="(addPatientForm.get('dob').touched || addPatientForm.get('dob').dirty) && (addPatientForm.get('dob').errors)">
+              <mat-error *ngIf="addPatientForm.get('dob').errors.required">
                   *Required
               </mat-error>
             </ng-container>
@@ -498,8 +497,8 @@
             </mat-form-field>
             
             <ng-container
-              *ngIf="(adminPatientForm.get('pcpName').touched || adminPatientForm.get('pcpName').dirty) && (adminPatientForm.get('pcpName').errors)">
-              <mat-error *ngIf="adminPatientForm.get('pcpName').errors.required">
+              *ngIf="(addPatientForm.get('pcpName').touched || addPatientForm.get('pcpName').dirty) && (addPatientForm.get('pcpName').errors)">
+              <mat-error *ngIf="addPatientForm.get('pcpName').errors.required">
                   *Required
               </mat-error>
             </ng-container>
@@ -519,10 +518,10 @@
     <div  fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="space-evenly end">    
       <div mat-dialog-actions align="center" class="select-row">
         <button mat-button (click)="cancelAdminDialog()">Cancel</button>
-        <button mat-flat-button [disabled]="!adminPatientForm.valid" color="accent"
-        (click)="openAdminConfirmDialog(1)">SAVE AND CONTINUE</button>
-        <button mat-flat-button [disabled]="!adminPatientForm.valid" color="accent"
-        (click)="openAdminConfirmDialog(2)">SAVE AND EXIT</button>
+        <button mat-flat-button [disabled]="!addPatientForm.valid" color="accent"
+        (click)="openAdminConfirmDialog(addNewPatientProcessEnum.SaveAndContinue)">SAVE AND CONTINUE</button>
+        <button mat-flat-button [disabled]="!addPatientForm.valid" color="accent"
+        (click)="openAdminConfirmDialog(addNewPatientProcessEnum.SaveAndExit)">SAVE AND EXIT</button>
       </div>
     </div>
 
@@ -533,43 +532,143 @@
       <h3 *ngIf="isAddingPatientAndExit">Are you sure you want to save this patient and exit?</h3>
       <h3 *ngIf="isAddingPatientAndContinue">Are you sure you want to save this patient and continue?</h3>
     </div>
-    <div mat-dialog-actions align="end">
-      <button mat-button mat-dialog-close (click)="cancelAdminDialog()">Cancel</button>
+    <div mat-dialog-actions align="end">    
+      <button mat-button mat-dialog-close>Cancel</button>
       <button mat-flat-button color="accent" mat-dialog-close (click)="submitPatientAddUpdate()" *ngIf="isAddingPatientAndContinue">
         Save And Continue</button>
       <button mat-flat-button color="accent" mat-dialog-close (click)="submitPatientAddUpdate()" *ngIf="isAddingPatientAndExit">
         Save And Exit</button>
     </div>
   </ng-template>
-
-
-  <!---------------------- Patient Admin Dialog ------------------------------------->
-<ng-template *ngIf="isUserAdmin && potentialPatient" #patientAdminDialog>
-  <mat-table [dataSource]="dataSource" id="patients" multiTemplateDataRows matSort matSortDisableClear>
-    <div mat-dialog-content class="mat-typography" id="patientAdmin-dialog">
-      <form [formGroup]="patientAdminForm">
-        <div fxLayout="row" fxLayoutGap="34px" class="form-row">
-         
-           <!-- Name Column -->
-    <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
-      <mat-cell *matCellDef="let element"
-        [ngStyle]="{'color': (element.pendingStatusConfirmation ? '#f0673c' : '#4A4A4A') }">
-        {{element.lastName | titlecase}}, {{element.firstName | titlecase}} </mat-cell>
-    </ng-container>
-
-    <!-- DOB Column -->
-    <ng-container matColumnDef="dob">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> DOB </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.dob | date:'MM/dd/yyyy'}} </mat-cell>
-    </ng-container>
-        </div>
-      </form>
-    </div>
- 
-  </mat-table>
   
+<ng-template  #patientAdminDialog>  
+  <div mat-dialog-content class="mat-typography" id="patient-admin-dialog">   
+    <form [formGroup]="patientAdminForm">     
+      <div fxLayout="row" class="detail-heading">POTENTIAL PATIENT</div>      
+      
+      <div fxLayout="row" fxLayoutGap="60px" class="form-row" fxLayoutAlign="start end" >
+        <div fxLayout="column">
+          <mat-form-field floatLabel="always">
+            <mat-label>First Name</mat-label>
+            <input matInput formControlName="firstName" readonly>                  
+          </mat-form-field>               
+        </div>
+        <div fxLayout="column">
+          <mat-form-field floatLabel="always">
+            <mat-label>Last Name</mat-label>
+            <input matInput formControlName="lastName" readonly>
+          </mat-form-field>          
+        </div>
+
+        <div fxLayout="column">
+          <mat-form-field floatLabel="always">
+            <mat-label>MRN</mat-label>
+            <input matInput [value]="epicMrn" readonly>
+          </mat-form-field>         
+        </div>
+      </div>
+     
+      <div fxLayout="row" fxLayoutGap="60px" class="form-row" fxLayoutAlign="start end" >
+        <div fxLayout="column" fxLayoutAlign="start end">
+          <mat-form-field floatLabel="always">
+            <mat-label>Date Of Birth</mat-label>           
+            <input matInput formControlName="patientDOB" readonly>         
+          </mat-form-field>          
+        </div>
+
+        <div fxLayout="column" fxLayoutAlign="start end">
+          <mat-form-field floatLabel="always">
+            <mat-label>Gender</mat-label>
+            <input matInput formControlName="gender" readonly>
+          </mat-form-field>           
+        </div>
+
+        <div fxLayout="column" fxLayoutAlign="start end">
+          <mat-form-field floatLabel="always">
+            <mat-label>PCP</mat-label>
+            <input matInput formControlName = "pcpName" readonly>
+          </mat-form-field>          
+        </div>
+      </div>      
+    </form>   
+ 
+  <br>
+  <!-- merge starts -->
+  <form [formGroup]="patientAdminForm">     
+    <div fxLayout="row" class="detail-heading">POSSIBLE DUPLICATE WITH CURRENT PATIENT</div>
+    <!-- <br> -->
+
+    <div fxLayout="row" fxLayoutGap="60px" class="form-row" fxLayoutAlign="start end" >
+      <div fxLayout="column">
+        <mat-form-field floatLabel="always">
+          <mat-label>First Name</mat-label>         
+          <input matInput formControlName="potentialDupFirstName" readonly>                  
+        </mat-form-field>               
+      </div>
+      <div fxLayout="column">
+        <mat-form-field floatLabel="always">
+          <mat-label>Last Name</mat-label>
+          <input matInput  formControlName="potentialDupLastName" readonly>
+        </mat-form-field>          
+      </div>
+
+      <div fxLayout="column">
+        <mat-form-field floatLabel="always">
+          <mat-label>MRN</mat-label>         
+          <input matInput formControlName="potentialDuplicatePatientMRNId" readonly> 
+        </mat-form-field>         
+      </div>
+    </div>
+   
+    <div fxLayout="row" fxLayoutGap="60px" class="form-row" fxLayoutAlign="start end" >
+      <div fxLayout="column" fxLayoutAlign="start end">
+        <mat-form-field floatLabel="always">
+          <mat-label>Date Of Birth</mat-label>           
+          <input matInput formControlName="potentialDuplicateDOB" readonly>         
+        </mat-form-field>          
+      </div>
+
+      <div fxLayout="column" fxLayoutAlign="start end">
+        <mat-form-field floatLabel="always">
+          <mat-label>Gender</mat-label>
+          <input matInput formControlName="potentialDuplicateGender" readonly>
+        </mat-form-field>           
+      </div>
+
+      <div fxLayout="column" fxLayoutAlign="start end">
+        <mat-form-field floatLabel="always">
+          <mat-label>PCP</mat-label>
+          <input matInput formControlName = "potentialDuplicatePCPName" readonly>
+        </mat-form-field>          
+      </div>
+    </div>      
+  </form>
+  
+  <div mat-dialog-actions align="center" class="potentialPatientDialog"> 
+    <button mat-button (click)="cancelPatientAdminDialog()">Cancel</button> 
+    <button mat-flat-button color="accent"
+    (click)="openPatientAdminConfirmDialog(patientAdminActionEnum.Accept)" matTooltip="Will add the potential patient to your registry as a new patient" matTooltipClass="patientAdminDialogtooltip" [disabled]="possibleDuplicatePatient">CREATE PATIENT</button>
+    <button mat-flat-button color="accent"
+    (click)="openPatientAdminConfirmDialog(patientAdminActionEnum.Update)" matTooltip="Will update the current patient with the new name and MRN"  matTooltipClass="patientAdminDialogtooltip" [disabled]="!possibleDuplicatePatient">UPDATE CURRENT PATIENT</button>  
+    <button mat-flat-button color="accent"
+    (click)="openPatientAdminConfirmDialog(patientAdminActionEnum.Decline)" matTooltip="Will ignore the new patient. Please contact your PIC to recover any declined patients" matTooltipClass="patientAdminDialogtooltip">DECLINE PATIENT</button>       
+  </div> 
+  <!--Merge ends-->
+  </div>
 </ng-template>
 
-
-
+<ng-template #patientAdminConfirmDialog>
+  <div mat-dialog-content class="mat-typography">
+    <h3 *ngIf="acceptPatient">Are you sure you want to add this new patient?</h3>
+    <h3 *ngIf="declinePatient">Are you sure you want to decline this patient?</h3>
+  </div>
+  <div mat-dialog-actions align="end">   
+    <button mat-button (click)="cancelPatientAdminDialog()">Cancel</button> 
+    <button mat-flat-button color="accent" mat-dialog-close (click)="submitPotentialPatientForm(1)" *ngIf="acceptPatient">
+      YES ACCEPT</button>
+    <button mat-flat-button color="accent" mat-dialog-close (click)="submitPotentialPatientForm(2)" *ngIf="declinePatient">
+      YES DECLINE</button>
+    <button mat-flat-button color="accent" mat-dialog-close (click)="submitPotentialPatientForm(3)" *ngIf="mergeWithNewPatient">
+      YES UPDATE</button>  
+  </div> 
+</ng-template>

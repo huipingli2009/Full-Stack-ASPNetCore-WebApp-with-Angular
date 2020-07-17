@@ -202,6 +202,26 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 }
             }
         }
+
+        public async Task<int> AcceptPotentialPatient(int userId, int potentialPatientId, int PotentialProcessType)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spAcceptPotentialPatient", sqlConnection))
+                {
+
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@PotentialPatientID", SqlDbType.Int).Value = potentialPatientId;
+                    sqlCommand.Parameters.Add("@PotentialProcessStatus", SqlDbType.Int).Value = PotentialProcessType;
+
+                    await sqlConnection.OpenAsync();
+
+                    //Execute Stored Procedure
+                    return ((int)sqlCommand.ExecuteScalar());
+                }
+            }
+        }
         public async Task<bool> IsExistingPatient(int userId, Patient patient)
         {
 
@@ -375,8 +395,15 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 LastCCHMCAdmit = (dr["LastCCHMCAdmit"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LastCCHMCAdmit"].ToString())),
                                 LastHealthBridgeAdmit = (dr["LastHBAdmit"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["LastHBAdmit"].ToString())),
                                 LastDiagnosis = dr["LastDiagnosis"].ToString(),
-                                CCHMCAppointment = (dr["CCHMCAppt"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["CCHMCAppt"].ToString()))
-                            };
+                                CCHMCAppointment = (dr["CCHMCAppt"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["CCHMCAppt"].ToString())),
+                                PotentialDuplicateFirstName = dr["potentialDup_FirstName"].ToString(),
+                                PotentialDuplicateLastName = dr["potentialDup_LastName"].ToString(),
+                                PotentialDuplicateDOB = (dr["potentialDup_PatientDOB"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["PatientDOB"].ToString())),
+                                PotentialDuplicateGender = dr["potentialDup_Gender"].ToString(),
+                                PotentialDuplicatePCPFirstName = dr["potentialDup_PCP_FirstName"].ToString(),
+                                PotentialDuplicatePCPLastName = dr["potentialDup_PCP_LastName"].ToString(),
+                                PotentialDup_PAT_MRN_ID = dr["potentialDup_PAT_MRN_ID"].ToString()
+                            };                            
 
                             if (!string.IsNullOrWhiteSpace(dr["ConditionIDs"].ToString()))
                             {

@@ -181,7 +181,7 @@ export class RestService {
   }
 
   /*Gets base PatientDetails based on Patient Id */
-  getPatientDetails(id,potentiallyActive): Observable<any> {
+  getPatientDetails(id: number,potentiallyActive: boolean): Observable<any> {
     
     //const potentiallyActive=false;
 
@@ -201,7 +201,26 @@ export class RestService {
         return data;
       })
     );
-  }
+  } 
+
+  addPotentialPatient(id: number, choice: number): Observable<number> {    
+
+    let paramsValue = new HttpParams();
+
+    paramsValue = paramsValue.append("id",id.toString());
+    paramsValue = paramsValue.append("choice",choice.toString());
+    
+    this.logger.log(id, 'PotentialPatientId');
+    this.logger.log(choice, 'PotentialPatientProcessId');
+    this.logger.log(paramsValue, 'param');
+
+    return this.http.get<any>(`${API_URL}/api/Patients/potentialpatient/${id}/${choice}`).pipe(
+      map((data) => {
+        return data;
+      })
+    );
+  } 
+
 
   /* Staff Component =======================================================*/
 

@@ -62,6 +62,15 @@ export interface PatientDetails {
     lastDiagnosis: string;
     cchmcAppointment: Date;
     potentialPatient: boolean;
+    potentialDuplicateFirstName: string;
+    potentialDuplicateLastName: string;
+    potentialDuplicateDOB: Date;
+    potentialDuplicatePCPFirstName: string;
+    potentialDuplicatePCPLastName: string;
+    potentialDuplicatePCPName: string;
+    potentialDuplicateGender: string;
+    potentialDuplicatePatientMRNId: string;
+    
 }
 
 export interface NewPatient {
@@ -129,4 +138,15 @@ export class PatientForWorkbook {
     lastName: string;
     dob: string;
     phone: string;
+}
+
+export enum patientAdminActionTypeEnum {
+    Accept = 1,
+    Decline = 2,
+    Update = 3  
+}
+
+export enum addPatientProcessEnum {
+    SaveAndContinue = 1,
+    SaveAndExit = 2     
 }
