@@ -519,9 +519,9 @@
       <div mat-dialog-actions align="center" class="select-row">
         <button mat-button (click)="cancelAdminDialog()">Cancel</button>
         <button mat-flat-button [disabled]="!addPatientForm.valid" color="accent"
-        (click)="openAdminConfirmDialog(1)">SAVE AND CONTINUE</button>
+        (click)="openAdminConfirmDialog(addNewPatientProcessEnum.SaveAndContinue)">SAVE AND CONTINUE</button>
         <button mat-flat-button [disabled]="!addPatientForm.valid" color="accent"
-        (click)="openAdminConfirmDialog(2)">SAVE AND EXIT</button>
+        (click)="openAdminConfirmDialog(addNewPatientProcessEnum.SaveAndExit)">SAVE AND EXIT</button>
       </div>
     </div>
 
@@ -647,11 +647,11 @@
   <div mat-dialog-actions align="center" class="potentialPatientDialog"> 
     <button mat-button (click)="cancelPatientAdminDialog()">Cancel</button> 
     <button mat-flat-button color="accent"
-    (click)="openPatientAdminConfirmDialog(1)" matTooltip="Will add the potential patient to your registry as a new patient" matTooltipClass="patientAdminDialogtooltip" [disabled]="possibleDuplicatePatient">CREATE PATIENT</button>
+    (click)="openPatientAdminConfirmDialog(patientAdminActionEnum.Accept)" matTooltip="Will add the potential patient to your registry as a new patient" matTooltipClass="patientAdminDialogtooltip" [disabled]="possibleDuplicatePatient">CREATE PATIENT</button>
     <button mat-flat-button color="accent"
-    (click)="openPatientAdminConfirmDialog(3)" matTooltip="Will update the current patient with the new name and MRN"  matTooltipClass="patientAdminDialogtooltip" [disabled]="!possibleDuplicatePatient">UPDATE CURRENT PATIENT</button>  
+    (click)="openPatientAdminConfirmDialog(patientAdminActionEnum.Update)" matTooltip="Will update the current patient with the new name and MRN"  matTooltipClass="patientAdminDialogtooltip" [disabled]="!possibleDuplicatePatient">UPDATE CURRENT PATIENT</button>  
     <button mat-flat-button color="accent"
-    (click)="openPatientAdminConfirmDialog(2)" matTooltip="Will ignore the new patient. Please contact your PIC to recover any declined patients" matTooltipClass="patientAdminDialogtooltip">DECLINE PATIENT</button>       
+    (click)="openPatientAdminConfirmDialog(patientAdminActionEnum.Decline)" matTooltip="Will ignore the new patient. Please contact your PIC to recover any declined patients" matTooltipClass="patientAdminDialogtooltip">DECLINE PATIENT</button>       
   </div> 
   <!--Merge ends-->
   </div>

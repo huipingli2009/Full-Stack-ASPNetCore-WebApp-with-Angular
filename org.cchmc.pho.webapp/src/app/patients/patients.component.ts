@@ -101,6 +101,8 @@ export class PatientsComponent implements OnInit {
   mergeWithNewPatient: boolean;
   mergeWithOldPatient: boolean;
   possibleDuplicatePatient: boolean;
+  patientAdminActionEnum = patientAdminActionTypeEnum;
+  addNewPatientProcessEnum = addPatientProcessEnum;
 
   // Selected Values
   selectedGender;
@@ -589,20 +591,20 @@ export class PatientsComponent implements OnInit {
   } 
 
   openPatientAdminConfirmDialog(type) {
-    if (type === 1) {
+    if (type === patientAdminActionTypeEnum.Accept) {
       this.acceptPatient = true;
       this.declinePatient = false;
       this.mergeWithNewPatient = false;
       this.mergeWithOldPatient = false;
     }
-    if (type === 2) {
+    if (type === patientAdminActionTypeEnum.Decline) {
       this.acceptPatient = false;
       this.declinePatient = true;
       this.mergeWithNewPatient = false;
       this.mergeWithOldPatient = false;
     }
 
-    if (type === 3) {
+    if (type === patientAdminActionTypeEnum.Update) {
       this.acceptPatient = false;
       this.declinePatient = false;
       this.mergeWithNewPatient = true;
@@ -632,7 +634,7 @@ export class PatientsComponent implements OnInit {
 
     if (choice == patientAdminActionTypeEnum.Update)   
     {
-      this.logger.log('Name merged with new patient'); 
+      this.logger.log('Updated existing patient with new patient'); 
     }     
     
     this.rest.addPotentialPatient(potentialPatientId, choice).subscribe(data => {     
