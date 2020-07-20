@@ -638,7 +638,7 @@ export class PatientsComponent implements OnInit {
     }     
     
     this.rest.addPotentialPatient(potentialPatientId, choice).subscribe(data => {       
-      this.snackBar.openSnackBar(`The confirmation process for patient: ${this.patientDetails.potentialDuplicateFirstName + ' ' + this.patientDetails.potentialDuplicateLastName} has been complete`, 'Close', 'success-snackbar');
+      this.snackBar.openSnackBar(`The reconfirmation process for patient: ${this.patientDetails.potentialDuplicateFirstName + ' ' + this.patientDetails.potentialDuplicateLastName} is complete`, 'Close', 'success-snackbar');
       this.loadPatientsWithFilters(); 
     });  
     
