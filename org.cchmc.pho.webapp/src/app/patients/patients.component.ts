@@ -637,7 +637,8 @@ export class PatientsComponent implements OnInit {
       this.logger.log('Updated existing patient with new patient'); 
     }     
     
-    this.rest.addPotentialPatient(potentialPatientId, choice).subscribe(data => {     
+    this.rest.addPotentialPatient(potentialPatientId, choice).subscribe(data => {       
+      this.snackBar.openSnackBar(`The confirmation process for patient: ${this.patientDetails.potentialDuplicateFirstName + ' ' + this.patientDetails.potentialDuplicateLastName} has been complete`, 'Close', 'success-snackbar');
       this.loadPatientsWithFilters(); 
     });  
     
