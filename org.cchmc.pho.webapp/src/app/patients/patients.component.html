@@ -594,7 +594,8 @@
  
   <br>
   <!-- merge starts -->
-  <form [formGroup]="patientAdminForm">     
+  <!-- <form [formGroup]="patientAdminForm" id="potentialPatients" *ngIf="possibleDuplicatePatient">      -->
+    <form [formGroup]="patientAdminForm_DuplicatePatients" *ngIf="possibleDuplicatePatient"> 
     <div fxLayout="row" class="detail-heading">POSSIBLE DUPLICATE WITH CURRENT PATIENT</div>
     <!-- <br> -->
 
@@ -602,13 +603,13 @@
       <div fxLayout="column">
         <mat-form-field floatLabel="always">
           <mat-label>First Name</mat-label>         
-          <input matInput formControlName="potentialDupFirstName" readonly>                  
+          <input matInput formControlName="potentialDuplicateFirstName" readonly>                  
         </mat-form-field>               
       </div>
       <div fxLayout="column">
         <mat-form-field floatLabel="always">
           <mat-label>Last Name</mat-label>
-          <input matInput  formControlName="potentialDupLastName" readonly>
+          <input matInput  formControlName="potentialDuplicateLastName" readonly>
         </mat-form-field>          
       </div>
 
@@ -621,8 +622,10 @@
     </div>
    
     <div fxLayout="row" fxLayoutGap="60px" class="form-row" fxLayoutAlign="start end" >
+
       <div fxLayout="column" fxLayoutAlign="start end">
-        <mat-form-field floatLabel="always">
+
+        <mat-form-field floatLabel="always">          
           <mat-label>Date Of Birth</mat-label>           
           <input matInput formControlName="potentialDuplicateDOB" readonly>         
         </mat-form-field>          
@@ -646,10 +649,12 @@
   
   <div mat-dialog-actions align="center" class="potentialPatientDialog"> 
     <button mat-button (click)="cancelPatientAdminDialog()">Cancel</button> 
-    <button mat-flat-button color="accent"
-    (click)="openPatientAdminConfirmDialog(patientAdminActionEnum.Accept)" matTooltip="Will add the potential patient to your registry as a new patient" matTooltipClass="patientAdminDialogtooltip" [disabled]="possibleDuplicatePatient">CREATE PATIENT</button>
-    <button mat-flat-button color="accent"
-    (click)="openPatientAdminConfirmDialog(patientAdminActionEnum.Update)" matTooltip="Will update the current patient with the new name and MRN"  matTooltipClass="patientAdminDialogtooltip" [disabled]="!possibleDuplicatePatient">UPDATE CURRENT PATIENT</button>  
+    <button mat-flat-button color="accent" *ngIf="possibleDuplicatePatient"
+    (click)="openPatientAdminConfirmDialog(patientAdminActionEnum.Accept)" matTooltip="Will add the potential patient to your registry as a new patient" matTooltipClass="patientAdminDialogtooltip">CREATE PATIENT</button>
+    <button mat-flat-button color="accent" *ngIf="!possibleDuplicatePatient"
+    (click)="openPatientAdminConfirmDialog(patientAdminActionEnum.Accept)" matTooltip="Will add the potential patient to your registry as a new patient" matTooltipClass="patientAdminDialogtooltip">ACCEPT PATIENT</button>
+    <button mat-flat-button color="accent" *ngIf="possibleDuplicatePatient"
+    (click)="openPatientAdminConfirmDialog(patientAdminActionEnum.Update)" matTooltip="Will update the current patient with the new name and MRN"  matTooltipClass="patientAdminDialogtooltip">UPDATE CURRENT PATIENT</button>  
     <button mat-flat-button color="accent"
     (click)="openPatientAdminConfirmDialog(patientAdminActionEnum.Decline)" matTooltip="Will ignore the new patient. Please contact your PIC to recover any declined patients" matTooltipClass="patientAdminDialogtooltip">DECLINE PATIENT</button>       
   </div> 
@@ -664,11 +669,11 @@
   </div>
   <div mat-dialog-actions align="end">   
     <button mat-button (click)="cancelPatientAdminDialog()">Cancel</button> 
-    <button mat-flat-button color="accent" mat-dialog-close (click)="submitPotentialPatientForm(1)" *ngIf="acceptPatient">
+    <button mat-flat-button color="accent" mat-dialog-close (click)="submitPotentialPatientForm(patientAdminActionEnum.Accept)" *ngIf="acceptPatient">
       YES ACCEPT</button>
-    <button mat-flat-button color="accent" mat-dialog-close (click)="submitPotentialPatientForm(2)" *ngIf="declinePatient">
+    <button mat-flat-button color="accent" mat-dialog-close (click)="submitPotentialPatientForm(patientAdminActionEnum.Decline)" *ngIf="declinePatient">
       YES DECLINE</button>
-    <button mat-flat-button color="accent" mat-dialog-close (click)="submitPotentialPatientForm(3)" *ngIf="mergeWithNewPatient">
+    <button mat-flat-button color="accent" mat-dialog-close (click)="submitPotentialPatientForm(patientAdminActionEnum.Update)" *ngIf="mergeWithNewPatient">
       YES UPDATE</button>  
   </div> 
 </ng-template>

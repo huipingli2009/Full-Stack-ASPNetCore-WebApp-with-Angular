@@ -92,6 +92,7 @@ export class PatientsComponent implements OnInit {
   newPatientValues: NewPatient;
   addPatientForm: FormGroup;
   patientAdminForm: FormGroup;
+  patientAdminForm_DuplicatePatients: FormGroup;
   isLoading = true;
   isAddingPatientAndContinue : boolean;
   isAddingPatientAndExit : boolean;
@@ -140,7 +141,7 @@ export class PatientsComponent implements OnInit {
       addressLine1: [''],
       city: [''],
       state: [''],
-      zip: ['']
+      zip: ['']     
     });
 
     this.addPatientForm = this.fb.group({
@@ -158,16 +159,20 @@ export class PatientsComponent implements OnInit {
       gender: '',
       genderId: '',
       pcpId: '',
-      pcpName: '',
-      potentialDupFirstName: '',
-      potentialDupLastName: '',
+      pcpName: ''
+    });
+
+    this.patientAdminForm_DuplicatePatients = this.fb.group({
+      potentialDuplicateFirstName: '',
+      potentialDuplicateLastName: '',
       potentialDuplicateDOB: '',
       potentialDuplicatePCPFirstName: '',
       potentialDuplicatePCPLastName: '',
       potentialDuplicateGender: '',
-      potentialDuplicatePatientMRNId: ''
-    })
-
+      potentialDuplicatePatientMRNId: '',
+      potentialDuplicatePCPName: ''
+    });   
+   
     this.subscription = this.filterService.getIsFilteringPatients().subscribe (res => {
       this.isFilteringPatients = res;
     });
@@ -430,15 +435,7 @@ export class PatientsComponent implements OnInit {
       const selectedValues = {
         firstName: data.firstName,
         lastName: data.lastName,
-        dob: this.transformDob(data.patientDOB),
-        potentialDuplicateFirstName: data.potentialDuplicateFirstName,
-        potentialDuplicateLastName: data.potentialDuplicateLastName,
-        potentialDuplicateDOB: data.potentialDuplicateDOB,
-        potentialDuplicatePCPFirstName: data.potentialDuplicatePCPFirstName,
-        potentialDuplicatePCPLastName: data.potentialDuplicatePCPLastName,
-        potentialDuplicatePCPName: data.potentialDuplicatePCPFirstName + ' ' + data.potentialDuplicatePCPLastName,
-        potentialDuplicateGender: data.potentialDuplicateGender,
-        potentialDuplicatePatientMRNId: data.potentialDuplicatePatientMRNId,
+        dob: this.transformDob(data.patientDOB),       
         email: data.email,
         activeStatus: data.activeStatus,
         gender: {
@@ -574,17 +571,20 @@ export class PatientsComponent implements OnInit {
       gender: this.patientDetails.gender,
       genderId: this.patientDetails.genderId,     
       pcpId: this.patientDetails.pcpId,
-      pcpName: this.patientDetails.pcpFirstName + " " + this.patientDetails.pcpLastName,
-      potentialDupFirstName: this.patientDetails.potentialDuplicateFirstName,
-      potentialDupLastName: this.patientDetails.potentialDuplicateLastName,
+      pcpName: this.patientDetails.pcpFirstName + " " + this.patientDetails.pcpLastName
+    });
+
+    this.patientAdminForm_DuplicatePatients.patchValue({
+      potentialDuplicateFirstName: this.patientDetails.potentialDuplicateFirstName,
+      potentialDuplicateLastName: this.patientDetails.potentialDuplicateLastName,
       potentialDuplicateDOB: this.transformDob(this.patientDetails.potentialDuplicateDOB),
       potentialDuplicatePCPFirstName: this.patientDetails.potentialDuplicatePCPFirstName,
       potentialDuplicatePCPLastName: this.patientDetails.potentialDuplicatePCPLastName,
       potentialDuplicatePCPName: this.patientDetails.potentialDuplicatePCPFirstName + ' ' + this.patientDetails.potentialDuplicatePCPLastName,
       potentialDuplicateGender: this.patientDetails.potentialDuplicateGender,
-      potentialDuplicatePatientMRNId: this.patientDetails.potentialDuplicatePatientMRNId    
-    }); 
-    
+      potentialDuplicatePatientMRNId: this.patientDetails.potentialDuplicatePatientMRNId 
+    });         
+      
     this.possibleDuplicatePatient = +((this.patientDetails.potentialDuplicateFirstName) != '' && (this.patientDetails.potentialDuplicateLastName) != '') ? true:false;
    
     this.dialog.open(this.patientAdminDialog, { disableClose: true });     
