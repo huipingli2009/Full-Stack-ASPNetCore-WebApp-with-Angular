@@ -301,7 +301,7 @@
             </div>           
             <div fxLayout="row"  fxLayoutAlign="end end">              
               <div fxLayout="column"  >
-                <button mat-flat-button color="accent" [disabled]="!form.valid"  *ngIf="isUserAdmin && potentialPatient"
+                <button mat-flat-button color="accent" [disabled]="!form.valid"  *ngIf="potentialPatient"
                 (click)="openPatientAdminDialog(detail.patientId)">PATIENT ADMIN</button>
               </div>
               <div fxLayout="column" fxLayoutAlign="end end">
