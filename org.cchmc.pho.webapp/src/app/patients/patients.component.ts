@@ -639,10 +639,10 @@ export class PatientsComponent implements OnInit {
     {
       this.logger.log('Updated existing patient with new patient');  
       message ='Updated';   
-    }   
+    }     
     
     this.rest.addPotentialPatient(potentialPatientId, choice).subscribe(data => {       
-      this.snackBar.openSnackBar(`Patient: ${this.patientDetails.potentialDuplicateFirstName + ' ' + this.patientDetails.potentialDuplicateLastName} was ${message}`, 'Close', 'success-snackbar');
+      this.snackBar.openSnackBar(`Patient: ${this.patientDetails.firstName + ' ' + this.patientDetails.lastName} was ${message}`, 'Close', 'success-snackbar');
      
       this.loadPatientsWithFilters(); 
     });  
