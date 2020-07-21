@@ -103,7 +103,7 @@ export class PatientsComponent implements OnInit {
   mergeWithOldPatient: boolean;
   possibleDuplicatePatient: boolean;
   patientAdminActionEnum = patientAdminActionTypeEnum;
-  addNewPatientProcessEnum = addPatientProcessEnum;
+  addNewPatientProcessEnum = addPatientProcessEnum;  
 
   // Selected Values
   selectedGender;
@@ -621,24 +621,29 @@ export class PatientsComponent implements OnInit {
   submitPotentialPatientForm(choice: number) {
 
     const potentialPatientId: number = this.patientDetails.id;
+    let message = '';   
    
     if (choice == patientAdminActionTypeEnum.Accept)
     {
-      this.logger.log('Potential Patient Added'); 
+      this.logger.log('Potential Patient Added');  
+      message ='Accepted';
     }
 
     if (choice == patientAdminActionTypeEnum.Decline)   
     {
       this.logger.log('Potential Patient Declined'); 
+      message ='Declined';
     }
 
     if (choice == patientAdminActionTypeEnum.Update)   
     {
-      this.logger.log('Updated existing patient with new patient'); 
-    }     
+      this.logger.log('Updated existing patient with new patient');  
+      message ='Updated';   
+    }   
     
     this.rest.addPotentialPatient(potentialPatientId, choice).subscribe(data => {       
-      this.snackBar.openSnackBar(`The reconfirmation process for patient: ${this.patientDetails.potentialDuplicateFirstName + ' ' + this.patientDetails.potentialDuplicateLastName} is complete`, 'Close', 'success-snackbar');
+      this.snackBar.openSnackBar(`Patient: ${this.patientDetails.potentialDuplicateFirstName + ' ' + this.patientDetails.potentialDuplicateLastName} was ${message}`, 'Close', 'success-snackbar');
+     
       this.loadPatientsWithFilters(); 
     });  
     
