@@ -582,7 +582,7 @@ export class PatientsComponent implements OnInit {
       potentialDuplicatePCPLastName: this.patientDetails.potentialDuplicatePCPLastName,
       potentialDuplicatePCPName: this.patientDetails.potentialDuplicatePCPFirstName + ' ' + this.patientDetails.potentialDuplicatePCPLastName,
       potentialDuplicateGender: this.patientDetails.potentialDuplicateGender,
-      potentialDuplicatePatientMRNId: this.patientDetails.potentialDuplicatePatientMRNId 
+      potentialDuplicatePatientMRNId: this.patientDetails.potentialDup_PAT_MRN_ID
     });         
       
     this.possibleDuplicatePatient = +((this.patientDetails.potentialDuplicateFirstName) != '' && (this.patientDetails.potentialDuplicateLastName) != '') ? true:false;
