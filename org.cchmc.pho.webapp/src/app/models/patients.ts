@@ -69,7 +69,7 @@ export interface PatientDetails {
     potentialDuplicatePCPLastName: string;
     potentialDuplicatePCPName: string;
     potentialDuplicateGender: string;
-    potentialDuplicatePatientMRNId: string;
+    potentialDup_PAT_MRN_ID: string;
     
 }
 
