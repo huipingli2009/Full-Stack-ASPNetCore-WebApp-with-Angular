@@ -332,7 +332,7 @@
               <div fxLayout="row" class="detail-heading">METRICS</div>
               <div fxLayout="row" class="metric-data-box" *ngIf="patientDetails" [(ngModel)]="patientDetails"
                 ngDefaultControl>
-                <div fxLayout="column" class="metric-data" fxLayoutAlign="top center">
+                <div fxLayout="column" class="metric-data" fxLayoutAlign="top center" (click)="openDrilldownDialog()">
                   <span class="metric-number">{{patientDetails.practiceVisits}}</span>
                   <span class="metric-title">PRACTICE VISITS</span>
                 </div>

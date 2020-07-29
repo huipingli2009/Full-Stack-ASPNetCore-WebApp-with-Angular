@@ -61,7 +61,6 @@ import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.compo
 import { StaffComponent } from './staff/staff.component';
 import { VersionComponent } from './version/version.component';
 import { WorkbooksComponent } from './workbooks/workbooks.component';
-import { XyzComponent } from './xyz/xyz.component';
 import { DrilldownComponent } from './drilldown/drilldown.component';
 
 @NgModule({
@@ -81,7 +80,6 @@ import { DrilldownComponent } from './drilldown/drilldown.component';
     ReportComponent,
     FooterComponent,
     LegalDisclaimerComponent,
-    XyzComponent,
     DrilldownComponent
   ],
   imports: [

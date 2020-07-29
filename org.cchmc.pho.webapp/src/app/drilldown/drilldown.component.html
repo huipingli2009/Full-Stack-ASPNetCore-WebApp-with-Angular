@@ -1,1 +1,53 @@
 <p>drilldown works!</p>
+<div mat-dialog-content class="mat-typography">
+    <h3>ED Details: </h3>
+    <table class="ed-table">
+        <thead>
+            <tr>
+                <th>Index</th>
+                <th>Patient MRN</th>
+                <th>Patient Encounter ID</th>
+                <th>Facility</th>
+                <th>Patient Name</th>
+                <th>Patient DOB</th>
+                <th>PCP</th>
+                <th>Hospital Admission</th>
+                <th>Hospital Discharge</th>
+                <th>Visit Type</th>
+                <th>Primary DX</th>
+                <th>Primary DX_10Code</th>
+                <th>DX2</th>
+                <th>DX2_10Code</th>
+                <th>Inpatient Visit</th>
+                <th>ED Visit Count Last 12m</th>
+                <th>UC Visit Count Last 12m</th>
+                <th>Admit Count Last 12m</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+    </table>
+</div>
+<div mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close (click)="cancel()">Close</button>
+    <button mat-button (click)="confirm()">View Report</button>
+
+</div>
