@@ -62,6 +62,7 @@ import { StaffComponent } from './staff/staff.component';
 import { VersionComponent } from './version/version.component';
 import { WorkbooksComponent } from './workbooks/workbooks.component';
 import { DrilldownComponent } from './drilldown/drilldown.component';
+import { DrilldownService } from './drilldown/drilldown.service';
 
 @NgModule({
   declarations: [
@@ -147,7 +148,7 @@ import { DrilldownComponent } from './drilldown/drilldown.component';
 
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-  { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }, MatSnackBarComponent, ErrorInterceptor],
+  { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }, MatSnackBarComponent, ErrorInterceptor, DrilldownService],
   bootstrap: [AppComponent]  
 })
 export class AppModule { }

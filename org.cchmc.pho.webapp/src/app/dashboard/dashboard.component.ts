@@ -9,7 +9,7 @@ import { NGXLogger } from 'ngx-logger';
 import { environment } from 'src/environments/environment';
 import { EdChart, EdChartDetails, Population, Quicklinks, Spotlight } from '../models/dashboard';
 import { RestService } from '../rest.service';
-import { DrilldownService } from '../services/drilldown.service';
+import { DrilldownService } from '../drilldown/drilldown.service';
 import { AuthenticationService } from '../services/authentication.service';
 import { BehaviorSubject } from 'rxjs';
 import { FilterService } from '../services/filter.service';

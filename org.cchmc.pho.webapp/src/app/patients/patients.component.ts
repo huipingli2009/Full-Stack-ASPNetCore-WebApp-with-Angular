@@ -17,7 +17,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarComponent } from '../shared/mat-snack-bar/mat-snack-bar.component';
 import { UserService } from '../services/user.service';
 import { CurrentUser, User } from '../models/user';
-import { DrilldownService } from '../services/drilldown.service';
+import { DrilldownService } from '../drilldown/drilldown.service';
 
 @Component({
   selector: 'app-patients',

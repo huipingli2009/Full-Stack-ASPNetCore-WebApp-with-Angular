@@ -12,9 +12,14 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 export class DrilldownComponent implements OnInit {
 
+  selectedMeasureId: string;
+
   constructor(@Inject(MAT_DIALOG_DATA) public data: {
     measureId: string
-}, private mdDialogRef: MatDialogRef<DrilldownComponent>){}
+}, private mdDialogRef: MatDialogRef<DrilldownComponent>)
+{
+  this.selectedMeasureId = data.measureId;
+}
 
   ngOnInit(): void {
   }
