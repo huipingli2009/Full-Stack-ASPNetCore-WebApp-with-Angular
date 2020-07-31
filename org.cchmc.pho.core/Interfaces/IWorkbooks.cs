@@ -7,11 +7,11 @@ namespace org.cchmc.pho.core.Interfaces
 {
     public interface IWorkbooks
     {       
-        Task<List<WorkbooksPatient>> ListPatients(int userId, int formResponseId);
+        Task<List<WorkbooksDepressionPatient>> GetDepressionPatientList(int userId, int formResponseId);
         Task<WorkbooksPractice> GetPracticeWorkbooks(int userId, int formResponseId);
         Task<List<WorkbooksProvider>> GetPracticeWorkbooksProviders(int userId, int formResponseId);
         Task<List<WorkbooksLookup>> GetWorkbooksLookups(int userId, string nameSearch);
-        Task<bool> AddPatientToWorkbooks (int userId, int formResponseId, int patientID, int providerstaffID, DateTime? dos, int phq9score, bool action);
+        Task<bool> AddPatientToDepressionWorkbooks(int userId, int formResponseId, int patientID, int providerstaffID, DateTime? dos, int phq9score, bool action);
         Task<bool> RemovePatientFromWorkbooks(int userId, int formResponseId, int patientID);
         Task<bool> AddProviderToWorkbooks(int userId, int formResponseId, int providerId);
         Task<bool> RemoveProviderFromWorkbooks(int userId, int formResponseId, int providerId);

@@ -35,20 +35,20 @@ namespace org.cchmc.pho.api.Controllers
         [HttpGet("patients")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
-        [SwaggerResponse(200, type: typeof(List<WorkbooksPatientViewModel>))]
+        [SwaggerResponse(200, type: typeof(List<WorkbooksDepressionPatientViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
 
         //public async Task<IActionResult> ListPatients(int userId, int formResponseId, string nameSearch)
-        public async Task<IActionResult> ListPatients(int formResponseId)
+        public async Task<IActionResult> GetDepressionPatientList(int formResponseId)
         {
 
             try
             {
                 int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
-                var data = await _workbooks.ListPatients(currentUserId, formResponseId);
+                var data = await _workbooks.GetDepressionPatientList(currentUserId, formResponseId);
 
-                var result = _mapper.Map<List<WorkbooksPatientViewModel>>(data);
+                var result = _mapper.Map<List<WorkbooksDepressionPatientViewModel>>(data);
 
                 // return the result in a "200 OK" response
                 return Ok(result);
@@ -143,12 +143,12 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(200, type: typeof(string))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> AddPatientToWorkbooks(int id, [FromBody] WorkbooksPatientViewModel workbookspatientVM)
+        public async Task<IActionResult> AddPatientToDepressionWorkbooks(int id, [FromBody] WorkbooksDepressionPatientViewModel workbookspatientVM)
         {
             try
             {
                 int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
-                var result = await _workbooks.AddPatientToWorkbooks(currentUserId, workbookspatientVM.FormResponseId, id, workbookspatientVM.ProviderId, workbookspatientVM.DateOfService, int.Parse(workbookspatientVM.PHQ9_Score), workbookspatientVM.ActionFollowUp);
+                var result = await _workbooks.AddPatientToDepressionWorkbooks(currentUserId, workbookspatientVM.FormResponseId, id, workbookspatientVM.ProviderId, workbookspatientVM.DateOfService, int.Parse(workbookspatientVM.PHQ9_Score), workbookspatientVM.ActionFollowUp);
                 return Ok(result);
             }
             catch (Exception ex)

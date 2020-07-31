@@ -85,9 +85,9 @@ namespace org.cchmc.pho.unittest.ControllerTests
             // setup  
             var formResponseId = 109;
 
-            var myWorkbooksPatients = new List<WorkbooksPatient>
+            var myWorkbooksPatients = new List<core.DataModels.WorkbooksDepressionPatient>
             {
-                new WorkbooksPatient()
+                new core.DataModels.WorkbooksDepressionPatient()
                 {
                      FormResponseId = 109 ,
                      PatientId = 78835,
@@ -98,7 +98,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                      PHQ9_Score = "10",
                      ActionFollowUp = true
                 },
-               new WorkbooksPatient()
+               new core.DataModels.WorkbooksDepressionPatient()
                 {
                      FormResponseId = 109 ,
                      PatientId = 88835,
@@ -116,7 +116,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
 
             // execute
             var result = await _workbooksController.ListPatients(109) as ObjectResult;
-            var resultList = result.Value as List<WorkbooksPatientViewModel>;
+            var resultList = result.Value as List<WorkbooksDepressionPatientViewModel>;
 
             // assert
             Assert.AreEqual(myWorkbooksPatients[0].FormResponseId, resultList[0].FormResponseId);
@@ -249,7 +249,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             var patientId = 10809;
             bool expected = true;
 
-            WorkbooksPatientViewModel selectedPatient = new WorkbooksPatientViewModel()
+            WorkbooksDepressionPatientViewModel selectedPatient = new WorkbooksDepressionPatientViewModel()
             {
                 FormResponseId = 109,
                 PatientId = 10809,

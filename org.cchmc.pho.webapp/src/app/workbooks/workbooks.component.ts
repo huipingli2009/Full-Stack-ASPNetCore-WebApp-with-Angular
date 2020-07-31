@@ -21,10 +21,7 @@ import { MatSnackBarComponent } from '../shared/mat-snack-bar/mat-snack-bar.comp
 export class WorkbooksComponent implements OnInit, OnDestroy {
 
   constructor(private rest: RestService, private fb: FormBuilder, private datePipe: DatePipe, private logger: NGXLogger, private dialog: MatDialog, private snackBar: MatSnackBarComponent) 
-  { 
-
-
-  }
+  {}
 
   get ProviderWorkbookArray() {
     return this.ProvidersForWorkbookForm.get('ProviderWorkbookArray') as FormArray;

@@ -2,7 +2,7 @@
 
 namespace org.cchmc.pho.core.DataModels
 {
-    public class WorkbooksPatient
+    public class WorkbooksDepressionPatient
     {
         public int FormResponseId { get; set; }       
         public int PatientId { get; set; }

@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace org.cchmc.pho.api.ViewModels
 {
-    public class WorkbooksPatientViewModel
+    public abstract class WorkbooksPatient
     {
         public int FormResponseId { get; set; }
         public int PatientId { get; set; }
@@ -11,10 +14,6 @@ namespace org.cchmc.pho.api.ViewModels
         public string Phone { get; set; }
         public string Provider { get; set; }
         public int ProviderId { get; set; }
-        public DateTime? DateOfService { get; set; }
-        public string PHQ9_Score { get; set; }
-        public bool ActionFollowUp { get; set; }
-        public string Improvement { get; set; }
-        public bool FollowUpResponse { get; set; }
+        public DateTime? DateOfService { get; set; }              
     }
 }
