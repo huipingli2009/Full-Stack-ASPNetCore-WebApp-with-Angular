@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace org.cchmc.pho.api.ViewModels
 {
     public class WorkbooksDepressionPatientViewModel: WorkbooksPatient
