@@ -80,14 +80,14 @@ namespace org.cchmc.pho.unittest.ControllerTests
         }
 
         [TestMethod]
-        public async Task ListPatients_Mapping_Success()
+        public async Task GetDepressionPatientList_Mapping_Success()
         {
             // setup  
             var formResponseId = 109;
 
-            var myWorkbooksPatients = new List<WorkbooksPatient>
+            var myWorkbooksPatients = new List<core.DataModels.WorkbooksDepressionPatient>
             {
-                new WorkbooksPatient()
+                new core.DataModels.WorkbooksDepressionPatient()
                 {
                      FormResponseId = 109 ,
                      PatientId = 78835,
@@ -98,7 +98,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                      PHQ9_Score = "10",
                      ActionFollowUp = true
                 },
-               new WorkbooksPatient()
+               new core.DataModels.WorkbooksDepressionPatient()
                 {
                      FormResponseId = 109 ,
                      PatientId = 88835,
@@ -111,12 +111,12 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 },
             };
             _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
-            _mockWorkbooksDal.Setup(s => s.ListPatients(_userId,formResponseId)).Returns(Task.FromResult(myWorkbooksPatients)).Verifiable();
+            _mockWorkbooksDal.Setup(s => s.GetDepressionPatientList(_userId,formResponseId)).Returns(Task.FromResult(myWorkbooksPatients)).Verifiable();
             _workbooksController = new WorkbooksController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockWorkbooksDal.Object);
 
             // execute
-            var result = await _workbooksController.ListPatients(109) as ObjectResult;
-            var resultList = result.Value as List<WorkbooksPatientViewModel>;
+            var result = await _workbooksController.GetDepressionPatientList(109) as ObjectResult;
+            var resultList = result.Value as List<WorkbooksDepressionPatientViewModel>;
 
             // assert
             Assert.AreEqual(myWorkbooksPatients[0].FormResponseId, resultList[0].FormResponseId);
@@ -136,11 +136,11 @@ namespace org.cchmc.pho.unittest.ControllerTests
             var formResponseId = 109;
 
             _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
-            _mockWorkbooksDal.Setup(s => s.ListPatients(_userId,formResponseId)).Throws(new Exception()).Verifiable();
+            _mockWorkbooksDal.Setup(s => s.GetDepressionPatientList(_userId,formResponseId)).Throws(new Exception()).Verifiable();
             _workbooksController = new WorkbooksController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockWorkbooksDal.Object);
 
             //execute
-            var result = await _workbooksController.ListPatients(formResponseId) as ObjectResult;
+            var result = await _workbooksController.GetDepressionPatientList(formResponseId) as ObjectResult;
 
             //assert
             Assert.AreEqual(500, result.StatusCode);
@@ -243,13 +243,13 @@ namespace org.cchmc.pho.unittest.ControllerTests
         }       
 
         [TestMethod]
-        public async Task AddPatientToWorkbooks_Success()
+        public async Task AddPatientToDepressionWorkbooks_Success()
         {
             //set up        
             var patientId = 10809;
             bool expected = true;
 
-            WorkbooksPatientViewModel selectedPatient = new WorkbooksPatientViewModel()
+            WorkbooksDepressionPatientViewModel selectedPatient = new WorkbooksDepressionPatientViewModel()
             {
                 FormResponseId = 109,
                 PatientId = 10809,
@@ -264,13 +264,13 @@ namespace org.cchmc.pho.unittest.ControllerTests
             };
 
             _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
-            _mockWorkbooksDal.Setup(s => s.AddPatientToWorkbooks(_userId, selectedPatient.FormResponseId, selectedPatient.PatientId, selectedPatient.ProviderId, selectedPatient.DateOfService, int.Parse(selectedPatient.PHQ9_Score), selectedPatient.ActionFollowUp))
+            _mockWorkbooksDal.Setup(s => s.AddPatientToDepressionWorkbooks(_userId, selectedPatient.FormResponseId, selectedPatient.PatientId, selectedPatient.ProviderId, selectedPatient.DateOfService, int.Parse(selectedPatient.PHQ9_Score), selectedPatient.ActionFollowUp))
                              .Returns(Task.FromResult(expected))
                              .Verifiable();
             _workbooksController = new WorkbooksController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockWorkbooksDal.Object);
 
             // execute
-            var result = await _workbooksController.AddPatientToWorkbooks(patientId, selectedPatient) as ObjectResult;
+            var result = await _workbooksController.AddPatientToDepressionWorkbooks(patientId, selectedPatient) as ObjectResult;
             var resultvalue = result.Value;
 
             // assert

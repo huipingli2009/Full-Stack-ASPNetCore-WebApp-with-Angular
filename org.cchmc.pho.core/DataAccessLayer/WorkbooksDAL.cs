@@ -19,10 +19,10 @@ namespace org.cchmc.pho.core.DataAccessLayer
         {
             _connectionStrings = options.Value;
         }
-        public async Task<List<WorkbooksPatient>> ListPatients(int userId, int formResponseId)
+        public async Task<List<WorkbooksDepressionPatient>> GetDepressionPatientList(int userId, int formResponseId)
         {
             DataTable dataTable = new DataTable();
-            List<WorkbooksPatient> workbookspatients = new List<WorkbooksPatient>();
+            List<WorkbooksDepressionPatient> workbookspatients = new List<WorkbooksDepressionPatient>();
 
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
@@ -41,7 +41,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                         foreach (DataRow dr in dataTable.Rows)
                         {
-                            var workbookspt = new WorkbooksPatient()
+                            var workbookspt = new WorkbooksDepressionPatient()
                             {
                                 FormResponseId = int.Parse(dr["FormResponseId"].ToString()),
                                 PatientId = int.Parse(dr["PatientId"].ToString()),
@@ -172,7 +172,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             return workbookslookups;
         }
 
-        public async Task<bool> AddPatientToWorkbooks(int userId, int formResponseId, int patientID, int providerstaffID, DateTime? dos, int phq9score, bool action)
+        public async Task<bool> AddPatientToDepressionWorkbooks(int userId, int formResponseId, int patientID, int providerstaffID, DateTime? dos, int phq9score, bool action)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
