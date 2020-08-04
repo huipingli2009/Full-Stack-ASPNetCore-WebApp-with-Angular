@@ -8,6 +8,7 @@ namespace org.cchmc.pho.core.Interfaces
     public interface IWorkbooks
     {       
         Task<List<WorkbooksDepressionPatient>> GetDepressionPatientList(int userId, int formResponseId);
+        Task<List<WorkbooksAsthmaPatient>> GetAsthmaPatientList(int userId, int formResponseId);
         Task<WorkbooksPractice> GetPracticeWorkbooks(int userId, int formResponseId);
         Task<List<WorkbooksProvider>> GetPracticeWorkbooksProviders(int userId, int formResponseId);
         Task<List<WorkbooksLookup>> GetWorkbooksLookups(int userId, string nameSearch);

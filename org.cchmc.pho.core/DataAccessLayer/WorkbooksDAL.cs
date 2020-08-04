@@ -64,7 +64,54 @@ namespace org.cchmc.pho.core.DataAccessLayer
             return workbookspatients;
         }
 
-            public async Task<WorkbooksPractice> GetPracticeWorkbooks(int userId, int formResponseId)
+        public async Task<List<WorkbooksAsthmaPatient>> GetAsthmaPatientList(int userId, int formResponseId)
+        {            
+            DataTable dataTable = new DataTable();
+            List<WorkbooksAsthmaPatient> workbooksasthmapatients = new List<WorkbooksAsthmaPatient>();
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetAsthmaWorkbooks_Patients", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@FormResponseId", SqlDbType.Int).Value = formResponseId;
+
+                    await sqlConnection.OpenAsync();
+
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+
+                        foreach (DataRow dr in dataTable.Rows)
+                        {
+                            var workbookspt = new WorkbooksAsthmaPatient()
+                            {
+                                FormResponseId = int.Parse(dr["FormResponseId"].ToString()),
+                                PatientId = int.Parse(dr["PatientId"].ToString()),
+                                Patient = dr["Patient"].ToString(),
+                                DOB = (dr["DOB"] == DBNull.Value ? (DateTime?)null : (DateTime.Parse(dr["DOB"].ToString()))),
+                                Phone = dr["Phone"].ToString(),
+                                Provider = dr["Provider"].ToString(),
+                                DateOfService = (dr["DateOfService"] == DBNull.Value ? (DateTime?)null : (DateTime.Parse(dr["DateOfService"].ToString()))),
+                                Asthma_Score = dr["AsthmaScore"].ToString(),
+                                //ActionPlanGiven = (dr["ActionPlanGiven"] != DBNull.Value && Convert.ToBoolean(dr["ActionPlanGiven"])),
+                                ActionPlanGiven = (dr["ActionPlanGiven"].ToString()),
+                                Treatment = dr["Treatment"].ToString(),
+                                //AssessmentCompleted = bool.Parse(dr["AssessmentCompleted"].ToString())
+                                AssessmentCompleted = (dr["AssessmentCompleted"].ToString())
+                            };
+
+                            workbooksasthmapatients.Add(workbookspt);
+                        }
+                    }
+                }
+            }
+            return workbooksasthmapatients;
+        }
+
+        public async Task<WorkbooksPractice> GetPracticeWorkbooks(int userId, int formResponseId)
         {
             DataTable dataTable = new DataTable();
             WorkbooksPractice workbookpractice;
