@@ -65,7 +65,9 @@ namespace org.cchmc.pho.core.DataAccessLayer
         }
 
         public async Task<List<WorkbooksAsthmaPatient>> GetAsthmaPatientList(int userId, int formResponseId)
-        {            
+        {
+            userId = 56;
+
             DataTable dataTable = new DataTable();
             List<WorkbooksAsthmaPatient> workbooksasthmapatients = new List<WorkbooksAsthmaPatient>();
 
@@ -98,8 +100,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 Asthma_Score = dr["AsthmaScore"].ToString(),
                                 //ActionPlanGiven = (dr["ActionPlanGiven"] != DBNull.Value && Convert.ToBoolean(dr["ActionPlanGiven"])),
                                 ActionPlanGiven = (dr["ActionPlanGiven"].ToString()),
-                                Treatment = dr["Treatment"].ToString(),
-                                //AssessmentCompleted = bool.Parse(dr["AssessmentCompleted"].ToString())
+                                Treatment = dr["Treatment"].ToString(),                               
                                 AssessmentCompleted = (dr["AssessmentCompleted"].ToString())
                             };
 

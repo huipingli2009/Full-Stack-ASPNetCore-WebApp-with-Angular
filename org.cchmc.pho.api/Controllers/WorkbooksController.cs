@@ -38,11 +38,9 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(200, type: typeof(List<WorkbooksDepressionPatientViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-
-        //public async Task<IActionResult> ListPatients(int userId, int formResponseId, string nameSearch)
+     
         public async Task<IActionResult> GetDepressionPatientList(int formResponseId)
         {
-
             try
             {
                 int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
@@ -64,20 +62,17 @@ namespace org.cchmc.pho.api.Controllers
         // GET: api/Workbooks
         [HttpGet("asthmapatients")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        [AllowAnonymous]
-        //[Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        //[AllowAnonymous]   -- for testing purpose
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<WorkbooksAsthmaPatientViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
-        [SwaggerResponse(500, type: typeof(string))]
-
-        //public async Task<IActionResult> ListPatients(int userId, int formResponseId, string nameSearch)
+        [SwaggerResponse(500, type: typeof(string))]       
         public async Task<IActionResult> GetAsthmaPatientList(int formResponseId)
         {
-
             try
             {
-                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);               
-
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+               
                 var data = await _workbooks.GetAsthmaPatientList(currentUserId, formResponseId);
 
                 var result = _mapper.Map<List<WorkbooksAsthmaPatientViewModel>>(data);
