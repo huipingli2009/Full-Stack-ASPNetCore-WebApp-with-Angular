@@ -11,8 +11,7 @@ export class WorkbookProvider {
     total: number;
 }
 
-
-export class WorkbookPatient {
+export abstract class WorkbookPatientBase{
     formResponseId: number;
     patientId: number;
     patient: string;
@@ -21,6 +20,9 @@ export class WorkbookPatient {
     provider: string;
     providerId: number;
     dateOfService: string;
+}
+
+export class WorkbookPatient extends WorkbookPatientBase {    
     phQ9_Score: string;
     actionFollowUp: boolean;
     improvement: string;
