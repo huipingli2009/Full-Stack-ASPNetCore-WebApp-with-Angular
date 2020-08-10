@@ -4,7 +4,7 @@ import { MatTableDataSource, MatTable, MatTableModule } from '@angular/material/
 import { RestService } from '../rest.service';
 import { NGXLogger } from 'ngx-logger';
 import { MetricDrillthruTable, MetricDrillthruRow, MetricDrillthruColumn } from '../models/drillthru';
-
+import * as XLSX from 'xlsx'; 
 
 
 @Component({
@@ -24,6 +24,8 @@ export class DrilldownComponent implements OnInit {
   primaryRow: MetricDrillthruRow;
   headerColumns: MetricDrillthruColumn[];  
   headerDisplayText: string;
+  fileName= 'Data_Export.xlsx'; 
+  isLoading: boolean;
   
   constructor(public rest: RestService,private logger: NGXLogger, @Inject(MAT_DIALOG_DATA) public data: {
     measureId: string,
@@ -31,11 +33,10 @@ export class DrilldownComponent implements OnInit {
     displayText: string
 }, private mdDialogRef: MatDialogRef<DrilldownComponent>)
 {
-  console.info('incoming parameters: ', data);
+  this.isLoading = true;
   this.selectedMeasureId = data.measureId;
   this.selectedFilterId = data.filterId;
   this.headerDisplayText = data.displayText;
-  console.info('selectedFilterId: ', this.selectedFilterId);
   this.getMeasureDetailsTable();
 }
 
@@ -46,13 +47,11 @@ export class DrilldownComponent implements OnInit {
   getMeasureDetailsTable(){
     this.rest.getMeasureDrilldownTable(this.selectedMeasureId, this.selectedFilterId).subscribe((data) => {
       this.logger.log(data, 'metricDrilldownData');
-      console.info('metricDrilldownData: ', data);
       this.table = data;
       this.rows = this.table.rows;
       this.primaryRow = this.table.rows[0];
-      console.info('primaryRow: ', this.primaryRow);
-      this.headerColumns = this.primaryRow.columns;      
-      console.info('headers: ', this.headerColumns);
+      this.headerColumns = this.primaryRow.columns; 
+      this.isLoading = false;   
   });
 
   }
@@ -66,9 +65,18 @@ export class DrilldownComponent implements OnInit {
   public confirm() {
     this.close(true);
   }
-  @HostListener("keydown.esc") 
-  public onEsc() {
-    this.close(false);
+  
+  public exportExcel() {
+       /* table id is passed over here */   
+       let element = document.getElementById('drilldownTable'); 
+       const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+
+       /* generate workbook and add the worksheet */
+       const wb: XLSX.WorkBook = XLSX.utils.book_new();
+       XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+       /* save to file */
+       XLSX.writeFile(wb, this.fileName);
   }
 
 }
