@@ -12,6 +12,9 @@ namespace org.cchmc.pho.api.Mappings
             CreateMap<EDChart, EDChartViewModel>();
             CreateMap<EDDetail, EDDetailViewModel>();
             CreateMap<PopulationMetric, PopulationMetricViewModel>();
+            CreateMap<DrillthruMetricTable, DrillthruMetricTableViewModel>();
+            CreateMap<DrillthruRow, DrillthruRowViewModel>();
+            CreateMap<DrillthruColumn, DrillthruColumnViewModel>();
         }
     }
 }

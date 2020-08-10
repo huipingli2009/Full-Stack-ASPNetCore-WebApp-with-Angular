@@ -9,6 +9,7 @@ import { NGXLogger } from 'ngx-logger';
 import { environment } from 'src/environments/environment';
 import { EdChart, EdChartDetails, Population, Quicklinks, Spotlight } from '../models/dashboard';
 import { RestService } from '../rest.service';
+import { DrilldownService } from '../drilldown/drilldown.service';
 import { AuthenticationService } from '../services/authentication.service';
 import { BehaviorSubject } from 'rxjs';
 import { FilterService } from '../services/filter.service';
@@ -49,9 +50,14 @@ export class DashboardComponent implements OnInit {
   isLoggedIn$: boolean;
   patientsMax: number;
 
+  drilldownOptions = {
+    measureId: '42'
+  };
+
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
               public fb: FormBuilder, public dialog: MatDialog, private datePipe: DatePipe, private logger: NGXLogger,
-              private authenticationService: AuthenticationService, private filterService: FilterService) {
+              private authenticationService: AuthenticationService, private filterService: FilterService,
+              private drilldownService: DrilldownService) {
     // var id = this.userId.snapshot.paramMap.get('id') TODO: Need User Table;
     this.dataSourceOne = new MatTableDataSource;
     this.dataSourceTwo = new MatTableDataSource;
