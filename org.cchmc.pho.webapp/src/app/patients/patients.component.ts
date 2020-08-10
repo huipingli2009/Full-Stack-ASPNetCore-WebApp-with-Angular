@@ -106,10 +106,6 @@ export class PatientsComponent implements OnInit {
   patientAdminActionEnum = patientAdminActionTypeEnum;
   addNewPatientProcessEnum = addPatientProcessEnum;  
 
-  drilldownOptions = {
-    measureId: '42'
-  };
-
   // Selected Values
   selectedGender;
 
@@ -655,8 +651,14 @@ export class PatientsComponent implements OnInit {
     this.dialog.closeAll();
   }
  
-  openDrilldownDialog(){
-    this.drilldownService.open(this.drilldownOptions);
+  openDrilldownDialog(measure, display){
+    var drilldownOptions = {
+      measureId: measure, //'1',
+      filterId: this.currentPatientId, //'381886'
+      displayText: display
+    };
+
+    this.drilldownService.open(drilldownOptions);
   }
 }
 

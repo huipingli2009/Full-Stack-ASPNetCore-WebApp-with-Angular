@@ -15,7 +15,9 @@ export class DrilldownService {
     {
         this.dialogRef = this.dialog.open(DrilldownComponent, {    
             data: {
-              measureId: options.measureId
+              measureId: options.measureId,
+              filterId: options.filterId,
+              displayText: options.displayText
             }
        });  
     }  
