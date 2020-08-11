@@ -10,7 +10,6 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Linq;
 
-
 namespace org.cchmc.pho.core.DataAccessLayer
 {
 
@@ -115,7 +114,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         }
 
         public async Task<List<EDDetail>> ListEDDetails(int userId, DateTime admitDate)
-        {            
+        {
             DataTable dataTable = new DataTable();
             List<EDDetail> details = new List<EDDetail>();
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
@@ -155,6 +154,64 @@ namespace org.cchmc.pho.core.DataAccessLayer
                             ).ToList();
                     }
                     return details;
+                }
+            }
+
+        }
+        public async Task<DrillthruMetricTable> GetDrillthruTable(int userId, int measureId, int filterId)
+        {
+            DataTable dataTable = new DataTable();
+            DrillthruMetricTable drillthruTable = new DrillthruMetricTable();
+            drillthruTable.Rows = new List<DrillthruRow>();
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetDrillthruData", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@MeasureID", SqlDbType.Int).Value = measureId;
+                    sqlCommand.Parameters.Add("@FilterID", SqlDbType.Int).Value = filterId;
+
+                    sqlConnection.Open();
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+
+                        //var Test = (from row in dataTable.DataSet.Tables[0].AsEnumerable()
+                        //            select row.Field<string>("attribute1_name") + row.Field<int>("attribute2_name")).Distinct();
+
+                        //var distinctValues = dataTable.AsEnumerable()
+                        //.Select(row => new {
+                        //    attribute1_name = row.Field<string>("attribute1_name"),
+                        //    attribute2_name = row.Field<string>("attribute2_name")
+                        //})
+                        //.Distinct();
+
+                        foreach (DataRow dr in dataTable.DefaultView.ToTable(true, "RowNumber").Rows)
+                        {
+                            DrillthruRow row = new DrillthruRow()
+                            {
+                                RowNumber = Convert.ToInt32(dr[0]),
+                                Columns = new List<DrillthruColumn>()
+                            };
+                            drillthruTable.Rows.Add(row);
+                        }
+                        foreach (DataRow dr in dataTable.Rows)
+                        {
+                            int currentRow = Convert.ToInt32(dr["RowNumber"]);
+
+                            var column = new DrillthruColumn()
+                            {
+                                ColumnName =dr["ColumnName"].ToString(),
+                                Value = dr["Value"].ToString()
+                            };
+
+                            drillthruTable.Rows.Find(x => x.RowNumber.Equals(currentRow)).Columns.Add(column);
+                        }
+
+                    }
+                    return drillthruTable;
                 }
             }
 

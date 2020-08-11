@@ -332,23 +332,23 @@
               <div fxLayout="row" class="detail-heading">METRICS</div>
               <div fxLayout="row" class="metric-data-box" *ngIf="patientDetails" [(ngModel)]="patientDetails"
                 ngDefaultControl>
-                <div fxLayout="column" class="metric-data" fxLayoutAlign="top center">
+                <div fxLayout="column" class="metric-data" fxLayoutAlign="top center" (click)="openDrilldownDialog('1', 'Practice Visit Details')">
                   <span class="metric-number">{{patientDetails.practiceVisits}}</span>
                   <span class="metric-title">PRACTICE VISITS</span>
                 </div>
-                <div fxLayout="column" class="metric-data" fxLayoutAlign="top center">
+                <div fxLayout="column" class="metric-data" fxLayoutAlign="top center" (click)="openDrilldownDialog('2', 'CCHMC Encounter Details')">
                   <span class="metric-number">{{patientDetails.cchmcEncounters}}</span>
                   <span class="metric-title">CCHMC ENCOUNTERS</span>
                 </div>
-                <div fxLayout="column" class="metric-data" fxLayoutAlign="top center">
+                <div fxLayout="column" class="metric-data" fxLayoutAlign="top center" (click)="openDrilldownDialog('3', 'Healthbridge Encounter Details')">
                   <span class="metric-number">{{patientDetails.healthBridgeEncounters}}</span>
                   <span class="metric-title">HEALTHBRIDGE ENCOUNTERS</span>
                 </div>
-                <div fxLayout="column" class="metric-data" fxLayoutAlign="top center">
+                <div fxLayout="column" class="metric-data" fxLayoutAlign="top center" (click)="openDrilldownDialog('4', 'Diagnosis Details')">
                   <span class="metric-number">{{patientDetails.uniqueDXs}}</span>
                   <span class="metric-title">UNIQUE DXS</span>
                 </div>
-                <div fxLayout="column" class="metric-data" fxLayoutAlign="top center">
+                <div fxLayout="column" class="metric-data" fxLayoutAlign="top center" (click)="openDrilldownDialog('5', 'Procedure Details')">
                   <span class="metric-number">{{patientDetails.uniqueCPTCodes}}</span>
                   <span class="metric-title">UNIQUE CPT CODES</span>
                 </div>

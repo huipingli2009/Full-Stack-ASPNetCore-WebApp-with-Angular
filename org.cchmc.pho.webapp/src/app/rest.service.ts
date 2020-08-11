@@ -11,6 +11,7 @@ import { Followup, WorkbookDepressionPatient, WorkbookProvider, WorkbookReportin
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
 import { FileDetails, FileAction, ResourceType, Tag, Initiative, FileType, ContentPlacement } from './models/files';
 import { Location } from '@angular/common';
+import { MetricDrillthruTable } from './models/drillthru';
 
 
 
@@ -94,6 +95,16 @@ export class RestService {
     const endpoint = `${API_URL}/api/Metrics/edcharts/${admitDate}`;
     return this.http.get<any>(endpoint).pipe(
       map((data: EdChartDetails[]) => {
+        return data;
+      })
+    );
+  }
+
+  /*Gets base ED Chart Information */
+  getMeasureDrilldownTable(measureId, filterId): Observable<any> {
+    const endpoint = `${API_URL}/api/Metrics/drillthru/${measureId}/${filterId}`;
+    return this.http.get<any>(endpoint).pipe(
+      map((data: MetricDrillthruTable[]) => {
         return data;
       })
     );

@@ -17,6 +17,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarComponent } from '../shared/mat-snack-bar/mat-snack-bar.component';
 import { UserService } from '../services/user.service';
 import { CurrentUser, User } from '../models/user';
+import { DrilldownService } from '../drilldown/drilldown.service';
 
 @Component({
   selector: 'app-patients',
@@ -124,7 +125,7 @@ export class PatientsComponent implements OnInit {
 
   constructor(public rest: RestService, private route: ActivatedRoute, public fb: FormBuilder, private userService: UserService,
               private logger: NGXLogger, public dialog: MatDialog, private datePipe: DatePipe, private snackBar: MatSnackBarComponent,
-              private filterService: FilterService) {
+              private filterService: FilterService, private drilldownService: DrilldownService) {
     this.form = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -650,5 +651,14 @@ export class PatientsComponent implements OnInit {
     this.dialog.closeAll();
   }
  
+  openDrilldownDialog(measure, display){
+    var drilldownOptions = {
+      measureId: measure, //'1',
+      filterId: this.currentPatientId, //'381886'
+      displayText: display
+    };
+
+    this.drilldownService.open(drilldownOptions);
+  }
 }
 
