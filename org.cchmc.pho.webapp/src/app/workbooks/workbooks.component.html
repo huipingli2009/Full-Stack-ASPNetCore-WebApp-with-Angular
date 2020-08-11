@@ -2,7 +2,21 @@
     <div id="workbooks">
         <div class="top-date-container" fxLayout="row">
             <div fxLayout="column" fxLayoutAlign="start center" class="main-date">
-                DEPRESSION WORKBOOK FOR
+                Select Workbook
+            </div>
+            <div fxLayout="column" fxLayoutAlign="start center">
+                <mat-form-field class="select-override main-date-select">
+                    <mat-select [formControl]="selectedFormResponseID"
+                        (selectionChange)="onReportingDateSelectionChange()">
+                        <mat-option *ngFor="let workbooksInitiative of workbooksInitiativeList"
+                            [value]="workbooksInitiative.id">
+                           {{workbooksInitiative.label}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div fxLayout="column" fxLayoutAlign="start center" class="main-date">
+                Reporting Period                
             </div>
             <div fxLayout="column" fxLayoutAlign="start center">
                 <mat-form-field class="select-override main-date-select">
@@ -16,7 +30,6 @@
                 </mat-form-field>
             </div>
             <div fxLayout="column" fxLayoutAlign="end end" class="search-input" fxFlex fxFill>
-                <span class="search-header">Search for a patient across all workbooks:</span>
                 <mat-form-field>
                     <input matInput [formControl]="PatientNameFilter" autocomplete="off"
                         placeholder="Search Patient: Name">
@@ -25,6 +38,32 @@
                     </button>
                 </mat-form-field>
             </div>
+        </div>
+        <div class="top-date-container" fxLayout="row">
+            <div fxLayout="column" fxLayoutAlign="start center" class="main-date">
+                DEPRESSION WORKBOOK FOR
+            </div>
+            <div fxLayout="column" fxLayoutAlign="start center">
+                <mat-form-field class="select-override main-date-select">
+                    <mat-select [formControl]="selectedFormResponseID"
+                        (selectionChange)="onReportingDateSelectionChange()">
+                        <mat-option *ngFor="let reportingdate of workbookReportingMonths"
+                            [value]="reportingdate.formResponseID">
+                            {{reportingdate.reportingMonth}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <!-- <div fxLayout="column" fxLayoutAlign="end end" class="search-input" fxFlex fxFill>
+                <span class="search-header">Search for a patient across all workbooks:</span>
+                <mat-form-field>
+                    <input matInput [formControl]="PatientNameFilter" autocomplete="off"
+                        placeholder="Search Patient: Name">
+                    <button mat-button matSuffix mat-icon-button aria-label="Search">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                </mat-form-field>
+            </div> -->
 
         </div>
         <div class="side-border-container text-container">

@@ -98,10 +98,9 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 Provider = dr["Provider"].ToString(),
                                 DateOfService = (dr["DateOfService"] == DBNull.Value ? (DateTime?)null : (DateTime.Parse(dr["DateOfService"].ToString()))),
                                 Asthma_Score = dr["AsthmaScore"].ToString(),
-                                //ActionPlanGiven = (dr["ActionPlanGiven"] != DBNull.Value && Convert.ToBoolean(dr["ActionPlanGiven"])),
-                                ActionPlanGiven = (dr["ActionPlanGiven"].ToString()),
+                                ActionPlanGiven = dr["ActionPlanGiven"] != DBNull.Value && Convert.ToBoolean(dr["ActionPlanGiven"]),                               
                                 Treatment = dr["Treatment"].ToString(),                               
-                                AssessmentCompleted = (dr["AssessmentCompleted"].ToString())
+                                AssessmentCompleted = (dr["AssessmentCompleted"] != DBNull.Value && Convert.ToBoolean(dr["AssessmentCompleted"]))
                             };
 
                             workbooksasthmapatients.Add(workbookspt);
@@ -383,6 +382,36 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                     //return rows of data affected
                     return sqlCommand.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public async Task<List<WorkbooksInitiatives>> GetWorkbooksInitiatives(int userId)
+        {
+            DataTable dataTable = new DataTable();
+            List<WorkbooksInitiatives> initiatives;
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetWorkbookForms", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+
+                    await sqlConnection.OpenAsync();
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        initiatives = (from DataRow dr in dataTable.Rows
+                                   select new WorkbooksInitiatives()
+                                   {
+                                       Id = Convert.ToInt32(dr["FormId"]),
+                                       Label = dr["Survey_Title"].ToString()
+                                   }
+                            ).ToList();
+                    }
+                    return initiatives;
                 }
             }
         }

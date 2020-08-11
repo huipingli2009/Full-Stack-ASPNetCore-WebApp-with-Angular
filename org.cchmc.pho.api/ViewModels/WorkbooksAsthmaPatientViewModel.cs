@@ -7,9 +7,9 @@ namespace org.cchmc.pho.api.ViewModels
 {
     public class WorkbooksAsthmaPatientViewModel: WorkbooksPatient
     {
-        public string AssessmentCompleted { get; set; }
+        public bool AssessmentCompleted { get; set; }
         public string Treatment { get; set; }
-        public string ActionPlanGiven { get; set; }
+        public bool ActionPlanGiven { get; set; }
         public string Asthma_Score { get; set; }
     }
 }

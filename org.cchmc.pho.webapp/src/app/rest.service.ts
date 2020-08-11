@@ -7,7 +7,7 @@ import { environment } from '../environments/environment';
 import { Alerts, EdChart, EdChartDetails, Population, Quicklinks, Spotlight } from './models/dashboard';
 import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Patients, NewPatient, Pmca, PopSlices, Providers, States } from './models/patients';
 import { PracticeList, Responsibilities, Staff, StaffDetails, StaffAdmin } from './models/Staff';
-import { Followup, WorkbookPatient, WorkbookProvider, WorkbookReportingMonths, WorkbookPractice } from './models/workbook';
+import { Followup, WorkbookDepressionPatient, WorkbookProvider, WorkbookReportingMonths, WorkbookPractice, WorkbookInitiative } from './models/workbook';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
 import { FileDetails, FileAction, ResourceType, Tag, Initiative, FileType, ContentPlacement } from './models/files';
 import { Location } from '@angular/common';
@@ -374,6 +374,15 @@ export class RestService {
     );
   }
 
+  /*Get workbooks initiatives*/
+  getWorkbooksInitiatives(): Observable<any> {
+    return this.http.get<any>(`${API_URL}/api/Workbooks/workbooksinitiatives/`).pipe(
+      map((data: WorkbookInitiative[]) => {
+        return data;
+      })
+    );
+  }
+
   /* for getting providers for Depression workbook for a spefic reporting date*/
 
   getWorkbookProviders(formResponseid: number): Observable<any> {
@@ -414,7 +423,7 @@ export class RestService {
   }
 
   /*addition of patient to the work book*/
-  AddPatientToWorkbook(workbookPatient: WorkbookPatient): Observable<any> {
+  AddPatientToWorkbook(workbookPatient: WorkbookDepressionPatient): Observable<any> {
     this.logger.log(JSON.stringify(workbookPatient));
     return this.http.post<boolean>(`${API_URL}/api/Workbooks/Patients/${workbookPatient.patientId}`, JSON.stringify(workbookPatient), httpOptions).pipe(
       catchError(this.handleError<any>('adding patient to the workbook'))
@@ -459,7 +468,7 @@ export class RestService {
   }
 
   /*Removing patient from the work book*/
-  RemovePatientFromWorkbook(workbookPatient: WorkbookPatient): Observable<any> {
+  RemovePatientFromWorkbook(workbookPatient: WorkbookDepressionPatient): Observable<any> {
     this.logger.log(JSON.stringify(workbookPatient));
     return this.http.delete<boolean>(`${API_URL}/api/Workbooks/Patients/${workbookPatient.formResponseId}/${workbookPatient.patientId}`, httpOptions).pipe(
       catchError(this.handleError<any>('removing patient from the workbook'))
