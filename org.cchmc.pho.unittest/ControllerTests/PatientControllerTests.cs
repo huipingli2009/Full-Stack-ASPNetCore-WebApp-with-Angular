@@ -379,7 +379,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 LastCCHMCAdmit = Convert.ToDateTime("2018-09-12T00:00:00"),
                 LastHealthBridgeAdmit = Convert.ToDateTime("2016-01-28T21:04:00"),
                 LastDiagnosis = "",
-                CCHMCAppointment = Convert.ToDateTime("2016-02-03T19:00:00")
+                NextCCHMCAppointment = Convert.ToDateTime("2016-02-03T19:00:00")
             };
 
             _PatientController = new PatientsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockPatientDal.Object);
@@ -445,7 +445,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 LastCCHMCAdmit = Convert.ToDateTime("2018-09-12T00:00:00"),
                 LastHealthBridgeAdmit = Convert.ToDateTime("2016-01-28T21:04:00"),
                 LastDiagnosis = "",
-                CCHMCAppointment = Convert.ToDateTime("2016-02-03T19:00:00")
+                NextCCHMCAppointment = Convert.ToDateTime("2016-02-03T19:00:00")
             };
 
             _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
