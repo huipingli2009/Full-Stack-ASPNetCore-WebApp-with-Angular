@@ -369,9 +369,9 @@
                   </div>
                   <div fxLayout="row" class="detail-text">{{patientDetails.lastCCHMCAdmit | date:'MM/dd/yyyy'}}</div>
                   <div fxLayout="row" class="detail-title">
-                    LAST OR NEXT CCHMC APPT
+                    LAST CCHMC APPT
                   </div>
-                  <div fxLayout="row" class="detail-text">{{patientDetails.cchmcAppointment | date:'MM/dd/yyyy'}}</div>
+                  <div fxLayout="row" class="detail-text">{{patientDetails.lastCCHMCAppointment | date:'MM/dd/yyyy'}}</div>
                 </div>
                 <div fxLayout="column">
                   <div fxLayout="row" class="detail-title">
@@ -383,6 +383,10 @@
                   </div>
                   <div fxLayout="row" class="detail-text">{{patientDetails.lastHealthBridgeAdmit | date:'MM/dd/yyyy'}}
                   </div>
+                  <div fxLayout="row" class="detail-title">
+                    NEXT CCHMC APPT
+                  </div>
+                  <div fxLayout="row" class="detail-text">{{patientDetails.nextCCHMCAppointment | date:'MM/dd/yyyy'}}</div>
                 </div>
               </div>
             </div>

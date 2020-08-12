@@ -45,7 +45,8 @@ namespace org.cchmc.pho.core.DataModels
         public DateTime? LastCCHMCAdmit { get; set; }
         public DateTime? LastHealthBridgeAdmit { get; set; }
         public string LastDiagnosis { get; set; }
-        public DateTime? CCHMCAppointment { get; set; }
+        public DateTime? LastCCHMCAppointment { get; set; }
+        public DateTime? NextCCHMCAppointment { get; set; }
         public string PotentialDuplicateFirstName { get; set; }
         public string PotentialDuplicateLastName { get; set; }
         public DateTime? PotentialDuplicateDOB { get; set; }
