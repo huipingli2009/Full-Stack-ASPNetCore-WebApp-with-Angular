@@ -77,7 +77,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     ])
   });
 
-  PatientForWorkbookForm = this.fb.group({
+  DepressionPatientForWorkbookForm = this.fb.group({
     formResponseId: [''],
     patientInfo: [''],
     patientId: ['', Validators.required],
@@ -125,9 +125,9 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
 
   //Reset Add Patient Form
   resetAddPatient() {
-    this.PatientForWorkbookForm.reset();
+    this.DepressionPatientForWorkbookForm.reset();
     this.hasSelectedPatient = false;
-    this.PatientForWorkbookForm.get('action').setValue('false');
+    this.DepressionPatientForWorkbookForm.get('action').setValue('false');
   }
 
 
@@ -217,7 +217,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
       this.patientTableHeader = this.workbookDepressionPatient.length;
       this.dataSourceWorkbook = new MatTableDataSource(this.workbookDepressionPatient);
       this.dataSourceWorkbook.data = this.workbookDepressionPatient;
-      this.PatientForWorkbookForm.get('action').setValue('false');
+      this.DepressionPatientForWorkbookForm.get('action').setValue('false');
     })
   }
 
@@ -255,9 +255,9 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
 
   onSelectedPatient(event: any): void {
     this.hasSelectedPatient = true;
-    this.PatientForWorkbookForm.get('dob').setValue(this.datePipe.transform(event.value.dob, 'MM/dd/yyyy'));
-    this.PatientForWorkbookForm.get('phone').setValue(event.value.phone);
-    this.PatientForWorkbookForm.get('patientId').setValue(event.value.patientId);
+    this.DepressionPatientForWorkbookForm.get('dob').setValue(this.datePipe.transform(event.value.dob, 'MM/dd/yyyy'));
+    this.DepressionPatientForWorkbookForm.get('phone').setValue(event.value.phone);
+    this.DepressionPatientForWorkbookForm.get('patientId').setValue(event.value.patientId);
     this.addingPatientName = `${event.value.firstName} ${event.value.lastName}`;
 
   }
@@ -266,18 +266,18 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.hasSelectedPatient = false;
     this.newWorkbookPatient = new WorkbookDepressionPatient();
     this.newWorkbookPatient.formResponseId = this.selectedFormResponseID.value;
-    this.newWorkbookPatient.patientId = this.PatientForWorkbookForm.get('patientId').value;
-    this.newWorkbookPatient.phone = this.PatientForWorkbookForm.get('phone').value;
-    this.newWorkbookPatient.providerId = this.PatientForWorkbookForm.get('providerStaffID').value;
-    this.newWorkbookPatient.dateOfService = this.PatientForWorkbookForm.get('dateOfService').value;
-    this.newWorkbookPatient.phQ9_Score = this.PatientForWorkbookForm.get('pHQ9Score').value;
-    this.newWorkbookPatient.actionFollowUp = JSON.parse(this.PatientForWorkbookForm.controls.action.value);
+    this.newWorkbookPatient.patientId = this.DepressionPatientForWorkbookForm.get('patientId').value;
+    this.newWorkbookPatient.phone = this.DepressionPatientForWorkbookForm.get('phone').value;
+    this.newWorkbookPatient.providerId = this.DepressionPatientForWorkbookForm.get('providerStaffID').value;
+    this.newWorkbookPatient.dateOfService = this.DepressionPatientForWorkbookForm.get('dateOfService').value;
+    this.newWorkbookPatient.phQ9_Score = this.DepressionPatientForWorkbookForm.get('pHQ9Score').value;
+    this.newWorkbookPatient.actionFollowUp = JSON.parse(this.DepressionPatientForWorkbookForm.controls.action.value);
     this.AddPatientToWorkbook(this.newWorkbookPatient, this.addingPatientName);
   }
 
   AddPatientToWorkbook(newWorkbookPatient: WorkbookDepressionPatient, patientName: string) {
     this.rest.AddPatientToWorkbook(this.newWorkbookPatient).pipe(take(1)).subscribe(res => {
-      this.PatientForWorkbookForm.reset();
+      this.DepressionPatientForWorkbookForm.reset();
       this.getWorkbookPatients(this.selectedFormResponseID.value);
       this.searchPatient.reset();
       (res) ? this.snackBar.openSnackBar(`Patient ${patientName} added to the workbook`, 'Close', 'success-snackbar') : this.snackBar.openSnackBar(`Patient ${patientName} already exists on the current workbook`, 'Close', 'warn-snackbar')
@@ -300,7 +300,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
 
   RemovePatientFromWorkbook(removeWorkbookPatient: WorkbookDepressionPatient) {
     this.rest.RemovePatientFromWorkbook(this.removeWorkbookPatient).pipe(take(1)).subscribe(res => {
-      this.PatientForWorkbookForm.reset();
+      this.DepressionPatientForWorkbookForm.reset();
       this.getWorkbookPatients(this.selectedFormResponseID.value);
       this.snackBar.openSnackBar(`Patient ${this.deletingPatientName} removed from the workbook`, 'Close', 'success-snackbar')
     })
@@ -489,10 +489,10 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.rest.getWorkbooksInitiatives().pipe(take(1)).subscribe((data) => {
       this.workbooksInitiativeList = data;
 
-      // this.workbooksInitiativeList.forEach((index) => {
-      //   this.selectedFormResponseID.setValue(this.workbooksInitiativeList[0].formResponseID);
-      //   //this.onReportingDateSelectionChange();
-      // });
+      this.workbooksInitiativeList.forEach((index) => {
+        this.selectedFormResponseID.setValue(this.workbooksInitiativeList[0].formResponseID);
+        this.onReportingDateSelectionChange();
+      });
     });
   }
   

@@ -4,7 +4,7 @@
             <div fxLayout="column" fxLayoutAlign="start center" class="main-date">
                 Select Workbook
             </div>
-            <div fxLayout="column" fxLayoutAlign="start center">
+            <div fxLayout="column" fxLayoutAlign="start center">               
                 <mat-form-field class="select-override main-date-select">
                     <mat-select [formControl]="selectedFormResponseID"
                         (selectionChange)="onReportingDateSelectionChange()">
@@ -293,7 +293,7 @@
                 </ng-container>
 
                 <!-- Second Header Columns===============================================================-->
-                <div form [formGroup]="PatientForWorkbookForm">
+                <div form [formGroup]="DepressionPatientForWorkbookForm">
                     <!-- Action button to add patients -->
                     <ng-container matColumnDef="addaction">
                         <mat-header-cell *matHeaderCellDef>
@@ -325,8 +325,8 @@
                                     </mat-option>
                                 </mat-select>
                                 <ng-container
-                                    *ngIf="(PatientForWorkbookForm.get('patientId').touched || PatientForWorkbookForm.get('patientId').dirty) && PatientForWorkbookForm.get('patientId').errors">
-                                    <mat-error *ngIf="PatientForWorkbookForm.get('patientId').errors.required">
+                                    *ngIf="(DepressionPatientForWorkbookForm.get('patientId').touched || DepressionPatientForWorkbookForm.get('patientId').dirty) && DepressionPatientForWorkbookForm.get('patientId').errors">
+                                    <mat-error *ngIf="DepressionPatientForWorkbookForm.get('patientId').errors.required">
                                         Please select a patient
                                     </mat-error>
                                 </ng-container>
@@ -365,8 +365,8 @@
                                     </mat-option>
                                 </mat-select>
                                 <ng-container
-                                    *ngIf="(PatientForWorkbookForm.get('providerStaffID').touched || PatientForWorkbookForm.get('providerStaffID').dirty) && PatientForWorkbookForm.get('providerStaffID').errors">
-                                    <mat-error *ngIf="PatientForWorkbookForm.get('providerStaffID').errors.required">
+                                    *ngIf="(DepressionPatientForWorkbookForm.get('providerStaffID').touched || DepressionPatientForWorkbookForm.get('providerStaffID').dirty) && DepressionPatientForWorkbookForm.get('providerStaffID').errors">
+                                    <mat-error *ngIf="DepressionPatientForWorkbookForm.get('providerStaffID').errors.required">
                                         Please select a provider
                                     </mat-error>
 
@@ -390,8 +390,8 @@
                                 <mat-datepicker #picker></mat-datepicker>
 
                                 <ng-container
-                                    *ngIf="(PatientForWorkbookForm.get('dateOfService').touched || PatientForWorkbookForm.get('dateOfService').dirty) && PatientForWorkbookForm.get('dateOfService').errors">
-                                    <mat-error *ngIf="PatientForWorkbookForm.get('dateOfService').errors.daterequired">
+                                    *ngIf="(DepressionPatientForWorkbookForm.get('dateOfService').touched || DepressionPatientForWorkbookForm.get('dateOfService').dirty) && DepressionPatientForWorkbookForm.get('dateOfService').errors">
+                                    <mat-error *ngIf="DepressionPatientForWorkbookForm.get('dateOfService').errors.daterequired">
                                         Date of service is required in MM/DD/YYYY format
                                     </mat-error>
                                 </ng-container>
@@ -404,8 +404,8 @@
                             <mat-form-field>
                                 <input matInput formControlName="pHQ9Score" required placeholder="Score">
                                 <ng-container
-                                    *ngIf="(PatientForWorkbookForm.get('pHQ9Score').touched || PatientForWorkbookForm.get('pHQ9Score').dirty) && PatientForWorkbookForm.get('pHQ9Score').errors">
-                                    <mat-error *ngIf="PatientForWorkbookForm.get('pHQ9Score').errors.required">
+                                    *ngIf="(DepressionPatientForWorkbookForm.get('pHQ9Score').touched || DepressionPatientForWorkbookForm.get('pHQ9Score').dirty) && DepressionPatientForWorkbookForm.get('pHQ9Score').errors">
+                                    <mat-error *ngIf="DepressionPatientForWorkbookForm.get('pHQ9Score').errors.required">
                                         pHQ9Score is required
                                     </mat-error>
 
@@ -427,8 +427,8 @@
                                 <mat-button-toggle value="false">No</mat-button-toggle>
                             </mat-button-toggle-group>
                             <ng-container
-                                *ngIf="(PatientForWorkbookForm.get('action').touched || PatientForWorkbookForm.get('action').dirty) && PatientForWorkbookForm.get('action').errors">
-                                <mat-error *ngIf="PatientForWorkbookForm.get('action').errors.required">
+                                *ngIf="(DepressionPatientForWorkbookForm.get('action').touched || DepressionPatientForWorkbookForm.get('action').dirty) && DepressionPatientForWorkbookForm.get('action').errors">
+                                <mat-error *ngIf="DepressionPatientForWorkbookForm.get('action').errors.required">
                                     Please select a action Followup
                                 </mat-error>
 
@@ -440,7 +440,7 @@
                     <!-- Action Follow up Column -->
                     <ng-container matColumnDef="addfollowUp">
                         <mat-header-cell *matHeaderCellDef>
-                            <button mat-flat-button [disabled]="!PatientForWorkbookForm.valid" color="accent"
+                            <button mat-flat-button [disabled]="!DepressionPatientForWorkbookForm.valid" color="accent"
                                 (click)="AddPatientForWorkbook()">ADD PATIENT</button>
                         </mat-header-cell>
 
