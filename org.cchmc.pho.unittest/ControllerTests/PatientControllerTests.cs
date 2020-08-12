@@ -124,7 +124,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 LastCCHMCAdmit = Convert.ToDateTime("2018-09-12T00:00:00"),
                 LastHealthBridgeAdmit = Convert.ToDateTime("2016-01-28T21:04:00"),
                 LastDiagnosis = "",
-                CCHMCAppointment = Convert.ToDateTime("2016-02-03T19:00:00")
+                NextCCHMCAppointment = Convert.ToDateTime("2016-02-03T19:00:00")
             };
 
 
@@ -172,7 +172,6 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.AreEqual(myPatientDetails.Phone1, resultList.Phone1);
             Assert.AreEqual(myPatientDetails.Phone2, resultList.Phone2);
             Assert.AreEqual(myPatientDetails.PracticeVisits, resultList.PracticeVisits);
-            Assert.AreEqual(myPatientDetails.CCHMCEncounters, resultList.CCHMCEncounters);
             Assert.AreEqual(myPatientDetails.HealthBridgeEncounters, resultList.HealthBridgeEncounters);
             Assert.AreEqual(myPatientDetails.UniqueDXs, resultList.UniqueDXs);
             Assert.AreEqual(myPatientDetails.UniqueCPTCodes, resultList.UniqueCPTCodes);
@@ -180,7 +179,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.AreEqual(myPatientDetails.LastCCHMCAdmit, resultList.LastCCHMCAdmit);
             Assert.AreEqual(myPatientDetails.LastHealthBridgeAdmit, resultList.LastHealthBridgeAdmit);
             Assert.AreEqual(myPatientDetails.LastDiagnosis, resultList.LastDiagnosis);
-            Assert.AreEqual(myPatientDetails.CCHMCAppointment, resultList.CCHMCAppointment);
+            Assert.AreEqual(myPatientDetails.NextCCHMCAppointment, resultList.NextCCHMCAppointment);
         }
 
         [TestMethod]
@@ -284,7 +283,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 LastCCHMCAdmit = Convert.ToDateTime("2018-09-12T00:00:00"),
                 LastHealthBridgeAdmit = Convert.ToDateTime("2016-01-28T21:04:00"),
                 LastDiagnosis = "",
-                CCHMCAppointment = Convert.ToDateTime("2016-02-03T19:00:00")
+                NextCCHMCAppointment = Convert.ToDateTime("2016-02-03T19:00:00")
             };
 
             _mockPatientDal.Setup(p => p.UpdatePatientDetails(userId, myPatientDetails))
@@ -373,7 +372,6 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 Phone1 = "5137700902",
                 Phone2 = "",
                 PracticeVisits = 28,
-                CCHMCEncounters = 15,
                 HealthBridgeEncounters = 0,
                 UniqueDXs = 0,
                 UniqueCPTCodes = 23,
@@ -440,7 +438,6 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 Phone1 = "5137700902",
                 Phone2 = "",
                 PracticeVisits = 28,
-                CCHMCEncounters = 15,
                 HealthBridgeEncounters = 0,
                 UniqueDXs = 0,
                 UniqueCPTCodes = 23,

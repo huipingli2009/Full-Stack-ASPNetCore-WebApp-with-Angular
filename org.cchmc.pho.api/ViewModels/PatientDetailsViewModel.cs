@@ -38,6 +38,8 @@ namespace org.cchmc.pho.api.ViewModels
         public string Phone2 { get; set; }
         public int PracticeVisits { get; set; }
         public int CCHMCEncounters { get; set; }
+        public DateTime? LastCCHMCAppointment { get; set; }
+        public DateTime? NextCCHMCAppointment { get; set; }
         public int HealthBridgeEncounters { get; set; }
         public int UniqueDXs { get; set; }
         public int UniqueCPTCodes { get; set; }
@@ -45,7 +47,6 @@ namespace org.cchmc.pho.api.ViewModels
         public DateTime? LastCCHMCAdmit { get; set; }
         public DateTime? LastHealthBridgeAdmit { get; set; }
         public string LastDiagnosis { get; set; }
-        public DateTime? CCHMCAppointment { get; set; }
         public bool potentialPatient { get; }
         public string PotentialDuplicateFirstName { get; set; }
         public string PotentialDuplicateLastName { get; set; }

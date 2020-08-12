@@ -60,7 +60,8 @@ export interface PatientDetails {
     lastCCHMCAdmit: Date;
     lastHealthBridgeAdmit: Date;
     lastDiagnosis: string;
-    cchmcAppointment: Date;
+    lastCCHMCAppointment: Date;
+    nextCCHMCAppointment: Date;
     potentialPatient: boolean;
     potentialDuplicateFirstName: string;
     potentialDuplicateLastName: string;
