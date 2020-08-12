@@ -18,7 +18,8 @@ export class DrilldownService {
               measureId: options.measureId,
               filterId: options.filterId,
               displayText: options.displayText
-            }
+            },
+            panelClass: 'drilldown-dialog-container'
        });  
     }  
   
