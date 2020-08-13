@@ -910,7 +910,9 @@ button.toast-close-button {
 .drilldown-dialog-container .mat-dialog-container {
     margin: 0px !important;
     padding: 15px !important;
+    overflow-y: hidden !important;
 }
+
 .drilldown-table {
   color: #333;
   background: white;
@@ -931,7 +933,7 @@ button.toast-close-button {
   tfoot th {
     color: #777;
     background: rgba(0, 0, 0, 0.1);
-    background-color:  rgba(0, 0, 0, 0.1);
+    background-color:  rgba(202, 204, 206, 1);
   }
   caption {
     padding: 0.5em;
