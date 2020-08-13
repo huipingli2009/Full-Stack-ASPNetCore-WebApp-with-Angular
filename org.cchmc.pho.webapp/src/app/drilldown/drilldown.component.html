@@ -1,14 +1,35 @@
 <div class="content-main">
     <h3 mat-dialog-title class="drilldown-heading">{{headerDisplayText}}</h3>
-    <div mat-dialog-content class="mat-typography">
-        <div *ngIf="isLoading" fxLayout="row" style="height: 300px; width:600px" fxLayoutAlign="center center">
+    <div mat-dialog-content style="min-height: 150px;" class="mat-typography">
+
+        <div *ngIf="isLoading" fxLayout="row" fxLayoutAlign="center center">
             <div fxLayout="column">
                 <mat-progress-spinner color="primary" mode="indeterminate">
                 </mat-progress-spinner>
             </div>
         </div>
-        <div fxLayout="row" *ngIf="!isLoading" style="height: 300px; width:600px">
-            <div fxLayout="column">
+        <table id="drilldownTable" class="drilldown-table" *ngIf="!isLoading">
+            <thead>
+               <tr>
+                  <th *ngFor="let item of headerColumns">{{item.columnName}}</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr *ngFor="let row of rows">
+                  <td *ngFor="let column of row.columns">
+                        {{column.value}}
+                  </td>
+               </tr>
+            </tbody>
+         </table>
+<!--         <div *ngIf="isLoading" fxLayout="row" fxLayoutAlign="center center">
+            <div fxLayout="column" style="min-height: 80%;">
+                <mat-progress-spinner color="primary" mode="indeterminate">
+                </mat-progress-spinner>
+            </div>
+        </div>
+        <div fxLayout="row" *ngIf="!isLoading">
+            <div fxLayout="column" style="min-height: 80%;">
                 <table id="drilldownTable" class="drilldown-table">
                     <thead>
                        <tr>
@@ -25,7 +46,7 @@
                  </table>
 
             </div>
-        </div>
+        </div> -->
     </div>
     <div mat-dialog-actions align="end">
         <button mat-flat-button mat-dialog-close color="accent" (click)="cancel()">Close</button>
