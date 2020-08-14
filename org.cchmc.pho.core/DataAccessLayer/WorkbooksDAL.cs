@@ -65,8 +65,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         }
 
         public async Task<List<WorkbooksAsthmaPatient>> GetAsthmaPatientList(int userId, int formResponseId)
-        {
-            userId = 56;
+        {        
 
             DataTable dataTable = new DataTable();
             List<WorkbooksAsthmaPatient> workbooksasthmapatients = new List<WorkbooksAsthmaPatient>();
@@ -386,10 +385,10 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
-        public async Task<List<WorkbooksInitiatives>> GetWorkbooksInitiatives(int userId)
+        public async Task<List<WorkbooksForms>> GetWorkbooksForms(int userId)
         {
             DataTable dataTable = new DataTable();
-            List<WorkbooksInitiatives> initiatives;
+            List<WorkbooksForms> initiatives;
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spGetWorkbookForms", sqlConnection))
@@ -404,7 +403,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     {
                         da.Fill(dataTable);
                         initiatives = (from DataRow dr in dataTable.Rows
-                                   select new WorkbooksInitiatives()
+                                   select new WorkbooksForms()
                                    {
                                        Id = Convert.ToInt32(dr["FormId"]),
                                        Label = dr["Survey_Title"].ToString()

@@ -62,3 +62,17 @@ export class WorkbookInitiative {
     id: number;
     label: string;
 }
+
+interface Treatment {
+    value: string;
+    viewValue: string;
+}
+
+export class AsthmaTreatment {
+    treatment: Treatment[] = [
+      {value: 'Maintained', viewValue: 'Maintained'},
+      {value: 'Stepped Up', viewValue: 'Stepped Up'},
+      {value: 'Stepped Down', viewValue: 'Stepped Down'},
+      {value: 'NULL', viewValue: 'NULL'}
+    ];   
+}

@@ -321,20 +321,20 @@ namespace org.cchmc.pho.api.Controllers
 
         }
 
-        [HttpGet("workbooksinitiatives")]
+        [HttpGet("WorkbooksForms")]
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
-        [SwaggerResponse(200, type: typeof(List<WorkbooksInitiativesViewModel>))]
+        [SwaggerResponse(200, type: typeof(List<WorkbooksFormsViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> GetWorkbooksInitiatives()
+        public async Task<IActionResult> GetWorkbooksForms()
         {
             try
             {
                 int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
                 // call the data method
-                var data = await _workbooks.GetWorkbooksInitiatives(currentUserId);
+                var data = await _workbooks.GetWorkbooksForms(currentUserId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
-                var result = _mapper.Map<List<WorkbooksInitiativesViewModel>>(data);
+                var result = _mapper.Map<List<WorkbooksFormsViewModel>>(data);
                 // return the result in a "200 OK" response
                 return Ok(result);
             }

@@ -1,25 +1,24 @@
 <div class="content-main">
     <div id="workbooks">
-        <div class="top-date-container" fxLayout="row">
-            <div fxLayout="column" fxLayoutAlign="start center" class="main-date">
-                Select Workbook
-            </div>
-            <div fxLayout="column" fxLayoutAlign="start center">               
-                <mat-form-field class="select-override main-date-select">
-                    <mat-select [formControl]="selectedFormResponseID"
-                        (selectionChange)="onReportingDateSelectionChange()">
+        <div fxLayout="row" class="workbooks-header" fxLayoutAlign="space-even center">           
+            <div fxLayout="column" fxLayoutAlign="start center" >                                            
+                <mat-form-field>
+                    <mat-label>Select Workbook</mat-label>  
+                    <mat-select [formControl]="selectedWorkbook"
+                        (selectionChange)="onWorkbookSelectionChange()">
+                        <!-- [{workbooksInitiative.id}] = "selectedWorkbook"> --> 
+                        <mat-option seleced>Select Workbook</mat-option>
                         <mat-option *ngFor="let workbooksInitiative of workbooksInitiativeList"
                             [value]="workbooksInitiative.id">
                            {{workbooksInitiative.label}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
-            </div>
-            <div fxLayout="column" fxLayoutAlign="start center" class="main-date">
-                Reporting Period                
-            </div>
+            </div>   
+             <div>&nbsp;</div>   
             <div fxLayout="column" fxLayoutAlign="start center">
-                <mat-form-field class="select-override main-date-select">
+                <mat-form-field >
+                    <mat-label> Reporting Period </mat-label>  
                     <mat-select [formControl]="selectedFormResponseID"
                         (selectionChange)="onReportingDateSelectionChange()">
                         <mat-option *ngFor="let reportingdate of workbookReportingMonths"
@@ -49,22 +48,11 @@
                         (selectionChange)="onReportingDateSelectionChange()">
                         <mat-option *ngFor="let reportingdate of workbookReportingMonths"
                             [value]="reportingdate.formResponseID">
-                            {{reportingdate.reportingMonth}}
+                            {{reportingdate.reportingMonth == ''? defaultWorkbooksReportingMonth: reportingdate.reportingMonth}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
-            <!-- <div fxLayout="column" fxLayoutAlign="end end" class="search-input" fxFlex fxFill>
-                <span class="search-header">Search for a patient across all workbooks:</span>
-                <mat-form-field>
-                    <input matInput [formControl]="PatientNameFilter" autocomplete="off"
-                        placeholder="Search Patient: Name">
-                    <button mat-button matSuffix mat-icon-button aria-label="Search">
-                        <mat-icon>search</mat-icon>
-                    </button>
-                </mat-form-field>
-            </div> -->
-
         </div>
         <div class="side-border-container text-container">
             <div fxLayout="row" class="italic">
@@ -192,14 +180,14 @@
             </div>
         </div>
     </div>
-    <div *ngIf="dataSourceWorkbook">
+    <div *ngIf="dataSourceDepressionWorkbook">
         <div fxLayout="row" class="workbooks-header">
             <div fxLayout="column" class="header-filter">
                 {{patientTableHeader}} Patients with PHQ-9 scores of 10 or Above Follow Up Patients
             </div>
         </div>
         <div fxLayout="row" class="patient-workbook-table">
-            <mat-table #table [dataSource]="dataSourceWorkbook" matSort id="patients"
+            <mat-table #table [dataSource]="dataSourceDepressionWorkbook" matSort id="patients"
                 (matSortChange)="onSortData($event)" [trackBy]="trackPatients" multiTemplateDataRows>
 
                 <!-- DropDown Column -->
@@ -479,14 +467,12 @@
                 </ng-container>
 
 
-                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-header-row *matHeaderRowDef="displayedDepressionColumns"></mat-header-row>
                 <mat-header-row class="patient-addition-row"
                     *matHeaderRowDef="['addaction','addpatient','adddob', 'addphone','addprovider','adddateOfService','addphQ9_Score','addimprovement','addactionFollowUp','addfollowUp']">
                 </mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumns;">
+                <mat-row *matRowDef="let row; columns: displayedDepressionColumns;">
                 </mat-row>
-
-
             </mat-table>
         </div>
     </div>
