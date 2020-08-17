@@ -48,7 +48,7 @@
                         (selectionChange)="onReportingDateSelectionChange()">
                         <mat-option *ngFor="let reportingdate of workbookReportingMonths"
                             [value]="reportingdate.formResponseID" aria-expanded="false">
-                            {{reportingdate.reportingMonth == reportingdate.reportingMonth}}
+                            {{reportingdate.reportingMonth}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>

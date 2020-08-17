@@ -48,6 +48,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   workbookProviderDetail: WorkbookProvider;
   dataSourceDepressionWorkbook: MatTableDataSource<WorkbookDepressionPatient>;
   formResponseId: number;
+  asthmaFormResponseId: number;
   phqsFinal = 0;
   totalFinal: number;
   patientTableHeader: number;
@@ -64,7 +65,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   selectedEditProviderDisplay: string;
   selectedEditProviderId: number;
 
-  workbooksInitiative: string;
+  //workbooksInitiative: string;
   workbooksFormList: WorkbookForm[];
   defaultWorkbooksReportingMonth = '';
   //selectedWorkbook = '3'; //Depression for default
@@ -510,10 +511,22 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   //on change of the workbook selection
   onWorkbookSelectionChange() {
     //this.selectedWorkbook.setValue(this.workbooksInitiativeList[0].id);
-    this.selectedWorkbook = this.selectedWorkbook.value;
-    this.selectedFormResponseID = this.selectedFormResponseID.value;
-    console.log();
+    //this.selectedWorkbook = this.selectedWorkbook.value;
+    //this.selectedFormResponseID = this.selectedFormResponseID.value;
+    let val;
 
+    val = this.selectedWorkbook;
+    console.log();
+    // this.rest.getWorkbooksForms().pipe(take(1)).subscribe((data) => {
+    //   this.workbooksFormList = data;
+
+    //   this.formResponseId = this.selectedWorkbook;
+
+    //   this.workbooksFormList.forEach((element, index, reportData) => {
+    //     this.selectedWorkbook.setValue(this.workbooksFormList[index].id);
+    //     console.log();
+    //   }); 
+    // })
   }
 
   // getWorkbookReportingMonths() {
