@@ -388,7 +388,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         public async Task<List<WorkbooksForms>> GetWorkbooksForms(int userId)
         {
             DataTable dataTable = new DataTable();
-            List<WorkbooksForms> initiatives;
+            List<WorkbooksForms> workbooksForms;
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spGetWorkbookForms", sqlConnection))
@@ -402,7 +402,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
                         da.Fill(dataTable);
-                        initiatives = (from DataRow dr in dataTable.Rows
+                        workbooksForms = (from DataRow dr in dataTable.Rows
                                    select new WorkbooksForms()
                                    {
                                        Id = Convert.ToInt32(dr["FormId"]),
@@ -410,7 +410,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                    }
                             ).ToList();
                     }
-                    return initiatives;
+                    return workbooksForms;
                 }
             }
         }

@@ -7,7 +7,7 @@ import { environment } from '../environments/environment';
 import { Alerts, EdChart, EdChartDetails, Population, Quicklinks, Spotlight } from './models/dashboard';
 import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Patients, NewPatient, Pmca, PopSlices, Providers, States } from './models/patients';
 import { PracticeList, Responsibilities, Staff, StaffDetails, StaffAdmin } from './models/Staff';
-import { Followup, WorkbookDepressionPatient, WorkbookProvider, WorkbookReportingMonths, WorkbookPractice, WorkbookInitiative } from './models/workbook';
+import { Followup, WorkbookDepressionPatient, WorkbookProvider, WorkbookReportingMonths, WorkbookPractice, WorkbookForm} from './models/workbook';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
 import { FileDetails, FileAction, ResourceType, Tag, Initiative, FileType, ContentPlacement } from './models/files';
 import { Location } from '@angular/common';
@@ -386,9 +386,9 @@ export class RestService {
   }
 
   /*Get workbooks initiatives*/
-  getWorkbooksInitiatives(): Observable<any> {
-    return this.http.get<any>(`${API_URL}/api/Workbooks/workbooksinitiatives/`).pipe(
-      map((data: WorkbookInitiative[]) => {
+  getWorkbooksForms(): Observable<any> {
+    return this.http.get<any>(`${API_URL}/api/Workbooks/WorkbooksForms/`).pipe(
+      map((data: WorkbookForm[]) => {
         return data;
       })
     );

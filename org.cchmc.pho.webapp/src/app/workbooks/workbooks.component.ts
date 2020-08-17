@@ -8,7 +8,7 @@ import { NGXLogger } from 'ngx-logger';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { PatientForWorkbook, Providers } from '../models/patients';
-import { Followup, WorkbookDepressionPatient, WorkbookAsthmaPatient, WorkbookProvider, WorkbookReportingMonths, WorkbookPractice, WorkbookInitiative } from '../models/workbook';
+import { Followup, WorkbookDepressionPatient, WorkbookAsthmaPatient, WorkbookProvider, WorkbookReportingMonths, WorkbookPractice, WorkbookForm } from '../models/workbook';
 import { RestService } from '../rest.service';
 import { DateRequiredValidator } from '../shared/customValidators/customValidator';
 import { MatSnackBarComponent } from '../shared/mat-snack-bar/mat-snack-bar.component';
@@ -65,7 +65,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   selectedEditProviderId: number;
 
   workbooksInitiative: string;
-  workbooksInitiativeList: WorkbookInitiative[];
+  workbooksFormList: WorkbookForm[];
   defaultWorkbooksReportingMonth = '';
   //selectedWorkbook = '3'; //Depression for default
 
@@ -119,7 +119,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.onProviderValueChanges();
     this.onPatientSearchValueChanges();
     this.onWorkbooksForPatientSearchValueChanges();
-    this.getWorkbooksInitiatives();
+    this.getWorkbooksForms();
   }
 
   ngOnDestroy(): void {
@@ -141,7 +141,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
       this.workbookReportingMonths = data;
       this.workbookReportingMonths.forEach((element, index, reportData) => {
         this.workbookReportingMonths[index].reportingMonth = this.datePipe.transform(this.workbookReportingMonths[index].reportingMonth, 'MMM-yyyy');
-        //this.selectedFormResponseID.setValue(this.workbookReportingMonths[0].formResponseID);
+        this.selectedFormResponseID.setValue(this.workbookReportingMonths[0].formResponseID);
         this.defaultWorkbooksReportingMonth =  this.workbookReportingMonths[0].reportingMonth;
         this.onReportingDateSelectionChange();
       });
@@ -492,13 +492,13 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
 
   
 
-  getWorkbooksInitiatives() {
-    this.rest.getWorkbooksInitiatives().pipe(take(1)).subscribe((data) => {
-      this.workbooksInitiativeList = data;
+  getWorkbooksForms() {
+    this.rest.getWorkbooksForms().pipe(take(1)).subscribe((data) => {
+      this.workbooksFormList = data;
 
-      this.workbooksInitiativeList.forEach((element, index, reportData) => {
+      this.workbooksFormList.forEach((element, index, reportData) => {
         
-        this.selectedWorkbook.setValue(this.workbooksInitiativeList[index].id);
+        this.selectedWorkbook.setValue(this.workbooksFormList[1].id);
 
         this.onWorkbookSelectionChange();
 

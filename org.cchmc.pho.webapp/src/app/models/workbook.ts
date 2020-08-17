@@ -58,7 +58,7 @@ export class WorkbookPractice {
     line3: string;
 }
 
-export class WorkbookInitiative {
+export class WorkbookForm {
     id: number;
     label: string;
 }
