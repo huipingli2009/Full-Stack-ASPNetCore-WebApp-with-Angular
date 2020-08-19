@@ -345,5 +345,56 @@ namespace org.cchmc.pho.api.Controllers
                 return StatusCode(500, "An error occurred");
             }
         }
+
+
+        [HttpGet("asthmatreatmentplan")]       
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [SwaggerResponse(200, type: typeof(List<AsthmaTreatmentPlanViewModel>))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> GetAsthmaTreatmentPlan()
+        {
+            try
+            {
+                // call the data method
+                var data = await _workbooks.GetAsthmaTreatmentPlan();
+                // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
+                var result = _mapper.Map<List<AsthmaTreatmentPlanViewModel>>(data);
+                // return the result in a "200 OK" response
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+        [HttpGet("asthmaworkbookspractice")]
+        [AllowAnonymous]
+        //[Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [SwaggerResponse(200, type: typeof(AsthmaWorkbooksPracticeViewModel))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> GetAsthmaPracticeWorkbooks(int formResponseId)
+        {
+            try
+            {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+                // call the data method
+                var data = await _workbooks.GetAsthmaPracticeWorkbooks(currentUserId, formResponseId);
+                // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
+                var result = _mapper.Map<AsthmaWorkbooksPracticeViewModel>(data);
+                // return the result in a "200 OK" response
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
     }
 }
