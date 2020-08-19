@@ -39,10 +39,11 @@
             </div>
         </div>
         <div class="top-date-container" fxLayout="row">
-            <div fxLayout="column" fxLayoutAlign="start center" class="main-date">
-                DEPRESSION WORKBOOK FOR  
+            <div fxLayout="column" fxLayoutAlign="start center" class="main-date" >   
+                <!-- DEPRESSION WORKBOOK FOR  {{defaultWorkbooksReportingMonth}} -->
+                {{selectedWorkbookForm}} FOR  {{defaultWorkbooksReportingMonth}}
             </div>
-            <div fxLayout="column" fxLayoutAlign="start center">
+            <!-- <div fxLayout="column" fxLayoutAlign="start center">
                 <mat-form-field class="select-override main-date-select">
                     <mat-select [formControl]="selectedFormResponseID"
                         (selectionChange)="onReportingDateSelectionChange()">
@@ -52,7 +53,7 @@
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
-            </div>
+            </div> -->
         </div>
         <div class="side-border-container text-container">
             <div fxLayout="row" class="italic">

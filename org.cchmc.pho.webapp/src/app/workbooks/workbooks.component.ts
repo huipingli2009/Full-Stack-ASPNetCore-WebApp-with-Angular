@@ -67,6 +67,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
 
   //workbooksInitiative: string;
   workbooksFormList: WorkbookForm[];
+  selectedWorkbookForm = '';
   defaultWorkbooksReportingMonth = '';
   //selectedWorkbook = '3'; //Depression for default
 
@@ -144,18 +145,25 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
         this.workbookReportingMonths[index].reportingMonth = this.datePipe.transform(this.workbookReportingMonths[index].reportingMonth, 'MMM-yyyy');
         this.selectedFormResponseID.setValue(this.workbookReportingMonths[0].formResponseID);
         this.defaultWorkbooksReportingMonth =  this.workbookReportingMonths[0].reportingMonth;
+        this.selectedWorkbookForm = 'DEPRESSION WORKBOOK ';
         this.onReportingDateSelectionChange();
       });
     })
   }
 
-
   //on change of the reporting data for workbook
   onReportingDateSelectionChange() {
-    this.formResponseId = this.selectedFormResponseID.value;
+    this.formResponseId = this.selectedFormResponseID.value; 
+
+    let val: number;
+    
+    val = this.workbookReportingMonths.findIndex(data => data.formResponseID == this.formResponseId);
+    
     this.getWorkbookProviders(this.formResponseId);
     this.getWorkbookPatients(this.formResponseId);
-    this.getWorkbookPractice(this.formResponseId);
+    this.getWorkbookPractice(this.formResponseId);     
+    
+    this.defaultWorkbooksReportingMonth =  this.workbookReportingMonths[val].reportingMonth;
   }
 
   //for getting workbook providers
@@ -327,7 +335,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
       this.workbookReportingMonths = data;
       this.workbookReportingMonths.forEach((element, index, reportData) => {
         this.workbookReportingMonths[index].reportingMonth = this.datePipe.transform(this.workbookReportingMonths[index].reportingMonth, 'MM/dd/yyyy');
-        this.selectedFormResponseID.setValue(this.workbookReportingMonths[0].formResponseID);
+        this.selectedFormResponseID.setValue(this.workbookReportingMonths[0].formResponseID);       
         this.onReportingDateSelectionChange();
       });
     })
@@ -509,24 +517,20 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   } 
   
   //on change of the workbook selection
-  onWorkbookSelectionChange() {
-    //this.selectedWorkbook.setValue(this.workbooksInitiativeList[0].id);
-    //this.selectedWorkbook = this.selectedWorkbook.value;
-    //this.selectedFormResponseID = this.selectedFormResponseID.value;
-    let val;
+  onWorkbookSelectionChange() {   
+    let val: number;
 
-    val = this.selectedWorkbook;
-    console.log();
-    // this.rest.getWorkbooksForms().pipe(take(1)).subscribe((data) => {
-    //   this.workbooksFormList = data;
+    val = this.selectedWorkbook.value;  
 
-    //   this.formResponseId = this.selectedWorkbook;
-
-    //   this.workbooksFormList.forEach((element, index, reportData) => {
-    //     this.selectedWorkbook.setValue(this.workbooksFormList[index].id);
-    //     console.log();
-    //   }); 
-    // })
+    if (val==1)
+    {
+      this.selectedWorkbookForm = 'ASTHMA WORKBOOK';  
+    }
+    else
+    {
+      this.selectedWorkbookForm = 'DEPRESSION WORKBOOK'; 
+    }    
+    console.log();   
   }
 
   // getWorkbookReportingMonths() {
