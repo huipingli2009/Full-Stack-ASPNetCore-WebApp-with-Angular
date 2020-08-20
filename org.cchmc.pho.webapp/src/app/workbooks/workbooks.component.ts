@@ -33,22 +33,28 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   @ViewChild('table') table: MatTable<WorkbookDepressionPatient>;
   @ViewChild('EditProvidersDialog') editProvidersDialog: TemplateRef<any>;
 
+  //declarations
+  //generic
   private unsubscribe$ = new Subject();
   displayedDepressionColumns: string[] = ['action', 'patient', 'dob', 'phone', 'provider', 'dateOfService', 'phQ9_Score', 'improvement', 'actionFollowUp', 'followUp'];
   displayedAsthmaColumns: string[] = ['action', 'patient', 'dob', 'phone', 'provider', 'dateOfService', 'AssessmentCompleted', 'Treatment', 'ActionPlanGiven', 'Asthma_Score'];
+  
+  selectedFormResponseID = new FormControl('');
+  selectedWorkbook = new FormControl('');
   workbookReportingMonths: WorkbookReportingMonths[];
-  workbookProviders: WorkbookProvider[];
-  workbookDepressionPatient: WorkbookDepressionPatient[];
+
+
+  //depression  
   workbookPractice: WorkbookPractice;
   sortedData: WorkbookDepressionPatient[];
-  SearchPatients: PatientForWorkbook[];
+  SearchPatients: PatientForWorkbook[]; 
   followUpQuestions: Followup;
-  newWorkbookPatient: WorkbookDepressionPatient;
-  removeWorkbookPatient: WorkbookDepressionPatient;
   workbookProviderDetail: WorkbookProvider;
+  newDepressionWorkbookPatient: WorkbookDepressionPatient;
+  removeDepressionWorkbookPatient: WorkbookDepressionPatient;
+  workbookProviders: WorkbookProvider[];
   dataSourceDepressionWorkbook: MatTableDataSource<WorkbookDepressionPatient>;
   formResponseId: number;
-  asthmaFormResponseId: number;
   phqsFinal = 0;
   totalFinal: number;
   patientTableHeader: number;
@@ -56,19 +62,25 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   deletingPatientId: number;
   addingPatientName: string;
   hasSelectedPatient: boolean;
-  selectedFormResponseID = new FormControl('');
-  selectedWorkbook = new FormControl('');
   searchPatient = new FormControl('');
   PatientNameFilter = new FormControl('');
   selectedPCPEdit = new FormControl('');
   allProviders: Providers[] = [];
   selectedEditProviderDisplay: string;
   selectedEditProviderId: number;
+  displayDepressionWorkbook: boolean;
+
+  //asthma
+  dataSourceAsthmaWorkbook: MatTableDataSource<WorkbookAsthmaPatient>;
+  asthmaFormResponseId: number;
+  workbookDepressionPatient: WorkbookDepressionPatient[];
+  workbookAsthmaPatient: WorkbookAsthmaPatient[]; 
+  newAsthmaWorkbookPatient: WorkbookAsthmaPatient; 
+  removeAsthmaWorkbookPatient: WorkbookAsthmaPatient; 
 
   //workbooksInitiative: string;
   workbooksFormList: WorkbookForm[];
   defaultWorkbooksReportingMonth = '';
-  //selectedWorkbook = '3'; //Depression for default
 
   ProvidersForWorkbookForm = this.fb.group({
     ProviderWorkbookArray: this.fb.array([
@@ -93,6 +105,22 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     dob: [''],
     phone: ['']
   });
+  
+  AsthmaPatientForWorkbookForm = this.fb.group({
+    formResponseId: [''],
+    patientInfo: [''],
+    patientId: ['', Validators.required],
+    providerStaffID: ['', Validators.required],
+    dateOfService: ['', [DateRequiredValidator]],
+    pHQ9Score: ['', Validators.required],
+    action: ['false'],
+    dob: [''],
+    phone: [''],
+    asthma_Score: [''],
+    assessmentcompleted: [''],
+    treatment: [''],
+    actionplangiven: ['']
+  });
 
   FollowupForm = this.fb.group(
     {
@@ -114,10 +142,12 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     pcpName: ['', Validators.required]
   });
 
+  //event handlers - generic (all workbooks)
+
   ngOnInit(): void {
 
     this.getWorkbookReportingMonths();
-    this.onProviderValueChanges();
+    this.onDepressionProviderValueChanges();
     this.onPatientSearchValueChanges();
     this.onWorkbooksForPatientSearchValueChanges();
     this.getWorkbooksForms();
@@ -127,66 +157,51 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
+  
+  //on change of the workbook selection
+  onWorkbookSelectionChange() {
+    //this.selectedWorkbook.setValue(this.workbooksInitiativeList[0].id);
+    //this.selectedWorkbook = this.selectedWorkbook.value;
+    //this.selectedFormResponseID = this.selectedFormResponseID.value;
+    let val;
 
-  //Reset Add Patient Form
-  resetAddPatient() {
-    this.DepressionPatientForWorkbookForm.reset();
-    this.hasSelectedPatient = false;
-    this.DepressionPatientForWorkbookForm.get('action').setValue('false');
+    val = this.selectedWorkbook;
+    console.log();
+    // this.rest.getWorkbooksForms().pipe(take(1)).subscribe((data) => {
+    //   this.workbooksFormList = data;
+
+    //   this.formResponseId = this.selectedWorkbook;
+
+    //   this.workbooksFormList.forEach((element, index, reportData) => {
+    //     this.selectedWorkbook.setValue(this.workbooksFormList[index].id);
+    //     console.log();
+    //   }); 
+    // })
   }
-
-
-  //for getting the reporting months for a workbook
-  getWorkbookReportingMonths() {
-    this.rest.getWorkbookReportingMonths().pipe(take(1)).subscribe((data) => {
-      this.workbookReportingMonths = data;
-      this.workbookReportingMonths.forEach((element, index, reportData) => {
-        this.workbookReportingMonths[index].reportingMonth = this.datePipe.transform(this.workbookReportingMonths[index].reportingMonth, 'MMM-yyyy');
-        this.selectedFormResponseID.setValue(this.workbookReportingMonths[0].formResponseID);
-        this.defaultWorkbooksReportingMonth =  this.workbookReportingMonths[0].reportingMonth;
-        this.onReportingDateSelectionChange();
-      });
-    })
-  }
-
 
   //on change of the reporting data for workbook
   onReportingDateSelectionChange() {
     this.formResponseId = this.selectedFormResponseID.value;
-    this.getWorkbookProviders(this.formResponseId);
-    this.getWorkbookPatients(this.formResponseId);
+    this.getDepressionWorkbookProviders(this.formResponseId);
+    this.getDepressionWorkbookPatients(this.formResponseId);
     this.getWorkbookPractice(this.formResponseId);
   }
+  
+  //find specific patient to add to the workbook
+  onPatientSearchValueChanges(): void {
+    this.searchPatient.valueChanges.pipe(debounceTime(1000), distinctUntilChanged(), takeUntil(this.unsubscribe$)).subscribe(values => {
+      if (values != "") {
+        this.findPatientsForAddingtoWorkbook(values);
+      }
 
-  //for getting workbook providers
-  getWorkbookProviders(formResponseid: number) {
-    this.rest.getWorkbookProviders(formResponseid).pipe(take(1)).subscribe((data) => {
-      this.workbookProviders = data;
-      this.AssignProviderWorkbookArray();
-    })
-  }
-
-  //for getting workbook providers
-  getAllProviders() {
-    this.rest.getPCPList().pipe(take(1)).subscribe((data) => {
-      this.allProviders = data;
-    })
-  }
-
-  AssignProviderWorkbookArray() {
-    const providerArray = this.ProviderWorkbookArray;
-    let clearArray = this.ProvidersForWorkbookForm.controls['ProviderWorkbookArray'] as FormArray;
-    clearArray.clear();
-    if (providerArray.length > 0) {
-      providerArray.removeAt(0);
-    }
-    this.workbookProviders.forEach(provider => {
-      providerArray.push(this.fb.group(provider));
     });
   }
 
-  //for updating the provider values
-  onProviderValueChanges(): void {
+
+//event handlers - depression specific
+  
+  //for updating the depression provider values
+  onDepressionProviderValueChanges(): void {
     this.ProvidersForWorkbookForm.get('ProviderWorkbookArray').valueChanges.pipe(takeUntil(this.unsubscribe$)).subscribe(values => {
       this.phqsFinal = 0;
       this.totalFinal = 0;
@@ -202,63 +217,14 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     })
   }
 
-  onProviderWorkbookChange(index: number) {
+  onProviderDepressionWorkbookChange(index: number) {
     let provider = this.ProviderWorkbookArray.at(index);
     this.workbookProviderDetail = provider.value;
     this.workbookProviderDetail.phqs = Number(this.workbookProviderDetail.phqs);
     this.workbookProviderDetail.total = Number(this.workbookProviderDetail.total);
-    this.updateWorkbookProviders(this.workbookProviderDetail);
+    this.updateDepressionWorkbookProviders(this.workbookProviderDetail);
   }
-
-  updateWorkbookProviders(workbookProviderDetails: WorkbookProvider) {
-    this.rest.updateWorkbookForProvider(workbookProviderDetails).subscribe(res => {
-    })
-  }
-
-  //for getting patients for specific reporting period of workbook
-  getWorkbookPatients(formResponseid: number) {
-    this.rest.getWorkbookPatients(formResponseid).pipe(take(1)).subscribe((data) => {
-      this.workbookDepressionPatient = data;
-      this.logger.log(this.workbookDepressionPatient, 'Workbook Patient')
-      this.patientTableHeader = this.workbookDepressionPatient.length;
-      this.dataSourceDepressionWorkbook = new MatTableDataSource(this.workbookDepressionPatient);
-      this.dataSourceDepressionWorkbook.data = this.workbookDepressionPatient;
-      this.DepressionPatientForWorkbookForm.get('action').setValue('false');
-    })
-  }
-
-  trackPatients(index: number, item: WorkbookDepressionPatient): string {
-    return '${item.patientId}';
-  }
-
-  //find specific patient to add to the workbook
-  onPatientSearchValueChanges(): void {
-    this.searchPatient.valueChanges.pipe(debounceTime(1000), distinctUntilChanged(), takeUntil(this.unsubscribe$)).subscribe(values => {
-      if (values != "") {
-        this.findPatientsForAddingtoWorkbook(values);
-      }
-
-    });
-  }
-  findPatientsForAddingtoWorkbook(searchterm: string) {
-    this.rest.findPatientsForAddingtoWorkbook(searchterm).pipe(take(1)).subscribe((data) => {
-      this.SearchPatients = data;
-    })
-  }
-
-  trackByForPatientSearch(index, patient): string {
-    return '${patient.patientId}';
-  }
-
-  //get workbook practice
-  getWorkbookPractice(formResponseid: number) {
-    this.rest.getWorkbookPractice(formResponseid).pipe(take(1)).subscribe((data) => {
-      this.workbookPractice = data;
-    })
-  }
-
-  //adding patient to the workbook
-
+  
   onSelectedPatient(event: any): void {
     this.hasSelectedPatient = true;
     this.DepressionPatientForWorkbookForm.get('dob').setValue(this.datePipe.transform(event.value.dob, 'MM/dd/yyyy'));
@@ -266,54 +232,9 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.DepressionPatientForWorkbookForm.get('patientId').setValue(event.value.patientId);
     this.addingPatientName = `${event.value.firstName} ${event.value.lastName}`;
 
-  }
-
-  AddPatientForWorkbook() {
-    this.hasSelectedPatient = false;
-    this.newWorkbookPatient = new WorkbookDepressionPatient();
-    this.newWorkbookPatient.formResponseId = this.selectedFormResponseID.value;
-    this.newWorkbookPatient.patientId = this.DepressionPatientForWorkbookForm.get('patientId').value;
-    this.newWorkbookPatient.phone = this.DepressionPatientForWorkbookForm.get('phone').value;
-    this.newWorkbookPatient.providerId = this.DepressionPatientForWorkbookForm.get('providerStaffID').value;
-    this.newWorkbookPatient.dateOfService = this.DepressionPatientForWorkbookForm.get('dateOfService').value;
-    this.newWorkbookPatient.phQ9_Score = this.DepressionPatientForWorkbookForm.get('pHQ9Score').value;
-    this.newWorkbookPatient.actionFollowUp = JSON.parse(this.DepressionPatientForWorkbookForm.controls.action.value);
-    this.AddPatientToWorkbook(this.newWorkbookPatient, this.addingPatientName);
-  }
-
-  AddPatientToWorkbook(newWorkbookPatient: WorkbookDepressionPatient, patientName: string) {
-    this.rest.AddPatientToWorkbook(this.newWorkbookPatient).pipe(take(1)).subscribe(res => {
-      this.DepressionPatientForWorkbookForm.reset();
-      this.getWorkbookPatients(this.selectedFormResponseID.value);
-      this.searchPatient.reset();
-      (res) ? this.snackBar.openSnackBar(`Patient ${patientName} added to the workbook`, 'Close', 'success-snackbar') : this.snackBar.openSnackBar(`Patient ${patientName} already exists on the current workbook`, 'Close', 'warn-snackbar')
-    })
-  }
-
-  //For removing patient from the workbook
-  onPatientDelete(element: any) {
-    this.deletingPatientName = element.patient;
-    this.deletingPatientId = element.patientId;
-    this.dialog.open(this.DeletePatient);
-  }
-
-  OnRemovePatientClick() {
-    this.removeWorkbookPatient = new WorkbookDepressionPatient();
-    this.removeWorkbookPatient.formResponseId = this.selectedFormResponseID.value;
-    this.removeWorkbookPatient.patientId = this.deletingPatientId;
-    this.RemovePatientFromWorkbook(this.removeWorkbookPatient);
-  }
-
-  RemovePatientFromWorkbook(removeWorkbookPatient: WorkbookDepressionPatient) {
-    this.rest.RemovePatientFromWorkbook(this.removeWorkbookPatient).pipe(take(1)).subscribe(res => {
-      this.DepressionPatientForWorkbookForm.reset();
-      this.getWorkbookPatients(this.selectedFormResponseID.value);
-      this.snackBar.openSnackBar(`Patient ${this.deletingPatientName} removed from the workbook`, 'Close', 'success-snackbar')
-    })
-  }
-
+  }  
+  
   //for getting reporting months based on patient name
-
   onWorkbooksForPatientSearchValueChanges(): void {
     this.PatientNameFilter.valueChanges.pipe(debounceTime(1000), distinctUntilChanged(), takeUntil(this.unsubscribe$)).subscribe(values => {
       if (values != "") {
@@ -322,61 +243,45 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     });
   }
 
-  getWorkbookReportingMonthsForPatient(patientName: string) {
-    this.rest.getWorkbookReportingMonthsForPatient(patientName).pipe(take(1)).subscribe((data) => {
+  
+
+//helper methods - generic (all workbooks)
+
+  //get workbook practice
+  getWorkbookPractice(formResponseid: number) {
+    this.rest.getWorkbookPractice(formResponseid).pipe(take(1)).subscribe((data) => {
+      this.workbookPractice = data;
+    })
+  }
+
+  //for getting the reporting months for a workbook
+  getWorkbookReportingMonths() {
+    this.rest.getWorkbookReportingMonths().pipe(take(1)).subscribe((data) => {
       this.workbookReportingMonths = data;
       this.workbookReportingMonths.forEach((element, index, reportData) => {
-        this.workbookReportingMonths[index].reportingMonth = this.datePipe.transform(this.workbookReportingMonths[index].reportingMonth, 'MM/dd/yyyy');
+        this.workbookReportingMonths[index].reportingMonth = this.datePipe.transform(this.workbookReportingMonths[index].reportingMonth, 'MMM-yyyy');
         this.selectedFormResponseID.setValue(this.workbookReportingMonths[0].formResponseID);
+        this.defaultWorkbooksReportingMonth =  this.workbookReportingMonths[0].reportingMonth;
         this.onReportingDateSelectionChange();
       });
     })
-  }
+  } 
 
-
-  //for getting the follow-up questions
-
-  FollowUpForPatient(element: any) {
-    this.getFollowUpQuestions(element.formResponseId, element.patientId, element.patient);
-  }
-
-  getFollowUpQuestions(formResponseid: number, patientID: number, patient: string) {
-    this.rest.getFollowUpQuestions(formResponseid, patientID).pipe(take(1)).subscribe((data) => {
-      this.followUpQuestions = data;
-      this.FollowupForm.setValue(this.followUpQuestions);
-      this.FollowupForm.get('actionPlanGiven').setValue(this.followUpQuestions.actionPlanGiven ? 'Yes' : 'No');
-      this.FollowupForm.get('managedByExternalProvider').setValue(this.followUpQuestions.managedByExternalProvider ? 'Yes' : 'No');
-      this.FollowupForm.get('followupPhoneCallOneToTwoWeeks').setValue(this.followUpQuestions.followupPhoneCallOneToTwoWeeks ? 'Yes' : 'No');
-      this.FollowupForm.get('oneMonthFollowupVisit').setValue(this.followUpQuestions.oneMonthFollowupVisit ? 'Yes' : 'No');
-      this.openDialog();
+  //for getting workbook providers
+  getAllProviders() {
+    this.rest.getPCPList().pipe(take(1)).subscribe((data) => {
+      this.allProviders = data;
     })
   }
 
-
-  //updating the follow-up questions  
-
-  updateFollowUpQuestion() {
-    this.followUpQuestions = new Followup();
-    this.followUpQuestions.actionPlanGiven = (this.FollowupForm.get('actionPlanGiven').value === 'Yes') ? true : false;
-    this.followUpQuestions.managedByExternalProvider = (this.FollowupForm.get('managedByExternalProvider').value === 'Yes') ? true : false;
-    this.followUpQuestions.followupPhoneCallOneToTwoWeeks = (this.FollowupForm.get('followupPhoneCallOneToTwoWeeks').value === 'Yes') ? true : false;
-    this.followUpQuestions.oneMonthFollowupVisit = (this.FollowupForm.get('oneMonthFollowupVisit').value === 'Yes') ? true : false;
-    this.followUpQuestions.formResponseId = this.FollowupForm.get('formResponseId').value;
-    this.followUpQuestions.patientId = this.FollowupForm.get('patientId').value;
-    this.followUpQuestions.dateOfLastCommunicationByExternalProvider = this.FollowupForm.get('dateOfLastCommunicationByExternalProvider').value;
-    this.followUpQuestions.dateOfFollowupCall = this.FollowupForm.get('dateOfFollowupCall').value;
-    this.followUpQuestions.dateOfOneMonthVisit = this.FollowupForm.get('dateOfOneMonthVisit').value;
-    this.followUpQuestions.oneMonthFolllowupPHQ9Score = (Number)(this.FollowupForm.get('oneMonthFolllowupPHQ9Score').value);
-    this.UpdateFollowUpQuestionResponses(this.followUpQuestions);
-  }
-  UpdateFollowUpQuestionResponses(followUp: Followup) {
-    this.rest.UpdateFollowUpQuestionResponses(followUp).pipe(take(1)).subscribe((data) => {
-      this.getWorkbookPatients(this.formResponseId);
-      this.CloseDialog();
-
+  //lookup patient to add. Depression and possibly asthma.
+  findPatientsForAddingtoWorkbook(searchterm: string) {
+    this.rest.findPatientsForAddingtoWorkbook(searchterm).pipe(take(1)).subscribe((data) => {
+      this.SearchPatients = data;
     })
   }
 
+  
   openDialog() {
     const dialogRef = this.dialog.open(this.followUp);
 
@@ -413,7 +318,174 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   compare(a: number | string, b: number | string, isAsc: boolean) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
+  
+  getWorkbooksForms() {
+    this.rest.getWorkbooksForms().pipe(take(1)).subscribe((data) => {
+      this.workbooksFormList = data;
 
+      this.workbooksFormList.forEach((element, index, reportData) => {
+        
+        this.selectedWorkbook.setValue(this.workbooksFormList[1].id);
+
+        this.onWorkbookSelectionChange();
+
+        this.onReportingDateSelectionChange();
+      });         
+    });    
+  } 
+
+
+//helper methods - depression specific
+
+  //for getting workbook providers
+  getDepressionWorkbookProviders(formResponseid: number) {
+    this.rest.getWorkbookProviders(formResponseid).pipe(take(1)).subscribe((data) => {
+      this.workbookProviders = data;
+      this.AssignDepressionProviderWorkbookArray();
+    })
+  }  
+
+  AssignDepressionProviderWorkbookArray() {
+    const providerArray = this.ProviderWorkbookArray;
+    let clearArray = this.ProvidersForWorkbookForm.controls['ProviderWorkbookArray'] as FormArray;
+    clearArray.clear();
+    if (providerArray.length > 0) {
+      providerArray.removeAt(0);
+    }
+    this.workbookProviders.forEach(provider => {
+      providerArray.push(this.fb.group(provider));
+    });
+  }  
+
+  //Reset Add Patient Form
+  resetAddDepressionPatient() {
+    this.DepressionPatientForWorkbookForm.reset();
+    this.hasSelectedPatient = false;
+    this.DepressionPatientForWorkbookForm.get('action').setValue('false');
+  }
+
+  updateDepressionWorkbookProviders(workbookProviderDetails: WorkbookProvider) {
+    this.rest.updateWorkbookForProvider(workbookProviderDetails).subscribe(res => {
+    })
+  }
+  
+  //adding patient to the workbook
+  AddDepressionPatientForWorkbook() {
+    this.hasSelectedPatient = false;
+    this.newDepressionWorkbookPatient = new WorkbookDepressionPatient();
+    this.newDepressionWorkbookPatient.formResponseId = this.selectedFormResponseID.value;
+    this.newDepressionWorkbookPatient.patientId = this.DepressionPatientForWorkbookForm.get('patientId').value;
+    this.newDepressionWorkbookPatient.phone = this.DepressionPatientForWorkbookForm.get('phone').value;
+    this.newDepressionWorkbookPatient.providerId = this.DepressionPatientForWorkbookForm.get('providerStaffID').value;
+    this.newDepressionWorkbookPatient.dateOfService = this.DepressionPatientForWorkbookForm.get('dateOfService').value;
+    this.newDepressionWorkbookPatient.phQ9_Score = this.DepressionPatientForWorkbookForm.get('pHQ9Score').value;
+    this.newDepressionWorkbookPatient.actionFollowUp = JSON.parse(this.DepressionPatientForWorkbookForm.controls.action.value);
+    this.AddDepressionPatientToWorkbook(this.newDepressionWorkbookPatient, this.addingPatientName);
+  }
+
+  AddDepressionPatientToWorkbook(newWorkbookPatient: WorkbookDepressionPatient, patientName: string) {
+    this.rest.AddPatientToDepressionWorkbook(this.newDepressionWorkbookPatient).pipe(take(1)).subscribe(res => {
+      this.DepressionPatientForWorkbookForm.reset();
+      this.getDepressionWorkbookPatients(this.selectedFormResponseID.value);
+      this.searchPatient.reset();
+      (res) ? this.snackBar.openSnackBar(`Patient ${patientName} added to the workbook`, 'Close', 'success-snackbar') : this.snackBar.openSnackBar(`Patient ${patientName} already exists on the current workbook`, 'Close', 'warn-snackbar')
+    })
+  }
+
+  //For removing patient from the workbook
+  onDepressionPatientDelete(element: any) {
+    this.deletingPatientName = element.patient;
+    this.deletingPatientId = element.patientId;
+    this.dialog.open(this.DeletePatient);
+  } 
+
+  OnRemoveDepressionPatientClick() {
+    this.removeDepressionWorkbookPatient = new WorkbookDepressionPatient();
+    this.removeDepressionWorkbookPatient.formResponseId = this.selectedFormResponseID.value;
+    this.removeDepressionWorkbookPatient.patientId = this.deletingPatientId;
+    this.RemoveDepressionPatientFromWorkbook(this.removeDepressionWorkbookPatient);
+  }
+
+  RemoveDepressionPatientFromWorkbook(removeWorkbookPatient: WorkbookDepressionPatient) {
+    this.rest.RemoveDepressionPatientFromWorkbook(this.removeDepressionWorkbookPatient).pipe(take(1)).subscribe(res => {
+      this.DepressionPatientForWorkbookForm.reset();
+      this.getDepressionWorkbookPatients(this.selectedFormResponseID.value);
+      this.snackBar.openSnackBar(`Patient ${this.deletingPatientName} removed from the workbook`, 'Close', 'success-snackbar')
+    })
+  }
+
+  //for getting patients for specific reporting period of workbook
+  getDepressionWorkbookPatients(formResponseid: number) {
+    this.rest.getWorkbookDepressionPatients(formResponseid).pipe(take(1)).subscribe((data) => {
+      this.workbookDepressionPatient = data;
+      this.logger.log(this.workbookDepressionPatient, 'Workbook Patient')
+      this.patientTableHeader = this.workbookDepressionPatient.length;
+      this.dataSourceDepressionWorkbook = new MatTableDataSource(this.workbookDepressionPatient);
+      this.dataSourceDepressionWorkbook.data = this.workbookDepressionPatient;
+      this.DepressionPatientForWorkbookForm.get('action').setValue('false');
+    })
+  }
+
+  trackDepressionPatients(index: number, item: WorkbookDepressionPatient): string {
+    return '${item.patientId}';
+  }
+  
+  trackByForPatientSearch(index, patient): string {
+    return '${patient.patientId}';
+  }
+
+  getWorkbookReportingMonthsForPatient(patientName: string) {
+    this.rest.getWorkbookReportingMonthsForPatient(patientName).pipe(take(1)).subscribe((data) => {
+      this.workbookReportingMonths = data;
+      this.workbookReportingMonths.forEach((element, index, reportData) => {
+        this.workbookReportingMonths[index].reportingMonth = this.datePipe.transform(this.workbookReportingMonths[index].reportingMonth, 'MM/dd/yyyy');
+        this.selectedFormResponseID.setValue(this.workbookReportingMonths[0].formResponseID);
+        this.onReportingDateSelectionChange();
+      });
+    })
+  }
+
+    //for getting the follow-up questions
+    FollowUpForPatient(element: any) {
+      this.getFollowUpQuestions(element.formResponseId, element.patientId, element.patient);
+    }
+  
+    getFollowUpQuestions(formResponseid: number, patientID: number, patient: string) {
+      this.rest.getFollowUpQuestions(formResponseid, patientID).pipe(take(1)).subscribe((data) => {
+        this.followUpQuestions = data;
+        this.FollowupForm.setValue(this.followUpQuestions);
+        this.FollowupForm.get('actionPlanGiven').setValue(this.followUpQuestions.actionPlanGiven ? 'Yes' : 'No');
+        this.FollowupForm.get('managedByExternalProvider').setValue(this.followUpQuestions.managedByExternalProvider ? 'Yes' : 'No');
+        this.FollowupForm.get('followupPhoneCallOneToTwoWeeks').setValue(this.followUpQuestions.followupPhoneCallOneToTwoWeeks ? 'Yes' : 'No');
+        this.FollowupForm.get('oneMonthFollowupVisit').setValue(this.followUpQuestions.oneMonthFollowupVisit ? 'Yes' : 'No');
+        this.openDialog();
+      })
+    }
+  
+    //updating the follow-up questions  
+    updateFollowUpQuestion() {
+      this.followUpQuestions = new Followup();
+      this.followUpQuestions.actionPlanGiven = (this.FollowupForm.get('actionPlanGiven').value === 'Yes') ? true : false;
+      this.followUpQuestions.managedByExternalProvider = (this.FollowupForm.get('managedByExternalProvider').value === 'Yes') ? true : false;
+      this.followUpQuestions.followupPhoneCallOneToTwoWeeks = (this.FollowupForm.get('followupPhoneCallOneToTwoWeeks').value === 'Yes') ? true : false;
+      this.followUpQuestions.oneMonthFollowupVisit = (this.FollowupForm.get('oneMonthFollowupVisit').value === 'Yes') ? true : false;
+      this.followUpQuestions.formResponseId = this.FollowupForm.get('formResponseId').value;
+      this.followUpQuestions.patientId = this.FollowupForm.get('patientId').value;
+      this.followUpQuestions.dateOfLastCommunicationByExternalProvider = this.FollowupForm.get('dateOfLastCommunicationByExternalProvider').value;
+      this.followUpQuestions.dateOfFollowupCall = this.FollowupForm.get('dateOfFollowupCall').value;
+      this.followUpQuestions.dateOfOneMonthVisit = this.FollowupForm.get('dateOfOneMonthVisit').value;
+      this.followUpQuestions.oneMonthFolllowupPHQ9Score = (Number)(this.FollowupForm.get('oneMonthFolllowupPHQ9Score').value);
+      this.UpdateFollowUpQuestionResponses(this.followUpQuestions);
+    }
+    UpdateFollowUpQuestionResponses(followUp: Followup) {
+      this.rest.UpdateFollowUpQuestionResponses(followUp).pipe(take(1)).subscribe((data) => {
+        this.getDepressionWorkbookPatients(this.formResponseId);
+        this.CloseDialog();
+  
+      })
+    }
+
+    
   openEditProvidersDialog() {
 
     this.editProvidersForm.reset();
@@ -437,7 +509,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
         this.logger.log(staffId, 'New Workbook Provider');
         this.cancelEditProvidersDialog();
         this.editProvidersForm.reset();
-        this.getWorkbookProviders(this.formResponseId);
+        this.getDepressionWorkbookProviders(this.formResponseId);
         this.snackBar.openSnackBar(`Provider added to the workbook`, 'Close', 'success-snackbar');
       } 
       else 
@@ -459,7 +531,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
           this.logger.log(staffId, 'Removed Workbook Provider');
           this.cancelEditProvidersDialog();
           this.editProvidersForm.reset();
-          this.getWorkbookProviders(this.formResponseId);
+          this.getDepressionWorkbookProviders(this.formResponseId);
           this.snackBar.openSnackBar(`Provider removed from the workbook`, 'Close', 'success-snackbar');
         } 
         else 
@@ -491,61 +563,46 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     return ((this.workbookProviders.filter(x => x.staffID === id).length > 0) ? 1 : 0);
   }
 
+
   
 
-  getWorkbooksForms() {
-    this.rest.getWorkbooksForms().pipe(take(1)).subscribe((data) => {
-      this.workbooksFormList = data;
+//helper methods - asthma specific
 
-      this.workbooksFormList.forEach((element, index, reportData) => {
-        
-        this.selectedWorkbook.setValue(this.workbooksFormList[1].id);
-
-        this.onWorkbookSelectionChange();
-
-        this.onReportingDateSelectionChange();
-      });         
-    });    
-  } 
-  
-  //on change of the workbook selection
-  onWorkbookSelectionChange() {
-    //this.selectedWorkbook.setValue(this.workbooksInitiativeList[0].id);
-    //this.selectedWorkbook = this.selectedWorkbook.value;
-    //this.selectedFormResponseID = this.selectedFormResponseID.value;
-    let val;
-
-    val = this.selectedWorkbook;
-    console.log();
-    // this.rest.getWorkbooksForms().pipe(take(1)).subscribe((data) => {
-    //   this.workbooksFormList = data;
-
-    //   this.formResponseId = this.selectedWorkbook;
-
-    //   this.workbooksFormList.forEach((element, index, reportData) => {
-    //     this.selectedWorkbook.setValue(this.workbooksFormList[index].id);
-    //     console.log();
-    //   }); 
-    // })
+  //for getting patients for specific reporting period of workbook
+  getAsthmaWorkbookPatients(formResponseid: number) {
+    this.rest.getWorkbookDepressionPatients(formResponseid).pipe(take(1)).subscribe((data) => {
+      this.workbookAsthmaPatient = data;
+      this.logger.log(this.workbookAsthmaPatient, 'Workbook Patient')
+      this.patientTableHeader = this.workbookAsthmaPatient.length;
+      this.dataSourceAsthmaWorkbook = new MatTableDataSource(this.workbookAsthmaPatient);
+      this.dataSourceAsthmaWorkbook.data = this.workbookAsthmaPatient;
+      this.AsthmaPatientForWorkbookForm.get('action').setValue('false');
+    })
   }
 
-  // getWorkbookReportingMonths() {
-  //   this.rest.getWorkbookReportingMonths().pipe(take(1)).subscribe((data) => {
-  //     this.workbookReportingMonths = data;
-  //     this.workbookReportingMonths.forEach((element, index, reportData) => {
-  //       this.workbookReportingMonths[index].reportingMonth = this.datePipe.transform(this.workbookReportingMonths[index].reportingMonth, 'MMM-yyyy');
-  //       //this.selectedFormResponseID.setValue(this.workbookReportingMonths[0].formResponseID);
-  //       this.defaultWorkbooksReportingMonth =  this.workbookReportingMonths[0].reportingMonth;
-  //       this.onReportingDateSelectionChange();
-  //     });
-  //   })
-  // }
+  
+  //adding patient to the workbook
+  AddAsthmaPatientForWorkbook() {
+    this.hasSelectedPatient = false;
+    this.newAsthmaWorkbookPatient = new WorkbookAsthmaPatient();
+    this.newAsthmaWorkbookPatient.formResponseId = this.selectedFormResponseID.value;
+    this.newAsthmaWorkbookPatient.patientId = this.AsthmaPatientForWorkbookForm.get('patientId').value;
+    this.newAsthmaWorkbookPatient.phone = this.AsthmaPatientForWorkbookForm.get('phone').value;
+    this.newAsthmaWorkbookPatient.providerId = this.AsthmaPatientForWorkbookForm.get('providerStaffID').value;
+    this.newAsthmaWorkbookPatient.dateOfService = this.AsthmaPatientForWorkbookForm.get('dateOfService').value;
+  }
 
-   //on change of the reporting data for workbook
-  //  onReportingDateSelectionChange() {
-  //   this.formResponseId = this.selectedFormResponseID.value;
-  //   this.getWorkbookProviders(this.formResponseId);
-  //   this.getWorkbookPatients(this.formResponseId);
-  //   this.getWorkbookPractice(this.formResponseId);
-  // }
+  AddAsthmaPatientToWorkbook(newWorkbookPatient: WorkbookAsthmaPatient, patientName: string) {
+    this.rest.AddPatientToAsthmaWorkbook(this.newAsthmaWorkbookPatient).pipe(take(1)).subscribe(res => {
+      this.AsthmaPatientForWorkbookForm.reset();
+      this.getAsthmaWorkbookPatients(this.selectedFormResponseID.value);
+      this.searchPatient.reset();
+      (res) ? this.snackBar.openSnackBar(`Patient ${patientName} added to the workbook`, 'Close', 'success-snackbar') : this.snackBar.openSnackBar(`Patient ${patientName} already exists on the current workbook`, 'Close', 'warn-snackbar')
+    })
+  }
+
+  trackAsthmaPatients(index: number, item: WorkbookAsthmaPatient): string {
+    return '${item.patientId}';
+  }
+  
 }

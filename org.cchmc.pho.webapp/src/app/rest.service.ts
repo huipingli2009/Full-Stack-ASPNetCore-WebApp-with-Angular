@@ -7,7 +7,7 @@ import { environment } from '../environments/environment';
 import { Alerts, EdChart, EdChartDetails, Population, Quicklinks, Spotlight } from './models/dashboard';
 import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Patients, NewPatient, Pmca, PopSlices, Providers, States } from './models/patients';
 import { PracticeList, Responsibilities, Staff, StaffDetails, StaffAdmin } from './models/Staff';
-import { Followup, WorkbookDepressionPatient, WorkbookProvider, WorkbookReportingMonths, WorkbookPractice, WorkbookForm} from './models/workbook';
+import { Followup, WorkbookDepressionPatient, WorkbookProvider, WorkbookReportingMonths, WorkbookPractice, WorkbookForm, WorkbookAsthmaPatient} from './models/workbook';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
 import { FileDetails, FileAction, ResourceType, Tag, Initiative, FileType, ContentPlacement } from './models/files';
 import { Location } from '@angular/common';
@@ -414,7 +414,7 @@ export class RestService {
   }
 
   /* for getting the patients for a form response ID */
-  getWorkbookPatients(formResponseid: number): Observable<any> {
+  getWorkbookDepressionPatients(formResponseid: number): Observable<any> {
     let paramsValue = new HttpParams();
     paramsValue = paramsValue.append("formResponseId", formResponseid.toString());
     return this.http.get<WorkbookProvider[]>(`${API_URL}/api/Workbooks/patients`, { params: paramsValue }).pipe(
@@ -434,12 +434,21 @@ export class RestService {
   }
 
   /*addition of patient to the work book*/
-  AddPatientToWorkbook(workbookPatient: WorkbookDepressionPatient): Observable<any> {
+  AddPatientToDepressionWorkbook(workbookPatient: WorkbookDepressionPatient): Observable<any> {
     this.logger.log(JSON.stringify(workbookPatient));
     return this.http.post<boolean>(`${API_URL}/api/Workbooks/Patients/${workbookPatient.patientId}`, JSON.stringify(workbookPatient), httpOptions).pipe(
       catchError(this.handleError<any>('adding patient to the workbook'))
     );
   }
+  
+  /*addition of patient to the work book*/
+  AddPatientToAsthmaWorkbook(workbookPatient: WorkbookAsthmaPatient): Observable<any> {
+    this.logger.log(JSON.stringify(workbookPatient));
+    return this.http.post<boolean>(`${API_URL}/api/Workbooks/Patients/${workbookPatient.patientId}`, JSON.stringify(workbookPatient), httpOptions).pipe(
+      catchError(this.handleError<any>('adding patient to the workbook'))
+    );
+  }
+
   switchPractice(staffWithPractice): Observable<any> {
     return this.http.put(`${API_URL}/api/Staff/switchpractice`, JSON.stringify(staffWithPractice), httpOptions).pipe(
       tap(_ => this.snackBar.openSnackBar(`Current Practice Switched!`
@@ -479,7 +488,15 @@ export class RestService {
   }
 
   /*Removing patient from the work book*/
-  RemovePatientFromWorkbook(workbookPatient: WorkbookDepressionPatient): Observable<any> {
+  RemoveDepressionPatientFromWorkbook(workbookPatient: WorkbookDepressionPatient): Observable<any> {
+    this.logger.log(JSON.stringify(workbookPatient));
+    return this.http.delete<boolean>(`${API_URL}/api/Workbooks/Patients/${workbookPatient.formResponseId}/${workbookPatient.patientId}`, httpOptions).pipe(
+      catchError(this.handleError<any>('removing patient from the workbook'))
+    );
+  }
+
+  /*Removing patient from the work book*/
+  RemoveAsthmaPatientFromWorkbook(workbookPatient: WorkbookAsthmaPatient): Observable<any> {
     this.logger.log(JSON.stringify(workbookPatient));
     return this.http.delete<boolean>(`${API_URL}/api/Workbooks/Patients/${workbookPatient.formResponseId}/${workbookPatient.patientId}`, httpOptions).pipe(
       catchError(this.handleError<any>('removing patient from the workbook'))
