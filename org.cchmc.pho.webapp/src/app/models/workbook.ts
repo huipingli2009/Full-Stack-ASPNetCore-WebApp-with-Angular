@@ -1,6 +1,9 @@
-export class WorkbookReportingMonths {
-    formResponseID: number;
-    reportingMonth: string;
+export class WorkbookReportingPeriod {
+    formResponseId: number;    
+    formId: number;
+    practiceId: number;
+    QuestionId: number;
+    reportingPeriod: string;
 }
 
 export class WorkbookProvider {
@@ -20,8 +23,8 @@ export abstract class WorkbookPatient{
     provider: string;
     providerId: number;
     dateOfService: string;
-}
-
+} 
+ 
 export class WorkbookAsthmaPatient extends WorkbookPatient {    
     asthma_Score: string;
     assessmentcompleted: boolean;
@@ -61,6 +64,11 @@ export class WorkbookPractice {
 export class WorkbookForm {
     id: number;
     label: string;
+}
+
+export enum WorkbookFormValueEnum {
+    asthma = 1,
+    depression = 3
 }
 
 interface Treatment {

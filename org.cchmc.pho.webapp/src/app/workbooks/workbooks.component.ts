@@ -5,10 +5,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { NGXLogger } from 'ngx-logger';
-import { Subject } from 'rxjs';
+import { Subject } from 'rxjs'; 
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { PatientForWorkbook, Providers } from '../models/patients';
-import { Followup, WorkbookDepressionPatient, WorkbookAsthmaPatient, WorkbookProvider, WorkbookReportingMonths, WorkbookPractice, WorkbookForm } from '../models/workbook';
+import { Followup, WorkbookDepressionPatient, WorkbookAsthmaPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookFormValueEnum } from '../models/workbook';
 import { RestService } from '../rest.service';
 import { DateRequiredValidator } from '../shared/customValidators/customValidator';
 import { MatSnackBarComponent } from '../shared/mat-snack-bar/mat-snack-bar.component';
@@ -38,10 +38,12 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject();
   displayedDepressionColumns: string[] = ['action', 'patient', 'dob', 'phone', 'provider', 'dateOfService', 'phQ9_Score', 'improvement', 'actionFollowUp', 'followUp'];
   displayedAsthmaColumns: string[] = ['action', 'patient', 'dob', 'phone', 'provider', 'dateOfService', 'AssessmentCompleted', 'Treatment', 'ActionPlanGiven', 'Asthma_Score'];
-  
+  workbookFormValueEnum = WorkbookFormValueEnum;
   selectedFormResponseID = new FormControl('');
   selectedWorkbook = new FormControl('');
-  workbookReportingMonths: WorkbookReportingMonths[];
+  workbookReportingPeriods: WorkbookReportingPeriod[];
+  selectedWorkbookFormId = 0;
+  selectedWorkbookReportingPeriod: string;
 
 
   //depression  
@@ -76,11 +78,14 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   workbookDepressionPatient: WorkbookDepressionPatient[];
   workbookAsthmaPatient: WorkbookAsthmaPatient[]; 
   newAsthmaWorkbookPatient: WorkbookAsthmaPatient; 
-  removeAsthmaWorkbookPatient: WorkbookAsthmaPatient; 
+  removeAsthmaWorkbookPatient: WorkbookAsthmaPatient;   
+  asthmaPercentAssessed: number;
+  asthmaPrecentActionPlan: number;
+  totalAsthmaVisits: number;
+  totalAsthmaScreenings: number;
 
   //workbooksInitiative: string;
   workbooksFormList: WorkbookForm[];
-  defaultWorkbooksReportingMonth = '';
 
   ProvidersForWorkbookForm = this.fb.group({
     ProviderWorkbookArray: this.fb.array([
@@ -145,45 +150,52 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   //event handlers - generic (all workbooks)
 
   ngOnInit(): void {
-
+    //Set initial workbook to Asthma
+    this.selectedWorkbookFormId = WorkbookFormValueEnum.asthma;
+    this.getWorkbooksForms();
     this.getWorkbookReportingMonths();
     this.onDepressionProviderValueChanges();
     this.onPatientSearchValueChanges();
     this.onWorkbooksForPatientSearchValueChanges();
-    this.getWorkbooksForms();
   }
 
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
-  }
+  }  
+  
+  getWorkbooksForms() {
+    this.rest.getWorkbooksForms().pipe(take(1)).subscribe((data) => {
+      this.workbooksFormList = data;     
+    });    
+  } 
   
   //on change of the workbook selection
-  onWorkbookSelectionChange() {
-    //this.selectedWorkbook.setValue(this.workbooksInitiativeList[0].id);
-    //this.selectedWorkbook = this.selectedWorkbook.value;
-    //this.selectedFormResponseID = this.selectedFormResponseID.value;
-    let val;
+  onWorkbookSelectionChange(event: any) : void {
+  //set flags
+  this.selectedWorkbookFormId = event.value.id;
+  //repopulate dates
 
-    val = this.selectedWorkbook;
-    console.log();
-    // this.rest.getWorkbooksForms().pipe(take(1)).subscribe((data) => {
-    //   this.workbooksFormList = data;
-
-    //   this.formResponseId = this.selectedWorkbook;
-
-    //   this.workbooksFormList.forEach((element, index, reportData) => {
-    //     this.selectedWorkbook.setValue(this.workbooksFormList[index].id);
-    //     console.log();
-    //   }); 
-    // })
   }
+  
+  //for getting the reporting months for a workbook
+  getWorkbookReportingMonths() {
+    this.rest.getWorkbookReportingPeriods(this.selectedWorkbookFormId, this.PatientNameFilter).pipe(take(1)).subscribe((data) => {
+      this.workbookReportingPeriods = data;
+    });
+  } 
 
   //on change of the reporting data for workbook
-  onReportingDateSelectionChange() {
-    this.formResponseId = this.selectedFormResponseID.value;
-    this.getDepressionWorkbookProviders(this.formResponseId);
-    this.getDepressionWorkbookPatients(this.formResponseId);
+  onReportingDateSelectionChange(event: any) : void {
+    this.selectedFormResponseID = event.value.formResponseID;
+    this.formResponseId = event.value.formResponseID;
+    if (this.selectedWorkbookFormId == WorkbookFormValueEnum.depression){
+      this.getDepressionWorkbookProviders(this.formResponseId);
+      this.getDepressionWorkbookPatients(this.formResponseId);
+    }
+    if (this.selectedWorkbookFormId == WorkbookFormValueEnum.asthma){
+      this.getAsthmaWorkbookPatients(this.formResponseId);
+    }
     this.getWorkbookPractice(this.formResponseId);
   }
   
@@ -199,6 +211,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
 
 
 //event handlers - depression specific
+
   
   //for updating the depression provider values
   onDepressionProviderValueChanges(): void {
@@ -217,7 +230,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     })
   }
 
-  onProviderDepressionWorkbookChange(index: number) {
+  onProviderDepressionWorkbookChange(index: number) { 
     let provider = this.ProviderWorkbookArray.at(index);
     this.workbookProviderDetail = provider.value;
     this.workbookProviderDetail.phqs = Number(this.workbookProviderDetail.phqs);
@@ -254,18 +267,6 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     })
   }
 
-  //for getting the reporting months for a workbook
-  getWorkbookReportingMonths() {
-    this.rest.getWorkbookReportingMonths().pipe(take(1)).subscribe((data) => {
-      this.workbookReportingMonths = data;
-      this.workbookReportingMonths.forEach((element, index, reportData) => {
-        this.workbookReportingMonths[index].reportingMonth = this.datePipe.transform(this.workbookReportingMonths[index].reportingMonth, 'MMM-yyyy');
-        this.selectedFormResponseID.setValue(this.workbookReportingMonths[0].formResponseID);
-        this.defaultWorkbooksReportingMonth =  this.workbookReportingMonths[0].reportingMonth;
-        this.onReportingDateSelectionChange();
-      });
-    })
-  } 
 
   //for getting workbook providers
   getAllProviders() {
@@ -318,22 +319,6 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   compare(a: number | string, b: number | string, isAsc: boolean) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
-  
-  getWorkbooksForms() {
-    this.rest.getWorkbooksForms().pipe(take(1)).subscribe((data) => {
-      this.workbooksFormList = data;
-
-      this.workbooksFormList.forEach((element, index, reportData) => {
-        
-        this.selectedWorkbook.setValue(this.workbooksFormList[1].id);
-
-        this.onWorkbookSelectionChange();
-
-        this.onReportingDateSelectionChange();
-      });         
-    });    
-  } 
-
 
 //helper methods - depression specific
 
@@ -436,12 +421,11 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
 
   getWorkbookReportingMonthsForPatient(patientName: string) {
     this.rest.getWorkbookReportingMonthsForPatient(patientName).pipe(take(1)).subscribe((data) => {
-      this.workbookReportingMonths = data;
-      this.workbookReportingMonths.forEach((element, index, reportData) => {
-        this.workbookReportingMonths[index].reportingMonth = this.datePipe.transform(this.workbookReportingMonths[index].reportingMonth, 'MM/dd/yyyy');
-        this.selectedFormResponseID.setValue(this.workbookReportingMonths[0].formResponseID);
+      this.workbookReportingPeriods = data;
+/*       this.workbookReportingPeriods.forEach((element, index, reportData) => {
+        this.selectedFormResponseID.setValue(this.workbookReportingPeriods[0].formResponseID);
         this.onReportingDateSelectionChange();
-      });
+      }); */
     })
   }
 
@@ -603,6 +587,21 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
 
   trackAsthmaPatients(index: number, item: WorkbookAsthmaPatient): string {
     return '${item.patientId}';
+  }
+
+  
+  //For removing patient from the workbook
+  onAsthmaPatientDelete(element: any) {
+    this.deletingPatientName = element.patient;
+    this.deletingPatientId = element.patientId;
+    this.dialog.open(this.DeletePatient);
+  } 
+  
+  //Reset Add Patient Form
+  resetAddAsthmaPatient() {
+    this.AsthmaPatientForWorkbookForm.reset();
+    this.hasSelectedPatient = false;
+    this.AsthmaPatientForWorkbookForm.get('action').setValue('false');
   }
   
 }

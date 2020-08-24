@@ -185,7 +185,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
-        public async Task<List<WorkbooksLookup>> GetWorkbooksLookups(int userId, string nameSearch)
+        public async Task<List<WorkbooksLookup>> GetWorkbooksLookups(int formId, int userId, string nameSearch)
         {
             DataTable dataTable = new DataTable();
             List<WorkbooksLookup> workbookslookups = new List<WorkbooksLookup>();
@@ -195,6 +195,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
 
+                    sqlCommand.Parameters.Add("@FormId", SqlDbType.Int).Value = formId;
                     sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
                     sqlCommand.Parameters.Add("@NameSearch", SqlDbType.VarChar).Value = nameSearch;
 
@@ -206,8 +207,11 @@ namespace org.cchmc.pho.core.DataAccessLayer
                         {
                             var workbookslookup = new WorkbooksLookup()
                             {
-                                FormResponseID = (dr["FormResponseID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FormResponseID"].ToString())),
-                                ReportingMonth = (dr["ReportingMonth"] == DBNull.Value ? (DateTime?)null : (DateTime.Parse(dr["ReportingMonth"].ToString())))
+                                FormId = (dr["FormID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FormID"].ToString())),
+                                QuestionId = (dr["QuestionID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["QuestionID"].ToString())),
+                                PracticeId = (dr["PracticeID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PracticeID"].ToString())),
+                                FormResponseId = (dr["FormResponseID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FormResponseID"].ToString())),
+                                ReportingPeriod = dr["ReportingMonth"].ToString()
                             };
 
                             workbookslookups.Add(workbookslookup);

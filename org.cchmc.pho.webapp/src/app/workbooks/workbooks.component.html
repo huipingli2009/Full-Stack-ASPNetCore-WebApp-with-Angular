@@ -1,5 +1,6 @@
 <div class="content-main">
     <div id="workbooks">
+        <!-- NOTE: (TH) HEADER SECTION (Workbooks, Reporting Periods, Patient Search)-->
         <div fxLayout="row" class="workbooks-header" fxLayoutAlign="space-even center">           
             <div fxLayout="column" fxLayoutAlign="start center" >                                            
                 <mat-form-field>
@@ -38,7 +39,8 @@
                 </mat-form-field>
             </div>
         </div>
-        <ng-container id="depressionWorkbookContainer" *ngIf="displayDepressionWorkbook">
+        <!-- NOTE: (TH) DEPRESSION SECTION (Header w/ stats, provider input, patient entry)-->
+        <ng-container id="depressionWorkbookContainer" *ngIf="selectedWorkbookFormId == workbookFormValueEnum.depression">
             <div class="top-date-container" fxLayout="row">
                 <div fxLayout="column" fxLayoutAlign="start center" class="main-date">
                     DEPRESSION WORKBOOK FOR  
@@ -155,14 +157,14 @@
                                                 </div>
                                                 <div fxLayout="column" fxFlex="60.5px" class="workbook-inputs-col">
                                                     <mat-form-field class="workbook-input">
-                                                        <input matInput (change)="onDepressionProviderValueChanges(i)"
+                                                        <input matInput (change)="onProviderDepressionWorkbookChange(i)"
                                                             formControlName="phqs">
     
                                                     </mat-form-field> 
                                                 </div>
                                                 <div fxLayout="column" fxFlex="60.5px">
                                                     <mat-form-field class="workbook-input">
-                                                        <input matInput (change)="onDepressionProviderValueChanges(i)"
+                                                        <input matInput (change)="onProviderDepressionWorkbookChange(i)"
                                                             formControlName="total">
                                                     </mat-form-field>
                                                 </div>
@@ -479,8 +481,8 @@
 
         </ng-container>
         
-        <!-- ASTHMA WORKBOOK -->
-        <ng-container id="asthmaWorkbookContainer" *ngIf="displayAsthmaWorkbook">
+        <!-- NOTE: (TH)  ASTHMA SECTION (Header w/ stats, patient entry) -->
+        <ng-container id="asthmaWorkbookContainer" *ngIf="selectedWorkbookFormId == workbookFormValueEnum.asthma">
             <div class="top-date-container" fxLayout="row">
                 <div fxLayout="column" fxLayoutAlign="start center" class="main-date">
                     ASTHMA WORKBOOK FOR  
@@ -498,41 +500,38 @@
                 </div>
             </div>
             <div class="side-border-container text-container">
-                <div fxLayout="row" class="italic">
-    
-                    You have completed <strong>{{phqsFinal}} </strong> of <strong>{{totalFinal}}</strong> Asthma screenings for
+                <div fxLayout="row" class="italic">    
+                    You have completed <strong>{{totalAsthmaScreenings}}</strong> Asthma screenings for
                     this period
                 </div>
                 <div fxLayout="row">
                     <div fxLayout="column" fxFlex="90">
-                        <span>For <strong>{{totalFinal}} total</strong> 2-17 year olds seen for WCC in this reporting
-                            period, <strong>{{phqsFinal}} had a PHQ Screening</strong> during their visit.</span>
-                    </div>
-                    
-                    <div fxLayout="column" fxLayoutAlign="end end" fxFlex>
-                        <a href='{{workbookPractice?.jobAidURL}}' target="_blank">Job Aid</a>
-                    </div>   
+                        <span>For <strong>{{totalAsthmaScreenings}} total</strong> 2-17 year olds seen for WCC in this reporting
+                            period, <strong>{{totalAsthmaVisits}} had a PHQ Screening</strong> during their visit.</span>
+                    </div>  
                 </div>
                 <div fxLayout="row">    
-                   <strong>{{phqsFinal}} </strong> of patients received an asthma assessment and <strong>{{totalFinal}}</strong> of patients recieved an action plan.
+                    <div fxLayout="column" fxFlex="90">
+                        <strong>{{asthmaPercentAssessed}} </strong> of patients received an asthma assessment and <strong>{{asthmaPrecentActionPlan}}</strong> of patients recieved an action plan.
+                    </div>
                 </div>
             </div>
 
             <div *ngIf="dataSourceAsthmaWorkbook">
                 <div fxLayout="row" class="workbooks-header">
                     <div fxLayout="column" class="header-filter">
-                        {{patientTableHeader}} Patients had an asthma assessment
+                        {{totalAsthmaScreenings}} Patients had an asthma assessment
                     </div>
                 </div>
                 <div fxLayout="row" class="patient-workbook-table">
                     <mat-table #table [dataSource]="dataSourceAsthmaWorkbook" matSort id="asthmaPatients"
-                        (matSortChange)="onSortData($event)" [trackBy]="trackDepressionPatients" multiTemplateDataRows>
+                        (matSortChange)="onSortData($event)" [trackBy]="trackAsthmaPatients" multiTemplateDataRows>
         
                         <!-- DropDown Column -->
                         <ng-container matColumnDef="action">
                             <mat-header-cell *matHeaderCellDef></mat-header-cell>
                             <mat-cell *matCellDef="let element">
-                                <button mat-icon-button color="accent" (click)="onDepressionPatientDelete(element)">
+                                <button mat-icon-button color="accent" (click)="onAsthmaPatientDelete(element)">
                                     <mat-icon>remove_circle</mat-icon>
                                 </button>
                             </mat-cell>
@@ -580,53 +579,15 @@
                         </ng-container>
         
         
-                        <!-- PHO9 Score Column -->
-                        <ng-container matColumnDef="phQ9_Score">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> PHQ9 </mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{element.phQ9_Score}}
-                            </mat-cell>
-                        </ng-container>
-        
-        
-                        <!-- Improvement Column -->
-                        <ng-container matColumnDef="improvement">
-                            <mat-header-cell *matHeaderCellDef> IMPROVEMENT </mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{element.improvement}}
-                            </mat-cell>
-                        </ng-container>
-        
-        
-                        <!-- Action Follow up Column -->
-                        <ng-container matColumnDef="actionFollowUp">
-                            <mat-header-cell *matHeaderCellDef> ACTION PLAN </mat-header-cell>
-                            <mat-cell *matCellDef="let element">
-                                <ng-container *ngIf="element.actionFollowUp; else actionElse">
-                                    Yes
-                                </ng-container>
-                                <ng-template #actionElse>
-                                    No
-                                </ng-template>
-                            </mat-cell>
-                        </ng-container>
-                        <!-- Action Follow up Column -->
-                        <ng-container matColumnDef="followUp">
-                            <mat-header-cell *matHeaderCellDef> FOLLOW UP </mat-header-cell>
-                            <mat-cell *matCellDef="let element">
-                                <button mat-flat-button [color]="element.followUpResponse? 'primary' : 'accent'"
-                                    (click)="FollowUpForPatient(element)">FOLLOW
-                                    UP</button>
-                            </mat-cell>
-                        </ng-container>
-        
                         <!-- Second Header Columns===============================================================-->
-                        <div form [formGroup]="DepressionPatientForWorkbookForm">
+                        <div form [formGroup]="AsthmaPatientForWorkbookForm">
                             <!-- Action button to add patients -->
                             <ng-container matColumnDef="addaction">
                                 <mat-header-cell *matHeaderCellDef>
                                     <button type="submit" mat-icon-button color="accent" *ngIf="!hasSelectedPatient">
                                         <mat-icon>add_circle</mat-icon>
                                     </button>
-                                    <button mat-icon-button color="primary" (click)="resetAddDepressionPatient()"
+                                    <button mat-icon-button color="primary" (click)="resetAddAsthmaPatient()"
                                         *ngIf="hasSelectedPatient">
                                         <mat-icon>clear</mat-icon>
                                     </button>
@@ -651,8 +612,8 @@
                                             </mat-option>
                                         </mat-select>
                                         <ng-container
-                                            *ngIf="(DepressionPatientForWorkbookForm.get('patientId').touched || DepressionPatientForWorkbookForm.get('patientId').dirty) && DepressionPatientForWorkbookForm.get('patientId').errors">
-                                            <mat-error *ngIf="DepressionPatientForWorkbookForm.get('patientId').errors.required">
+                                            *ngIf="(AsthmaPatientForWorkbookForm.get('patientId').touched || AsthmaPatientForWorkbookForm.get('patientId').dirty) && AsthmaPatientForWorkbookForm.get('patientId').errors">
+                                            <mat-error *ngIf="AsthmaPatientForWorkbookForm.get('patientId').errors.required">
                                                 Please select a patient
                                             </mat-error>
                                         </ng-container>
@@ -691,8 +652,8 @@
                                             </mat-option>
                                         </mat-select>
                                         <ng-container
-                                            *ngIf="(DepressionPatientForWorkbookForm.get('providerStaffID').touched || DepressionPatientForWorkbookForm.get('providerStaffID').dirty) && DepressionPatientForWorkbookForm.get('providerStaffID').errors">
-                                            <mat-error *ngIf="DepressionPatientForWorkbookForm.get('providerStaffID').errors.required">
+                                            *ngIf="(AsthmaPatientForWorkbookForm.get('providerStaffID').touched || AsthmaPatientForWorkbookForm.get('providerStaffID').dirty) && AsthmaPatientForWorkbookForm.get('providerStaffID').errors">
+                                            <mat-error *ngIf="AsthmaPatientForWorkbookForm.get('providerStaffID').errors.required">
                                                 Please select a provider
                                             </mat-error>
         
@@ -716,57 +677,19 @@
                                         <mat-datepicker #picker></mat-datepicker>
         
                                         <ng-container
-                                            *ngIf="(DepressionPatientForWorkbookForm.get('dateOfService').touched || DepressionPatientForWorkbookForm.get('dateOfService').dirty) && DepressionPatientForWorkbookForm.get('dateOfService').errors">
-                                            <mat-error *ngIf="DepressionPatientForWorkbookForm.get('dateOfService').errors.daterequired">
+                                            *ngIf="(AsthmaPatientForWorkbookForm.get('dateOfService').touched || AsthmaPatientForWorkbookForm.get('dateOfService').dirty) && AsthmaPatientForWorkbookForm.get('dateOfService').errors">
+                                            <mat-error *ngIf="AsthmaPatientForWorkbookForm.get('dateOfService').errors.daterequired">
                                                 Date of service is required in MM/DD/YYYY format
                                             </mat-error>
                                         </ng-container>
                                     </mat-form-field>
                                 </mat-header-cell>
                             </ng-container>
-                            <!-- PHQ9 score Column -->
-                            <ng-container matColumnDef="addphQ9_Score">
-                                <mat-header-cell *matHeaderCellDef>
-                                    <mat-form-field>
-                                        <input matInput formControlName="pHQ9Score" required placeholder="Score">
-                                        <ng-container
-                                            *ngIf="(DepressionPatientForWorkbookForm.get('pHQ9Score').touched || DepressionPatientForWorkbookForm.get('pHQ9Score').dirty) && DepressionPatientForWorkbookForm.get('pHQ9Score').errors">
-                                            <mat-error *ngIf="DepressionPatientForWorkbookForm.get('pHQ9Score').errors.required">
-                                                pHQ9Score is required
-                                            </mat-error>
-        
-                                        </ng-container>
-                                    </mat-form-field>
-                                </mat-header-cell>
-                            </ng-container>
-                            <!-- Improvement Column -->
-                            <ng-container matColumnDef="addimprovement">
-                                <mat-header-cell *matHeaderCellDef>
-        
-                                </mat-header-cell>
-                            </ng-container>
-                            <!-- Patient Name Column -->
-                            <ng-container matColumnDef="addactionFollowUp">
-                                <mat-header-cell *matHeaderCellDef>
-                                    <mat-button-toggle-group formControlName="action">
-                                        <mat-button-toggle value="true">Yes</mat-button-toggle>
-                                        <mat-button-toggle value="false">No</mat-button-toggle>
-                                    </mat-button-toggle-group>
-                                    <ng-container
-                                        *ngIf="(DepressionPatientForWorkbookForm.get('action').touched || DepressionPatientForWorkbookForm.get('action').dirty) && DepressionPatientForWorkbookForm.get('action').errors">
-                                        <mat-error *ngIf="DepressionPatientForWorkbookForm.get('action').errors.required">
-                                            Please select a action Followup
-                                        </mat-error>
-        
-        
-                                    </ng-container>
-                                </mat-header-cell>
-                            </ng-container>
         
                             <!-- Action Follow up Column -->
                             <ng-container matColumnDef="addfollowUp">
                                 <mat-header-cell *matHeaderCellDef>
-                                    <button mat-flat-button [disabled]="!DepressionPatientForWorkbookForm.valid" color="accent"
+                                    <button mat-flat-button [disabled]="!AsthmaPatientForWorkbookForm.valid" color="accent"
                                         (click)="AddAsthmaPatientForWorkbook()">ADD PATIENT</button>
                                 </mat-header-cell>
         
@@ -791,13 +714,6 @@
                             <mat-cell *matCellDef="let element"> {{element.providerId}} </mat-cell>
                         </ng-container>
         
-                        <!-- FollowUpResponse Column -->
-                        <ng-container matColumnDef="FollowUpResponse">
-                            <mat-header-cell *matHeaderCellDef> formResponseId </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.followUpResponse}} </mat-cell>
-                        </ng-container>
-        
-        
                         <!-- Column for adding patient-->
                         <ng-container matColumnDef="addingPatient">
                             <mat-header-cell *matHeaderCellDef> providerId </mat-header-cell>
@@ -805,11 +721,11 @@
                         </ng-container>
         
         
-                        <mat-header-row *matHeaderRowDef="displayedDepressionColumns"></mat-header-row>
+                        <mat-header-row *matHeaderRowDef="displayedAsthmaColumns"></mat-header-row>
                         <mat-header-row class="patient-addition-row"
-                            *matHeaderRowDef="['addaction','addpatient','adddob', 'addphone','addprovider','adddateOfService','addphQ9_Score','addimprovement','addactionFollowUp','addfollowUp']">
+                            *matHeaderRowDef="['addaction','addpatient','adddob', 'addphone','addprovider','adddateOfService']">
                         </mat-header-row>
-                        <mat-row *matRowDef="let row; columns: displayedDepressionColumns;">
+                        <mat-row *matRowDef="let row; columns: displayedAsthmaColumns;">
                         </mat-row>
                     </mat-table>
                 </div>

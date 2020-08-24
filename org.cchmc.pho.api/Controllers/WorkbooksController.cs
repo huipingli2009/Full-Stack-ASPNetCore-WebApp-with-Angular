@@ -145,13 +145,13 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(200, type: typeof(List<WorkbooksLookupViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> GetPracticeWorkbooksLookups(string nameSearch)
+        public async Task<IActionResult> GetPracticeWorkbooksLookups(int formId, string nameSearch)
         {
             try
             {
                 int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
                 // call the data method
-                var data = await _workbooks.GetWorkbooksLookups(currentUserId, nameSearch);
+                var data = await _workbooks.GetWorkbooksLookups(formId, currentUserId, nameSearch);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
                 var result = _mapper.Map<List<WorkbooksLookupViewModel>>(data);
                 // return the result in a "200 OK" response
