@@ -11,8 +11,7 @@ export class WorkbookProvider {
     total: number;
 }
 
-
-export class WorkbookPatient {
+export abstract class WorkbookPatient{
     formResponseId: number;
     patientId: number;
     patient: string;
@@ -21,6 +20,16 @@ export class WorkbookPatient {
     provider: string;
     providerId: number;
     dateOfService: string;
+}
+
+export class WorkbookAsthmaPatient extends WorkbookPatient {    
+    asthma_Score: string;
+    assessmentcompleted: boolean;
+    treatment: string;
+    actionplangiven: boolean;
+}
+
+export class WorkbookDepressionPatient extends WorkbookPatient {    
     phQ9_Score: string;
     actionFollowUp: boolean;
     improvement: string;
@@ -47,4 +56,23 @@ export class WorkbookPractice {
     line2: string;
     jobAidURL: string;
     line3: string;
+}
+
+export class WorkbookForm {
+    id: number;
+    label: string;
+}
+
+interface Treatment {
+    value: string;
+    viewValue: string;
+}
+
+export class AsthmaTreatment {
+    treatment: Treatment[] = [
+      {value: 'Maintained', viewValue: 'Maintained'},
+      {value: 'Stepped Up', viewValue: 'Stepped Up'},
+      {value: 'Stepped Down', viewValue: 'Stepped Down'},
+      {value: 'NULL', viewValue: 'NULL'}
+    ];   
 }

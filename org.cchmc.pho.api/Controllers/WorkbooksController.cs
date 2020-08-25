@@ -38,17 +38,43 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(200, type: typeof(List<WorkbooksDepressionPatientViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-
-        //public async Task<IActionResult> ListPatients(int userId, int formResponseId, string nameSearch)
+     
         public async Task<IActionResult> GetDepressionPatientList(int formResponseId)
         {
-
             try
             {
                 int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
                 var data = await _workbooks.GetDepressionPatientList(currentUserId, formResponseId);
 
                 var result = _mapper.Map<List<WorkbooksDepressionPatientViewModel>>(data);
+
+                // return the result in a "200 OK" response
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+        // GET: api/Workbooks
+        [HttpGet("asthmapatients")]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]       
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [SwaggerResponse(200, type: typeof(List<WorkbooksAsthmaPatientViewModel>))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]       
+        public async Task<IActionResult> GetAsthmaPatientList(int formResponseId)
+        {
+            try
+            {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+               
+                var data = await _workbooks.GetAsthmaPatientList(currentUserId, formResponseId);
+
+                var result = _mapper.Map<List<WorkbooksAsthmaPatientViewModel>>(data);
 
                 // return the result in a "200 OK" response
                 return Ok(result);
@@ -138,8 +164,8 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [HttpPost("patients/{id}")]
-        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [HttpPost("depressionpatients/{id}")]  
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]        
         [SwaggerResponse(200, type: typeof(string))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -149,6 +175,27 @@ namespace org.cchmc.pho.api.Controllers
             {
                 int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
                 var result = await _workbooks.AddPatientToDepressionWorkbooks(currentUserId, workbookspatientVM.FormResponseId, id, workbookspatientVM.ProviderId, workbookspatientVM.DateOfService, int.Parse(workbookspatientVM.PHQ9_Score), workbookspatientVM.ActionFollowUp);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+        [HttpPost("asthmapatients/{id}")]
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]       
+        [SwaggerResponse(200, type: typeof(string))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> AddPatientToAsthmaWorkbooks(int id, [FromBody] WorkbooksAsthmaPatientViewModel workbookspatientVM)
+        {
+            try
+            {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+                var result = await _workbooks.AddPatientToAsthmaWorkbooks(currentUserId, workbookspatientVM.FormResponseId, id, workbookspatientVM.ProviderId, workbookspatientVM.DateOfService, int.Parse(workbookspatientVM.Asthma_Score), workbookspatientVM.AssessmentCompleted, int.Parse(workbookspatientVM.Treatment),  workbookspatientVM.ActionPlanGiven);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -292,6 +339,81 @@ namespace org.cchmc.pho.api.Controllers
                 return StatusCode(500, "An error occurred");
             }
 
+        }
+
+        [HttpGet("WorkbooksForms")]
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [SwaggerResponse(200, type: typeof(List<WorkbooksFormsViewModel>))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> GetWorkbooksForms()
+        {
+            try
+            {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+                // call the data method
+                var data = await _workbooks.GetWorkbooksForms(currentUserId);
+                // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
+                var result = _mapper.Map<List<WorkbooksFormsViewModel>>(data);
+                // return the result in a "200 OK" response
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+
+        [HttpGet("asthmatreatmentplan")]       
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [SwaggerResponse(200, type: typeof(List<AsthmaTreatmentPlanViewModel>))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> GetAsthmaTreatmentPlan()
+        {
+            try
+            {
+                // call the data method
+                var data = await _workbooks.GetAsthmaTreatmentPlan();
+                // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
+                var result = _mapper.Map<List<AsthmaTreatmentPlanViewModel>>(data);
+                // return the result in a "200 OK" response
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+        [HttpGet("asthmaworkbookspractice")]       
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [SwaggerResponse(200, type: typeof(AsthmaWorkbooksPracticeViewModel))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> GetAsthmaPracticeWorkbooks(int formResponseId)
+        {
+            try
+            {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+                // call the data method
+                var data = await _workbooks.GetAsthmaPracticeWorkbooks(currentUserId, formResponseId);
+                // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
+                var result = _mapper.Map<AsthmaWorkbooksPracticeViewModel>(data);
+                // return the result in a "200 OK" response
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
         }
     }
 }

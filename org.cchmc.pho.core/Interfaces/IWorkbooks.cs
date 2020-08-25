@@ -8,6 +8,7 @@ namespace org.cchmc.pho.core.Interfaces
     public interface IWorkbooks
     {       
         Task<List<WorkbooksDepressionPatient>> GetDepressionPatientList(int userId, int formResponseId);
+        Task<List<WorkbooksAsthmaPatient>> GetAsthmaPatientList(int userId, int formResponseId);
         Task<WorkbooksPractice> GetPracticeWorkbooks(int userId, int formResponseId);
         Task<List<WorkbooksProvider>> GetPracticeWorkbooksProviders(int userId, int formResponseId);
         Task<List<WorkbooksLookup>> GetWorkbooksLookups(int userId, string nameSearch);
@@ -18,5 +19,9 @@ namespace org.cchmc.pho.core.Interfaces
         Task<int> UpdateWorkbooksProviders(int userId, int formResponseId, int providerstaffID, int phqs, int total);
         Task<WorkbooksPatientFollowup> GetWorkbooksPatientPHQ9FollowUp(int userId, int formResponseId, int patientID);       
         Task<int> UpdateWorkbooksPatientFollowup(int userId, int formResponseId, int patientId, bool actionPlanGiven, bool managedByExternalProvider, DateTime? dateOfLastCommunicationByExternalProvider, bool followupPhoneCallOneToTwoWeeks, DateTime? dateOfFollowupCall, bool oneMonthFollowupVisit, DateTime? dateOfOneMonthVisit, int oneMonthFolllowupPHQ9Score);
+        Task<List<WorkbooksForms>> GetWorkbooksForms(int userid);
+        Task<List<AsthmaTreatmentPlan>> GetAsthmaTreatmentPlan();
+        Task<AsthmaWorkbooksPractice> GetAsthmaPracticeWorkbooks(int userId, int formResponseId);
+        Task<bool> AddPatientToAsthmaWorkbooks(int userId, int formResponseId, int patientID, int providerstaffID, DateTime? dos, int asthmascore, bool assessmentCompleted, int treatmentplanId, bool actionPlanGiven);
     }
 }
