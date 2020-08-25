@@ -379,9 +379,11 @@ export class RestService {
   /* for getting the reporting month and form response ID */
   getWorkbookReportingPeriods(formId, nameSearch): Observable<any> {
     let paramsValue = new HttpParams();
+    console.log('getWorkbookReportingPeriods formId: ', formId);
+    console.log('getWorkbookReportingPeriods nameSearch: ', nameSearch);
     paramsValue = paramsValue.append("formId", formId);
     paramsValue = paramsValue.append("nameSearch", nameSearch);
-    return this.http.get<WorkbookReportingPeriod[]>(`${API_URL}/api/Workbooks/lookups`).pipe(
+    return this.http.get<WorkbookReportingPeriod[]>(`${API_URL}/api/Workbooks/lookups`, { params: paramsValue }).pipe(
       map((data: WorkbookReportingPeriod[]) => {
         return data;
       })
@@ -390,7 +392,7 @@ export class RestService {
 
   /*Get workbooks initiatives*/
   getWorkbooksForms(): Observable<any> {
-    return this.http.get<any>(`${API_URL}/api/Workbooks/WorkbooksForms/`).pipe(
+    return this.http.get<any>(`${API_URL}/api/Workbooks/WorkbooksForms/`).pipe(      
       map((data: WorkbookForm[]) => {
         return data;
       })

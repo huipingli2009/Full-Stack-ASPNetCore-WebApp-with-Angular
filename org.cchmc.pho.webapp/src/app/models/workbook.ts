@@ -1,3 +1,9 @@
+
+export class WorkbookForm {
+    id: number;
+    label: string;
+}
+
 export class WorkbookReportingPeriod {
     formResponseId: number;    
     formId: number;
@@ -61,10 +67,6 @@ export class WorkbookPractice {
     line3: string;
 }
 
-export class WorkbookForm {
-    id: number;
-    label: string;
-}
 
 export enum WorkbookFormValueEnum {
     asthma = 1,

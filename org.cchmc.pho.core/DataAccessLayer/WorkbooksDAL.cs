@@ -191,7 +191,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             List<WorkbooksLookup> workbookslookups = new List<WorkbooksLookup>();
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
-                using (SqlCommand sqlCommand = new SqlCommand("spGetPHQ9Workbooks", sqlConnection))
+                using (SqlCommand sqlCommand = new SqlCommand("spGetWorkbookPeriods", sqlConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
 
@@ -211,7 +211,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 QuestionId = (dr["QuestionID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["QuestionID"].ToString())),
                                 PracticeId = (dr["PracticeID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PracticeID"].ToString())),
                                 FormResponseId = (dr["FormResponseID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FormResponseID"].ToString())),
-                                ReportingPeriod = dr["ReportingMonth"].ToString()
+                                ReportingPeriod = dr["ReportingPeriod"].ToString()
                             };
 
                             workbookslookups.Add(workbookslookup);

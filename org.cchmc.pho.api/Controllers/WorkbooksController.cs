@@ -140,7 +140,7 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [HttpGet("lookups")]
+        [HttpGet("lookups/")]
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<WorkbooksLookupViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
