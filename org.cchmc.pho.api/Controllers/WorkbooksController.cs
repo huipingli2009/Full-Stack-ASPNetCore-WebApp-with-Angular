@@ -61,8 +61,7 @@ namespace org.cchmc.pho.api.Controllers
 
         // GET: api/Workbooks
         [HttpGet("asthmapatients")]
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        //[AllowAnonymous]   -- for testing purpose
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]       
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<WorkbooksAsthmaPatientViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
@@ -165,8 +164,8 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [HttpPost("patients/{id}")]
-        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [HttpPost("depressionpatients/{id}")]  
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]        
         [SwaggerResponse(200, type: typeof(string))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -176,6 +175,27 @@ namespace org.cchmc.pho.api.Controllers
             {
                 int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
                 var result = await _workbooks.AddPatientToDepressionWorkbooks(currentUserId, workbookspatientVM.FormResponseId, id, workbookspatientVM.ProviderId, workbookspatientVM.DateOfService, int.Parse(workbookspatientVM.PHQ9_Score), workbookspatientVM.ActionFollowUp);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+        [HttpPost("asthmapatients/{id}")]
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]       
+        [SwaggerResponse(200, type: typeof(string))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> AddPatientToAsthmaWorkbooks(int id, [FromBody] WorkbooksAsthmaPatientViewModel workbookspatientVM)
+        {
+            try
+            {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+                var result = await _workbooks.AddPatientToAsthmaWorkbooks(currentUserId, workbookspatientVM.FormResponseId, id, workbookspatientVM.ProviderId, workbookspatientVM.DateOfService, int.Parse(workbookspatientVM.Asthma_Score), workbookspatientVM.AssessmentCompleted, int.Parse(workbookspatientVM.Treatment),  workbookspatientVM.ActionPlanGiven);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -371,9 +391,8 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [HttpGet("asthmaworkbookspractice")]
-        [AllowAnonymous]
-        //[Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [HttpGet("asthmaworkbookspractice")]       
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(AsthmaWorkbooksPracticeViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]

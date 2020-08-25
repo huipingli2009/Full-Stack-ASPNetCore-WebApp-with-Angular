@@ -241,11 +241,37 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
+        public async Task<bool> AddPatientToAsthmaWorkbooks(int userId, int formResponseId, int patientID, int providerstaffID, DateTime? dos, int asthmascore, bool assessmentCompleted, int treatmentplanId, bool actionPlanGiven)
+        {            
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spPostAsthmaWorkbook_Patient", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@FormResponseId", SqlDbType.Int).Value = formResponseId;
+                    sqlCommand.Parameters.Add("@PatientID", SqlDbType.Int).Value = patientID;
+                    sqlCommand.Parameters.Add("@ProviderStaffID", SqlDbType.Int).Value = providerstaffID;
+                    sqlCommand.Parameters.Add("@AsthmaScore", SqlDbType.Int).Value = asthmascore;
+                    sqlCommand.Parameters.Add("@DateOfService", SqlDbType.DateTime).Value = dos;
+                    sqlCommand.Parameters.Add("@TreamentID", SqlDbType.Int).Value = treatmentplanId;
+                    sqlCommand.Parameters.Add("@ActionPlan", SqlDbType.Int).Value = actionPlanGiven;
+                    sqlCommand.Parameters.Add("@AssessmentCompleted", SqlDbType.Int).Value = assessmentCompleted;
+
+                    await sqlConnection.OpenAsync();
+
+                    //Execute Stored Procedure
+                    return (bool)sqlCommand.ExecuteScalar();
+                }
+            }
+
+        }
+
         public async Task<bool> RemovePatientFromWorkbooks(int userId, int formResponseId, int patientID)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
-                using (SqlCommand sqlCommand = new SqlCommand("spRemovePHQ9Workbook_Patient", sqlConnection))
+                using (SqlCommand sqlCommand = new SqlCommand("spRemoveWorkbook_Patient", sqlConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;

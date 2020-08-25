@@ -22,5 +22,6 @@ namespace org.cchmc.pho.core.Interfaces
         Task<List<WorkbooksForms>> GetWorkbooksForms(int userid);
         Task<List<AsthmaTreatmentPlan>> GetAsthmaTreatmentPlan();
         Task<AsthmaWorkbooksPractice> GetAsthmaPracticeWorkbooks(int userId, int formResponseId);
+        Task<bool> AddPatientToAsthmaWorkbooks(int userId, int formResponseId, int patientID, int providerstaffID, DateTime? dos, int asthmascore, bool assessmentCompleted, int treatmentplanId, bool actionPlanGiven);
     }
 }

@@ -272,7 +272,7 @@
                     </mat-cell>
                 </ng-container>
                 <!-- Action Follow up Column -->
-                <ng-container matColumnDef="followUp">
+                <ng-container matColumnDef="followUp" class="patientButtonAlign">
                     <mat-header-cell *matHeaderCellDef> FOLLOW UP </mat-header-cell>
                     <mat-cell *matCellDef="let element">
                         <button mat-flat-button [color]="element.followUpResponse? 'primary' : 'accent'"
