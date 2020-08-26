@@ -14,6 +14,8 @@ namespace org.cchmc.pho.api.Mappings
             CreateMap<WorkbooksLookup, WorkbooksLookupViewModel>();
             CreateMap<WorkbooksPatientFollowup, WorkbooksPatientFollowupViewModel>();
             CreateMap<WorkbooksForms, WorkbooksFormsViewModel>();
+            CreateMap<AsthmaTreatmentPlan, AsthmaTreatmentPlanViewModel>();
+            CreateMap<AsthmaWorkbooksPractice, AsthmaWorkbooksPracticeViewModel>();
         }        
     }
 }

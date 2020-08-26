@@ -245,11 +245,37 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
+        public async Task<bool> AddPatientToAsthmaWorkbooks(int userId, int formResponseId, int patientID, int providerstaffID, DateTime? dos, int asthmascore, bool assessmentCompleted, int treatmentplanId, bool actionPlanGiven)
+        {            
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spPostAsthmaWorkbook_Patient", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@FormResponseId", SqlDbType.Int).Value = formResponseId;
+                    sqlCommand.Parameters.Add("@PatientID", SqlDbType.Int).Value = patientID;
+                    sqlCommand.Parameters.Add("@ProviderStaffID", SqlDbType.Int).Value = providerstaffID;
+                    sqlCommand.Parameters.Add("@AsthmaScore", SqlDbType.Int).Value = asthmascore;
+                    sqlCommand.Parameters.Add("@DateOfService", SqlDbType.DateTime).Value = dos;
+                    sqlCommand.Parameters.Add("@TreamentID", SqlDbType.Int).Value = treatmentplanId;
+                    sqlCommand.Parameters.Add("@ActionPlan", SqlDbType.Int).Value = actionPlanGiven;
+                    sqlCommand.Parameters.Add("@AssessmentCompleted", SqlDbType.Int).Value = assessmentCompleted;
+
+                    await sqlConnection.OpenAsync();
+
+                    //Execute Stored Procedure
+                    return (bool)sqlCommand.ExecuteScalar();
+                }
+            }
+
+        }
+
         public async Task<bool> RemovePatientFromWorkbooks(int userId, int formResponseId, int patientID)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
-                using (SqlCommand sqlCommand = new SqlCommand("spRemovePHQ9Workbook_Patient", sqlConnection))
+                using (SqlCommand sqlCommand = new SqlCommand("spRemoveWorkbook_Patient", sqlConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
@@ -417,6 +443,72 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     return workbooksForms;
                 }
             }
+        }
+
+        public async Task<List<AsthmaTreatmentPlan>> GetAsthmaTreatmentPlan()      
+        {
+            DataTable dataTable = new DataTable();
+            List<AsthmaTreatmentPlan> asthmatreatmentplan;
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetAsthmaWorkbooks_TreatmentLookup", sqlConnection))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    await sqlConnection.OpenAsync();
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        asthmatreatmentplan = (from DataRow dr in dataTable.Rows
+                                 select new AsthmaTreatmentPlan()
+                                 {
+                                     TreatmentId = (dr["TreatmentID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["TreatmentID"].ToString())),
+
+                                     TreatmentLabel = dr["TreatmentLabel"].ToString()
+                                 }
+                        ).ToList();
+                    }
+                }
+            }
+            return asthmatreatmentplan;
+        }
+
+        public async Task<AsthmaWorkbooksPractice> GetAsthmaPracticeWorkbooks(int userId, int formResponseId)
+        {   
+
+            DataTable dataTable = new DataTable();
+            AsthmaWorkbooksPractice asthmaworkbookpractice;
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetAsthmaWorkbooks_Practice", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@FormResponseId", SqlDbType.Int).Value = formResponseId;
+
+                    await sqlConnection.OpenAsync();
+
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+
+                        asthmaworkbookpractice = (from DataRow dr in dataTable.Rows
+                                            select new AsthmaWorkbooksPractice()
+                                            {
+                                                FormResponseId = int.Parse(dr["FormResponseId"].ToString()),
+                                                Header = dr["Header"].ToString(),
+                                                Line1 = dr["Line1"].ToString(),
+                                                Line2 = dr["Line2"].ToString(),
+                                                Line3 = dr["Line3"].ToString(),
+                                                JobAidURL = dr["JobAidURL"].ToString()
+                                            }
+                                        ).SingleOrDefault();
+                    }
+                }
+            }
+            return asthmaworkbookpractice;
         }
     }
 }
