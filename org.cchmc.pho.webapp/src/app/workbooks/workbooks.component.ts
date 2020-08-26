@@ -153,7 +153,8 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   //event handlers - generic (all workbooks)
 
   ngOnInit(): void {
-    this.selectedWorkbookFormId = 1;
+    this.selectedWorkbookFormId = 3;
+    this.workbooksFormList = [];
     this.getWorkbooksForms();
 
 
@@ -169,11 +170,15 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   }  
   
   getWorkbooksForms() {
-    this.rest.getWorkbooksForms().pipe(take(1)).subscribe((data) => {
-      this.workbooksFormList = data;   
-      console.log('getWorkbooksForms data: ', data);  
+    this.rest.getWorkbooksForms().subscribe((data) => {
+      data.forEach((item) => {
+        this.workbooksFormList.push(item);
+      });
+      console.log('getWorkbooksForms data: ', this.workbooksFormList); 
+      //set initial value 
       const toSelect = this.workbooksFormList.find(c => c.id == 3);
-      this.workbookSelector.get('workbookSelector').setValue(toSelect);
+      this.logger.log(toSelect);
+      this.workbookSelector.setValue(toSelect.id);
     });  
 
   } 
