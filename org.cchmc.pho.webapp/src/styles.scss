@@ -1034,6 +1034,7 @@ button.toast-close-button {
 }
 
 #patients,
+#asthmaPatients,
 #staff,
 #workbook,
 #files {
@@ -2014,6 +2015,7 @@ button.toast-close-button {
     strong {
       color: var(--primary-color);
       padding: 0 5px;
+      display: inline !important;
     }
 
     .italic {

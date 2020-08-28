@@ -7,7 +7,7 @@ import { environment } from '../environments/environment';
 import { Alerts, EdChart, EdChartDetails, Population, Quicklinks, Spotlight } from './models/dashboard';
 import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Patients, NewPatient, Pmca, PopSlices, Providers, States } from './models/patients';
 import { PracticeList, Responsibilities, Staff, StaffDetails, StaffAdmin } from './models/Staff';
-import { Followup, WorkbookDepressionPatient, WorkbookProvider, WorkbookReportingMonths, WorkbookPractice, WorkbookForm} from './models/workbook';
+import { Followup, WorkbookDepressionPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookAsthmaPatient, Treatment} from './models/workbook';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
 import { FileDetails, FileAction, ResourceType, Tag, Initiative, FileType, ContentPlacement } from './models/files';
 import { Location } from '@angular/common';
@@ -377,9 +377,14 @@ export class RestService {
   /* Workbook Component =======================================================*/
 
   /* for getting the reporting month and form response ID */
-  getWorkbookReportingMonths(): Observable<any> {
-    return this.http.get<WorkbookReportingMonths[]>(`${API_URL}/api/Workbooks/lookups`).pipe(
-      map((data: WorkbookReportingMonths[]) => {
+  getWorkbookReportingPeriods(formId, nameSearch): Observable<any> {
+    let paramsValue = new HttpParams();
+    console.log('getWorkbookReportingPeriods formId: ', formId);
+    console.log('getWorkbookReportingPeriods nameSearch: ', nameSearch);
+    paramsValue = paramsValue.append("formId", formId);
+    paramsValue = paramsValue.append("nameSearch", nameSearch);
+    return this.http.get<WorkbookReportingPeriod[]>(`${API_URL}/api/Workbooks/lookups`, { params: paramsValue }).pipe(
+      map((data: WorkbookReportingPeriod[]) => {
         return data;
       })
     );
@@ -387,8 +392,17 @@ export class RestService {
 
   /*Get workbooks initiatives*/
   getWorkbooksForms(): Observable<any> {
-    return this.http.get<any>(`${API_URL}/api/Workbooks/WorkbooksForms/`).pipe(
+    return this.http.get<any>(`${API_URL}/api/Workbooks/WorkbooksForms/`).pipe(      
       map((data: WorkbookForm[]) => {
+        return data;
+      })
+    );
+  }
+
+  /*Get treatment options*/
+  getTreatments(): Observable<any> {
+    return this.http.get<any>(`${API_URL}/api/Workbooks/asthmatreatmentplan/`).pipe(      
+      map((data: Treatment[]) => {
         return data;
       })
     );
@@ -406,6 +420,16 @@ export class RestService {
     );
   }
 
+  getAsthmaWorkbookWorkbookPractice(formResponseid: number): Observable<any> {
+    let paramsValue = new HttpParams();
+    paramsValue = paramsValue.append("formResponseId", formResponseid.toString());
+    return this.http.get<WorkbookPractice[]>(`${API_URL}/api/Workbooks/asthmaworkbookspractice`, { params: paramsValue }).pipe(
+      map((data: WorkbookPractice[]) => {
+        return data;
+      })
+    );
+  }
+
   /*Update workbook for Staff*/
   updateWorkbookForProvider(WorkbookProvider: WorkbookProvider): Observable<any> {
     return this.http.put(`${API_URL}/api/Workbooks/provider/${WorkbookProvider.staffID}`, JSON.stringify(WorkbookProvider), httpOptions).pipe(
@@ -414,12 +438,20 @@ export class RestService {
   }
 
   /* for getting the patients for a form response ID */
-  getWorkbookPatients(formResponseid: number): Observable<any> {
+  getWorkbookDepressionPatients(formResponseid: number): Observable<any> {
     let paramsValue = new HttpParams();
     paramsValue = paramsValue.append("formResponseId", formResponseid.toString());
     return this.http.get<WorkbookProvider[]>(`${API_URL}/api/Workbooks/patients`, { params: paramsValue }).pipe(
       map((data: WorkbookProvider[]) => {
         return data;
+      })
+    );
+  }
+  /* for getting the patients for a form response ID */
+  getWorkbookAsthmaPatients(formResponseid: number): Observable<any> {
+    return this.http.get<WorkbookAsthmaPatient[]>(`${API_URL}/api/Workbooks/asthmapatients/${formResponseid}`).pipe(
+      map((data: WorkbookAsthmaPatient[]) => {
+        return data; 
       })
     );
   }
@@ -434,12 +466,21 @@ export class RestService {
   }
 
   /*addition of patient to the work book*/
-  AddPatientToWorkbook(workbookPatient: WorkbookDepressionPatient): Observable<any> {
+  AddPatientToDepressionWorkbook(workbookPatient: WorkbookDepressionPatient): Observable<any> {
     this.logger.log(JSON.stringify(workbookPatient));
-    return this.http.post<boolean>(`${API_URL}/api/Workbooks/Patients/${workbookPatient.patientId}`, JSON.stringify(workbookPatient), httpOptions).pipe(
+    return this.http.post<boolean>(`${API_URL}/api/Workbooks/depressionpatients/${workbookPatient.patientId}`, JSON.stringify(workbookPatient), httpOptions).pipe(
       catchError(this.handleError<any>('adding patient to the workbook'))
     );
   }
+  
+  /*addition of patient to the work book*/
+  AddPatientToAsthmaWorkbook(workbookPatient: WorkbookAsthmaPatient): Observable<any> {
+    this.logger.log(JSON.stringify(workbookPatient));
+    return this.http.post<boolean>(`${API_URL}/api/Workbooks/asthmapatients/${workbookPatient.patientId}`, JSON.stringify(workbookPatient), httpOptions).pipe(
+      catchError(this.handleError<any>('adding patient to the workbook'))
+    );
+  }
+
   switchPractice(staffWithPractice): Observable<any> {
     return this.http.put(`${API_URL}/api/Staff/switchpractice`, JSON.stringify(staffWithPractice), httpOptions).pipe(
       tap(_ => this.snackBar.openSnackBar(`Current Practice Switched!`
@@ -486,11 +527,29 @@ export class RestService {
     );
   }
 
+  /*Removing patient from the work book*/
+  RemoveAsthmaPatientFromWorkbook(workbookPatient: WorkbookAsthmaPatient): Observable<any> {
+    this.logger.log(JSON.stringify(workbookPatient));
+    return this.http.delete<boolean>(`${API_URL}/api/Workbooks/Patients/${workbookPatient.formResponseId}/${workbookPatient.patientId}`, httpOptions).pipe(
+      catchError(this.handleError<any>('removing patient from the workbook'))
+    );
+  }
+
   /*getting workbook Practice details*/
   getWorkbookPractice(formResponseid: number): Observable<any> {
     let paramsValue = new HttpParams();
     paramsValue = paramsValue.append("formResponseId", formResponseid.toString());
     return this.http.get<WorkbookPractice>(`${API_URL}/api/Workbooks/practice`, { params: paramsValue }).pipe(
+      map((data: WorkbookPractice) => {
+        return data;
+      })
+    ); 
+  }
+  /*getting workbook Practice details for asthma (separate API)*/
+  getAsthmaWorkbookPractice(formResponseid: number): Observable<any> {
+    let paramsValue = new HttpParams();
+    paramsValue = paramsValue.append("formResponseId", formResponseid.toString());
+    return this.http.get<WorkbookPractice>(`${API_URL}/api/Workbooks/asthmaworkbookspractice`, { params: paramsValue }).pipe(
       map((data: WorkbookPractice) => {
         return data;
       })
@@ -523,8 +582,8 @@ export class RestService {
   getWorkbookReportingMonthsForPatient(patientName: string): Observable<any> {
     let paramsValue = new HttpParams();
     paramsValue = paramsValue.append("nameSearch", patientName);
-    return this.http.get<WorkbookReportingMonths[]>(`${API_URL}/api/Workbooks/lookups`, { params: paramsValue }).pipe(
-      map((data: WorkbookReportingMonths[]) => {
+    return this.http.get<WorkbookReportingPeriod[]>(`${API_URL}/api/Workbooks/lookups`, { params: paramsValue }).pipe(
+      map((data: WorkbookReportingPeriod[]) => {
         return data;
       })
     );

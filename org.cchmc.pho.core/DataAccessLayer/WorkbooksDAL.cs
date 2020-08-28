@@ -96,10 +96,10 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 Phone = dr["Phone"].ToString(),
                                 Provider = dr["Provider"].ToString(),
                                 DateOfService = (dr["DateOfService"] == DBNull.Value ? (DateTime?)null : (DateTime.Parse(dr["DateOfService"].ToString()))),
-                                Asthma_Score = dr["AsthmaScore"].ToString(),
-                                ActionPlanGiven = dr["ActionPlanGiven"] != DBNull.Value && Convert.ToBoolean(dr["ActionPlanGiven"]),                               
-                                Treatment = dr["Treatment"].ToString(),                               
-                                AssessmentCompleted = (dr["AssessmentCompleted"] != DBNull.Value && Convert.ToBoolean(dr["AssessmentCompleted"]))
+                                Asthma_Score = (dr["AsthmaScore"] == DBNull.Value ? 0 : Convert.ToInt32(dr["AsthmaScore"].ToString())),
+                                ActionPlanGiven = (dr["ActionPlanGiven"] == DBNull.Value ? Convert.ToBoolean(0) : Convert.ToBoolean(dr["ActionPlanGiven"].ToString())),
+                                Treatment = (dr["Treatment"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Treatment"].ToString())),
+                                AssessmentCompleted = (dr["AssessmentCompleted"] == DBNull.Value ? Convert.ToBoolean(0) : Convert.ToBoolean(dr["AssessmentCompleted"].ToString())),
                             };
 
                             workbooksasthmapatients.Add(workbookspt);
@@ -185,16 +185,17 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
-        public async Task<List<WorkbooksLookup>> GetWorkbooksLookups(int userId, string nameSearch)
+        public async Task<List<WorkbooksLookup>> GetWorkbooksLookups(int formId, int userId, string nameSearch)
         {
             DataTable dataTable = new DataTable();
             List<WorkbooksLookup> workbookslookups = new List<WorkbooksLookup>();
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
-                using (SqlCommand sqlCommand = new SqlCommand("spGetPHQ9Workbooks", sqlConnection))
+                using (SqlCommand sqlCommand = new SqlCommand("spGetWorkbookPeriods", sqlConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
 
+                    sqlCommand.Parameters.Add("@FormId", SqlDbType.Int).Value = formId;
                     sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
                     sqlCommand.Parameters.Add("@NameSearch", SqlDbType.VarChar).Value = nameSearch;
 
@@ -206,8 +207,11 @@ namespace org.cchmc.pho.core.DataAccessLayer
                         {
                             var workbookslookup = new WorkbooksLookup()
                             {
-                                FormResponseID = (dr["FormResponseID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FormResponseID"].ToString())),
-                                ReportingMonth = (dr["ReportingMonth"] == DBNull.Value ? (DateTime?)null : (DateTime.Parse(dr["ReportingMonth"].ToString())))
+                                FormId = (dr["FormID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FormID"].ToString())),
+                                QuestionId = (dr["QuestionID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["QuestionID"].ToString())),
+                                PracticeId = (dr["PracticeID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PracticeID"].ToString())),
+                                FormResponseId = (dr["FormResponseID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FormResponseID"].ToString())),
+                                ReportingPeriod = dr["ReportingPeriod"].ToString()
                             };
 
                             workbookslookups.Add(workbookslookup);
