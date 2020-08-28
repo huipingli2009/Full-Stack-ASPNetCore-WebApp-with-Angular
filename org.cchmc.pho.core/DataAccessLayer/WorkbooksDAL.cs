@@ -96,10 +96,10 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 Phone = dr["Phone"].ToString(),
                                 Provider = dr["Provider"].ToString(),
                                 DateOfService = (dr["DateOfService"] == DBNull.Value ? (DateTime?)null : (DateTime.Parse(dr["DateOfService"].ToString()))),
-                                Asthma_Score = dr["AsthmaScore"].ToString(),
-                                ActionPlanGiven = dr["ActionPlanGiven"] != DBNull.Value && Convert.ToBoolean(dr["ActionPlanGiven"]),                               
-                                Treatment = dr["Treatment"].ToString(),                               
-                                AssessmentCompleted = (dr["AssessmentCompleted"] != DBNull.Value && Convert.ToBoolean(dr["AssessmentCompleted"]))
+                                Asthma_Score = (dr["AsthmaScore"] == DBNull.Value ? 0 : Convert.ToInt32(dr["AsthmaScore"].ToString())),
+                                ActionPlanGiven = (dr["ActionPlanGiven"] == DBNull.Value ? Convert.ToBoolean(0) : Convert.ToBoolean(dr["ActionPlanGiven"].ToString())),
+                                Treatment = (dr["Treatment"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Treatment"].ToString())),
+                                AssessmentCompleted = (dr["AssessmentCompleted"] == DBNull.Value ? Convert.ToBoolean(0) : Convert.ToBoolean(dr["AssessmentCompleted"].ToString())),
                             };
 
                             workbooksasthmapatients.Add(workbookspt);
