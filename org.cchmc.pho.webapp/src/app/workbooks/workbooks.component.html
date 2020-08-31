@@ -565,25 +565,45 @@
                         <!-- Assessment Column -->
                         <ng-container matColumnDef="assessmentcompleted">
                             <mat-header-cell *matHeaderCellDef mat-sort-header> ASSESSMENT COMPLETED </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.assessmentcompleted }} </mat-cell>
+                            <mat-cell *matCellDef="let element">
+                                <ng-container *ngIf="element.assessmentcompleted; else actionElse">
+                                    Yes
+                                </ng-container>
+                                <ng-template #actionElse>
+                                    No
+                                </ng-template>
+                            </mat-cell>
                         </ng-container>                        
         
                         <!-- Treatment Column -->
                         <ng-container matColumnDef="treatment">
                             <mat-header-cell *matHeaderCellDef mat-sort-header> TREATMENT </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.treatment }} </mat-cell>
+                            <mat-cell *matCellDef="let element"> {{ element.treatment.treatmentLabel }} </mat-cell>
                         </ng-container>                        
         
                         <!-- Action Plan Column -->
                         <ng-container matColumnDef="actionplangiven">
                             <mat-header-cell *matHeaderCellDef mat-sort-header> ACTION PLAN GIVEN </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{element.actionplangiven }} </mat-cell>
+                            <mat-cell *matCellDef="let element">
+                                <ng-container *ngIf="element.actionplangiven; else actionElse">
+                                    Yes
+                                </ng-container>
+                                <ng-template #actionElse>
+                                    No
+                                </ng-template>
+                            </mat-cell>
                         </ng-container>                        
         
                         <!-- Asthma Score Column -->
                         <ng-container matColumnDef="asthma_Score">
                             <mat-header-cell *matHeaderCellDef mat-sort-header> SCORE </mat-header-cell>
                             <mat-cell *matCellDef="let element"> {{element.asthma_Score }} </mat-cell>
+                        </ng-container>
+
+                        <!-- Empty Column -->
+                        <ng-container>
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> </mat-header-cell>
+                            <mat-cell *matCellDef="let element">blank</mat-cell>
                         </ng-container>
         
         
@@ -697,7 +717,7 @@
                             <!-- Assessment CompletedColumn -->
                             <ng-container matColumnDef="addassessmentcompleted">
                                 <mat-header-cell *matHeaderCellDef>
-                                    <mat-button-toggle-group formControlName="action">
+                                    <mat-button-toggle-group formControlName="assessmentcompleted">
                                         <mat-button-toggle value="true">Yes</mat-button-toggle>
                                         <mat-button-toggle value="false">No</mat-button-toggle>
                                     </mat-button-toggle-group>
@@ -727,7 +747,7 @@
                                         <ng-container
                                             *ngIf="(AsthmaPatientForWorkbookForm.get('treatment').touched || AsthmaPatientForWorkbookForm.get('treatment').dirty) && AsthmaPatientForWorkbookForm.get('treatment').errors">
                                             <mat-error *ngIf="AsthmaPatientForWorkbookForm.get('treatment').errors.required">
-                                                Please select a provider
+                                                Please select a treatment
                                             </mat-error>
         
         
@@ -739,7 +759,7 @@
                             <!-- Action Plan column -->
                             <ng-container matColumnDef="addactionplangiven">
                                 <mat-header-cell *matHeaderCellDef>
-                                    <mat-button-toggle-group formControlName="action">
+                                    <mat-button-toggle-group formControlName="actionplangiven">
                                         <mat-button-toggle value="true">Yes</mat-button-toggle>
                                         <mat-button-toggle value="false">No</mat-button-toggle>
                                     </mat-button-toggle-group>

@@ -209,7 +209,7 @@ namespace org.cchmc.pho.api.Controllers
             try
             {
                 int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
-                var result = await _workbooks.AddPatientToAsthmaWorkbooks(currentUserId, workbookspatientVM.FormResponseId, patientId, workbookspatientVM.ProviderId, workbookspatientVM.DateOfService, workbookspatientVM.Asthma_Score, workbookspatientVM.AssessmentCompleted, workbookspatientVM.Treatment,  workbookspatientVM.ActionPlanGiven);
+                var result = await _workbooks.AddPatientToAsthmaWorkbooks(currentUserId, workbookspatientVM.FormResponseId, patientId, workbookspatientVM.ProviderId, workbookspatientVM.DateOfService, workbookspatientVM.Asthma_Score, workbookspatientVM.AssessmentCompleted, workbookspatientVM.Treatment.TreatmentId,  workbookspatientVM.ActionPlanGiven);
                 return Ok(result);
             }
             catch (Exception ex)

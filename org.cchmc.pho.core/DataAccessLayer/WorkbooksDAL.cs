@@ -98,9 +98,16 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 DateOfService = (dr["DateOfService"] == DBNull.Value ? (DateTime?)null : (DateTime.Parse(dr["DateOfService"].ToString()))),
                                 Asthma_Score = (dr["AsthmaScore"] == DBNull.Value ? 0 : Convert.ToInt32(dr["AsthmaScore"].ToString())),
                                 ActionPlanGiven = (dr["ActionPlanGiven"] == DBNull.Value ? Convert.ToBoolean(0) : Convert.ToBoolean(dr["ActionPlanGiven"].ToString())),
-                                Treatment = (dr["Treatment"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Treatment"].ToString())),
                                 AssessmentCompleted = (dr["AssessmentCompleted"] == DBNull.Value ? Convert.ToBoolean(0) : Convert.ToBoolean(dr["AssessmentCompleted"].ToString())),
                             };
+
+                            if (dr["Treatment"] != DBNull.Value && int.TryParse(dr["Treatment"].ToString(), out int intTreatment))
+                            {
+                                AsthmaTreatmentPlan treatment = new AsthmaTreatmentPlan();
+                                treatment.TreatmentId = intTreatment;
+                                treatment.TreatmentLabel = dr["TreatmentLabel"].ToString();
+                                workbookspt.Treatment = treatment;
+                            }
 
                             workbooksasthmapatients.Add(workbookspt);
                         }
@@ -245,7 +252,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
-        public async Task<bool> AddPatientToAsthmaWorkbooks(int userId, int formResponseId, int patientID, int providerstaffID, DateTime? dos, int asthmascore, bool assessmentCompleted, int treatmentplanId, bool actionPlanGiven)
+        public async Task<bool> AddPatientToAsthmaWorkbooks(int userId, int formResponseId, int patientID, int providerstaffID, DateTime? dos, int asthmascore, bool assessmentCompleted, int treatment, bool actionPlanGiven)
         {            
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
@@ -258,7 +265,16 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@ProviderStaffID", SqlDbType.Int).Value = providerstaffID;
                     sqlCommand.Parameters.Add("@AsthmaScore", SqlDbType.Int).Value = asthmascore;
                     sqlCommand.Parameters.Add("@DateOfService", SqlDbType.DateTime).Value = dos;
-                    sqlCommand.Parameters.Add("@TreamentID", SqlDbType.Int).Value = treatmentplanId;
+
+                    if (treatment > 0)
+                    {
+                        sqlCommand.Parameters.Add("@TreamentID", SqlDbType.Int).Value = treatment;
+                    }
+                    else
+                    {
+                        sqlCommand.Parameters.Add("@TreamentID", SqlDbType.Int).Value = DBNull.Value;
+
+                    }
                     sqlCommand.Parameters.Add("@ActionPlan", SqlDbType.Int).Value = actionPlanGiven;
                     sqlCommand.Parameters.Add("@AssessmentCompleted", SqlDbType.Int).Value = assessmentCompleted;
 

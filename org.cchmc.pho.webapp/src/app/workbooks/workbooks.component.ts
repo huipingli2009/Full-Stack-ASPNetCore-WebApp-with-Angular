@@ -455,7 +455,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     })
   }
   RemoveAsthmaPatientFromWorkbook(removeWorkbookPatient: WorkbookAsthmaPatient) {
-    this.rest.RemovePatientFromWorkbook(this.removeDepressionWorkbookPatient).pipe(take(1)).subscribe(res => {
+    this.rest.RemoveAsthmaPatientFromWorkbook(this.removeAsthmaWorkbookPatient).pipe(take(1)).subscribe(res => {
       this.AsthmaPatientForWorkbookForm.reset();
       this.getAsthmaWorkbookPatients(this.selectedFormResponseID);
       this.snackBar.openSnackBar(`Patient ${this.deletingPatientName} removed from the workbook`, 'Close', 'success-snackbar')
@@ -643,20 +643,16 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   AddAsthmaPatientForWorkbook() {
     this.hasSelectedPatient = false;
     this.newAsthmaWorkbookPatient = new WorkbookAsthmaPatient();
+    this.newAsthmaWorkbookPatient = <WorkbookAsthmaPatient> this.AsthmaPatientForWorkbookForm.value;
+    this.newAsthmaWorkbookPatient.treatment = this.treatmentList.find(t => t.treatmentId == this.AsthmaPatientForWorkbookForm.get('treatment').value);
     this.newAsthmaWorkbookPatient.formResponseId = this.selectedFormResponseID;
-    this.newAsthmaWorkbookPatient.patientId = this.AsthmaPatientForWorkbookForm.get('patientId').value;
-    this.newAsthmaWorkbookPatient.phone = this.AsthmaPatientForWorkbookForm.get('phone').value;
-    this.newAsthmaWorkbookPatient.providerId = this.AsthmaPatientForWorkbookForm.get('providerStaffID').value;
-    this.newAsthmaWorkbookPatient.dateOfService = this.AsthmaPatientForWorkbookForm.get('dateOfService').value;
+    this.newAsthmaWorkbookPatient.dob = null;
+    this.newAsthmaWorkbookPatient.providerId =  JSON.parse(this.AsthmaPatientForWorkbookForm.get('providerStaffID').value);
+    this.newAsthmaWorkbookPatient.actionplangiven = JSON.parse(this.AsthmaPatientForWorkbookForm.get('actionplangiven').value);
+    this.newAsthmaWorkbookPatient.assessmentcompleted = JSON.parse(this.AsthmaPatientForWorkbookForm.get('assessmentcompleted').value);
+    this.newAsthmaWorkbookPatient.asthma_Score = JSON.parse(this.AsthmaPatientForWorkbookForm.get('asthma_Score').value);
+    this.logger.log(this.newAsthmaWorkbookPatient, "newworkbookasthmapatient"); 
 
-/*     console.log('action plan populate ', this.AsthmaPatientForWorkbookForm);
-    console.log('asthma score populate ', this.FormatAsthmaField(this.AsthmaPatientForWorkbookForm.get('asthma_Score'))); */
-    this.newAsthmaWorkbookPatient.actionplangiven = false;// this.AsthmaPatientForWorkbookForm.get('actionplangiven').value;
-    this.newAsthmaWorkbookPatient.assessmentcompleted = false; //this.AsthmaPatientForWorkbookForm.get('assessmentcompleted').value;
-
-    
-    this.newAsthmaWorkbookPatient.treatment = this.FormatAsthmaField(this.AsthmaPatientForWorkbookForm.get('treatment'));
-    this.newAsthmaWorkbookPatient.asthma_Score = this.FormatAsthmaField(this.AsthmaPatientForWorkbookForm.get('asthma_Score'));
     this.AddAsthmaPatientToWorkbook(this.newAsthmaWorkbookPatient, this.addingPatientName);
   }
 

@@ -34,7 +34,7 @@ export abstract class WorkbookPatient{
 export class WorkbookAsthmaPatient extends WorkbookPatient {    
     asthma_Score: number;
     assessmentcompleted: boolean;
-    treatment: number;
+    treatment: Treatment;
     actionplangiven: boolean;
 }
 

@@ -15,7 +15,7 @@ namespace org.cchmc.pho.core.DataModels
         public int ProviderId { get; set; }
         public DateTime? DateOfService { get; set; }
         public bool AssessmentCompleted { get; set; }
-        public int Treatment { get; set; }
+        public AsthmaTreatmentPlan Treatment { get; set; }
         public bool ActionPlanGiven { get; set; }
         public int Asthma_Score { get; set; }
     }  
