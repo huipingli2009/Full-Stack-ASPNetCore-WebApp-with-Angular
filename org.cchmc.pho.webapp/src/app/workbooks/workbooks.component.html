@@ -43,16 +43,8 @@
                 <div fxLayout="column" fxLayoutAlign="start center" class="main-date">
                     DEPRESSION WORKBOOK FOR  
                 </div>
-                <div fxLayout="column" fxLayoutAlign="start center">
-<!--                     <mat-form-field class="select-override main-date-select">
-                        <mat-select [formControl]="selectedFormResponseID"
-                            (selectionChange)="onReportingDateSelectionChange($event)">
-                            <mat-option *ngFor="let reportingdate of workbookReportingPeriods"
-                                [value]="reportingdate.formResponseID" aria-expanded="false">
-                                {{reportingdate.reportingMonth}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field> -->
+                <div fxLayout="column" fxLayoutAlign="start center" class="main-date">
+                    <strong>{{selectedReportingPeriod.reportingPeriod}}</strong>
                 </div>
             </div>
             <div class="side-border-container text-container">
@@ -486,17 +478,22 @@
                 </div>
             </div>
             <div class="side-border-container text-container">
-                <div fxLayout="row" class="italic" [innerHTML]=workbookPractice.line1>    
+                <div fxLayout="row" class="italic">   
+                    <div fxLayout="column" fxFlex="90">
+                        <span [innerHTML]=workbookPractice.line1></span> 
+                    </div>
                 </div>
                 <div fxLayout="row">
-                    <div fxLayout="column" fxFlex="90" [innerHTML]=workbookPractice.line2>
+                    <div fxLayout="column" fxFlex="90" >
+                        <span [innerHTML]=workbookPractice.line2></span>
                     </div>  
                 </div>
                 <div fxLayout="row">    
-                    <div fxLayout="column" fxFlex="90" [innerHTML]=workbookPractice.line3>
+                    <div fxLayout="column" fxFlex="90" >
+                        <span [innerHTML]=workbookPractice.line3></span>
                     </div>
                     <div fxLayout="column" fxLayoutAlign="end end" fxFlex>
-                        <a href='workbookPractice.jobAidURL' target="_blank">Job Aid</a>
+                        <a href='{{workbookPractice?.jobAidURL}}' target="_blank">Job Aid</a>
                     </div>
                 </div>
             </div>
@@ -566,7 +563,7 @@
                         <ng-container matColumnDef="assessmentcompleted">
                             <mat-header-cell *matHeaderCellDef mat-sort-header> ASSESSMENT COMPLETED </mat-header-cell>
                             <mat-cell *matCellDef="let element">
-                                <ng-container *ngIf="element.assessmentcompleted; else actionElse">
+                                <ng-container *ngIf="element.assessmentCompleted; else actionElse">
                                     Yes
                                 </ng-container>
                                 <ng-template #actionElse>
@@ -585,7 +582,7 @@
                         <ng-container matColumnDef="actionplangiven">
                             <mat-header-cell *matHeaderCellDef mat-sort-header> ACTION PLAN GIVEN </mat-header-cell>
                             <mat-cell *matCellDef="let element">
-                                <ng-container *ngIf="element.actionplangiven; else actionElse">
+                                <ng-container *ngIf="element.actionPlanGiven; else actionElse">
                                     Yes
                                 </ng-container>
                                 <ng-template #actionElse>

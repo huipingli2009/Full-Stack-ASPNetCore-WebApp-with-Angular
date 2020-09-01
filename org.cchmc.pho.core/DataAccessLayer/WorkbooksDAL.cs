@@ -217,9 +217,17 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 FormId = (dr["FormID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FormID"].ToString())),
                                 QuestionId = (dr["QuestionID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["QuestionID"].ToString())),
                                 PracticeId = (dr["PracticeID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PracticeID"].ToString())),
-                                FormResponseId = (dr["FormResponseID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FormResponseID"].ToString())),
-                                ReportingPeriod = dr["ReportingPeriod"].ToString()
+                                FormResponseId = (dr["FormResponseID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FormResponseID"].ToString()))
                             };
+
+                            if (DateTime.TryParse(dr["ReportingPeriod"].ToString(), out DateTime reportingDate))
+                            {
+                                workbookslookup.ReportingPeriod = reportingDate.ToShortDateString();
+                            }
+                            else
+                            {
+                                workbookslookup.ReportingPeriod = dr["ReportingPeriod"].ToString();
+                            }
 
                             workbookslookups.Add(workbookslookup);
                         }

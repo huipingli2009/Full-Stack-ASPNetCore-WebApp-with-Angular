@@ -47,6 +47,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   reportingPeriods: string; */
   selectedFormResponseID: number;
   selectedWorkbookFormId: number;
+  selectedReportingPeriod: WorkbookReportingPeriod;
   workbookSelector= new FormControl('');
   reportingPeriodSelector = new FormControl('');
 
@@ -121,10 +122,10 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     action: ['false'],
     dob: [''],
     phone: [''],
-    asthma_Score: [''],
-    assessmentcompleted: [''],
-    treatment: [''],
-    actionplangiven: ['']
+    asthma_Score: [0],
+    assessmentcompleted: [0],
+    treatment: [10],
+    actionplangiven: [0]
   });
 
   FollowupForm = this.fb.group(
@@ -204,18 +205,24 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
       });
       console.log('getWorkbookReportingMonths: ', this.workbookReportingPeriods);
       //set initial default      
-      this.reportingPeriodSelector.setValue(this.workbookReportingPeriods[0].formResponseId);
-      this.selectedFormResponseID = this.workbookReportingPeriods[0].formResponseId;
+      this.setSelectedReportingPeriod(this.workbookReportingPeriods[0]);
       //call toggler
       this.toggleWorkbookDisplay();
     });
 
   } 
+
+  setSelectedReportingPeriod(selectedReportingPeriod: WorkbookReportingPeriod){
+    this.reportingPeriodSelector.setValue(selectedReportingPeriod.formResponseId);
+    this.selectedFormResponseID = selectedReportingPeriod.formResponseId;
+    this.selectedReportingPeriod = selectedReportingPeriod;
+  }
  
   //on change of the reporting data for workbook
   onReportingDateSelectionChange(event) : void {
     this.selectedFormResponseID = event.value;
     console.log('onReportingDateSelectionChange event: ', this.selectedFormResponseID);
+    this.selectedReportingPeriod = this.workbookReportingPeriods.find(p => p.formResponseId = this.selectedFormResponseID)
     this.toggleWorkbookDisplay();
   }
 
@@ -620,10 +627,11 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.rest.getWorkbookAsthmaPatients(formResponseid).pipe(take(1)).subscribe((data) => {
       this.workbookAsthmaPatient = data;
       console.log('getAsthmaWorkbookPatients data:', data);
-      this.logger.log(this.workbookAsthmaPatient, 'Workbook Patient')
+      this.logger.log(this.workbookAsthmaPatient, 'Workbook Patient');
       this.patientTableHeader = this.workbookAsthmaPatient.length;
       this.dataSourceAsthmaWorkbook = new MatTableDataSource(this.workbookAsthmaPatient);
       this.dataSourceAsthmaWorkbook.data = this.workbookAsthmaPatient;
+      this.logger.log(this.workbookAsthmaPatient, 'Workbook Patient');
       this.AsthmaPatientForWorkbookForm.get('action').setValue('false');
       this.totalAsthmaPatients = this.workbookAsthmaPatient.length;
     })
@@ -647,10 +655,10 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.newAsthmaWorkbookPatient.treatment = this.treatmentList.find(t => t.treatmentId == this.AsthmaPatientForWorkbookForm.get('treatment').value);
     this.newAsthmaWorkbookPatient.formResponseId = this.selectedFormResponseID;
     this.newAsthmaWorkbookPatient.dob = null;
-    this.newAsthmaWorkbookPatient.providerId =  JSON.parse(this.AsthmaPatientForWorkbookForm.get('providerStaffID').value);
-    this.newAsthmaWorkbookPatient.actionplangiven = JSON.parse(this.AsthmaPatientForWorkbookForm.get('actionplangiven').value);
-    this.newAsthmaWorkbookPatient.assessmentcompleted = JSON.parse(this.AsthmaPatientForWorkbookForm.get('assessmentcompleted').value);
-    this.newAsthmaWorkbookPatient.asthma_Score = JSON.parse(this.AsthmaPatientForWorkbookForm.get('asthma_Score').value);
+    this.newAsthmaWorkbookPatient.providerId = (!this.AsthmaPatientForWorkbookForm.get('providerStaffID').value ? 0 : JSON.parse(this.AsthmaPatientForWorkbookForm.get('providerStaffID').value));
+    this.newAsthmaWorkbookPatient.actionplangiven = (!this.AsthmaPatientForWorkbookForm.get('actionplangiven').value ? false : JSON.parse(this.AsthmaPatientForWorkbookForm.get('actionplangiven').value)); 
+    this.newAsthmaWorkbookPatient.assessmentcompleted = (!this.AsthmaPatientForWorkbookForm.get('assessmentcompleted').value ? false : JSON.parse(this.AsthmaPatientForWorkbookForm.get('assessmentcompleted').value)); 
+    this.newAsthmaWorkbookPatient.asthma_Score = (!this.AsthmaPatientForWorkbookForm.get('asthma_Score').value ? 0 : JSON.parse(this.AsthmaPatientForWorkbookForm.get('asthma_Score').value));
     this.logger.log(this.newAsthmaWorkbookPatient, "newworkbookasthmapatient"); 
 
     this.AddAsthmaPatientToWorkbook(this.newAsthmaWorkbookPatient, this.addingPatientName);
@@ -672,6 +680,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.rest.AddPatientToAsthmaWorkbook(newWorkbookPatient).pipe(take(1)).subscribe(res => {
       this.AsthmaPatientForWorkbookForm.reset();
       this.getAsthmaWorkbookPatients(this.selectedFormResponseID);
+      this.getAsthmaWorkbookPractice(this.selectedFormResponseID);
       this.searchPatient.reset();
       (res) ? this.snackBar.openSnackBar(`Patient ${patientName} added to the workbook`, 'Close', 'success-snackbar') : this.snackBar.openSnackBar(`Patient ${patientName} already exists on the current workbook`, 'Close', 'warn-snackbar')
     })
