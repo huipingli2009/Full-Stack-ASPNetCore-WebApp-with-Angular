@@ -38,7 +38,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   //generic
   private unsubscribe$ = new Subject();
   displayedDepressionColumns: string[] = ['action', 'patient', 'dob', 'phone', 'provider', 'dateOfService', 'phQ9_Score', 'improvement', 'actionFollowUp', 'followUp'];
-  displayedAsthmaColumns: string[] = ['action', 'patient', 'dob', 'phone', 'provider', 'dateOfService', 'assessmentcompleted', 'treatment', 'actionplangiven', 'asthma_Score'];
+  displayedAsthmaColumns: string[] = ['action', 'patient', 'dob', 'phone', 'provider', 'dateOfService', 'assessmentcompleted', 'treatment', 'asthma_Score', 'followUp'];
   workbookFormValueEnum = WorkbookFormValueEnum;
   workbookReportingPeriods: WorkbookReportingPeriod[];
   workbooksFormList: WorkbookForm[];
@@ -124,8 +124,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     phone: [''],
     asthma_Score: [0],
     assessmentcompleted: [0],
-    treatment: [10],
-    actionplangiven: [0]
+    treatment: [10]
   });
 
   FollowupForm = this.fb.group(
@@ -295,7 +294,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
       this.AsthmaPatientForWorkbookForm.get('patientId').setValue(event.value.patientId);
       this.AsthmaPatientForWorkbookForm.get('treatment').setValue(event.value.treatment);
       this.AsthmaPatientForWorkbookForm.get('assessmentcompleted').setValue(event.value.assessmentcompleted);
-      this.AsthmaPatientForWorkbookForm.get('actionplangiven').setValue(event.value.actionplangiven);
+      //this.AsthmaPatientForWorkbookForm.get('actionplangiven').setValue(event.value.actionplangiven);
       this.AsthmaPatientForWorkbookForm.get('asthma_Score').setValue(event.value.asthma_Score);
     }
     this.addingPatientName = `${event.value.firstName} ${event.value.lastName}`;
@@ -465,7 +464,8 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.rest.RemoveAsthmaPatientFromWorkbook(this.removeAsthmaWorkbookPatient).pipe(take(1)).subscribe(res => {
       this.AsthmaPatientForWorkbookForm.reset();
       this.getAsthmaWorkbookPatients(this.selectedFormResponseID);
-      this.snackBar.openSnackBar(`Patient ${this.deletingPatientName} removed from the workbook`, 'Close', 'success-snackbar')
+      this.getAsthmaWorkbookPractice(this.selectedFormResponseID);
+      this.snackBar.openSnackBar(`Patient ${this.deletingPatientName} removed from the workbook`, 'Close', 'success-snackbar');
     })
   }
 
@@ -656,7 +656,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.newAsthmaWorkbookPatient.formResponseId = this.selectedFormResponseID;
     this.newAsthmaWorkbookPatient.dob = null;
     this.newAsthmaWorkbookPatient.providerId = (!this.AsthmaPatientForWorkbookForm.get('providerStaffID').value ? 0 : JSON.parse(this.AsthmaPatientForWorkbookForm.get('providerStaffID').value));
-    this.newAsthmaWorkbookPatient.actionplangiven = (!this.AsthmaPatientForWorkbookForm.get('actionplangiven').value ? false : JSON.parse(this.AsthmaPatientForWorkbookForm.get('actionplangiven').value)); 
+    //this.newAsthmaWorkbookPatient.actionplangiven = (!this.AsthmaPatientForWorkbookForm.get('actionplangiven').value ? false : JSON.parse(this.AsthmaPatientForWorkbookForm.get('actionplangiven').value)); 
     this.newAsthmaWorkbookPatient.assessmentcompleted = (!this.AsthmaPatientForWorkbookForm.get('assessmentcompleted').value ? false : JSON.parse(this.AsthmaPatientForWorkbookForm.get('assessmentcompleted').value)); 
     this.newAsthmaWorkbookPatient.asthma_Score = (!this.AsthmaPatientForWorkbookForm.get('asthma_Score').value ? 0 : JSON.parse(this.AsthmaPatientForWorkbookForm.get('asthma_Score').value));
     this.logger.log(this.newAsthmaWorkbookPatient, "newworkbookasthmapatient"); 
@@ -709,6 +709,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   getAsthmaWorkbookPractice(formResponseid: number) {
     this.rest.getAsthmaWorkbookPractice(formResponseid).pipe(take(1)).subscribe((data) => {
       this.workbookPractice = data;
+      this.logger.log(data, "getAsthmaWorkbookPractice");
     })
   }
 
