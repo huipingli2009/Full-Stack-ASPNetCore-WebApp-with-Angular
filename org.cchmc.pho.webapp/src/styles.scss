@@ -1990,6 +1990,35 @@ button.toast-close-button {
 #workbooks {
   border-radius: 7px 7px 0 0;
 
+  #header{
+    .header-filter {
+      margin-right: 36px;
+    }
+    .header-filter:last-of-type {
+      margin-right: 0;
+    }
+    .mat-form-field-appearance-legacy .mat-form-field-label,
+    .mat-select-value-text {
+      font-size: 15px;
+      line-height: 20px;
+      color: white;
+      font-weight: Bold;
+      letter-spacing: normal;
+    }
+    .mat-select-arrow {
+      color: white;
+    }
+    .mat-form-field-underline {
+      background-color: #ddecea;
+      bottom: 0;
+    }
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
+  }
+
+
+
   .top-date-container {
     padding: 22px 28px 0;
     background-color: #f2fafa;
