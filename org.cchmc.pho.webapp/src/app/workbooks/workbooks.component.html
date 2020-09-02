@@ -27,7 +27,7 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div fxLayout="column" fxLayoutAlign="end end" class="search-input" fxFlex fxFill>
+            <div fxLayout="column" fxLayoutAlign="end end" class="search-input" style="color: var(--primary-darker-color) !important" fxFlex fxFill>
                 <mat-form-field>
                     <input matInput [formControl]="PatientNameFilter" autocomplete="off"
                         placeholder="Search Patient: Name">
@@ -173,7 +173,7 @@
                 </div>
             </div>
             <div *ngIf="dataSourceDepressionWorkbook">
-                <div fxLayout="row" class="workbooks-header">
+                <div fxLayout="row" class="workbooks-header" style="border-radius: 0px !important;">
                     <div fxLayout="column" class="header-filter">
                         {{patientTableHeader}} Patients with PHQ-9 scores of 10 or Above Follow Up Patients
                     </div>
@@ -485,7 +485,12 @@
                 </div>
                 <div fxLayout="row">
                     <div fxLayout="column" fxFlex="90" >
-                        <span [innerHTML]=workbookPractice.line2></span>
+                        <span [innerHTML]='workbookPractice.line2'></span>
+                    </div>  
+                </div>
+                <div fxLayout="row">
+                    <div fxLayout="column" fxFlex="90" >
+                        <span><br></span>
                     </div>  
                 </div>
                 <div fxLayout="row">    
@@ -495,11 +500,16 @@
                     <div fxLayout="column" fxLayoutAlign="end end" fxFlex>
                         <a href='{{workbookPractice?.jobAidURL}}' target="_blank">Job Aid</a>
                     </div>
+                </div>                
+                <div fxLayout="row">
+                    <div fxLayout="column" fxFlex="90" >
+                        <span><br></span>
+                    </div>  
                 </div>
             </div>
 
             <div *ngIf="dataSourceAsthmaWorkbook">
-                <div fxLayout="row" class="workbooks-header">
+                <div fxLayout="row" id="totalPatients" class="workbooks-header" style="border-radius: 0px !important;">
                     <div fxLayout="column" class="header-filter">
                         {{totalAsthmaPatients}} Patients had an asthma assessment
                     </div>
@@ -719,7 +729,7 @@
                                         <mat-button-toggle value="false">No</mat-button-toggle>
                                     </mat-button-toggle-group>
                                     <ng-container
-                                        *ngIf="(AsthmaPatientForWorkbookForm.get('assessmentcompleted').touched || AsthmaPatientForWorkbookForm.get('action').dirty) && AsthmaPatientForWorkbookForm.get('action').errors">
+                                        *ngIf="(AsthmaPatientForWorkbookForm.get('assessmentcompleted').touched || AsthmaPatientForWorkbookForm.get('assessmentcompleted').dirty) && AsthmaPatientForWorkbookForm.get('assessmentcompleted').errors">
                                         <mat-error *ngIf="AsthmaPatientForWorkbookForm.get('assessmentcompleted').errors.required">
                                             Please select a assessment option
                                         </mat-error>

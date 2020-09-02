@@ -1988,41 +1988,12 @@ button.toast-close-button {
 
 /* Workbooks ==================================================================================*/
 #workbooks {
-  border-radius: 7px 7px 0 0;
-
-  #header{
-    .header-filter {
-      margin-right: 36px;
-    }
-    .header-filter:last-of-type {
-      margin-right: 0;
-    }
-    .mat-form-field-appearance-legacy .mat-form-field-label,
-    .mat-select-value-text {
-      font-size: 15px;
-      line-height: 20px;
-      color: white;
-      font-weight: Bold;
-      letter-spacing: normal;
-    }
-    .mat-select-arrow {
-      color: white;
-    }
-    .mat-form-field-underline {
-      background-color: #ddecea;
-      bottom: 0;
-    }
-    .mat-form-field-wrapper {
-      padding-bottom: 0;
-    }
-  }
-
+  //border-radius: 7px 7px 0 0;
 
 
   .top-date-container {
     padding: 22px 28px 0;
     background-color: #f2fafa;
-    border-radius: 7px 7px 0 0;
     border: solid var(--primary-color);
     border-width: 1.5px 1.5px 0 1.5px;
   }
@@ -2030,6 +2001,7 @@ button.toast-close-button {
   .side-border-container {
     border: solid var(--primary-color);
     border-width: 0 1.5px 0 1.5px;
+    border-radius: 0px !important;
   }
 
   .text-container {
@@ -2173,7 +2145,7 @@ button.toast-close-button {
       border-radius: 18px;
       border-bottom: none;
       padding-left: 23px;
-      border: var(--primary-darker-color) solid 2px;
+      //border: var(--primary-darker-color) solid 2px;
     }
     .mat-form-field-appearance-legacy .mat-form-field-label {
       color: var(--primary-darker-color);
@@ -2379,6 +2351,38 @@ button.toast-close-button {
   font-weight: Bold;
   text-align: left;
   letter-spacing: normal;
+}
+
+.strong{
+display: block !important;
+}
+
+#header{
+  .header-filter {
+    margin-right: 36px;
+  }
+  .header-filter:last-of-type {
+    margin-right: 0;
+  }
+  .mat-form-field-appearance-legacy .mat-form-field-label,
+  .mat-select-value-text {
+    font-size: 15px;
+    line-height: 20px;
+    color: white;
+    font-weight: Bold;
+    letter-spacing: normal;
+  }
+  .mat-select-arrow {
+    color: white;
+  }
+  .mat-form-field-underline {
+    background-color: #ddecea;
+    bottom: 0;
+  }
+  .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+  
 }
 .patient-workbook-table {
   .mat-form-field-wrapper {
