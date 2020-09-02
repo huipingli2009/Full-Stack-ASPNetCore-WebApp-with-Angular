@@ -123,7 +123,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     dob: [''],
     phone: [''],
     asthma_Score: [0],
-    assessmentcompleted: [0],
+    assessmentcompleted: ['false'],
     treatment: [10]
   });
 
@@ -152,7 +152,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.selectedWorkbookFormId = this.workbookFormValueEnum.depression;
     
-    console.log('setting selected workbookFormId in ngOnInit', this.selectedWorkbookFormId.toString());
+    this.logger.log('setting selected workbookFormId in ngOnInit', this.selectedWorkbookFormId.toString());
     this.getWorkbooksForms();
     this.getWorkbookReportingPeriods();
     this.onDepressionProviderValueChanges();
@@ -172,37 +172,36 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
       data.forEach((item) => {
         this.workbooksFormList.push(item);
       });
-      console.log('getWorkbooksForms data: ', this.workbooksFormList);       
+      this.logger.log('getWorkbooksForms data: ', this.workbooksFormList);       
       //set initial value - depression
       const toSelect = this.workbooksFormList.find(c => c.id == this.workbookFormValueEnum.depression);
       this.logger.log(toSelect);
       this.workbookSelector.setValue(toSelect.id);
       this.selectedWorkbookFormId = toSelect.id;
-      console.log('setting selected workbookFormId in getWorkbooksForms: ', this.selectedWorkbookFormId); 
+      this.logger.log('setting selected workbookFormId in getWorkbooksForms: ', this.selectedWorkbookFormId); 
     });  
 
   } 
   
   //on change of the workbook selection
   onWorkbookSelectionChange(event) : void {
-    console.log('onWorkbookSelectionChange event: ', event.value);
+    this.logger.log('onWorkbookSelectionChange event: ', event.value);
     //set flags
     this.selectedWorkbookFormId = event.value;
-    console.log('event.value in getWorkbooksForms: ', event.value.toString()); 
-    console.log('setting selected workbookFormId in getWorkbooksForms: ', this.selectedWorkbookFormId); 
+    this.logger.log('setting selected workbookFormId in getWorkbooksForms: ', this.selectedWorkbookFormId); 
     //repopulate dates
     this.getWorkbookReportingPeriods();
   }
   
   //for getting the reporting months for a workbook
   getWorkbookReportingPeriods() { 
-    console.log('getWorkbookReportingPeriods selectedWorkbookFormId: ', this.selectedWorkbookFormId); 
+    this.logger.log('getWorkbookReportingPeriods selectedWorkbookFormId: ', this.selectedWorkbookFormId); 
     this.workbookReportingPeriods = [];
     this.rest.getWorkbookReportingPeriods(this.selectedWorkbookFormId.toString(), "").pipe(take(1)).subscribe((data) => {
       data.forEach((item) => {
         this.workbookReportingPeriods.push(item);
       });
-      console.log('getWorkbookReportingMonths: ', this.workbookReportingPeriods);
+      this.logger.log('getWorkbookReportingMonths: ', this.workbookReportingPeriods);
       //set initial default      
       this.setSelectedReportingPeriod(this.workbookReportingPeriods[0]);
       //call toggler
@@ -220,7 +219,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   //on change of the reporting data for workbook
   onReportingDateSelectionChange(event) : void {
     this.selectedFormResponseID = event.value;
-    console.log('onReportingDateSelectionChange event: ', this.selectedFormResponseID);
+    this.logger.log('onReportingDateSelectionChange event: ', this.selectedFormResponseID);
     this.selectedReportingPeriod = this.workbookReportingPeriods.find(p => p.formResponseId = this.selectedFormResponseID)
     this.toggleWorkbookDisplay();
   }
@@ -279,16 +278,12 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   
   onSelectedPatient(event: any): void {
     this.hasSelectedPatient = true;
-    console.log('onselectedpatient which form?: ', this.selectedWorkbookFormId); 
-    console.log('onselectedpatient what enum?: ', this.selectedWorkbookFormId); 
     if (this.selectedWorkbookFormId == WorkbookFormValueEnum.depression){
-      console.log('populating new depression patient');
       this.DepressionPatientForWorkbookForm.get('dob').setValue(this.datePipe.transform(event.value.dob, 'MM/dd/yyyy'));
       this.DepressionPatientForWorkbookForm.get('phone').setValue(event.value.phone);
       this.DepressionPatientForWorkbookForm.get('patientId').setValue(event.value.patientId);
     } 
     if (this.selectedWorkbookFormId == WorkbookFormValueEnum.asthma){      
-      console.log('populating new asthma patient', event.value);
       this.AsthmaPatientForWorkbookForm.get('dob').setValue(this.datePipe.transform(event.value.dob, 'MM/dd/yyyy'));
       this.AsthmaPatientForWorkbookForm.get('phone').setValue(event.value.phone);
       this.AsthmaPatientForWorkbookForm.get('patientId').setValue(event.value.patientId);
@@ -626,7 +621,6 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   getAsthmaWorkbookPatients(formResponseid: number) {
     this.rest.getWorkbookAsthmaPatients(formResponseid).pipe(take(1)).subscribe((data) => {
       this.workbookAsthmaPatient = data;
-      console.log('getAsthmaWorkbookPatients data:', data);
       this.logger.log(this.workbookAsthmaPatient, 'Workbook Patient');
       this.patientTableHeader = this.workbookAsthmaPatient.length;
       this.dataSourceAsthmaWorkbook = new MatTableDataSource(this.workbookAsthmaPatient);
