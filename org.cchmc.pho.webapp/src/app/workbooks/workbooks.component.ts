@@ -525,21 +525,25 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     if (val==1)
     {
       this.selectedWorkbookForm = 'ASTHMA WORKBOOK';  
+      this.getWorkbookReportingMonths();
     }
     else
     {
       this.selectedWorkbookForm = 'DEPRESSION WORKBOOK'; 
+      this.getWorkbookReportingMonths();
     }    
     console.log();   
   }
 
-  // getWorkbookReportingMonths() {
+  //  //for getting the reporting months for a workbook
+  //  getWorkbookReportingMonths() {
   //   this.rest.getWorkbookReportingMonths().pipe(take(1)).subscribe((data) => {
   //     this.workbookReportingMonths = data;
   //     this.workbookReportingMonths.forEach((element, index, reportData) => {
   //       this.workbookReportingMonths[index].reportingMonth = this.datePipe.transform(this.workbookReportingMonths[index].reportingMonth, 'MMM-yyyy');
-  //       //this.selectedFormResponseID.setValue(this.workbookReportingMonths[0].formResponseID);
+  //       this.selectedFormResponseID.setValue(this.workbookReportingMonths[0].formResponseID);
   //       this.defaultWorkbooksReportingMonth =  this.workbookReportingMonths[0].reportingMonth;
+  //       this.selectedWorkbookForm = 'DEPRESSION WORKBOOK ';
   //       this.onReportingDateSelectionChange();
   //     });
   //   })

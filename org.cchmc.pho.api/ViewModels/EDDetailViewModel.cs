@@ -4,6 +4,7 @@ namespace org.cchmc.pho.api.ViewModels
 {
     public class EDDetailViewModel
     {
+        public int PatientId { get; set; }
         public string PatientMRN { get; set; }
         public string PatientEncounterID { get; set; }
         public string Facility { get; set; }

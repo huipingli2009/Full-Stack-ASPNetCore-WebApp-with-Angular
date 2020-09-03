@@ -4,6 +4,7 @@ namespace org.cchmc.pho.core.DataModels
 {
     public class EDDetail
     {
+        public int PatientId { get; set; }
         public string PatientMRN { get; set; }
         public string PatientEncounterID { get; set; }
         public string Facility { get; set; }

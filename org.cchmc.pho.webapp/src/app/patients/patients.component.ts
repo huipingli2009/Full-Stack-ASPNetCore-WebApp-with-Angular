@@ -46,6 +46,10 @@ export class PatientsComponent implements OnInit {
   @Input()
   checked: Boolean;
 
+  //For binding selected patient(Id) from ED report to patient page
+  @Input() passedPatientId: number;
+  @Input() directPatientFromEDChart: () => void;
+
   expandedElement: any;
   value = '';
 
@@ -192,6 +196,9 @@ export class PatientsComponent implements OnInit {
     this.getGenderList();
     this.getPmca();
     this.getStates();
+    
+    //added for link ED Chart patient to patient page
+    this.getPatientDetails(this.passedPatientId)
   }
 
   ngAfterViewInit() {
@@ -660,5 +667,15 @@ export class PatientsComponent implements OnInit {
 
     this.drilldownService.open(drilldownOptions);
   }
+
+  onClicked(value:number){  
+    if(value > 0){      
+      this.patientNameSearch = value.toString();
+      this.loadPatientsWithFilters();   
+    }  
+    else{  
+     console.log('An error occurs');
+    }  
+  } 
 }
 

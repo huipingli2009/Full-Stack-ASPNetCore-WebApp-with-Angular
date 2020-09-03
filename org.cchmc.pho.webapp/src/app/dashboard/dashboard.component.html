@@ -165,7 +165,8 @@
                     <td>{{item.patientMRN}}</td>
                     <td>{{item.patientEncounterID}}</td>
                     <td>{{item.facility}}</td>
-                    <td>{{item.patientName}}</td>
+                    <td style="display:none;"><app-patients [passedPatientId]= "item.patientId"></app-patients></td>                 
+                    <td><input class="button button-primary" type="button" (click)="onClick(item.patientId)" value="item.patientName" />{{item.patientName}}</td>
                     <td>{{item.patientDOB | date:'shortDate'}}</td>
                     <td>{{item.pcp}}</td>
                     <td>{{item.hospitalAdmission | date:'short'}}</td>

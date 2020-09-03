@@ -133,6 +133,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                         details = (from DataRow dr in dataTable.Rows
                                    select new EDDetail()
                                    {
+                                       PatientId = Convert.ToInt32(dr["PatientID"]),
                                        PatientMRN = dr["PAT_MRN_ID"].ToString(),
                                        PatientEncounterID = dr["PAT_ENC_CSN_ID"].ToString(),
                                        Facility = dr["Facility"].ToString(),
