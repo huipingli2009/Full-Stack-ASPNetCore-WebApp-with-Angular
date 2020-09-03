@@ -198,9 +198,8 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.logger.log('getWorkbookReportingPeriods selectedWorkbookFormId: ', this.selectedWorkbookFormId); 
     this.workbookReportingPeriods = [];
     this.rest.getWorkbookReportingPeriods(this.selectedWorkbookFormId.toString(), "").pipe(take(1)).subscribe((data) => {
-      data.forEach((item) => {
-        this.workbookReportingPeriods.push(item);
-      });
+      this.workbookReportingPeriods = data;      
+      this.logger.log('getWorkbookReportingMonths: ', data);
       this.logger.log('getWorkbookReportingMonths: ', this.workbookReportingPeriods);
       //set initial default      
       this.setSelectedReportingPeriod(this.workbookReportingPeriods[0]);
@@ -219,8 +218,9 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   //on change of the reporting data for workbook
   onReportingDateSelectionChange(event) : void {
     this.selectedFormResponseID = event.value;
+    this.logger.log('onReportingDateSelectionChange event: ', event.value);
     this.logger.log('onReportingDateSelectionChange event: ', this.selectedFormResponseID);
-    this.selectedReportingPeriod = this.workbookReportingPeriods.find(p => p.formResponseId = this.selectedFormResponseID)
+    this.selectedReportingPeriod = this.workbookReportingPeriods.find(p => p.formResponseId == this.selectedFormResponseID);
     this.toggleWorkbookDisplay();
   }
 
