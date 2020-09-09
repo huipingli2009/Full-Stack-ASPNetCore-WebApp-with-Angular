@@ -528,7 +528,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     }
     UpdateFollowUpQuestionResponses(followUp: Followup) {
       this.rest.UpdateFollowUpQuestionResponses(followUp).pipe(take(1)).subscribe((data) => {
-        this.getDepressionWorkbookPatients(this.formResponseId);
+        this.getDepressionWorkbookPatients(this.selectedFormResponseID);
         this.CloseDialog();
   
       })
@@ -550,15 +550,15 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     let staffId = this.editProvidersForm.controls.pcpName.value.id;
 
     this.logger.log(staffId, 'StaffId');
-    this.logger.log(this.formResponseId, 'FormResponseId');
+    this.logger.log(this.selectedFormResponseID, 'FormResponseId');
     if (type === 1) {
       
-    this.rest.AddProviderToWorkbook(staffId, this.formResponseId).subscribe(data => {    
+    this.rest.AddProviderToWorkbook(staffId, this.selectedFormResponseID).subscribe(data => {    
       if (data){
         this.logger.log(staffId, 'New Workbook Provider');
         this.cancelEditProvidersDialog();
         this.editProvidersForm.reset();
-        this.getDepressionWorkbookProviders(this.formResponseId);
+        this.getDepressionWorkbookProviders(this.selectedFormResponseID);
         this.snackBar.openSnackBar(`Provider added to the workbook`, 'Close', 'success-snackbar');
       } 
       else 
@@ -575,12 +575,12 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
       });  
     }
     if (type === 2) {
-      this.rest.RemoveProviderFromWorkbook(staffId, this.formResponseId).subscribe(data => {    
+      this.rest.RemoveProviderFromWorkbook(staffId, this.selectedFormResponseID).subscribe(data => {    
         if (data){
           this.logger.log(staffId, 'Removed Workbook Provider');
           this.cancelEditProvidersDialog();
           this.editProvidersForm.reset();
-          this.getDepressionWorkbookProviders(this.formResponseId);
+          this.getDepressionWorkbookProviders(this.selectedFormResponseID);
           this.snackBar.openSnackBar(`Provider removed from the workbook`, 'Close', 'success-snackbar');
         } 
         else 
