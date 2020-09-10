@@ -12,6 +12,7 @@ import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.compo
 import { FileDetails, FileAction, ResourceType, Tag, Initiative, FileType, ContentPlacement } from './models/files';
 import { Location } from '@angular/common';
 import { MetricDrillthruTable } from './models/drillthru';
+// import { constants } from 'http2';
 
 
 
@@ -29,6 +30,9 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class RestService {
+
+  //handle selected patient from ED Chart
+  selectedPatientId: number | null;
 
   constructor(private http: HttpClient, private logger: NGXLogger, private snackBar: MatSnackBarComponent) { }
   private extractData(res: Response) {
@@ -193,16 +197,15 @@ export class RestService {
 
   /*Gets base PatientDetails based on Patient Id */
   getPatientDetails(id: number,potentiallyActive: boolean): Observable<any> {
-    
-    //const potentiallyActive=false;
+     //const potentiallyActive=false;
 
-    const endpoint = `${API_URL}/api/Patients/${id}/${potentiallyActive}`;
-    return this.http.get<any>(endpoint).pipe(
-      map((data: PatientDetails[]) => {
-        return data;
-      })
-    );
-  }
+     const endpoint = `${API_URL}/api/Patients/${id}/${potentiallyActive}`;
+     return this.http.get<any>(endpoint).pipe(
+       map((data: PatientDetails[]) => {
+         return data;
+       })
+     );
+   }
 
   /* Adds a new patient */
   addPatient(patient: NewPatient): Observable<any> {

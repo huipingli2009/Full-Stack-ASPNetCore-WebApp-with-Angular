@@ -44,11 +44,12 @@ export class PatientsComponent implements OnInit {
   @ViewChild('patientAdminConfirmDialog') patientAdminConfirmDialog: TemplateRef<any>;
 
   @Input()
-  checked: Boolean;
+  checked: Boolean; 
 
-  //For binding selected patient(Id) from ED report to patient page
-  @Input() passedPatientId: number;
-  @Input() directPatientFromEDChart: () => void;
+  //if patient is selected from ED chart
+  get selPatientId(): number | null {
+    return this.rest.selectedPatientId;
+  } 
 
   expandedElement: any;
   value = '';
@@ -195,10 +196,7 @@ export class PatientsComponent implements OnInit {
     this.getInsuranceList();
     this.getGenderList();
     this.getPmca();
-    this.getStates();
-    
-    //added for link ED Chart patient to patient page
-    this.getPatientDetails(this.passedPatientId)
+    this.getStates();   
   }
 
   ngAfterViewInit() {
@@ -245,6 +243,11 @@ export class PatientsComponent implements OnInit {
       this.popSlices = this.filterType;      
     }
 
+    //if patient is coming from ED chart
+    if (this.selPatientId > 0){
+      this.patientNameSearch = this.selPatientId.toString();
+    }
+
     this.potentialPatient = +(this.popSlices) == potentialPtStaus.PopSlice ? true:false;
     
     this.dataSource.loadPatients(this.defaultSortedRow, this.defaultSortDirection, 0, 20, this.chronic, this.watchFlag, this.conditions,
@@ -253,6 +256,9 @@ export class PatientsComponent implements OnInit {
       this.providers, this.popSlices, this.patientNameSearch).subscribe((data) => {
         this.patientRecords = data[0].totalRecords;
       });
+
+      //reset selectedPatientId
+      this.rest.selectedPatientId = null;
   }
 
   loadPatientsPage() {

@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
@@ -11,13 +11,7 @@ import { EdChart, EdChartDetails, Population, Quicklinks, Spotlight } from '../m
 import { RestService } from '../rest.service';
 import { DrilldownService } from '../drilldown/drilldown.service';
 import { AuthenticationService } from '../services/authentication.service';
-import { BehaviorSubject } from 'rxjs';
 import { FilterService } from '../services/filter.service';
-
-//import for link ED patient to Patients
-import { Patients, PatientDetails} from '../models/patients';
-import { HttpHeaders, HttpClient} from '@angular/common/http';
-import { map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-dashboard',
@@ -53,24 +47,13 @@ export class DashboardComponent implements OnInit {
   edBarChart: any;
   selectedBar: string;
   isLoggedIn$: boolean;
-  patientsMax: number;
-
-  //link patient from ED chart to patient page
-  patient: Patients;
-  //selectedPatientId: number;
-  patientDetails: PatientDetails;
-  potentiallyActive: boolean = false;
-
-  //Patient id to be passed to Patient page
-  // @Output() passedPatientId: number;
-  // @Output() clicked = new EventEmitter<number>(); 
+  patientsMax: number;  
 
   drilldownOptions = {
     measureId: '42'
   };
-  // passedPatientId: number;
 
-  constructor(private http: HttpClient, public rest: RestService, private route: ActivatedRoute, private router: Router,
+  constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
               public fb: FormBuilder, public dialog: MatDialog, private datePipe: DatePipe, private logger: NGXLogger,
               private authenticationService: AuthenticationService, private filterService: FilterService,
               private drilldownService: DrilldownService) {
@@ -263,29 +246,10 @@ export class DashboardComponent implements OnInit {
     window.open(`${this.defaultUrl}/edreport`, '_blank');
   }
 
-  onClick(id: number){ 
-    let m: string = '';
-    // this.selectedPatientId = id; 
-    // this.clicked.emit(id);  
-  }
+  onSelectedPatient(id: number){ 
+    this.rest.selectedPatientId = id;
+    this.router.navigate(['/patients']);
 
-  // directToPatientPage(id: number){
-   
-    // this.passedPatientId = id;
-    //access environment.apiUrl
-    // const API_URL = environment.apiURL;
-
-    // const httpOptions = {
-    //   headers: new HttpHeaders({
-    //     'Content-Type': 'application/json'
-    //   })
-    // };
-
-    // const endpoint = `${API_URL}/api/Patients/${id}/${false}`;
-    // return this.http.get<any>(endpoint).pipe(
-    //   map((data: PatientDetails[]) => {
-    //     return data;
-    //   })
-    // );    
-  // }
+    this.dialog.closeAll();    
+   }  
 }
