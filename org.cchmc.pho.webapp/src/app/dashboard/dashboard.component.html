@@ -71,9 +71,6 @@
                 <mat-tab label="MY POPULATION">
 
                     <table mat-table [dataSource]="dataSourceOne" class="mat-elevation-z8">
-
-
-
                         <ng-container matColumnDef="dashboardLabel">
                             <th mat-header-cell *matHeaderCellDef> Measure </th>
                             <td mat-cell *matCellDef="let element" matTooltip="{{element.measureDesc}}">
@@ -81,18 +78,15 @@
                             </td>
                         </ng-container>
 
-
                         <ng-container matColumnDef="practiceTotal">
                             <th mat-header-cell *matHeaderCellDef> Practice </th>
                             <td mat-cell *matCellDef="let element" (click)="toFilteredPatients(element)"> {{element.practiceTotal}} </td>
                         </ng-container>
 
-
                         <ng-container matColumnDef="networkTotal">
                             <th mat-header-cell *matHeaderCellDef> Network </th>
                             <td mat-cell *matCellDef="let element"> {{element.networkTotal}} </td>
                         </ng-container>
-
 
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
@@ -101,9 +95,6 @@
                 </mat-tab>
                 <mat-tab label="MY OUTCOMES">
                     <table mat-table [dataSource]="dataSourceTwo" class="mat-elevation-z8">
-
-
-
                         <ng-container matColumnDef="dashboardLabelQi">
                             <th mat-header-cell *matHeaderCellDef> Measure </th>
                             <td mat-cell *matCellDef="let element" matTooltip="{{element.measureDesc}}">
@@ -111,18 +102,15 @@
                             </td>
                         </ng-container>
 
-
                         <ng-container matColumnDef="practiceTotalQi">
                             <th mat-header-cell *matHeaderCellDef> Practice </th>
                             <td mat-cell *matCellDef="let element"> {{element.practiceTotal}} </td>
                         </ng-container>
 
-
                         <ng-container matColumnDef="networkTotalQi">
                             <th mat-header-cell *matHeaderCellDef> Network </th>
                             <td mat-cell *matCellDef="let element"> {{element.networkTotal}} </td>
                         </ng-container>
-
 
                         <tr mat-header-row *matHeaderRowDef="displayedColumnsQi"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumnsQi;"></tr>
@@ -164,8 +152,8 @@
                     <td>{{i+1}}</td>
                     <td>{{item.patientMRN}}</td>
                     <td>{{item.patientEncounterID}}</td>
-                    <td>{{item.facility}}</td>
-                    <td>{{item.patientName}}</td>
+                    <td>{{item.facility}}</td>                   
+                    <td class="underline" (click)="onSelectedPatient(item.patientId)">{{item.patientName}}</td>
                     <td>{{item.patientDOB | date:'shortDate'}}</td>
                     <td>{{item.pcp}}</td>
                     <td>{{item.hospitalAdmission | date:'short'}}</td>

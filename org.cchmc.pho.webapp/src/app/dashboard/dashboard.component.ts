@@ -11,7 +11,6 @@ import { EdChart, EdChartDetails, Population, Quicklinks, Spotlight } from '../m
 import { RestService } from '../rest.service';
 import { DrilldownService } from '../drilldown/drilldown.service';
 import { AuthenticationService } from '../services/authentication.service';
-import { BehaviorSubject } from 'rxjs';
 import { FilterService } from '../services/filter.service';
 
 @Component({
@@ -48,7 +47,7 @@ export class DashboardComponent implements OnInit {
   edBarChart: any;
   selectedBar: string;
   isLoggedIn$: boolean;
-  patientsMax: number;
+  patientsMax: number;  
 
   drilldownOptions = {
     measureId: '42'
@@ -247,6 +246,10 @@ export class DashboardComponent implements OnInit {
     window.open(`${this.defaultUrl}/edreport`, '_blank');
   }
 
+  onSelectedPatient(id: number){ 
+    this.rest.selectedPatientId = id;
+    this.router.navigate(['/patients']);
 
-
+    this.dialog.closeAll();    
+   }  
 }

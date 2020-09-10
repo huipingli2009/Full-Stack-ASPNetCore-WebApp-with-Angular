@@ -31,7 +31,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
-                    sqlConnection.Open();
+                    await sqlConnection.OpenAsync();
                     // Define the data adapter and fill the dataset
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
@@ -62,7 +62,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 using (SqlCommand sqlCommand = new SqlCommand("spGetPopulationMetricList", sqlConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                    sqlConnection.Open();
+                    await sqlConnection.OpenAsync();
                     // Define the data adapter and fill the dataset
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
@@ -91,7 +91,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
 
-                    sqlConnection.Open();
+                    await sqlConnection.OpenAsync();
                     // Define the data adapter and fill the dataset
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
@@ -125,7 +125,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
                     sqlCommand.Parameters.Add("@AdmitDate", SqlDbType.Date).Value = admitDate;
 
-                    sqlConnection.Open();
+                    await sqlConnection.OpenAsync();
                     // Define the data adapter and fill the dataset
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
@@ -133,6 +133,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                         details = (from DataRow dr in dataTable.Rows
                                    select new EDDetail()
                                    {
+                                       PatientId = Convert.ToInt32(dr["PatientID"]),
                                        PatientMRN = dr["PAT_MRN_ID"].ToString(),
                                        PatientEncounterID = dr["PAT_ENC_CSN_ID"].ToString(),
                                        Facility = dr["Facility"].ToString(),
@@ -172,7 +173,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@MeasureID", SqlDbType.Int).Value = measureId;
                     sqlCommand.Parameters.Add("@FilterID", SqlDbType.Int).Value = filterId;
 
-                    sqlConnection.Open();
+                    await sqlConnection.OpenAsync();
                     // Define the data adapter and fill the dataset
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
