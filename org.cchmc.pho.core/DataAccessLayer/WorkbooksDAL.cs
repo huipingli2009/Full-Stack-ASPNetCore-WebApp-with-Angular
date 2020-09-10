@@ -96,11 +96,18 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 Phone = dr["Phone"].ToString(),
                                 Provider = dr["Provider"].ToString(),
                                 DateOfService = (dr["DateOfService"] == DBNull.Value ? (DateTime?)null : (DateTime.Parse(dr["DateOfService"].ToString()))),
-                                Asthma_Score = dr["AsthmaScore"].ToString(),
-                                ActionPlanGiven = dr["ActionPlanGiven"] != DBNull.Value && Convert.ToBoolean(dr["ActionPlanGiven"]),                               
-                                Treatment = dr["Treatment"].ToString(),                               
-                                AssessmentCompleted = (dr["AssessmentCompleted"] != DBNull.Value && Convert.ToBoolean(dr["AssessmentCompleted"]))
+                                Asthma_Score = (dr["AsthmaScore"] == DBNull.Value ? 0 : Convert.ToInt32(dr["AsthmaScore"].ToString())),
+                                ActionPlanGiven = (dr["ActionPlanGiven"] == DBNull.Value ? Convert.ToBoolean(0) : Convert.ToBoolean(dr["ActionPlanGiven"].ToString())),
+                                AssessmentCompleted = (dr["AssessmentCompleted"] == DBNull.Value ? Convert.ToBoolean(0) : Convert.ToBoolean(dr["AssessmentCompleted"].ToString())),
                             };
+
+                            if (dr["Treatment"] != DBNull.Value && int.TryParse(dr["Treatment"].ToString(), out int intTreatment))
+                            {
+                                AsthmaTreatmentPlan treatment = new AsthmaTreatmentPlan();
+                                treatment.TreatmentId = intTreatment;
+                                treatment.TreatmentLabel = dr["TreatmentLabel"].ToString();
+                                workbookspt.Treatment = treatment;
+                            }
 
                             workbooksasthmapatients.Add(workbookspt);
                         }
@@ -185,16 +192,17 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
-        public async Task<List<WorkbooksLookup>> GetWorkbooksLookups(int userId, string nameSearch)
+        public async Task<List<WorkbooksLookup>> GetWorkbooksLookups(int formId, int userId, string nameSearch)
         {
             DataTable dataTable = new DataTable();
             List<WorkbooksLookup> workbookslookups = new List<WorkbooksLookup>();
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
-                using (SqlCommand sqlCommand = new SqlCommand("spGetPHQ9Workbooks", sqlConnection))
+                using (SqlCommand sqlCommand = new SqlCommand("spGetWorkbookPeriods", sqlConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
 
+                    sqlCommand.Parameters.Add("@FormId", SqlDbType.Int).Value = formId;
                     sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
                     sqlCommand.Parameters.Add("@NameSearch", SqlDbType.VarChar).Value = nameSearch;
 
@@ -206,9 +214,20 @@ namespace org.cchmc.pho.core.DataAccessLayer
                         {
                             var workbookslookup = new WorkbooksLookup()
                             {
-                                FormResponseID = (dr["FormResponseID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FormResponseID"].ToString())),
-                                ReportingMonth = (dr["ReportingMonth"] == DBNull.Value ? (DateTime?)null : (DateTime.Parse(dr["ReportingMonth"].ToString())))
+                                FormId = (dr["FormID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FormID"].ToString())),
+                                QuestionId = (dr["QuestionID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["QuestionID"].ToString())),
+                                PracticeId = (dr["PracticeID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PracticeID"].ToString())),
+                                FormResponseId = (dr["FormResponseID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FormResponseID"].ToString()))
                             };
+
+                            if (DateTime.TryParse(dr["ReportingPeriod"].ToString(), out DateTime reportingDate))
+                            {
+                                workbookslookup.ReportingPeriod = reportingDate.ToShortDateString();
+                            }
+                            else
+                            {
+                                workbookslookup.ReportingPeriod = dr["ReportingPeriod"].ToString();
+                            }
 
                             workbookslookups.Add(workbookslookup);
                         }
@@ -241,7 +260,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
-        public async Task<bool> AddPatientToAsthmaWorkbooks(int userId, int formResponseId, int patientID, int providerstaffID, DateTime? dos, int asthmascore, bool assessmentCompleted, int treatmentplanId, bool actionPlanGiven)
+        public async Task<bool> AddPatientToAsthmaWorkbooks(int userId, int formResponseId, int patientID, int providerstaffID, DateTime? dos, int asthmascore, bool assessmentCompleted, int treatment, bool actionPlanGiven)
         {            
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
@@ -254,7 +273,16 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@ProviderStaffID", SqlDbType.Int).Value = providerstaffID;
                     sqlCommand.Parameters.Add("@AsthmaScore", SqlDbType.Int).Value = asthmascore;
                     sqlCommand.Parameters.Add("@DateOfService", SqlDbType.DateTime).Value = dos;
-                    sqlCommand.Parameters.Add("@TreamentID", SqlDbType.Int).Value = treatmentplanId;
+
+                    if (treatment > 0)
+                    {
+                        sqlCommand.Parameters.Add("@TreamentID", SqlDbType.Int).Value = treatment;
+                    }
+                    else
+                    {
+                        sqlCommand.Parameters.Add("@TreamentID", SqlDbType.Int).Value = DBNull.Value;
+
+                    }
                     sqlCommand.Parameters.Add("@ActionPlan", SqlDbType.Int).Value = actionPlanGiven;
                     sqlCommand.Parameters.Add("@AssessmentCompleted", SqlDbType.Int).Value = assessmentCompleted;
 

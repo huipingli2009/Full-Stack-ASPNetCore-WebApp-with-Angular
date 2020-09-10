@@ -270,7 +270,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             _workbooksController = new WorkbooksController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockWorkbooksDal.Object);
 
             // execute
-            var result = await _workbooksController.AddPatientToDepressionWorkbooks(patientId, selectedPatient) as ObjectResult;
+            var result = await _workbooksController.AddPatientToDepressionWorkbooks(patientId.ToString(), selectedPatient) as ObjectResult;
             var resultvalue = result.Value;
 
             // assert
