@@ -35,8 +35,8 @@ export class DashboardComponent implements OnInit {
   monthlySpotlightLink: string;
   monthlySpotlightImageUrl: string;
   edChartTitle: string;
-  defaultUrl = environment.apiURL;
-  popData: any[] = [];
+  defaultUrl = environment.apiURL; 
+   popData: any[] = [];
   qiData: any[] = [];
   dataSourceOne: MatTableDataSource<any>;
   displayedColumns: string[] = ['dashboardLabel', 'practiceTotal', 'networkTotal'];
@@ -56,9 +56,6 @@ export class DashboardComponent implements OnInit {
 
   //download to excel
   fileName= 'EDChart_Data.xlsx'; 
-  reportDisplay: boolean = true;
-  downloadReport: boolean = false;
-
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
               public fb: FormBuilder, public dialog: MatDialog, private datePipe: DatePipe, private logger: NGXLogger,
@@ -250,7 +247,7 @@ export class DashboardComponent implements OnInit {
   }
 
   OpenReport() {
-    window.open(`${this.defaultUrl}/edreport`, '_blank');
+    window.open(`${this.defaultUrl}/edreport`, '_blank');       
   }
 
   onSelectedPatient(id: number, name: string){  
