@@ -12,6 +12,7 @@ import { RestService } from '../rest.service';
 import { DrilldownService } from '../drilldown/drilldown.service';
 import { AuthenticationService } from '../services/authentication.service';
 import { FilterService } from '../services/filter.service';
+import * as XLSX from 'xlsx'; 
 
 @Component({
   selector: 'app-dashboard',
@@ -52,6 +53,12 @@ export class DashboardComponent implements OnInit {
   drilldownOptions = {
     measureId: '42'
   };
+
+  //download to excel
+  fileName= 'EDChart_Data.xlsx'; 
+  reportDisplay: boolean = true;
+  downloadReport: boolean = false;
+
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
               public fb: FormBuilder, public dialog: MatDialog, private datePipe: DatePipe, private logger: NGXLogger,
@@ -246,10 +253,26 @@ export class DashboardComponent implements OnInit {
     window.open(`${this.defaultUrl}/edreport`, '_blank');
   }
 
-  onSelectedPatient(id: number){ 
+  onSelectedPatient(id: number, name: string){  
+
     this.rest.selectedPatientId = id;
+    this.rest.selectedPatientName = name;
     this.router.navigate(['/patients']);
 
     this.dialog.closeAll();    
    }  
+
+   public downloadToExcel() {
+    /* table id is passed over here */   
+    let element = document.getElementById('EDChartData'); 
+    const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    /* save to file */
+    XLSX.writeFile(wb, this.fileName);  
+    
+  }
 }

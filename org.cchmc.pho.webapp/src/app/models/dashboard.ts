@@ -53,7 +53,7 @@ export class EdChart {
     edVisits: number;
 }
 export class EdChartDetails {
-    patientId: Int16Array;
+    patientId: number;
     patientMRN: string;
     patientEncounterID: string;
     facility: string;

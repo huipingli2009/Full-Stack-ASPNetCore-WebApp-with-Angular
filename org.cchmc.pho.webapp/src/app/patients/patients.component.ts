@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DatePipe } from '@angular/common';
-import { Component, HostListener, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -41,7 +41,7 @@ export class PatientsComponent implements OnInit {
   @ViewChild('adminDialog') adminDialog: TemplateRef<any>;
   @ViewChild('adminConfirmDialog') adminConfirmDialog: TemplateRef<any>;
   @ViewChild('patientAdminDialog') patientAdminDialog: TemplateRef<any>;
-  @ViewChild('patientAdminConfirmDialog') patientAdminConfirmDialog: TemplateRef<any>;
+  @ViewChild('patientAdminConfirmDialog') patientAdminConfirmDialog: TemplateRef<any>; 
 
   @Input()
   checked: Boolean; 
@@ -50,6 +50,10 @@ export class PatientsComponent implements OnInit {
   get selPatientId(): number | null {
     return this.rest.selectedPatientId;
   } 
+
+  get selPatientName(): string | null {
+    return this.rest.selectedPatientName;
+  }
 
   expandedElement: any;
   value = '';
@@ -87,6 +91,7 @@ export class PatientsComponent implements OnInit {
   defaultSortDirection = 'asc';
   patientNameControl = new FormControl();
   patientNameSearch: string;
+  patientNameSearchValue: string;
   filteredOptions: Observable<string[]>;
   isActive: boolean;
   potentialPatient: boolean = false;
@@ -199,7 +204,7 @@ export class PatientsComponent implements OnInit {
     this.getStates();   
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit() {  
     this.paginator.page
       .pipe(
         tap(() => this.loadPatientsPage())
@@ -246,19 +251,21 @@ export class PatientsComponent implements OnInit {
     //if patient is coming from ED chart
     if (this.selPatientId > 0){
       this.patientNameSearch = this.selPatientId.toString();
+      this.patientNameSearchValue = this.selPatientName;
     }
 
     this.potentialPatient = +(this.popSlices) == potentialPtStaus.PopSlice ? true:false;
-    
+   
     this.dataSource.loadPatients(this.defaultSortedRow, this.defaultSortDirection, 0, 20, this.chronic, this.watchFlag, this.conditions,
       this.providers, this.popSlices, this.patientNameSearch);
     this.rest.findPatients(this.defaultSortedRow, this.defaultSortDirection, 0, 20, this.chronic, this.watchFlag, this.conditions,
-      this.providers, this.popSlices, this.patientNameSearch).subscribe((data) => {
+      this.providers, this.popSlices, this.patientNameSearch).subscribe((data) => {       
         this.patientRecords = data[0].totalRecords;
       });
 
       //reset selectedPatientId
       this.rest.selectedPatientId = null;
+      this.rest.selectedPatientName = null;
   }
 
   loadPatientsPage() {
