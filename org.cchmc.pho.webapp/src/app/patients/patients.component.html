@@ -33,7 +33,7 @@
     </div>
     <div fxLayout="column" class="header-filter search-input" fxFlex fxLayoutAlign="center end">
       <mat-form-field>
-        <input type="text" matInput placeholder="Search Patient Name" (change)="searchPatientsByName($event)">
+        <input type="text" matInput placeholder="Search Patient Name" [(ngModel)]="patientNameSearchValue" (change)="searchPatientsByName($event)">
         <button mat-button matSuffix mat-icon-button aria-label="Search">
           <mat-icon>search</mat-icon>
         </button>

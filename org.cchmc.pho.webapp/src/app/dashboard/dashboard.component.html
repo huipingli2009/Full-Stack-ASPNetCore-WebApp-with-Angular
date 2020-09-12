@@ -124,7 +124,7 @@
 <ng-template #callEDDialog>
     <div mat-dialog-content class="mat-typography">
         <h3>ED Details: </h3>
-        <table class="ed-table">
+        <table id="EDChartData" class="ed-table">
             <thead>
                 <tr>
                     <th>Index</th>
@@ -153,7 +153,7 @@
                     <td>{{item.patientMRN}}</td>
                     <td>{{item.patientEncounterID}}</td>
                     <td>{{item.facility}}</td>                   
-                    <td class="underline" (click)="onSelectedPatient(item.patientId)">{{item.patientName}}</td>
+                    <td class="underline" (click)="onSelectedPatient(item.patientId, item.patientName)">{{item.patientName}}</td>
                     <td>{{item.patientDOB | date:'shortDate'}}</td>
                     <td>{{item.pcp}}</td>
                     <td>{{item.hospitalAdmission | date:'short'}}</td>
@@ -172,8 +172,8 @@
     </div>
     <div mat-dialog-actions align="end">
         <button mat-button mat-dialog-close>Close</button>
+        <button mat-button (click)="downloadToExcel()">Download</button>
         <button mat-button (click)="OpenReport()">View Report</button>
-
     </div>
 
 </ng-template>

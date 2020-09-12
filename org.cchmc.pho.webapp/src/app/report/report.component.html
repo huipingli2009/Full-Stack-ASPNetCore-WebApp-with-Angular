@@ -3,7 +3,7 @@
         Daily ED Report
     </div>
     <div>
-        <table class="ed-report">
+        <table id="EDChartData" class="ed-report">             
             <thead>
                 <tr>
                     <th>Row Number</th>
@@ -46,7 +46,10 @@
                     <td>{{item.edVisitCount}}</td>
                     <td>{{item.ucVisitCount}}</td>
                     <td>{{item.admitCount}}</td>
-                </tr>
+                </tr>                
         </table>
-    </div>
+        <div mat-dialog-actions class="ed-report-download" align="end">      
+            <button mat-button (click)="downloadToExcel()">Download</button>
+        </div>
+    </div>   
 </div>
