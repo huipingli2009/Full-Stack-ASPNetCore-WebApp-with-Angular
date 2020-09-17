@@ -41,17 +41,17 @@ export class PatientsComponent implements OnInit {
   @ViewChild('adminDialog') adminDialog: TemplateRef<any>;
   @ViewChild('adminConfirmDialog') adminConfirmDialog: TemplateRef<any>;
   @ViewChild('patientAdminDialog') patientAdminDialog: TemplateRef<any>;
-  @ViewChild('patientAdminConfirmDialog') patientAdminConfirmDialog: TemplateRef<any>; 
+  @ViewChild('patientAdminConfirmDialog') patientAdminConfirmDialog: TemplateRef<any>;
 
   @Input()
-  checked: Boolean; 
+  checked: Boolean;
 
   //if patient is selected from ED chart
-  get selPatientId(): number | null {
+  get selectedPatientId(): number | null {
     return this.rest.selectedPatientId;
-  } 
+  }
 
-  get selPatientName(): string | null {
+  get selectedPatientName(): string | null {
     return this.rest.selectedPatientName;
   }
 
@@ -99,14 +99,14 @@ export class PatientsComponent implements OnInit {
   insuranceList: any[] = [];
   genderList: Gender;
   pmcaList: any[] = [];
-  stateList: any[] = [];  
+  stateList: any[] = [];
   newPatientValues: NewPatient;
   addPatientForm: FormGroup;
   patientAdminForm: FormGroup;
   patientAdminForm_DuplicatePatients: FormGroup;
   isLoading = true;
-  isAddingPatientAndContinue : boolean;
-  isAddingPatientAndExit : boolean;
+  isAddingPatientAndContinue: boolean;
+  isAddingPatientAndExit: boolean;
   isUserAdmin: boolean;
   acceptPatient: boolean;
   declinePatient: boolean;
@@ -114,7 +114,7 @@ export class PatientsComponent implements OnInit {
   mergeWithOldPatient: boolean;
   possibleDuplicatePatient: boolean;
   patientAdminActionEnum = patientAdminActionTypeEnum;
-  addNewPatientProcessEnum = addPatientProcessEnum;  
+  addNewPatientProcessEnum = addPatientProcessEnum;
 
   // Selected Values
   selectedGender;
@@ -128,14 +128,15 @@ export class PatientsComponent implements OnInit {
   isDisabled: boolean;
   isFormValid = this.form;
   subscription: Subscription;
+  patientSubscription: Subscription;
   isFilteringPatients: boolean;
   filterType: string;
 
   isExpansionDetailRow = (i: number, row: object) => row.hasOwnProperty('detailRow');
 
   constructor(public rest: RestService, private route: ActivatedRoute, public fb: FormBuilder, private userService: UserService,
-              private logger: NGXLogger, public dialog: MatDialog, private datePipe: DatePipe, private snackBar: MatSnackBarComponent,
-              private filterService: FilterService, private drilldownService: DrilldownService) {
+    private logger: NGXLogger, public dialog: MatDialog, private datePipe: DatePipe, private snackBar: MatSnackBarComponent,
+    private filterService: FilterService, private drilldownService: DrilldownService) {
     this.form = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -152,7 +153,7 @@ export class PatientsComponent implements OnInit {
       addressLine1: [''],
       city: [''],
       state: [''],
-      zip: ['']     
+      zip: ['']
     });
 
     this.addPatientForm = this.fb.group({
@@ -163,7 +164,7 @@ export class PatientsComponent implements OnInit {
       pcpName: ['', Validators.required]
     });
 
-    this.patientAdminForm = this.fb.group({      
+    this.patientAdminForm = this.fb.group({
       firstName: '',
       lastName: '',
       patientDOB: '',
@@ -182,15 +183,15 @@ export class PatientsComponent implements OnInit {
       potentialDuplicateGender: '',
       potentialDuplicatePatientMRNId: '',
       potentialDuplicatePCPName: ''
-    });   
-   
-    this.subscription = this.filterService.getIsFilteringPatients().subscribe (res => {
+    });
+
+    this.subscription = this.filterService.getIsFilteringPatients().subscribe(res => {
       this.isFilteringPatients = res;
     });
     this.subscription = this.filterService.getFilterType().subscribe(res => this.filterType = res);
   }
 
-  ngOnInit() {    
+  ngOnInit() {
     this.patients = this.route.snapshot.data.patients;
     this.dataSource = new PatientsDataSource(this.rest);
     this.getCurrentUser();
@@ -201,10 +202,10 @@ export class PatientsComponent implements OnInit {
     this.getInsuranceList();
     this.getGenderList();
     this.getPmca();
-    this.getStates();   
+    this.getStates();
   }
 
-  ngAfterViewInit() {  
+  ngAfterViewInit() {
     this.paginator.page
       .pipe(
         tap(() => this.loadPatientsPage())
@@ -214,6 +215,7 @@ export class PatientsComponent implements OnInit {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.patientSubscription.unsubscribe();
     this.filterService.updateIsFilteringPatients(false);
     this.filterService.updateFilterType('');
   }
@@ -245,27 +247,38 @@ export class PatientsComponent implements OnInit {
 
   loadPatientsWithFilters() {
     if (this.isFilteringPatients === true) { // This is to handle if the user is coming from Dashboard or not.
-      this.popSlices = this.filterType;      
+      this.popSlices = this.filterType;
     }
 
     //if patient is coming from ED chart
-    if (this.selPatientId > 0){
-      this.patientNameSearch = this.selPatientId.toString();
-      this.patientNameSearchValue = this.selPatientName;
+    if (this.selectedPatientId) {
+      this.patientNameSearch = this.selectedPatientId.toString();
+      this.patientNameSearchValue = this.selectedPatientName;
+      this.getPatientDetails(this.selectedPatientId);
+      this.patientSubscription = this.dataSource.PatientData$.subscribe((patients) => {
+        this.logger.log("Patients", patients);
+        this.logger.log("selected Patient ID", this.selectedPatientId);
+        //assign the expanded element only when there is one record in the table
+        if (patients.length == 1) {
+          this.expandedElement = patients[0];
+        }
+        this.logger.log("selected Patient", this.expandedElement);
+      });
     }
 
-    this.potentialPatient = +(this.popSlices) == potentialPtStaus.PopSlice ? true:false;
-   
+    this.potentialPatient = +(this.popSlices) == potentialPtStaus.PopSlice ? true : false;
+
     this.dataSource.loadPatients(this.defaultSortedRow, this.defaultSortDirection, 0, 20, this.chronic, this.watchFlag, this.conditions,
       this.providers, this.popSlices, this.patientNameSearch);
     this.rest.findPatients(this.defaultSortedRow, this.defaultSortDirection, 0, 20, this.chronic, this.watchFlag, this.conditions,
-      this.providers, this.popSlices, this.patientNameSearch).subscribe((data) => {       
+      this.providers, this.popSlices, this.patientNameSearch).subscribe((data) => {
         this.patientRecords = data[0].totalRecords;
       });
 
-      //reset selectedPatientId
-      this.rest.selectedPatientId = null;
-      this.rest.selectedPatientName = null;
+
+    //reset selectedPatientId
+    this.rest.selectedPatientId = null;
+    this.rest.selectedPatientName = null;
   }
 
   loadPatientsPage() {
@@ -355,7 +368,7 @@ export class PatientsComponent implements OnInit {
     this.dialog.open(this.adminDialog, { disableClose: true });
     this.isActive = true;
   }
-  
+
   // Type = submission type. 1 = Save And Continue / 2 = Save And Exit
   openAdminConfirmDialog(type) {
     if (type === addPatientProcessEnum.SaveAndContinue) {
@@ -369,7 +382,7 @@ export class PatientsComponent implements OnInit {
     this.dialog.open(this.adminConfirmDialog, { disableClose: true });
   }
 
-  
+
   submitPatientAddUpdate() {
     this.newPatientValues = this.addPatientForm.value;
     this.newPatientValues.firstName = this.addPatientForm.controls.firstName.value;
@@ -381,47 +394,44 @@ export class PatientsComponent implements OnInit {
 
     this.logger.log('inSubmitPatientAddUpdate', this.newPatientValues);
     this.logger.log(this.addPatientForm.value);
-    this.rest.addPatient(this.newPatientValues).subscribe(data => {    
-      if (data){
+    this.rest.addPatient(this.newPatientValues).subscribe(data => {
+      if (data) {
         let id = <number>data;
         this.logger.log(id, 'New Patient');
         if (this.isAddingPatientAndContinue) {
           this.patientNameSearch = id.toString();
-          this.loadPatientsWithFilters();          
+          this.loadPatientsWithFilters();
         }
         if (this.isAddingPatientAndExit) {
-          this.loadPatientsPage(); 
+          this.loadPatientsPage();
         }
         this.snackBar.openSnackBar(`Patient ${this.newPatientValues.firstName + ' ' + this.newPatientValues.lastName} added to the registry`, 'Close', 'success-snackbar');
-      } 
-      else 
-      {
+      }
+      else {
         this.logger.log('patient exists');
       }
-      this.cancelAdminDialog(); 
+      this.cancelAdminDialog();
 
 
     },
-    error => {
-      if (error){
-        console.info('AddPatient Error: ', error);
-        if (error === 'patient already exists'){
-          this.logger.log('patient exists: ' + this.newPatientValues.firstName + ' ' + this.newPatientValues.lastName);
-          this.snackBar.openSnackBar(`Patient ${this.newPatientValues.firstName + ' ' + this.newPatientValues.lastName} already exists in registry`, 'Close', 'warn-snackbar');
+      error => {
+        if (error) {
+          console.info('AddPatient Error: ', error);
+          if (error === 'patient already exists') {
+            this.logger.log('patient exists: ' + this.newPatientValues.firstName + ' ' + this.newPatientValues.lastName);
+            this.snackBar.openSnackBar(`Patient ${this.newPatientValues.firstName + ' ' + this.newPatientValues.lastName} already exists in registry`, 'Close', 'warn-snackbar');
+          }
+          else {
+            this.logger.log('unexpected error caught: ' + error)
+            this.snackBar.openSnackBar(`Oops! Something has gone wrong. Please contact your PHO Administrator`, 'Close', 'warn-snackbar');
+          }
+
         }
-        else
-        {
-          this.logger.log('unexpected error caught: ' + error)
+        else {
           this.snackBar.openSnackBar(`Oops! Something has gone wrong. Please contact your PHO Administrator`, 'Close', 'warn-snackbar');
         }
 
-      }
-      else
-      {
-        this.snackBar.openSnackBar(`Oops! Something has gone wrong. Please contact your PHO Administrator`, 'Close', 'warn-snackbar');
-      }    
-     
-    });  
+      });
 
   }
 
@@ -433,15 +443,15 @@ export class PatientsComponent implements OnInit {
     this.dialog.closeAll();
   }
 
-  cancelPatientAdminDialog() {    
-    this.dialog.closeAll();   
-    
+  cancelPatientAdminDialog() {
+    this.dialog.closeAll();
+
   }
 
 
   /*Patient Details */
   getPatientDetails(id) {
-    this.rest.getPatientDetails(id,this.potentialPatient).subscribe((data) => {
+    this.rest.getPatientDetails(id, this.potentialPatient).subscribe((data) => {
       this.currentPatientId = data.id;
       this.isLoading = false;
       this.patientDetails = data;
@@ -451,12 +461,12 @@ export class PatientsComponent implements OnInit {
       this.pcpFullName = `${data.pcpFirstName} ${data.pcpLastName}`;
       this.providerPmcaScoreControl = data.providerPMCAScore;
       this.providerNotesControl = data.providerNotes;
-      this.selectedGender = data.gender;                
+      this.selectedGender = data.gender;
 
       const selectedValues = {
         firstName: data.firstName,
         lastName: data.lastName,
-        dob: this.transformDob(data.patientDOB),       
+        dob: this.transformDob(data.patientDOB),
         email: data.email,
         activeStatus: data.activeStatus,
         gender: {
@@ -520,7 +530,7 @@ export class PatientsComponent implements OnInit {
   openPatientSaveDialog() {
     const { value, valid } = this.form;
     if (valid) {
-      this.dialog.open(this.callPatientSaveDialog, { disableClose: true });      
+      this.dialog.open(this.callPatientSaveDialog, { disableClose: true });
     }
   }
 
@@ -553,8 +563,8 @@ export class PatientsComponent implements OnInit {
     this.rest.savePatientDetails(this.currentPatientId, this.patientDetails).subscribe(data => {
       this.savedPatientData = data;
       this.patientNameSearch = '';
-      this.loadPatientsWithFilters(); 
-    });          
+      this.loadPatientsWithFilters();
+    });
   }
 
   /* Patient Details - Form Elements*/
@@ -583,14 +593,14 @@ export class PatientsComponent implements OnInit {
     const dialogRef = this.dialog.open(this.callPmcaDialog, { disableClose: true });
   }
 
-  openPatientAdminDialog(id:number) { 
-    
+  openPatientAdminDialog(id: number) {
+
     this.patientAdminForm.patchValue({
       firstName: this.patientDetails.firstName,
       lastName: this.patientDetails.lastName,
       patientDOB: this.transformDob(this.patientDetails.patientDOB),
       gender: this.patientDetails.gender,
-      genderId: this.patientDetails.genderId,     
+      genderId: this.patientDetails.genderId,
       pcpId: this.patientDetails.pcpId,
       pcpName: this.patientDetails.pcpFirstName + " " + this.patientDetails.pcpLastName
     });
@@ -604,12 +614,12 @@ export class PatientsComponent implements OnInit {
       potentialDuplicatePCPName: this.patientDetails.potentialDuplicatePCPFirstName + ' ' + this.patientDetails.potentialDuplicatePCPLastName,
       potentialDuplicateGender: this.patientDetails.potentialDuplicateGender,
       potentialDuplicatePatientMRNId: this.patientDetails.potentialDup_PAT_MRN_ID
-    });         
-      
-    this.possibleDuplicatePatient = +((this.patientDetails.potentialDuplicateFirstName) != '' && (this.patientDetails.potentialDuplicateLastName) != '') ? true:false;
-   
-    this.dialog.open(this.patientAdminDialog, { disableClose: true });     
-  } 
+    });
+
+    this.possibleDuplicatePatient = +((this.patientDetails.potentialDuplicateFirstName) != '' && (this.patientDetails.potentialDuplicateLastName) != '') ? true : false;
+
+    this.dialog.open(this.patientAdminDialog, { disableClose: true });
+  }
 
   openPatientAdminConfirmDialog(type) {
     if (type === patientAdminActionTypeEnum.Accept) {
@@ -631,47 +641,44 @@ export class PatientsComponent implements OnInit {
       this.mergeWithNewPatient = true;
       this.mergeWithOldPatient = false;
     }
-    
-    this.dialog.open(this.patientAdminConfirmDialog, { disableClose: true });      
+
+    this.dialog.open(this.patientAdminConfirmDialog, { disableClose: true });
   }
 
-  openPatientAdminAcceptDialog(){
+  openPatientAdminAcceptDialog() {
     this.dialog.closeAll();
   }
 
   submitPotentialPatientForm(choice: number) {
 
     const potentialPatientId: number = this.patientDetails.id;
-    let message = '';   
-   
-    if (choice == patientAdminActionTypeEnum.Accept)
-    {
-      this.logger.log('Potential Patient Added');  
-      message ='Accepted';
+    let message = '';
+
+    if (choice == patientAdminActionTypeEnum.Accept) {
+      this.logger.log('Potential Patient Added');
+      message = 'Accepted';
     }
 
-    if (choice == patientAdminActionTypeEnum.Decline)   
-    {
-      this.logger.log('Potential Patient Declined'); 
-      message ='Declined';
+    if (choice == patientAdminActionTypeEnum.Decline) {
+      this.logger.log('Potential Patient Declined');
+      message = 'Declined';
     }
 
-    if (choice == patientAdminActionTypeEnum.Update)   
-    {
-      this.logger.log('Updated existing patient with new patient');  
-      message ='Updated';   
-    }     
-    
-    this.rest.addPotentialPatient(potentialPatientId, choice).subscribe(data => {       
+    if (choice == patientAdminActionTypeEnum.Update) {
+      this.logger.log('Updated existing patient with new patient');
+      message = 'Updated';
+    }
+
+    this.rest.addPotentialPatient(potentialPatientId, choice).subscribe(data => {
       this.snackBar.openSnackBar(`Patient: ${this.patientDetails.firstName + ' ' + this.patientDetails.lastName} was ${message}`, 'Close', 'success-snackbar');
-     
-      this.loadPatientsWithFilters(); 
-    });  
-    
+
+      this.loadPatientsWithFilters();
+    });
+
     this.dialog.closeAll();
   }
- 
-  openDrilldownDialog(measure, display){
+
+  openDrilldownDialog(measure, display) {
     var drilldownOptions = {
       measureId: measure, //'1',
       filterId: this.currentPatientId, //'381886'
@@ -681,14 +688,14 @@ export class PatientsComponent implements OnInit {
     this.drilldownService.open(drilldownOptions);
   }
 
-  onClicked(value:number){  
-    if(value > 0){      
+  onClicked(value: number) {
+    if (value > 0) {
       this.patientNameSearch = value.toString();
-      this.loadPatientsWithFilters();   
-    }  
-    else{  
-     console.log('An error occurs');
-    }  
-  } 
+      this.loadPatientsWithFilters();
+    }
+    else {
+      console.log('An error occurs');
+    }
+  }
 }
 
