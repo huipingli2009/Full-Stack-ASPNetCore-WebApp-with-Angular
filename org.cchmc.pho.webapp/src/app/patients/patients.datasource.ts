@@ -6,20 +6,21 @@ import { RestService } from '../rest.service';
 
 export class PatientsDataSource implements DataSource<Patients> {
 
-    private lessonsSubject = new BehaviorSubject<Patients[]>([]);
+    private patientSubject = new BehaviorSubject<Patients[]>([]);
     private loadingSubject = new BehaviorSubject<boolean>(false);
 
     public loading$ = this.loadingSubject.asObservable();
+    public PatientData$ = this.patientSubject.asObservable();
     private pageNumber: number;
 
     constructor(private restService: RestService) { }
 
     connect(collectionViewer: CollectionViewer): Observable<Patients[]> {
-        return this.lessonsSubject.asObservable();
+        return this.patientSubject.asObservable();
     }
 
     disconnect(collectionViewer: CollectionViewer): void {
-        this.lessonsSubject.complete();
+        this.patientSubject.complete();
         this.loadingSubject.complete();
     }
 
@@ -35,6 +36,6 @@ export class PatientsDataSource implements DataSource<Patients> {
                 catchError(() => of([])),
                 finalize(() => this.loadingSubject.next(false))
             )
-            .subscribe(patients => this.lessonsSubject.next(patients));
+            .subscribe(patients => this.patientSubject.next(patients));
     }
 }
