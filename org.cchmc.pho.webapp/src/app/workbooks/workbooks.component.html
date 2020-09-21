@@ -65,8 +65,8 @@
     
                 </div>
             </div>
+            <form [formGroup]="ProvidersForWorkbookForm">
             <div fxLayout="row" class="side-border-container provider-list-container">
-                <form [formGroup]="ProvidersForWorkbookForm">
                     <ng-container *ngIf="workbookProviders">
                         <div fxLayout="row" class="workbook-detail-heading">
                             Patients with a Completed PHQ screen vs. patients seen by doctor:
@@ -165,13 +165,19 @@
                             </ng-container>
                         </div>
                     </ng-container>
-                </form>
             </div>
             <div fxLayout="row" fxLayoutAlign="end center" class="side-border-container button-container">
                 <div fxLayout="column">
-                    <button mat-flat-button color="accent" (click)="openEditProvidersDialog()">EDIT PROVIDERS</button>
+                    <label>ALL PROVIDER DATA IS ENTERED</label>
+                    <mat-slide-toggle formControlName="activeStatus" [checked]="form.controls.activeStatus"
+                      name="activeStatus" ngDefaultControl>
+                    </mat-slide-toggle>
                 </div>
+                <div fxLayout="column">
+                    <button mat-flat-button color="accent" (click)="openEditProvidersDialog()">EDIT PROVIDERS</button>
+                </div> 
             </div>
+        </form>
             <div *ngIf="dataSourceDepressionWorkbook">
                 <div fxLayout="row" class="workbooks-header" style="border-radius: 0px !important;">
                     <div fxLayout="column" class="header-filter">

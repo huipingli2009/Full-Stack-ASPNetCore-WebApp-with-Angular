@@ -53,7 +53,9 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 PHQ9_Score = dr["PHQ9_Score"].ToString(),
                                 ActionFollowUp = (dr["ActionFollowUp"] != DBNull.Value && Convert.ToBoolean(dr["ActionFollowUp"])),
                                 Improvement = dr["Improvement"].ToString(),
-                                FollowUpResponse = bool.Parse(dr["FollowUpResponse"].ToString())
+                                FollowUpResponse = bool.Parse(dr["FollowUpResponse"].ToString()),
+                                AllProvidersConfirmed = bool.Parse(dr["FollowUpResponse"].ToString()),
+                                NoPatientsConfirmed = bool.Parse(dr["NoPatientsConfirmed"].ToString())
                             };
 
                             workbookspatients.Add(workbookspt);

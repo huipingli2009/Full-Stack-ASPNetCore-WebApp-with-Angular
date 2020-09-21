@@ -7,5 +7,7 @@ namespace org.cchmc.pho.api.ViewModels
         public bool ActionFollowUp { get; set; }
         public string Improvement { get; set; }
         public bool FollowUpResponse { get; set; }
+        public bool AllProvidersConfirmed { get; set; }
+        public bool NoPatientsConfirmed { get; set; }
     }
 }
