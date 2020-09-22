@@ -205,7 +205,7 @@ export class PatientsComponent implements OnInit {
     this.getGenderList();
     this.getPmca();
     this.getStates();
-    this.getPrimaryLocations();  
+    this.getPrimaryLocations();     
   }
 
   ngAfterViewInit() {
@@ -494,7 +494,11 @@ export class PatientsComponent implements OnInit {
           id: data.stateId,
           shortName: data.state
         },
-        zip: data.zip
+        zip: data.zip,
+        locations:{
+          id: data.locations.id,
+          name: data.locations.name
+        }
       };
       this.form.setValue(selectedValues);
     });

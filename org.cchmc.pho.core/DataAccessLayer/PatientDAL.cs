@@ -404,7 +404,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 PotentialDuplicateGender = dr["potentialDup_Gender"].ToString(),
                                 PotentialDuplicatePCPFirstName = dr["potentialDup_PCP_FirstName"].ToString(),
                                 PotentialDuplicatePCPLastName = dr["potentialDup_PCP_LastName"].ToString(),
-                                PotentialDup_PAT_MRN_ID = dr["potentialDup_PAT_MRN_ID"].ToString(),
+                                PotentialDup_PAT_MRN_ID = dr["potentialDup_PAT_MRN_ID"].ToString(),                               
                                 Locations = new List<Location>()
                             };                            
 
