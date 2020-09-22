@@ -20,6 +20,7 @@ namespace org.cchmc.pho.core.DataModels
 
         public int TotalRecords { get; set; }
         public List<PatientCondition> Conditions { get; set; }
+        public int LocationId { get; set; }
     }
    
 

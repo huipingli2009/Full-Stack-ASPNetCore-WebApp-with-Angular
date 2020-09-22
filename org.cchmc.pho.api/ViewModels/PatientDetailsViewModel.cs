@@ -1,4 +1,5 @@
-﻿using System;
+﻿using org.cchmc.pho.core.DataModels;
+using System;
 using System.Collections.Generic;
 
 namespace org.cchmc.pho.api.ViewModels
@@ -55,6 +56,7 @@ namespace org.cchmc.pho.api.ViewModels
         public string PotentialDuplicatePCPLastName { get; set; }
         public string PotentialDuplicateGender { get; set; }
         public string PotentialDup_PAT_MRN_ID { get; set; }
-
+        public List<LocationViewModel> Locations { get; set; }
+        public int? LocationId { get; set; }
     }
 }

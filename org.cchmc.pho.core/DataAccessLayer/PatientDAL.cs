@@ -351,6 +351,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                         da.Fill(dataTable);
 
                         List<PatientCondition> patientConditions = await GetPatientConditionsAll();
+                        List<Location> locations = await ListLocations(userId);
 
                         foreach (DataRow dr in dataTable.Rows)
                         {
@@ -403,7 +404,8 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 PotentialDuplicateGender = dr["potentialDup_Gender"].ToString(),
                                 PotentialDuplicatePCPFirstName = dr["potentialDup_PCP_FirstName"].ToString(),
                                 PotentialDuplicatePCPLastName = dr["potentialDup_PCP_LastName"].ToString(),
-                                PotentialDup_PAT_MRN_ID = dr["potentialDup_PAT_MRN_ID"].ToString()
+                                PotentialDup_PAT_MRN_ID = dr["potentialDup_PAT_MRN_ID"].ToString(),
+                                Locations = new List<Location>()
                             };                            
 
                             if (!string.IsNullOrWhiteSpace(dr["ConditionIDs"].ToString()))
@@ -414,6 +416,17 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                         details.Conditions.Add(patientConditions.First(p => p.ID == conditionId));
                                     else
                                         _logger.LogError("An unmapped patient condition id was returned by the database ");
+                                }
+                            }
+
+                            if (!string.IsNullOrWhiteSpace(dr["PracticeLocationID"].ToString()))
+                            {
+                                foreach (int locationId in dr["PracticeLocationID"].ToString().Split(',').Select(p => int.Parse(p)))
+                                {
+                                    if (locations.Any(l => l.Id == locationId))
+                                        details.Locations.Add(locations.First(p => p.Id == locationId));
+                                    else
+                                        _logger.LogError("An unmapped location id was returned by the database ");
                                 }
                             }
                         }
@@ -521,6 +534,37 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlConnection.Open();
 
                     return (bool)sqlCommand.ExecuteScalar();
+                }
+            }
+        }
+
+        public async Task<List<Location>> ListLocations(int userId)
+        {
+            DataTable dataTable = new DataTable();
+            List<Location> locations = new List<Location>();
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetLocationList", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+
+                    await sqlConnection.OpenAsync();
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        foreach (DataRow dr in dataTable.Rows)
+                        {
+                            var record = new Location()
+                            {
+                                Id = (dr["Id"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Id"].ToString())),
+                                Name = dr["LocationName"].ToString()
+                            };
+                            locations.Add(record);
+                        }
+                    }
+                    return locations;
                 }
             }
         }

@@ -44,7 +44,7 @@ export class PatientsComponent implements OnInit {
   @ViewChild('patientAdminConfirmDialog') patientAdminConfirmDialog: TemplateRef<any>;
 
   @Input()
-  checked: Boolean;
+  checked: Boolean; 
 
   //if patient is selected from ED chart
   get selectedPatientId(): number | null {
@@ -100,6 +100,7 @@ export class PatientsComponent implements OnInit {
   genderList: Gender;
   pmcaList: any[] = [];
   stateList: any[] = [];
+  PrimaryLocationList: any[] = [];
   newPatientValues: NewPatient;
   addPatientForm: FormGroup;
   patientAdminForm: FormGroup;
@@ -153,7 +154,8 @@ export class PatientsComponent implements OnInit {
       addressLine1: [''],
       city: [''],
       state: [''],
-      zip: ['']
+      zip: [''],
+      locations: [null, Validators.required]
     });
 
     this.addPatientForm = this.fb.group({
@@ -203,6 +205,7 @@ export class PatientsComponent implements OnInit {
     this.getGenderList();
     this.getPmca();
     this.getStates();
+    this.getPrimaryLocations();  
   }
 
   ngAfterViewInit() {
@@ -556,6 +559,7 @@ export class PatientsComponent implements OnInit {
     this.patientDetails.stateId = this.form.controls.state.value.id;
     this.patientDetails.state = this.form.controls.state.value.shortName;
     this.patientDetails.zip = this.form.controls.zip.value;
+    this.patientDetails.locationId = this.form.controls.locationId.value.id;
 
     this.logger.log('inSubmit', this.patientDetails);
     this.logger.log(this.form.value);
@@ -581,6 +585,12 @@ export class PatientsComponent implements OnInit {
   getPmca() {
     this.rest.getPmca().subscribe((data) => {
       this.pmcaList = data;
+    });
+  }
+
+  getPrimaryLocations() {
+    this.rest.getLocations().pipe(take(1)).subscribe((data) => {
+      this.PrimaryLocationList = data;
     });
   }
   getStates() {

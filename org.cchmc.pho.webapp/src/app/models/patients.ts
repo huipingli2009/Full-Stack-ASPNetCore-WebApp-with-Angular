@@ -40,6 +40,8 @@ export interface PatientDetails {
     stateId: number;
     state: string;
     zip: string;
+    locations: Location[];
+    locationId: number;
     conditions: Array<Conditions>;
     pmcaScore: number;
     providerPMCAScore: number;
@@ -150,4 +152,8 @@ export enum patientAdminActionTypeEnum {
 export enum addPatientProcessEnum {
     SaveAndContinue = 1,
     SaveAndExit = 2     
+}
+export class Location {
+    id: number;
+    name: string;
 }
