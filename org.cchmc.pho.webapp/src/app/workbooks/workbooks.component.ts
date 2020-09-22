@@ -139,12 +139,18 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
       oneMonthFollowupVisit: [''],
       dateOfOneMonthVisit: [''],
       oneMonthFolllowupPHQ9Score: ['']
-
     }
   );
 
   editProvidersForm = this.fb.group({
     pcpName: ['', Validators.required]
+  });
+
+  ProviderConfirmationForm = this.fb.group({
+    providerConfirm: ['']
+  });
+  PatientConfirmationForm = this.fb.group({
+    patientConfirm: ['']
   });
 
   //event handlers - generic (all workbooks)

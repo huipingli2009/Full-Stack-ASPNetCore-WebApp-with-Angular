@@ -65,8 +65,9 @@
     
                 </div>
             </div>
-            <form [formGroup]="ProvidersForWorkbookForm">
             <div fxLayout="row" class="side-border-container provider-list-container">
+                
+                <form [formGroup]="ProvidersForWorkbookForm">
                     <ng-container *ngIf="workbookProviders">
                         <div fxLayout="row" class="workbook-detail-heading">
                             Patients with a Completed PHQ screen vs. patients seen by doctor:
@@ -165,23 +166,35 @@
                             </ng-container>
                         </div>
                     </ng-container>
+                    
+                </form>
             </div>
             <div fxLayout="row" fxLayoutAlign="end center" class="side-border-container button-container">
                 <div fxLayout="column">
-                    <label>ALL PROVIDER DATA IS ENTERED</label>
-                    <mat-slide-toggle formControlName="activeStatus" [checked]="form.controls.activeStatus"
-                      name="activeStatus" ngDefaultControl>
-                    </mat-slide-toggle>
+                    
+                    <form [formGroup]="ProviderConfirmationForm">
+                        <label>ALL PROVIDER DATA IS ENTERED</label>
+                        <mat-slide-toggle formControlName="providerConfirm" [checked]="ProviderConfirmationForm.controls.providerConfirm"
+                            name="providerConfirm" ngDefaultControl>
+                        </mat-slide-toggle>
+                    </form>
                 </div>
                 <div fxLayout="column">
                     <button mat-flat-button color="accent" (click)="openEditProvidersDialog()">EDIT PROVIDERS</button>
                 </div> 
             </div>
-        </form>
             <div *ngIf="dataSourceDepressionWorkbook">
                 <div fxLayout="row" class="workbooks-header" style="border-radius: 0px !important;">
                     <div fxLayout="column" class="header-filter">
                         {{patientTableHeader}} Patients with PHQ-9 scores of 10 or Above Follow Up Patients
+                    </div>
+                    <div fxLayout="column" class="header-filter" style="flex-basis:40%">
+                        <form [formGroup]="PatientConfirmationForm">
+                            <label>NO PATIENTS WITH PHQ-9 OF 10 OR ABOVE</label>
+                            <mat-slide-toggle formControlName="patientConfirm" [checked]="PatientConfirmationForm.controls.patientConfirm"
+                                name="patientConfirm" ngDefaultControl>
+                            </mat-slide-toggle>
+                        </form>
                     </div>
                 </div>
                 <div fxLayout="row" class="patient-workbook-table">
