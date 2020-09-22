@@ -218,7 +218,9 @@ export class PatientsComponent implements OnInit {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-    this.patientSubscription.unsubscribe();
+    if (this.patientSubscription && !this.patientSubscription.closed) {
+      this.patientSubscription.unsubscribe();
+    }
     this.filterService.updateIsFilteringPatients(false);
     this.filterService.updateFilterType('');
   }
