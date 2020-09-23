@@ -54,8 +54,8 @@ namespace org.cchmc.pho.core.DataModels
         public string PotentialDuplicatePCPLastName { get; set; }
         public string PotentialDuplicateGender { get; set; }
         public string PotentialDup_PAT_MRN_ID { get; set; }
-        public List<Location> Locations { get; set; }
-        public int? LocationId { get; set; }
+        public string PrimaryLocation { get; set; }
+        public int PrimaryLocationId { get; set; }
 
     }
 }

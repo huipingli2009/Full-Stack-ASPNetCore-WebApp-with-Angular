@@ -40,8 +40,8 @@ export interface PatientDetails {
     stateId: number;
     state: string;
     zip: string;
-    locations: Location[];
-    locationId: number;
+    primarylocation: string;
+    primarylocationId: number;
     conditions: Array<Conditions>;
     pmcaScore: number;
     providerPMCAScore: number;

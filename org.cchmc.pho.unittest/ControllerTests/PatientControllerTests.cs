@@ -81,8 +81,8 @@ namespace org.cchmc.pho.unittest.ControllerTests
             bool potentialPatient = false;
 
             List<PatientCondition> conditions = new List<PatientCondition>();
-            conditions.Add(new PatientCondition(1, "Asthma"));
-            conditions.Add(new PatientCondition(2, "Depression"));
+            conditions.Add(new PatientCondition(1, "Asthma", "Asthmacondition"));
+            conditions.Add(new PatientCondition(2, "Depression", "Depressioncondition"));
 
             var myPatientDetails = new PatientDetails()
             {
@@ -240,8 +240,8 @@ namespace org.cchmc.pho.unittest.ControllerTests
             var userId = 3;
 
             List<PatientCondition> conditions = new List<PatientCondition>();
-            conditions.Add(new PatientCondition(1, "Asthma"));
-            conditions.Add(new PatientCondition(2, "Depression"));
+            conditions.Add(new PatientCondition(1, "Asthma", "Asthma condition"));
+            conditions.Add(new PatientCondition(2, "Depression", "Depression condition"));
 
             var myPatientDetails = new PatientDetails()
             {

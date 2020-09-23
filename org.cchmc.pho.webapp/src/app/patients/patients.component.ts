@@ -100,7 +100,7 @@ export class PatientsComponent implements OnInit {
   genderList: Gender;
   pmcaList: any[] = [];
   stateList: any[] = [];
-  PrimaryLocationList: any[] = [];
+  LocationList: Location[];
   newPatientValues: NewPatient;
   addPatientForm: FormGroup;
   patientAdminForm: FormGroup;
@@ -155,7 +155,7 @@ export class PatientsComponent implements OnInit {
       city: [''],
       state: [''],
       zip: [''],
-      locations: [null, Validators.required]
+      locations: ['']
     });
 
     this.addPatientForm = this.fb.group({
@@ -238,7 +238,7 @@ export class PatientsComponent implements OnInit {
 
   compareByShortValue(o1, o2): boolean {
     return o1.shortName === o2.shortName;
-  }
+  } 
 
   getCurrentUser() {
     this.userService.getCurrentUser().pipe(take(1)).subscribe((data) => {
@@ -498,8 +498,8 @@ export class PatientsComponent implements OnInit {
         },
         zip: data.zip,
         locations:{
-          id: data.locations.id,
-          name: data.locations.name
+          id: data.primaryLocationId,
+          name: data.primaryLocation
         }
       };
       this.form.setValue(selectedValues);
@@ -565,7 +565,8 @@ export class PatientsComponent implements OnInit {
     this.patientDetails.stateId = this.form.controls.state.value.id;
     this.patientDetails.state = this.form.controls.state.value.shortName;
     this.patientDetails.zip = this.form.controls.zip.value;
-    this.patientDetails.locationId = this.form.controls.locationId.value.id;
+    this.patientDetails.primarylocationId = this.form.controls.locations.value.id;
+    this.patientDetails.primarylocation = this.form.controls.locations.value.name;
 
     this.logger.log('inSubmit', this.patientDetails);
     this.logger.log(this.form.value);
@@ -596,7 +597,7 @@ export class PatientsComponent implements OnInit {
 
   getPrimaryLocations() {
     this.rest.getLocations().pipe(take(1)).subscribe((data) => {
-      this.PrimaryLocationList = data;
+      this.LocationList = data;
     });
   }
   getStates() {

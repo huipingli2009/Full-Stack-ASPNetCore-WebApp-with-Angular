@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using org.cchmc.pho.api.ViewModels;
 using org.cchmc.pho.core.DataModels;
-using static org.cchmc.pho.api.ViewModels.PatientViewModel;
-using static org.cchmc.pho.core.DataModels.Patient;
 
 namespace org.cchmc.pho.api.Mappings
 {
@@ -22,9 +20,7 @@ namespace org.cchmc.pho.api.Mappings
             CreateMap<PMCA, PMCAViewModel>();
             CreateMap<Gender, GenderViewModel>();
             CreateMap<State, StateViewModel>();
-            CreateMap<SimplifiedPatient, SimplifiedPatientViewModel>();
-            CreateMap<Location, LocationViewModel>();
-            CreateMap<LocationViewModel, Location>();
+            CreateMap<SimplifiedPatient, SimplifiedPatientViewModel>();           
         }
     }
 }

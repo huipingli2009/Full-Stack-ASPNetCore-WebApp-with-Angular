@@ -19,21 +19,22 @@ namespace org.cchmc.pho.core.DataModels
         public bool WatchFlag { get; set; }
 
         public int TotalRecords { get; set; }
-        public List<PatientCondition> Conditions { get; set; }
-        public int LocationId { get; set; }
+        public List<PatientCondition> Conditions { get; set; }        
     }
    
 
     public class PatientCondition
-    {
+    {      
+
         public int ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public PatientCondition(int id, string name)
+        public PatientCondition(int id, string name, string description)
         {
             ID = id;
             Name = name;
+            Description = description;
         }
 
         public PatientCondition()

@@ -18,8 +18,7 @@ namespace org.cchmc.pho.api.ViewModels
         public bool Chronic { get; set; }
         public bool WatchFlag { get; set; }
         public int TotalRecords { get; set; }
-        public List<PatientConditionViewModel> Conditions { get; set; }
-        public int LocationId { get; set; }
+        public List<PatientConditionViewModel> Conditions { get; set; }       
     }
 
 

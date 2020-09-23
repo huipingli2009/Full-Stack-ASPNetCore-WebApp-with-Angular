@@ -270,15 +270,15 @@
                 <label for="providerNotes">Provider Notes</label>
                 {{providerNotesControl | slice:0:17}}...
               </div>
-            </div>            
+            </div>
             <div fxLayout="row" fxLayoutGap="33px">
-              <div fxLayout="column" fxFlex="10">
-                <label for="state">Primary Location</label>
+              <div fxLayout="column">
+                <label for="location">Primary Location</label>
                 <mat-form-field class="multi-select-override">
-                  <mat-select matNativeControl formControlName="locationId" >
-                    <mat-option *ngFor="let item of PrimaryLocationList" [value]="item.id">
+                  <mat-select matNativeControl formControlName="locations" [compareWith]="compareFn">
+                    <mat-option *ngFor="let item of LocationList" [value]="item">
                       {{item.name}}
-                    </mat-option>                    
+                    </mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
