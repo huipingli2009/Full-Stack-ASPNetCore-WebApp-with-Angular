@@ -21,5 +21,6 @@ namespace org.cchmc.pho.core.Interfaces
         Task<List<State>> ListState();
         Task<List<PMCA>> ListPMCA();
         bool IsPatientInSamePractice(int userId, int patientId);
+        Task<List<Location>> ListLocations(int userId);
     }
 }

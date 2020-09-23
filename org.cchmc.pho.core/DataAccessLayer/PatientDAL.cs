@@ -167,7 +167,8 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@City", SqlDbType.VarChar).Value = patientDetail.City;
                     sqlCommand.Parameters.Add("@State", SqlDbType.VarChar).Value = patientDetail.State;
                     sqlCommand.Parameters.Add("@StateID", SqlDbType.Int).Value = patientDetail.StateId;
-                    sqlCommand.Parameters.Add("@Zip", SqlDbType.VarChar).Value = patientDetail.Zip;
+                    sqlCommand.Parameters.Add("@Zip", SqlDbType.VarChar).Value = patientDetail.Zip;                    
+                    sqlCommand.Parameters.Add("@LocationID", SqlDbType.Int).Value = patientDetail.PrimaryLocationId;
 
                     await sqlConnection.OpenAsync();
 
@@ -314,7 +315,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 {
                     sqlCommand.CommandType = CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
-                    sqlConnection.Open();
+                    await sqlConnection.OpenAsync();
                     // Define the data adapter and fill the dataset
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
@@ -351,7 +352,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                         da.Fill(dataTable);
 
                         List<PatientCondition> patientConditions = await GetPatientConditionsAll();
-
+                      
                         foreach (DataRow dr in dataTable.Rows)
                         {
                             details = new PatientDetails()
@@ -403,7 +404,9 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 PotentialDuplicateGender = dr["potentialDup_Gender"].ToString(),
                                 PotentialDuplicatePCPFirstName = dr["potentialDup_PCP_FirstName"].ToString(),
                                 PotentialDuplicatePCPLastName = dr["potentialDup_PCP_LastName"].ToString(),
-                                PotentialDup_PAT_MRN_ID = dr["potentialDup_PAT_MRN_ID"].ToString()
+                                PotentialDup_PAT_MRN_ID = dr["potentialDup_PAT_MRN_ID"].ToString(),
+                                PrimaryLocationId = dr["PracticeLocationID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PracticeLocationID"].ToString()),
+                                PrimaryLocation = dr["LocationName"].ToString()                               
                             };                            
 
                             if (!string.IsNullOrWhiteSpace(dr["ConditionIDs"].ToString()))
@@ -416,9 +419,8 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                         _logger.LogError("An unmapped patient condition id was returned by the database ");
                                 }
                             }
+                           
                         }
-
-
 
                     }
                     return details;
@@ -436,7 +438,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 using (SqlCommand sqlCommand = new SqlCommand("spGetGenderList", sqlConnection))
                 {
                     sqlCommand.CommandType = CommandType.StoredProcedure;
-                    sqlConnection.Open();
+                    await sqlConnection.OpenAsync();
                     // Define the data adapter and fill the dataset
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
@@ -463,7 +465,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 using (SqlCommand sqlCommand = new SqlCommand("spGetPMCAList", sqlConnection))
                 {
                     sqlCommand.CommandType = CommandType.StoredProcedure;
-                    sqlConnection.Open();
+                    await sqlConnection.OpenAsync();
                     // Define the data adapter and fill the dataset
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
@@ -490,7 +492,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 using (SqlCommand sqlCommand = new SqlCommand("spGetStateList", sqlConnection))
                 {
                     sqlCommand.CommandType = CommandType.StoredProcedure;
-                    sqlConnection.Open();
+                    await sqlConnection.OpenAsync();
                     // Define the data adapter and fill the dataset
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
@@ -525,6 +527,36 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
+        public async Task<List<Location>> ListLocations(int userId)
+        {
+            DataTable dataTable = new DataTable();
+            List<Location> locations = new List<Location>();
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetLocationList", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+
+                    await sqlConnection.OpenAsync();
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        foreach (DataRow dr in dataTable.Rows)
+                        {
+                            var record = new Location()
+                            {
+                                Id = (dr["Id"] == DBNull.Value ? 0 : Convert.ToInt32(dr["Id"].ToString())),
+                                Name = dr["LocationName"].ToString()
+                            };
+                            locations.Add(record);
+                        }
+                    }
+                    return locations;
+                }
+            }
+        }
 
     }
 }
