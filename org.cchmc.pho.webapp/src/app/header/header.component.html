@@ -6,6 +6,11 @@
   <div fxLayout="row" fxLayoutAlign="start end" fxFlex>
     <div fxLayout="column" fxLayoutAlign="start end" fxFlex="10%">
       <button mat-button routerLink="dashboard">Home</button>
+    </div>    
+    <div fxLayout="column" fxLayoutAlign="end end" fxFlex="62%" class="logout-col">
+      <div><span (click)="openPasswordDialog()">Contact your practice improvement coach {{practiceCoach.coachName}} <mat-icon class="account-icon" matPrefix>
+        email</mat-icon></span></div>
+
     </div>
     <div fxLayout="column" fxLayoutAlign="end end" fxFlex class="logout-col">
       <div><span (click)="openPasswordDialog()">Welcome, {{firstName}} {{lastName}} <mat-icon class="account-icon">
