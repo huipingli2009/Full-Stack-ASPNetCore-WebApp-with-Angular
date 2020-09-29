@@ -7,7 +7,7 @@ import { environment } from '../environments/environment';
 import { Alerts, EdChart, EdChartDetails, Population, Quicklinks, Spotlight } from './models/dashboard';
 import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Patients, NewPatient, Pmca, PopSlices, Providers, States } from './models/patients';
 import { PracticeList, Responsibilities, Staff, StaffDetails, StaffAdmin } from './models/Staff';
-import { Followup, WorkbookDepressionPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookAsthmaPatient, Treatment} from './models/workbook';
+import { Followup, WorkbookDepressionPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookAsthmaPatient, Treatment, WorkbookConfirmation} from './models/workbook';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
 import { FileDetails, FileAction, ResourceType, Tag, Initiative, FileType, ContentPlacement } from './models/files';
 import { Location } from '@angular/common';
@@ -440,6 +440,24 @@ export class RestService {
     );
   }
 
+  /*Update workbook confirmations*/
+  updateWorkbookConfirmations(WorkbookConfirmation: WorkbookConfirmation): Observable<any> {
+    return this.http.put(`${API_URL}/api/Workbooks/confirmation/`, JSON.stringify(WorkbookConfirmation), httpOptions).pipe(
+      catchError(this.handleError<any>('update workbook confirmations'))
+    );
+  }
+
+  /* for getting depression confirmations for a form response ID */
+  getWorkbookDepressionConfirmations(formResponseid: number): Observable<any> {
+    let paramsValue = new HttpParams();
+    paramsValue = paramsValue.append("formResponseId", formResponseid.toString());
+    return this.http.get<WorkbookConfirmation>(`${API_URL}/api/Workbooks/confirmation`, { params: paramsValue }).pipe(
+      map((data: WorkbookConfirmation) => {
+        return data;
+      })
+    );
+  }
+
   /* for getting the patients for a form response ID */
   getWorkbookDepressionPatients(formResponseid: number): Observable<any> {
     let paramsValue = new HttpParams();
@@ -479,6 +497,14 @@ export class RestService {
   /*addition of patient to the work book*/
   AddPatientToAsthmaWorkbook(workbookPatient: WorkbookAsthmaPatient): Observable<any> {
     this.logger.log(JSON.stringify(workbookPatient));
+    return this.http.post<boolean>(`${API_URL}/api/Workbooks/asthmapatients/${workbookPatient.patientId}`, JSON.stringify(workbookPatient), httpOptions).pipe(
+      catchError(this.handleError<any>('adding patient to the workbook'))
+    );
+  }
+
+  /*addition of patient to the work book*/
+  UpdateDepressionWorkbookConfirmations(workbookConfirmations: WorkbookConfirmation): Observable<any> {
+    this.logger.log(JSON.stringify(workbookConfirmations));
     return this.http.post<boolean>(`${API_URL}/api/Workbooks/asthmapatients/${workbookPatient.patientId}`, JSON.stringify(workbookPatient), httpOptions).pipe(
       catchError(this.handleError<any>('adding patient to the workbook'))
     );

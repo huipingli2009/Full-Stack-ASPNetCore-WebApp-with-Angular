@@ -8,7 +8,7 @@ import { NGXLogger } from 'ngx-logger';
 import { Subject } from 'rxjs'; 
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { PatientForWorkbook, Providers } from '../models/patients';
-import { Followup, WorkbookDepressionPatient, WorkbookAsthmaPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookFormValueEnum, Treatment } from '../models/workbook';
+import { Followup, WorkbookDepressionPatient, WorkbookAsthmaPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookFormValueEnum, Treatment, WorkbookConfirmation } from '../models/workbook';
 import { RestService } from '../rest.service';
 import { DateRequiredValidator } from '../shared/customValidators/customValidator';
 import { MatSnackBarComponent } from '../shared/mat-snack-bar/mat-snack-bar.component';
@@ -60,6 +60,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   workbookProviderDetail: WorkbookProvider;
   newDepressionWorkbookPatient: WorkbookDepressionPatient;
   removeDepressionWorkbookPatient: WorkbookDepressionPatient;
+  workbookDepressionConfirmations: WorkbookConfirmation;
   workbookProviders: WorkbookProvider[];
   dataSourceDepressionWorkbook: MatTableDataSource<WorkbookDepressionPatient>;
   formResponseId: number;
@@ -147,10 +148,10 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   });
 
   ProviderConfirmationForm = this.fb.group({
-    providerConfirm: ['']
+    allProvidersConfirm: ['']
   });
   PatientConfirmationForm = this.fb.group({
-    patientConfirm: ['']
+    noPatientsConfirm: ['']
   });
 
   //event handlers - generic (all workbooks)
@@ -235,6 +236,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     if (this.selectedWorkbookFormId == WorkbookFormValueEnum.depression){
       this.getDepressionWorkbookProviders(this.selectedFormResponseID);
       this.getDepressionWorkbookPatients(this.selectedFormResponseID);
+      this.getDepressionConfirmations(this.selectedFormResponseID);
       this.getWorkbookPractice(this.selectedFormResponseID);
     }
     if (this.selectedWorkbookFormId == WorkbookFormValueEnum.asthma){
@@ -407,6 +409,11 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.rest.updateWorkbookForProvider(workbookProviderDetails).subscribe(res => {
     })
   }
+
+  updateDepressionWorkbookConfirmations(workbookConfirmations: WorkbookConfirmation) {
+    this.rest.UpdateDepressionWorkbookConfirmations(workbookConfirmations).subscribe(res => {
+    })
+  }
   
   //adding patient to the workbook
   AddDepressionPatientForWorkbook() {
@@ -479,6 +486,16 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
       this.dataSourceDepressionWorkbook = new MatTableDataSource(this.workbookDepressionPatient);
       this.dataSourceDepressionWorkbook.data = this.workbookDepressionPatient;
       this.DepressionPatientForWorkbookForm.get('action').setValue('false');
+    })
+  }
+
+  //for getting confirmation flags for depression worsheet
+  getDepressionConfirmations(formResponseid: number) {
+    this.rest.getWorkbookDepressionConfirmations(formResponseid).pipe(take(1)).subscribe((data) => {
+      this.workbookDepressionConfirmations = data;
+      this.ProviderConfirmationForm.get('allProvidersConfirm').setValue(this.workbookDepressionConfirmations.allProvidersConfirm);
+      this.PatientConfirmationForm.get('noPatientsConfirm').setValue(this.workbookDepressionConfirmations.noPatientsConfirm);
+      
     })
   }
 

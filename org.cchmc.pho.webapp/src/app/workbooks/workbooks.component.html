@@ -60,9 +60,7 @@
                     </div>
                     <div fxLayout="column" fxLayoutAlign="end end" fxFlex>
                         <a href='{{workbookPractice?.jobAidURL}}' target="_blank">Job Aid</a>
-                    </div>
-    
-    
+                    </div>  
                 </div>
             </div>
             <div fxLayout="row" class="side-border-container provider-list-container">
@@ -174,7 +172,7 @@
                     
                     <form [formGroup]="ProviderConfirmationForm">
                         <label>ALL PROVIDER DATA IS ENTERED</label>
-                        <mat-slide-toggle formControlName="providerConfirm" [checked]="ProviderConfirmationForm.controls.providerConfirm"
+                        <mat-slide-toggle formControlName="allProvidersConfirm" [checked]="ProviderConfirmationForm.controls.allProvidersConfirm"
                             name="providerConfirm" ngDefaultControl>
                         </mat-slide-toggle>
                     </form>
@@ -185,10 +183,10 @@
             </div>
             <div *ngIf="dataSourceDepressionWorkbook">
                 <div fxLayout="row" class="workbooks-header" style="border-radius: 0px !important;">
-                    <div fxLayout="column" class="header-filter">
+                    <div fxLayout="column" class="header-filter" style="width:60%">
                         {{patientTableHeader}} Patients with PHQ-9 scores of 10 or Above Follow Up Patients
                     </div>
-                    <div fxLayout="column" class="header-filter" style="flex-basis:40%">
+                    <div fxLayout="column" class="header-filter" style="width:40%; align-content: flex-end;">
                         <form [formGroup]="PatientConfirmationForm">
                             <label>NO PATIENTS WITH PHQ-9 OF 10 OR ABOVE</label>
                             <mat-slide-toggle formControlName="patientConfirm" [checked]="PatientConfirmationForm.controls.patientConfirm"

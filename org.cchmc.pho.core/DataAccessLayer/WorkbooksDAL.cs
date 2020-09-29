@@ -53,9 +53,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 PHQ9_Score = dr["PHQ9_Score"].ToString(),
                                 ActionFollowUp = (dr["ActionFollowUp"] != DBNull.Value && Convert.ToBoolean(dr["ActionFollowUp"])),
                                 Improvement = dr["Improvement"].ToString(),
-                                FollowUpResponse = bool.Parse(dr["FollowUpResponse"].ToString()),
-                                AllProvidersConfirmed = bool.Parse(dr["FollowUpResponse"].ToString()),
-                                NoPatientsConfirmed = bool.Parse(dr["NoPatientsConfirmed"].ToString())
+                                FollowUpResponse = bool.Parse(dr["FollowUpResponse"].ToString())
                             };
 
                             workbookspatients.Add(workbookspt);
@@ -64,6 +62,62 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 }
             }
             return workbookspatients;
+        }
+
+        public async Task<WorkbooksDepressionConfirmation> GetDepressionConfirmation(int userId, int formResponseId) 
+        {
+            DataTable dataTable = new DataTable();
+            WorkbooksDepressionConfirmation confirmation = new WorkbooksDepressionConfirmation();
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetPHQ9Workbooks_Confirmations", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@FormResponseId", SqlDbType.Int).Value = formResponseId;
+
+                    await sqlConnection.OpenAsync();
+
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+
+                        foreach (DataRow dr in dataTable.Rows)
+                        {
+                            var workbookspt = new WorkbooksDepressionConfirmation()
+                            {
+                                FormResponseId = int.Parse(dr["FormResponseId"].ToString()),
+                                AllProvidersConfirmed = bool.Parse(dr["FollowUpResponse"].ToString()),
+                                NoPatientsConfirmed = bool.Parse(dr["NoPatientsConfirmed"].ToString())
+                            };
+
+                            confirmation = workbookspt;
+                        }
+                    }
+                }
+            }
+            return confirmation;
+        }
+        public async Task<bool> UpdateDepressionConfirmation(int userId, WorkbooksDepressionConfirmation confirmation)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spPostPHQ9Workbook_Confirmations", sqlConnection))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@FormResponseId", SqlDbType.Int).Value = confirmation.FormResponseId;
+                    sqlCommand.Parameters.Add("@AllProvidersConfirmed", SqlDbType.Bit).Value = confirmation.AllProvidersConfirmed;
+                    sqlCommand.Parameters.Add("@NoPatientsConfirmed", SqlDbType.Bit).Value = confirmation.NoPatientsConfirmed;
+
+                    await sqlConnection.OpenAsync();
+
+                    //return rows of data affected
+                    return (bool)sqlCommand.ExecuteScalar();
+                }
+            }
         }
 
         public async Task<List<WorkbooksAsthmaPatient>> GetAsthmaPatientList(int userId, int formResponseId)

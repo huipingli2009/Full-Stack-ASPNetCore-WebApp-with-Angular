@@ -78,3 +78,10 @@ export interface Treatment {
     treatmentLabel: string;
 }
 
+
+export class WorkbookConfirmation {
+    formResponseID: number;
+    allProvidersConfirm: boolean;
+    noPatientsConfirm: boolean;
+}
+
