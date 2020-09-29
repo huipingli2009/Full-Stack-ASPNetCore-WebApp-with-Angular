@@ -33,7 +33,7 @@
     </div>
     <div fxLayout="column" class="header-filter search-input" fxFlex fxLayoutAlign="center end">
       <mat-form-field>
-        <input type="text" matInput placeholder="Search Patient Name" (change)="searchPatientsByName($event)">
+        <input type="text" matInput placeholder="Search Patient Name" [(ngModel)]="patientNameSearchValue" (change)="searchPatientsByName($event)">
         <button mat-button matSuffix mat-icon-button aria-label="Search">
           <mat-icon>search</mat-icon>
         </button>
@@ -272,6 +272,16 @@
               </div>
             </div>
             <div fxLayout="row" fxLayoutGap="33px">
+              <div fxLayout="column">
+                <label for="location">Primary Location</label>
+                <mat-form-field class="multi-select-override">
+                  <mat-select matNativeControl formControlName="locations" [compareWith]="compareFn">
+                    <mat-option *ngFor="let item of LocationList" [value]="item">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
               <div fxLayout="column">
                 <label for="phone1">Phone</label>
                 <input formControlName="phone1" name="phone1" />
