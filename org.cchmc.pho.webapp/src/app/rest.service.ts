@@ -12,6 +12,9 @@ import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.compo
 import { FileDetails, FileAction, ResourceType, Tag, Initiative, FileType, ContentPlacement } from './models/files';
 import { Location } from '@angular/common';
 import { MetricDrillthruTable } from './models/drillthru';
+// import { constants } from 'http2';
+
+
 
 // we can now access environment.apiUrl
 const API_URL = environment.apiURL;
@@ -30,7 +33,6 @@ export class RestService {
 
   //handle selected patient from ED Chart
   selectedPatientId: number | null;
-  selectedPatientName: string | null;
 
   constructor(private http: HttpClient, private logger: NGXLogger, private snackBar: MatSnackBarComponent) { }
   private extractData(res: Response) {
@@ -495,14 +497,6 @@ export class RestService {
   /*addition of patient to the work book*/
   AddPatientToAsthmaWorkbook(workbookPatient: WorkbookAsthmaPatient): Observable<any> {
     this.logger.log(JSON.stringify(workbookPatient));
-    return this.http.post<boolean>(`${API_URL}/api/Workbooks/asthmapatients/${workbookPatient.patientId}`, JSON.stringify(workbookPatient), httpOptions).pipe(
-      catchError(this.handleError<any>('adding patient to the workbook'))
-    );
-  }
-
-  /*addition of patient to the work book*/
-  UpdateDepressionWorkbookConfirmations(workbookConfirmations: WorkbookConfirmation): Observable<any> {
-    this.logger.log(JSON.stringify(workbookConfirmations));
     return this.http.post<boolean>(`${API_URL}/api/Workbooks/asthmapatients/${workbookPatient.patientId}`, JSON.stringify(workbookPatient), httpOptions).pipe(
       catchError(this.handleError<any>('adding patient to the workbook'))
     );

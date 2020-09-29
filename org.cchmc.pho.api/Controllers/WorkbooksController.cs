@@ -463,6 +463,7 @@ namespace org.cchmc.pho.api.Controllers
                 return StatusCode(500, "An error occurred");
             }
         }
+
         [HttpGet("confirmation")]
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(WorkbooksDepressionConfirmationViewModel))]
@@ -490,7 +491,7 @@ namespace org.cchmc.pho.api.Controllers
 
         [HttpPut("confirmation")]
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
-        [SwaggerResponse(200, type: typeof(WorkbooksPatientFollowupViewModel))]
+        [SwaggerResponse(200, type: typeof(bool))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
 

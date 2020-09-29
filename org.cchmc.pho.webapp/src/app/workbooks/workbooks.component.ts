@@ -411,7 +411,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   }
 
   updateDepressionWorkbookConfirmations(workbookConfirmations: WorkbookConfirmation) {
-    this.rest.UpdateDepressionWorkbookConfirmations(workbookConfirmations).subscribe(res => {
+    this.rest.updateWorkbookConfirmations(workbookConfirmations).subscribe(res => {
     })
   }
   
