@@ -359,7 +359,15 @@ h1 {
       padding-right: 9px;
       cursor: pointer;
     }
+    a:link {
+      color: #272624;
+    }
   }
+  .practicecoach_underline {
+    margin-left: .2em;
+    text-decoration: underline;
+    margin-right: .2em;
+    line-height: 18px;     }
 }
 /* Login ===================================================================================*/
 .login-wrapper {
@@ -475,7 +483,7 @@ h1 {
 }
 
 .account-icon {
-  vertical-align: bottom;
+  vertical-align: bottom;  
 }
 
 /* Dashboard =========================================================================== */

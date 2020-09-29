@@ -21,8 +21,7 @@ import { FilterService } from '../services/filter.service';
   selector: 'app-header',
   templateUrl: './header.component.html'
 })
-export class HeaderComponent {
-
+export class HeaderComponent {  
   isLoggedIn$: boolean;
 
   @ViewChild(ToastContainerDirective, { static: false }) toastContainer: ToastContainerDirective;
@@ -252,5 +251,5 @@ export class HeaderComponent {
   cancelPasswordUpdateDialog() {
     this.isPasswordUpdated = false;
     this.dialog.closeAll();
-  }
+  } 
 }
