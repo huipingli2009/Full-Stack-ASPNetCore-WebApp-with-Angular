@@ -24,6 +24,8 @@ import { FilterService } from '../services/filter.service';
 export class HeaderComponent {  
   isLoggedIn$: boolean;
 
+  // test: string="huiping.li@cchmc.org";
+
   @ViewChild(ToastContainerDirective, { static: false }) toastContainer: ToastContainerDirective;
   @ViewChild('passwordDialog') passwordDialog: TemplateRef<any>;
   @ViewChild('updatePassConfirmDialog') updatePassConfirmDialog: TemplateRef<any>;
@@ -48,8 +50,9 @@ export class HeaderComponent {
   matcher = new MyErrorStateMatcher();
   updateUserForm: FormGroup;
   isPasswordUpdated: boolean;
-  passwordVerbiage: string;
-  practiceCoach: PracticeCoach;
+  passwordVerbiage: string; 
+  email: string = '';
+  coachName: string = '';
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
     private toastr: ToastrService, public fb: FormBuilder, private logger: NGXLogger,
@@ -183,8 +186,9 @@ export class HeaderComponent {
 
   //Practice coach 
   getPracticeCoach(){
-    this.rest.GetPracticeCoach().subscribe(data => {
-      this.practiceCoach = data;
+    this.rest.GetPracticeCoach().subscribe(data => {     
+      this.email = data.email;  
+      this.coachName = data.coachName;    
     });
   }
 
