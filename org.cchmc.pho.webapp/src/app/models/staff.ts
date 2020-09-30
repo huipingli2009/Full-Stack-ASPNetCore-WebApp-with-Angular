@@ -77,3 +77,9 @@ export interface Practices {
     id: number;
     name: string;
 }
+
+export class PracticeCoach {
+  id: number;     
+  coachName: string;   
+  email: string;
+}

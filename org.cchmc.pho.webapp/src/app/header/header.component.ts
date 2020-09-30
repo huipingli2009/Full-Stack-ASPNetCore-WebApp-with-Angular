@@ -6,7 +6,7 @@ import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AlertAction, AlertActionTaken, Alerts } from '../models/dashboard';
-import { Practices } from '../models/Staff';
+import { PracticeCoach, Practices } from '../models/Staff';
 import { CurrentUser } from '../models/user';
 import { RestService } from '../rest.service';
 import { AuthenticationService } from '../services/authentication.service';
@@ -21,8 +21,7 @@ import { FilterService } from '../services/filter.service';
   selector: 'app-header',
   templateUrl: './header.component.html'
 })
-export class HeaderComponent {
-
+export class HeaderComponent {  
   isLoggedIn$: boolean;
 
   @ViewChild(ToastContainerDirective, { static: false }) toastContainer: ToastContainerDirective;
@@ -50,6 +49,8 @@ export class HeaderComponent {
   updateUserForm: FormGroup;
   isPasswordUpdated: boolean;
   passwordVerbiage: string;
+  practiceCoach: PracticeCoach;
+
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
     private toastr: ToastrService, public fb: FormBuilder, private logger: NGXLogger,
     private authenticationService: AuthenticationService, private userService: UserService,
@@ -73,6 +74,7 @@ export class HeaderComponent {
     this.getCurrentUser();
     this.getPracticeList();
     this.getPasswordVerbiage();
+    this.getPracticeCoach();
   }
 
   ngAfterViewInit() {
@@ -179,6 +181,13 @@ export class HeaderComponent {
     });
   }
 
+  //Practice coach 
+  getPracticeCoach(){
+    this.rest.GetPracticeCoach().subscribe(data => {
+      this.practiceCoach = data;
+    });
+  }
+
   switchPractice(practiceId) {
     const staffId = this.authenticationService.getCurrentStaffId();
     const newPractice = {
@@ -242,5 +251,5 @@ export class HeaderComponent {
   cancelPasswordUpdateDialog() {
     this.isPasswordUpdated = false;
     this.dialog.closeAll();
-  }
+  } 
 }

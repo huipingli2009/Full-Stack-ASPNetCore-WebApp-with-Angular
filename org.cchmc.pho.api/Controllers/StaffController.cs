@@ -423,6 +423,31 @@ namespace org.cchmc.pho.api.Controllers
                 _logger.LogError(ex, "An error occurred");
                 return StatusCode(500, "An error occurred");
             }
+        }        
+       
+        [HttpGet("practicecoach")]
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [SwaggerResponse(200, type: typeof(PracticeCoachViewModel))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> GetPracticeCoach()
+        {  
+            try
+            {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+                // call the data method
+                var data = await _staffDal.GetPracticeCoach(currentUserId);
+                // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
+                var result = _mapper.Map<PracticeCoachViewModel>(data);
+                // return the result in a "200 OK" response
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
         }
     }
 }

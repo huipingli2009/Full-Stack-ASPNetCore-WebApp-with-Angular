@@ -19,6 +19,7 @@ namespace org.cchmc.pho.api.Mappings
             CreateMap<Provider, ProviderViewModel>();
             CreateMap<Location, LocationViewModel>();
             CreateMap<LocationViewModel, Location>();
+            CreateMap<PracticeCoach, PracticeCoachViewModel>();
         }
     }
 }
