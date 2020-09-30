@@ -8,15 +8,15 @@
       <button mat-button routerLink="dashboard">Home</button>
     </div>    
     <div fxLayout="column" fxLayoutAlign="end end" fxFlex="62%" class="logout-col">   
-      <div  fxLayout="row" fxLayoutAlign="end end" fxFlex="100%" >Contact your practice improvement coach 
-        <div fxLayoutAlign="end end" fxFlex class="practicecoach_underline">{{practiceCoach.coachName}}</div>
-        <a href="mailto:{{practiceCoach.email}}"  target="_top"><mat-icon class="account-icon" matPrefix>email</mat-icon></a>
+      <div >Contact your practice improvement coach 
+        <span><a href="mailto:{{practiceCoach.email}}"  target="_top"><u>{{practiceCoach.coachName}}</u>
+        <mat-icon class="email-icon" matPrefix>email</mat-icon></a></span>
       </div>           
     </div>
     <div fxLayout="column" fxLayoutAlign="end end" fxFlex class="logout-col">
-      <div><span (click)="openPasswordDialog()">Welcome, {{firstName}} {{lastName}} <mat-icon class="account-icon">
-            account_box</mat-icon></span>| <button mat-button (click)="logout()">Logout</button></div>
-
+      <div ><span (click)="openPasswordDialog()">Welcome, {{firstName}} {{lastName}}<mat-icon class="account-icon">
+            account_box</mat-icon></span>| <button mat-button (click)="logout()">Logout</button>
+      </div>
     </div>
   </div>
 </div>
