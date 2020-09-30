@@ -522,7 +522,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         public async Task<PracticeCoach> GetPracticeCoach(int userId)
         {
             DataTable dataTable = new DataTable();
-            PracticeCoach coach = null; ;
+            PracticeCoach coach = null; 
 
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
