@@ -33,6 +33,7 @@ export class RestService {
 
   //handle selected patient from ED Chart
   selectedPatientId: number | null;
+  selectedPatientName: string | null;
 
   constructor(private http: HttpClient, private logger: NGXLogger, private snackBar: MatSnackBarComponent) { }
   private extractData(res: Response) {
@@ -442,6 +443,7 @@ export class RestService {
 
   /*Update workbook confirmations*/
   updateWorkbookConfirmations(WorkbookConfirmation: WorkbookConfirmation): Observable<any> {
+    this.logger.log(WorkbookConfirmation, 'updateWorkbookConfirmations');
     return this.http.put(`${API_URL}/api/Workbooks/confirmation/`, JSON.stringify(WorkbookConfirmation), httpOptions).pipe(
       catchError(this.handleError<any>('update workbook confirmations'))
     );

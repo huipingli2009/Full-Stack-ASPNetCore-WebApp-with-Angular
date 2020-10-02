@@ -261,6 +261,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   
   //for updating the depression provider values
   onDepressionProviderValueChanges(): void {
+    this.logger.log("onDepressionProviderValueChanges");
     this.ProvidersForWorkbookForm.get('ProviderWorkbookArray').valueChanges.pipe(takeUntil(this.unsubscribe$)).subscribe(values => {
       this.phqsFinal = 0;
       this.totalFinal = 0;
@@ -276,12 +277,37 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     })
   }
 
+  //for updating the depression confirmations
+  onConfirmationChange(): void {
+    this.logger.log("onConfirmationChange");
+    this.logger.log(this.ProviderConfirmationForm.get('allProvidersConfirm').value, "allProvidersConfirm");
+    this.logger.log(this.PatientConfirmationForm.get('noPatientsConfirm').value, "noPatientsConfirm");
+    if (this.ProviderConfirmationForm.get('allProvidersConfirm').value != null)
+    {
+      this.workbookDepressionConfirmations.allProvidersConfirmed = this.ProviderConfirmationForm.get('allProvidersConfirm').value;
+    }
+    if (this.PatientConfirmationForm.get('noPatientsConfirm').value != null)
+    {
+      this.workbookDepressionConfirmations.noPatientsConfirmed = this.PatientConfirmationForm.get('noPatientsConfirm').value;
+      this.logger.log(this.PatientConfirmationForm.get('noPatientsConfirm').value, "really setting value");
+    }
+    this.updateDepressionWorkbookConfirmations(this.workbookDepressionConfirmations);
+  }
+
   onProviderDepressionWorkbookChange(index: number) { 
+    this.logger.log("onProviderDepressionWorkbookChange");
     let provider = this.ProviderWorkbookArray.at(index);
     this.workbookProviderDetail = provider.value;
     this.workbookProviderDetail.phqs = Number(this.workbookProviderDetail.phqs);
     this.workbookProviderDetail.total = Number(this.workbookProviderDetail.total);
     this.updateDepressionWorkbookProviders(this.workbookProviderDetail);
+
+    if (this.workbookProviders.filter(p => p.phqs == 0 || p.total==0).length == 0){
+      this.logger.log("no empty provider totals", this.ProviderWorkbookArray);
+    }
+    else{
+      this.logger.log("still some empty providers", this.workbookProviders);
+    }
   }
   
   onSelectedPatient(event: any): void {
@@ -493,8 +519,8 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   getDepressionConfirmations(formResponseid: number) {
     this.rest.getWorkbookDepressionConfirmations(formResponseid).pipe(take(1)).subscribe((data) => {
       this.workbookDepressionConfirmations = data;
-      this.ProviderConfirmationForm.get('allProvidersConfirm').setValue(this.workbookDepressionConfirmations.allProvidersConfirm);
-      this.PatientConfirmationForm.get('noPatientsConfirm').setValue(this.workbookDepressionConfirmations.noPatientsConfirm);
+      this.ProviderConfirmationForm.get('allProvidersConfirm').setValue(this.workbookDepressionConfirmations.allProvidersConfirmed);
+      this.PatientConfirmationForm.get('noPatientsConfirm').setValue(this.workbookDepressionConfirmations.noPatientsConfirmed);
       
     })
   }

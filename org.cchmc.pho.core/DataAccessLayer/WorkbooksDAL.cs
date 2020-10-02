@@ -89,7 +89,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                             var workbookspt = new WorkbooksDepressionConfirmation()
                             {
                                 FormResponseId = int.Parse(dr["FormResponseId"].ToString()),
-                                AllProvidersConfirmed = bool.Parse(dr["FollowUpResponse"].ToString()),
+                                AllProvidersConfirmed = bool.Parse(dr["AllProvidersConfirmed"].ToString()),
                                 NoPatientsConfirmed = bool.Parse(dr["NoPatientsConfirmed"].ToString())
                             };
 

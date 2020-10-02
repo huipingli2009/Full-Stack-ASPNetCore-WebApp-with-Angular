@@ -81,7 +81,7 @@ export interface Treatment {
 
 export class WorkbookConfirmation {
     formResponseID: number;
-    allProvidersConfirm: boolean;
-    noPatientsConfirm: boolean;
+    allProvidersConfirmed: boolean;
+    noPatientsConfirmed: boolean;
 }
 

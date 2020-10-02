@@ -93,39 +93,6 @@ namespace org.cchmc.pho.api.Controllers
         }
 
 
-        // GET: api/Workbooks
-        [AllowAnonymous]
-        [HttpGet("asthmapatients/{id}")]
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        //[Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
-        [SwaggerResponse(200, type: typeof(List<WorkbooksAsthmaPatientViewModel>))]
-        [SwaggerResponse(400, type: typeof(string))]
-        [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> GetDepressionConfirmations(string id)
-        {
-            // route parameters are strings and need to be translated (and validated) to their proper data type
-            if (!int.TryParse(id, out var formResponseId))
-                return BadRequest("id is not a valid integer");
-
-            try
-            {
-                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
-
-                var data = await _workbooks.GetAsthmaPatientList(currentUserId, formResponseId);
-
-                var result = _mapper.Map<List<WorkbooksAsthmaPatientViewModel>>(data);
-
-                // return the result in a "200 OK" response
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                // log any exceptions that happen and return the error to the user
-                _logger.LogError(ex, "An error occurred");
-                return StatusCode(500, "An error occurred");
-            }
-        }
-
         [HttpGet("practice")]
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(WorkbooksPracticeViewModel))]
