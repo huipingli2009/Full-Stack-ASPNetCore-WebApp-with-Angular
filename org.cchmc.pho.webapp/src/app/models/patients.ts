@@ -157,3 +157,8 @@ export class Location {
     id: number;
     name: string;
 }
+
+export class Outcomes {
+    measureId: number;
+    dashboardLabel: string;
+}

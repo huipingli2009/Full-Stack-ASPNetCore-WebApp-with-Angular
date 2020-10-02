@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from '../environments/environment';
 import { Alerts, EdChart, EdChartDetails, Population, Quicklinks, Spotlight } from './models/dashboard';
-import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Patients, NewPatient, Pmca, PopSlices, Providers, States } from './models/patients';
+import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Patients, NewPatient, Pmca, PopSlices, Providers, States, Outcomes } from './models/patients';
 import { PracticeList, Responsibilities, Staff, StaffDetails, StaffAdmin, PracticeCoach } from './models/Staff';
 import { Followup, WorkbookDepressionPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookAsthmaPatient, Treatment} from './models/workbook';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
@@ -777,6 +777,15 @@ export class RestService {
 
     return this.http.get<any>(`${API_URL}/api/Files/popular/`, { params: paramsValue }).pipe(
       map((data: FileList[]) => {
+        return data;
+      })
+    );
+  }  
+
+  //Get patient outcome metric list
+  GetPopulationOutcomeMetrics(): Observable<any>{
+    return this.http.get<any>(`${API_URL}/api/Metrics/outcomepop`).pipe(
+      map((data: Outcomes[]) => {
         return data;
       })
     );

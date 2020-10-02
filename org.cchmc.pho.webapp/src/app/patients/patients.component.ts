@@ -44,7 +44,7 @@ export class PatientsComponent implements OnInit {
   @ViewChild('patientAdminConfirmDialog') patientAdminConfirmDialog: TemplateRef<any>;
 
   @Input()
-  checked: Boolean; 
+  checked: Boolean;  
 
   //if patient is selected from ED chart
   get selectedPatientId(): number | null {
@@ -116,6 +116,10 @@ export class PatientsComponent implements OnInit {
   possibleDuplicatePatient: boolean;
   patientAdminActionEnum = patientAdminActionTypeEnum;
   addNewPatientProcessEnum = addPatientProcessEnum;
+
+  //Outcome Pop list
+  outcomes: string;
+  outcomePopList: any[] = [];
 
   // Selected Values
   selectedGender;
@@ -205,7 +209,8 @@ export class PatientsComponent implements OnInit {
     this.getGenderList();
     this.getPmca();
     this.getStates();
-    this.getPrimaryLocations();     
+    this.getPrimaryLocations(); 
+    this.getOutcomeMetricList();    
   }
 
   ngAfterViewInit() {
@@ -328,6 +333,12 @@ export class PatientsComponent implements OnInit {
     this.rest.getPopSliceList().subscribe((data) => {
       this.popSliceList = data;
     });
+  }
+
+  getOutcomeMetricList(){
+    this.rest.GetPopulationOutcomeMetrics().subscribe(data =>{
+      this.outcomePopList = data;
+    })
   }
 
   patientHasPopSlice() {
