@@ -244,6 +244,17 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
       this.getAsthmaWorkbookPractice(this.selectedFormResponseID);      
     }
   }
+
+  toggleDepressionPatientFormEnabled(): void{
+    if(this.workbookDepressionConfirmations.noPatientsConfirmed == true){
+      this.DepressionPatientForWorkbookForm.disable();
+      this.logger.log("disable patient entry");
+      }
+      else { 
+        this.DepressionPatientForWorkbookForm.enable(); 
+        this.logger.log("enable patient entry");
+      }
+  }
   
   //find specific patient to add to the workbook
   onPatientSearchValueChanges(): void {
@@ -280,18 +291,24 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   //for updating the depression confirmations
   onConfirmationChange(): void {
     this.logger.log("onConfirmationChange");
-    this.logger.log(this.ProviderConfirmationForm.get('allProvidersConfirm').value, "allProvidersConfirm");
-    this.logger.log(this.PatientConfirmationForm.get('noPatientsConfirm').value, "noPatientsConfirm");
+    let updateData = false;
+    // this.logger.log(this.ProviderConfirmationForm.get('allProvidersConfirm').value, "allProvidersConfirm");
+    // this.logger.log(this.PatientConfirmationForm.get('noPatientsConfirm').value, "noPatientsConfirm");
     if (this.ProviderConfirmationForm.get('allProvidersConfirm').value != null)
     {
+      updateData = true;
       this.workbookDepressionConfirmations.allProvidersConfirmed = this.ProviderConfirmationForm.get('allProvidersConfirm').value;
     }
     if (this.PatientConfirmationForm.get('noPatientsConfirm').value != null)
     {
+      updateData = true;
       this.workbookDepressionConfirmations.noPatientsConfirmed = this.PatientConfirmationForm.get('noPatientsConfirm').value;
-      this.logger.log(this.PatientConfirmationForm.get('noPatientsConfirm').value, "really setting value");
     }
-    this.updateDepressionWorkbookConfirmations(this.workbookDepressionConfirmations);
+    //enable disable controls
+    this.toggleDepressionPatientFormEnabled();
+    if (updateData == true){
+      this.updateDepressionWorkbookConfirmations(this.workbookDepressionConfirmations);
+    }    
   }
 
   onProviderDepressionWorkbookChange(index: number) { 
@@ -433,6 +450,9 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
 
   updateDepressionWorkbookProviders(workbookProviderDetails: WorkbookProvider) {
     this.rest.updateWorkbookForProvider(workbookProviderDetails).subscribe(res => {
+      //after we get this data, doublecheck for changed confirmation values
+      this.getDepressionConfirmations(this.selectedFormResponseID);
+      this.toggleDepressionPatientFormEnabled();
     })
   }
 
@@ -521,7 +541,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
       this.workbookDepressionConfirmations = data;
       this.ProviderConfirmationForm.get('allProvidersConfirm').setValue(this.workbookDepressionConfirmations.allProvidersConfirmed);
       this.PatientConfirmationForm.get('noPatientsConfirm').setValue(this.workbookDepressionConfirmations.noPatientsConfirmed);
-      
+      this.toggleDepressionPatientFormEnabled();
     })
   }
 
