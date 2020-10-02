@@ -168,30 +168,30 @@
                 </form>
             </div>
             <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="100px" class="side-border-container button-container">
-                <div fxLayout="column">
-                    
+                <div fxLayout="column" fxLayoutAlign="end center">                    
                     <form [formGroup]="ProviderConfirmationForm">
-                        <label>ALL PROVIDER DATA IS ENTERED</label>
-                        <mat-slide-toggle formControlName="allProvidersConfirm" [checked]="ProviderConfirmationForm.controls.allProvidersConfirm" (change)="onConfirmationChange()"
-                            name="providerConfirm" ngDefaultControl>
+                        <mat-slide-toggle labelPosition="after" formControlName="allProvidersConfirm" [checked]="ProviderConfirmationForm.controls.allProvidersConfirm" (change)="onConfirmationChange()"
+                            name="providerConfirm" ngDefaultControl><span class="whitespace"></span>ALL PROVIDER DATA IS ENTERED
                         </mat-slide-toggle>
                     </form>
                 </div>
                 <div fxLayout="column">
                     <button mat-flat-button color="accent" (click)="openEditProvidersDialog()">EDIT PROVIDERS</button>
-                </div> 
+                </div>
             </div>
             <div *ngIf="dataSourceDepressionWorkbook">
                 <form [formGroup]="PatientConfirmationForm">
                 <div fxLayout="row" class="workbooks-header" style="border-radius: 0px !important;" fxLayoutAlign="start center" >
-                        <div class="header-filter" fxLayout="column" fxLayoutAlign="start center" fxFlex="50"> 
+                        <div class="header-filter" fxLayout="column" fxLayoutAlign="start" fxFlex="80"> 
                             {{patientTableHeader}} Patients with PHQ-9 scores of 10 or Above Follow Up Patients
                         </div>
-                        <div class="header-filter" fxLayout="column" fxLayoutAlign="end center" fxFlex>    
+                        <div class="header-filter" fxLayout="column" fxLayoutAlign="end" fxFlex>    
                             <mat-checkbox formControlName="noPatientsConfirm"   [checked]="PatientConfirmationForm.controls.noPatientsConfirm" (change)="onConfirmationChange()"  class="table-header-checkbox"> 
                                 NO PATIENTS WITH PHQ-9 OF 10 OR ABOVE
                             </mat-checkbox>
                         </div>
+
+                        
                 </div>
                 </form>
                 <div fxLayout="row" class="patient-workbook-table">
