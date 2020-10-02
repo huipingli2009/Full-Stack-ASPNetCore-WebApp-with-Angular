@@ -60,12 +60,11 @@
                     </div>
                     <div fxLayout="column" fxLayoutAlign="end end" fxFlex>
                         <a href='{{workbookPractice?.jobAidURL}}' target="_blank">Job Aid</a>
-                    </div>
-    
-    
+                    </div>  
                 </div>
             </div>
             <div fxLayout="row" class="side-border-container provider-list-container">
+                
                 <form [formGroup]="ProvidersForWorkbookForm">
                     <ng-container *ngIf="workbookProviders">
                         <div fxLayout="row" class="workbook-detail-heading">
@@ -165,19 +164,36 @@
                             </ng-container>
                         </div>
                     </ng-container>
+                    
                 </form>
             </div>
-            <div fxLayout="row" fxLayoutAlign="end center" class="side-border-container button-container">
+            <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="100px" class="side-border-container button-container">
+                <div fxLayout="column" fxLayoutAlign="end center">                    
+                    <form [formGroup]="ProviderConfirmationForm">
+                        <mat-slide-toggle labelPosition="after" formControlName="allProvidersConfirm" [checked]="ProviderConfirmationForm.controls.allProvidersConfirm" (change)="onConfirmationChange()"
+                            name="providerConfirm" ngDefaultControl><span class="whitespace"></span>ALL PROVIDER DATA IS ENTERED
+                        </mat-slide-toggle>
+                    </form>
+                </div>
                 <div fxLayout="column">
                     <button mat-flat-button color="accent" (click)="openEditProvidersDialog()">EDIT PROVIDERS</button>
                 </div>
             </div>
             <div *ngIf="dataSourceDepressionWorkbook">
-                <div fxLayout="row" class="workbooks-header" style="border-radius: 0px !important;">
-                    <div fxLayout="column" class="header-filter">
-                        {{patientTableHeader}} Patients with PHQ-9 scores of 10 or Above Follow Up Patients
-                    </div>
+                <form [formGroup]="PatientConfirmationForm">
+                <div fxLayout="row" class="workbooks-header" style="border-radius: 0px !important;" fxLayoutAlign="start center" >
+                        <div class="header-filter" fxLayout="column" fxLayoutAlign="start" fxFlex="80"> 
+                            {{patientTableHeader}} Patients with PHQ-9 scores of 10 or Above Follow Up Patients
+                        </div>
+                        <div class="header-filter" fxLayout="column" fxLayoutAlign="end" fxFlex>    
+                            <mat-checkbox formControlName="noPatientsConfirm"   [checked]="PatientConfirmationForm.controls.noPatientsConfirm" (change)="onConfirmationChange()"  class="table-header-checkbox"> 
+                                NO PATIENTS WITH PHQ-9 OF 10 OR ABOVE
+                            </mat-checkbox>
+                        </div>
+
+                        
                 </div>
+                </form>
                 <div fxLayout="row" class="patient-workbook-table">
                     <mat-table #table [dataSource]="dataSourceDepressionWorkbook" matSort id="patients"
                         (matSortChange)="onSortData($event)" [trackBy]="trackDepressionPatients" multiTemplateDataRows>

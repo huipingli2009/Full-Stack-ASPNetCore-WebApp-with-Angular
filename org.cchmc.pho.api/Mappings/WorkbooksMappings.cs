@@ -8,7 +8,9 @@ namespace org.cchmc.pho.api.Mappings
     {
         public WorkbooksMappings()
         {
-            CreateMap<core.DataModels.WorkbooksDepressionPatient, WorkbooksDepressionPatientViewModel>();
+            CreateMap<WorkbooksDepressionPatient, WorkbooksDepressionPatientViewModel>();
+            CreateMap<WorkbooksDepressionConfirmation, WorkbooksDepressionConfirmationViewModel>();
+            CreateMap<WorkbooksDepressionConfirmationViewModel, WorkbooksDepressionConfirmation>();
             CreateMap<WorkbooksPractice, WorkbooksPracticeViewModel>();
             CreateMap<WorkbooksProvider, WorkbooksProviderViewModel>();
             CreateMap<WorkbooksLookup, WorkbooksLookupViewModel>();

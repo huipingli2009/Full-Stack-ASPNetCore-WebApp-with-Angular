@@ -7,11 +7,14 @@ import { environment } from '../environments/environment';
 import { Alerts, EdChart, EdChartDetails, Population, Quicklinks, Spotlight } from './models/dashboard';
 import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Patients, NewPatient, Pmca, PopSlices, Providers, States } from './models/patients';
 import { PracticeList, Responsibilities, Staff, StaffDetails, StaffAdmin, PracticeCoach } from './models/Staff';
-import { Followup, WorkbookDepressionPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookAsthmaPatient, Treatment} from './models/workbook';
+import { Followup, WorkbookDepressionPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookAsthmaPatient, Treatment, WorkbookConfirmation} from './models/workbook';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
 import { FileDetails, FileAction, ResourceType, Tag, Initiative, FileType, ContentPlacement } from './models/files';
 import { Location } from '@angular/common';
 import { MetricDrillthruTable } from './models/drillthru';
+// import { constants } from 'http2';
+
+
 
 // we can now access environment.apiUrl
 const API_URL = environment.apiURL;
@@ -445,6 +448,25 @@ export class RestService {
   updateWorkbookForProvider(WorkbookProvider: WorkbookProvider): Observable<any> {
     return this.http.put(`${API_URL}/api/Workbooks/provider/${WorkbookProvider.staffID}`, JSON.stringify(WorkbookProvider), httpOptions).pipe(
       catchError(this.handleError<any>('update staff workbook'))
+    );
+  }
+
+  /*Update workbook confirmations*/
+  updateWorkbookConfirmations(WorkbookConfirmation: WorkbookConfirmation): Observable<any> {
+    this.logger.log(WorkbookConfirmation, 'updateWorkbookConfirmations');
+    return this.http.put(`${API_URL}/api/Workbooks/confirmation/`, JSON.stringify(WorkbookConfirmation), httpOptions).pipe(
+      catchError(this.handleError<any>('update workbook confirmations'))
+    );
+  }
+
+  /* for getting depression confirmations for a form response ID */
+  getWorkbookDepressionConfirmations(formResponseid: number): Observable<any> {
+    let paramsValue = new HttpParams();
+    paramsValue = paramsValue.append("formResponseId", formResponseid.toString());
+    return this.http.get<WorkbookConfirmation>(`${API_URL}/api/Workbooks/confirmation`, { params: paramsValue }).pipe(
+      map((data: WorkbookConfirmation) => {
+        return data;
+      })
     );
   }
 
