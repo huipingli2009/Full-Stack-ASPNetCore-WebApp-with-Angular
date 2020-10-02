@@ -23,6 +23,7 @@ namespace org.cchmc.pho.core.Interfaces
         Task<SelectPractice> GetPracticeList(int userId);
         Task<bool> SwitchPractice(int userId, int practiceID);
         //Task<bool> AddNewStaff(int userId, int staffPositionId, string firstName, string lastName, string email, string phone, int locationId, DateTime startDate);
-        Task<StaffDetails> AddNewStaff(int userId, StaffDetails staffDetails);
+        Task<StaffDetails> AddNewStaff(int userId, StaffDetails staffDetails);        
+        Task<PracticeCoach> GetPracticeCoach(int userId);
     }
 }

@@ -259,6 +259,16 @@ export class RestService {
     );
   }
 
+   /*Get practice coach */
+   GetPracticeCoach(): Observable<any> {
+    const endpoint = `${API_URL}/api/Staff/practicecoach`;
+    return this.http.get<PracticeCoach>(endpoint).pipe(
+      map((data: PracticeCoach) => {
+        return data;
+      })
+    );
+  }
+
   /*Updates Staff*/
   updateStaff(StaffDetails): Observable<any> {
     this.logger.log(JSON.stringify(StaffDetails));

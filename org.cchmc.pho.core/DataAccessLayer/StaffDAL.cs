@@ -518,5 +518,40 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     return null;
             }
         }
+               
+        public async Task<PracticeCoach> GetPracticeCoach(int userId)
+        {
+            DataTable dataTable = new DataTable();
+            PracticeCoach coach = null; 
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetPracticeCoach", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                    await sqlConnection.OpenAsync();
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+
+                        foreach (DataRow dr in dataTable.Rows)
+                        {                             
+                            coach = new PracticeCoach()
+                            {                               
+                                Id = (dr["StaffId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StaffId"].ToString())),                                
+                                CoachName = dr["StaffName"].ToString(),
+                                Email = dr["EmailAddress"].ToString()
+                            };      
+
+                        }
+                        return coach;
+                    }
+                   
+                }
+               
+            }
+        }
     }   
 }
