@@ -255,6 +255,16 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
         this.logger.log("enable patient entry");
       }
   }
+
+  toggleDepressionConfirmationEnabled(enable: boolean): void{
+    if (enable == true){
+      this.PatientConfirmationForm.enable();
+    }else{
+      this.workbookDepressionConfirmations.noPatientsConfirmed = false;
+      this.PatientConfirmationForm.get('noPatientsConfirm').setValue(false);
+      this.PatientConfirmationForm.disable();
+    }
+  }
   
   //find specific patient to add to the workbook
   onPatientSearchValueChanges(): void {
@@ -532,6 +542,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
       this.dataSourceDepressionWorkbook = new MatTableDataSource(this.workbookDepressionPatient);
       this.dataSourceDepressionWorkbook.data = this.workbookDepressionPatient;
       this.DepressionPatientForWorkbookForm.get('action').setValue('false');
+      this.toggleDepressionConfirmationEnabled(this.workbookDepressionPatient.length == 0);
     })
   }
 
