@@ -120,6 +120,7 @@ export class PatientsComponent implements OnInit {
   //Outcome Pop list
   outcomes: string;
   outcomePopList: any[] = [];
+  test: string;
 
   // Selected Values
   selectedGender;
