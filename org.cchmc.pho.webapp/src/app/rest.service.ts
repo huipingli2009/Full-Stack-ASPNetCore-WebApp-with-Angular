@@ -134,7 +134,7 @@ export class RestService {
   findPatients(
     sortcolumn = 'name', sortdirection = 'Asc',
     pageNumber = 1, rowsPerPage = 20, chronic = '', watchFlag = '', conditionIDs = '',
-    staffID = '', popmeasureID = '', namesearch = ''): Observable<Patients[]> {
+    staffID = '', popmeasureID = '', outcomemetricId, namesearch = ''): Observable<Patients[]> {
 
     return this.http.get(`${API_URL}/api/Patients`, {
       params: new HttpParams()
@@ -147,6 +147,7 @@ export class RestService {
         .set('conditionIDs', conditionIDs)
         .set('staffID', staffID)
         .set('popmeasureID', popmeasureID)
+        .set('outcomemetricId',outcomemetricId )
         .set('namesearch', namesearch)
     }).pipe(
       map(res => {

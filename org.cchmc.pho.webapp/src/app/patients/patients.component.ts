@@ -279,9 +279,9 @@ export class PatientsComponent implements OnInit {
     this.potentialPatient = +(this.popSlices) == potentialPtStaus.PopSlice ? true : false;
 
     this.dataSource.loadPatients(this.defaultSortedRow, this.defaultSortDirection, 0, 20, this.chronic, this.watchFlag, this.conditions,
-      this.providers, this.popSlices, this.patientNameSearch);
+      this.providers, this.popSlices,  this.outcomes, this.patientNameSearch);
     this.rest.findPatients(this.defaultSortedRow, this.defaultSortDirection, 0, 20, this.chronic, this.watchFlag, this.conditions,
-      this.providers, this.popSlices, this.patientNameSearch).subscribe((data) => {
+      this.providers, this.popSlices,  this.outcomes, this.patientNameSearch).subscribe((data) => {
         this.patientRecords = data[0].totalRecords;
       });
 
@@ -302,6 +302,7 @@ export class PatientsComponent implements OnInit {
       this.conditions,
       this.providers,
       this.popSlices,
+      this.outcomes,
       this.patientNameSearch);
   }
 
