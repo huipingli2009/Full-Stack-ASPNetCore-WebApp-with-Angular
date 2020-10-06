@@ -190,7 +190,15 @@ export class PatientsComponent implements OnInit {
     this.subscription = this.filterService.getIsFilteringPatients().subscribe(res => {
       this.isFilteringPatients = res;
     });
-    this.subscription = this.filterService.getFilterType().subscribe(res => this.filterType = res);
+    //TH - check for outcome filtering    
+    this.subscription = this.filterService.getIsFilteringOutcomes().subscribe(res => {
+      this.logger.log(res, "Patients: IsFilteringOutcomes ", res);
+    });
+    this.subscription = this.filterService.getFilterType().subscribe(res => { 
+      this.filterType = res;
+      this.logger.log(res, "Patients: getFilterType ", res);
+    });
+
   }
 
   ngOnInit() {

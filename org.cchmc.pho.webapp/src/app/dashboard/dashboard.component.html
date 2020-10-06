@@ -97,7 +97,7 @@
                     <table mat-table [dataSource]="dataSourceTwo" class="mat-elevation-z8">
                         <ng-container matColumnDef="dashboardLabelQi">
                             <th mat-header-cell *matHeaderCellDef> Measure </th>
-                            <td mat-cell *matCellDef="let element" matTooltip="{{element.measureDesc}}">
+                            <td mat-cell *matCellDef="let element" (click)="toFilteredOutcomes(element)" matTooltip="{{element.measureDesc}}">
                                 {{element.dashboardLabel}}
                             </td>
                         </ng-container>
