@@ -230,9 +230,16 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.selectedReportingPeriod = this.workbookReportingPeriods.find(p => p.formResponseId == this.selectedFormResponseID);
     this.toggleWorkbookDisplay();
   }
+  //on change of the reporting data for workbook
+  onReportingDateSelectionChangeForPatient(formResponseId: number) : void {
+    this.selectedFormResponseID = formResponseId;
+    this.selectedReportingPeriod = this.workbookReportingPeriods.find(p => p.formResponseId == this.selectedFormResponseID);
+    this.toggleWorkbookDisplay();
+  }
 
   //switches out display modes for workbooks, which one will populate
   toggleWorkbookDisplay(): void{
+    this.logger.log("toggleWorkbookDisplay formResponseId: ", this.selectedFormResponseID);
     if (this.selectedWorkbookFormId == WorkbookFormValueEnum.depression){
       this.getDepressionWorkbookProviders(this.selectedFormResponseID);
       this.getDepressionWorkbookPatients(this.selectedFormResponseID);
@@ -565,14 +572,18 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   }
 
   getWorkbookReportingMonthsForPatient(patientName: string) {
-    this.rest.getWorkbookReportingMonthsForPatient(patientName).pipe(take(1)).subscribe((data) => {
+    this.rest.getWorkbookReportingMonthsForPatient(patientName, this.selectedWorkbookFormId.toString()).pipe(take(1)).subscribe((data) => {
       this.workbookReportingPeriods = data;
-/*       this.workbookReportingPeriods.forEach((element, index, reportData) => {
-        this.selectedFormResponseID.setValue(this.workbookReportingPeriods[0].formResponseID);
-        this.onReportingDateSelectionChange();
-      }); */
+        this.workbookReportingPeriods.forEach((element, index, reportData) => {
+        this.logger.log(this.workbookReportingPeriods[0].formResponseId, "getWorkbookReportingMonthsForPatient");
+        this.selectedFormResponseID = this.workbookReportingPeriods[0].formResponseId;
+        this.selectedWorkbookFormId = this.workbookReportingPeriods[0].formId;
+        this.setSelectedReportingPeriod(this.workbookReportingPeriods[0]);
+        this.onReportingDateSelectionChangeForPatient(this.selectedFormResponseID);
+      });
     })
   }
+  
 
     //for getting the follow-up questions
     FollowUpForPatient(element: any) {
