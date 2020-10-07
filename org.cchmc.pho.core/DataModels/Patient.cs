@@ -46,11 +46,5 @@ namespace org.cchmc.pho.core.DataModels
     {
         public int Id { get; set; }
         public string Name { get; set; }
-    }
-
-    //public class OutcomeMetricFilter
-    //{
-    //    public int MeasureId { get; set; }
-    //    public string DashboardLabel { get; set; }
-    //}
+    }    
 }
