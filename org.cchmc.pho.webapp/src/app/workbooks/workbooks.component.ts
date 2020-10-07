@@ -8,7 +8,7 @@ import { NGXLogger } from 'ngx-logger';
 import { Subject } from 'rxjs'; 
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { PatientForWorkbook, Providers } from '../models/patients';
-import { Followup, WorkbookDepressionPatient, WorkbookAsthmaPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookFormValueEnum, Treatment } from '../models/workbook';
+import { Followup, WorkbookDepressionPatient, WorkbookAsthmaPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookFormValueEnum, Treatment, WorkbookConfirmation } from '../models/workbook';
 import { RestService } from '../rest.service';
 import { DateRequiredValidator } from '../shared/customValidators/customValidator';
 import { MatSnackBarComponent } from '../shared/mat-snack-bar/mat-snack-bar.component';
@@ -60,6 +60,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   workbookProviderDetail: WorkbookProvider;
   newDepressionWorkbookPatient: WorkbookDepressionPatient;
   removeDepressionWorkbookPatient: WorkbookDepressionPatient;
+  workbookDepressionConfirmations: WorkbookConfirmation;
   workbookProviders: WorkbookProvider[];
   dataSourceDepressionWorkbook: MatTableDataSource<WorkbookDepressionPatient>;
   formResponseId: number;
@@ -139,12 +140,18 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
       oneMonthFollowupVisit: [''],
       dateOfOneMonthVisit: [''],
       oneMonthFolllowupPHQ9Score: ['']
-
     }
   );
 
   editProvidersForm = this.fb.group({
     pcpName: ['', Validators.required]
+  });
+
+  ProviderConfirmationForm = this.fb.group({
+    allProvidersConfirm: ['']
+  });
+  PatientConfirmationForm = this.fb.group({
+    noPatientsConfirm: ['']
   });
 
   //event handlers - generic (all workbooks)
@@ -223,17 +230,46 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.selectedReportingPeriod = this.workbookReportingPeriods.find(p => p.formResponseId == this.selectedFormResponseID);
     this.toggleWorkbookDisplay();
   }
+  //on change of the reporting data for workbook
+  onReportingDateSelectionChangeForPatient(formResponseId: number) : void {
+    this.selectedFormResponseID = formResponseId;
+    this.selectedReportingPeriod = this.workbookReportingPeriods.find(p => p.formResponseId == this.selectedFormResponseID);
+    this.toggleWorkbookDisplay();
+  }
 
   //switches out display modes for workbooks, which one will populate
   toggleWorkbookDisplay(): void{
+    this.logger.log("toggleWorkbookDisplay formResponseId: ", this.selectedFormResponseID);
     if (this.selectedWorkbookFormId == WorkbookFormValueEnum.depression){
       this.getDepressionWorkbookProviders(this.selectedFormResponseID);
       this.getDepressionWorkbookPatients(this.selectedFormResponseID);
+      this.getDepressionConfirmations(this.selectedFormResponseID);
       this.getWorkbookPractice(this.selectedFormResponseID);
     }
     if (this.selectedWorkbookFormId == WorkbookFormValueEnum.asthma){
       this.getAsthmaWorkbookPatients(this.selectedFormResponseID);
       this.getAsthmaWorkbookPractice(this.selectedFormResponseID);      
+    }
+  }
+
+  toggleDepressionPatientFormEnabled(): void{
+    if(this.workbookDepressionConfirmations.noPatientsConfirmed === true){
+      this.DepressionPatientForWorkbookForm.disable();
+      this.logger.log("disable patient entry");
+      }
+      else { 
+        this.DepressionPatientForWorkbookForm.enable(); 
+        this.logger.log("enable patient entry");
+      }
+  }
+
+  toggleDepressionConfirmationEnabled(enable: boolean): void{
+    if (enable === true){
+      this.PatientConfirmationForm.enable();
+    }else{
+      this.workbookDepressionConfirmations.noPatientsConfirmed = false;
+      this.PatientConfirmationForm.get('noPatientsConfirm').setValue(false);
+      this.PatientConfirmationForm.disable();
     }
   }
   
@@ -253,6 +289,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   
   //for updating the depression provider values
   onDepressionProviderValueChanges(): void {
+    this.logger.log("onDepressionProviderValueChanges");
     this.ProvidersForWorkbookForm.get('ProviderWorkbookArray').valueChanges.pipe(takeUntil(this.unsubscribe$)).subscribe(values => {
       this.phqsFinal = 0;
       this.totalFinal = 0;
@@ -268,12 +305,43 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     })
   }
 
+  //for updating the depression confirmations
+  onConfirmationChange(): void {
+    this.logger.log("onConfirmationChange");
+    let updateData = false;
+    // this.logger.log(this.ProviderConfirmationForm.get('allProvidersConfirm').value, "allProvidersConfirm");
+    // this.logger.log(this.PatientConfirmationForm.get('noPatientsConfirm').value, "noPatientsConfirm");
+    if (this.ProviderConfirmationForm.get('allProvidersConfirm').value != null)
+    {
+      updateData = true;
+      this.workbookDepressionConfirmations.allProvidersConfirmed = this.ProviderConfirmationForm.get('allProvidersConfirm').value;
+    }
+    if (this.PatientConfirmationForm.get('noPatientsConfirm').value != null)
+    {
+      updateData = true;
+      this.workbookDepressionConfirmations.noPatientsConfirmed = this.PatientConfirmationForm.get('noPatientsConfirm').value;
+    }
+    //enable disable controls
+    this.toggleDepressionPatientFormEnabled();
+    if (updateData == true){
+      this.updateDepressionWorkbookConfirmations(this.workbookDepressionConfirmations);
+    }    
+  }
+
   onProviderDepressionWorkbookChange(index: number) { 
+    this.logger.log("onProviderDepressionWorkbookChange");
     let provider = this.ProviderWorkbookArray.at(index);
     this.workbookProviderDetail = provider.value;
     this.workbookProviderDetail.phqs = Number(this.workbookProviderDetail.phqs);
     this.workbookProviderDetail.total = Number(this.workbookProviderDetail.total);
     this.updateDepressionWorkbookProviders(this.workbookProviderDetail);
+
+    if (this.workbookProviders.filter(p => p.phqs == 0 || p.total==0).length == 0){
+      this.logger.log("no empty provider totals", this.ProviderWorkbookArray);
+    }
+    else{
+      this.logger.log("still some empty providers", this.workbookProviders);
+    }
   }
   
   onSelectedPatient(event: any): void {
@@ -399,6 +467,14 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
 
   updateDepressionWorkbookProviders(workbookProviderDetails: WorkbookProvider) {
     this.rest.updateWorkbookForProvider(workbookProviderDetails).subscribe(res => {
+      //after we get this data, doublecheck for changed confirmation values
+      this.getDepressionConfirmations(this.selectedFormResponseID);
+      this.toggleDepressionPatientFormEnabled();
+    })
+  }
+
+  updateDepressionWorkbookConfirmations(workbookConfirmations: WorkbookConfirmation) {
+    this.rest.updateWorkbookConfirmations(workbookConfirmations).subscribe(res => {
     })
   }
   
@@ -473,6 +549,17 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
       this.dataSourceDepressionWorkbook = new MatTableDataSource(this.workbookDepressionPatient);
       this.dataSourceDepressionWorkbook.data = this.workbookDepressionPatient;
       this.DepressionPatientForWorkbookForm.get('action').setValue('false');
+      this.toggleDepressionConfirmationEnabled(this.workbookDepressionPatient.length === 0);
+    })
+  }
+
+  //for getting confirmation flags for depression worsheet
+  getDepressionConfirmations(formResponseid: number) {
+    this.rest.getWorkbookDepressionConfirmations(formResponseid).pipe(take(1)).subscribe((data) => {
+      this.workbookDepressionConfirmations = data;
+      this.ProviderConfirmationForm.get('allProvidersConfirm').setValue(this.workbookDepressionConfirmations.allProvidersConfirmed);
+      this.PatientConfirmationForm.get('noPatientsConfirm').setValue(this.workbookDepressionConfirmations.noPatientsConfirmed);
+      this.toggleDepressionPatientFormEnabled();
     })
   }
 
@@ -485,14 +572,18 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   }
 
   getWorkbookReportingMonthsForPatient(patientName: string) {
-    this.rest.getWorkbookReportingMonthsForPatient(patientName).pipe(take(1)).subscribe((data) => {
+    this.rest.getWorkbookReportingMonthsForPatient(patientName, this.selectedWorkbookFormId.toString()).pipe(take(1)).subscribe((data) => {
       this.workbookReportingPeriods = data;
-/*       this.workbookReportingPeriods.forEach((element, index, reportData) => {
-        this.selectedFormResponseID.setValue(this.workbookReportingPeriods[0].formResponseID);
-        this.onReportingDateSelectionChange();
-      }); */
+        this.workbookReportingPeriods.forEach((element, index, reportData) => {
+        this.logger.log(this.workbookReportingPeriods[0].formResponseId, "getWorkbookReportingMonthsForPatient");
+        this.selectedFormResponseID = this.workbookReportingPeriods[0].formResponseId;
+        this.selectedWorkbookFormId = this.workbookReportingPeriods[0].formId;
+        this.setSelectedReportingPeriod(this.workbookReportingPeriods[0]);
+        this.onReportingDateSelectionChangeForPatient(this.selectedFormResponseID);
+      });
     })
   }
+  
 
     //for getting the follow-up questions
     FollowUpForPatient(element: any) {
