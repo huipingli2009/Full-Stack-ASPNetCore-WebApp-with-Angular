@@ -119,8 +119,7 @@ export class PatientsComponent implements OnInit {
 
   //Outcome Pop list
   outcomes: string;
-  outcomePopList: any[] = [];
-  test: string;
+  outcomePopList: any[] = []; 
 
   // Selected Values
   selectedGender;
@@ -354,6 +353,10 @@ export class PatientsComponent implements OnInit {
   }
 
   patientHasCondition(e) {
+    this.loadPatientsWithFilters();
+  }
+
+  outcomesFilterSelected(){
     this.loadPatientsWithFilters();
   }
 

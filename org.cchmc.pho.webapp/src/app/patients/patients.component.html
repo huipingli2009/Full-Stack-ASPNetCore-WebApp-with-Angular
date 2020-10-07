@@ -34,7 +34,7 @@
     <div fxLayout="column" class="header-filter">
       <mat-form-field>
         <mat-label>Outcomes</mat-label>
-        <mat-select [(ngModel)]="outcomes" (selectionChange)="patientHasCondition($event)">
+        <mat-select [(ngModel)]="outcomes" (selectionChange)="outcomesFilterSelected()">
           <mat-option *ngFor="let outcomepop of outcomePopList" [value]="outcomepop.measureId">
             {{outcomepop.dashboardLabel}}
           </mat-option>

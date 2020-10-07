@@ -26,7 +26,7 @@ export class PatientsDataSource implements DataSource<Patients> {
 
     loadPatients(sortcolumn = 'name',
         sortDirection = 'asc', pageIndex = 0, pageSize = 20, chronic = '', watchFlag = '', conditionIDs = '',
-        staffID = '', popmeasureID = '', outcomemetricId ='', namesearch = '') {
+        staffID = '', popmeasureID = '', outcomemetricId = '', namesearch = '') {
 
         this.loadingSubject.next(true);
         this.pageNumber = pageIndex + 1;

@@ -134,7 +134,7 @@ export class RestService {
   findPatients(
     sortcolumn = 'name', sortdirection = 'Asc',
     pageNumber = 1, rowsPerPage = 20, chronic = '', watchFlag = '', conditionIDs = '',
-    staffID = '', popmeasureID = '', outcomemetricId, namesearch = ''): Observable<Patients[]> {
+    staffID = '', popmeasureID = '', outcomemetricId: string, namesearch = ''): Observable<Patients[]> {
 
     return this.http.get(`${API_URL}/api/Patients`, {
       params: new HttpParams()
@@ -154,6 +154,7 @@ export class RestService {
         var patientsAndCount: Patients[];
 
         patientsAndCount = res['results'];
+        // patientsAndCount = res['resultCount'];
         return patientsAndCount;
       })
     );
