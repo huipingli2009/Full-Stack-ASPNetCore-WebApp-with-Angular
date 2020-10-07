@@ -253,7 +253,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   }
 
   toggleDepressionPatientFormEnabled(): void{
-    if(this.workbookDepressionConfirmations.noPatientsConfirmed == true){
+    if(this.workbookDepressionConfirmations.noPatientsConfirmed === true){
       this.DepressionPatientForWorkbookForm.disable();
       this.logger.log("disable patient entry");
       }
@@ -264,7 +264,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   }
 
   toggleDepressionConfirmationEnabled(enable: boolean): void{
-    if (enable == true){
+    if (enable === true){
       this.PatientConfirmationForm.enable();
     }else{
       this.workbookDepressionConfirmations.noPatientsConfirmed = false;
@@ -549,7 +549,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
       this.dataSourceDepressionWorkbook = new MatTableDataSource(this.workbookDepressionPatient);
       this.dataSourceDepressionWorkbook.data = this.workbookDepressionPatient;
       this.DepressionPatientForWorkbookForm.get('action').setValue('false');
-      this.toggleDepressionConfirmationEnabled(this.workbookDepressionPatient.length == 0);
+      this.toggleDepressionConfirmationEnabled(this.workbookDepressionPatient.length === 0);
     })
   }
 
