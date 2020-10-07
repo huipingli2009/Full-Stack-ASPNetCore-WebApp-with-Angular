@@ -612,8 +612,9 @@ export class RestService {
   }
 
   /* for getting the reporting month and form response ID for a Patient */
-  getWorkbookReportingMonthsForPatient(patientName: string): Observable<any> {
+  getWorkbookReportingMonthsForPatient(patientName: string, form: string): Observable<any> {
     let paramsValue = new HttpParams();
+    paramsValue = paramsValue.append("formId", form);
     paramsValue = paramsValue.append("nameSearch", patientName);
     return this.http.get<WorkbookReportingPeriod[]>(`${API_URL}/api/Workbooks/lookups`, { params: paramsValue }).pipe(
       map((data: WorkbookReportingPeriod[]) => {
