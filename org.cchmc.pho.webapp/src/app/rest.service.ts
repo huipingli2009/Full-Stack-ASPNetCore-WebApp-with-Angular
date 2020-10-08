@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from '../environments/environment';
 import { Alerts, EdChart, EdChartDetails, Population, Quicklinks, Spotlight } from './models/dashboard';
-import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Patients, NewPatient, Pmca, PopSlices, Providers, States } from './models/patients';
+import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Patients, NewPatient, Pmca, PopSlices, Providers, States, Outcomes } from './models/patients';
 import { PracticeList, Responsibilities, Staff, StaffDetails, StaffAdmin, PracticeCoach } from './models/Staff';
 import { Followup, WorkbookDepressionPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookAsthmaPatient, Treatment, WorkbookConfirmation} from './models/workbook';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
@@ -137,7 +137,7 @@ export class RestService {
   findPatients(
     sortcolumn = 'name', sortdirection = 'Asc',
     pageNumber = 1, rowsPerPage = 20, chronic = '', watchFlag = '', conditionIDs = '',
-    staffID = '', popmeasureID = '', namesearch = ''): Observable<Patients[]> {
+    staffID = '', popmeasureID = '', outcomemetricId = '', namesearch = ''): Observable<Patients[]> {
 
     return this.http.get(`${API_URL}/api/Patients`, {
       params: new HttpParams()
@@ -150,12 +150,13 @@ export class RestService {
         .set('conditionIDs', conditionIDs)
         .set('staffID', staffID)
         .set('popmeasureID', popmeasureID)
+        .set('outcomemetricId',outcomemetricId )
         .set('namesearch', namesearch)
     }).pipe(
       map(res => {
         var patientsAndCount: Patients[];
 
-        patientsAndCount = res['results'];
+        patientsAndCount = res['results'];       
         return patientsAndCount;
       })
     );
@@ -800,6 +801,15 @@ export class RestService {
 
     return this.http.get<any>(`${API_URL}/api/Files/popular/`, { params: paramsValue }).pipe(
       map((data: FileList[]) => {
+        return data;
+      })
+    );
+  }  
+
+  //Get patient outcome metric list
+  GetPopulationOutcomeMetrics(): Observable<any>{
+    return this.http.get<any>(`${API_URL}/api/Metrics/outcomepop`).pipe(
+      map((data: Outcomes[]) => {
         return data;
       })
     );

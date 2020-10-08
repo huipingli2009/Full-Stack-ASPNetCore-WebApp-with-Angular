@@ -20,7 +20,8 @@ namespace org.cchmc.pho.api.Mappings
             CreateMap<PMCA, PMCAViewModel>();
             CreateMap<Gender, GenderViewModel>();
             CreateMap<State, StateViewModel>();
-            CreateMap<SimplifiedPatient, SimplifiedPatientViewModel>();           
+            CreateMap<SimplifiedPatient, SimplifiedPatientViewModel>();
+            CreateMap<PopulationOutcomeMetric, PopulationOutcomeMetricViewModel>();
         }
     }
 }

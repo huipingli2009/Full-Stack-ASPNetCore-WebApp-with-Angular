@@ -217,6 +217,32 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
 
         }
+        public async Task<List<PopulationOutcomeMetric>> GetPopulationOutcomeMetrics()
+        {
+            DataTable dataTable = new DataTable();
+            List<PopulationOutcomeMetric> outcomemetrics;
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetOutcomeMetricList", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    await sqlConnection.OpenAsync();
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        outcomemetrics = (from DataRow dr in dataTable.Rows
+                                   select new PopulationOutcomeMetric()
+                                   {
+                                       MeasureId = Convert.ToInt32(dr["MeasureId"]),
+                                       DashboardLabel = dr["DashboardLabel"].ToString()
+                                   }
+                            ).ToList();
+                    }
+                    return outcomemetrics;
+                }
+            }
+        }
 
     }
 }

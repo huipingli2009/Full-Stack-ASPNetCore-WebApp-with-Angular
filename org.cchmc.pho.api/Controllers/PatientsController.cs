@@ -38,12 +38,12 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(200, type: typeof(List<PatientViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> ListActivePatient(int? staffID, int? popmeasureID, bool? watch, bool? chronic, string conditionIDs, string namesearch, string sortcolumn, string sortdirection, int? pagenumber, int? rowsPerPage)
+        public async Task<IActionResult> ListActivePatient(int? staffID, int? popmeasureID, bool? watch, bool? chronic, string conditionIDs, string namesearch, string sortcolumn, string sortdirection, int? pagenumber, int? rowsPerPage, int? outcomeMetricId)
         {
             try
             {
                 int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
-                var data = await _patient.ListActivePatient(currentUserId, staffID, popmeasureID, watch, chronic, conditionIDs, namesearch,sortcolumn,sortdirection,pagenumber,rowsPerPage);
+                var data = await _patient.ListActivePatient(currentUserId, staffID, popmeasureID, watch, chronic, conditionIDs, namesearch,sortcolumn,sortdirection,pagenumber,rowsPerPage, outcomeMetricId);
                 var result = _mapper.Map<SearchResultsViewModel<PatientViewModel>>(data);
 
                 // return the result in a "200 OK" response 
