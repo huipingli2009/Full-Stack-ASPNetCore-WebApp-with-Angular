@@ -24,7 +24,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             _logger = logger;
         }       
 
-        public async Task<SearchResults<Patient>> ListActivePatient(int userId, int? staffID, int? popmeasureID, bool? watch, bool? chronic, string conditionIDs, string namesearch, string sortcolumn, string sortdirection, int? pagenumber, int? rowsperpage)
+        public async Task<SearchResults<Patient>> ListActivePatient(int userId, int? staffID, int? popmeasureID, bool? watch, bool? chronic, string conditionIDs, string namesearch, string sortcolumn, string sortdirection, int? pagenumber, int? rowsperpage, int? outcomeMetricId)
         {
             DataTable patientListDataTable;
             DataTable patientListCountDataTable;
@@ -48,6 +48,8 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@SortDirection", SqlDbType.VarChar, 100).Value = sortdirection;
                     sqlCommand.Parameters.Add("@PageNumber", SqlDbType.VarChar, 50).Value = pagenumber;
                     sqlCommand.Parameters.Add("@RowspPage", SqlDbType.VarChar, 100).Value = rowsperpage;
+
+                    sqlCommand.Parameters.Add("@QIMeasureID", SqlDbType.Int).Value = outcomeMetricId;                   
 
                     await sqlConnection.OpenAsync();
 
@@ -75,7 +77,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 Conditions = new List<PatientCondition>(),
                                 ActiveStatus = bool.Parse(dr["ActiveStatus"].ToString()),
                                 PotentiallyActiveStatus = bool.Parse(dr["PotentiallyActive"].ToString()),
-                                TotalRecords = Convert.ToInt32(dr["TotalRecords"])
+                                TotalRecords = Convert.ToInt32(dr["TotalRecords"])                               
                             };
 
                             if (!string.IsNullOrWhiteSpace(dr["ConditionIDs"].ToString()))

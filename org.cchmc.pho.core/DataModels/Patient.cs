@@ -19,7 +19,8 @@ namespace org.cchmc.pho.core.DataModels
         public bool WatchFlag { get; set; }
 
         public int TotalRecords { get; set; }
-        public List<PatientCondition> Conditions { get; set; }        
+        public List<PatientCondition> Conditions { get; set; }
+        public int OutcomeMetricFilterId { get; set; }
     }
    
 
@@ -45,5 +46,5 @@ namespace org.cchmc.pho.core.DataModels
     {
         public int Id { get; set; }
         public string Name { get; set; }
-    }
+    }    
 }
