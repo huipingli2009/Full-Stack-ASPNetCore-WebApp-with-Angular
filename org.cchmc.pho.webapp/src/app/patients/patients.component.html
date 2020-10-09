@@ -31,6 +31,16 @@
         </mat-select>
       </mat-form-field>
     </div>
+    <div fxLayout="column" class="header-filter">
+      <mat-form-field>
+        <mat-label>Outcomes</mat-label>
+        <mat-select [(ngModel)]="outcomes" (selectionChange)="outcomesFilterSelected()">
+          <mat-option *ngFor="let outcomepop of outcomePopList" [value]="outcomepop.measureId">
+            {{outcomepop.dashboardLabel}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
     <div fxLayout="column" class="header-filter search-input" fxFlex fxLayoutAlign="center end">
       <mat-form-field>
         <input type="text" matInput placeholder="Search Patient Name" [(ngModel)]="patientNameSearchValue" (change)="searchPatientsByName($event)">

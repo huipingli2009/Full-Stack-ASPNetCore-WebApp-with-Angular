@@ -13,5 +13,6 @@ namespace org.cchmc.pho.core.Interfaces
         Task<List<EDDetail>> ListEDDetails(int userId, DateTime admitDate);
         Task<List<PopulationMetric>> ListPopulationMetrics();
         Task<DrillthruMetricTable> GetDrillthruTable(int userId, int measureId, int filterId);
+        Task<List<PopulationOutcomeMetric>> GetPopulationOutcomeMetrics();
     }
 }
