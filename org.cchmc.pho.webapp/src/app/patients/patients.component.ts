@@ -131,10 +131,11 @@ export class PatientsComponent implements OnInit {
   dataSource: PatientsDataSource;
   savedPatientData: any;
   isDisabled: boolean;
-  isFormValid = this.form;
+  isFormValid = this.form; 
   subscription: Subscription;
   patientSubscription: Subscription;
   isFilteringPatients: boolean;
+  isFilteringOutcomes: boolean;
   filterType: string;
 
   isExpansionDetailRow = (i: number, row: object) => row.hasOwnProperty('detailRow');
@@ -196,6 +197,7 @@ export class PatientsComponent implements OnInit {
     });
     //TH - check for outcome filtering    
     this.subscription = this.filterService.getIsFilteringOutcomes().subscribe(res => {
+      this.isFilteringOutcomes = res;
       this.logger.log(res, "Patients: IsFilteringOutcomes ", res);
     });
     this.subscription = this.filterService.getFilterType().subscribe(res => { 
@@ -235,6 +237,7 @@ export class PatientsComponent implements OnInit {
       this.patientSubscription.unsubscribe();
     }
     this.filterService.updateIsFilteringPatients(false);
+    this.filterService.updateIsFilteringOutcomes(false);
     this.filterService.updateFilterType('');
   }
 
@@ -267,6 +270,9 @@ export class PatientsComponent implements OnInit {
     if (this.isFilteringPatients === true) { // This is to handle if the user is coming from Dashboard or not.
       this.popSlices = this.filterType;
     }
+    if (this.isFilteringOutcomes === true){
+      this.outcomes = this.filterType;
+    }
 
     //if patient is coming from ED chart
     if (this.selectedPatientId) {
@@ -297,6 +303,8 @@ export class PatientsComponent implements OnInit {
     //reset selectedPatientId
     this.rest.selectedPatientId = null;
     this.rest.selectedPatientName = null;
+    //reset outcome filter
+    this.filterService.updateIsFilteringOutcomes(false);
   }
 
   loadPatientsPage() {
