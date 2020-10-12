@@ -6,10 +6,14 @@ import { Subject, Observable, BehaviorSubject } from 'rxjs';
 export class FilterService {
 
     private isFilteringPatients: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    private isFilteringOutcomes: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     private filterType: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
     getIsFilteringPatients(): Observable<boolean> {
         return this.isFilteringPatients.asObservable();
+    }
+    getIsFilteringOutcomes(): Observable<boolean> {
+        return this.isFilteringOutcomes.asObservable();
     }
 
     getFilterType(): Observable<string> {
@@ -18,6 +22,9 @@ export class FilterService {
 
     updateIsFilteringPatients(isFiltering: boolean) {
         this.isFilteringPatients.next(isFiltering);
+    }
+    updateIsFilteringOutcomes(isFiltering: boolean) {
+        this.isFilteringOutcomes.next(isFiltering);
     }
 
     updateFilterType(filterType: string) {

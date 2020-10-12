@@ -173,7 +173,8 @@ export class DashboardComponent implements OnInit {
             dashboardLabel: item.dashboardLabel,
             measureDesc: item.measureDesc,
             practiceTotal: item.practiceTotal,
-            networkTotal: item.networkTotal
+            networkTotal: item.networkTotal,
+            measureId: item.measureId
           });
           this.dataSourceTwo.data = this.qiData;
         }
@@ -184,6 +185,13 @@ export class DashboardComponent implements OnInit {
   // Send click to Filtered Patients
   toFilteredPatients(element) {
     this.filterService.updateIsFilteringPatients(true);
+    this.filterService.updateFilterType(element.measureId);
+    this.router.navigate(['/patients']);
+  }
+  // Send click to Filtered Patients
+  toFilteredOutcomes(element) {
+    this.logger.log(element.measureId, "toFilteredOutcomes: measureId");
+    this.filterService.updateIsFilteringOutcomes(true);
     this.filterService.updateFilterType(element.measureId);
     this.router.navigate(['/patients']);
   }
