@@ -36,12 +36,15 @@ export class DashboardComponent implements OnInit {
   monthlySpotlightImageUrl: string;
   edChartTitle: string;
   defaultUrl = environment.apiURL; 
-   popData: any[] = [];
+  popData: any[] = [];
   qiData: any[] = [];
+  conditionData: any[] = [];
   dataSourceOne: MatTableDataSource<any>;
   displayedColumns: string[] = ['dashboardLabel', 'practiceTotal', 'networkTotal'];
   dataSourceTwo: MatTableDataSource<any>;
   displayedColumnsQi: string[] = ['dashboardLabelQi', 'practiceTotalQi', 'networkTotalQi'];
+  dataSourceThree: MatTableDataSource<any>;
+  displayedColumnsCondition: string[] = ['dashboardLabelCondition', 'practiceTotalCondition', 'networkTotalCondition'];
   // Chart Options
   canvas: any;
   ctx: any;
@@ -64,6 +67,7 @@ export class DashboardComponent implements OnInit {
     // var id = this.userId.snapshot.paramMap.get('id') TODO: Need User Table;
     this.dataSourceOne = new MatTableDataSource;
     this.dataSourceTwo = new MatTableDataSource;
+    this.dataSourceThree = new MatTableDataSource;
   }
 
   public barChartLabels = [];
@@ -177,6 +181,16 @@ export class DashboardComponent implements OnInit {
             measureId: item.measureId
           });
           this.dataSourceTwo.data = this.qiData;
+        }
+        if (item.measureType === 'COND') {
+          this.conditionData.push({
+            dashboardLabel: item.dashboardLabel,
+            measureDesc: item.measureDesc,
+            practiceTotal: item.practiceTotal,
+            networkTotal: item.networkTotal,
+            measureId: item.measureId
+          });
+          this.dataSourceThree.data = this.conditionData;
         }
       });
     });
