@@ -104,7 +104,7 @@
 
                         <ng-container matColumnDef="practiceTotalQi">
                             <th mat-header-cell *matHeaderCellDef> Practice </th>
-                            <td mat-cell *matCellDef="let element"> {{element.practiceTotal}} </td>
+                            <td mat-cell *matCellDef="let element" (click)="toFilteredOutcomes(element)"> {{element.practiceTotal}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="networkTotalQi">
