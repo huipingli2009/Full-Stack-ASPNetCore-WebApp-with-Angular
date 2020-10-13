@@ -986,10 +986,10 @@
                 </div>
                 <div fxLayout="column">
                     <mat-form-field>
-                        <input matInput formControlName="oneMonthFolllowupPHQ9Score" placeholder="Score">
+                        <input matInput formControlName="oneMonthFollowupPHQ9Score == 0 ? '':oneMonthFollowupPHQ9Score" placeholder="Score">
                         <ng-container
-                            *ngIf="(FollowupForm.get('oneMonthFolllowupPHQ9Score').touched || FollowupForm.get('oneMonthFolllowupPHQ9Score').dirty) && FollowupForm.get('oneMonthFolllowupPHQ9Score').errors">
-                            <mat-error *ngIf="FollowupForm.get('oneMonthFolllowupPHQ9Score').errors.required">
+                            *ngIf="(FollowupForm.get('oneMonthFollowupPHQ9Score').touched || FollowupForm.get('oneMonthFollowupPHQ9Score').dirty) && FollowupForm.get('oneMonthFolllowupPHQ9Score').errors">
+                            <mat-error *ngIf="FollowupForm.get('oneMonthFollowupPHQ9Score').errors.required">
                                 PHQ-9 score is required
                             </mat-error>
                         </ng-container>

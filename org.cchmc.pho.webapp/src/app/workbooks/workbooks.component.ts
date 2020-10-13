@@ -826,30 +826,34 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
       });
       this.table.dataSource = this.sortedData;  
     }
-
-    PHQFollowUpQuestionValidators() {
-      // const followupPhoneCallOneToTwoWeeks = this.FollowupForm.get('followupPhoneCallOneToTwoWeeks');
-      // const oneMonthFollowupVisit = this.FollowupForm.get('oneMonthFollowupVisit');
+    PHQFollowUpQuestionValidators() {    
 
       const dateOfFollowupCall = this.FollowupForm.get('dateOfFollowupCall');
-      const dateOfOneMonthVisit = this.FollowupForm.get('dateOfOneMonthVisit');
-    
+      const dateOfOneMonthVisit = this.FollowupForm.get('dateOfOneMonthVisit');    
 
       this.FollowupForm.get('followupPhoneCallOneToTwoWeeks').valueChanges
         .subscribe(followupPhoneCallOneToTwoWeeks =>{
           if (followupPhoneCallOneToTwoWeeks ==='Yes'){
-            dateOfFollowupCall.setValidators([Validators.required]); 
-            dateOfFollowupCall.updateValueAndValidity(); 
+            dateOfFollowupCall.setValidators([Validators.required]);             
           }
+          else{            
+            this.FollowupForm.get('dateOfFollowupCall').clearValidators();
+            this.FollowupForm.get('dateOfFollowupCall').reset();
+          }
+          dateOfFollowupCall.updateValueAndValidity();
         })
 
         this.FollowupForm.get('oneMonthFollowupVisit').valueChanges
         .subscribe(oneMonthFollowupVisit =>{
           if (oneMonthFollowupVisit ==='Yes'){
-            dateOfOneMonthVisit.setValidators([Validators.required]);  
-            dateOfOneMonthVisit.updateValueAndValidity();
-          }      
-
+            dateOfOneMonthVisit.setValidators([Validators.required]);              
+          } 
+          else
+          {            
+            this.FollowupForm.get('dateOfOneMonthVisit').clearValidators();
+            this.FollowupForm.get('dateOfOneMonthVisit').reset();
+          }     
+          dateOfOneMonthVisit.updateValueAndValidity();
         })     
     }  
 }
