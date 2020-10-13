@@ -166,8 +166,6 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.onPatientSearchValueChanges();
     this.onWorkbooksForPatientSearchValueChanges();
     this.getTreatments();
-
-    //conditionally reset validators for required fields
     this.PHQFollowUpQuestionValidators();
   }
 
@@ -617,11 +615,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
       this.followUpQuestions.dateOfLastCommunicationByExternalProvider = this.FollowupForm.get('dateOfLastCommunicationByExternalProvider').value;
       this.followUpQuestions.dateOfFollowupCall = this.FollowupForm.get('dateOfFollowupCall').value;
       this.followUpQuestions.dateOfOneMonthVisit = this.FollowupForm.get('dateOfOneMonthVisit').value;
-
-      if ((Number)(this.FollowupForm.get('oneMonthFolllowupPHQ9Score').value) == -1)
-        this.followUpQuestions.oneMonthFolllowupPHQ9Score = null;
-      else
-        this.followUpQuestions.oneMonthFolllowupPHQ9Score = (Number)(this.FollowupForm.get('oneMonthFolllowupPHQ9Score').value);
+      this.followUpQuestions.oneMonthFolllowupPHQ9Score = (Number)(this.FollowupForm.get('oneMonthFolllowupPHQ9Score').value);
       this.UpdateFollowUpQuestionResponses(this.followUpQuestions);
     }
     UpdateFollowUpQuestionResponses(followUp: Followup) {
@@ -824,7 +818,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
           default: return 0;
         }
       });
-      this.table.dataSource = this.sortedData;  
+      this.table.dataSource = this.sortedData; 
     }
     PHQFollowUpQuestionValidators() {    
 
@@ -857,3 +851,4 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
         })     
     }  
 }
+
