@@ -166,6 +166,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.onPatientSearchValueChanges();
     this.onWorkbooksForPatientSearchValueChanges();
     this.getTreatments();
+    this.PHQFollowUpQuestionValidators();
   }
 
   ngOnDestroy(): void {
@@ -817,9 +818,37 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
           default: return 0;
         }
       });
-      this.table.dataSource = this.sortedData;
-  
-  
+      this.table.dataSource = this.sortedData; 
     }
-  
+    PHQFollowUpQuestionValidators() {    
+
+      const dateOfFollowupCall = this.FollowupForm.get('dateOfFollowupCall');
+      const dateOfOneMonthVisit = this.FollowupForm.get('dateOfOneMonthVisit');    
+
+      this.FollowupForm.get('followupPhoneCallOneToTwoWeeks').valueChanges
+        .subscribe(followupPhoneCallOneToTwoWeeks =>{
+          if (followupPhoneCallOneToTwoWeeks ==='Yes'){
+            dateOfFollowupCall.setValidators([Validators.required]);             
+          }
+          else{            
+            this.FollowupForm.get('dateOfFollowupCall').clearValidators();
+            this.FollowupForm.get('dateOfFollowupCall').reset();
+          }
+          dateOfFollowupCall.updateValueAndValidity();
+        })
+
+        this.FollowupForm.get('oneMonthFollowupVisit').valueChanges
+        .subscribe(oneMonthFollowupVisit =>{
+          if (oneMonthFollowupVisit ==='Yes'){
+            dateOfOneMonthVisit.setValidators([Validators.required]);              
+          } 
+          else
+          {            
+            this.FollowupForm.get('dateOfOneMonthVisit').clearValidators();
+            this.FollowupForm.get('dateOfOneMonthVisit').reset();
+          }     
+          dateOfOneMonthVisit.updateValueAndValidity();
+        })     
+    }  
 }
+
