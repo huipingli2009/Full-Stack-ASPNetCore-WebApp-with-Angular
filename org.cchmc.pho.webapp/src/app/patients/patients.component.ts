@@ -80,7 +80,7 @@ export class PatientsComponent implements OnInit {
   providerNotesControl: string;
   epicMrn: string;
   filterFormGroup;
-  conditions: string;
+  conditions: Array<string>;
   conditionsList: Array<Conditions>;
   providers: string;
   providersList: any[] = [];
@@ -131,11 +131,11 @@ export class PatientsComponent implements OnInit {
   dataSource: PatientsDataSource;
   savedPatientData: any;
   isDisabled: boolean;
-  isFormValid = this.form; 
   subscription: Subscription;
   patientSubscription: Subscription;
   isFilteringPatients: boolean;
   isFilteringOutcomes: boolean;
+  isFilteringConditions: boolean;
   filterType: string;
 
   isExpansionDetailRow = (i: number, row: object) => row.hasOwnProperty('detailRow');
@@ -200,6 +200,11 @@ export class PatientsComponent implements OnInit {
       this.isFilteringOutcomes = res;
       this.logger.log(res, "Patients: IsFilteringOutcomes ", res);
     });
+    //TH - check for condition filtering    
+    this.subscription = this.filterService.getIsFilteringConditions().subscribe(res => {
+      this.isFilteringConditions = res;
+      this.logger.log(res, "Patients: IsFilteringConditions ", res);
+    });
     this.subscription = this.filterService.getFilterType().subscribe(res => { 
       this.filterType = res;
       this.logger.log(res, "Patients: getFilterType ", res);
@@ -211,8 +216,8 @@ export class PatientsComponent implements OnInit {
     this.patients = this.route.snapshot.data.patients;
     this.dataSource = new PatientsDataSource(this.rest);
     this.getCurrentUser();
-    this.loadPatientsWithFilters();
     this.getConditionsList();
+    this.loadPatientsWithFilters();
     this.getPCPList();
     this.getPopSliceList();
     this.getInsuranceList();
@@ -238,6 +243,7 @@ export class PatientsComponent implements OnInit {
     }
     this.filterService.updateIsFilteringPatients(false);
     this.filterService.updateIsFilteringOutcomes(false);
+    this.filterService.updateIsFilteringConditions(false);
     this.filterService.updateFilterType('');
   }
 
@@ -273,6 +279,9 @@ export class PatientsComponent implements OnInit {
     if (this.isFilteringOutcomes === true){
       this.outcomes = this.filterType;
     }
+    if (this.isFilteringConditions === true){
+      this.conditions = [this.filterType];
+    }
 
     //if patient is coming from ED chart
     if (this.selectedPatientId) {
@@ -292,9 +301,9 @@ export class PatientsComponent implements OnInit {
 
     this.potentialPatient = +(this.popSlices) == potentialPtStaus.PopSlice ? true : false;
 
-    this.dataSource.loadPatients(this.defaultSortedRow, this.defaultSortDirection, 0, 20, this.chronic, this.watchFlag, this.conditions,
+    this.dataSource.loadPatients(this.defaultSortedRow, this.defaultSortDirection, 0, 20, this.chronic, this.watchFlag, this.conditions.toString(),
       this.providers, this.popSlices,  this.outcomes, this.patientNameSearch);
-    this.rest.findPatients(this.defaultSortedRow, this.defaultSortDirection, 0, 20, this.chronic, this.watchFlag, this.conditions,
+    this.rest.findPatients(this.defaultSortedRow, this.defaultSortDirection, 0, 20, this.chronic, this.watchFlag, this.conditions.toString(),
       this.providers, this.popSlices,  this.outcomes, this.patientNameSearch).subscribe((data) => {
         this.patientRecords = data[0].totalRecords;
       });
@@ -305,6 +314,7 @@ export class PatientsComponent implements OnInit {
     this.rest.selectedPatientName = null;
     //reset outcome filter
     this.filterService.updateIsFilteringOutcomes(false);
+    this.filterService.updateIsFilteringConditions(false);
   }
 
   loadPatientsPage() {
@@ -315,7 +325,7 @@ export class PatientsComponent implements OnInit {
       this.paginator.pageSize,
       this.chronic,
       this.watchFlag,
-      this.conditions,
+      this.conditions.toString(),
       this.providers,
       this.popSlices,
       this.outcomes,
@@ -369,6 +379,8 @@ export class PatientsComponent implements OnInit {
   }
 
   patientHasCondition(e) {
+    this.logger.log(e, "patientHasConditon argument: ");
+    this.logger.log(this.conditions, "patientHasCondition conditions: ")
     this.loadPatientsWithFilters();
   }
 
