@@ -7,6 +7,7 @@ export class FilterService {
 
     private isFilteringPatients: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     private isFilteringOutcomes: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    private isFilteringConditions: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     private filterType: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
     getIsFilteringPatients(): Observable<boolean> {
@@ -14,6 +15,9 @@ export class FilterService {
     }
     getIsFilteringOutcomes(): Observable<boolean> {
         return this.isFilteringOutcomes.asObservable();
+    }
+    getIsFilteringConditions(): Observable<boolean> {
+        return this.isFilteringConditions.asObservable();
     }
 
     getFilterType(): Observable<string> {
@@ -25,6 +29,9 @@ export class FilterService {
     }
     updateIsFilteringOutcomes(isFiltering: boolean) {
         this.isFilteringOutcomes.next(isFiltering);
+    }
+    updateIsFilteringConditions(isFiltering: boolean) {
+        this.isFilteringConditions.next(isFiltering);
     }
 
     updateFilterType(filterType: string) {

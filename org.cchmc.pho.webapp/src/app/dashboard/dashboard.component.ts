@@ -202,10 +202,17 @@ export class DashboardComponent implements OnInit {
     this.filterService.updateFilterType(element.measureId);
     this.router.navigate(['/patients']);
   }
-  // Send click to Filtered Patients
+  // Send click to Filtered Outcomes
   toFilteredOutcomes(element) {
     this.logger.log(element.measureId, "toFilteredOutcomes: measureId");
     this.filterService.updateIsFilteringOutcomes(true);
+    this.filterService.updateFilterType(element.measureId);
+    this.router.navigate(['/patients']);
+  }
+  // Send click to Filtered Patients
+  toFilteredConditions(element) {
+    this.logger.log(element.measureId, "toFilteredConditions: measureId");
+    this.filterService.updateIsFilteringConditions(true);
     this.filterService.updateFilterType(element.measureId);
     this.router.navigate(['/patients']);
   }

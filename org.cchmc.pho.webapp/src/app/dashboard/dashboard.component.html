@@ -67,7 +67,7 @@
             </div>
         </div>
         <div fxLayout="row" class="population-content">
-            <mat-tab-group mat-stretch-tabs class="population-tabs">
+            <mat-tab-group dynamicHeight mat-stretch-tabs class="population-tabs">
                 <mat-tab label="POPULATION">
 
                     <table mat-table [dataSource]="dataSourceOne" class="mat-elevation-z8">
@@ -127,7 +127,7 @@
 
                         <ng-container matColumnDef="practiceTotalCondition">
                             <th mat-header-cell *matHeaderCellDef> Practice </th>
-                            <td mat-cell *matCellDef="let element" (click)="toFilteredOutcomes(element)"> {{element.practiceTotal}} </td>
+                            <td mat-cell *matCellDef="let element" (click)="toFilteredConditions(element)"> {{element.practiceTotal}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="networkTotalCondition">
