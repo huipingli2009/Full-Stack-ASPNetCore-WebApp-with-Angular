@@ -80,7 +80,7 @@ export class PatientsComponent implements OnInit {
   providerNotesControl: string;
   epicMrn: string;
   filterFormGroup;
-  conditions: Array<string>;
+  conditions: Array<string> = [];
   conditionsList: Array<Conditions>;
   providers: string;
   providersList: any[] = [];
