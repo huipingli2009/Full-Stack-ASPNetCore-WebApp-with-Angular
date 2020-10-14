@@ -55,7 +55,7 @@ export class Followup {
     dateOfFollowupCall: string;
     oneMonthFollowupVisit: boolean;
     dateOfOneMonthVisit: string;
-    oneMonthFolllowupPHQ9Score: number;
+    oneMonthFolllowupPHQ9Score: string;
 }
 
 export class WorkbookPractice {
