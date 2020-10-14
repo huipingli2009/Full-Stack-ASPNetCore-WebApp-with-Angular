@@ -12,6 +12,6 @@ namespace org.cchmc.pho.core.DataModels
         public DateTime? DateOfFollowupCall { get; set; }
         public bool OneMonthFollowupVisit { get; set; }
         public DateTime? DateOfOneMonthVisit { get; set; }
-        public int OneMonthFolllowupPHQ9Score { get; set; }
+        public string OneMonthFolllowupPHQ9Score { get; set; }
     }
 }

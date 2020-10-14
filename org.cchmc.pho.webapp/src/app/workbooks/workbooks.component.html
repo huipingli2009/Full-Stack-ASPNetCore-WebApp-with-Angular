@@ -985,8 +985,8 @@
                     1 Month follow-up PHQ-9 Score ?
                 </div>
                 <div fxLayout="column">
-                    <mat-form-field>
-                        <input matInput formControlName="oneMonthFolllowupPHQ9Score == -1 ? '':oneMonthFolllowupPHQ9Score  " placeholder="Score">
+                    <mat-form-field>                        
+                        <input matInput formControlName="oneMonthFolllowupPHQ9Score" placeholder="Score">
                         <ng-container
                             *ngIf="(FollowupForm.get('oneMonthFolllowupPHQ9Score').touched || FollowupForm.get('oneMonthFolllowupPHQ9Score').dirty) && FollowupForm.get('oneMonthFolllowupPHQ9Score').errors">
                             <mat-error *ngIf="FollowupForm.get('oneMonthFolllowupPHQ9Score').errors.required">

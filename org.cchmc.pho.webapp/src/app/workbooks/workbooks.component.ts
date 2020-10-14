@@ -594,6 +594,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     getFollowUpQuestions(formResponseid: number, patientID: number, patient: string) {
       this.rest.getFollowUpQuestions(formResponseid, patientID).pipe(take(1)).subscribe((data) => {
         this.followUpQuestions = data;
+        
         this.FollowupForm.setValue(this.followUpQuestions);
         this.FollowupForm.get('actionPlanGiven').setValue(this.followUpQuestions.actionPlanGiven ? 'Yes' : 'No');
         this.FollowupForm.get('managedByExternalProvider').setValue(this.followUpQuestions.managedByExternalProvider ? 'Yes' : 'No');
@@ -615,7 +616,8 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
       this.followUpQuestions.dateOfLastCommunicationByExternalProvider = this.FollowupForm.get('dateOfLastCommunicationByExternalProvider').value;
       this.followUpQuestions.dateOfFollowupCall = this.FollowupForm.get('dateOfFollowupCall').value;
       this.followUpQuestions.dateOfOneMonthVisit = this.FollowupForm.get('dateOfOneMonthVisit').value;
-      this.followUpQuestions.oneMonthFolllowupPHQ9Score = (Number)(this.FollowupForm.get('oneMonthFolllowupPHQ9Score').value);
+      this.followUpQuestions.oneMonthFolllowupPHQ9Score = this.FollowupForm.get('oneMonthFolllowupPHQ9Score').value;
+  
       this.UpdateFollowUpQuestionResponses(this.followUpQuestions);
     }
     UpdateFollowUpQuestionResponses(followUp: Followup) {
@@ -702,10 +704,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
 
   checkForExistingWorkbookProvider(id){
     return ((this.workbookProviders.filter(x => x.staffID === id).length > 0) ? 1 : 0);
-  }
-
-
-  
+  }  
 
 //helper methods - asthma specific
 
@@ -820,6 +819,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
       });
       this.table.dataSource = this.sortedData; 
     }
+
     PHQFollowUpQuestionValidators() {    
 
       const dateOfFollowupCall = this.FollowupForm.get('dateOfFollowupCall');
@@ -849,6 +849,6 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
           }     
           dateOfOneMonthVisit.updateValueAndValidity();
         })     
-    }  
-}
+    } 
+  }
 
