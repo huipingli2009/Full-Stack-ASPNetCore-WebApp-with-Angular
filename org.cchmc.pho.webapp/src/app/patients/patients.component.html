@@ -236,7 +236,7 @@
                 <label for="conditions">Conditions</label>
                 <mat-form-field class="multi-select-override">
                   <mat-select matNativeControl multiple formControlName="conditionsControl" [compareWith]="compareFn">
-                    <mat-option *ngFor="let item of conditionsList" [value]="item">{{item.name}}</mat-option>
+                    <mat-option *ngFor="let item of patientConditionsList" [value]="item">{{item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>

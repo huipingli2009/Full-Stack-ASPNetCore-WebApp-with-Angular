@@ -82,6 +82,8 @@ export class PatientsComponent implements OnInit {
   filterFormGroup;
   conditions: Array<string> = [];
   conditionsList: Array<Conditions>;
+  patientConditionsList: Array<Conditions>;
+  metricConditionIds : number[];
   providers: string;
   providersList: any[] = [];
   popSlices: string;
@@ -375,6 +377,14 @@ export class PatientsComponent implements OnInit {
   getConditionsList() {
     this.rest.getConditionsList().subscribe((data) => {
       this.conditionsList = data;
+
+      //TH 10-15-20 NEW condition list that excludes new metrics. For the patient details lookup dropdown
+      var ids : number[];
+      ids = [31,35]
+      this.patientConditionsList = data;
+      this.patientConditionsList = this.patientConditionsList.filter(function(item){
+        return ids.indexOf(item.id) === -1;
+      });
     });
   }
 
