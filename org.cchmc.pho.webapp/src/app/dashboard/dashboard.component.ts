@@ -141,10 +141,13 @@ export class DashboardComponent implements OnInit {
     this.spotlight = [];
     this.rest.getSpotlight().subscribe((data) => {
       this.spotlight = data;
+      this.logger.log(this.spotlight, "RETURNED SPOTLIGHT FIELDS");
       const imageName = this.spotlight[0].imageHyperlink;
       this.monthlySpotlightTitle = this.spotlight[0].header;
       this.monthlySpotlightBody = this.spotlight[0].body;
-      this.monthlySpotlightImageUrl = `${this.defaultUrl}/assets/img/${imageName}`;
+      //this.monthlySpotlightImageUrl = `${this.defaultUrl}/assets/img/${imageName}`;
+      //this.monthlySpotlightImageUrl = 'https://static1.squarespace.com/static/5c82a6f22727be5e5907c624/t/5f8dd43bef23221d7288dc08/1603130428143/Spotlight_img1.jpeg';
+      this.monthlySpotlightImageUrl = this.spotlight[0].imageHyperlink;
       this.monthlySpotlightLink = this.spotlight[0].hyperlink;
     });
   }
