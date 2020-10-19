@@ -266,6 +266,7 @@ export class FilesComponent implements OnInit {
       this.watchFilter, this.nameFilter).pipe(take(1)).subscribe((res) => {
         this.dataSource = new MatTableDataSource(res);
         this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
         this.logger.log(res, 'FIND FILTER FILES');
       })
   }
