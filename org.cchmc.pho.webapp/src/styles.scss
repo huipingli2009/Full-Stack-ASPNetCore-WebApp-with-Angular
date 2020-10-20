@@ -930,7 +930,14 @@ button.toast-close-button {
       color: #4a4a4a;
     }
   }
-  .population-tabs {
+
+  a{
+    text-decoration: none; 
+    color: #4a4a4a; 
+  }
+
+  a:hover{
+    text-decoration: underline;
   }
 }
 

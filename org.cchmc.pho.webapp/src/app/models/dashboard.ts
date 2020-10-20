@@ -43,6 +43,7 @@ export class Population {
     measureType: string;
     practiceTotal: number;
     networkTotal: number;
+    opDefURL: string;
 }
 
 export class EdChart {
