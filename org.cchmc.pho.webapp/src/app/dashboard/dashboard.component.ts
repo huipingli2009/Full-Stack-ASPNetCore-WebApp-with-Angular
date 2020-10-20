@@ -171,7 +171,8 @@ export class DashboardComponent implements OnInit {
             measureDesc: item.measureDesc,
             practiceTotal: item.practiceTotal,
             networkTotal: item.networkTotal,
-            measureId: item.measureId
+            measureId: item.measureId,
+            opDefURL: item.opDefURL
           });
           this.dataSourceOne.data = this.popData;
         }
@@ -191,7 +192,9 @@ export class DashboardComponent implements OnInit {
             measureDesc: item.measureDesc,
             practiceTotal: item.practiceTotal,
             networkTotal: item.networkTotal,
-            measureId: item.measureId
+            measureId: item.measureId,
+            opDefURL: item.opDefURL
+            
           });
           this.dataSourceThree.data = this.conditionData;
         }
