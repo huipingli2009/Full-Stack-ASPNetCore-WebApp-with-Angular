@@ -58,7 +58,7 @@ export class DashboardComponent implements OnInit {
   };
 
   //download to excel
-  fileName= 'EDChart_Data.xlsx'; 
+  fileName= 'EDChart_Data.xlsx';  
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
               public fb: FormBuilder, public dialog: MatDialog, private datePipe: DatePipe, private logger: NGXLogger,
@@ -163,7 +163,9 @@ export class DashboardComponent implements OnInit {
   getPopulation() {
     this.population = [];
     this.rest.getAllKpis().subscribe((data) => {
-      this.population = data;
+
+      this.population = data;      
+
       this.population.forEach(item => {
         if (item.measureType === 'POP') {
           this.popData.push({
@@ -171,8 +173,7 @@ export class DashboardComponent implements OnInit {
             measureDesc: item.measureDesc,
             practiceTotal: item.practiceTotal,
             networkTotal: item.networkTotal,
-            measureId: item.measureId,
-            opDefURL: item.opDefURL
+            measureId: item.measureId           
           });
           this.dataSourceOne.data = this.popData;
         }
@@ -186,17 +187,21 @@ export class DashboardComponent implements OnInit {
           });
           this.dataSourceTwo.data = this.qiData;
         }
-        if (item.measureType === 'COND') {
+        if (item.measureType === 'COND') {         
           this.conditionData.push({
             dashboardLabel: item.dashboardLabel,
             measureDesc: item.measureDesc,
             practiceTotal: item.practiceTotal,
             networkTotal: item.networkTotal,
             measureId: item.measureId,
-            opDefURL: item.opDefURL
-            
+            opDefURL: item.opDefURL,
+            opDefURLExists: item.opDefURL === ''? false: true           
           });
+
+          
           this.dataSourceThree.data = this.conditionData;
+
+          
         }
       });
     });

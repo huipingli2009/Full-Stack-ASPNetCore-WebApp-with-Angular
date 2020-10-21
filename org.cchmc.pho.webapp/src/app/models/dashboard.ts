@@ -44,6 +44,7 @@ export class Population {
     practiceTotal: number;
     networkTotal: number;
     opDefURL: string;
+    opDefLinkExists: boolean;
 }
 
 export class EdChart {
