@@ -172,7 +172,10 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
                     sqlCommand.Parameters.Add("@MeasureID", SqlDbType.Int).Value = measureId;
-                    sqlCommand.Parameters.Add("@FilterID", SqlDbType.Int).Value = filterId;
+                    if (filterId > 0)
+                    {
+                        sqlCommand.Parameters.Add("@FilterID", SqlDbType.Int).Value = filterId;
+                    }
 
                     await sqlConnection.OpenAsync();
                     // Define the data adapter and fill the dataset

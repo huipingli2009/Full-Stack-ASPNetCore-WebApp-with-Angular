@@ -319,6 +319,21 @@ export class PatientsComponent implements OnInit {
     this.filterService.updateIsFilteringConditions(false);
   }
 
+  isPatientListFiltered() : boolean {
+    this.logger.log(this.chronic, "chronic");
+    this.logger.log(this.watchFlag, "watchFlag");
+    this.logger.log(this.conditions, "conditions");
+    this.logger.log(this.providers, "providers");
+    this.logger.log(this.popSlices, "popSlices");
+    this.logger.log(this.outcomes, "outcomes");
+    this.logger.log(this.patientNameSearch, "patientNameSearch");
+    if (this.chronic || this.watchFlag || this.conditions.length > 0 || this.providers || this.popSlices || this.outcomes || this.patientNameSearch){
+      return true;
+    } else{
+      return false;
+    }
+  }
+
   loadPatientsPage() {
     this.dataSource.loadPatients(
       this.defaultSortedRow,
@@ -750,12 +765,15 @@ export class PatientsComponent implements OnInit {
   }
 
   openDrilldownDialog(measure, display) {
+    var filterId = -1;
+    if (measure !== "6"){
+      filterId = this.currentPatientId;
+    }
     var drilldownOptions = {
       measureId: measure, //'1',
-      filterId: this.currentPatientId, //'381886'
+      filterId: filterId, //'381886'
       displayText: display
     };
-
     this.drilldownService.open(drilldownOptions);
   }
 

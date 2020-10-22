@@ -448,7 +448,14 @@
     <tr mat-row *matRowDef="let row; columns: ['expandedDetail'];" class="collapsed-detail">
     </tr>
   </mat-table>
-  <mat-paginator [length]="patientRecords" [pageSize]="20" [pageSizeOptions]="[20, 40, 60]"></mat-paginator>
+  <div fxLayout="row" fxLayoutAlign="end center">
+    <div fxLayout="column">
+      <button mat-button style="max-width: 100px;" [disabled]="!isPatientListFiltered()" (click)="openDrilldownDialog('6', 'Patient List')">Download</button>
+    </div>
+    <div fxLayout="column">
+      <mat-paginator [length]="patientRecords" [pageSize]="20" [pageSizeOptions]="[20, 40, 60]"></mat-paginator>
+    </div>
+  </div>
 </div>
 
   <!--Dialogs ===========================-->
