@@ -139,7 +139,8 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
       dateOfFollowupCall: [''],
       oneMonthFollowupVisit: [''],
       dateOfOneMonthVisit: [''],
-      oneMonthFolllowupPHQ9Score: ['']
+      oneMonthFolllowupPHQ9Score: [''],
+      phQ9FollowUpNotes: ['']
     }
   );
 
@@ -488,7 +489,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.newDepressionWorkbookPatient.phone = this.DepressionPatientForWorkbookForm.get('phone').value;
     this.newDepressionWorkbookPatient.providerId = this.DepressionPatientForWorkbookForm.get('providerStaffID').value;
     this.newDepressionWorkbookPatient.dateOfService = this.DepressionPatientForWorkbookForm.get('dateOfService').value;
-    this.newDepressionWorkbookPatient.phQ9_Score = this.DepressionPatientForWorkbookForm.get('pHQ9Score').value;
+    this.newDepressionWorkbookPatient.phQ9_Score = this.DepressionPatientForWorkbookForm.get('pHQ9Score').value;    
     this.newDepressionWorkbookPatient.actionFollowUp = JSON.parse(this.DepressionPatientForWorkbookForm.controls.action.value);
     this.AddDepressionPatientToWorkbook(this.newDepressionWorkbookPatient, this.addingPatientName);
   }
@@ -600,6 +601,8 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
         this.FollowupForm.get('managedByExternalProvider').setValue(this.followUpQuestions.managedByExternalProvider ? 'Yes' : 'No');
         this.FollowupForm.get('followupPhoneCallOneToTwoWeeks').setValue(this.followUpQuestions.followupPhoneCallOneToTwoWeeks ? 'Yes' : 'No');
         this.FollowupForm.get('oneMonthFollowupVisit').setValue(this.followUpQuestions.oneMonthFollowupVisit ? 'Yes' : 'No');
+        this.FollowupForm.get('phQ9FollowUpNotes').setValue(this.followUpQuestions.phQ9FollowUpNotes);
+       
         this.openDialog();
       })
     }
@@ -617,6 +620,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
       this.followUpQuestions.dateOfFollowupCall = this.FollowupForm.get('dateOfFollowupCall').value;
       this.followUpQuestions.dateOfOneMonthVisit = this.FollowupForm.get('dateOfOneMonthVisit').value;
       this.followUpQuestions.oneMonthFolllowupPHQ9Score = this.FollowupForm.get('oneMonthFolllowupPHQ9Score').value;
+      this.followUpQuestions.phQ9FollowUpNotes = this.FollowupForm.get('phQ9FollowUpNotes').value;
   
       this.UpdateFollowUpQuestionResponses(this.followUpQuestions);
     }

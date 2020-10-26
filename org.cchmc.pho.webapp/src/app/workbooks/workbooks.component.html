@@ -996,6 +996,22 @@
                     </mat-form-field>
                 </div>
             </div>
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="32px">
+                <div fxLayout="column" class="question">
+                    Provider Notes: 
+                </div>
+                <div fxLayout="column">
+                    <mat-form-field appearance="outline" class="staff-full-width">                        
+                        <input matInput formControlName="phQ9FollowUpNotes" placeholder="Notes">
+                        <!-- <ng-container
+                            *ngIf="(FollowupForm.get('oneMonthFolllowupPHQ9Score').touched || FollowupForm.get('oneMonthFolllowupPHQ9Score').dirty) && FollowupForm.get('oneMonthFolllowupPHQ9Score').errors">
+                            <mat-error *ngIf="FollowupForm.get('oneMonthFolllowupPHQ9Score').errors.required">
+                                PHQ-9 score is required
+                            </mat-error>
+                        </ng-container> -->
+                    </mat-form-field>
+                </div>
+            </div>
 
         </mat-dialog-content>
         <mat-dialog-actions>
