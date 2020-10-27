@@ -18,6 +18,7 @@ import { MatSnackBarComponent } from '../shared/mat-snack-bar/mat-snack-bar.comp
 import { UserService } from '../services/user.service';
 import { CurrentUser, User } from '../models/user';
 import { DrilldownService } from '../drilldown/drilldown.service';
+import { DrillthruMeasurementIdEnum } from '../models/drillthru';
 
 @Component({
   selector: 'app-patients',
@@ -758,8 +759,11 @@ export class PatientsComponent implements OnInit {
   }
 
   openDrilldownDialog(measure, display) {
+    //set default filterId value to -1, to differentiate between a set value and an intentionally null value.
     var filterId = -1;
-    if (measure !== "6"){
+
+    //apply filterId conditionally. 
+    if (measure !== DrillthruMeasurementIdEnum.FilteredPatientList.toString()){
       filterId = this.currentPatientId;
     }
     var drilldownOptions = {

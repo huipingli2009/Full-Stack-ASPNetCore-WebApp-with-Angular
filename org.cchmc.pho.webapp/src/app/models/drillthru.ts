@@ -13,3 +13,12 @@ export class MetricDrillthruColumn{
     value: string;
     columnName: string;
 }
+
+export enum DrillthruMeasurementIdEnum {
+    PracticeVisitKPI = 1,
+    CCHMCVisitKPI = 2,
+    HealthbridgeEncounterKPI = 3,
+    DiagnosisDetails = 4,
+    CPTCodes = 5,
+    FilteredPatientList = 6  
+}
