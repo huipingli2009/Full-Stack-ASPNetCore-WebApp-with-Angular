@@ -487,7 +487,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@1_Month_follow_up_visit", SqlDbType.Bit).Value = oneMonthFollowupVisit;
                     sqlCommand.Parameters.Add("@Date_of_1_month_visit", SqlDbType.DateTime).Value = dateOfOneMonthVisit;
                     sqlCommand.Parameters.Add("@1_Month_followup_PHQ9_Score", SqlDbType.VarChar, 20).Value = oneMonthFolllowupPHQ9Score;
-                    sqlCommand.Parameters.Add("@PHQ9_Follow_Up_Notes", SqlDbType.VarChar, 20).Value = pHQ9FollowUpNotes;
+                    sqlCommand.Parameters.Add("@PHQ9_Follow_Up_Notes", SqlDbType.VarChar, 500).Value = pHQ9FollowUpNotes;
 
                     await sqlConnection.OpenAsync();
 

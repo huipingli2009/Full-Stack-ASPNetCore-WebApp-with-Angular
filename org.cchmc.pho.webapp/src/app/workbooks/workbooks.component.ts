@@ -12,7 +12,6 @@ import { Followup, WorkbookDepressionPatient, WorkbookAsthmaPatient, WorkbookPro
 import { RestService } from '../rest.service';
 import { DateRequiredValidator } from '../shared/customValidators/customValidator';
 import { MatSnackBarComponent } from '../shared/mat-snack-bar/mat-snack-bar.component';
-import { Variable } from '@angular/compiler/src/render3/r3_ast';
 
 @Component({
   selector: 'app-workbooks',
@@ -744,8 +743,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.newAsthmaWorkbookPatient.treatment = this.treatmentList.find(t => t.treatmentId == this.AsthmaPatientForWorkbookForm.get('treatment').value);
     this.newAsthmaWorkbookPatient.formResponseId = this.selectedFormResponseID;
     this.newAsthmaWorkbookPatient.dob = null;
-    this.newAsthmaWorkbookPatient.providerId = (!this.AsthmaPatientForWorkbookForm.get('providerStaffID').value ? 0 : JSON.parse(this.AsthmaPatientForWorkbookForm.get('providerStaffID').value));
-    //this.newAsthmaWorkbookPatient.actionplangiven = (!this.AsthmaPatientForWorkbookForm.get('actionplangiven').value ? false : JSON.parse(this.AsthmaPatientForWorkbookForm.get('actionplangiven').value)); 
+    this.newAsthmaWorkbookPatient.providerId = (!this.AsthmaPatientForWorkbookForm.get('providerStaffID').value ? 0 : JSON.parse(this.AsthmaPatientForWorkbookForm.get('providerStaffID').value));   
     this.newAsthmaWorkbookPatient.assessmentcompleted = (!this.AsthmaPatientForWorkbookForm.get('assessmentcompleted').value ? false : JSON.parse(this.AsthmaPatientForWorkbookForm.get('assessmentcompleted').value)); 
     this.newAsthmaWorkbookPatient.asthma_Score = (!this.AsthmaPatientForWorkbookForm.get('asthma_Score').value ? 0 : JSON.parse(this.AsthmaPatientForWorkbookForm.get('asthma_Score').value));
     this.logger.log(this.newAsthmaWorkbookPatient, "newworkbookasthmapatient"); 
