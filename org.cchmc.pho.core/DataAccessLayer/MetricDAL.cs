@@ -183,16 +183,6 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     {
                         da.Fill(dataTable);
 
-                        //var Test = (from row in dataTable.DataSet.Tables[0].AsEnumerable()
-                        //            select row.Field<string>("attribute1_name") + row.Field<int>("attribute2_name")).Distinct();
-
-                        //var distinctValues = dataTable.AsEnumerable()
-                        //.Select(row => new {
-                        //    attribute1_name = row.Field<string>("attribute1_name"),
-                        //    attribute2_name = row.Field<string>("attribute2_name")
-                        //})
-                        //.Distinct();
-
                         foreach (DataRow dr in dataTable.DefaultView.ToTable(true, "RowNumber").Rows)
                         {
                             DrillthruRow row = new DrillthruRow()
