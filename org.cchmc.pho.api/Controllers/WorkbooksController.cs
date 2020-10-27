@@ -344,7 +344,7 @@ namespace org.cchmc.pho.api.Controllers
             try
             {
                 int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
-                object p = await _workbooks.UpdateWorkbooksPatientFollowup(currentUserId, wbptfollowup.FormResponseId, wbptfollowup.PatientId, wbptfollowup.ActionPlanGiven, wbptfollowup.ManagedByExternalProvider, wbptfollowup.DateOfLastCommunicationByExternalProvider, wbptfollowup.FollowupPhoneCallOneToTwoWeeks, wbptfollowup.DateOfFollowupCall, wbptfollowup.OneMonthFollowupVisit, wbptfollowup.DateOfOneMonthVisit, wbptfollowup.OneMonthFolllowupPHQ9Score);
+                object p = await _workbooks.UpdateWorkbooksPatientFollowup(currentUserId, wbptfollowup.FormResponseId, wbptfollowup.PatientId, wbptfollowup.ActionPlanGiven, wbptfollowup.ManagedByExternalProvider, wbptfollowup.DateOfLastCommunicationByExternalProvider, wbptfollowup.FollowupPhoneCallOneToTwoWeeks, wbptfollowup.DateOfFollowupCall, wbptfollowup.OneMonthFollowupVisit, wbptfollowup.DateOfOneMonthVisit, wbptfollowup.OneMonthFolllowupPHQ9Score, wbptfollowup.PHQ9FollowUpNotes);
                 return Ok();
             }
             catch (Exception ex)

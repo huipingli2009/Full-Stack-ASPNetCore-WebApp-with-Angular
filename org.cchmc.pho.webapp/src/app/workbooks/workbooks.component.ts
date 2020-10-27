@@ -12,7 +12,6 @@ import { Followup, WorkbookDepressionPatient, WorkbookAsthmaPatient, WorkbookPro
 import { RestService } from '../rest.service';
 import { DateRequiredValidator } from '../shared/customValidators/customValidator';
 import { MatSnackBarComponent } from '../shared/mat-snack-bar/mat-snack-bar.component';
-import { Variable } from '@angular/compiler/src/render3/r3_ast';
 
 @Component({
   selector: 'app-workbooks',
@@ -139,7 +138,8 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
       dateOfFollowupCall: [''],
       oneMonthFollowupVisit: [''],
       dateOfOneMonthVisit: [''],
-      oneMonthFolllowupPHQ9Score: ['']
+      oneMonthFolllowupPHQ9Score: [''],
+      phQ9FollowUpNotes: ['']
     }
   );
 
@@ -488,7 +488,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.newDepressionWorkbookPatient.phone = this.DepressionPatientForWorkbookForm.get('phone').value;
     this.newDepressionWorkbookPatient.providerId = this.DepressionPatientForWorkbookForm.get('providerStaffID').value;
     this.newDepressionWorkbookPatient.dateOfService = this.DepressionPatientForWorkbookForm.get('dateOfService').value;
-    this.newDepressionWorkbookPatient.phQ9_Score = this.DepressionPatientForWorkbookForm.get('pHQ9Score').value;
+    this.newDepressionWorkbookPatient.phQ9_Score = this.DepressionPatientForWorkbookForm.get('pHQ9Score').value;    
     this.newDepressionWorkbookPatient.actionFollowUp = JSON.parse(this.DepressionPatientForWorkbookForm.controls.action.value);
     this.AddDepressionPatientToWorkbook(this.newDepressionWorkbookPatient, this.addingPatientName);
   }
@@ -600,6 +600,8 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
         this.FollowupForm.get('managedByExternalProvider').setValue(this.followUpQuestions.managedByExternalProvider ? 'Yes' : 'No');
         this.FollowupForm.get('followupPhoneCallOneToTwoWeeks').setValue(this.followUpQuestions.followupPhoneCallOneToTwoWeeks ? 'Yes' : 'No');
         this.FollowupForm.get('oneMonthFollowupVisit').setValue(this.followUpQuestions.oneMonthFollowupVisit ? 'Yes' : 'No');
+        this.FollowupForm.get('phQ9FollowUpNotes').setValue(this.followUpQuestions.phQ9FollowUpNotes);
+       
         this.openDialog();
       })
     }
@@ -617,6 +619,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
       this.followUpQuestions.dateOfFollowupCall = this.FollowupForm.get('dateOfFollowupCall').value;
       this.followUpQuestions.dateOfOneMonthVisit = this.FollowupForm.get('dateOfOneMonthVisit').value;
       this.followUpQuestions.oneMonthFolllowupPHQ9Score = this.FollowupForm.get('oneMonthFolllowupPHQ9Score').value;
+      this.followUpQuestions.phQ9FollowUpNotes = this.FollowupForm.get('phQ9FollowUpNotes').value;
   
       this.UpdateFollowUpQuestionResponses(this.followUpQuestions);
     }
@@ -740,8 +743,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.newAsthmaWorkbookPatient.treatment = this.treatmentList.find(t => t.treatmentId == this.AsthmaPatientForWorkbookForm.get('treatment').value);
     this.newAsthmaWorkbookPatient.formResponseId = this.selectedFormResponseID;
     this.newAsthmaWorkbookPatient.dob = null;
-    this.newAsthmaWorkbookPatient.providerId = (!this.AsthmaPatientForWorkbookForm.get('providerStaffID').value ? 0 : JSON.parse(this.AsthmaPatientForWorkbookForm.get('providerStaffID').value));
-    //this.newAsthmaWorkbookPatient.actionplangiven = (!this.AsthmaPatientForWorkbookForm.get('actionplangiven').value ? false : JSON.parse(this.AsthmaPatientForWorkbookForm.get('actionplangiven').value)); 
+    this.newAsthmaWorkbookPatient.providerId = (!this.AsthmaPatientForWorkbookForm.get('providerStaffID').value ? 0 : JSON.parse(this.AsthmaPatientForWorkbookForm.get('providerStaffID').value));   
     this.newAsthmaWorkbookPatient.assessmentcompleted = (!this.AsthmaPatientForWorkbookForm.get('assessmentcompleted').value ? false : JSON.parse(this.AsthmaPatientForWorkbookForm.get('assessmentcompleted').value)); 
     this.newAsthmaWorkbookPatient.asthma_Score = (!this.AsthmaPatientForWorkbookForm.get('asthma_Score').value ? 0 : JSON.parse(this.AsthmaPatientForWorkbookForm.get('asthma_Score').value));
     this.logger.log(this.newAsthmaWorkbookPatient, "newworkbookasthmapatient"); 
