@@ -18,6 +18,7 @@ import { MatSnackBarComponent } from '../shared/mat-snack-bar/mat-snack-bar.comp
 import { UserService } from '../services/user.service';
 import { CurrentUser, User } from '../models/user';
 import { DrilldownService } from '../drilldown/drilldown.service';
+import { DrillthruMeasurementIdEnum } from '../models/drillthru';
 
 @Component({
   selector: 'app-patients',
@@ -320,13 +321,6 @@ export class PatientsComponent implements OnInit {
   }
 
   isPatientListFiltered() : boolean {
-    this.logger.log(this.chronic, "chronic");
-    this.logger.log(this.watchFlag, "watchFlag");
-    this.logger.log(this.conditions, "conditions");
-    this.logger.log(this.providers, "providers");
-    this.logger.log(this.popSlices, "popSlices");
-    this.logger.log(this.outcomes, "outcomes");
-    this.logger.log(this.patientNameSearch, "patientNameSearch");
     if (this.chronic || this.watchFlag || this.conditions.length > 0 || this.providers || this.popSlices || this.outcomes || this.patientNameSearch){
       return true;
     } else{
@@ -765,8 +759,11 @@ export class PatientsComponent implements OnInit {
   }
 
   openDrilldownDialog(measure, display) {
+    //set default filterId value to -1, to differentiate between a set value and an intentionally null value.
     var filterId = -1;
-    if (measure !== "6"){
+
+    //apply filterId conditionally. 
+    if (measure !== DrillthruMeasurementIdEnum.FilteredPatientList.toString()){
       filterId = this.currentPatientId;
     }
     var drilldownOptions = {
