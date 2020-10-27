@@ -45,7 +45,8 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                        MeasureDesc = dr["MeasureDesc"].ToString(),
                                        MeasureType = dr["MeasureType"].ToString(),
                                        PracticeTotal = Convert.ToInt32(dr["PracticeTotal"]),
-                                       NetworkTotal = Convert.ToInt32(dr["NetworkTotal"])
+                                       NetworkTotal = Convert.ToInt32(dr["NetworkTotal"]),
+                                       OpDefURL = dr["OpDefURL"].ToString()
                                    }
                             ).ToList();
                     }

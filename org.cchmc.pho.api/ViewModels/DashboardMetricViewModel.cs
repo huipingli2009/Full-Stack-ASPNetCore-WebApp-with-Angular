@@ -10,5 +10,6 @@ namespace org.cchmc.pho.api.ViewModels
         public string MeasureType { get; set; }
         public int PracticeTotal { get; set; }
         public int NetworkTotal { get; set; }
+        public string OpDefURL { get; set; }
     }
 }
