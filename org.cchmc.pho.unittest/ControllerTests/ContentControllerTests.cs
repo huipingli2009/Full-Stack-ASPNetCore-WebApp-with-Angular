@@ -109,8 +109,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.AreEqual(2, resultList.Count);
             Assert.AreEqual(mySpotlights[0].Header, resultList[0].Header);
             Assert.AreEqual(mySpotlights[0].Body, resultList[0].Body);
-            Assert.AreEqual(mySpotlights[0].Hyperlink, resultList[0].Hyperlink);            
-            Assert.AreEqual(mySpotlights[0].WebPageHTML, resultList[0].WebPageHTML);
+            Assert.AreEqual(mySpotlights[0].Hyperlink, resultList[0].Hyperlink);        
             Assert.AreEqual(mySpotlights[0].ImageHyperlink, resultList[0].ImageHyperlink);
             Assert.AreEqual(mySpotlights[0].LocationId, resultList[0].LocationId);
             Assert.AreEqual(mySpotlights[1].Header, resultList[1].Header);
