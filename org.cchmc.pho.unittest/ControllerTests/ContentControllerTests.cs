@@ -84,6 +84,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                     Header = "Wonderful things!",
                     Body = "DescriptionText1",
                     Hyperlink = "http://yadayada.com",
+                    HyperLinkLabel = "watch here",
                     ImageHyperlink = "http://yadayada.com",
                     LocationId = 1
                 },
@@ -92,6 +93,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
                     Header = "Good news!",
                     Body = "DescriptionText2",
                     Hyperlink = "http://yadayada2.com",
+                     HyperLinkLabel = "Read here",
                     ImageHyperlink = "http://yadayada2.com",
                     LocationId = 1
                 }
@@ -107,7 +109,8 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.AreEqual(2, resultList.Count);
             Assert.AreEqual(mySpotlights[0].Header, resultList[0].Header);
             Assert.AreEqual(mySpotlights[0].Body, resultList[0].Body);
-            Assert.AreEqual(mySpotlights[0].Hyperlink, resultList[0].Hyperlink);
+            Assert.AreEqual(mySpotlights[0].Hyperlink, resultList[0].Hyperlink);            
+            Assert.AreEqual(mySpotlights[0].WebPageHTML, resultList[0].WebPageHTML);
             Assert.AreEqual(mySpotlights[0].ImageHyperlink, resultList[0].ImageHyperlink);
             Assert.AreEqual(mySpotlights[0].LocationId, resultList[0].LocationId);
             Assert.AreEqual(mySpotlights[1].Header, resultList[1].Header);

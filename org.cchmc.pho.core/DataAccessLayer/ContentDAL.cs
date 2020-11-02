@@ -48,7 +48,9 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                           Body = dr["Body"].ToString(),
                                           Hyperlink = dr["Hyperlink"].ToString(),
                                           ImageHyperlink = dr["ImageHyperlink"].ToString(),
-                                          LocationId = (dr["LocationId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["LocationId"].ToString()))
+                                          LocationId = (dr["LocationId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["LocationId"].ToString())),
+                                          HyperLinkLabel = dr["HyperLinkLabel"].ToString()
+                                          
                                       }
 
                           ).ToList();
