@@ -20,7 +20,7 @@
 <div fxLayout="row" class="home-submenu">
   <div fxLayout="row" fxFlex="20" fxLayoutAlign="start end">
     <form [formGroup]="practiceForm">
-      <mat-form-field class="practice-select">
+      <mat-form-field class="practice-select">       
         <mat-select formControlName="practiceControl" (selectionChange)="switchPractice($event.value)"
           [disabled]="!isUserAdmin">
           <mat-option class="practice-select-text" *ngFor="let practice of practiceList" [value]="practice.id">
