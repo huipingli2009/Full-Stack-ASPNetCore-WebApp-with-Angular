@@ -28,6 +28,8 @@ export class Spotlight {
     hyperlink: string;
     imageHyperlink: string;
     locationId: number;
+    hyperLinkLabel: string;
+
 }
 export class Quicklinks {
     placementOrder: number;
