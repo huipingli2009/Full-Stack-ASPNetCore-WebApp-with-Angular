@@ -342,7 +342,7 @@ h1 {
     font-size: 12px;
     line-height: 18px;
     letter-spacing: normal;
-    color: #272624;
+    color: #272624;      
     font-weight: 600;
     .mat-button {
       padding: 0;
@@ -350,6 +350,7 @@ h1 {
     button {
       font-size: 12px;
       line-height: 18px;
+      font-weight: bold;
     }
     button:after {
       width: 67%;
@@ -360,7 +361,12 @@ h1 {
       cursor: pointer;
     }
     a:link {
-      color: #272624;       
+      font-family: ArcherSemiBold;      
+      color: var(--purple-dark);      
+    }
+    .UserText {
+      font-family: "Lato";
+      color: #4A4A4A;
     }
   }
   .practicecoach_underline {
@@ -483,10 +489,12 @@ h1 {
 
 .account-icon {
   vertical-align: bottom;  
+  color: #F0673C;
 }
 
-.email-icon{
-  vertical-align: middle;  
+.email-icon{  
+  vertical-align: middle; 
+  color: #F0673C;
 }
 
 .whitespace{
@@ -513,7 +521,7 @@ h1 {
     font-family: "ArcherSemiBold";
     font-size: 26px;
     line-height: 18px;
-    letter-spacing: normal;
+    letter-spacing: normal;    
   }
   .mat-select-value {
     max-width: 100%;
@@ -543,7 +551,10 @@ h1 {
   .mat-select-arrow {
     border-left: none;
     border-right: none;
+    // appearance: none;   
+    
   }
+  
   .mat-form-field-underline {
     display: none;
     bottom: 0;
