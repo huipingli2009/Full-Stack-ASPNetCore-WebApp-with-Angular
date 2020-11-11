@@ -130,6 +130,8 @@ h1 {
   .mat-select-arrow {
     border-left: none;
     border-right: none;
+    //color: #63961C;
+    .mat-select-panel { background-color: red; }
   }
   .mat-form-field-underline {
     background-color: #ddecea;
@@ -529,7 +531,7 @@ h1 {
   .mat-select-value {
     max-width: 100%;
     width: auto;
-    padding-right: 22px;
+    padding-right: 22px;    
   }
   .mat-select-value-text {
     color: var(--primary-color);
@@ -803,7 +805,9 @@ button.toast-close-button {
   .content-text {
     padding: 0px 38px 25px 25px;
     & .mat-subheading-2 {
-      margin-bottom: 11.2px;
+      // margin-bottom: 11.2px;
+      padding-bottom: 1px !important;
+      margin-bottom: 1.2px;
     }
     a {
       color: var(--purple-dark);
@@ -846,7 +850,8 @@ button.toast-close-button {
 // Content - ED CHART
 .ed-chart {
   .mat-subheading-2 {
-    margin-top: -34px;
+    margin-top: -24px;
+    margin-bottom: -34px;
   }
 }
 .ed-table {
@@ -2080,9 +2085,9 @@ button.toast-close-button {
       font-size: 14px;
       font-style: italic;
       margin-bottom: 9px;
-    }
+    }   
+      
   }
-
   
   .button-container {
     background-color: white;
