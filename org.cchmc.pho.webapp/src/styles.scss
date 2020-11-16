@@ -24,6 +24,8 @@ $phoweb-theme: mat-light-theme($phoweb-primary, $phoweb-accent, $phoweb-warn);
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include angular-material-theme($phoweb-theme);
+//@include mat-select-typography($phoweb-theme);
+
 
 // // Custom Theming for Angular Material
 // // For more information: https://material.angular.io/guide/theming
@@ -106,6 +108,7 @@ h1 {
   padding-bottom: 4px;
   color: #4a4a4a;
   font-size: 13px;
+  font-family: Lato;
   line-height: 18px;
   letter-spacing: normal;
   .mat-select {

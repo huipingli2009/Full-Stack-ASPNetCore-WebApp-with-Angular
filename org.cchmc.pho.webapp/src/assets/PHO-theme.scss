@@ -23,7 +23,8 @@ $fontConfig: (
   body-1: mat-typography-level(12px, 20px, 400, 'Lato', normal),
   button: mat-typography-level(15px, 18px, 500, 'Arvo', 0.0667em),
   caption: mat-typography-level(12px, 20px, 400, 'Lato', 0.0333em),
-  input: mat-typography-level(inherit, 1.125, 400, 'Lato', 1.5px)
+  input: mat-typography-level(inherit, 1.125, 400, 'Lato', 1.5px),
+  // font-family: 'Lato'
 );
 
 // Override Default Elements
@@ -243,4 +244,7 @@ $altTheme: mat-dark-theme($theme-primary, $theme-accent, $theme-warn);
 
 .mat-table {
   font-family: 'Lato';
+}
+.mat-select {
+  font-family: 'Lato'
 }
