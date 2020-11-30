@@ -9,9 +9,9 @@
     </div> 
    
     <div fxLayout="column" fxLayoutAlign="end end" fxFlex class="logout-col">
-      <div ><span> Contact your practice improvement coach <a [href]="'mailto:'+ email "  target="_top"><u><span class = "coachName">{{coachName}}</span></u>
-        <span class="email-icon"><mat-icon class="material-icons-round">email</mat-icon></span></a></span>
-        <span class="whitespace"></span><span (click)="openPasswordDialog()" class="UserText">Welcome, {{firstName}} {{lastName}}<span class="account-icon"><mat-icon class="material-icons-round">
+      <div ><span> Contact your practice improvement coach <a [href]="'mailto:'+ email "  target="_top">
+        <span class="coachName">{{coachName}}<span class="email-icon"><mat-icon class="material-icons-round">email</mat-icon></span></span>
+        </a></span><span class="whitespace"></span><span (click)="openPasswordDialog()" class="UserText">Welcome, {{firstName}} {{lastName}}<span class="account-icon"><mat-icon class="material-icons-round">
             account_box</mat-icon></span></span>|<button mat-button (click)="logout()">Logout</button>
       </div>
     </div>
