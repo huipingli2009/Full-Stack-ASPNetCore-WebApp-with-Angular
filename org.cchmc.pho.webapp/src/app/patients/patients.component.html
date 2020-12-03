@@ -349,8 +349,8 @@
           </form>
           <div fxLayout="row" class="border-row-top">
             <div fxLayout="column" fxFlex>
-              <div fxLayout="row" class="detail-heading">METRICS</div>
-              <div fxLayout="row" class="metric-data-box" *ngIf="patientDetails && patientDetails.activeStatus" [(ngModel)]="patientDetails"
+              <div fxLayout="row" class="detail-heading">METRICS</div>              
+                <div fxLayout="row" class="metric-data-box" *ngIf="patientDetails" [(ngModel)]="patientDetails"
                 ngDefaultControl>
                 <div fxLayout="column" class="metric-data" fxLayoutAlign="top center" (click)="openDrilldownDialog('1', 'Practice Visit Details')">
                   <span class="metric-number">{{patientDetails.practiceVisits}}</span>
@@ -372,30 +372,7 @@
                   <span class="metric-number">{{patientDetails.uniqueCPTCodes}}</span>
                   <span class="metric-title">UNIQUE CPT CODES</span>
                 </div>
-              </div>
-              <div fxLayout="row" class="metric-data-box" *ngIf="patientDetails && !patientDetails.activeStatus" [(ngModel)]="patientDetails"
-                ngDefaultControl>
-                <div fxLayout="column" class="metric-data" fxLayoutAlign="top center">
-                  <span class="metric-number">{{patientDetails.practiceVisits}}</span>
-                  <span class="metric-title">PRACTICE VISITS</span>
-                </div>
-                <div fxLayout="column" class="metric-data" fxLayoutAlign="top center">
-                  <span class="metric-number">{{patientDetails.cchmcEncounters}}</span>
-                  <span class="metric-title">CCHMC ENCOUNTERS</span>
-                </div>
-                <div fxLayout="column" class="metric-data" fxLayoutAlign="top center">
-                  <span class="metric-number">{{patientDetails.healthBridgeEncounters}}</span>
-                  <span class="metric-title">HEALTHBRIDGE ENCOUNTERS</span>
-                </div>
-                <div fxLayout="column" class="metric-data" fxLayoutAlign="top center">
-                  <span class="metric-number">{{patientDetails.uniqueDXs}}</span>
-                  <span class="metric-title">UNIQUE DXS</span>
-                </div>
-                <div fxLayout="column" class="metric-data" fxLayoutAlign="top center">
-                  <span class="metric-number">{{patientDetails.uniqueCPTCodes}}</span>
-                  <span class="metric-title">UNIQUE CPT CODES</span>
-                </div>
-              </div>
+              </div>            
             </div>
             <mat-divider [vertical]="true"></mat-divider>
             <div fxLayout="column" class="visit-details-box" *ngIf="patientDetails" [(ngModel)]="patientDetails"
