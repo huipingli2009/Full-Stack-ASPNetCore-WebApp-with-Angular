@@ -1,5 +1,6 @@
 ﻿using org.cchmc.pho.core.DataModels;
 using org.cchmc.pho.core.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,7 +14,8 @@ namespace org.cchmc.pho.core.Interfaces
         Task<bool> UpdatePatientWatchlist(int userId, int patientId);
         Task<int> AddPatient(int userId, Patient patient);
         Task<int> AcceptPotentialPatient(int currentUserId, int potentialPatientId, int PotentialProcessType);
-        Task<bool> IsExistingPatient(int userId, Patient patient);
+        Task<List<DuplicatePatient>> CheckForMergablePatients(int userId, string firstName, string lastName, DateTime dob, int? existingPatientId);
+        Task<bool> ConfirmPatientMerge(int userId, int patientId, string firstName, string lastName, DateTime dob, int duplicatePatientId, int mergeActionId);
         Task<List<SimplifiedPatient>> SearchSimplifiedPatients(int userId, string search);
         Task<List<PatientCondition>> GetPatientConditionsAll();
         Task<List<PatientInsurance>> GetPatientInsuranceAll(int userId);

@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from '../environments/environment';
 import { Alerts, EdChart, EdChartDetails, Population, Quicklinks, Spotlight } from './models/dashboard';
-import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Patients, NewPatient, Pmca, PopSlices, Providers, States, Outcomes } from './models/patients';
+import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Patients, NewPatient, Pmca, PopSlices, Providers, States, Outcomes, DuplicatePatient } from './models/patients';
 import { PracticeList, Responsibilities, Staff, StaffDetails, StaffAdmin, PracticeCoach } from './models/Staff';
 import { Followup, WorkbookDepressionPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookAsthmaPatient, Treatment, WorkbookConfirmation} from './models/workbook';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
@@ -236,6 +236,28 @@ export class RestService {
       })
     );
   } 
+
+  getCheckPatientDuplicates(firstName, lastName, dob, existingPatientId): Observable<any> {
+    let paramsValue = new HttpParams();
+    paramsValue = paramsValue.append("firstName", firstName);
+    paramsValue = paramsValue.append("lastName", lastName);
+    paramsValue = paramsValue.append("dob", dob);
+    paramsValue = paramsValue.append("existingPatientId", existingPatientId);
+    return this.http.get<Patients[]>(`${API_URL}/api/Patients/duplicates`, { params: paramsValue }).pipe(
+      map((data:Patients[]) => {
+        return data;
+      })
+    );
+  }
+
+  confirmPatientDupicateAction(patient: DuplicatePatient, duplicatePatient, mergeAction){
+
+    this.logger.log(JSON.stringify(patient), "dupPatient");
+    return this.http.put(`${API_URL}/api/Patients/duplicates/${duplicatePatient}/${mergeAction}`, JSON.stringify(patient), httpOptions).pipe(
+      tap(_ => this.snackBar.openSnackBar(`Patient ${patient.firstName} ${patient.lastName} has been updated!`
+        , 'Close', 'success-snackbar'))
+    ); 
+  }
 
 
   /* Staff Component =======================================================*/

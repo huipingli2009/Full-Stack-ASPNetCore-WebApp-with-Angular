@@ -7,9 +7,9 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute } from '@angular/router';
 import { NGXLogger } from 'ngx-logger';
-import { Observable, Subscription } from 'rxjs';
+import { merge, Observable, Subscription } from 'rxjs';
 import { tap, take } from 'rxjs/operators';
-import { Conditions, Gender, PatientDetails, Patients, NewPatient, patientAdminActionTypeEnum, potentialPtStaus, addPatientProcessEnum } from '../models/patients';
+import { Conditions, Gender, PatientDetails, Patients, NewPatient, DuplicatePatient, patientAdminActionTypeEnum, potentialPtStaus, addPatientProcessEnum, patientDuplicateSaveTypeEnum, patientDuplicateMatchTypeEnum, patientDuplicateActionEnum } from '../models/patients';
 import { RestService } from '../rest.service';
 import { PatientsDataSource } from './patients.datasource';
 import { FilterService } from '../services/filter.service';
@@ -42,6 +42,7 @@ export class PatientsComponent implements OnInit {
   @ViewChild('adminDialog') adminDialog: TemplateRef<any>;
   @ViewChild('adminConfirmDialog') adminConfirmDialog: TemplateRef<any>;
   @ViewChild('patientAdminDialog') patientAdminDialog: TemplateRef<any>;
+  @ViewChild('patientMergeDialog') patientMergeDialog: TemplateRef<any>;
   @ViewChild('patientAdminConfirmDialog') patientAdminConfirmDialog: TemplateRef<any>;
 
   @Input()
@@ -107,7 +108,18 @@ export class PatientsComponent implements OnInit {
   newPatientValues: NewPatient;
   addPatientForm: FormGroup;
   patientAdminForm: FormGroup;
+  patientMergeForm: FormGroup;
   patientAdminForm_DuplicatePatients: FormGroup;
+  patientMergeForm_DuplicatePatients: FormGroup;
+  duplicateList: DuplicatePatient[];
+  duplicateDialog_AllowContinue: Boolean;
+  duplicateDialog_AllowReactivate: Boolean;
+  duplicateDialog_AllowKeepAndSave: Boolean;
+  duplicateDialog_AllowMerge: Boolean;
+  duplicateDialog_SelectedSaveType: number;
+  mergePatient = {} as DuplicatePatient;
+  mergeHeaderText = '';
+  mergeDetailText = '';
   isLoading = true;
   isAddingPatientAndContinue: boolean;
   isAddingPatientAndExit: boolean;
@@ -119,6 +131,7 @@ export class PatientsComponent implements OnInit {
   possibleDuplicatePatient: boolean;
   patientAdminActionEnum = patientAdminActionTypeEnum;
   addNewPatientProcessEnum = addPatientProcessEnum;
+  patientDuplicateMergeActionEnum = patientDuplicateActionEnum;
 
   //Outcome Pop list
   outcomes: string;
@@ -185,6 +198,27 @@ export class PatientsComponent implements OnInit {
     });
 
     this.patientAdminForm_DuplicatePatients = this.fb.group({
+      potentialDuplicateFirstName: '',
+      potentialDuplicateLastName: '',
+      potentialDuplicateDOB: '',
+      potentialDuplicatePCPFirstName: '',
+      potentialDuplicatePCPLastName: '',
+      potentialDuplicateGender: '',
+      potentialDuplicatePatientMRNId: '',
+      potentialDuplicatePCPName: ''
+    });
+
+    this.patientMergeForm = this.fb.group({
+      firstName: '',
+      lastName: '',
+      patientDOB: '',
+      gender: '',
+      genderId: '',
+      pcpId: '',
+      pcpName: ''
+    });
+
+    this.patientMergeForm_DuplicatePatients = this.fb.group({
       potentialDuplicateFirstName: '',
       potentialDuplicateLastName: '',
       potentialDuplicateDOB: '',
@@ -451,7 +485,16 @@ export class PatientsComponent implements OnInit {
   }
 
 
-  submitPatientAddUpdate() {
+  submitPatientAddUpdate(type) {
+    if (type === addPatientProcessEnum.SaveAndContinue) {
+      this.isAddingPatientAndContinue = true;
+      this.isAddingPatientAndExit = false;
+    }
+    if (type === addPatientProcessEnum.SaveAndExit) {
+      this.isAddingPatientAndContinue = false;
+      this.isAddingPatientAndExit = true;
+    }
+
     this.newPatientValues = this.addPatientForm.value;
     this.newPatientValues.firstName = this.addPatientForm.controls.firstName.value;
     this.newPatientValues.lastName = this.addPatientForm.controls.lastName.value;
@@ -462,45 +505,61 @@ export class PatientsComponent implements OnInit {
 
     this.logger.log('inSubmitPatientAddUpdate', this.newPatientValues);
     this.logger.log(this.addPatientForm.value);
-    this.rest.addPatient(this.newPatientValues).subscribe(data => {
-      if (data) {
-        let id = <number>data;
-        this.logger.log(id, 'New Patient');
-        if (this.isAddingPatientAndContinue) {
-          this.patientNameSearch = id.toString();
-          this.loadPatientsWithFilters();
-        }
-        if (this.isAddingPatientAndExit) {
-          this.loadPatientsPage();
-        }
-        this.snackBar.openSnackBar(`Patient ${this.newPatientValues.firstName + ' ' + this.newPatientValues.lastName} added to the registry`, 'Close', 'success-snackbar');
-      }
-      else {
-        this.logger.log('patient exists');
-      }
-      this.cancelAdminDialog();
 
+    //TH - 11/17/2020 - Before saving, check for duplicates
+    this.rest.getCheckPatientDuplicates(this.newPatientValues.firstName, this.newPatientValues.lastName, this.newPatientValues.dob.toDateString(), -1).subscribe((dupData) => {
+      this.duplicateList = dupData;
 
-    },
-      error => {
-        if (error) {
-          console.info('AddPatient Error: ', error);
-          if (error === 'patient already exists') {
-            this.logger.log('patient exists: ' + this.newPatientValues.firstName + ' ' + this.newPatientValues.lastName);
-            this.snackBar.openSnackBar(`Patient ${this.newPatientValues.firstName + ' ' + this.newPatientValues.lastName} already exists in registry`, 'Close', 'warn-snackbar');
+      if (this.duplicateList === undefined || this.duplicateList == null || this.duplicateList.length < 1)
+      {   
+        this.logger.log("does not contain duplicates", this.duplicateList);
+        this.rest.addPatient(this.newPatientValues).subscribe(data => {
+          if (data) {
+            let id = <number>data;
+            this.logger.log(id, 'New Patient');
+            if (this.isAddingPatientAndContinue) {
+              this.patientNameSearch = id.toString();
+              this.loadPatientsWithFilters();
+            }
+            if (this.isAddingPatientAndExit) {
+              this.loadPatientsPage();
+            }
+            this.snackBar.openSnackBar(`Patient ${this.newPatientValues.firstName + ' ' + this.newPatientValues.lastName} added to the registry`, 'Close', 'success-snackbar');
           }
           else {
-            this.logger.log('unexpected error caught: ' + error)
-            this.snackBar.openSnackBar(`Oops! Something has gone wrong. Please contact your PHO Administrator`, 'Close', 'warn-snackbar');
+            this.logger.log('patient exists');
           }
-
-        }
-        else {
-          this.snackBar.openSnackBar(`Oops! Something has gone wrong. Please contact your PHO Administrator`, 'Close', 'warn-snackbar');
-        }
-
-      });
-
+          this.cancelAdminDialog();   
+        },
+          error => {
+            if (error) {
+              console.info('AddPatient Error: ', error);
+              if (error === 'patient already exists') {
+                this.logger.log('patient exists: ' + this.newPatientValues.firstName + ' ' + this.newPatientValues.lastName);
+                this.snackBar.openSnackBar(`Patient ${this.newPatientValues.firstName + ' ' + this.newPatientValues.lastName} already exists in registry`, 'Close', 'warn-snackbar');
+              }
+              else {
+                this.logger.log('unexpected error caught: ' + error)
+                this.snackBar.openSnackBar(`Oops! Something has gone wrong. Please contact your PHO Administrator`, 'Close', 'warn-snackbar');
+              }
+    
+            }
+            else {
+              this.snackBar.openSnackBar(`Oops! Something has gone wrong. Please contact your PHO Administrator`, 'Close', 'warn-snackbar');
+            }
+    
+          });
+      }else{
+        this.logger.log("contains duplicates", this.duplicateList);
+        this.mergePatient = this.duplicateList[0];
+        this.duplicateDialog_AllowContinue = this.duplicateList[0].allowContinue;
+        this.duplicateDialog_AllowReactivate = this.duplicateList[0].allowReactivate;
+        this.duplicateDialog_AllowKeepAndSave = this.duplicateList[0].allowKeepAndSave;
+        this.duplicateDialog_AllowMerge = this.duplicateList[0].allowMerge;
+        //pop dialog
+        this.openPatientMergeDialog(patientDuplicateSaveTypeEnum.New);
+      }
+    });
   }
 
 
@@ -634,11 +693,31 @@ export class PatientsComponent implements OnInit {
     this.logger.log('inSubmit', this.patientDetails);
     this.logger.log(this.form.value);
     this.logger.log(this.currentPatientId);
-    this.rest.savePatientDetails(this.currentPatientId, this.patientDetails).subscribe(data => {
-      this.savedPatientData = data;
-      this.patientNameSearch = '';
-      this.loadPatientsWithFilters();
-    });
+
+        //TH - 11/17/2020 - Before saving, check for duplicates
+        this.rest.getCheckPatientDuplicates(this.patientDetails.firstName, this.patientDetails.lastName, this.patientDetails.patientDOB.toDateString(), this.patientDetails.id).subscribe((dupData) => {
+          this.duplicateList = dupData;
+    
+          if (this.duplicateList === undefined || this.duplicateList == null || this.duplicateList.length < 1)
+          {   
+            this.logger.log("does not contain duplicates", this.duplicateList);
+            this.rest.savePatientDetails(this.currentPatientId, this.patientDetails).subscribe(data => {
+              this.savedPatientData = data;
+              this.patientNameSearch = '';
+              this.loadPatientsWithFilters();
+            });
+          }else{
+            this.logger.log("contains duplicates", this.duplicateList);
+            this.mergePatient = this.duplicateList[0];
+            this.duplicateDialog_AllowContinue = this.duplicateList[0].allowContinue;
+            this.duplicateDialog_AllowReactivate = this.duplicateList[0].allowReactivate;
+            this.duplicateDialog_AllowKeepAndSave = this.duplicateList[0].allowKeepAndSave;
+            this.duplicateDialog_AllowMerge = this.duplicateList[0].allowMerge;
+
+            //pop dialog
+            this.openPatientMergeDialog(patientDuplicateSaveTypeEnum.Update);
+          }
+        });
   }
 
   /* Patient Details - Form Elements*/
@@ -671,6 +750,80 @@ export class PatientsComponent implements OnInit {
 
   openPmcaDialog() {
     const dialogRef = this.dialog.open(this.callPmcaDialog, { disableClose: true });
+  }
+
+  openPatientMergeDialog(action) {
+    this.duplicateDialog_SelectedSaveType = action;
+
+    this.dialog.closeAll();
+
+    if (action === patientDuplicateSaveTypeEnum.Update){
+      this.patientMergeForm.patchValue({
+        firstName: this.patientDetails.firstName,
+        lastName: this.patientDetails.lastName,
+        patientDOB: this.transformDob(this.patientDetails.patientDOB),
+        gender: this.patientDetails.gender,
+        genderId: this.patientDetails.genderId,
+        pcpId: this.patientDetails.pcpId,
+        pcpName: this.patientDetails.pcpFirstName + " " + this.patientDetails.pcpLastName
+      });    
+    }
+    if (action === patientDuplicateSaveTypeEnum.New){
+      this.patientMergeForm.patchValue({
+        firstName: this.newPatientValues.firstName,
+        lastName: this.newPatientValues.lastName,
+        patientDOB: this.transformDob(this.newPatientValues.dob),
+        genderId: this.newPatientValues.genderId,
+        pcpName: ''
+      });
+
+    }
+
+    this.patientMergeForm_DuplicatePatients.patchValue({
+      potentialDuplicateFirstName: this.duplicateList[0].firstName,
+      potentialDuplicateLastName: this.duplicateList[0].lastName,
+      potentialDuplicateDOB: this.transformDob(this.duplicateList[0].dob),
+      potentialDuplicateGender: this.duplicateList[0].gender
+    });
+
+    this.mergeHeaderText = this.duplicateList[0].headerText;
+    this.mergeDetailText = this.duplicateList[0].detailHeaderText;
+
+    this.dialog.open(this.patientMergeDialog, { disableClose: true });
+  }
+
+  
+  confirmPatientMerge(mergeAction){      
+    this.logger.log("confirming merge: mergeAction=" + mergeAction + " mergeSaveType=" + this.duplicateDialog_SelectedSaveType);    
+
+    if (this.duplicateDialog_SelectedSaveType === patientDuplicateSaveTypeEnum.Update){
+      this.logger.log("processing merge update save");
+      //create a variable for the current patient, to send values up to API
+      this.mergePatient.firstName = this.patientDetails.firstName;
+      this.mergePatient.lastName = this.patientDetails.lastName;
+      this.mergePatient.dob = this.transformDobForPut(this.patientDetails.patientDOB);
+      this.mergePatient.gender = this.patientDetails.gender;            
+    }
+    if (this.duplicateDialog_SelectedSaveType === patientDuplicateSaveTypeEnum.New){
+      this.logger.log("processing merge new save");
+      //create a variable for the current patient, to send values up to API
+      this.mergePatient.firstName = this.newPatientValues.firstName;
+      this.mergePatient.lastName = this.newPatientValues.lastName;
+      this.mergePatient.dob = this.transformDobForPut(this.newPatientValues.dob);
+      this.mergePatient.genderId = this.newPatientValues.genderId;
+    }
+
+    this.logger.log("calling REST API confirm Merge");
+    this.logger.log(this.mergePatient, "mergePatient");
+    this.logger.log(this.duplicateList[0].patientId, "dupPatientId");
+    this.logger.log(mergeAction, "mergeAction");
+      
+    this.rest.confirmPatientDupicateAction(this.mergePatient, this.duplicateList[0].patientId.toString(), mergeAction.toString()).subscribe(data => {
+      this.loadPatientsWithFilters();
+    });
+
+    this.dialog.closeAll();
+
   }
 
   openPatientAdminDialog(id: number) {
