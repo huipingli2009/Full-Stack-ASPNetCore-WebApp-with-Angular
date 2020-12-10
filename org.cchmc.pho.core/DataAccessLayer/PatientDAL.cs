@@ -240,7 +240,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@FirstName", SqlDbType.VarChar).Value = firstName;
                     sqlCommand.Parameters.Add("@LastName", SqlDbType.VarChar).Value = lastName;
                     sqlCommand.Parameters.Add("@DOB", SqlDbType.Date).Value = dob;
-                    sqlCommand.Parameters.Add("@ExistingPatientId", SqlDbType.Int).Value = (existingPatientId.HasValue ? (int?)null : existingPatientId);
+                    sqlCommand.Parameters.Add("@ExistingPatientId", SqlDbType.Int).Value = (existingPatientId.HasValue ? existingPatientId: (int?)null);
 
                     await sqlConnection.OpenAsync();
 
