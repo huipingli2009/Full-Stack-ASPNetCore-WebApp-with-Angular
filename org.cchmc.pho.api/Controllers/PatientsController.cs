@@ -121,7 +121,6 @@ namespace org.cchmc.pho.api.Controllers
 
 
         // GET: api/Workbooks
-        [AllowAnonymous]
         [HttpGet("duplicates")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
