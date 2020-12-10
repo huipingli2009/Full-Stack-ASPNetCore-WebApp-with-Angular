@@ -225,27 +225,81 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 }
             }
         }
-        public async Task<bool> IsExistingPatient(int userId, Patient patient)
+        public async Task<List<DuplicatePatient>> CheckForMergablePatients(int userId, string firstName, string lastName, DateTime dob, int? existingPatientId)
         {
+            DataTable dataTable = new DataTable();
+            List<DuplicatePatient> searchResults = new List<DuplicatePatient>();
 
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
-                using (SqlCommand sqlCommand = new SqlCommand("spCheckExistingPatient", sqlConnection))
+                using (SqlCommand sqlCommand = new SqlCommand("spCheckForMergablePatients", sqlConnection))
                 {
 
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
-                    sqlCommand.Parameters.Add("@FirstName", SqlDbType.VarChar).Value = patient.FirstName;
-                    sqlCommand.Parameters.Add("@LastName", SqlDbType.VarChar).Value = patient.LastName;
-                    sqlCommand.Parameters.Add("@DOB", SqlDbType.Date).Value = patient.DOB;
+                    sqlCommand.Parameters.Add("@FirstName", SqlDbType.VarChar).Value = firstName;
+                    sqlCommand.Parameters.Add("@LastName", SqlDbType.VarChar).Value = lastName;
+                    sqlCommand.Parameters.Add("@DOB", SqlDbType.Date).Value = dob;
+                    sqlCommand.Parameters.Add("@ExistingPatientId", SqlDbType.Int).Value = (existingPatientId.HasValue ? (int?)null : existingPatientId);
 
                     await sqlConnection.OpenAsync();
 
-                    //Execute Stored Procedure
-                    return ((bool)sqlCommand.ExecuteScalar());
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+
+                        foreach (DataRow dr in dataTable.Rows)
+                        {
+                            var workbookspt = new DuplicatePatient()
+                            {
+                                PatientId = int.Parse(dr["CurrPatientID"].ToString()),
+                                LastName = dr["LastName"].ToString(),
+                                FirstName = dr["FirstName"].ToString(),
+                                DOB = (dr["PatientDOB"] == DBNull.Value ? (DateTime?)null : (DateTime.Parse(dr["PatientDOB"].ToString()))),
+                                Gender = dr["Gender"].ToString(),
+                                HeaderText = dr["HeaderText"].ToString(),
+                                DetailHeaderText = dr["DetailHeaderText"].ToString(),
+                                MatchType = Convert.ToInt32(dr["MatchType"].ToString()),
+                                AllowContinue = Convert.ToBoolean(dr["AllowContinue"]),
+                                AllowReactivate = Convert.ToBoolean(dr["AllowReactivate"]),
+                                AllowKeepAndSave = Convert.ToBoolean(dr["AllowKeepAndSave"]),
+                                AllowMerge = Convert.ToBoolean(dr["AllowMerge"])
+                            };
+
+                            searchResults.Add(workbookspt);
+                        }
+                    }
+
+                    return searchResults;
                 }
             }
         }
+
+
+        public async Task<bool> ConfirmPatientMerge(int userId, int patientId, string firstName, string lastName, DateTime dob, int duplicatePatientId, int mergeActionId)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spPutPatientMergeConfirmation", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@FirstName", SqlDbType.VarChar).Value = firstName;
+                    sqlCommand.Parameters.Add("@LastName", SqlDbType.VarChar).Value = lastName;
+                    sqlCommand.Parameters.Add("@DOB", SqlDbType.Date).Value = dob;
+                    sqlCommand.Parameters.Add("@CurrentPatientID", SqlDbType.Int).Value = patientId;
+                    sqlCommand.Parameters.Add("@DuplicatePatientID", SqlDbType.Int).Value = duplicatePatientId;
+                    sqlCommand.Parameters.Add("@MergeActionID", SqlDbType.Int).Value = mergeActionId;
+
+                    await sqlConnection.OpenAsync();
+
+                    //Execute Stored Procedure                    
+                    return ((bool)sqlCommand.ExecuteScalar());
+
+                }
+            }
+        }
+
         public async Task<bool> UpdatePatientWatchlist(int userId, int patientId)
         {
 

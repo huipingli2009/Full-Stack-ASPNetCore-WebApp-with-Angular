@@ -119,6 +119,70 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
+
+        // GET: api/Workbooks
+        [AllowAnonymous]
+        [HttpGet("duplicates")]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [SwaggerResponse(200, type: typeof(List<DuplicatePatientViewModel>))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> CheckForMergablePatients(string firstName, string lastName, DateTime dob, int? existingPatientId)
+        {
+            try
+            {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+                var data = await _patient.CheckForMergablePatients(currentUserId, firstName, lastName, dob, existingPatientId);
+
+                var result = _mapper.Map<List<DuplicatePatientViewModel>>(data);
+
+                // return the result in a "200 OK" response
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+        [HttpPut("duplicates/{duplicatePatient}/{mergeAction}")]
+        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [SwaggerResponse(200, type: typeof(PatientDetailsViewModel))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> ConfirmPatientMerge(string duplicatePatient, string mergeAction, [FromBody] DuplicatePatientViewModel patientVM)
+        {
+            if (!int.TryParse(duplicatePatient, out var duplicatePatientId))
+            {
+                _logger.LogInformation($"Failed to parse patientId - {duplicatePatient}");
+                return BadRequest("patient is not a valid integer");
+            }
+            if (!int.TryParse(mergeAction, out var mergeActionId))
+            {
+                _logger.LogInformation($"Failed to parse merge action - {mergeAction}");
+                return BadRequest("merge action is not a valid integer");
+            }
+
+            try
+            {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+
+                // call the data layer to mark the action
+                var data = await _patient.ConfirmPatientMerge(currentUserId, patientVM.PatientId, patientVM.FirstName, patientVM.LastName, patientVM.DOB.Value, duplicatePatientId, mergeActionId);
+                var result = _mapper.Map<bool>(data);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
         [HttpPut("{patient}")]
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(PatientDetailsViewModel))]
@@ -201,16 +265,6 @@ namespace org.cchmc.pho.api.Controllers
                 int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
 
                 Patient patient = _mapper.Map<Patient>(patientVM);
-                //check for existing
-                var check = await _patient.IsExistingPatient(currentUserId, patient);
-                bool existing = (bool)_mapper.Map<bool>(check);
-                if (existing)
-                {
-                    BadRequestObjectResult res = new BadRequestObjectResult(new { message = "patient already exists" });
-
-                    _logger.LogInformation("patient already exists");
-                    return res;
-                }
                 // call the data layer to mark the action
                 var data = await _patient.AddPatient(currentUserId, patient);
                 var result = _mapper.Map<int>(data);
