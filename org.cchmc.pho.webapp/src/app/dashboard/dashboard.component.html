@@ -200,10 +200,10 @@
                 </tr>
         </table>
     </div>
-    <div mat-dialog-actions align="end">
-        <button mat-button mat-dialog-close>Close</button>
-        <button mat-button (click)="downloadToExcel()">Download</button>
-        <button mat-button (click)="OpenReport()">View Report</button>
+    <div mat-dialog-actions #edReportActions align="end" >
+        <button mat-button mat-dialog-close class="ed-report-action">Close</button>
+        <button mat-button class="ed-report-action" (click)="downloadToExcel()">Download</button>
+        <button mat-button class="ed-report-action" (click)="OpenReport()">View Report</button>
     </div>
 
 </ng-template>

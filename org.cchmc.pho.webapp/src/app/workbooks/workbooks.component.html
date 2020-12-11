@@ -514,7 +514,7 @@
                         <span [innerHTML]=workbookPractice.line3></span>
                     </div>
                     <div fxLayout="column" fxLayoutAlign="end end" fxFlex>
-                       <a href='{{workbookPractice?.jobAidURL}}' target="_blank">Job Aid</a>
+                        <a mat-flat-button color="accent"  href='{{workbookPractice?.jobAidURL}}' target="_blank">Job Aid</a>
                     </div>
                 </div>                
                 <div fxLayout="row">
@@ -588,7 +588,7 @@
                         <!-- Assessment Column -->
                         <ng-container matColumnDef="assessmentcompleted">
                             <mat-header-cell *matHeaderCellDef mat-sort-header> ASSESSMENT COMPLETED </mat-header-cell>
-                            <mat-cell *matCellDef="let element">
+                            <mat-cell *matCellDef="let element" style="justify-content: center;">
                                 <ng-container *ngIf="element.assessmentCompleted; else actionElse">
                                     Yes
                                 </ng-container>

@@ -863,10 +863,13 @@ button.toast-close-button {
   color: #333;
   background: white;
   border: 1px solid grey;
-  font-size: 12pt;
+  font-size: 12pt;  
   border-collapse: collapse;
   margin-bottom: 1em;
 
+  thead th {
+    font-weight: bold;
+  }
   thead th,
   tfoot th {
     color: #777;
@@ -885,6 +888,7 @@ button.toast-close-button {
     text-decoration: underline;
     cursor: pointer;
   }
+ 
 }
 
 // Content - Population Details
@@ -1204,8 +1208,7 @@ button.toast-close-button {
   .patientButtonAlign {        
     justify-content: flex-end;          
   }
-
-  
+ 
 .whitespace{
   margin-left: 1.5em; 
   margin-right: 1.5em; 
@@ -2054,7 +2057,7 @@ button.toast-close-button {
   }
   .ed-report-download {
     margin-right: 50px;
-  }
+  } 
 }
 
 .edreport-title {
@@ -2063,10 +2066,17 @@ button.toast-close-button {
   margin-left: 50px;
 }
 
+/* For pop-up report mat-dialog-action button style */
+.ed-report-action {
+    font-family: ArcherBold;
+    background-color:#f0673c;
+    color: white; 
+    text-transform: uppercase;
+}
+
 /* Workbooks ==================================================================================*/
 #workbooks {
   //border-radius: 7px 7px 0 0;
-
 
   .top-date-container {
     padding: 22px 28px 0;
