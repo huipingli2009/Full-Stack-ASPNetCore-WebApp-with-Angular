@@ -170,7 +170,7 @@ namespace org.cchmc.pho.api.Controllers
                 int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
 
                 // call the data layer to mark the action
-                var data = await _patient.ConfirmPatientMerge(currentUserId, patientVM.PatientId, patientVM.FirstName, patientVM.LastName, patientVM.DOB.Value, duplicatePatientId, mergeActionId);
+                var data = await _patient.ConfirmPatientMerge(currentUserId, patientVM.PatientId, patientVM.FirstName, patientVM.LastName, patientVM.DOB.Value, patientVM.GenderId, patientVM.PCPId, duplicatePatientId, mergeActionId);
                 var result = _mapper.Map<bool>(data);
                 return Ok(result);
             }

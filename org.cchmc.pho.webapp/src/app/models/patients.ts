@@ -18,6 +18,7 @@ export interface Patients {
 export interface DuplicatePatient extends Patients {
     gender: string;
     genderId: number;
+    pcpId: number;
     headerText: string;
     detailHeaderText: string;
     matchType: number;
