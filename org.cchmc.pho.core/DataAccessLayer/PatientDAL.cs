@@ -276,7 +276,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         }
 
 
-        public async Task<bool> ConfirmPatientMerge(int userId, int patientId, string firstName, string lastName, DateTime dob, int duplicatePatientId, int mergeActionId)
+        public async Task<bool> ConfirmPatientMerge(int userId, int patientId, string firstName, string lastName, DateTime dob, int genderId, int pcpId, int duplicatePatientId, int mergeActionId)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
@@ -287,6 +287,8 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@FirstName", SqlDbType.VarChar).Value = firstName;
                     sqlCommand.Parameters.Add("@LastName", SqlDbType.VarChar).Value = lastName;
                     sqlCommand.Parameters.Add("@DOB", SqlDbType.Date).Value = dob;
+                    sqlCommand.Parameters.Add("@GenderId", SqlDbType.Int).Value = genderId;
+                    sqlCommand.Parameters.Add("@PCPId", SqlDbType.Int).Value = pcpId;
                     sqlCommand.Parameters.Add("@CurrentPatientID", SqlDbType.Int).Value = patientId;
                     sqlCommand.Parameters.Add("@DuplicatePatientID", SqlDbType.Int).Value = duplicatePatientId;
                     sqlCommand.Parameters.Add("@MergeActionID", SqlDbType.Int).Value = mergeActionId;

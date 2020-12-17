@@ -551,7 +551,12 @@ export class PatientsComponent implements OnInit {
           });
       }else{
         this.logger.log("contains duplicates", this.duplicateList);
-        this.mergePatient = this.duplicateList[0];
+        this.mergePatient.firstName = this.newPatientValues.firstName;
+        this.mergePatient.lastName = this.newPatientValues.lastName;
+        this.mergePatient.dob = this.newPatientValues.dob.toDateString();
+        this.mergePatient.genderId = this.newPatientValues.genderId;
+        this.mergePatient.pcpId = this.newPatientValues.pcP_StaffID;
+
         this.duplicateDialog_AllowContinue = this.duplicateList[0].allowContinue;
         this.duplicateDialog_AllowReactivate = this.duplicateList[0].allowReactivate;
         this.duplicateDialog_AllowKeepAndSave = this.duplicateList[0].allowKeepAndSave;
@@ -696,8 +701,7 @@ export class PatientsComponent implements OnInit {
 
         //TH - 11/17/2020 - Before saving, check for duplicates
         this.rest.getCheckPatientDuplicates(this.patientDetails.firstName, this.patientDetails.lastName, this.patientDetails.patientDOB.toDateString(), this.patientDetails.id).subscribe((dupData) => {
-          this.duplicateList = dupData;
-    
+          this.duplicateList = dupData;    
           if (this.duplicateList === undefined || this.duplicateList == null || this.duplicateList.length < 1)
           {   
             this.logger.log("does not contain duplicates", this.duplicateList);
@@ -708,7 +712,13 @@ export class PatientsComponent implements OnInit {
             });
           }else{
             this.logger.log("contains duplicates", this.duplicateList);
-            this.mergePatient = this.duplicateList[0];
+            this.mergePatient.patientId = this.patientDetails.id;
+            this.mergePatient.firstName = this.patientDetails.firstName;
+            this.mergePatient.lastName = this.patientDetails.lastName;
+            this.mergePatient.dob = this.patientDetails.patientDOB.toDateString();
+            this.mergePatient.genderId = this.patientDetails.genderId;
+            this.mergePatient.pcpId = this.patientDetails.pcpId;
+
             this.duplicateDialog_AllowContinue = this.duplicateList[0].allowContinue;
             this.duplicateDialog_AllowReactivate = this.duplicateList[0].allowReactivate;
             this.duplicateDialog_AllowKeepAndSave = this.duplicateList[0].allowKeepAndSave;
@@ -802,7 +812,9 @@ export class PatientsComponent implements OnInit {
       this.mergePatient.firstName = this.patientDetails.firstName;
       this.mergePatient.lastName = this.patientDetails.lastName;
       this.mergePatient.dob = this.transformDobForPut(this.patientDetails.patientDOB);
-      this.mergePatient.gender = this.patientDetails.gender;            
+      this.mergePatient.gender = this.patientDetails.gender;  
+      this.mergePatient.genderId = this.patientDetails.genderId;
+      this.mergePatient.pcpId = this.patientDetails.pcpId;     
     }
     if (this.duplicateDialog_SelectedSaveType === patientDuplicateSaveTypeEnum.New){
       this.logger.log("processing merge new save");
@@ -811,6 +823,7 @@ export class PatientsComponent implements OnInit {
       this.mergePatient.lastName = this.newPatientValues.lastName;
       this.mergePatient.dob = this.transformDobForPut(this.newPatientValues.dob);
       this.mergePatient.genderId = this.newPatientValues.genderId;
+      this.mergePatient.pcpId = this.newPatientValues.pcP_StaffID;
     }
 
     this.logger.log("calling REST API confirm Merge");

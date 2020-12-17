@@ -15,6 +15,8 @@ namespace org.cchmc.pho.api.ViewModels
     public class DuplicatePatientViewModel : SimplifiedPatientViewModel
     {
         public string Gender { get; set; }
+        public int GenderId { get; set; }
+        public int PCPId { get; set; }
         public string HeaderText { get; set; }
         public string DetailHeaderText { get; set; }
         public int MatchType { get; set; }
