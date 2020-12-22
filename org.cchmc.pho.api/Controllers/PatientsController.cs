@@ -127,12 +127,12 @@ namespace org.cchmc.pho.api.Controllers
         [SwaggerResponse(200, type: typeof(List<DuplicatePatientViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> CheckForMergablePatients(string firstName, string lastName, DateTime dob, int? existingPatientId)
+        public async Task<IActionResult> CheckForMergablePatients(string firstName, string lastName, DateTime dob, int genderId, int? existingPatientId)
         {
             try
             {
                 int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
-                var data = await _patient.CheckForMergablePatients(currentUserId, firstName, lastName, dob, existingPatientId);
+                var data = await _patient.CheckForMergablePatients(currentUserId, firstName, lastName, dob, genderId, existingPatientId);
 
                 var result = _mapper.Map<List<DuplicatePatientViewModel>>(data);
 
@@ -147,30 +147,21 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [HttpPut("duplicates/{duplicatePatient}/{mergeAction}")]
+        [HttpPut("duplicates")]
         [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
-        [SwaggerResponse(200, type: typeof(PatientDetailsViewModel))]
+        [SwaggerResponse(200, type: typeof(bool))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> ConfirmPatientMerge(string duplicatePatient, string mergeAction, [FromBody] DuplicatePatientViewModel patientVM)
+        public async Task<IActionResult> ConfirmPatientMerge([FromBody] MergeConfirmationViewModel confirmVM)
         {
-            if (!int.TryParse(duplicatePatient, out var duplicatePatientId))
-            {
-                _logger.LogInformation($"Failed to parse patientId - {duplicatePatient}");
-                return BadRequest("patient is not a valid integer");
-            }
-            if (!int.TryParse(mergeAction, out var mergeActionId))
-            {
-                _logger.LogInformation($"Failed to parse merge action - {mergeAction}");
-                return BadRequest("merge action is not a valid integer");
-            }
-
             try
             {
                 int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
 
+
+                MergeConfirmation confirmation = _mapper.Map<MergeConfirmation>(confirmVM);
                 // call the data layer to mark the action
-                var data = await _patient.ConfirmPatientMerge(currentUserId, patientVM.PatientId, patientVM.FirstName, patientVM.LastName, patientVM.DOB.Value, patientVM.GenderId, patientVM.PCPId, duplicatePatientId, mergeActionId);
+                var data = await _patient.ConfirmPatientMerge(currentUserId, confirmation);
                 var result = _mapper.Map<bool>(data);
                 return Ok(result);
             }

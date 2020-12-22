@@ -225,7 +225,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 }
             }
         }
-        public async Task<List<DuplicatePatient>> CheckForMergablePatients(int userId, string firstName, string lastName, DateTime dob, int? existingPatientId)
+        public async Task<List<DuplicatePatient>> CheckForMergablePatients(int userId, string firstName, string lastName, DateTime dob, int genderId, int? existingPatientId)
         {
             DataTable dataTable = new DataTable();
             List<DuplicatePatient> searchResults = new List<DuplicatePatient>();
@@ -237,6 +237,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@GenderId", SqlDbType.Int).Value = genderId;
                     sqlCommand.Parameters.Add("@FirstName", SqlDbType.VarChar).Value = firstName;
                     sqlCommand.Parameters.Add("@LastName", SqlDbType.VarChar).Value = lastName;
                     sqlCommand.Parameters.Add("@DOB", SqlDbType.Date).Value = dob;
@@ -253,6 +254,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                             var workbookspt = new DuplicatePatient()
                             {
                                 PatientId = int.Parse(dr["CurrPatientID"].ToString()),
+                                PatientMRNId = dr["PAT_MRN_ID"].ToString(),
                                 LastName = dr["LastName"].ToString(),
                                 FirstName = dr["FirstName"].ToString(),
                                 DOB = (dr["PatientDOB"] == DBNull.Value ? (DateTime?)null : (DateTime.Parse(dr["PatientDOB"].ToString()))),
@@ -276,7 +278,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         }
 
 
-        public async Task<bool> ConfirmPatientMerge(int userId, int patientId, string firstName, string lastName, DateTime dob, int genderId, int pcpId, int duplicatePatientId, int mergeActionId)
+        public async Task<bool> ConfirmPatientMerge(int userId, MergeConfirmation mergeConfirmation)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
@@ -284,14 +286,14 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
-                    sqlCommand.Parameters.Add("@FirstName", SqlDbType.VarChar).Value = firstName;
-                    sqlCommand.Parameters.Add("@LastName", SqlDbType.VarChar).Value = lastName;
-                    sqlCommand.Parameters.Add("@DOB", SqlDbType.Date).Value = dob;
-                    sqlCommand.Parameters.Add("@GenderId", SqlDbType.Int).Value = genderId;
-                    sqlCommand.Parameters.Add("@PCPId", SqlDbType.Int).Value = pcpId;
-                    sqlCommand.Parameters.Add("@CurrentPatientID", SqlDbType.Int).Value = patientId;
-                    sqlCommand.Parameters.Add("@DuplicatePatientID", SqlDbType.Int).Value = duplicatePatientId;
-                    sqlCommand.Parameters.Add("@MergeActionID", SqlDbType.Int).Value = mergeActionId;
+                    sqlCommand.Parameters.Add("@UpdatedFirstName", SqlDbType.VarChar).Value = mergeConfirmation.TopPatientFirstName;
+                    sqlCommand.Parameters.Add("@UpdatedLastName", SqlDbType.VarChar).Value = mergeConfirmation.TopPatientLastName;
+                    sqlCommand.Parameters.Add("@UpdatedDOB", SqlDbType.Date).Value = mergeConfirmation.TopPatientDOB;
+                    sqlCommand.Parameters.Add("@UpdatedGenderId", SqlDbType.Int).Value = mergeConfirmation.TopPatientGenderId;
+                    sqlCommand.Parameters.Add("@UpdatedPCPId", SqlDbType.Int).Value = mergeConfirmation.PCPStaffId;
+                    sqlCommand.Parameters.Add("@CurrentPatientID", SqlDbType.Int).Value = mergeConfirmation.TopPatientId;
+                    sqlCommand.Parameters.Add("@DuplicatePatientID", SqlDbType.Int).Value = mergeConfirmation.BottomPatientId;
+                    sqlCommand.Parameters.Add("@MergeActionID", SqlDbType.Int).Value = mergeConfirmation.MergeAction;
 
                     await sqlConnection.OpenAsync();
 
