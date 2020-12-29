@@ -780,7 +780,7 @@ export class PatientsComponent implements OnInit {
         pcpName: this.patientDetails.pcpFirstName + " " + this.patientDetails.pcpLastName
       });   
       // SET TOP PATIENT DESCRIPTION
-      this.topPatientHeaderText = "EDITED PATIENT (FIELDS WILL BE KEPT)"; 
+      this.topPatientHeaderText = "EDITED PATIENT (VALUES WILL REMAIN)"; 
     }
     if (action === patientDuplicateSaveTypeEnum.New){
       this.patientMergeForm.patchValue({
@@ -791,7 +791,7 @@ export class PatientsComponent implements OnInit {
         pcpName: ''
       });
       // SET TOP PATIENT DESCRIPTION
-      this.topPatientHeaderText = "NEW PATIENT (FIELDS WILL BE KEPT)";
+      this.topPatientHeaderText = "NEW PATIENT (VALUES WILL REMAIN)";
     }
 
     this.patientMergeForm_DuplicatePatients.patchValue({
