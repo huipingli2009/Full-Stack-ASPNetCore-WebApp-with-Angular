@@ -175,9 +175,15 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     await sqlConnection.OpenAsync();
 
                     //Execute Stored Procedure
-                    sqlCommand.ExecuteNonQuery();
+                    int returnSuccess = (int)sqlCommand.ExecuteScalar();
+                    if (returnSuccess == 1)
+                    {
+                        return await GetPatientDetails(userId, patientDetail.Id, true); //only active patient can be updated
+                    }
 
-                    return await GetPatientDetails(userId, patientDetail.Id, true); //only active patient can be updated
+                    return null;
+
+                    
 
                 }
             }

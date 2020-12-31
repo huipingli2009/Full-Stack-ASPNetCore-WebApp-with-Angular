@@ -314,12 +314,15 @@ export class PatientsComponent implements OnInit {
   loadPatientsWithFilters() {
     if (this.isFilteringPatients === true) { // This is to handle if the user is coming from Dashboard or not.
       this.popSlices = this.filterType;
+      this.isFilteringPatients = false;
     }
     if (this.isFilteringOutcomes === true){
       this.outcomes = this.filterType;
+      this.isFilteringOutcomes = false;
     }
     if (this.isFilteringConditions === true){
       this.conditions = [this.filterType];
+      this.isFilteringConditions = false;
     }
 
     //if patient is coming from ED chart
@@ -520,7 +523,8 @@ export class PatientsComponent implements OnInit {
             let id = <number>data;
             this.logger.log(id, 'New Patient');
             if (this.isAddingPatientAndContinue) {
-              this.patientNameSearch = id.toString();
+              this.patientNameSearch = this.newPatientValues.firstName + ' ' + this.newPatientValues.lastName;
+              this.patientNameSearchValue = this.newPatientValues.firstName + ' ' + this.newPatientValues.lastName;
               this.loadPatientsWithFilters();
             }
             if (this.isAddingPatientAndExit) {
@@ -841,6 +845,10 @@ export class PatientsComponent implements OnInit {
     this.logger.log(mergeAction, "mergeAction");
       
     this.rest.confirmPatientDupicateAction(this.mergeConfirmation).subscribe(data => {
+      if (this.duplicateDialog_SelectedSaveType === patientDuplicateSaveTypeEnum.New){
+        this.patientNameSearch = this.newPatientValues.firstName + ' ' + this.newPatientValues.lastName;
+        this.patientNameSearchValue = this.newPatientValues.firstName + ' ' + this.newPatientValues.lastName;
+      }
       this.loadPatientsWithFilters();
     });
 
