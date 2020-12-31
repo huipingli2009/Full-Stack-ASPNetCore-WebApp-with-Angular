@@ -144,7 +144,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
         public async Task<PatientDetails> UpdatePatientDetails(int userId, PatientDetails patientDetail)
         {
-
+            int returnSuccess = 0;
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spUpdatePatient", sqlConnection))
@@ -175,17 +175,19 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     await sqlConnection.OpenAsync();
 
                     //Execute Stored Procedure
-                    int returnSuccess = (int)sqlCommand.ExecuteScalar();
-                    if (returnSuccess == 1)
-                    {
-                        return await GetPatientDetails(userId, patientDetail.Id, true); //only active patient can be updated
-                    }
-
-                    return null;
-
-                    
+                    returnSuccess = (int)sqlCommand.ExecuteScalar();                   
 
                 }
+            }
+
+            //if successful, return updated patDetails
+            if (returnSuccess == 1)
+            {
+                return await GetPatientDetails(userId, patientDetail.Id, false); //only active patient can be updated
+            }
+            else
+            {
+                return null;
             }
         }
         public async Task<int> AddPatient(int userId, Patient patient)
