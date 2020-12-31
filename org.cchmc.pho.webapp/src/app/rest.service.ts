@@ -165,8 +165,26 @@ export class RestService {
   /*Update Patient Details*/
   savePatientDetails(patientId, patient): Observable<any> {
     return this.http.put(`${API_URL}/api/Patients/${patientId}`, JSON.stringify(patient), httpOptions).pipe(
-      tap(_ => this.snackBar.openSnackBar(`Patient ${patient.firstName} ${patient.lastName} has been updated!`
-        , 'Close', 'success-snackbar'))
+      map((data: PatientDetails) => {
+        this.logger.log(data, 'savePatientDetails rest data ');
+        
+        if(data != null)
+        {      
+          this.logger.log('savePatientDetails data is present ');
+          this.snackBar.openSnackBar(`Patient ${patient.firstName} ${patient.lastName} has been updated!`
+            , 'Close', 'success-snackbar');
+        }
+        else
+        {
+          this.logger.log('savePatientDetails data is null ');
+          this.snackBar.openSnackBar(`Patient ${patient.firstName} ${patient.lastName} could not be updated`
+          , 'Close', 'warn-snackbar');
+        }
+
+        this.logger.log('savePatientDetails end');
+        return data;
+      })
+
     );
   }
 
