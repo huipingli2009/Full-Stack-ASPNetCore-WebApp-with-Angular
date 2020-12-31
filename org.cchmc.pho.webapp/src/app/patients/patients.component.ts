@@ -217,7 +217,8 @@ export class PatientsComponent implements OnInit {
       gender: '',
       genderId: '',
       pcpId: '',
-      pcpName: ''
+      pcpName: '',
+      epicMrn: ''
     });
 
     this.patientMergeForm_DuplicatePatients = this.fb.group({
@@ -781,7 +782,8 @@ export class PatientsComponent implements OnInit {
         gender: this.patientDetails.gender,
         genderId: this.patientDetails.genderId,
         pcpId: this.patientDetails.pcpId,
-        pcpName: this.patientDetails.pcpFirstName + " " + this.patientDetails.pcpLastName
+        pcpName: this.patientDetails.pcpFirstName + " " + this.patientDetails.pcpLastName,
+        epicMrn: this.patientDetails.patientMRNId
       });   
       // SET TOP PATIENT DESCRIPTION
       this.topPatientHeaderText = "EDITED PATIENT (VALUES WILL REMAIN)"; 
@@ -792,7 +794,8 @@ export class PatientsComponent implements OnInit {
         lastName: this.newPatientValues.lastName,
         patientDOB: this.transformDob(this.newPatientValues.dob),
         genderId: this.newPatientValues.genderId,
-        pcpName: ''
+        pcpName: '',
+        epicMrn: ''
       });
       // SET TOP PATIENT DESCRIPTION
       this.topPatientHeaderText = "NEW PATIENT (VALUES WILL REMAIN)";
