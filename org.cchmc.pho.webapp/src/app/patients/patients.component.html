@@ -136,7 +136,7 @@
     <!-- button Column -->
     <ng-container matColumnDef="button">
       <mat-header-cell *matHeaderCellDef class="patientButtonAlign">
-        <button mat-flat-button color="accent" class="add-patient-button" *ngIf="isUserAdmin"
+        <button mat-flat-button color="accent" class="add-patient-button" *ngIf="userCanAddPatient"
           (click)="openAdminAddDialog()">ADD PATIENT</button>
       </mat-header-cell>
       <mat-cell *matCellDef="let row">
@@ -407,6 +407,10 @@
                     NEXT CCHMC APPT
                   </div>
                   <div fxLayout="row" class="detail-text">{{patientDetails.nextCCHMCAppointment | date:'MM/dd/yyyy'}}</div>
+                  <!-- Patient Name History Link-->
+                  <div fxLayout="row" class="detail-text">
+                    <button mat-flat-button color="accent" (click)="openDrilldownDialog('7', 'Patient Name History')">PATIENT NAME HISTORY</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -450,7 +454,8 @@
             </mat-form-field>
             <ng-container
               *ngIf="(addPatientForm.get('firstName').touched || addPatientForm.get('firstName').dirty) && (addPatientForm.get('firstName').errors)">
-              <mat-error *ngIf="addPatientForm.get('firstName').errors.required">
+              <mat-error *ngIf="addPatientForm.get('firstName
+              ').errors.required">
                   *Required
               </mat-error>
             </ng-container>

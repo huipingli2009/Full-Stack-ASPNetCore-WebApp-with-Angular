@@ -125,7 +125,7 @@ export class PatientsComponent implements OnInit {
   isLoading = true;
   isAddingPatientAndContinue: boolean;
   isAddingPatientAndExit: boolean;
-  isUserAdmin: boolean;
+  userCanAddPatient: boolean;
   acceptPatient: boolean;
   declinePatient: boolean;
   mergeWithNewPatient: boolean;
@@ -306,9 +306,9 @@ export class PatientsComponent implements OnInit {
     this.userService.getCurrentUser().pipe(take(1)).subscribe((data) => {
       this.currentUser = data;
       this.currentUserId = data.id;
-      if (data.role.id === 3) {
-        this.isUserAdmin = true;
-      } else { this.isUserAdmin = false; }
+      if (data.role.id === 3 || data.role.id === 2 || data.role.id === 5) {
+        this.userCanAddPatient = true;
+      } else { this.userCanAddPatient = false; }
     });
   }
 

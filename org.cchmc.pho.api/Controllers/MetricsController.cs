@@ -31,7 +31,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpGet("kpis")]
-        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<DashboardMetricViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -55,7 +55,7 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
         [HttpGet("pop")]
-        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<PopulationMetricViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -79,7 +79,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpGet("edcharts")]
-        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<EDChartViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -106,7 +106,7 @@ namespace org.cchmc.pho.api.Controllers
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpGet("edcharts/{admitdate}")]
-        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<EDDetailViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -141,7 +141,7 @@ namespace org.cchmc.pho.api.Controllers
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpGet("drillthru/{measure}/{filter}")]
-        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(DrillthruMetricTableViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -172,7 +172,7 @@ namespace org.cchmc.pho.api.Controllers
 
        
         [HttpGet("outcomepop")]
-        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<PopulationOutcomeMetricViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
