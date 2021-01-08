@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AlertAction, AlertActionTaken, Alerts } from '../models/dashboard';
 import { PracticeCoach, Practices } from '../models/Staff';
-import { CurrentUser } from '../models/user';
+import { CurrentUser, Role } from '../models/user';
 import { RestService } from '../rest.service';
 import { AuthenticationService } from '../services/authentication.service';
 import { UserService } from '../services/user.service';
@@ -37,8 +37,9 @@ export class HeaderComponent {
   updateAlert: FormGroup;
   currentUser: CurrentUser;
   isUserAdmin: boolean;
+  displayPatientsTab: boolean;
   canSwitchPractice: boolean;
-  isPHOMember: boolean;
+  displayStaffAndWorkbookTab: boolean;
   firstName: string;
   lastName: string;
   subscription: Subscription;
@@ -94,19 +95,19 @@ export class HeaderComponent {
       this.currentUsername = data.userName;
       this.firstName = data.firstName;
       this.lastName = data.lastName;
-      if ((data.role.id === 1) || (data.role.id === 2) || (data.role.id === 3) || (data.role.id === 5)) {
-        this.isUserAdmin = true;
+      if ((data.role.id === Role.PracticeMember) || (data.role.id ===  Role.PracticeAdmin) || (data.role.id === Role.PHOAdmin) || (data.role.id === Role.PracticeCoordinator)) {
+        this.displayPatientsTab = true;
       } 
       else { 
-        this.isUserAdmin = false;        
+        this.displayPatientsTab = false;        
       }
-      if (data.role.id === 4) {
-        this.isPHOMember = true;
+      if (data.role.id === Role.PHOMember) {
+        this.displayStaffAndWorkbookTab = true;
       } 
       else { 
-        this.isPHOMember = false;        
+        this.displayStaffAndWorkbookTab = false;        
       }
-      if ((data.role.id === 3) || (data.role.id === 6)) {
+      if ((data.role.id === Role.PHOAdmin) || (data.role.id === Role.PHOLeader)) {
         this.canSwitchPractice = true;
       } 
       else { 

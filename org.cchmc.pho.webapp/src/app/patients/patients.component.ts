@@ -15,7 +15,7 @@ import { PatientsDataSource } from './patients.datasource';
 import { FilterService } from '../services/filter.service';
 import { MatSnackBarComponent } from '../shared/mat-snack-bar/mat-snack-bar.component';
 import { UserService } from '../services/user.service';
-import { CurrentUser} from '../models/user';
+import { CurrentUser, Role} from '../models/user';
 import { DrilldownService } from '../drilldown/drilldown.service';
 import { DrillthruMeasurementIdEnum } from '../models/drillthru';
 
@@ -125,8 +125,7 @@ export class PatientsComponent implements OnInit {
   isAddingPatientAndContinue: boolean;
   isAddingPatientAndExit: boolean;
   userCanAddPatient: boolean;
-  acceptPatient: boolean;
-  userCanAddPatient: boolean;
+  acceptPatient: boolean;  
   declinePatient: boolean;
   mergeWithNewPatient: boolean;
   mergeWithOldPatient: boolean;
@@ -306,7 +305,7 @@ export class PatientsComponent implements OnInit {
     this.userService.getCurrentUser().pipe(take(1)).subscribe((data) => {
       this.currentUser = data;
       this.currentUserId = data.id;
-      if (data.role.id === 3 || data.role.id === 2 || data.role.id === 5) {
+      if (data.role.id === Role.PHOAdmin || data.role.id === Role.PracticeAdmin || data.role.id === Role.PracticeCoordinator) {
         this.userCanAddPatient = true;
       } else { this.userCanAddPatient = false; }
     });
