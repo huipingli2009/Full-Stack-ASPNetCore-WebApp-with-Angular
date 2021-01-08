@@ -19,6 +19,7 @@ export interface DuplicatePatient extends Patients {
     gender: string;
     genderId: number;
     pcpId: number;
+    patientMRNId: string;
     headerText: string;
     detailHeaderText: string;
     matchType: number;
@@ -27,6 +28,19 @@ export interface DuplicatePatient extends Patients {
     allowKeepAndSave: boolean;
     allowMerge: boolean;
 }
+
+export interface MergePatientConfirmation {
+    matchType: number;
+    mergeAction: number;
+    topPatientId: number;
+    bottomPatientId: number;
+    pcP_StaffID: number;
+    topPatientFirstName: string;
+    topPatientLastName: string;
+    topPatientDob: string;
+    topPatientGenderId: number;
+}
+
 export interface PatientClass {
     resultCount: number;
     results: Patients[];

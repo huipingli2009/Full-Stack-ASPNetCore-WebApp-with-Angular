@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from '../environments/environment';
 import { Alerts, EdChart, EdChartDetails, Population, Quicklinks, Spotlight } from './models/dashboard';
-import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Patients, NewPatient, Pmca, PopSlices, Providers, States, Outcomes, DuplicatePatient } from './models/patients';
+import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Patients, NewPatient, Pmca, PopSlices, Providers, States, Outcomes, DuplicatePatient, MergePatientConfirmation } from './models/patients';
 import { PracticeList, Responsibilities, Staff, StaffDetails, StaffAdmin, PracticeCoach } from './models/Staff';
 import { Followup, WorkbookDepressionPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookAsthmaPatient, Treatment, WorkbookConfirmation} from './models/workbook';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
@@ -165,8 +165,26 @@ export class RestService {
   /*Update Patient Details*/
   savePatientDetails(patientId, patient): Observable<any> {
     return this.http.put(`${API_URL}/api/Patients/${patientId}`, JSON.stringify(patient), httpOptions).pipe(
-      tap(_ => this.snackBar.openSnackBar(`Patient ${patient.firstName} ${patient.lastName} has been updated!`
-        , 'Close', 'success-snackbar'))
+      map((data: PatientDetails) => {
+        this.logger.log(data, 'savePatientDetails rest data ');
+        
+        if(data != null)
+        {      
+          this.logger.log('savePatientDetails data is present ');
+          this.snackBar.openSnackBar(`Patient ${patient.firstName} ${patient.lastName} has been updated!`
+            , 'Close', 'success-snackbar');
+        }
+        else
+        {
+          this.logger.log('savePatientDetails data is null ');
+          this.snackBar.openSnackBar(`Patient ${patient.firstName} ${patient.lastName} could not be updated`
+          , 'Close', 'warn-snackbar');
+        }
+
+        this.logger.log('savePatientDetails end');
+        return data;
+      })
+
     );
   }
 
@@ -237,11 +255,12 @@ export class RestService {
     );
   } 
 
-  getCheckPatientDuplicates(firstName, lastName, dob, existingPatientId): Observable<any> {
+  getCheckPatientDuplicates(firstName, lastName, dob, genderId, existingPatientId): Observable<any> {
     let paramsValue = new HttpParams();
     paramsValue = paramsValue.append("firstName", firstName);
     paramsValue = paramsValue.append("lastName", lastName);
     paramsValue = paramsValue.append("dob", dob);
+    paramsValue = paramsValue.append("genderId", genderId);
     paramsValue = paramsValue.append("existingPatientId", existingPatientId);
     return this.http.get<Patients[]>(`${API_URL}/api/Patients/duplicates`, { params: paramsValue }).pipe(
       map((data:Patients[]) => {
@@ -250,11 +269,11 @@ export class RestService {
     );
   }
 
-  confirmPatientDupicateAction(patient: DuplicatePatient, duplicatePatient, mergeAction){
+  confirmPatientDupicateAction(mergeObject: MergePatientConfirmation){
 
-    this.logger.log(JSON.stringify(patient), "dupPatient");
-    return this.http.put(`${API_URL}/api/Patients/duplicates/${duplicatePatient}/${mergeAction}`, JSON.stringify(patient), httpOptions).pipe(
-      tap(_ => this.snackBar.openSnackBar(`Patient ${patient.firstName} ${patient.lastName} has been updated!`
+    this.logger.log(JSON.stringify(mergeObject), "mergeConfirmation");
+    return this.http.put(`${API_URL}/api/Patients/duplicates/`, JSON.stringify(mergeObject), httpOptions).pipe(
+      tap(_ => this.snackBar.openSnackBar(`Patient ${mergeObject.topPatientFirstName} ${mergeObject.topPatientLastName} has been updated!`
         , 'Close', 'success-snackbar'))
     ); 
   }

@@ -9,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NGXLogger } from 'ngx-logger';
 import { Observable, Subscription } from 'rxjs';
 import { tap, take } from 'rxjs/operators';
-import { Conditions, Gender, PatientDetails, Patients, NewPatient, DuplicatePatient, patientAdminActionTypeEnum, potentialPtStaus, addPatientProcessEnum, patientDuplicateSaveTypeEnum, patientDuplicateMatchTypeEnum, patientDuplicateActionEnum } from '../models/patients';
+import { Conditions, Gender, PatientDetails, Patients, NewPatient, DuplicatePatient, patientAdminActionTypeEnum, potentialPtStaus, addPatientProcessEnum, patientDuplicateSaveTypeEnum, patientDuplicateMatchTypeEnum, patientDuplicateActionEnum, MergePatientConfirmation } from '../models/patients';
 import { RestService } from '../rest.service';
 import { PatientsDataSource } from './patients.datasource';
 import { FilterService } from '../services/filter.service';
@@ -117,12 +117,14 @@ export class PatientsComponent implements OnInit {
   duplicateDialog_AllowMerge: Boolean;
   duplicateDialog_SelectedSaveType: number;
   mergePatient = {} as DuplicatePatient;
+  mergeConfirmation = {} as MergePatientConfirmation;
   mergeHeaderText = '';
   mergeDetailText = '';
+  topPatientHeaderText = '';
   isLoading = true;
   isAddingPatientAndContinue: boolean;
   isAddingPatientAndExit: boolean;
-  isUserAdmin: boolean;
+  userCanAddPatient: boolean;
   acceptPatient: boolean;
   userCanAddPatient: boolean;
   declinePatient: boolean;
@@ -215,7 +217,8 @@ export class PatientsComponent implements OnInit {
       gender: '',
       genderId: '',
       pcpId: '',
-      pcpName: ''
+      pcpName: '',
+      epicMrn: ''
     });
 
     this.patientMergeForm_DuplicatePatients = this.fb.group({
@@ -312,12 +315,15 @@ export class PatientsComponent implements OnInit {
   loadPatientsWithFilters() {
     if (this.isFilteringPatients === true) { // This is to handle if the user is coming from Dashboard or not.
       this.popSlices = this.filterType;
+      this.isFilteringPatients = false;
     }
     if (this.isFilteringOutcomes === true){
       this.outcomes = this.filterType;
+      this.isFilteringOutcomes = false;
     }
     if (this.isFilteringConditions === true){
       this.conditions = [this.filterType];
+      this.isFilteringConditions = false;
     }
 
     //if patient is coming from ED chart
@@ -507,7 +513,7 @@ export class PatientsComponent implements OnInit {
     this.logger.log(this.addPatientForm.value);
 
     //TH - 11/17/2020 - Before saving, check for duplicates
-    this.rest.getCheckPatientDuplicates(this.newPatientValues.firstName, this.newPatientValues.lastName, this.newPatientValues.dob.toDateString(), -1).subscribe((dupData) => {
+    this.rest.getCheckPatientDuplicates(this.newPatientValues.firstName, this.newPatientValues.lastName, this.newPatientValues.dob.toDateString(), this.newPatientValues.genderId, -1).subscribe((dupData) => {
       this.duplicateList = dupData;
 
       if (this.duplicateList === undefined || this.duplicateList == null || this.duplicateList.length < 1)
@@ -518,7 +524,8 @@ export class PatientsComponent implements OnInit {
             let id = <number>data;
             this.logger.log(id, 'New Patient');
             if (this.isAddingPatientAndContinue) {
-              this.patientNameSearch = id.toString();
+              this.patientNameSearch = this.newPatientValues.firstName + ' ' + this.newPatientValues.lastName;
+              this.patientNameSearchValue = this.newPatientValues.firstName + ' ' + this.newPatientValues.lastName;
               this.loadPatientsWithFilters();
             }
             if (this.isAddingPatientAndExit) {
@@ -700,7 +707,7 @@ export class PatientsComponent implements OnInit {
     this.logger.log(this.currentPatientId);
 
         //TH - 11/17/2020 - Before saving, check for duplicates
-        this.rest.getCheckPatientDuplicates(this.patientDetails.firstName, this.patientDetails.lastName, this.patientDetails.patientDOB.toDateString(), this.patientDetails.id).subscribe((dupData) => {
+        this.rest.getCheckPatientDuplicates(this.patientDetails.firstName, this.patientDetails.lastName, this.patientDetails.patientDOB.toDateString(), this.patientDetails.genderId, this.patientDetails.id).subscribe((dupData) => {
           this.duplicateList = dupData;    
           if (this.duplicateList === undefined || this.duplicateList == null || this.duplicateList.length < 1)
           {   
@@ -775,8 +782,11 @@ export class PatientsComponent implements OnInit {
         gender: this.patientDetails.gender,
         genderId: this.patientDetails.genderId,
         pcpId: this.patientDetails.pcpId,
-        pcpName: this.patientDetails.pcpFirstName + " " + this.patientDetails.pcpLastName
-      });    
+        pcpName: this.patientDetails.pcpFirstName + " " + this.patientDetails.pcpLastName,
+        epicMrn: this.patientDetails.patientMRNId
+      });   
+      // SET TOP PATIENT DESCRIPTION
+      this.topPatientHeaderText = "EDITED PATIENT (VALUES WILL REMAIN)"; 
     }
     if (action === patientDuplicateSaveTypeEnum.New){
       this.patientMergeForm.patchValue({
@@ -784,16 +794,19 @@ export class PatientsComponent implements OnInit {
         lastName: this.newPatientValues.lastName,
         patientDOB: this.transformDob(this.newPatientValues.dob),
         genderId: this.newPatientValues.genderId,
-        pcpName: ''
+        pcpName: '',
+        epicMrn: ''
       });
-
+      // SET TOP PATIENT DESCRIPTION
+      this.topPatientHeaderText = "NEW PATIENT (VALUES WILL REMAIN)";
     }
 
     this.patientMergeForm_DuplicatePatients.patchValue({
       potentialDuplicateFirstName: this.duplicateList[0].firstName,
       potentialDuplicateLastName: this.duplicateList[0].lastName,
       potentialDuplicateDOB: this.transformDob(this.duplicateList[0].dob),
-      potentialDuplicateGender: this.duplicateList[0].gender
+      potentialDuplicateGender: this.duplicateList[0].gender,
+      potentialDuplicatePatientMRNId: this.duplicateList[0].patientMRNId
     });
 
     this.mergeHeaderText = this.duplicateList[0].headerText;
@@ -809,29 +822,36 @@ export class PatientsComponent implements OnInit {
     if (this.duplicateDialog_SelectedSaveType === patientDuplicateSaveTypeEnum.Update){
       this.logger.log("processing merge update save");
       //create a variable for the current patient, to send values up to API
-      this.mergePatient.firstName = this.patientDetails.firstName;
-      this.mergePatient.lastName = this.patientDetails.lastName;
-      this.mergePatient.dob = this.transformDobForPut(this.patientDetails.patientDOB);
-      this.mergePatient.gender = this.patientDetails.gender;  
-      this.mergePatient.genderId = this.patientDetails.genderId;
-      this.mergePatient.pcpId = this.patientDetails.pcpId;     
+      this.mergeConfirmation.topPatientId = this.patientDetails.id;
+      this.mergeConfirmation.topPatientFirstName = this.patientDetails.firstName;
+      this.mergeConfirmation.topPatientLastName = this.patientDetails.lastName;
+      this.mergeConfirmation.topPatientDob = this.transformDobForPut(this.patientDetails.patientDOB);
+      this.mergeConfirmation.topPatientGenderId = this.patientDetails.genderId;
+      this.mergeConfirmation.pcP_StaffID = this.patientDetails.pcpId;     
     }
     if (this.duplicateDialog_SelectedSaveType === patientDuplicateSaveTypeEnum.New){
       this.logger.log("processing merge new save");
       //create a variable for the current patient, to send values up to API
-      this.mergePatient.firstName = this.newPatientValues.firstName;
-      this.mergePatient.lastName = this.newPatientValues.lastName;
-      this.mergePatient.dob = this.transformDobForPut(this.newPatientValues.dob);
-      this.mergePatient.genderId = this.newPatientValues.genderId;
-      this.mergePatient.pcpId = this.newPatientValues.pcP_StaffID;
+      this.mergeConfirmation.topPatientFirstName = this.newPatientValues.firstName;
+      this.mergeConfirmation.topPatientLastName = this.newPatientValues.lastName;
+      this.mergeConfirmation.topPatientDob = this.transformDobForPut(this.newPatientValues.dob);
+      this.mergeConfirmation.topPatientGenderId = this.newPatientValues.genderId;
+      this.mergeConfirmation.pcP_StaffID = this.newPatientValues.pcP_StaffID;
     }
+
+    this.mergeConfirmation.bottomPatientId = this.duplicateList[0].patientId;
+    this.mergeConfirmation.mergeAction = mergeAction;
 
     this.logger.log("calling REST API confirm Merge");
     this.logger.log(this.mergePatient, "mergePatient");
     this.logger.log(this.duplicateList[0].patientId, "dupPatientId");
     this.logger.log(mergeAction, "mergeAction");
       
-    this.rest.confirmPatientDupicateAction(this.mergePatient, this.duplicateList[0].patientId.toString(), mergeAction.toString()).subscribe(data => {
+    this.rest.confirmPatientDupicateAction(this.mergeConfirmation).subscribe(data => {
+      if (this.duplicateDialog_SelectedSaveType === patientDuplicateSaveTypeEnum.New){
+        this.patientNameSearch = this.newPatientValues.firstName + ' ' + this.newPatientValues.lastName;
+        this.patientNameSearchValue = this.newPatientValues.firstName + ' ' + this.newPatientValues.lastName;
+      }
       this.loadPatientsWithFilters();
     });
 
