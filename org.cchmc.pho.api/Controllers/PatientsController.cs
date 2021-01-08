@@ -34,7 +34,7 @@ namespace org.cchmc.pho.api.Controllers
         //[HttpGet("PatientList/{userId}/{staffID?}/{popmeasureID?}/{watch?}/{chronic?}/{conditionIDs?}/{namesearch?}/{sortcolumn?}/{pagenumber}/{rowspage}")]
         [HttpGet]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator, PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<PatientViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -59,7 +59,7 @@ namespace org.cchmc.pho.api.Controllers
 
         [HttpGet("{patient}/{potentiallyActive}")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]      
-        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<PatientDetailsViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -95,7 +95,7 @@ namespace org.cchmc.pho.api.Controllers
         // GET: api/Workbooks
         [HttpGet("simple/{searchTerm}")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<SimplifiedPatientViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -123,7 +123,7 @@ namespace org.cchmc.pho.api.Controllers
         // GET: api/Workbooks
         [HttpGet("duplicates")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Admin,Practice Coordinator,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<DuplicatePatientViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -148,7 +148,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpPut("duplicates/{duplicatePatient}/{mergeAction}")]
-        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Admin,Practice Coordinator,PHO Admin")]
         [SwaggerResponse(200, type: typeof(PatientDetailsViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -183,7 +183,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpPut("{patient}")]
-        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Admin,Practice Coordinator,PHO Admin")]
         [SwaggerResponse(200, type: typeof(PatientDetailsViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -232,7 +232,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpPost()]
-        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Admin,Practice Coordinator,PHO Admin")]
         [SwaggerResponse(200, type: typeof(int))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -278,7 +278,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpGet("potentialpatient/{PotentialPatientId}/{PotentialProcessStatus}")]       
-        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Admin,Practice Coordinator,PHO Admin")]
         [SwaggerResponse(200, type: typeof(int))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -303,7 +303,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpPut("watchlist/{patient}")]
-        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Admin,Practice Coordinator,PHO Admin")]
         [SwaggerResponse(200, type: typeof(bool))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -338,7 +338,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpGet("conditions")]
-        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<PatientConditionViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -362,7 +362,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpGet("insurance")]
-        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<PatientInsuranceViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -388,7 +388,7 @@ namespace org.cchmc.pho.api.Controllers
 
 
         [HttpGet("gender")]
-        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<GenderViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -412,7 +412,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpGet("pmca")]
-        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<PMCAViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -436,7 +436,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpGet("state")]
-        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<StateViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -460,7 +460,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpGet("locations")]
-        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<LocationViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]

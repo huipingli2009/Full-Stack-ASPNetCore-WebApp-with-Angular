@@ -63,6 +63,8 @@ import { VersionComponent } from './version/version.component';
 import { WorkbooksComponent } from './workbooks/workbooks.component';
 import { DrilldownComponent } from './drilldown/drilldown.component';
 import { DrilldownService } from './drilldown/drilldown.service';
+import { AuthGuard } from './guards/auth.guard';
+//import { JwtModule } from '@auth0/angular-jwt';
 
 @NgModule({
   declarations: [
@@ -106,6 +108,7 @@ import { DrilldownService } from './drilldown/drilldown.service';
       disableConsoleLogging: environment.disableConsoleLogging
     }),
     ToastContainerModule,
+    //JwtModule.forRoot({}),
     ChartsModule,
     MatSliderModule,
     MatMenuModule,
@@ -148,7 +151,7 @@ import { DrilldownService } from './drilldown/drilldown.service';
 
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-  { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }, MatSnackBarComponent, ErrorInterceptor, DrilldownService],
+  { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }, MatSnackBarComponent, ErrorInterceptor, DrilldownService, AuthGuard],
   bootstrap: [AppComponent]  
 })
 export class AppModule { }

@@ -1,22 +1,21 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DatePipe } from '@angular/common';
-import { Component, ElementRef, HostListener, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, HostListener, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatDialog} from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute } from '@angular/router';
 import { NGXLogger } from 'ngx-logger';
-import { merge, Observable, Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { tap, take } from 'rxjs/operators';
 import { Conditions, Gender, PatientDetails, Patients, NewPatient, DuplicatePatient, patientAdminActionTypeEnum, potentialPtStaus, addPatientProcessEnum, patientDuplicateSaveTypeEnum, patientDuplicateMatchTypeEnum, patientDuplicateActionEnum } from '../models/patients';
 import { RestService } from '../rest.service';
 import { PatientsDataSource } from './patients.datasource';
 import { FilterService } from '../services/filter.service';
-import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarComponent } from '../shared/mat-snack-bar/mat-snack-bar.component';
 import { UserService } from '../services/user.service';
-import { CurrentUser, User } from '../models/user';
+import { CurrentUser} from '../models/user';
 import { DrilldownService } from '../drilldown/drilldown.service';
 import { DrillthruMeasurementIdEnum } from '../models/drillthru';
 
@@ -125,6 +124,7 @@ export class PatientsComponent implements OnInit {
   isAddingPatientAndExit: boolean;
   isUserAdmin: boolean;
   acceptPatient: boolean;
+  userCanAddPatient: boolean;
   declinePatient: boolean;
   mergeWithNewPatient: boolean;
   mergeWithOldPatient: boolean;
@@ -303,9 +303,9 @@ export class PatientsComponent implements OnInit {
     this.userService.getCurrentUser().pipe(take(1)).subscribe((data) => {
       this.currentUser = data;
       this.currentUserId = data.id;
-      if (data.role.id === 3) {
-        this.isUserAdmin = true;
-      } else { this.isUserAdmin = false; }
+      if (data.role.id === 3 || data.role.id === 2 || data.role.id === 5) {
+        this.userCanAddPatient = true;
+      } else { this.userCanAddPatient = false; }
     });
   }
 

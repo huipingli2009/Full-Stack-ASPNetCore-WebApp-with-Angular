@@ -187,7 +187,7 @@ export class StaffComponent implements OnInit, OnDestroy {
     this.userService.getCurrentUser().pipe(take(1)).subscribe((data) => {
       this.currentUser = data;
       this.currentUserId = data.id;
-      if (data.role.id === 3) {
+      if ((data.role.id === 3) || (data.role.id === 2)) {
         this.isUserAdmin = true;
       } else { this.isUserAdmin = false; }
     });

@@ -23,7 +23,7 @@
     <form [formGroup]="practiceForm">
       <mat-form-field class="practice-select">       
         <mat-select formControlName="practiceControl" (selectionChange)="switchPractice($event.value)"
-          [disabled]="!isUserAdmin">
+          [disabled]="!canSwitchPractice">
           <mat-option class="practice-select-text" *ngFor="let practice of practiceList" [value]="practice.id">
             {{practice.name}}
           </mat-option>
@@ -33,10 +33,10 @@
   </div>
   <div fxLayout="row" fxLayoutAlign="end end" fxFlex>
     <button mat-button routerLink="/dashboard" routerLinkActive="active-submenu">Dashboard</button>
-    <button mat-button routerLink="/patients" routerLinkActive="active-submenu">Patients</button>
-    <button mat-button routerLink="/staff" routerLinkActive="active-submenu">Staff</button>
+    <button mat-button routerLink="/patients" routerLinkActive="active-submenu" [style.display]="isUserAdmin ? 'block' : 'none'">Patients</button>   
+    <button mat-button routerLink="/staff" routerLinkActive="active-submenu" [style.display]="!isPHOMember? 'block' : 'none'">Staff</button>
     <button mat-button routerLink="/files" routerLinkActive="active-submenu">Files and Resources</button>
-    <button mat-button routerLink="/workbooks" routerLinkActive="active-submenu">Workbooks</button>
+    <button mat-button routerLink="/workbooks" routerLinkActive="active-submenu" [style.display]="!isPHOMember? 'block' : 'none'">Workbooks</button>
   </div>
 </div>
 <div toastContainer class="alert-container"><span></span></div>

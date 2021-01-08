@@ -37,6 +37,8 @@ export class HeaderComponent {
   updateAlert: FormGroup;
   currentUser: CurrentUser;
   isUserAdmin: boolean;
+  canSwitchPractice: boolean;
+  isPHOMember: boolean;
   firstName: string;
   lastName: string;
   subscription: Subscription;
@@ -53,6 +55,7 @@ export class HeaderComponent {
   passwordVerbiage: string; 
   email: string = '';
   coachName: string = '';
+  hidePatientsTab: boolean;
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
     private toastr: ToastrService, public fb: FormBuilder, private logger: NGXLogger,
@@ -91,9 +94,24 @@ export class HeaderComponent {
       this.currentUsername = data.userName;
       this.firstName = data.firstName;
       this.lastName = data.lastName;
-      if (data.role.id === 3) {
+      if ((data.role.id === 1) || (data.role.id === 2) || (data.role.id === 3) || (data.role.id === 5)) {
         this.isUserAdmin = true;
-      } else { this.isUserAdmin = false; }
+      } 
+      else { 
+        this.isUserAdmin = false;        
+      }
+      if (data.role.id === 4) {
+        this.isPHOMember = true;
+      } 
+      else { 
+        this.isPHOMember = false;        
+      }
+      if ((data.role.id === 3) || (data.role.id === 6)) {
+        this.canSwitchPractice = true;
+      } 
+      else { 
+        this.canSwitchPractice = false;        
+      }      
     });
   }
 

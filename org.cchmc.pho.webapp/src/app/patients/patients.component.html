@@ -136,7 +136,7 @@
     <!-- button Column -->
     <ng-container matColumnDef="button">
       <mat-header-cell *matHeaderCellDef class="patientButtonAlign">
-        <button mat-flat-button color="accent" class="add-patient-button" *ngIf="isUserAdmin"
+        <button mat-flat-button color="accent" class="add-patient-button" *ngIf="userCanAddPatient"
           (click)="openAdminAddDialog()">ADD PATIENT</button>
       </mat-header-cell>
       <mat-cell *matCellDef="let row">
