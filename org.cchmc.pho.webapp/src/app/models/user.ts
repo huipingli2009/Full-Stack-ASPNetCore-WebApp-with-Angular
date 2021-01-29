@@ -61,3 +61,13 @@ export interface UserRoles {
     id: number;
     name: string;
 }
+
+export enum Role {
+    PracticeMember = 1,
+    PracticeAdmin = 2,
+    PHOAdmin = 3,
+    PHOMember = 4,
+    PracticeCoordinator = 5,
+    PHOLeader = 6
+}
+

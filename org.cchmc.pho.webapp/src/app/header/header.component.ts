@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AlertAction, AlertActionTaken, Alerts } from '../models/dashboard';
 import { PracticeCoach, Practices } from '../models/Staff';
-import { CurrentUser } from '../models/user';
+import { CurrentUser, Role } from '../models/user';
 import { RestService } from '../rest.service';
 import { AuthenticationService } from '../services/authentication.service';
 import { UserService } from '../services/user.service';
@@ -37,6 +37,9 @@ export class HeaderComponent {
   updateAlert: FormGroup;
   currentUser: CurrentUser;
   isUserAdmin: boolean;
+  displayPatientsTab: boolean;
+  canSwitchPractice: boolean;
+  displayStaffAndWorkbookTab: boolean;
   firstName: string;
   lastName: string;
   subscription: Subscription;
@@ -53,6 +56,7 @@ export class HeaderComponent {
   passwordVerbiage: string; 
   email: string = '';
   coachName: string = '';
+  hidePatientsTab: boolean;
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
     private toastr: ToastrService, public fb: FormBuilder, private logger: NGXLogger,
@@ -91,9 +95,24 @@ export class HeaderComponent {
       this.currentUsername = data.userName;
       this.firstName = data.firstName;
       this.lastName = data.lastName;
-      if (data.role.id === 3) {
-        this.isUserAdmin = true;
-      } else { this.isUserAdmin = false; }
+      if ((data.role.id === Role.PracticeMember) || (data.role.id ===  Role.PracticeAdmin) || (data.role.id === Role.PHOAdmin) || (data.role.id === Role.PracticeCoordinator)) {
+        this.displayPatientsTab = true;
+      } 
+      else { 
+        this.displayPatientsTab = false;        
+      }
+      if (data.role.id === Role.PHOMember) {
+        this.displayStaffAndWorkbookTab = true;
+      } 
+      else { 
+        this.displayStaffAndWorkbookTab = false;        
+      }
+      if ((data.role.id === Role.PHOAdmin) || (data.role.id === Role.PHOLeader)) {
+        this.canSwitchPractice = true;
+      } 
+      else { 
+        this.canSwitchPractice = false;        
+      }      
     });
   }
 
