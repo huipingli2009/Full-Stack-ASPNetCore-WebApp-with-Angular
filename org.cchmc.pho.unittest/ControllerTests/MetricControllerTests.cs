@@ -180,11 +180,11 @@ namespace org.cchmc.pho.unittest.ControllerTests
                 }
             };
             _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
-            _mockMetricDal.Setup(p => p.ListEDChart(_userId)).Returns(Task.FromResult(myMetrics)).Verifiable();
+            _mockMetricDal.Setup(p => p.ListWebChart(_userId, 2, 27, 2)).Returns(Task.FromResult(myMetrics)).Verifiable();
             _MetricController = new MetricsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockMetricDal.Object);
 
             // execute
-            var result = await _MetricController.ListEDChart() as ObjectResult;
+            var result = await _MetricController.ListWebChart(2, 27, 2) as ObjectResult;
             var resultList = result.Value as List<EDChartViewModel>;
 
             // assert
@@ -211,24 +211,24 @@ namespace org.cchmc.pho.unittest.ControllerTests
             _MetricController = new MetricsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockMetricDal.Object);
 
             // execute
-            var result = await _MetricController.ListEDChart() as ObjectResult;
+            var result = await _MetricController.ListWebChart(2, 32, 2) as ObjectResult;
 
             // assert
             Assert.AreEqual(400, result.StatusCode);
             Assert.AreEqual("user is not a valid integer", result.Value);
-            _mockMetricDal.Verify(p => p.ListEDChart(It.IsAny<int>()), Times.Never);
+            _mockMetricDal.Verify(p => p.ListWebChart(It.IsAny<int>(), 2, 27,2), Times.Never);
         }
 
         [TestMethod]
-        public async Task ListEDChart_DataLayerThrowsException_ReturnsError()
+        public async Task ListWebChart_DataLayerThrowsException_ReturnsError()
         {
             // setup
             _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
-            _mockMetricDal.Setup(p => p.ListEDChart(_userId)).Throws(new Exception()).Verifiable();
+            _mockMetricDal.Setup(p => p.ListWebChart(_userId, 2,19,1)).Throws(new Exception()).Verifiable();
             _MetricController = new MetricsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockMetricDal.Object);
 
             // execute
-            var result = await _MetricController.ListEDChart() as ObjectResult;
+            var result = await _MetricController.ListWebChart(2, 19, 1) as ObjectResult;
 
             // assert
             Assert.AreEqual(500, result.StatusCode);

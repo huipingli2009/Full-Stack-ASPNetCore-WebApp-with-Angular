@@ -78,19 +78,19 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-        [HttpGet("edcharts")]
+        [HttpGet("webcharts/{chartId}/{measureId}/{filterId}")]
         [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin")]
         [SwaggerResponse(200, type: typeof(List<EDChartViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> ListEDChart()
+        public async Task<IActionResult> ListWebChart(int? chartId, int? measureId, int? filterId)
         {
 
             try
             {
                 int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
                 // call the data method
-                var data = await _metricDal.ListEDChart(currentUserId);
+                var data = await _metricDal.ListWebChart(currentUserId, chartId, measureId, filterId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
                 var result = _mapper.Map<List<EDChartViewModel>>(data);
                 // return the result in a "200 OK" response
@@ -184,6 +184,31 @@ namespace org.cchmc.pho.api.Controllers
                 var data = await _metricDal.GetPopulationOutcomeMetrics();
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
                 var result = _mapper.Map<List<PopulationOutcomeMetricViewModel>>(data);
+                // return the result in a "200 OK" response
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+        //GetWebChartFilters()
+        [HttpGet("webchartfilterlookup/{chartId}")]
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin")]
+        [SwaggerResponse(200, type: typeof(List<WebChartFiltersViewModel>))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> GetWebChartFilters(int chartId)
+        {
+            try
+            {               
+                // call the data method
+                var data = await _metricDal.GetWebChartFilters(chartId);
+                // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
+                var result = _mapper.Map<List<WebChartFiltersViewModel>>(data);
                 // return the result in a "200 OK" response
                 return Ok(result);
             }

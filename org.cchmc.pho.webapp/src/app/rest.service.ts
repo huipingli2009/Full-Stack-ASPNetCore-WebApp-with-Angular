@@ -4,7 +4,7 @@ import { NGXLogger } from 'ngx-logger';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from '../environments/environment';
-import { Alerts, EdChart, EdChartDetails, Population, Quicklinks, Spotlight } from './models/dashboard';
+import { Alerts, EdChart, EdChartDetails, Population, Quicklinks, Spotlight, WebChartFilters } from './models/dashboard';
 import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Patients, NewPatient, Pmca, PopSlices, Providers, States, Outcomes, DuplicatePatient, MergePatientConfirmation } from './models/patients';
 import { PracticeList, Responsibilities, Staff, StaffDetails, StaffAdmin, PracticeCoach } from './models/Staff';
 import { Followup, WorkbookDepressionPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookAsthmaPatient, Treatment, WorkbookConfirmation} from './models/workbook';
@@ -86,8 +86,8 @@ export class RestService {
   }
 
   /*Gets base ED Chart Information */
-  getEdChartByUser(): Observable<any> {
-    const endpoint = `${API_URL}/api/Metrics/edcharts/`;
+  getWebChartByUser(chartId, measureId, filterId): Observable<any> {
+    const endpoint = `${API_URL}/api/Metrics/webcharts/${chartId}/${measureId}/${filterId}`;
     return this.http.get<any>(endpoint).pipe(
       map((data: EdChart[]) => {
         return data;
@@ -95,8 +95,20 @@ export class RestService {
     );
   }
 
+  //getWebChartFilters
+  getWebChartFilters(chartId: number): Observable<any> {
+    const endpoint = `${API_URL}/api/Metrics/webchartfilterlookup/${chartId}`;
+    return this.http.get<any>(endpoint).pipe(
+      map(
+        (data: WebChartFilters[]) => {
+          return data;
+        }
+      )
+    )
+  }
+ 
   /*Gets base ED Chart Information */
-  getEdChartDetails(admitDate): Observable<any> {
+  getWebChartDetails(admitDate): Observable<any> {
     const endpoint = `${API_URL}/api/Metrics/edcharts/${admitDate}`;
     return this.http.get<any>(endpoint).pipe(
       map((data: EdChartDetails[]) => {
@@ -404,7 +416,7 @@ export class RestService {
       })
     );
   }
-  /* Get Gender */
+  /* Get State */
   getState(): Observable<any> {
     return this.http.get<any>(`${API_URL}/api/Patients/state/`).pipe(
       map((data: States[]) => {

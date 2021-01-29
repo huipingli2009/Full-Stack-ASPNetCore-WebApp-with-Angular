@@ -81,16 +81,19 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
-        public async Task<List<EDChart>> ListEDChart(int userId)
+        public async Task<List<EDChart>> ListWebChart(int userId, int? chartId, int? measureId, int? filterId)
         {
             DataTable dataTable = new DataTable();
             List<EDChart> edCharts = new List<EDChart>();
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
-                using (SqlCommand sqlCommand = new SqlCommand("spGetDashboardEDChart", sqlConnection))
+                using (SqlCommand sqlCommand = new SqlCommand("spGetDashboardChart", sqlConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@ChartID", SqlDbType.Int).Value = (chartId.HasValue ? chartId : (int?)null); 
+                    sqlCommand.Parameters.Add("@MeasureID", SqlDbType.Int).Value = (measureId.HasValue ? measureId : (int?)null);
+                    sqlCommand.Parameters.Add("@FilterID", SqlDbType.Int).Value = (filterId.HasValue ? filterId : (int?)null); 
 
                     await sqlConnection.OpenAsync();
                     // Define the data adapter and fill the dataset
@@ -103,8 +106,9 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                        PracticeId = Convert.ToInt32(dr["PracticeId"]),
                                        AdmitDate = Convert.ToDateTime(dr["AdmitDate"]),
                                        ChartLabel = dr["ChartLabel"].ToString(),
-                                       ChartTitle = dr["ChartTitle"].ToString(),
-                                       EDVisits = Convert.ToInt32(dr["EDVisits"])
+                                       ChartTitle = dr["ChartTitle"].ToString(),                                     
+                                       EDVisits = Convert.ToInt32(dr["ChartValue"]),
+                                       ChartTopLeftLabel = dr["TopLeftLabel"].ToString(),
                                    }
                             ).ToList();
 
@@ -234,6 +238,38 @@ namespace org.cchmc.pho.core.DataAccessLayer
                             ).ToList();
                     }
                     return outcomemetrics;
+                }
+            }
+        }
+
+        //GetWebChartFilters
+        public async Task<List<WebChartFilters>> GetWebChartFilters(int chartId)
+        {
+            DataTable dataTable = new DataTable();
+            List<WebChartFilters> webchartfilters = new List<WebChartFilters>();
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetChartFilters", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;                   
+                    sqlCommand.Parameters.Add("@ChartID", SqlDbType.Int).Value = chartId;
+
+                    await sqlConnection.OpenAsync();
+                    // Define the data adapter and fill the dataset
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        foreach (DataRow dr in dataTable.Rows)
+                        {
+                            var record = new WebChartFilters()
+                            {
+                                FilterId = (dr["FilterID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FilterID"].ToString())),
+                                FilterLabel = dr["FilterLabel"].ToString()
+                            };
+                            webchartfilters.Add(record);
+                        }
+                    }
+                    return webchartfilters;
                 }
             }
         }
