@@ -307,6 +307,7 @@ export class DashboardComponent implements OnInit {
   //chart report condition change
   onWebReportConditionChange(event: any) {
     
+
     this.filterId = event.value;
 
     this.chartId = WebChartId.PopulationChart;
@@ -346,18 +347,8 @@ export class DashboardComponent implements OnInit {
   }
 
   updateChartReport(element: any){
-   
-    if (element.measureId == WebChartFilterMeasureId.conditionDefaultMeasureId){
-      
-       if (element.dashboardLabel.includes('Active Patients')) {         
-          this.getWebChart(WebChartId.PopulationChart, element.measureId, WebChartFilterId.conditionDefaultFilterId )
-       }
-      }
-    else{
-      if (element.dashboardLabel.includes('Recent ED/UC or Inpatient visit')) {       
-        this.getWebChart(WebChartId.PopulationChart, WebChartFilterMeasureId.edChartdMeasureId, WebChartFilterId.conditionDefaultFilterId )
-     }
-    }   
+    this.logger.log("element: " + element.toString());
+    this.getWebChart(WebChartId.PopulationChart, element.measureId, WebChartFilterId.conditionDefaultFilterId);
   }
 
   //click WEB CHART to switch back to ED CHART
