@@ -15,6 +15,7 @@ namespace org.cchmc.pho.api.Mappings
             CreateMap<DrillthruMetricTable, DrillthruMetricTableViewModel>();
             CreateMap<DrillthruRow, DrillthruRowViewModel>();
             CreateMap<DrillthruColumn, DrillthruColumnViewModel>();
+            CreateMap<WebChartFilters, WebChartFiltersViewModel>();
         }
     }
 }

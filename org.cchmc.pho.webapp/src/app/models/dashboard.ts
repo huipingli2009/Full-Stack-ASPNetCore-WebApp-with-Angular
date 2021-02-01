@@ -55,6 +55,7 @@ export class EdChart {
     chartLabel: string;
     chartTitle: string;
     edVisits: number;
+    chartTopLeftLabel: string
 }
 export class EdChartDetails {
     patientId: number;
@@ -75,4 +76,35 @@ export class EdChartDetails {
     edVisitCount: string;
     ucVisitCount: string;
     admitCount: string;
+}
+
+export class WebChartFilters {
+    filterId: number;
+    filterLabel: string;
+}
+
+export enum WebChartId {
+    EDChart = 1,    
+    PopulationChart = 2
+}
+
+export enum WebChartFilterMeasureId {
+    edChartdMeasureId = 19,
+    conditionDefaultMeasureId = 27,
+    pcpMeasureId = 27,
+    genderMeasureId = 32,
+    zipCodeMeasureId = 30,
+    payorTypeMeasureId = 27,
+    locationMeasureId = 35,
+    ageMeasureId = 32
+}
+
+export enum WebChartFilterId {
+    conditionDefaultFilterId = 1,
+    pcpFilterId = 2,
+    genderFilterId = 3,
+    zipCodeFilterId = 4,
+    payorTypeFilterId = 5,
+    locationFilterId = 6,
+    ageFilterId = 7
 }
