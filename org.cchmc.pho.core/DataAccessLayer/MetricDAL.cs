@@ -243,7 +243,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         }
 
         //GetWebChartFilters
-        public async Task<List<WebChartFilters>> GetWebChartFilters(int chartId)
+        public async Task<List<WebChartFilters>> GetWebChartFilters(int chartId, int measureId)
         {
             DataTable dataTable = new DataTable();
             List<WebChartFilters> webchartfilters = new List<WebChartFilters>();
@@ -251,8 +251,9 @@ namespace org.cchmc.pho.core.DataAccessLayer
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spGetChartFilters", sqlConnection))
                 {
-                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;                   
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add("@ChartID", SqlDbType.Int).Value = chartId;
+                    sqlCommand.Parameters.Add("@MeasureID", SqlDbType.Int).Value = measureId;
 
                     await sqlConnection.OpenAsync();
                     // Define the data adapter and fill the dataset
