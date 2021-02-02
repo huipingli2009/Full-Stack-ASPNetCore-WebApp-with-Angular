@@ -100,17 +100,25 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
                         da.Fill(dataTable);
-                        edCharts = (from DataRow dr in dataTable.Rows
-                                   select new EDChart()
-                                   {
-                                       PracticeId = Convert.ToInt32(dr["PracticeId"]),
-                                       AdmitDate = Convert.ToDateTime(dr["AdmitDate"]),
-                                       ChartLabel = dr["ChartLabel"].ToString(),
-                                       ChartTitle = dr["ChartTitle"].ToString(),                                     
-                                       EDVisits = Convert.ToInt32(dr["ChartValue"]),
-                                       ChartTopLeftLabel = dr["TopLeftLabel"].ToString(),
-                                   }
-                            ).ToList();
+                        if (dataTable.Rows.Count > 0)
+                        {
+                            edCharts = (from DataRow dr in dataTable.Rows
+                                        select new EDChart()
+                                        {
+                                            PracticeId = Convert.ToInt32(dr["PracticeId"]),
+                                            AdmitDate = Convert.ToDateTime(dr["AdmitDate"]),
+                                            ChartLabel = dr["ChartLabel"].ToString(),
+                                            ChartTitle = dr["ChartTitle"].ToString(),
+                                            EDVisits = Convert.ToInt32(dr["ChartValue"]),
+                                            ChartTopLeftLabel = dr["TopLeftLabel"].ToString(),
+                                        }
+    ).ToList();
+                        }
+                        else
+                        {
+                            edCharts.Add(new EDChart());
+                        }
+
 
                     }
                     return edCharts;

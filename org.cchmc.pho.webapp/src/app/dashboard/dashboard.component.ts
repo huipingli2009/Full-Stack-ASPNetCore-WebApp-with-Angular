@@ -307,7 +307,6 @@ export class DashboardComponent implements OnInit {
     
 
     this.filterId = event.value;
-
     this.chartId = WebChartId.PopulationChart;  
     
     //dynamically pass the parameters to getWebChart function to generate the report
