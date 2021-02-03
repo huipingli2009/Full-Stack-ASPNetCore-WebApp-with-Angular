@@ -52,13 +52,15 @@
             <div class="content-title mat-subheading-1 title-secondary" (click)="switchBackToEDChart()">
                {{webChartTopLeftLabel}}
             </div>           
-        </div>       
-        <div fxLayout="row" fxLayoutAlign="center center">
+        </div> 
+              
+        <div fxLayout="column" fxLayoutAlign="center center">
             <div class="mat-subheading-2 text-secondary">{{webChartTitle}}</div> 
-            <div  style="width: 50px;height: 30px;">&nbsp;</div>            
-            <div class="mat-subheading-2 text-secondary">
+            <div  style="width: 50px;height: 25px;">&nbsp;</div> 
+            <div  style="width: 50px;height: 25px;">&nbsp;</div>           
+            <div class="mat-subheading-2 text-secondary" fxLayoutAlign="space-around end !important">
                 <mat-form-field>
-                    <mat-label>Select Report</mat-label>
+                    <mat-label style="font-size: smaller;">Select Filter</mat-label>
                     <mat-select [(ngModel)]="webchartfilters" (selectionChange)="onWebReportConditionChange($event)" class="mat-subheading-2 text-secondary">
                       <mat-option *ngFor="let webchartfilter of webchartfilterList" [value]="webchartfilter.filterId" >
                         {{webchartfilter.filterLabel}}

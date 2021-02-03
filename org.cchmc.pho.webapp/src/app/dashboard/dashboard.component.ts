@@ -122,6 +122,9 @@ export class DashboardComponent implements OnInit {
       },
       options: {
         responsive: true,
+        legend: {
+          position: 'bottom'
+        },
         layout: {
           padding: {
             left: 42,
@@ -358,6 +361,7 @@ export class DashboardComponent implements OnInit {
         this.getWebChart(WebChartId.PopulationChart, WebChartFilterMeasureId.edChartdMeasureId, WebChartFilterId.conditionDefaultFilterId )
      }
     }   
+   
   }
 
   //click WEB CHART to switch back to ED CHART
