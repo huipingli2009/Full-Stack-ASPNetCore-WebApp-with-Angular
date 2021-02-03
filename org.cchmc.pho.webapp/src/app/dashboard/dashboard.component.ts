@@ -30,7 +30,7 @@ export class DashboardComponent implements OnInit {
   webChart: EdChart[];
   webChartData: any[];
   webChartDetails: EdChartDetails[];
-  webchartfilters: string;
+  webchartfilterselectedFilter: string;
   webchartfilterList: any[] = [];
   monthlySpotlightTitle: string;
   monthlySpotlightBody: string;
@@ -66,9 +66,9 @@ export class DashboardComponent implements OnInit {
   fileName= 'EDChart_Data.xlsx'; 
   
   //dynamic chart - and setting of initial values
-  chartId: number = WebChartId.PopulationChart; //2; ;
-  measureId: number = WebChartFilterMeasureId.conditionDefaultMeasureId; // 27; // = 27;
-  filterId: number = WebChartFilterId.pcpFilterId; //2; // =2;  
+  chartId: number = WebChartId.PopulationChart; 
+  measureId: number = WebChartFilterMeasureId.edChartdMeasureId; 
+  filterId: number = WebChartFilterId.dateFilterId; 
   chartData: number[] ;
   chartLabel: string[];
 
@@ -295,10 +295,12 @@ export class DashboardComponent implements OnInit {
 
   //get web chart filters
   getWebChartFilters(chartId: number, measureId: number) {
+    this.webchartfilterselectedFilter = null;
     this.rest.getWebChartFilters(chartId, measureId).subscribe((data) => {
       this.webchartfilterList = data;
       this.filterId = this.webchartfilterList[0].filterId;
-      this.webchartfilters = this.filterId.toString();
+      
+      this.webchartfilterselectedFilter = this.webchartfilterList[0].filterId.toString();
     });
   }
 
