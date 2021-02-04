@@ -30,7 +30,7 @@ export class DashboardComponent implements OnInit {
   webChart: EdChart[];
   webChartData: any[];
   webChartDetails: EdChartDetails[];
-  webchartfilters: string;
+  webchartfilterselectedFilter: string;
   webchartfilterList: any[] = [];
   monthlySpotlightTitle: string;
   monthlySpotlightBody: string;
@@ -65,10 +65,10 @@ export class DashboardComponent implements OnInit {
   //download to excel
   fileName= 'EDChart_Data.xlsx'; 
   
-  //dynamic chart
-  chartId: number = WebChartId.PopulationChart; //2; ;
-  measureId: number = WebChartFilterMeasureId.conditionDefaultMeasureId; // 27; // = 27;
-  filterId: number = WebChartFilterId.pcpFilterId; //2; // =2;  
+  //dynamic chart - and setting of initial values
+  chartId: number = WebChartId.PopulationChart; 
+  measureId: number = WebChartFilterMeasureId.edChartdMeasureId; 
+  filterId: number = WebChartFilterId.dateFilterId; 
   chartData: number[] ;
   chartLabel: string[];
 
@@ -90,8 +90,8 @@ export class DashboardComponent implements OnInit {
     this.getSpotlight();
     this.getQuicklinks();
     this.getPopulation();
-    this.getWebChart(WebChartId.PopulationChart, WebChartFilterMeasureId.edChartdMeasureId, WebChartFilterId.conditionDefaultFilterId);   
-    this.getWebChartFilters(this.chartId);
+    this.getWebChartFilters(this.chartId, this.measureId);
+    this.getWebChart(this.chartId, this.measureId, this.filterId);   
   }
 
   ngOnChanges() {
@@ -169,10 +169,7 @@ export class DashboardComponent implements OnInit {
       this.logger.log(this.spotlight, "RETURNED SPOTLIGHT FIELDS");
       const imageName = this.spotlight[0].imageHyperlink;
       this.monthlySpotlightTitle = this.spotlight[0].header;
-      this.monthlySpotlightBody = this.spotlight[0].body;
-      
-      //this.monthlySpotlightImageUrl = `${this.defaultUrl}/assets/img/${imageName}`;
-      //this.monthlySpotlightImageUrl = 'https://static1.squarespace.com/static/5c82a6f22727be5e5907c624/t/5f8dd43bef23221d7288dc08/1603130428143/Spotlight_img1.jpeg';
+      this.monthlySpotlightBody = this.spotlight[0].body;      
       this.monthlySpotlightImageUrl = this.spotlight[0].imageHyperlink;
       this.monthlySpotlightLink = this.spotlight[0].hyperlink;
       this.monthlySpotlightLinkLabel = this.spotlight[0].hyperLinkLabel;
@@ -291,54 +288,28 @@ export class DashboardComponent implements OnInit {
       
       this.patientsMax = max + 1; // This is here to add space above each bar in the chart (Max Number of patients, plus one empty tick on the y-axis)
       this.webBarChart.config.options.scales.yAxes[0].ticks.max = this.patientsMax;
-
       this.webBarChart.update();    
       
     });
   }
 
   //get web chart filters
-  getWebChartFilters(chartId: number) {
-    this.rest.getWebChartFilters(chartId).subscribe((data) => {
+  getWebChartFilters(chartId: number, measureId: number) {
+    this.webchartfilterselectedFilter = null;
+    this.rest.getWebChartFilters(chartId, measureId).subscribe((data) => {
       this.webchartfilterList = data;
+      this.filterId = this.webchartfilterList[0].filterId;
+      
+      this.webchartfilterselectedFilter = this.webchartfilterList[0].filterId.toString();
     });
   }
 
   //chart report condition change
   onWebReportConditionChange(event: any) {
     
+
     this.filterId = event.value;
-
-    this.chartId = WebChartId.PopulationChart;
-
-    if (this.filterId === WebChartFilterId.conditionDefaultFilterId)
-    {
-      this.measureId = WebChartFilterMeasureId.conditionDefaultMeasureId;
-    }
-    if (this.filterId === WebChartFilterId.pcpFilterId)
-    {
-      this.measureId = WebChartFilterMeasureId.pcpMeasureId;
-    }
-    if (this.filterId === WebChartFilterId.genderFilterId)
-    {
-      this.measureId = WebChartFilterMeasureId.genderMeasureId;
-    }
-    if (this.filterId === WebChartFilterId.zipCodeFilterId)
-    {
-      this.measureId = WebChartFilterMeasureId.zipCodeMeasureId;
-    }
-    if (this.filterId === WebChartFilterId.payorTypeFilterId)
-    {
-      this.measureId = WebChartFilterMeasureId.payorTypeMeasureId;
-    }
-    if (this.filterId=== WebChartFilterId.locationFilterId)
-    {
-      this.measureId = WebChartFilterMeasureId.locationMeasureId;
-    }
-    if (this.filterId === WebChartFilterId.ageFilterId)
-    {
-      this.measureId = WebChartFilterMeasureId.ageMeasureId;
-    }  
+    this.chartId = WebChartId.PopulationChart;  
     
     //dynamically pass the parameters to getWebChart function to generate the report
     this.getWebChart(this.chartId, this.measureId, this.filterId);
@@ -346,18 +317,10 @@ export class DashboardComponent implements OnInit {
   }
 
   updateChartReport(element: any){
-   
-    if (element.measureId == WebChartFilterMeasureId.conditionDefaultMeasureId){
-      
-       if (element.dashboardLabel.includes('Active Patients')) {         
-          this.getWebChart(WebChartId.PopulationChart, element.measureId, WebChartFilterId.conditionDefaultFilterId )
-       }
-      }
-    else{
-      if (element.dashboardLabel.includes('Recent ED/UC or Inpatient visit')) {       
-        this.getWebChart(WebChartId.PopulationChart, WebChartFilterMeasureId.edChartdMeasureId, WebChartFilterId.conditionDefaultFilterId )
-     }
-    }   
+    this.logger.log("switching chart object to measureId: " + element.measureId.toString());
+    this.measureId = element.measureId;
+    this.getWebChartFilters(this.chartId, this.measureId);
+    this.getWebChart(this.chartId, element.measureId, this.filterId);
   }
 
   //click WEB CHART to switch back to ED CHART

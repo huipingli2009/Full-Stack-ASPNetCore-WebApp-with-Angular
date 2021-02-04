@@ -100,6 +100,7 @@ export enum WebChartFilterMeasureId {
 }
 
 export enum WebChartFilterId {
+    dateFilterId = 0,
     conditionDefaultFilterId = 1,
     pcpFilterId = 2,
     genderFilterId = 3,
