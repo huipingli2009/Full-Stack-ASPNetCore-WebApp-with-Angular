@@ -96,8 +96,8 @@ export class RestService {
   }
 
   //getWebChartFilters
-  getWebChartFilters(chartId: number): Observable<any> {
-    const endpoint = `${API_URL}/api/Metrics/webchartfilterlookup/${chartId}`;
+  getWebChartFilters(chartId: number, measureId: number): Observable<any> {
+    const endpoint = `${API_URL}/api/Metrics/webchartfilterlookup/${chartId}/${measureId}`;
     return this.http.get<any>(endpoint).pipe(
       map(
         (data: WebChartFilters[]) => {

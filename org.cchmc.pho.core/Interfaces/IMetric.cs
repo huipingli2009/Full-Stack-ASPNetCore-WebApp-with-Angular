@@ -14,6 +14,6 @@ namespace org.cchmc.pho.core.Interfaces
         Task<List<PopulationMetric>> ListPopulationMetrics();
         Task<DrillthruMetricTable> GetDrillthruTable(int userId, int measureId, int filterId);
         Task<List<PopulationOutcomeMetric>> GetPopulationOutcomeMetrics();
-        Task<List<WebChartFilters>> GetWebChartFilters(int chartId);
+        Task<List<WebChartFilters>> GetWebChartFilters(int chartId, int measureId);
     }
 }

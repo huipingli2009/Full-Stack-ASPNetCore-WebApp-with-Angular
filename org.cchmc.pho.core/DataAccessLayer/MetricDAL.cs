@@ -100,17 +100,25 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
                         da.Fill(dataTable);
-                        edCharts = (from DataRow dr in dataTable.Rows
-                                   select new EDChart()
-                                   {
-                                       PracticeId = Convert.ToInt32(dr["PracticeId"]),
-                                       AdmitDate = Convert.ToDateTime(dr["AdmitDate"]),
-                                       ChartLabel = dr["ChartLabel"].ToString(),
-                                       ChartTitle = dr["ChartTitle"].ToString(),                                     
-                                       EDVisits = Convert.ToInt32(dr["ChartValue"]),
-                                       ChartTopLeftLabel = dr["TopLeftLabel"].ToString(),
-                                   }
-                            ).ToList();
+                        if (dataTable.Rows.Count > 0)
+                        {
+                            edCharts = (from DataRow dr in dataTable.Rows
+                                        select new EDChart()
+                                        {
+                                            PracticeId = Convert.ToInt32(dr["PracticeId"]),
+                                            AdmitDate = Convert.ToDateTime(dr["AdmitDate"]),
+                                            ChartLabel = dr["ChartLabel"].ToString(),
+                                            ChartTitle = dr["ChartTitle"].ToString(),
+                                            EDVisits = Convert.ToInt32(dr["ChartValue"]),
+                                            ChartTopLeftLabel = dr["TopLeftLabel"].ToString(),
+                                        }
+    ).ToList();
+                        }
+                        else
+                        {
+                            edCharts.Add(new EDChart());
+                        }
+
 
                     }
                     return edCharts;
@@ -243,7 +251,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         }
 
         //GetWebChartFilters
-        public async Task<List<WebChartFilters>> GetWebChartFilters(int chartId)
+        public async Task<List<WebChartFilters>> GetWebChartFilters(int chartId, int measureId)
         {
             DataTable dataTable = new DataTable();
             List<WebChartFilters> webchartfilters = new List<WebChartFilters>();
@@ -251,8 +259,9 @@ namespace org.cchmc.pho.core.DataAccessLayer
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spGetChartFilters", sqlConnection))
                 {
-                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;                   
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add("@ChartID", SqlDbType.Int).Value = chartId;
+                    sqlCommand.Parameters.Add("@MeasureID", SqlDbType.Int).Value = measureId;
 
                     await sqlConnection.OpenAsync();
                     // Define the data adapter and fill the dataset
