@@ -84,10 +84,10 @@
 
                     <table mat-table [dataSource]="dataSourceOne" class="mat-elevation-z8">
                         <ng-container matColumnDef="dashboardLabel">
-                            <th mat-header-cell *matHeaderCellDef> Measure </th>
-                            <td mat-cell *matCellDef="let element" matTooltip="{{element.measureDesc}}" (click)="updateChartReport(element)">
-                                {{element.dashboardLabel}}
-                            </td>
+                            <th mat-header-cell *matHeaderCellDef> Measure </th> 
+                                <td mat-cell *matCellDef="let element" matTooltip="{{element.measureDesc}}" (click)="element.practiceTotal < 1 ? $event.stopPropagation(): updateChartReport(element)">
+                                    {{element.dashboardLabel}} 
+                                </td>
                         </ng-container>
 
                         <ng-container matColumnDef="practiceTotal">

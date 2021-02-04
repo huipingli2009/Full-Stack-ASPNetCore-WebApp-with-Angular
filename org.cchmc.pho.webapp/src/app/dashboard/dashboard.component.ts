@@ -308,7 +308,6 @@ export class DashboardComponent implements OnInit {
       //New filters NECESSARILY means new chart generation. Trigger it here.
       this.getWebChart(this.chartId, this.measureId, this.filterId);
     });
-    
   }
 
   //chart report condition change
