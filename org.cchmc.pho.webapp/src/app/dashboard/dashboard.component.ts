@@ -31,6 +31,7 @@ export class DashboardComponent implements OnInit {
   webChartData: any[];
   webChartDetails: EdChartDetails[];
   webchartfilterselectedFilter: string;
+  webchartfilters: string;
   webchartfilterList: any[] = [];
   monthlySpotlightTitle: string;
   monthlySpotlightBody: string;
