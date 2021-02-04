@@ -66,9 +66,9 @@ export class DashboardComponent implements OnInit {
   fileName= 'EDChart_Data.xlsx'; 
   
   //dynamic chart - and setting of initial values
-  chartId: number = WebChartId.PopulationChart; 
-  measureId: number = WebChartFilterMeasureId.edChartdMeasureId; 
-  filterId: number = WebChartFilterId.dateFilterId; 
+  chartId: number; 
+  measureId: number; 
+  filterId: number;
   chartData: number[] ;
   chartLabel: string[];
 
@@ -90,8 +90,11 @@ export class DashboardComponent implements OnInit {
     this.getSpotlight();
     this.getQuicklinks();
     this.getPopulation();
-    this.getWebChartFilters(this.chartId, this.measureId);
-    this.getWebChart(this.chartId, this.measureId, this.filterId);   
+    this.chartId = WebChartId.PopulationChart; 
+    this.measureId = WebChartFilterMeasureId.edChartdMeasureId; 
+    this.filterId = WebChartFilterId.dateFilterId;
+    this.getWebChartFilters(this.chartId, this.measureId); 
+    this.logger.log("ngOnInit: filterid= " + this.filterId.toString());
   }
 
   ngOnChanges() {
@@ -298,18 +301,20 @@ export class DashboardComponent implements OnInit {
     this.webchartfilterselectedFilter = null;
     this.rest.getWebChartFilters(chartId, measureId).subscribe((data) => {
       this.webchartfilterList = data;
-      this.filterId = this.webchartfilterList[0].filterId;
-      
-      this.webchartfilterselectedFilter = this.webchartfilterList[0].filterId.toString();
+      this.webchartfilterselectedFilter = data[0].filterId.toString();
+      this.filterId = data[0].filterId.toString();
+      this.logger.log("filterlist: " + data[0].toString() + " data: " + data.toString());
+      this.logger.log("getWebChartFilters, regenerate measureId: " + measureId.toString() + " filterId: " + this.filterId.toString() + "trying to set to: " + data[0].filterId.toString());
+      //New filters NECESSARILY means new chart generation. Trigger it here.
+      this.getWebChart(this.chartId, this.measureId, this.filterId);
     });
+    
   }
 
   //chart report condition change
   onWebReportConditionChange(event: any) {
-    
-
-    this.filterId = event.value;
-    this.chartId = WebChartId.PopulationChart;  
+    this.logger.log("switching report condition to filterId: " + this.filterId.toString());
+    this.filterId = event.filterId;
     
     //dynamically pass the parameters to getWebChart function to generate the report
     this.getWebChart(this.chartId, this.measureId, this.filterId);
@@ -317,15 +322,17 @@ export class DashboardComponent implements OnInit {
   }
 
   updateChartReport(element: any){
-    this.logger.log("switching chart object to measureId: " + element.measureId.toString());
+    this.logger.log("switching chart object to measureId: " + element.measureId.toString() + " filterId: " + this.filterId.toString());
     this.measureId = element.measureId;
     this.getWebChartFilters(this.chartId, this.measureId);
-    this.getWebChart(this.chartId, element.measureId, this.filterId);
+    this.logger.log("switching chart object 2 to measureId: " + element.measureId.toString() + " filterId: " + this.filterId.toString());
   }
 
   //click WEB CHART to switch back to ED CHART
   switchBackToEDChart() {
-    this.getWebChart(WebChartId.EDChart, WebChartFilterMeasureId.conditionDefaultMeasureId, WebChartFilterId.conditionDefaultFilterId);
+    this.measureId = WebChartFilterMeasureId.edChartdMeasureId;
+    this.chartId = WebChartId.PopulationChart;
+    this.getWebChartFilters(this.chartId, this.measureId);
   }
 
   transformToolTipDate(date) {
