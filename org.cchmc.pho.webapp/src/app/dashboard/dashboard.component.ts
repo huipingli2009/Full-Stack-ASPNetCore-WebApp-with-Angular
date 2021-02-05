@@ -30,7 +30,7 @@ export class DashboardComponent implements OnInit {
   webChart: EdChart[];
   webChartData: any[];
   webChartDetails: EdChartDetails[];
-  webchartfilterselectedFilter: string;
+  webchartfilterselectedFilter: WebChartFilters;
   webchartfilterList: any[] = [];
   monthlySpotlightTitle: string;
   monthlySpotlightBody: string;
@@ -301,7 +301,7 @@ export class DashboardComponent implements OnInit {
     this.webchartfilterselectedFilter = null;
     this.rest.getWebChartFilters(chartId, measureId).subscribe((data) => {
       this.webchartfilterList = data;
-      this.webchartfilterselectedFilter = data[0].filterId.toString();
+      this.webchartfilterselectedFilter = data[0];
       this.filterId = data[0].filterId.toString();
       this.logger.log("filterlist: " + data[0].toString() + " data: " + data.toString());
       this.logger.log("getWebChartFilters, regenerate measureId: " + measureId.toString() + " filterId: " + this.filterId.toString() + "trying to set to: " + data[0].filterId.toString());
@@ -312,8 +312,9 @@ export class DashboardComponent implements OnInit {
 
   //chart report condition change
   onWebReportConditionChange(event: any) {
-    this.logger.log("switching report condition to filterId: " + this.filterId.toString());
-    this.filterId = event.filterId;
+    this.logger.log("switching report condition to filterId: " + event.value);
+    this.filterId = event.value;
+    this.webchartfilterselectedFilter = this.webchartfilterList.find(f => f.filterId === event.value);
     
     //dynamically pass the parameters to getWebChart function to generate the report
     this.getWebChart(this.chartId, this.measureId, this.filterId);
