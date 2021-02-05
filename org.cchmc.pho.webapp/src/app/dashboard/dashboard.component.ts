@@ -31,6 +31,7 @@ export class DashboardComponent implements OnInit {
   webChartData: any[];
   webChartDetails: EdChartDetails[];
   webchartfilterselectedFilter: string;
+  webchartfilters: string;
   webchartfilterList: any[] = [];
   monthlySpotlightTitle: string;
   monthlySpotlightBody: string;
@@ -122,6 +123,9 @@ export class DashboardComponent implements OnInit {
       },
       options: {
         responsive: true,
+        legend: {
+          position: 'bottom'
+        },
         layout: {
           padding: {
             left: 42,
