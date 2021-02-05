@@ -125,6 +125,9 @@ export class DashboardComponent implements OnInit {
       },
       options: {
         responsive: true,
+        legend: {
+          position: 'bottom'
+        },
         layout: {
           padding: {
             left: 42,
