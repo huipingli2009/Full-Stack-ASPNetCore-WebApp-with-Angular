@@ -190,7 +190,7 @@
                                 </div>
 
                                 <div fxLayout="column" fxFlex>
-                                    <mat-form-field floatLabel="always">
+                                    <mat-form-field class="multi-select-override" floatLabel="always">
                                         <mat-label>LOCATIONS</mat-label>
                                         <mat-select formControlName="locations" multiple required
                                             [compareWith]="compareByLocationName">
@@ -642,7 +642,7 @@
                     <div fxLayout="column" class="input-w-icon multiselect-with-icon">
                         <mat-form-field floatLabel="always" class="select-style-override">
                             <mat-label>LOCATIONS</mat-label>
-                            <mat-select matNativeControl formControlName="locationId" class="insurance" required>
+                            <mat-select matNativeControl formControlName="locationId" required>
                                 <mat-option *ngFor="let location of locationsList" [value]="location.id">
                                     {{location.name}}
                                 </mat-option>

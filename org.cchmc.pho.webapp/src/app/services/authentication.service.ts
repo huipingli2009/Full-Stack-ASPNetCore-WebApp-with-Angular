@@ -5,6 +5,7 @@ import { NGXLogger } from 'ngx-logger';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { UserAuthenticate } from '../models/user';
+//import { JwtHelperService } from '@auth0/angular-jwt';
 
 
 @Injectable({ providedIn: 'root' })
@@ -18,7 +19,10 @@ export class AuthenticationService {
     private loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     loginErrorMsg: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
-    constructor(private http: HttpClient, private logger: NGXLogger, public router: Router) { }
+    constructor(private http: HttpClient, 
+                private logger: NGXLogger, 
+                public router: Router) { }
+                //private jwtHelperService: JwtHelperService) { }
 
     login(user: UserAuthenticate) {
         this.logger.log(JSON.stringify(user), 'IN AUTH SERVICE')
@@ -48,7 +52,7 @@ export class AuthenticationService {
     getCurrentStaffId() {
         return sessionStorage.getItem('staffId');
     }
-
+   
     logout() {
         let removeToken = sessionStorage.removeItem('access_token');
         sessionStorage.removeItem('staffId');

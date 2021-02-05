@@ -7,14 +7,14 @@
                 </div>
                 <div class="content-text">
                     <div class="mat-subheading-2 text-green">{{monthlySpotlightTitle}}</div>
-                    <p>{{monthlySpotlightBody | slice:0:342}} <a href='{{monthlySpotlightLink}}' target="_blank"> Read
-                            more »</a></p>
+                    <p>{{monthlySpotlightBody | slice:0:342}} <a href='{{monthlySpotlightLink}}' target="_blank"> {{monthlySpotlightLinkLabel}} »
+                            </a></p>
                 </div>
             </div>
             <div fxLayout="column">
-                <div class="spotlight-img"><img src="{{monthlySpotlightImageUrl}}"></div>
+                <div class="spotlight-img"><a href='{{monthlySpotlightLink}}' target="_blank"><img src="{{monthlySpotlightImageUrl}}"></a></div>
             </div>
-        </div>
+        </div> 
     </div>
     <div fxLayout="column" fxFlex class="content-box quick-links">
         <div fxLayout="row">
@@ -49,15 +49,29 @@
 <div fxLayout="row" class="content-main" fxLayoutGap="33px">
     <div fxLayout="column" fxFlex="65%" class="content-box ed-chart">
         <div fxLayout="row">
-            <div class="content-title mat-subheading-1 title-secondary">
-                ED 12-DAY CHART
-            </div>
-        </div>
+            <div class="content-title mat-subheading-1 title-secondary" (click)="switchBackToEDChart()">
+               {{webChartTopLeftLabel}}
+            </div>           
+        </div> 
+              
+        <div fxLayout="column" fxLayoutAlign="center center">
+            <div class="mat-subheading-2 text-secondary">{{webChartTitle}}</div> 
+            <div  style="width: 50px;height: 25px;">&nbsp;</div> 
+            <div  style="width: 50px;height: 25px;">&nbsp;</div>           
+            <div class="mat-subheading-2 text-secondary" fxLayoutAlign="space-around end !important">
+                <mat-form-field>
+                    <mat-label class="chartFilterFont" >Select Filter</mat-label>
+                    <mat-select [(ngModel)]="webchartfilters" (selectionChange)="onWebReportConditionChange($event)" class="mat-subheading-2 text-secondary">
+                      <mat-option *ngFor="let webchartfilter of webchartfilterList" [value]="webchartfilter.filterId" >
+                        {{webchartfilter.filterLabel}}
+                      </mat-option>                     
+                    </mat-select>
+                </mat-form-field>
+            </div>           
+        </div> 
+        
         <div fxLayout="row" fxLayoutAlign="center center">
-            <div class="mat-subheading-2 text-secondary">{{edChartTitle}}</div>
-        </div>
-        <div fxLayout="row" fxLayoutAlign="center center">
-            <canvas id="edChart"></canvas>
+            <canvas id="webChart"></canvas>
         </div>
     </div>
     <div fxLayout="column" fxFlex class="content-box population-details">
@@ -73,7 +87,7 @@
                     <table mat-table [dataSource]="dataSourceOne" class="mat-elevation-z8">
                         <ng-container matColumnDef="dashboardLabel">
                             <th mat-header-cell *matHeaderCellDef> Measure </th>
-                            <td mat-cell *matCellDef="let element" matTooltip="{{element.measureDesc}}">
+                            <td mat-cell *matCellDef="let element" matTooltip="{{element.measureDesc}}" (click)="updateChartReport(element)">
                                 {{element.dashboardLabel}}
                             </td>
                         </ng-container>
@@ -97,9 +111,9 @@
                     <table mat-table [dataSource]="dataSourceTwo" class="mat-elevation-z8">
                         <ng-container matColumnDef="dashboardLabelQi">
                             <th mat-header-cell *matHeaderCellDef> Measure </th>
-                            <td mat-cell *matCellDef="let element" matTooltip="{{element.measureDesc}}">
-                                {{element.dashboardLabel}}
-                            </td>
+                            <td mat-cell *matCellDef="let element" >
+                              {{element.dashboardLabel}}
+                            </td>            
                         </ng-container>
 
                         <ng-container matColumnDef="practiceTotalQi">
@@ -178,7 +192,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of edChartDetails; let i=index;">
+                <tr *ngFor="let item of webChartDetails; let i=index;">
                     <td>{{i+1}}</td>
                     <td>{{item.patientMRN}}</td>
                     <td>{{item.patientEncounterID}}</td>
@@ -200,10 +214,10 @@
                 </tr>
         </table>
     </div>
-    <div mat-dialog-actions align="end">
-        <button mat-button mat-dialog-close>Close</button>
-        <button mat-button (click)="downloadToExcel()">Download</button>
-        <button mat-button (click)="OpenReport()">View Report</button>
+    <div mat-dialog-actions #edReportActions align="end" >
+        <button mat-button mat-dialog-close class="ed-report-action">Close</button>
+        <button mat-button class="ed-report-action" (click)="downloadToExcel()">Download</button>
+        <button mat-button class="ed-report-action" (click)="OpenReport()">View Report</button>
     </div>
 
 </ng-template>

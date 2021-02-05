@@ -115,7 +115,7 @@ namespace org.cchmc.pho.api.Controllers
                 return StatusCode(500, "An error occurred");
             }
         }
-        [Authorize(Roles = "Practice Member,Practice Admin,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Member,Practice Coordinator,Practice Admin,PHO Member,PHO Admin, PHO Leader")]
         [HttpGet("{staffId}")] // put because we're getting a specific user
         [SwaggerResponse(200, type: typeof(UserViewModel))]
         [SwaggerResponse(400, type: typeof(string))]

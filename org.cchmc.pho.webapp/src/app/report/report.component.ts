@@ -24,7 +24,7 @@ export class ReportComponent implements OnInit {
     this.GetEdChartData();
   }
   GetEdChartData() {
-    this.rest.getEdChartDetails(parameter).pipe(take(1)).subscribe((data) => {
+    this.rest.getWebChartDetails(parameter).pipe(take(1)).subscribe((data) => {
       this.edChartDetails = data;
 
     });

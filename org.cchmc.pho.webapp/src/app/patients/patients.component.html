@@ -136,7 +136,7 @@
     <!-- button Column -->
     <ng-container matColumnDef="button">
       <mat-header-cell *matHeaderCellDef class="patientButtonAlign">
-        <button mat-flat-button color="accent" class="add-patient-button" *ngIf="isUserAdmin"
+        <button mat-flat-button color="accent" class="add-patient-button" *ngIf="userCanAddPatient"
           (click)="openAdminAddDialog()">ADD PATIENT</button>
       </mat-header-cell>
       <mat-cell *matCellDef="let row">
@@ -325,10 +325,10 @@
                 (click)="openPatientAdminDialog(detail.patientId)">PATIENT ADMIN</button>
               </div>
               <div fxLayout="column" fxLayoutAlign="end end">
-                <button mat-flat-button (click)="openPatientSaveDialog()"  color="accent" [disabled]="!form.valid" *ngIf="!potentialPatient">Save</button>
+                <button mat-flat-button (click)="submitForm()"  color="accent" [disabled]="!form.valid" *ngIf="!potentialPatient">Save</button>
               </div>
             </div>
-            <div *ngIf = "!potentialPatient" >
+<!--             <div *ngIf = "!potentialPatient" >
               <ng-template #updatePatientDialog>
                 <div mat-dialog-content class="mat-typography">
                   <h3>Are you sure you want to save changes to this patient?</h3>
@@ -342,15 +342,15 @@
                     Patient</button>
                 </div>
               </ng-template>
-            </div>
+            </div> -->
             <div *ngIf="!form.valid" class="entire-form-error" fxLayout="row">
               You must fill out all required fields to update the patient.
             </div>
           </form>
           <div fxLayout="row" class="border-row-top">
             <div fxLayout="column" fxFlex>
-              <div fxLayout="row" class="detail-heading">METRICS</div>
-              <div fxLayout="row" class="metric-data-box" *ngIf="patientDetails && patientDetails.activeStatus" [(ngModel)]="patientDetails"
+              <div fxLayout="row" class="detail-heading">METRICS</div>              
+                <div fxLayout="row" class="metric-data-box" *ngIf="patientDetails" [(ngModel)]="patientDetails"
                 ngDefaultControl>
                 <div fxLayout="column" class="metric-data" fxLayoutAlign="top center" (click)="openDrilldownDialog('1', 'Practice Visit Details')">
                   <span class="metric-number">{{patientDetails.practiceVisits}}</span>
@@ -372,30 +372,7 @@
                   <span class="metric-number">{{patientDetails.uniqueCPTCodes}}</span>
                   <span class="metric-title">UNIQUE CPT CODES</span>
                 </div>
-              </div>
-              <div fxLayout="row" class="metric-data-box" *ngIf="patientDetails && !patientDetails.activeStatus" [(ngModel)]="patientDetails"
-                ngDefaultControl>
-                <div fxLayout="column" class="metric-data" fxLayoutAlign="top center">
-                  <span class="metric-number">{{patientDetails.practiceVisits}}</span>
-                  <span class="metric-title">PRACTICE VISITS</span>
-                </div>
-                <div fxLayout="column" class="metric-data" fxLayoutAlign="top center">
-                  <span class="metric-number">{{patientDetails.cchmcEncounters}}</span>
-                  <span class="metric-title">CCHMC ENCOUNTERS</span>
-                </div>
-                <div fxLayout="column" class="metric-data" fxLayoutAlign="top center">
-                  <span class="metric-number">{{patientDetails.healthBridgeEncounters}}</span>
-                  <span class="metric-title">HEALTHBRIDGE ENCOUNTERS</span>
-                </div>
-                <div fxLayout="column" class="metric-data" fxLayoutAlign="top center">
-                  <span class="metric-number">{{patientDetails.uniqueDXs}}</span>
-                  <span class="metric-title">UNIQUE DXS</span>
-                </div>
-                <div fxLayout="column" class="metric-data" fxLayoutAlign="top center">
-                  <span class="metric-number">{{patientDetails.uniqueCPTCodes}}</span>
-                  <span class="metric-title">UNIQUE CPT CODES</span>
-                </div>
-              </div>
+              </div>            
             </div>
             <mat-divider [vertical]="true"></mat-divider>
             <div fxLayout="column" class="visit-details-box" *ngIf="patientDetails" [(ngModel)]="patientDetails"
@@ -430,6 +407,10 @@
                     NEXT CCHMC APPT
                   </div>
                   <div fxLayout="row" class="detail-text">{{patientDetails.nextCCHMCAppointment | date:'MM/dd/yyyy'}}</div>
+                  <!-- Patient Name History Link-->
+                  <div fxLayout="row" class="detail-text">
+                    <button mat-flat-button color="accent" (click)="openDrilldownDialog('7', 'Patient Name History')">PATIENT NAME HISTORY</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -473,7 +454,8 @@
             </mat-form-field>
             <ng-container
               *ngIf="(addPatientForm.get('firstName').touched || addPatientForm.get('firstName').dirty) && (addPatientForm.get('firstName').errors)">
-              <mat-error *ngIf="addPatientForm.get('firstName').errors.required">
+              <mat-error *ngIf="addPatientForm.get('firstName
+              ').errors.required">
                   *Required
               </mat-error>
             </ng-container>
@@ -561,15 +543,15 @@
       <div mat-dialog-actions align="center" class="select-row">
         <button mat-button (click)="cancelAdminDialog()">Cancel</button>
         <button mat-flat-button [disabled]="!addPatientForm.valid" color="accent"
-        (click)="openAdminConfirmDialog(addNewPatientProcessEnum.SaveAndContinue)">SAVE AND CONTINUE</button>
+        (click)="submitPatientAddUpdate(addNewPatientProcessEnum.SaveAndContinue)">SAVE AND CONTINUE</button>
         <button mat-flat-button [disabled]="!addPatientForm.valid" color="accent"
-        (click)="openAdminConfirmDialog(addNewPatientProcessEnum.SaveAndExit)">SAVE AND EXIT</button>
+        (click)="submitPatientAddUpdate(addNewPatientProcessEnum.SaveAndExit)">SAVE AND EXIT</button>
       </div>
     </div>
   </ng-template>
 
   <ng-template #adminConfirmDialog>
-    <div mat-dialog-content class="mat-typography">
+<!--     <div mat-dialog-content class="mat-typography">
       <h3 *ngIf="isAddingPatientAndExit">Are you sure you want to save this patient and exit?</h3>
       <h3 *ngIf="isAddingPatientAndContinue">Are you sure you want to save this patient and continue?</h3>
     </div>
@@ -579,7 +561,7 @@
         Save And Continue</button>
       <button mat-flat-button color="accent" mat-dialog-close (click)="submitPatientAddUpdate()" *ngIf="isAddingPatientAndExit">
         Save And Exit</button>
-    </div>
+    </div> -->
   </ng-template>
   
 <ng-template  #patientAdminDialog>  
@@ -708,3 +690,120 @@
       YES UPDATE</button>  
   </div> 
 </ng-template>
+
+
+
+<ng-template  #patientMergeDialog>  
+  <div mat-dialog-content class="mat-typography" id="patient-admin-dialog">   
+    <form [formGroup]="patientMergeForm">     
+      <div fxLayout="row" class="patients-merge-header" fxLayoutAlign="center center">
+        <div fxLayout="column" fxLayoutAlign="center center">
+          <span>{{ mergeHeaderText }}</span>
+        </div>
+      </div>     
+      <div fxLayout="row" class="detail-heading">{{ topPatientHeaderText }}</div>         
+      <div fxLayout="row" fxLayoutGap="60px" class="form-row" fxLayoutAlign="start end" >
+        <div fxLayout="column">
+          <mat-form-field floatLabel="always">
+            <mat-label>First Name</mat-label>
+            <input matInput formControlName="firstName" readonly>                  
+          </mat-form-field>               
+        </div>
+        <div fxLayout="column">
+          <mat-form-field floatLabel="always">
+            <mat-label>Last Name</mat-label>
+            <input matInput formControlName="lastName" readonly>
+          </mat-form-field>          
+        </div>
+        <div fxLayout="column">
+          <mat-form-field floatLabel="always">
+            <mat-label>MRN</mat-label>
+            <input matInput formControlName="epicMrn" readonly>
+          </mat-form-field>         
+        </div>
+      </div>     
+      <div fxLayout="row" fxLayoutGap="60px" class="form-row" fxLayoutAlign="start end" >
+        <div fxLayout="column" fxLayoutAlign="start end">
+          <mat-form-field floatLabel="always">
+            <mat-label>Date Of Birth</mat-label>           
+            <input matInput formControlName="patientDOB" readonly>         
+          </mat-form-field>          
+        </div>
+        <div fxLayout="column" fxLayoutAlign="start end">
+          <mat-form-field floatLabel="always">
+            <mat-label>Gender</mat-label>
+            <input matInput formControlName="gender" readonly>
+          </mat-form-field>           
+        </div>
+        <div fxLayout="column" fxLayoutAlign="start end">
+          <mat-form-field floatLabel="always">
+            <mat-label>PCP Identified at CCHMC</mat-label>
+            <input matInput formControlName = "pcpName" readonly>
+          </mat-form-field>          
+        </div>
+      </div>      
+    </form>  
+ 
+  <br>
+  <!-- merge starts -->
+  <form [formGroup]="patientMergeForm_DuplicatePatients"> 
+    <div fxLayout="row" class="detail-heading">{{ mergeDetailText }}</div>
+    
+    <div fxLayout="row" fxLayoutGap="60px" class="form-row" fxLayoutAlign="start end" >
+      <div fxLayout="column">
+        <mat-form-field floatLabel="always">
+          <mat-label>First Name</mat-label>         
+          <input matInput formControlName="potentialDuplicateFirstName" readonly>                  
+        </mat-form-field>               
+      </div>
+      <div fxLayout="column">
+        <mat-form-field floatLabel="always">
+          <mat-label>Last Name</mat-label>
+          <input matInput  formControlName="potentialDuplicateLastName" readonly>
+        </mat-form-field>          
+      </div>
+
+      <div fxLayout="column">
+        <mat-form-field floatLabel="always">
+          <mat-label>MRN</mat-label>         
+          <input matInput formControlName="potentialDuplicatePatientMRNId" readonly> 
+        </mat-form-field>         
+      </div>
+    </div>
+   
+    <div fxLayout="row" fxLayoutGap="60px" class="form-row" fxLayoutAlign="start end" >
+      <div fxLayout="column" fxLayoutAlign="start end">
+        <mat-form-field floatLabel="always">          
+          <mat-label>Date Of Birth</mat-label>           
+          <input matInput formControlName="potentialDuplicateDOB" readonly>         
+        </mat-form-field>          
+      </div>
+      <div fxLayout="column" fxLayoutAlign="start end">
+        <mat-form-field floatLabel="always">
+          <mat-label>Gender</mat-label>
+          <input matInput formControlName="potentialDuplicateGender" readonly>
+        </mat-form-field>           
+      </div>
+      <div fxLayout="column" fxLayoutAlign="start end">
+        <mat-form-field floatLabel="always">
+          <mat-label>PCP</mat-label>
+          <input matInput formControlName = "potentialDuplicatePCPName" readonly>
+        </mat-form-field>          
+      </div>
+    </div>      
+  </form>
+  
+  <div mat-dialog-actions align="center" class="potentialPatientDialog">  
+    <button mat-button (click)="cancelPatientAdminDialog()">Cancel</button> 
+    <button mat-flat-button color="accent"
+    (click)="confirmPatientMerge(patientDuplicateMergeActionEnum.Reactivate)" *ngIf="duplicateDialog_AllowReactivate" matTooltip="" matTooltipClass="patientAdminDialogtooltip" matTooltip="Reactivate Duplicate: Duplicate patient will be made active, and values from TOP PATIENT will be preserved">REACTIVATE</button>
+    <button mat-flat-button color="accent"
+    (click)="confirmPatientMerge(patientDuplicateMergeActionEnum.Merge)" *ngIf="duplicateDialog_AllowMerge" matTooltip="" matTooltipClass="patientAdminDialogtooltip" matTooltip="Merge Patients: These two patients will be combined, and fields from TOP PATIENT will be preserved">MERGE</button>
+    <button mat-flat-button color="accent"
+    (click)="confirmPatientMerge(patientDuplicateMergeActionEnum.KeepAndSave)" *ngIf="duplicateDialog_AllowKeepAndSave" matTooltip="" matTooltipClass="patientAdminDialogtooltip" matTooltip="Keep Both: TOP PATIENT will be saved, BOTTOM PATIENT will be ignored. Only if patients are NOT duplicates.">KEEP BOTH</button>
+    <button mat-flat-button color="accent"
+    (click)="confirmPatientMerge(patientDuplicateMergeActionEnum.Continue)" *ngIf="duplicateDialog_AllowContinue" matTooltip="" matTooltipClass="patientAdminDialogtooltip" matTooltip="Patient matches an existing patient, and cannot be saved. Please continue.">CONTINUE</button>  
+  </div> 
+  <!--Merge ends-->
+  </div>
+</ng-template> 

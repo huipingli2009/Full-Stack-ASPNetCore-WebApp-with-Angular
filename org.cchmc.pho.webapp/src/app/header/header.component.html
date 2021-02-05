@@ -9,9 +9,10 @@
     </div> 
    
     <div fxLayout="column" fxLayoutAlign="end end" fxFlex class="logout-col">
-      <div ><span> Contact your practice improvement coach <a [href]="'mailto:'+ email "  target="_top"><u>{{coachName}}</u>
-        <mat-icon class="email-icon" matPrefix>email</mat-icon></a></span><span class="whitespace"></span><span (click)="openPasswordDialog()">Welcome, {{firstName}} {{lastName}}<mat-icon class="account-icon">
-            account_box</mat-icon></span>|<button mat-button (click)="logout()">Logout</button>
+      <div ><span> Contact your practice improvement coach <a [href]="'mailto:'+ email "  target="_top">
+        <span class="coachName">{{coachName}}<span class="email-icon"><mat-icon class="material-icons-round">email</mat-icon></span></span>
+        </a></span><span class="whitespace"></span><span (click)="openPasswordDialog()" class="UserText">Welcome, {{firstName}} {{lastName}}<span class="account-icon"><mat-icon class="material-icons-round">
+            account_box</mat-icon></span></span>|<button mat-button (click)="logout()">Logout</button>
       </div>
     </div>
   </div>
@@ -20,9 +21,9 @@
 <div fxLayout="row" class="home-submenu">
   <div fxLayout="row" fxFlex="20" fxLayoutAlign="start end">
     <form [formGroup]="practiceForm">
-      <mat-form-field class="practice-select">
+      <mat-form-field class="practice-select">       
         <mat-select formControlName="practiceControl" (selectionChange)="switchPractice($event.value)"
-          [disabled]="!isUserAdmin">
+          [disabled]="!canSwitchPractice">
           <mat-option class="practice-select-text" *ngFor="let practice of practiceList" [value]="practice.id">
             {{practice.name}}
           </mat-option>
@@ -32,10 +33,10 @@
   </div>
   <div fxLayout="row" fxLayoutAlign="end end" fxFlex>
     <button mat-button routerLink="/dashboard" routerLinkActive="active-submenu">Dashboard</button>
-    <button mat-button routerLink="/patients" routerLinkActive="active-submenu">Patients</button>
-    <button mat-button routerLink="/staff" routerLinkActive="active-submenu">Staff</button>
+    <button mat-button routerLink="/patients" routerLinkActive="active-submenu" [style.display]="displayPatientsTab ? 'block' : 'none'">Patients</button>   
+    <button mat-button routerLink="/staff" routerLinkActive="active-submenu" [style.display]="!displayStaffAndWorkbookTab? 'block' : 'none'">Staff</button>
     <button mat-button routerLink="/files" routerLinkActive="active-submenu">Files and Resources</button>
-    <button mat-button routerLink="/workbooks" routerLinkActive="active-submenu">Workbooks</button>
+    <button mat-button routerLink="/workbooks" routerLinkActive="active-submenu" [style.display]="!displayStaffAndWorkbookTab? 'block' : 'none'">Workbooks</button>
   </div>
 </div>
 <div toastContainer class="alert-container"><span></span></div>

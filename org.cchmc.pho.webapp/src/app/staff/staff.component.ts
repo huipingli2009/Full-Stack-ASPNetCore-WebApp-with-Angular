@@ -11,7 +11,7 @@ import { take, debounceTime, distinctUntilChanged, takeUntil, catchError } from 
 import { ErrorInterceptor } from '../helpers/error.interceptor';
 import { comparePasswords } from '../helpers/password-match.validator';
 import { Responsibilities, Staff, StaffDetails, StaffAdmin } from '../models/Staff';
-import { CurrentUser, User } from '../models/user';
+import { CurrentUser, User, Role } from '../models/user';
 import { RestService } from '../rest.service';
 import { AuthenticationService } from '../services/authentication.service';
 import { UserService } from '../services/user.service';
@@ -187,7 +187,7 @@ export class StaffComponent implements OnInit, OnDestroy {
     this.userService.getCurrentUser().pipe(take(1)).subscribe((data) => {
       this.currentUser = data;
       this.currentUserId = data.id;
-      if (data.role.id === 3) {
+      if ((data.role.id === Role.PHOAdmin) || (data.role.id === Role.PracticeAdmin)) {
         this.isUserAdmin = true;
       } else { this.isUserAdmin = false; }
     });

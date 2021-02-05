@@ -9,5 +9,6 @@ namespace org.cchmc.pho.api.ViewModels
         public string ChartLabel { get; set; }
         public string ChartTitle { get; set; }
         public int EDVisits { get; set; }
+        public string ChartTopLeftLabel { get; set; }
     }
 }

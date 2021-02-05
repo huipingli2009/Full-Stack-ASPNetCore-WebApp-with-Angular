@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FilesComponent } from './files/files.component';
-import { AuthGuard } from './helpers/auth.guard';
+import { AuthGuard } from './guards/auth.guard';
 import { LoginLayoutComponent } from './layouts/login-layout.component';
 import { MainLayoutComponent } from './layouts/main-layout.component';
 import { LoginComponent } from './login/login.component';
@@ -20,30 +20,43 @@ const routes: Routes = [
       {
         path: '',
         component: DashboardComponent,
+        data: {}
       },
       {
         path: 'dashboard',
         component: DashboardComponent,
+        // canActivate: [AuthGuard],       
         data: {
-          title: 'Dashboard' // Keeping this as ex. in case we need to use Dynamic switching for menu titles etc.
-        }
+          title: 'Dashboard' // Keeping this as ex. in case we need to use Dynamic switching for menu titles etc.       
+        },
       },
       {
         path: 'patients',
         component: PatientsComponent,
-        canActivate: [AuthGuard]
+        // canActivate: [AuthGuard],
+        data: {         
+          role: ['Practice Member','Practice Coordinator','Practice Admin','PHO Admin']
+        },      
       },
-      {
-        path: 'staff',
+      {path: 'staff',
         component: StaffComponent,
+        // canActivate: [AuthGuard],
+        data: {         
+          role: ['Practice Member','Practice Coordinator','Practice Admin','PHO Admin']
+        },    
       },
       {
         path: 'files',
         component: FilesComponent,
+        data: {}
       },
       {
         path: 'workbooks',
         component: WorkbooksComponent,
+        // canActivate: [AuthGuard],
+        data: {         
+          role: ['Practice Member','Practice Coordinator','Practice Admin','PHO Admin']
+        }    
       },
     ]
   },
@@ -58,7 +71,6 @@ const routes: Routes = [
       {
         path: 'edreport',
         component: ReportComponent
-
       }
     ]
   },

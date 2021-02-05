@@ -26,8 +26,13 @@ $fontConfig: (
   input: mat-typography-level(inherit, 1.125, 400, 'Lato', 1.5px)
 );
 
-// Override Default Elements
+// Define dropdown typography config that overrides the font-family
+$dropdownFontFamily-typography: mat-typography-config(
+  $font-family: 'Lato' 
+);
 
+// Override typography for dropdown font family in Angular Material.
+@include mat-option-typography($dropdownFontFamily-typography);
 
 // Light Theme Text
 $dark-text: #000000;

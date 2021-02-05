@@ -1,13 +1,13 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as Chart from 'chart.js';
 import { NGXLogger } from 'ngx-logger';
 import { environment } from 'src/environments/environment';
-import { EdChart, EdChartDetails, Population, Quicklinks, Spotlight } from '../models/dashboard';
+import { EdChart, EdChartDetails, Population, Quicklinks, Spotlight, WebChartFilters, WebChartFilterMeasureId, WebChartId, WebChartFilterId} from '../models/dashboard';
 import { RestService } from '../rest.service';
 import { DrilldownService } from '../drilldown/drilldown.service';
 import { AuthenticationService } from '../services/authentication.service';
@@ -27,14 +27,19 @@ export class DashboardComponent implements OnInit {
   spotlight: Spotlight[];
   quickLinks: Quicklinks[];
   population: Population[];
-  edChart: EdChart[];
-  edChartData: any[];
-  edChartDetails: EdChartDetails[];
+  webChart: EdChart[];
+  webChartData: any[];
+  webChartDetails: EdChartDetails[];
+  webchartfilterselectedFilter: string;
+  webchartfilters: string;
+  webchartfilterList: any[] = [];
   monthlySpotlightTitle: string;
   monthlySpotlightBody: string;
   monthlySpotlightLink: string;
+  monthlySpotlightLinkLabel: string;
   monthlySpotlightImageUrl: string;
-  edChartTitle: string;
+  webChartTitle: string;
+  webChartTopLeftLabel: string;
   defaultUrl = environment.apiURL; 
   popData: any[] = [];
   qiData: any[] = [];
@@ -48,17 +53,25 @@ export class DashboardComponent implements OnInit {
   // Chart Options
   canvas: any;
   ctx: any;
-  edBarChart: any;
+  webBarChart: any;
   selectedBar: string;
   isLoggedIn$: boolean;
-  patientsMax: number;  
+  patientsMax: number; 
+  chartXValue: string[]; 
 
   drilldownOptions = {
     measureId: '42'
   };
 
   //download to excel
-  fileName= 'EDChart_Data.xlsx';  
+  fileName= 'EDChart_Data.xlsx'; 
+  
+  //dynamic chart - and setting of initial values
+  chartId: number = WebChartId.PopulationChart; 
+  measureId: number = WebChartFilterMeasureId.edChartdMeasureId; 
+  filterId: number = WebChartFilterId.dateFilterId; 
+  chartData: number[] ;
+  chartLabel: string[];
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
               public fb: FormBuilder, public dialog: MatDialog, private datePipe: DatePipe, private logger: NGXLogger,
@@ -78,19 +91,31 @@ export class DashboardComponent implements OnInit {
     this.getSpotlight();
     this.getQuicklinks();
     this.getPopulation();
-    this.getEdChart();
+    this.getWebChartFilters(this.chartId, this.measureId);
+    this.getWebChart(this.chartId, this.measureId, this.filterId);   
   }
-  ngAfterViewInit() {
+
+  ngOnChanges() {
+    if (this.webBarChart != undefined){
+     
+        this.webBarChart.update();  
+    }   
+  } 
+  
+  ngAfterViewInit() {  
+
     const $this = this; // This is the only way to get the bar chart to work using functions out of scope.(Fat arrow does not work)
-    this.canvas = document.getElementById('edChart');
-    this.ctx = this.canvas.getContext('2d');
-    this.edBarChart = new Chart(this.ctx, {
+    this.canvas = document.getElementById('webChart');     
+
+    this.ctx = this.canvas.getContext('2d'); 
+
+    this.webBarChart = new Chart(this.ctx, {
       type: 'bar',
       data: {
-        labels: [],
+        labels: [],       
         datasets: [{
           label: '# Patients',
-          data: [],
+          data: [],         
           maxBarThickness: 22,
           backgroundColor: '#FABD9E',
           hoverBackgroundColor: '#F0673C'
@@ -98,6 +123,9 @@ export class DashboardComponent implements OnInit {
       },
       options: {
         responsive: true,
+        legend: {
+          position: 'bottom'
+        },
         layout: {
           padding: {
             left: 42,
@@ -110,13 +138,13 @@ export class DashboardComponent implements OnInit {
           xAxes: [{
             ticks: {
               callback (value, index, values) {
-                return $this.transformDate(value);
-              }
+                return value;
+              }              
             }
           }],
           yAxes: [{
-            ticks: {
-              max: this.patientsMax
+            ticks: {            
+                max:this.patientsMax              
             }
           }]
 
@@ -132,10 +160,11 @@ export class DashboardComponent implements OnInit {
           $this.Showmodal(e, this, element); // This is the result of a "fake" JQuery this
         }
       }
-    });
+    });  
+    
   }
 
-
+  
   // Dahsboard Content
   getSpotlight() {
     this.spotlight = [];
@@ -144,11 +173,10 @@ export class DashboardComponent implements OnInit {
       this.logger.log(this.spotlight, "RETURNED SPOTLIGHT FIELDS");
       const imageName = this.spotlight[0].imageHyperlink;
       this.monthlySpotlightTitle = this.spotlight[0].header;
-      this.monthlySpotlightBody = this.spotlight[0].body;
-      //this.monthlySpotlightImageUrl = `${this.defaultUrl}/assets/img/${imageName}`;
-      //this.monthlySpotlightImageUrl = 'https://static1.squarespace.com/static/5c82a6f22727be5e5907c624/t/5f8dd43bef23221d7288dc08/1603130428143/Spotlight_img1.jpeg';
+      this.monthlySpotlightBody = this.spotlight[0].body;      
       this.monthlySpotlightImageUrl = this.spotlight[0].imageHyperlink;
       this.monthlySpotlightLink = this.spotlight[0].hyperlink;
+      this.monthlySpotlightLinkLabel = this.spotlight[0].hyperLinkLabel;
     });
   }
 
@@ -197,11 +225,8 @@ export class DashboardComponent implements OnInit {
             opDefURL: item.opDefURL,
             opDefURLExists: item.opDefURL === ''? false: true           
           });
-
           
-          this.dataSourceThree.data = this.conditionData;
-
-          
+          this.dataSourceThree.data = this.conditionData;          
         }
       });
     });
@@ -230,23 +255,81 @@ export class DashboardComponent implements OnInit {
 
 
   /* ED Chart =========================================*/
-  getEdChart() {
-    this.edChart = [];
+  getWebChart(chartId: number, measureId: number, filterId: number) {    
+  
+    this.webChart = [];
     let max = 0;
-    this.rest.getEdChartByUser().subscribe((data) => {
-      this.edChart = data;
-      this.edChartTitle = this.edChart[0].chartTitle;
-      this.edChart.forEach(item => {
-        this.addData(this.edBarChart,
-          this.transformToolTipDate(item.admitDate),
-          item.edVisits); // Getting data to the chart, will be easier to update if needed
+    let counter = 0;    
+
+   if(this.webBarChart !== undefined) {   
+
+     let n = this.webBarChart.data.labels.length;
+
+     for (counter = 0; counter < n; counter++){
+      this.removeData(this.webBarChart);          
+    }   
+  }   
+
+    this.rest.getWebChartByUser(chartId,measureId,filterId).subscribe((data) => {     
+
+      this.webChart = data; 
+   
+      this.webChartTitle = this.webChart[0].chartTitle;   
+      this.webChartTopLeftLabel = this.webChart[0].chartTopLeftLabel;
+
+      this.webChart.forEach(item => {              
+
+          this.addData(this.webBarChart,
+         
+          item.chartLabel,
+          item.edVisits); // Getting data to the chart, will be easier to update if needed           
+     
         if (item.edVisits > max) {
-          max = item.edVisits;
-        }
-      });
+          max = item.edVisits;          
+        }    
+        
+      });      
+      
       this.patientsMax = max + 1; // This is here to add space above each bar in the chart (Max Number of patients, plus one empty tick on the y-axis)
-      this.edBarChart.config.options.scales.yAxes[0].ticks.max = this.patientsMax;
+      this.webBarChart.config.options.scales.yAxes[0].ticks.max = this.patientsMax;
+      this.webBarChart.update();    
+      
     });
+  }
+
+  //get web chart filters
+  getWebChartFilters(chartId: number, measureId: number) {
+    this.webchartfilterselectedFilter = null;
+    this.rest.getWebChartFilters(chartId, measureId).subscribe((data) => {
+      this.webchartfilterList = data;
+      this.filterId = this.webchartfilterList[0].filterId;
+      
+      this.webchartfilterselectedFilter = this.webchartfilterList[0].filterId.toString();
+    });
+  }
+
+  //chart report condition change
+  onWebReportConditionChange(event: any) {
+    
+
+    this.filterId = event.value;
+    this.chartId = WebChartId.PopulationChart;  
+    
+    //dynamically pass the parameters to getWebChart function to generate the report
+    this.getWebChart(this.chartId, this.measureId, this.filterId);
+    this.webBarChart.update();
+  }
+
+  updateChartReport(element: any){
+    this.logger.log("switching chart object to measureId: " + element.measureId.toString());
+    this.measureId = element.measureId;
+    this.getWebChartFilters(this.chartId, this.measureId);
+    this.getWebChart(this.chartId, element.measureId, this.filterId);
+  }
+
+  //click WEB CHART to switch back to ED CHART
+  switchBackToEDChart() {
+    this.getWebChart(WebChartId.EDChart, WebChartFilterMeasureId.conditionDefaultMeasureId, WebChartFilterId.conditionDefaultFilterId);
   }
 
   transformToolTipDate(date) {
@@ -261,12 +344,22 @@ export class DashboardComponent implements OnInit {
   }
 
   addData(chart, label, data) {
+   
     chart.data.labels.push(label);
+  
     chart.data.datasets.forEach((dataset) => {
-      dataset.data.push(data);
+      dataset.data.push(data);     
     });
     chart.update();
   }
+
+  removeData(chart) {
+    chart.data.labels.pop();
+    chart.data.datasets.forEach((dataset) => {
+        dataset.data.pop();
+    });
+    chart.update();
+}
 
   /* Open Modal (Dialog) on bar click */
   Showmodal(event, chart, element): void {
@@ -274,9 +367,9 @@ export class DashboardComponent implements OnInit {
     this.openDialogWithDetails();
   }
   openDialogWithDetails() {
-    this.edChartDetails = [];
-    this.rest.getEdChartDetails(this.selectedBar).subscribe((data) => {
-      this.edChartDetails = data;
+    this.webChartDetails = [];
+    this.rest.getWebChartDetails(this.selectedBar).subscribe((data) => {
+      this.webChartDetails = data;
       const dialogRef = this.dialog.open(this.callEDDialog);
     });
 

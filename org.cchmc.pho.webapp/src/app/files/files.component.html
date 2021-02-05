@@ -80,15 +80,17 @@
 
     <!-- Watch List Column -->
     <ng-container matColumnDef="watchFlag">
-      <th mat-header-cell *matHeaderCellDef> Watch List
+      <th mat-header-cell *matHeaderCellDef> Favorites
         <mat-checkbox class="table-header-checkbox" [(ngModel)]="watchFlag" (change)="isOnWatchlist($event)">
         </mat-checkbox>
       </th>
       <td mat-cell *matCellDef="let row; let i = renderIndex;" (click)="updateWatchlistStatus(row.id, i)"
         (click)="row.watchFlag = !row.watchFlag">
         <button mat-icon-button>
-          <i class="material-icons watchlist-icon" [ngClass]="row.watchFlag ? 'on-watchlist' : 'off-watchlist'">
-            remove_red_eye
+          <i class="material-icons favorite-icon" [ngClass]="row.watchFlag ? 'on-watchlist' : 'off-watchlist'">           
+            <span class="material-icons">
+              favorite
+              </span>
           </i>
         </button>
       </td>

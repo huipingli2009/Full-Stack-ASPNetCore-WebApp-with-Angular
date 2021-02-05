@@ -21,6 +21,8 @@ namespace org.cchmc.pho.api.Mappings
             CreateMap<Gender, GenderViewModel>();
             CreateMap<State, StateViewModel>();
             CreateMap<SimplifiedPatient, SimplifiedPatientViewModel>();
+            CreateMap<DuplicatePatient, DuplicatePatientViewModel>();
+            CreateMap<MergeConfirmationViewModel, MergeConfirmation>();
             CreateMap<PopulationOutcomeMetric, PopulationOutcomeMetricViewModel>();
         }
     }

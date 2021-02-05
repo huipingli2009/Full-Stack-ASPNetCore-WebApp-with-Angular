@@ -15,6 +15,32 @@ export interface Patients {
     close?: boolean;
     totalRecords: number;
 }
+export interface DuplicatePatient extends Patients {
+    gender: string;
+    genderId: number;
+    pcpId: number;
+    patientMRNId: string;
+    headerText: string;
+    detailHeaderText: string;
+    matchType: number;
+    allowContinue: boolean;
+    allowReactivate: boolean;
+    allowKeepAndSave: boolean;
+    allowMerge: boolean;
+}
+
+export interface MergePatientConfirmation {
+    matchType: number;
+    mergeAction: number;
+    topPatientId: number;
+    bottomPatientId: number;
+    pcP_StaffID: number;
+    topPatientFirstName: string;
+    topPatientLastName: string;
+    topPatientDob: string;
+    topPatientGenderId: number;
+}
+
 export interface PatientClass {
     resultCount: number;
     results: Patients[];
@@ -147,6 +173,24 @@ export enum patientAdminActionTypeEnum {
     Accept = 1,
     Decline = 2,
     Update = 3  
+}
+
+
+export enum patientDuplicateMatchTypeEnum {
+    CompleteMatch = 1,
+    PartialMatch = 2 
+}
+
+export enum patientDuplicateSaveTypeEnum {
+    Update = 1,
+    New = 2 
+}
+
+export enum patientDuplicateActionEnum {
+    Continue = 1,
+    Reactivate = 2,
+    KeepAndSave = 3,
+    Merge = 4
 }
 
 export enum addPatientProcessEnum {

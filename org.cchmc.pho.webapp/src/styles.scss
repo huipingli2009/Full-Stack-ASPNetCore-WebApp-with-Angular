@@ -24,6 +24,8 @@ $phoweb-theme: mat-light-theme($phoweb-primary, $phoweb-accent, $phoweb-warn);
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include angular-material-theme($phoweb-theme);
+//@include mat-select-typography($phoweb-theme);
+
 
 // // Custom Theming for Angular Material
 // // For more information: https://material.angular.io/guide/theming
@@ -61,6 +63,7 @@ body {
   --purple-dark: #451b5f;
   --purple-light: #e3dde7;
   --tertiary-green: #4c9e45;
+  --alert-accent: #F0673C;
 }
 
 html,
@@ -106,6 +109,7 @@ h1 {
   padding-bottom: 4px;
   color: #4a4a4a;
   font-size: 13px;
+  font-family: Lato;
   line-height: 18px;
   letter-spacing: normal;
   .mat-select {
@@ -129,7 +133,7 @@ h1 {
   }
   .mat-select-arrow {
     border-left: none;
-    border-right: none;
+    border-right: none;    
   }
   .mat-form-field-underline {
     background-color: #ddecea;
@@ -218,11 +222,12 @@ h1 {
   }
 }
 
+
 .fill-form-field {
   width: 100%;
 }
 
-// Button Toggle Styles (Could be used to iverride default)
+// Button Toggle Styles (Could be used to override default)
 
 .mat-button-toggle-group-appearance-standard {
   border-radius: 14px !important;
@@ -342,7 +347,7 @@ h1 {
     font-size: 12px;
     line-height: 18px;
     letter-spacing: normal;
-    color: #272624;
+    color: #272624;      
     font-weight: 600;
     .mat-button {
       padding: 0;
@@ -350,6 +355,7 @@ h1 {
     button {
       font-size: 12px;
       line-height: 18px;
+      font-weight: bold;
     }
     button:after {
       width: 67%;
@@ -360,7 +366,17 @@ h1 {
       cursor: pointer;
     }
     a:link {
-      color: #272624;       
+      font-family: ArcherSemiBold;      
+      color: var(--purple-dark);      
+    }
+    .UserText {
+      font-family: "Lato";
+      color: #4A4A4A;
+    }
+    .coachName {
+      font-size: 13px;
+      font-weight:600;
+      text-decoration: underline;
     }
   }
   .practicecoach_underline {
@@ -483,10 +499,13 @@ h1 {
 
 .account-icon {
   vertical-align: bottom;  
+  color: var(--alert-accent);
 }
 
-.email-icon{
-  vertical-align: middle;  
+.email-icon{  
+  margin-left: 0em;
+  vertical-align: middle; 
+  color: var(--alert-accent);
 }
 
 .whitespace{
@@ -513,12 +532,12 @@ h1 {
     font-family: "ArcherSemiBold";
     font-size: 26px;
     line-height: 18px;
-    letter-spacing: normal;
+    letter-spacing: normal;    
   }
   .mat-select-value {
     max-width: 100%;
     width: auto;
-    padding-right: 22px;
+    padding-right: 22px;    
   }
   .mat-select-value-text {
     color: var(--primary-color);
@@ -542,8 +561,9 @@ h1 {
   }
   .mat-select-arrow {
     border-left: none;
-    border-right: none;
+    border-right: none;    
   }
+  
   .mat-form-field-underline {
     display: none;
     bottom: 0;
@@ -577,6 +597,13 @@ h1 {
 .mat-column-practiceTotalCondition {
   cursor: pointer;
 }
+/* Click through cursor*/
+.mat-column-dashboardLabel {
+  cursor: pointer;
+}
+.chartFilterFont {
+  font-size: x-small;
+}
 /* toast styles */
 .toast-title {
   font-weight: bold;
@@ -590,7 +617,7 @@ h1 {
 }
 .toast-message a,
 .toast-message label {
-  color: var(--primary-color);
+  color: var(--alert-accent);
   font-size: 13px;
   font-weight: bold;
 }
@@ -600,18 +627,19 @@ h1 {
 }
 .alert-icon {
   margin-right: 18px;
-  color: var(--primary-color);
+  color: var(--alert-accent);
   font-size: 20px;
 }
 .alert-link {
   font-weight: bold;
   margin-left: 18px;
+  color: var(--alert-accent) !important;
 }
 .alert-filter-link {
   font-weight: bold;
   margin-left: 18px;
   text-decoration: underline;
-  color: var(--primary-color);
+  color: var(--alert-accent);
   font-size: 13px;
 }
 span.alert-filter-link:hover {
@@ -646,7 +674,7 @@ button.toast-close-button {
   border: 0 !important;
   position: relative !important;
   padding-right: 10px !important;
-  color: var(--primary-color) !important;
+  color: var(--alert-accent) !important;
 }
 .toast-container {
   pointer-events: none;
@@ -671,8 +699,8 @@ button.toast-close-button {
   background-repeat: no-repeat;
   background-size: 24px;
   color: black;
-  background-color: #f2fafa !important;
-  border: solid 1.5px var(--primary-lighter-color);
+  background-color:rgba(240,103,60,0.05) !important;
+  border: solid 1.5px var(--alert-accent);
   box-shadow: 1px 1px 4px 0 rgba(0, 109, 99, 0.15);
 }
 .toast-container .ngx-toastr:hover {
@@ -791,7 +819,9 @@ button.toast-close-button {
   .content-text {
     padding: 0px 38px 25px 25px;
     & .mat-subheading-2 {
-      margin-bottom: 11.2px;
+      // margin-bottom: 11.2px;
+      padding-bottom: 1px !important;
+      margin-bottom: 1.2px;
     }
     a {
       color: var(--purple-dark);
@@ -834,17 +864,21 @@ button.toast-close-button {
 // Content - ED CHART
 .ed-chart {
   .mat-subheading-2 {
-    margin-top: -34px;
+    margin-top: -24px;
+    margin-bottom: -34px;
   }
 }
 .ed-table {
   color: #333;
   background: white;
   border: 1px solid grey;
-  font-size: 12pt;
+  font-size: 12pt;  
   border-collapse: collapse;
   margin-bottom: 1em;
 
+  thead th {
+    font-weight: bold;
+  }
   thead th,
   tfoot th {
     color: #777;
@@ -863,6 +897,7 @@ button.toast-close-button {
     text-decoration: underline;
     cursor: pointer;
   }
+ 
 }
 
 // Content - Population Details
@@ -1068,6 +1103,17 @@ button.toast-close-button {
   }
 }
 
+.patients-merge-header {
+  background-color: var(--primary-color);
+  font-size: 15px;
+  line-height: 20px;
+  color: white;
+  padding: 21px;
+  font-weight: Bold;
+  text-align: left;
+  letter-spacing: normal;
+}
+
 #patients,
 #asthmaPatients,
 #staff,
@@ -1171,8 +1217,7 @@ button.toast-close-button {
   .patientButtonAlign {        
     justify-content: flex-end;          
   }
-
-  
+ 
 .whitespace{
   margin-left: 1.5em; 
   margin-right: 1.5em; 
@@ -1523,13 +1568,13 @@ button.toast-close-button {
   .icons-white-mail {
     height: 16px;
     width: 20px;
-    color: #f0673c;
+    color: var(--alert-accent);
   }
 
   .icons-white-mail-input {
     height: 8px;
     width: 10px;
-    color: #f0673c;
+    color: var(--alert-accent);
   }
 
 
@@ -2021,7 +2066,7 @@ button.toast-close-button {
   }
   .ed-report-download {
     margin-right: 50px;
-  }
+  } 
 }
 
 .edreport-title {
@@ -2030,10 +2075,17 @@ button.toast-close-button {
   margin-left: 50px;
 }
 
+/* For pop-up report mat-dialog-action button style */
+.ed-report-action {
+    font-family: ArcherBold;
+    background-color: var(--alert-accent);
+    color: white; 
+    text-transform: uppercase;
+}
+
 /* Workbooks ==================================================================================*/
 #workbooks {
   //border-radius: 7px 7px 0 0;
-
 
   .top-date-container {
     padding: 22px 28px 0;
@@ -2068,9 +2120,9 @@ button.toast-close-button {
       font-size: 14px;
       font-style: italic;
       margin-bottom: 9px;
-    }
+    }   
+      
   }
-
   
   .button-container {
     background-color: white;
@@ -2681,7 +2733,7 @@ display: block !important;
     box-shadow: 1px 1px 4px 0 rgba(0,109,99,0.15);
     th.mat-header-cell.mat-column-icon {
     
-      background-color: #F0673C;  
+      background-color: var(--alert-accent);  
     
     }
 
@@ -2692,7 +2744,7 @@ display: block !important;
       font-size: 13px;
       font-weight: bold;  
       vertical-align: middle;
-      background-color: #F0673C; 
+      background-color: var(--alert-accent); 
       width: 179.78px;
       height: 38px; 
     }
