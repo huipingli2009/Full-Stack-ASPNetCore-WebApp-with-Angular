@@ -60,7 +60,7 @@
             <div  style="width: 50px;height: 25px;">&nbsp;</div>           
             <div  fxLayoutAlign="space-around end !important">
                 <mat-form-field class="selectFilterFontColor" >
-                    <mat-label class="chartFilterFont" *ngIf = "reportConditionSelected" >Select Filter</mat-label>
+                    <mat-label class="chartFilterFont" *ngIf = "reportFilterSelected" >Select Filter</mat-label>
                     <mat-select [(ngModel)]="webchartfilters" (selectionChange)="onWebReportConditionChange($event)" class="mat-subheading-2 text-secondary">
                       <mat-option class="selectFilterFontColor" *ngFor="let webchartfilter of webchartfilterList" [value]="webchartfilter.filterId" >
                         {{webchartfilter.filterLabel}}

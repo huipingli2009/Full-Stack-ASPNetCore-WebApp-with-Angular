@@ -58,7 +58,7 @@ export class DashboardComponent implements OnInit {
   isLoggedIn$: boolean;
   patientsMax: number; 
   chartXValue: string[]; 
-  reportConditionSelected: boolean = true;
+  reportFilterSelected: boolean = true;
 
   drilldownOptions = {
     measureId: '42'
@@ -332,7 +332,7 @@ export class DashboardComponent implements OnInit {
   //chart report condition change
   onWebReportConditionChange(event: any) {
     
-
+    this.reportFilterSelected = false;
     this.filterId = event.value;
     this.webchartfilterselectedFilter = this.webchartfilterList.find(f => f.filterId === event.value);
     
