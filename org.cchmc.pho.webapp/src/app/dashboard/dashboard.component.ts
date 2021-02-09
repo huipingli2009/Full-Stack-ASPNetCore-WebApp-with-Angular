@@ -31,7 +31,6 @@ export class DashboardComponent implements OnInit {
   webChartData: any[];
   webChartDetails: EdChartDetails[];
   webchartfilterselectedFilter: string;
-  webchartfilters: string;
   webchartfilterList: any[] = [];
   monthlySpotlightTitle: string;
   monthlySpotlightBody: string;
@@ -39,6 +38,7 @@ export class DashboardComponent implements OnInit {
   monthlySpotlightLinkLabel: string;
   monthlySpotlightImageUrl: string;
   webChartTitle: string;
+  webchartfilters: string;
   webChartTopLeftLabel: string;
   defaultUrl = environment.apiURL; 
   popData: any[] = [];
@@ -58,6 +58,7 @@ export class DashboardComponent implements OnInit {
   isLoggedIn$: boolean;
   patientsMax: number; 
   chartXValue: string[]; 
+  reportConditionSelected: boolean = true;
 
   drilldownOptions = {
     measureId: '42'
@@ -124,7 +125,21 @@ export class DashboardComponent implements OnInit {
       options: {
         responsive: true,
         legend: {
-          position: 'bottom'
+          position: 'bottom',
+          // labels: {
+          //   verticalAlign: true
+          // }
+          // align: 'end',
+          // labels: {
+          //   fontColor: 'rgb(255, 99, 132)',
+          //   align: 'vertical'
+          // }
+          labels: {
+            //usePointStyle: true,
+            //fontColor: 'rgb(255,99,132)',
+            //boxWidth: 6
+            
+          }
         },
         layout: {
           padding: {
@@ -310,7 +325,7 @@ export class DashboardComponent implements OnInit {
 
   //chart report condition change
   onWebReportConditionChange(event: any) {
-    
+    this.reportConditionSelected = false;
 
     this.filterId = event.value;
     this.chartId = WebChartId.PopulationChart;  
