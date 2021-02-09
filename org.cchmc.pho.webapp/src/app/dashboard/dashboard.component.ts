@@ -161,7 +161,8 @@ export class DashboardComponent implements OnInit {
             }
           }],
           yAxes: [{
-            ticks: {            
+            ticks: {   
+              beginAtZero: true,   //force the y-axis to start at 0      
                 max:this.patientsMax              
             }
           }]
