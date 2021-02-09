@@ -136,13 +136,15 @@
                             <th mat-header-cell *matHeaderCellDef> Measure </th>
                             <td mat-cell *matCellDef="let element" matTooltip="{{element.measureDesc}}"> 
                                 <ng-container *ngIf = "element.opDefURL == ''"  >                                  
-                                    {{element.dashboardLabel}}
+                                    {{element.dashboardLabel}}                                    
                                 </ng-container>
                                 <ng-container *ngIf = "element.opDefURL != ''"  >
+                                    {{element.dashboardLabel}}
                                     <a href="{{element.opDefURL}}" target= "_blank">
-                                        {{element.dashboardLabel}}
-                                    </a> 
-                                </ng-container>                              
+                                        <mat-icon  class="fas fa-info-circle alert-icon" style="font-size: 1em;"></mat-icon>
+                                    </a>
+                                </ng-container>     
+
                             </td>
                         </ng-container>
 
