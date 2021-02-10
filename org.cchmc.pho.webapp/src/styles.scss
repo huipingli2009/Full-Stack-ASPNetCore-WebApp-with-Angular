@@ -26,6 +26,8 @@ $phoweb-theme: mat-light-theme($phoweb-primary, $phoweb-accent, $phoweb-warn);
 @include angular-material-theme($phoweb-theme);
 //@include mat-select-typography($phoweb-theme);
 
+//add a new theme for dropdown font color
+
 
 // // Custom Theming for Angular Material
 // // For more information: https://material.angular.io/guide/theming
@@ -57,6 +59,9 @@ $phoweb-theme: mat-light-theme($phoweb-primary, $phoweb-accent, $phoweb-warn);
 /* You can add global styles to this file, and also import other style files */
 @import "assets/PHO-theme.scss";
 @import "assets/icons/fontawesome-free-5.12.1-web/css/all.css";
+
+//This is the future work for chartjs report select part. 
+// @include mat-select-theme();
 
 //Additional Colors
 body {
@@ -603,7 +608,25 @@ h1 {
 }
 .chartFilterFont {
   font-size: x-small;
+  color: var(--accent-color)!important;
 }
+
+.selectFilterFontColor {
+  .mat-select-value-text {
+    color: var(--accent-color)!important;
+  }  
+}
+.webchartfilterFont {
+  font-size: 5pt!important;
+}
+.selectFilterFontColor { 
+    color: var(--accent-color)!important;
+   
+    .mat-option {
+      color: var(--accent-color)!important;
+    }
+}
+
 /* toast styles */
 .toast-title {
   font-weight: bold;
