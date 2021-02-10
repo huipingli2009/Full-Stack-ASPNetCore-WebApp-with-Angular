@@ -173,9 +173,7 @@ export class DashboardComponent implements OnInit {
         },
         onClick (e) {
           let element = this.getElementAtEvent(e);
-          if (element.length) {
-            // this.selectedBar = element[0]._model.label;
-          }
+          
           $this.Showmodal(e, this, element); // This is the result of a "fake" JQuery this
         }
       }
@@ -241,6 +239,7 @@ export class DashboardComponent implements OnInit {
             practiceTotal: item.practiceTotal,
             networkTotal: item.networkTotal,
             measureId: item.measureId,
+            conditionId: item.conditionId,
             opDefURL: item.opDefURL,
             opDefURLExists: item.opDefURL === ''? false: true           
           });
@@ -268,7 +267,7 @@ export class DashboardComponent implements OnInit {
   toFilteredConditions(element) {
     this.logger.log(element.measureId, "toFilteredConditions: measureId");
     this.filterService.updateIsFilteringConditions(true);
-    this.filterService.updateFilterType(element.measureId);
+    this.filterService.updateFilterType(element.conditionId);
     this.router.navigate(['/patients']);
   }
 
@@ -335,8 +334,8 @@ export class DashboardComponent implements OnInit {
     
     this.reportFilterSelected = false;
     this.filterId = event.value;
-    this.webchartfilterselectedFilter = this.webchartfilterList.find(f => f.filterId === event.value);
-    
+    this.webchartfilterselectedFilter = this.webchartfilterList.find(f => f.filterId === this.filterId);
+    this.logger.log("switching report condition to filterId: " + this.webchartfilterselectedFilter);
     //dynamically pass the parameters to getWebChart function to generate the report
     this.getWebChart(this.chartId, this.measureId, this.filterId);
     this.webBarChart.update();
@@ -364,7 +363,9 @@ export class DashboardComponent implements OnInit {
     return this.datePipe.transform(date, 'EE MM/dd');
   }
   transformAdmitDate(date) {
-    return this.datePipe.transform(date, 'yyyyMMdd');
+    let localYear = new Date().getFullYear();
+    this.logger.log("formatteddate " + this.datePipe.transform(date + ' , ' + localYear.toString(), 'yyyyMMdd').toString());
+    return this.datePipe.transform(date + ' , ' + localYear, 'yyyyMMdd').toString();
   }
 
   addData(chart, label, data) {
@@ -387,11 +388,18 @@ export class DashboardComponent implements OnInit {
 
   /* Open Modal (Dialog) on bar click */
   Showmodal(event, chart, element): void {
-    this.selectedBar = this.transformAdmitDate(element[0]._model.label);
-    this.openDialogWithDetails();
+    this.logger.log("starting ED modal");
+    if (this.measureId === WebChartFilterMeasureId.edChartdMeasureId){
+      this.logger.log("measure is edchart, loading dialog");
+      this.logger.log("selected bar: " + element[0]._model.label);
+      this.selectedBar = this.transformAdmitDate(element[0]._model.label);
+      this.openDialogWithDetails();
+    }
+
   }
   openDialogWithDetails() {
     this.webChartDetails = [];
+    this.logger.log("selected bar: " + this.selectedBar);
     this.rest.getWebChartDetails(this.selectedBar).subscribe((data) => {
       this.webChartDetails = data;
       const dialogRef = this.dialog.open(this.callEDDialog);
