@@ -41,6 +41,7 @@ export class Population {
     practiceId: number;
     dashboardLabel: string;
     measureId: number;
+    conditionId: number;
     measureDesc: string;
     measureType: string;
     practiceTotal: number;

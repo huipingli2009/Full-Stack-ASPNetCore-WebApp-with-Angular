@@ -222,6 +222,7 @@ export class DashboardComponent implements OnInit {
             practiceTotal: item.practiceTotal,
             networkTotal: item.networkTotal,
             measureId: item.measureId,
+            conditionId: item.conditionId,
             opDefURL: item.opDefURL,
             opDefURLExists: item.opDefURL === ''? false: true           
           });
@@ -249,7 +250,7 @@ export class DashboardComponent implements OnInit {
   toFilteredConditions(element) {
     this.logger.log(element.measureId, "toFilteredConditions: measureId");
     this.filterService.updateIsFilteringConditions(true);
-    this.filterService.updateFilterType(element.measureId);
+    this.filterService.updateFilterType(element.conditionId);
     this.router.navigate(['/patients']);
   }
 
