@@ -38,6 +38,7 @@ export class DashboardComponent implements OnInit {
   monthlySpotlightLinkLabel: string;
   monthlySpotlightImageUrl: string;
   webChartTitle: string;
+  webchartfilters: string;
   webChartTopLeftLabel: string;
   defaultUrl = environment.apiURL; 
   popData: any[] = [];
@@ -57,6 +58,7 @@ export class DashboardComponent implements OnInit {
   isLoggedIn$: boolean;
   patientsMax: number; 
   chartXValue: string[]; 
+  reportFilterSelected: boolean = true;
 
   drilldownOptions = {
     measureId: '42'
@@ -126,7 +128,21 @@ export class DashboardComponent implements OnInit {
       options: {
         responsive: true,
         legend: {
-          position: 'bottom'
+          position: 'bottom',
+          // labels: {
+          //   verticalAlign: true
+          // }
+          // align: 'end',
+          // labels: {
+          //   fontColor: 'rgb(255, 99, 132)',
+          //   align: 'vertical'
+          // }
+          labels: {
+            //usePointStyle: true,
+            //fontColor: 'rgb(255,99,132)',
+            //boxWidth: 6
+            
+          }
         },
         layout: {
           padding: {
@@ -145,7 +161,8 @@ export class DashboardComponent implements OnInit {
             }
           }],
           yAxes: [{
-            ticks: {            
+            ticks: {   
+              beginAtZero: true,   //force the y-axis to start at 0      
                 max:this.patientsMax              
             }
           }]
@@ -315,7 +332,8 @@ export class DashboardComponent implements OnInit {
 
   //chart report condition change
   onWebReportConditionChange(event: any) {
-    this.logger.log("switching report condition to filterId: " + event.value);
+    
+    this.reportFilterSelected = false;
     this.filterId = event.value;
     this.webchartfilterselectedFilter = this.webchartfilterList.find(f => f.filterId === event.value);
     
