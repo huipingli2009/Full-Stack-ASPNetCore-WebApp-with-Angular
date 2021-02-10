@@ -56,13 +56,13 @@
               
         <div fxLayout="column" fxLayoutAlign="center center">
             <div class="mat-subheading-2 text-secondary">{{webChartTitle}}</div> 
-            <div  style="width: 50px;height: 25px;">&nbsp;</div> 
-            <div  style="width: 50px;height: 25px;">&nbsp;</div>           
-            <div class="mat-subheading-2 text-secondary" fxLayoutAlign="space-around end !important">
-                <mat-form-field>
-                    <mat-label class="chartFilterFont" >Select Filter</mat-label>
+            <div  style="width: 50px;height: 20px;">&nbsp;</div> 
+            <div  style="width: 50px;height: 20px;">&nbsp;</div>           
+            <div  fxLayoutAlign="space-around end !important">
+                <mat-form-field class="selectFilterFontColor" >
+                    <mat-label class="chartFilterFont" *ngIf = "reportFilterSelected" >Select Filter</mat-label>
                     <mat-select [(ngModel)]="webchartfilters" (selectionChange)="onWebReportConditionChange($event)" class="mat-subheading-2 text-secondary">
-                      <mat-option *ngFor="let webchartfilter of webchartfilterList" [value]="webchartfilter.filterId" >
+                      <mat-option class="selectFilterFontColor" *ngFor="let webchartfilter of webchartfilterList" [value]="webchartfilter.filterId" >
                         {{webchartfilter.filterLabel}}
                       </mat-option>                     
                     </mat-select>
@@ -86,10 +86,10 @@
 
                     <table mat-table [dataSource]="dataSourceOne" class="mat-elevation-z8">
                         <ng-container matColumnDef="dashboardLabel">
-                            <th mat-header-cell *matHeaderCellDef> Measure </th>
-                            <td mat-cell *matCellDef="let element" matTooltip="{{element.measureDesc}}" (click)="updateChartReport(element)">
-                                {{element.dashboardLabel}}
-                            </td>
+                            <th mat-header-cell *matHeaderCellDef> Measure </th> 
+                                <td mat-cell *matCellDef="let element" matTooltip="{{element.measureDesc}}" (click)="element.practiceTotal < 1 ? $event.stopPropagation(): updateChartReport(element)">
+                                    {{element.dashboardLabel}}
+                                </td>
                         </ng-container>
 
                         <ng-container matColumnDef="practiceTotal">

@@ -30,8 +30,7 @@ export class DashboardComponent implements OnInit {
   webChart: EdChart[];
   webChartData: any[];
   webChartDetails: EdChartDetails[];
-  webchartfilterselectedFilter: string;
-  webchartfilters: string;
+  webchartfilterselectedFilter: WebChartFilters;
   webchartfilterList: any[] = [];
   monthlySpotlightTitle: string;
   monthlySpotlightBody: string;
@@ -39,6 +38,7 @@ export class DashboardComponent implements OnInit {
   monthlySpotlightLinkLabel: string;
   monthlySpotlightImageUrl: string;
   webChartTitle: string;
+  webchartfilters: string;
   webChartTopLeftLabel: string;
   defaultUrl = environment.apiURL; 
   popData: any[] = [];
@@ -58,6 +58,7 @@ export class DashboardComponent implements OnInit {
   isLoggedIn$: boolean;
   patientsMax: number; 
   chartXValue: string[]; 
+  reportFilterSelected: boolean = true;
 
   drilldownOptions = {
     measureId: '42'
@@ -67,9 +68,9 @@ export class DashboardComponent implements OnInit {
   fileName= 'EDChart_Data.xlsx'; 
   
   //dynamic chart - and setting of initial values
-  chartId: number = WebChartId.PopulationChart; 
-  measureId: number = WebChartFilterMeasureId.edChartdMeasureId; 
-  filterId: number = WebChartFilterId.dateFilterId; 
+  chartId: number; 
+  measureId: number; 
+  filterId: number;
   chartData: number[] ;
   chartLabel: string[];
 
@@ -91,8 +92,11 @@ export class DashboardComponent implements OnInit {
     this.getSpotlight();
     this.getQuicklinks();
     this.getPopulation();
-    this.getWebChartFilters(this.chartId, this.measureId);
-    this.getWebChart(this.chartId, this.measureId, this.filterId);   
+    this.chartId = WebChartId.PopulationChart; 
+    this.measureId = WebChartFilterMeasureId.edChartdMeasureId; 
+    this.filterId = WebChartFilterId.dateFilterId;
+    this.getWebChartFilters(this.chartId, this.measureId); 
+    this.logger.log("ngOnInit: filterid= " + this.filterId.toString());
   }
 
   ngOnChanges() {
@@ -124,7 +128,21 @@ export class DashboardComponent implements OnInit {
       options: {
         responsive: true,
         legend: {
-          position: 'bottom'
+          position: 'bottom',
+          // labels: {
+          //   verticalAlign: true
+          // }
+          // align: 'end',
+          // labels: {
+          //   fontColor: 'rgb(255, 99, 132)',
+          //   align: 'vertical'
+          // }
+          labels: {
+            //usePointStyle: true,
+            //fontColor: 'rgb(255,99,132)',
+            //boxWidth: 6
+            
+          }
         },
         layout: {
           padding: {
@@ -143,7 +161,8 @@ export class DashboardComponent implements OnInit {
             }
           }],
           yAxes: [{
-            ticks: {            
+            ticks: {   
+              beginAtZero: true,   //force the y-axis to start at 0      
                 max:this.patientsMax              
             }
           }]
@@ -302,18 +321,21 @@ export class DashboardComponent implements OnInit {
     this.webchartfilterselectedFilter = null;
     this.rest.getWebChartFilters(chartId, measureId).subscribe((data) => {
       this.webchartfilterList = data;
-      this.filterId = this.webchartfilterList[0].filterId;
-      
-      this.webchartfilterselectedFilter = this.webchartfilterList[0].filterId.toString();
+      this.webchartfilterselectedFilter = data[0];
+      this.filterId = data[0].filterId.toString();
+      this.logger.log("filterlist: " + data[0].toString() + " data: " + data.toString());
+      this.logger.log("getWebChartFilters, regenerate measureId: " + measureId.toString() + " filterId: " + this.filterId.toString() + "trying to set to: " + data[0].filterId.toString());
+      //New filters NECESSARILY means new chart generation. Trigger it here.
+      this.getWebChart(this.chartId, this.measureId, this.filterId);
     });
   }
 
   //chart report condition change
   onWebReportConditionChange(event: any) {
     
-
+    this.reportFilterSelected = false;
     this.filterId = event.value;
-    this.chartId = WebChartId.PopulationChart;  
+    this.webchartfilterselectedFilter = this.webchartfilterList.find(f => f.filterId === event.value);
     
     //dynamically pass the parameters to getWebChart function to generate the report
     this.getWebChart(this.chartId, this.measureId, this.filterId);
@@ -321,15 +343,17 @@ export class DashboardComponent implements OnInit {
   }
 
   updateChartReport(element: any){
-    this.logger.log("switching chart object to measureId: " + element.measureId.toString());
+    this.logger.log("switching chart object to measureId: " + element.measureId.toString() + " filterId: " + this.filterId.toString());
     this.measureId = element.measureId;
     this.getWebChartFilters(this.chartId, this.measureId);
-    this.getWebChart(this.chartId, element.measureId, this.filterId);
+    this.logger.log("switching chart object 2 to measureId: " + element.measureId.toString() + " filterId: " + this.filterId.toString());
   }
 
   //click WEB CHART to switch back to ED CHART
   switchBackToEDChart() {
-    this.getWebChart(WebChartId.EDChart, WebChartFilterMeasureId.conditionDefaultMeasureId, WebChartFilterId.conditionDefaultFilterId);
+    this.measureId = WebChartFilterMeasureId.edChartdMeasureId;
+    this.chartId = WebChartId.PopulationChart;
+    this.getWebChartFilters(this.chartId, this.measureId);
   }
 
   transformToolTipDate(date) {
