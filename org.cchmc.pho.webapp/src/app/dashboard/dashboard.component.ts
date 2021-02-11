@@ -229,8 +229,7 @@ export class DashboardComponent implements OnInit {
             practiceTotal: item.practiceTotal,
             networkTotal: item.networkTotal,
             measureId: item.measureId,
-            opDefURL: item.opDefURL,
-            opDefURLExists: item.opDefURL === ''? false: true 
+            opDefURL: item.opDefURL
           });
           this.dataSourceTwo.data = this.qiData;
         }
@@ -242,8 +241,7 @@ export class DashboardComponent implements OnInit {
             networkTotal: item.networkTotal,
             measureId: item.measureId,
             conditionId: item.conditionId,
-            opDefURL: item.opDefURL,
-            opDefURLExists: item.opDefURL === ''? false: true           
+            opDefURL: item.opDefURL   
           });
           
           this.dataSourceThree.data = this.conditionData;          
