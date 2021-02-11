@@ -228,7 +228,9 @@ export class DashboardComponent implements OnInit {
             measureDesc: item.measureDesc,
             practiceTotal: item.practiceTotal,
             networkTotal: item.networkTotal,
-            measureId: item.measureId
+            measureId: item.measureId,
+            opDefURL: item.opDefURL,
+            opDefURLExists: item.opDefURL === ''? false: true 
           });
           this.dataSourceTwo.data = this.qiData;
         }
