@@ -38,7 +38,7 @@ export class DashboardComponent implements OnInit {
   monthlySpotlightLinkLabel: string;
   monthlySpotlightImageUrl: string;
   webChartTitle: string;
-  webchartfilters: string;
+  webchartfilters: number;
   webChartTopLeftLabel: string;
   defaultUrl = environment.apiURL; 
   popData: any[] = [];
@@ -95,6 +95,7 @@ export class DashboardComponent implements OnInit {
     this.chartId = WebChartId.PopulationChart; 
     this.measureId = WebChartFilterMeasureId.edChartdMeasureId; 
     this.filterId = WebChartFilterId.dateFilterId;
+    this.webchartfilters = this.filterId;
     this.getWebChartFilters(this.chartId, this.measureId); 
     this.logger.log("ngOnInit: filterid= " + this.filterId.toString());
   }
@@ -321,8 +322,9 @@ export class DashboardComponent implements OnInit {
     this.rest.getWebChartFilters(chartId, measureId).subscribe((data) => {
       this.webchartfilterList = data;
       this.webchartfilterselectedFilter = data[0];
-      this.filterId = data[0].filterId.toString();
-      this.logger.log("filterlist: " + data[0].toString() + " data: " + data.toString());
+      this.filterId = data[0].filterId;
+      this.webchartfilters = data[0].filterId;
+      this.logger.log("filterlist: " + data[0] + " data: " + data);
       this.logger.log("getWebChartFilters, regenerate measureId: " + measureId.toString() + " filterId: " + this.filterId.toString() + "trying to set to: " + data[0].filterId.toString());
       //New filters NECESSARILY means new chart generation. Trigger it here.
       this.getWebChart(this.chartId, this.measureId, this.filterId);
@@ -335,6 +337,7 @@ export class DashboardComponent implements OnInit {
     this.reportFilterSelected = false;
     this.filterId = event.value;
     this.webchartfilterselectedFilter = this.webchartfilterList.find(f => f.filterId === this.filterId);
+    this.reportFilterSelected = true;
     this.logger.log("switching report condition to filterId: " + this.webchartfilterselectedFilter);
     //dynamically pass the parameters to getWebChart function to generate the report
     this.getWebChart(this.chartId, this.measureId, this.filterId);
