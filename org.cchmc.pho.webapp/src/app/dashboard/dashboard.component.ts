@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as Chart from 'chart.js';
 import { NGXLogger } from 'ngx-logger';
 import { environment } from 'src/environments/environment';
-import { EdChart, EdChartDetails, Population, Quicklinks, Spotlight, WebChartFilters, WebChartFilterMeasureId, WebChartId, WebChartFilterId} from '../models/dashboard';
+import { EdChart, EdChartDetails, Population, Quicklinks, Spotlight, WebChartFilters, WebChartFilterMeasureId, WebChartId, WebChartFilterId, DrillThruMeasureId} from '../models/dashboard';
 import { RestService } from '../rest.service';
 import { DrilldownService } from '../drilldown/drilldown.service';
 import { AuthenticationService } from '../services/authentication.service';
@@ -23,6 +23,7 @@ import * as XLSX from 'xlsx';
 export class DashboardComponent implements OnInit {
 
   @ViewChild('callEDDialog') callEDDialog: TemplateRef<any>;
+  @ViewChild('callNonEDPopulationDialog') callNonEDPopulationDialog: TemplateRef<any>;
 
   spotlight: Spotlight[];
   quickLinks: Quicklinks[];
@@ -73,6 +74,7 @@ export class DashboardComponent implements OnInit {
   filterId: number;
   chartData: number[] ;
   chartLabel: string[];
+  keys: any;
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
               public fb: FormBuilder, public dialog: MatDialog, private datePipe: DatePipe, private logger: NGXLogger,
@@ -128,20 +130,11 @@ export class DashboardComponent implements OnInit {
       options: {
         responsive: true,
         legend: {
-          position: 'bottom',
-          // labels: {
-          //   verticalAlign: true
-          // }
-          // align: 'end',
-          // labels: {
-          //   fontColor: 'rgb(255, 99, 132)',
-          //   align: 'vertical'
-          // }
-          labels: {
+          position: 'bottom',          
+          labels: {  //leave the coding here for future use
             //usePointStyle: true,
             //fontColor: 'rgb(255,99,132)',
-            //boxWidth: 6
-            
+            //boxWidth: 6            
           }
         },
         layout: {
@@ -169,16 +162,16 @@ export class DashboardComponent implements OnInit {
 
         },
         tooltips: {
-          enabled: true
+          enabled: true,
+          mode: 'point'
         },
         onClick (e) {
-          let element = this.getElementAtEvent(e);
+          let element = this.getElementAtEvent(e);  
           
           $this.Showmodal(e, this, element); // This is the result of a "fake" JQuery this
-        }
+        }       
       }
-    });  
-    
+    });     
   }
 
   
@@ -389,20 +382,35 @@ export class DashboardComponent implements OnInit {
   /* Open Modal (Dialog) on bar click */
   Showmodal(event, chart, element): void {
     this.logger.log("starting ED modal");
+
+    let drillThruMeasureId;
+    let tempFilterId;    
+
     if (this.measureId === WebChartFilterMeasureId.edChartdMeasureId){
       this.logger.log("measure is edchart, loading dialog");
       this.logger.log("selected bar: " + element[0]._model.label);
-      this.selectedBar = this.transformAdmitDate(element[0]._model.label);
-      this.openDialogWithDetails();
+      this.selectedBar = this.transformAdmitDate(element[0]._model.label);      
+      
+       drillThruMeasureId = DrillThruMeasureId.EDDrillThruMeasureId;
+       tempFilterId = element[0]._index + 1;     
     }
+    else {   //all the non-ED chart reports 
+      this.logger.log("measure is non edchart, loading dialog");
+      this.logger.log("selected bar: " + element[0]._index);     
+     
+      drillThruMeasureId = DrillThruMeasureId.NonEDDrillThruMeasureId;
+      tempFilterId = element[0]._index + 1;       
+    }
+     
+    this.openDrilldownDialog(drillThruMeasureId,tempFilterId);
+  }  
 
-  }
-  openDialogWithDetails() {
+  openNonEDPopulationDialogWithDetails(drillThruMeasureId: number,tempFilterId: number) {
     this.webChartDetails = [];
     this.logger.log("selected bar: " + this.selectedBar);
-    this.rest.getWebChartDetails(this.selectedBar).subscribe((data) => {
+    this.rest.getMeasureDrilldownTable(drillThruMeasureId,tempFilterId).subscribe((data) => {
       this.webChartDetails = data;
-      const dialogRef = this.dialog.open(this.callEDDialog);
+      const dialogRef = this.dialog.open(this.callNonEDPopulationDialog);
     });
 
     // Leaving this here incase we need to handle some things when a modal closes
@@ -411,9 +419,10 @@ export class DashboardComponent implements OnInit {
     // });
   }
 
-  OpenReport() {
-    window.open(`${this.defaultUrl}/edreport`, '_blank');       
-  }
+  //leave this function for future use
+  // OpenReport() {
+  //   window.open(`${this.defaultUrl}/edreport`, '_blank');       
+  // }
 
   onSelectedPatient(id: number, name: string){  
 
@@ -436,5 +445,23 @@ export class DashboardComponent implements OnInit {
     /* save to file */
     XLSX.writeFile(wb, this.fileName);  
     
+  }
+
+  openDrilldownDialog(measure,filterId) {    
+    let drillThruText;
+
+    if (measure == DrillThruMeasureId.EDDrillThruMeasureId) {
+      drillThruText = 'ED Details'
+    }
+    else {
+      drillThruText = 'Patients Details'
+    }
+    
+    var drilldownOptions = {
+      measureId: measure, 
+      filterId: filterId, 
+      displayText: drillThruText     
+    };
+    this.drilldownService.open(drilldownOptions);
   }
 }
