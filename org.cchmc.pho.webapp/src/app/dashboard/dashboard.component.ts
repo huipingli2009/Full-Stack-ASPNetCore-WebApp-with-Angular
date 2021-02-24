@@ -406,26 +406,7 @@ export class DashboardComponent implements OnInit {
     }
      
     this.openDrilldownDialog(drillThruMeasureId,tempFilterId);
-  }  
-
-  openNonEDPopulationDialogWithDetails(drillThruMeasureId: number,tempFilterId: number) {
-    this.webChartDetails = [];
-    this.logger.log("selected bar: " + this.selectedBar);
-    this.rest.getMeasureDrilldownTable(drillThruMeasureId,tempFilterId).subscribe((data) => {
-      this.webChartDetails = data;
-      const dialogRef = this.dialog.open(this.callNonEDPopulationDialog);
-    });
-
-    // Leaving this here incase we need to handle some things when a modal closes
-    // dialogRef.afterClosed().subscribe(result => {
-
-    // });
-  }
-
-  //leave this function for future use
-  // OpenReport() {
-  //   window.open(`${this.defaultUrl}/edreport`, '_blank');       
-  // }
+  } 
 
   onSelectedPatient(id: number, name: string){  
 
