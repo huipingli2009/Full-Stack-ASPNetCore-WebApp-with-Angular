@@ -113,5 +113,5 @@ export enum WebChartFilterId {
 
 export enum DrillThruMeasureId {
     EDDrillThruMeasureId = 8,
-    NonEDDrillThruMeasureId = 6  
+    PatientListDrillThruMeasureId = 6  
 }

@@ -401,7 +401,7 @@ export class DashboardComponent implements OnInit {
       this.logger.log("measure is non edchart, loading dialog");
       this.logger.log("selected bar: " + element[0]._index);     
      
-      drillThruMeasureId = DrillThruMeasureId.NonEDDrillThruMeasureId;
+      drillThruMeasureId = DrillThruMeasureId.PatientListDrillThruMeasureId;
       tempFilterId = element[0]._index + 1;       
     }
      
@@ -438,7 +438,7 @@ export class DashboardComponent implements OnInit {
       drillThruText = 'ED Details'
     }
     else {
-      drillThruText = 'Patients Details'
+      drillThruText = 'Patient Details'
     }
     
     var drilldownOptions = {

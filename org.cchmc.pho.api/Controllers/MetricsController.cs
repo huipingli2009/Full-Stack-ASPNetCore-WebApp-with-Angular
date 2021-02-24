@@ -113,7 +113,7 @@ namespace org.cchmc.pho.api.Controllers
         public async Task<IActionResult> GetDrillthruTable(string measure, string filter)
         {
             if (!int.TryParse(measure, out var measureId))
-                return BadRequest("measure is not a valid integer"); 
+                return BadRequest("measure is not a valid integer");
             if (!int.TryParse(filter, out var filterId))
                 return BadRequest("filter is not a valid integer");
 
@@ -135,7 +135,7 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
-       
+
         [HttpGet("outcomepop")]
         [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin, PHO Leader")]
         [SwaggerResponse(200, type: typeof(List<PopulationOutcomeMetricViewModel>))]
@@ -169,7 +169,7 @@ namespace org.cchmc.pho.api.Controllers
         public async Task<IActionResult> GetWebChartFilters(int chartId, int measureId)
         {
             try
-            {               
+            {
                 // call the data method
                 var data = await _metricDal.GetWebChartFilters(chartId, measureId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
