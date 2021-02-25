@@ -110,3 +110,8 @@ export enum WebChartFilterId {
     locationFilterId = 6,
     ageFilterId = 7
 }
+
+export enum DrillThruMeasureId {
+    EDDrillThruMeasureId = 8,
+    PatientListDrillThruMeasureId = 6  
+}
