@@ -160,23 +160,23 @@ namespace org.cchmc.pho.unittest.ControllerTests
         public async Task ListEDChart_Mapping_Success()
         {
             // setup
-            var myMetrics = new List<EDChart>()
+            var myMetrics = new List<WebChartData>()
             {
-                new EDChart()
+                new WebChartData()
                 {
                     PracticeId = 1,
                     AdmitDate = new DateTime(2020, 12, 1, 12, 12, 00, 00),
                     ChartLabel = "ChartTitleEtc1",
                     ChartTitle = "TitleOfSomeKind1",
-                    EDVisits = 8
+                    BarValue1 = 8
                 },
-                new EDChart()
+                new WebChartData()
                 {
                     PracticeId = 1,
                     AdmitDate = new DateTime(2020, 12, 1, 12, 12, 00, 00),
                     ChartLabel = "ChartTitleEtc2",
                     ChartTitle = "TitleOfSomeKind2",
-                    EDVisits = 12
+                    BarValue1 = 12
                 }
             };
             _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
@@ -185,7 +185,7 @@ namespace org.cchmc.pho.unittest.ControllerTests
 
             // execute
             var result = await _MetricController.ListWebChart(2, 27, 2) as ObjectResult;
-            var resultList = result.Value as List<EDChartViewModel>;
+            var resultList = result.Value as List<WebChartDataViewModel>;
 
             // assert
             Assert.AreEqual(2, resultList.Count);
@@ -193,12 +193,12 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.AreEqual(myMetrics[0].AdmitDate, resultList[0].AdmitDate);
             Assert.AreEqual(myMetrics[0].ChartLabel, resultList[0].ChartLabel);
             Assert.AreEqual(myMetrics[0].ChartTitle, resultList[0].ChartTitle);
-            Assert.AreEqual(myMetrics[0].EDVisits, resultList[0].EDVisits);
+            Assert.AreEqual(myMetrics[0].BarValue1, resultList[0].BarValue1);
             Assert.AreEqual(myMetrics[1].PracticeId, resultList[1].PracticeId);
             Assert.AreEqual(myMetrics[1].AdmitDate, resultList[1].AdmitDate);
             Assert.AreEqual(myMetrics[1].ChartLabel, resultList[1].ChartLabel);
             Assert.AreEqual(myMetrics[1].ChartTitle, resultList[1].ChartTitle);
-            Assert.AreEqual(myMetrics[1].EDVisits, resultList[1].EDVisits);
+            Assert.AreEqual(myMetrics[1].BarValue1, resultList[1].BarValue1);
 
         }
 

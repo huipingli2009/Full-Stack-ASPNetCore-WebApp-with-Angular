@@ -4,7 +4,7 @@ import { NGXLogger } from 'ngx-logger';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from '../environments/environment';
-import { Alerts, EdChart, EdChartDetails, Population, Quicklinks, Spotlight, WebChartFilters } from './models/dashboard';
+import { Alerts, WebChartData, EdChartDetails, Population, Quicklinks, Spotlight, WebChartFilters } from './models/dashboard';
 import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Patients, NewPatient, Pmca, PopSlices, Providers, States, Outcomes, DuplicatePatient, MergePatientConfirmation } from './models/patients';
 import { PracticeList, Responsibilities, Staff, StaffDetails, StaffAdmin, PracticeCoach } from './models/Staff';
 import { Followup, WorkbookDepressionPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookAsthmaPatient, Treatment, WorkbookConfirmation} from './models/workbook';
@@ -89,7 +89,7 @@ export class RestService {
   getWebChartByUser(chartId, measureId, filterId): Observable<any> {
     const endpoint = `${API_URL}/api/Metrics/webcharts/${chartId}/${measureId}/${filterId}`;
     return this.http.get<any>(endpoint).pipe(
-      map((data: EdChart[]) => {
+      map((data: WebChartData[]) => {
         return data;
       })
     );

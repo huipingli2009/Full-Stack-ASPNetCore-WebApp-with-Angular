@@ -80,7 +80,7 @@ namespace org.cchmc.pho.api.Controllers
 
         [HttpGet("webcharts/{chartId}/{measureId}/{filterId}")]
         [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin")]
-        [SwaggerResponse(200, type: typeof(List<EDChartViewModel>))]
+        [SwaggerResponse(200, type: typeof(List<WebChartDataViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> ListWebChart(int? chartId, int? measureId, int? filterId)
@@ -92,7 +92,7 @@ namespace org.cchmc.pho.api.Controllers
                 // call the data method
                 var data = await _metricDal.ListWebChart(currentUserId, chartId, measureId, filterId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
-                var result = _mapper.Map<List<EDChartViewModel>>(data);
+                var result = _mapper.Map<List<WebChartDataViewModel>>(data);
                 // return the result in a "200 OK" response
                 return Ok(result);
             }

@@ -50,12 +50,14 @@ export class Population {
     opDefLinkExists: boolean;
 }
 
-export class EdChart {
+export class WebChartData {
     practiceId: number;
     admitDate: Date;
     chartLabel: string;
     chartTitle: string;
-    edVisits: number;
+    barValue1: number;
+    lineValue1: number;
+    lineValue2: number;
     chartTopLeftLabel: string
 }
 export class EdChartDetails {
@@ -86,7 +88,8 @@ export class WebChartFilters {
 
 export enum WebChartId {
     EDChart = 1,    
-    PopulationChart = 2
+    PopulationChart = 2,
+    OutcomeChart = 3
 }
 
 export enum WebChartFilterMeasureId {
@@ -101,6 +104,7 @@ export enum WebChartFilterMeasureId {
 }
 
 export enum WebChartFilterId {
+    none = -1,
     dateFilterId = 0,
     conditionDefaultFilterId = 1,
     pcpFilterId = 2,

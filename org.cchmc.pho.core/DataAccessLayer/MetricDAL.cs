@@ -82,10 +82,10 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
-        public async Task<List<EDChart>> ListWebChart(int userId, int? chartId, int? measureId, int? filterId)
+        public async Task<List<WebChartData>> ListWebChart(int userId, int? chartId, int? measureId, int? filterId)
         {
             DataTable dataTable = new DataTable();
-            List<EDChart> edCharts = new List<EDChart>();
+            List<WebChartData> edCharts = new List<WebChartData>();
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spGetDashboardChart", sqlConnection))
@@ -104,25 +104,27 @@ namespace org.cchmc.pho.core.DataAccessLayer
                         if (dataTable.Rows.Count > 0)
                         {
                             edCharts = (from DataRow dr in dataTable.Rows
-                                        select new EDChart()
+                                        select new WebChartData()
                                         {
                                             PracticeId = Convert.ToInt32(dr["PracticeId"]),
                                             AdmitDate = Convert.ToDateTime(dr["AdmitDate"]),
                                             ChartLabel = dr["ChartLabel"].ToString(),
                                             ChartTitle = dr["ChartTitle"].ToString(),
-                                            EDVisits = Convert.ToInt32(dr["ChartValue"]),
+                                            BarValue1 = (dr["BarValue1"] == DBNull.Value ? -1 : Convert.ToInt32(dr["BarValue1"].ToString())),
+                                            LineValue1 = (dr["LineValue1"] == DBNull.Value ? -1 : Convert.ToInt32(dr["LineValue1"].ToString())),
+                                            LineValue2 = (dr["LineValue2"] == DBNull.Value ? -1 : Convert.ToInt32(dr["LineValue2"].ToString())),
                                             ChartTopLeftLabel = dr["TopLeftLabel"].ToString(),
                                         }
-    ).ToList();
+                            ).ToList();
                         }
                         else
                         {
-                            edCharts.Add(new EDChart());
+                            edCharts.Add(new WebChartData());
                         }
 
 
                     }
-                    return edCharts;
+                    return edCharts.OrderBy(c => c.AdmitDate).ToList();
                 }
             }
         }

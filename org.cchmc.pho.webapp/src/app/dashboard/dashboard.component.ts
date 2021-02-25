@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as Chart from 'chart.js';
 import { NGXLogger } from 'ngx-logger';
 import { environment } from 'src/environments/environment';
-import { EdChart, EdChartDetails, Population, Quicklinks, Spotlight, WebChartFilters, WebChartFilterMeasureId, WebChartId, WebChartFilterId} from '../models/dashboard';
+import { WebChartData, EdChartDetails, Population, Quicklinks, Spotlight, WebChartFilters, WebChartFilterMeasureId, WebChartId, WebChartFilterId} from '../models/dashboard';
 import { RestService } from '../rest.service';
 import { DrilldownService } from '../drilldown/drilldown.service';
 import { AuthenticationService } from '../services/authentication.service';
@@ -27,10 +27,9 @@ export class DashboardComponent implements OnInit {
   spotlight: Spotlight[];
   quickLinks: Quicklinks[];
   population: Population[];
-  webChart: EdChart[];
+  webChart: WebChartData[];
   webChartData: any[];
   webChartDetails: EdChartDetails[];
-  webchartfilterselectedFilter: WebChartFilters;
   webchartfilterList: any[] = [];
   monthlySpotlightTitle: string;
   monthlySpotlightBody: string;
@@ -39,7 +38,8 @@ export class DashboardComponent implements OnInit {
   monthlySpotlightImageUrl: string;
   webChartTitle: string;
   webchartfilters: number;
-  webChartTopLeftLabel: string;
+  webChartTopLeftLabel: string; 
+  webChartFilterIdEnum = WebChartFilterId;
   defaultUrl = environment.apiURL; 
   popData: any[] = [];
   qiData: any[] = [];
@@ -114,71 +114,53 @@ export class DashboardComponent implements OnInit {
 
     this.ctx = this.canvas.getContext('2d'); 
 
-    this.webBarChart = new Chart(this.ctx, {
-      type: 'bar',
-      data: {
-        labels: [],       
-        datasets: [{
-          label: '# Patients',
-          data: [],         
-          maxBarThickness: 22,
-          backgroundColor: '#FABD9E',
-          hoverBackgroundColor: '#F0673C'
-        }]
-      },
-      options: {
-        responsive: true,
-        legend: {
-          position: 'bottom',
-          // labels: {
-          //   verticalAlign: true
-          // }
-          // align: 'end',
-          // labels: {
-          //   fontColor: 'rgb(255, 99, 132)',
-          //   align: 'vertical'
-          // }
-          labels: {
-            //usePointStyle: true,
-            //fontColor: 'rgb(255,99,132)',
-            //boxWidth: 6
+      this.webBarChart = new Chart(this.ctx, {
+        type: 'bar',
+        data: {
+          labels: [],       
+          datasets: []
+        },
+        options: {
+          responsive: true,
+          legend: {
+            position: 'bottom',
+            labels: {
+            }
+          },
+          layout: {
+            padding: {
+              left: 42,
+              right: 53,
+              top: 27,
+              bottom: 43
+            }
+          },
+          scales: {
+            xAxes: [{
+              ticks: {
+                callback (value, index, values) {
+                  return value;
+                }              
+              }
+            }],
+            yAxes: [{
+              ticks: {   
+                beginAtZero: true,   //force the y-axis to start at 0      
+                  max:this.patientsMax              
+              }
+            }]
+  
+          },
+          tooltips: {
+            enabled: true
+          },
+          onClick (e) {
+            let element = this.getElementAtEvent(e);
             
+            $this.Showmodal(e, this, element); // This is the result of a "fake" JQuery this
           }
-        },
-        layout: {
-          padding: {
-            left: 42,
-            right: 53,
-            top: 27,
-            bottom: 43
-          }
-        },
-        scales: {
-          xAxes: [{
-            ticks: {
-              callback (value, index, values) {
-                return value;
-              }              
-            }
-          }],
-          yAxes: [{
-            ticks: {   
-              beginAtZero: true,   //force the y-axis to start at 0      
-                max:this.patientsMax              
-            }
-          }]
-
-        },
-        tooltips: {
-          enabled: true
-        },
-        onClick (e) {
-          let element = this.getElementAtEvent(e);
-          
-          $this.Showmodal(e, this, element); // This is the result of a "fake" JQuery this
         }
-      }
-    });  
+      });      
     
   }
 
@@ -292,19 +274,20 @@ export class DashboardComponent implements OnInit {
     this.rest.getWebChartByUser(chartId,measureId,filterId).subscribe((data) => {     
 
       this.webChart = data; 
-   
       this.webChartTitle = this.webChart[0].chartTitle;   
       this.webChartTopLeftLabel = this.webChart[0].chartTopLeftLabel;
 
       this.webChart.forEach(item => {              
 
-          this.addData(this.webBarChart,
-         
+          this.addData(this.webBarChart,         
           item.chartLabel,
-          item.edVisits); // Getting data to the chart, will be easier to update if needed           
+          item.barValue1,
+          item.lineValue1,
+          item.lineValue2,
+          chartId); // Getting data to the chart, will be easier to update if needed           
      
-        if (item.edVisits > max) {
-          max = item.edVisits;          
+        if (item.barValue1 > max) {
+          max = item.barValue1;          
         }    
         
       });      
@@ -318,14 +301,19 @@ export class DashboardComponent implements OnInit {
 
   //get web chart filters
   getWebChartFilters(chartId: number, measureId: number) {
-    this.webchartfilterselectedFilter = null;
     this.rest.getWebChartFilters(chartId, measureId).subscribe((data) => {
-      this.webchartfilterList = data;
-      this.webchartfilterselectedFilter = data[0];
-      this.filterId = data[0].filterId;
-      this.webchartfilters = data[0].filterId;
       this.logger.log("filterlist: " + data[0] + " data: " + data);
-      this.logger.log("getWebChartFilters, regenerate measureId: " + measureId.toString() + " filterId: " + this.filterId.toString() + "trying to set to: " + data[0].filterId.toString());
+      this.webchartfilterList = null;
+      if (data.length > 0){        
+        this.filterId = data[0].filterId;
+        this.webchartfilterList = data;
+        this.webchartfilters = data[0].filterId;
+      }
+      else
+      { 
+        this.filterId = WebChartFilterId.none; 
+        this.webchartfilters = WebChartFilterId.none;
+      }
       //New filters NECESSARILY means new chart generation. Trigger it here.
       this.getWebChart(this.chartId, this.measureId, this.filterId);
     });
@@ -336,9 +324,7 @@ export class DashboardComponent implements OnInit {
     
     this.reportFilterSelected = false;
     this.filterId = event.value;
-    this.webchartfilterselectedFilter = this.webchartfilterList.find(f => f.filterId === this.filterId);
     this.reportFilterSelected = true;
-    this.logger.log("switching report condition to filterId: " + this.webchartfilterselectedFilter);
     //dynamically pass the parameters to getWebChart function to generate the report
     this.getWebChart(this.chartId, this.measureId, this.filterId);
     this.webBarChart.update();
@@ -347,6 +333,13 @@ export class DashboardComponent implements OnInit {
   updateChartReport(element: any){
     this.logger.log("switching chart object to measureId: " + element.measureId.toString() + " filterId: " + this.filterId.toString());
     this.measureId = element.measureId;
+    if([26,14,15,16,25,20,21,22].includes(this.measureId)){
+      this.chartId = WebChartId.OutcomeChart;
+    }
+    else
+    {
+      this.chartId = WebChartId.PopulationChart;
+    }
     this.getWebChartFilters(this.chartId, this.measureId);
     this.logger.log("switching chart object 2 to measureId: " + element.measureId.toString() + " filterId: " + this.filterId.toString());
   }
@@ -371,13 +364,23 @@ export class DashboardComponent implements OnInit {
     return this.datePipe.transform(date + ' , ' + localYear, 'yyyyMMdd').toString();
   }
 
-  addData(chart, label, data) {
+  addData(chart, label, barValue1, lineValue1, lineValue2, chartId) {
    
     chart.data.labels.push(label);
-  
-    chart.data.datasets.forEach((dataset) => {
-      dataset.data.push(data);     
-    });
+    if (chartId === WebChartId.PopulationChart){
+      this.logger.log("pushing pop chart data: 1) " + barValue1);
+      chart.data.datasets[0].data.push(barValue1);
+    }
+    if (chartId === WebChartId.OutcomeChart){
+      this.logger.log("pushing outcome chart data: 1) " + lineValue1 + " 2) " + lineValue2);
+      if (lineValue1 >= 0){
+        chart.data.datasets[1].data.push(lineValue1);
+      }
+      if (lineValue2 >=0){
+        chart.data.datasets[2].data.push(lineValue2);
+      }
+    }
+
     chart.update();
   }
 
