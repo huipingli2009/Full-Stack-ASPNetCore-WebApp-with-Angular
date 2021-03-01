@@ -5,6 +5,7 @@ import { RestService } from '../rest.service';
 import { NGXLogger } from 'ngx-logger';
 import { MetricDrillthruTable, MetricDrillthruRow, MetricDrillthruColumn } from '../models/drillthru';
 import * as XLSX from 'xlsx'; 
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -26,6 +27,7 @@ export class DrilldownComponent implements OnInit {
   headerDisplayText: string;
   fileName= 'Data_Export.xlsx'; 
   isLoading: boolean;
+  defaultUrl = environment.apiURL; 
   
   constructor(public rest: RestService,private logger: NGXLogger, @Inject(MAT_DIALOG_DATA) public data: {
     measureId: string,
@@ -77,6 +79,10 @@ export class DrilldownComponent implements OnInit {
 
        /* save to file */
        XLSX.writeFile(wb, this.fileName);
+  }
+
+  public OpenReport() {
+    window.open(`${this.defaultUrl}/edreport`, '_blank');       
   }
 
 }
