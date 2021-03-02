@@ -8,7 +8,7 @@
                 </mat-progress-spinner>
             </div>
         </div>
-        <table id="drilldownTable" class="drilldown-table" *ngIf="!isLoading">
+        <table id="drilldownTable" name = "dynamicTable" class="drilldown-table" *ngIf="!isLoading">
             <thead>
                <tr>
                   <th *ngFor="let item of headerColumns">{{item.columnName}}</th>

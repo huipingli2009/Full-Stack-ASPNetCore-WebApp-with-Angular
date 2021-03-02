@@ -81,7 +81,7 @@ export class DashboardComponent implements OnInit {
   filterId: number;
   chartData: number[] ;
   chartLabel: string[];
-  keys: any;
+  chartCategorySelected: number;
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
               public fb: FormBuilder, public dialog: MatDialog, private datePipe: DatePipe, private logger: NGXLogger,
@@ -408,8 +408,7 @@ export class DashboardComponent implements OnInit {
 
   /* Open Modal (Dialog) on bar click */
   Showmodal(event, chart, element): void {
-
-    let drillThruChart = this.drillThruUser;
+    
     this.logger.log("starting ED modal");
 
     let drillThruMeasureId;
@@ -431,7 +430,7 @@ export class DashboardComponent implements OnInit {
       tempFilterId = element[0]._index + 1;       
     }
     
-    if (drillThruChart){
+    if (this.drillThruUser){
       this.openDrilldownDialog(drillThruMeasureId,tempFilterId);
     }
     
@@ -463,7 +462,8 @@ export class DashboardComponent implements OnInit {
   openDrilldownDialog(measure,filterId) {    
     let drillThruText;
 
-    if (measure == DrillThruMeasureId.EDDrillThruMeasureId) {
+    //Only ED Chart with Date Selected as Filter displays 'ED Details', the rest displays 'Patient Details'
+    if (measure == DrillThruMeasureId.EDDrillThruMeasureId && this.filterId == WebChartFilterId.dateFilterId) {
       drillThruText = 'ED Details'
     }
     else {

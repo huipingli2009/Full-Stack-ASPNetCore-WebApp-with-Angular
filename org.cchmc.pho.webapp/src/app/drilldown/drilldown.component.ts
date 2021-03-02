@@ -14,8 +14,6 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./drilldown.component.scss']
 })
 
-
-
 export class DrilldownComponent implements OnInit {
 
   selectedMeasureId: string;
@@ -82,7 +80,11 @@ export class DrilldownComponent implements OnInit {
   }
 
   public OpenReport() {
-    window.open(`${this.defaultUrl}/edreport`, '_blank');    
+    window.open(`${this.defaultUrl}/edreport`, '_blank');   
+    //window.open(`${this.defaultUrl}/edreport`, 'dynamicTable');  
+
+    // Write some text in the new window
+    //window.document.write("<p>This is 'myWindow'</p>");    
   }
 
 }
