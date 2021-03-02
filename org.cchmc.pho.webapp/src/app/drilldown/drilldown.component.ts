@@ -82,7 +82,7 @@ export class DrilldownComponent implements OnInit {
   }
 
   public OpenReport() {
-    window.open(`${this.defaultUrl}/edreport`, '_blank');       
+    window.open(`${this.defaultUrl}/edreport`, '_blank');    
   }
 
 }
