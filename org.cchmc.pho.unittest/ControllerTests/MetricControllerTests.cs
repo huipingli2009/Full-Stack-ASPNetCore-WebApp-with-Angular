@@ -234,135 +234,134 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.AreEqual(500, result.StatusCode);
         }
 
-        //keep the following test methods in case we need them in the future for similar testing case
-        //[TestMethod]
-        //public async Task ListEDDetails_Mapping_Success()
-        //{
-        //    // setup
-        //    var admitDate = "20201201";
-        //    bool converstionResult = DateTime.TryParseExact(admitDate, "yyyyMMdd", CultureInfo.CurrentCulture, DateTimeStyles.None, out var admitDateTime);
-        //    var myMetrics = new List<EDDetail>()
-        //    {
-        //        new EDDetail()
-        //        {
-        //            PatientMRN = "123_456_789",
-        //            PatientEncounterID = "4512398",
-        //            Facility = "Anderson",
-        //            PatientName = "John Doe",
-        //            PatientDOB = new DateTime(2010, 11, 20, 12, 12, 00, 00),
-        //            PCP = "Dr Nick Riviera",
-        //            HospitalAdmission = new DateTime(2020, 11, 19, 12, 12, 00, 00),
-        //            HospitalDischarge = new DateTime(2020, 12, 1, 12, 12, 00, 00),
-        //            VisitType = "Followup",
-        //            PrimaryDX = "A234",
-        //            PrimaryDX_10Code = "10",
-        //            DX2 = "B789",
-        //            DX2_10Code = "11"
-        //        },
-        //        new EDDetail()
-        //        {
-        //            PatientMRN = "987_654_321",
-        //            PatientEncounterID = "7612986",
-        //            Facility = "Fairfield",
-        //            PatientName = "Susan Smith",
-        //            PatientDOB = new DateTime(2012, 3, 15, 12, 12, 00, 00),
-        //            PCP = "Dr Richard Kimble",
-        //            HospitalAdmission = new DateTime(2020, 10, 19, 12, 12, 00, 00),
-        //            HospitalDischarge = null,
-        //            VisitType = "Followup",
-        //            PrimaryDX = "D234",
-        //            PrimaryDX_10Code = "10",
-        //            DX2 = "C789",
-        //            DX2_10Code = "11"
-        //        }
-        //    };
-        //    _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
-        //    _mockMetricDal.Setup(p => p.ListEDDetails(_userId, admitDateTime)).Returns(Task.FromResult(myMetrics)).Verifiable();
-        //    _MetricController = new MetricsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockMetricDal.Object);
+        [TestMethod]
+        public async Task ListEDDetails_Mapping_Success()
+        {
+            // setup
+            var admitDate = "20201201";
+            bool converstionResult = DateTime.TryParseExact(admitDate, "yyyyMMdd", CultureInfo.CurrentCulture, DateTimeStyles.None, out var admitDateTime);
+            var myMetrics = new List<EDDetail>()
+            {
+                new EDDetail()
+                {
+                    PatientMRN = "123_456_789",
+                    PatientEncounterID = "4512398",
+                    Facility = "Anderson",
+                    PatientName = "John Doe",
+                    PatientDOB = new DateTime(2010, 11, 20, 12, 12, 00, 00),
+                    PCP = "Dr Nick Riviera",
+                    HospitalAdmission = new DateTime(2020, 11, 19, 12, 12, 00, 00),
+                    HospitalDischarge = new DateTime(2020, 12, 1, 12, 12, 00, 00),
+                    VisitType = "Followup",
+                    PrimaryDX = "A234",
+                    PrimaryDX_10Code = "10",
+                    DX2 = "B789",
+                    DX2_10Code = "11"
+                },
+                new EDDetail()
+                {
+                    PatientMRN = "987_654_321",
+                    PatientEncounterID = "7612986",
+                    Facility = "Fairfield",
+                    PatientName = "Susan Smith",
+                    PatientDOB = new DateTime(2012, 3, 15, 12, 12, 00, 00),
+                    PCP = "Dr Richard Kimble",
+                    HospitalAdmission = new DateTime(2020, 10, 19, 12, 12, 00, 00),
+                    HospitalDischarge = null,
+                    VisitType = "Followup",
+                    PrimaryDX = "D234",
+                    PrimaryDX_10Code = "10",
+                    DX2 = "C789",
+                    DX2_10Code = "11"
+                }
+            };
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
+            _mockMetricDal.Setup(p => p.ListEDDetails(_userId, admitDateTime)).Returns(Task.FromResult(myMetrics)).Verifiable();
+            _MetricController = new MetricsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockMetricDal.Object);
 
-        //    // execute
-        //    var result = await _MetricController.ListEDDetails(admitDate.ToString()) as ObjectResult;
-        //    var resultList = result.Value as List<EDDetailViewModel>;
+            // execute
+            var result = await _MetricController.ListEDDetails(admitDate.ToString()) as ObjectResult;
+            var resultList = result.Value as List<EDDetailViewModel>;
 
-        //    // assert
-        //    Assert.AreEqual(2, resultList.Count);
-        //    Assert.AreEqual(myMetrics[0].PatientMRN, resultList[0].PatientMRN);
-        //    Assert.AreEqual(myMetrics[0].PatientEncounterID, resultList[0].PatientEncounterID);
-        //    Assert.AreEqual(myMetrics[0].Facility, resultList[0].Facility);
-        //    Assert.AreEqual(myMetrics[0].PatientName, resultList[0].PatientName);
-        //    Assert.AreEqual(myMetrics[0].PatientDOB, resultList[0].PatientDOB);
-        //    Assert.AreEqual(myMetrics[0].PCP, resultList[0].PCP);
-        //    Assert.AreEqual(myMetrics[0].HospitalAdmission, resultList[0].HospitalAdmission);
-        //    Assert.AreEqual(myMetrics[0].HospitalDischarge, resultList[0].HospitalDischarge);
-        //    Assert.AreEqual(myMetrics[0].VisitType, resultList[0].VisitType);
-        //    Assert.AreEqual(myMetrics[0].PrimaryDX, resultList[0].PrimaryDX);
-        //    Assert.AreEqual(myMetrics[0].PrimaryDX_10Code, resultList[0].PrimaryDX_10Code);
-        //    Assert.AreEqual(myMetrics[0].DX2, resultList[0].DX2);
-        //    Assert.AreEqual(myMetrics[0].DX2_10Code, resultList[0].DX2_10Code);
-        //    Assert.AreEqual(myMetrics[1].PatientMRN, resultList[1].PatientMRN);
-        //    Assert.AreEqual(myMetrics[1].PatientEncounterID, resultList[1].PatientEncounterID);
-        //    Assert.AreEqual(myMetrics[1].Facility, resultList[1].Facility);
-        //    Assert.AreEqual(myMetrics[1].PatientName, resultList[1].PatientName);
-        //    Assert.AreEqual(myMetrics[1].PatientDOB, resultList[1].PatientDOB);
-        //    Assert.AreEqual(myMetrics[1].PCP, resultList[1].PCP);
-        //    Assert.AreEqual(myMetrics[1].HospitalAdmission, resultList[1].HospitalAdmission);
-        //    Assert.AreEqual(myMetrics[1].HospitalDischarge, resultList[1].HospitalDischarge);
-        //    Assert.AreEqual(myMetrics[1].VisitType, resultList[1].VisitType);
-        //    Assert.AreEqual(myMetrics[1].PrimaryDX, resultList[1].PrimaryDX);
-        //    Assert.AreEqual(myMetrics[1].PrimaryDX_10Code, resultList[1].PrimaryDX_10Code);
-        //    Assert.AreEqual(myMetrics[1].DX2, resultList[1].DX2);
-        //    Assert.AreEqual(myMetrics[1].DX2_10Code, resultList[1].DX2_10Code);
-        //}
+            // assert
+            Assert.AreEqual(2, resultList.Count);
+            Assert.AreEqual(myMetrics[0].PatientMRN, resultList[0].PatientMRN);
+            Assert.AreEqual(myMetrics[0].PatientEncounterID, resultList[0].PatientEncounterID);
+            Assert.AreEqual(myMetrics[0].Facility, resultList[0].Facility);
+            Assert.AreEqual(myMetrics[0].PatientName, resultList[0].PatientName);
+            Assert.AreEqual(myMetrics[0].PatientDOB, resultList[0].PatientDOB);
+            Assert.AreEqual(myMetrics[0].PCP, resultList[0].PCP);
+            Assert.AreEqual(myMetrics[0].HospitalAdmission, resultList[0].HospitalAdmission);
+            Assert.AreEqual(myMetrics[0].HospitalDischarge, resultList[0].HospitalDischarge);
+            Assert.AreEqual(myMetrics[0].VisitType, resultList[0].VisitType);
+            Assert.AreEqual(myMetrics[0].PrimaryDX, resultList[0].PrimaryDX);
+            Assert.AreEqual(myMetrics[0].PrimaryDX_10Code, resultList[0].PrimaryDX_10Code);
+            Assert.AreEqual(myMetrics[0].DX2, resultList[0].DX2);
+            Assert.AreEqual(myMetrics[0].DX2_10Code, resultList[0].DX2_10Code);
+            Assert.AreEqual(myMetrics[1].PatientMRN, resultList[1].PatientMRN);
+            Assert.AreEqual(myMetrics[1].PatientEncounterID, resultList[1].PatientEncounterID);
+            Assert.AreEqual(myMetrics[1].Facility, resultList[1].Facility);
+            Assert.AreEqual(myMetrics[1].PatientName, resultList[1].PatientName);
+            Assert.AreEqual(myMetrics[1].PatientDOB, resultList[1].PatientDOB);
+            Assert.AreEqual(myMetrics[1].PCP, resultList[1].PCP);
+            Assert.AreEqual(myMetrics[1].HospitalAdmission, resultList[1].HospitalAdmission);
+            Assert.AreEqual(myMetrics[1].HospitalDischarge, resultList[1].HospitalDischarge);
+            Assert.AreEqual(myMetrics[1].VisitType, resultList[1].VisitType);
+            Assert.AreEqual(myMetrics[1].PrimaryDX, resultList[1].PrimaryDX);
+            Assert.AreEqual(myMetrics[1].PrimaryDX_10Code, resultList[1].PrimaryDX_10Code);
+            Assert.AreEqual(myMetrics[1].DX2, resultList[1].DX2);
+            Assert.AreEqual(myMetrics[1].DX2_10Code, resultList[1].DX2_10Code);
+        }
 
-        //[Ignore]
-        //[TestMethod]
-        //public async Task ListEDDetails_UserIdDoesNotValidate_Throws400()
-        //{
-        //    // setup
-        //    var admitDate = "12/1/2020 12:00:00 AM";
-        //    DateTime admitDateTime = Convert.ToDateTime(admitDate);
-        //    _MetricController = new MetricsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockMetricDal.Object);
+        [Ignore]
+        [TestMethod]
+        public async Task ListEDDetails_UserIdDoesNotValidate_Throws400()
+        {
+            // setup
+            var admitDate = "12/1/2020 12:00:00 AM";
+            DateTime admitDateTime = Convert.ToDateTime(admitDate);
+            _MetricController = new MetricsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockMetricDal.Object);
 
-        //    // execute
-        //    var result = await _MetricController.ListEDDetails(admitDate) as ObjectResult;
+            // execute
+            var result = await _MetricController.ListEDDetails(admitDate) as ObjectResult;
 
-        //    // assert
-        //    Assert.AreEqual(400, result.StatusCode);
-        //    Assert.AreEqual("user is not a valid integer", result.Value);
-        //    _mockMetricDal.Verify(p => p.ListEDDetails(It.IsAny<int>(), It.IsAny<DateTime>()), Times.Never);
-        //}
+            // assert
+            Assert.AreEqual(400, result.StatusCode);
+            Assert.AreEqual("user is not a valid integer", result.Value);
+            _mockMetricDal.Verify(p => p.ListEDDetails(It.IsAny<int>(), It.IsAny<DateTime>()), Times.Never);
+        }
 
-        //[TestMethod]
-        //public async Task ListEDDetails_AdmitDateDoesNotValidate_Throws400()
-        //{
-        //    // setup
-        //    var admitDate = "asdf";
-        //    _MetricController = new MetricsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockMetricDal.Object);
+        [TestMethod]
+        public async Task ListEDDetails_AdmitDateDoesNotValidate_Throws400()
+        {
+            // setup
+            var admitDate = "asdf";
+            _MetricController = new MetricsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockMetricDal.Object);
 
-        //    // execute
-        //    var result = await _MetricController.ListEDDetails(admitDate) as ObjectResult;
+            // execute
+            var result = await _MetricController.ListEDDetails(admitDate) as ObjectResult;
 
-        //    // assert
-        //    Assert.AreEqual(400, result.StatusCode);
-        //    Assert.AreEqual("admitdate is not a valid datetime", result.Value);
-        //    _mockMetricDal.Verify(p => p.ListEDDetails(It.IsAny<int>(), It.IsAny<DateTime>()), Times.Never);
-        //}
+            // assert
+            Assert.AreEqual(400, result.StatusCode);
+            Assert.AreEqual("admitdate is not a valid datetime", result.Value);
+            _mockMetricDal.Verify(p => p.ListEDDetails(It.IsAny<int>(), It.IsAny<DateTime>()), Times.Never);
+        }
 
-        //[TestMethod]
-        //public async Task ListEDDetails_DataLayerThrowsException_ReturnsError()
-        //{
-        //    // setup
-        //    var admitDate = "20201201";
-        //    bool converstionResult = DateTime.TryParseExact(admitDate, "yyyyMMdd", CultureInfo.CurrentCulture, DateTimeStyles.None, out var admitDateTime);
-        //    _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
-        //    _mockMetricDal.Setup(p => p.ListEDDetails(_userId, admitDateTime)).Throws(new Exception()).Verifiable();
-        //    _MetricController = new MetricsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockMetricDal.Object);
+        [TestMethod]
+        public async Task ListEDDetails_DataLayerThrowsException_ReturnsError()
+        {
+            // setup
+            var admitDate = "20201201";
+            bool converstionResult = DateTime.TryParseExact(admitDate, "yyyyMMdd", CultureInfo.CurrentCulture, DateTimeStyles.None, out var admitDateTime);
+            _mockUserService.Setup(p => p.GetUserIdFromClaims(It.IsAny<IEnumerable<Claim>>())).Returns(_userId).Verifiable();
+            _mockMetricDal.Setup(p => p.ListEDDetails(_userId, admitDateTime)).Throws(new Exception()).Verifiable();
+            _MetricController = new MetricsController(_mockLogger.Object, _mockUserService.Object, _mapper, _mockMetricDal.Object);
 
-        //    // execute
-        //    var result = await _MetricController.ListEDDetails(admitDate) as ObjectResult;
+            // execute
+            var result = await _MetricController.ListEDDetails(admitDate) as ObjectResult;
 
-        //    // assert
-        //    Assert.AreEqual(500, result.StatusCode);
-        //}
+            // assert
+            Assert.AreEqual(500, result.StatusCode);
+        }
     }
 }

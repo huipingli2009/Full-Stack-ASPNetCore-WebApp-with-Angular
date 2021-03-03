@@ -80,11 +80,6 @@ export class DrilldownComponent implements OnInit {
   }
 
   public OpenReport() {
-    window.open(`${this.defaultUrl}/edreport`, '_blank');   
-    //window.open(`${this.defaultUrl}/edreport`, 'dynamicTable');  
-
-    // Write some text in the new window
-    //window.document.write("<p>This is 'myWindow'</p>");    
+    window.open(`${this.defaultUrl}/edreport`, '_blank');       
   }
-
 }

@@ -10,7 +10,7 @@ import { PatientsComponent } from './patients/patients.component';
 import { ReportComponent } from './report/report.component';
 import { StaffComponent } from './staff/staff.component';
 import { WorkbooksComponent } from './workbooks/workbooks.component';
-import { DrilldownComponent } from './drilldown/drilldown.component';
+
 const routes: Routes = [
   {
     path: '',
@@ -68,14 +68,10 @@ const routes: Routes = [
         path: 'login',
         component: LoginComponent
       },
-      // {
-      //   path: 'edreport',
-      //   component: ReportComponent
-      // }
       {
         path: 'edreport',
-        component: DrilldownComponent
-      }      
+        component: ReportComponent
+      }     
     ]
   },
   { path: '**', redirectTo: '' }];
