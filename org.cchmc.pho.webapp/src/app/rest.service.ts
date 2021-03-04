@@ -12,9 +12,6 @@ import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.compo
 import { FileDetails, FileAction, ResourceType, Tag, Initiative, FileType, ContentPlacement } from './models/files';
 import { Location } from '@angular/common';
 import { MetricDrillthruTable } from './models/drillthru';
-// import { constants } from 'http2';
-
-
 
 // we can now access environment.apiUrl
 const API_URL = environment.apiURL;
@@ -34,6 +31,9 @@ export class RestService {
   //handle selected patient from ED Chart
   selectedPatientId: number | null;
   selectedPatientName: string | null;
+
+  //handle the hide/show of the View Report button
+  showViewReportButton: boolean | null;
 
   constructor(private http: HttpClient, private logger: NGXLogger, private snackBar: MatSnackBarComponent) { }
   private extractData(res: Response) {
