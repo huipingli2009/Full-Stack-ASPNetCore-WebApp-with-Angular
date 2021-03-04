@@ -79,13 +79,12 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpGet("webcharts/{chartId}/{measureId}/{filterId}")]
-        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin, PHO Leader")]
         [SwaggerResponse(200, type: typeof(List<EDChartViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> ListWebChart(int? chartId, int? measureId, int? filterId)
-        {
-
+        {             
             try
             {
                 int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
@@ -93,6 +92,41 @@ namespace org.cchmc.pho.api.Controllers
                 var data = await _metricDal.ListWebChart(currentUserId, chartId, measureId, filterId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
                 var result = _mapper.Map<List<EDChartViewModel>>(data);
+                // return the result in a "200 OK" response
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        [HttpGet("edcharts/{admitdate}")]
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin, PHO Leader")]
+        [SwaggerResponse(200, type: typeof(List<EDDetailViewModel>))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> ListEDDetails(string admitdate)
+        {
+            //todo: look at describign a date format as yyyymmdd : eg 20200227
+
+            // route parameters are strings and need to be translated (and validated) to their proper data type           
+            if (!DateTime.TryParseExact(admitdate, "yyyyMMdd", CultureInfo.CurrentCulture, DateTimeStyles.None, out var admitDateTime))
+            {
+                _logger.LogInformation($"Failed to parse admitDate - {admitdate}");
+                return BadRequest("admitdate is not a valid datetime");
+            }
+
+            try
+            {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+                // call the data method
+                var data = await _metricDal.ListEDDetails(currentUserId, admitDateTime);
+                // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
+                var result = _mapper.Map<List<EDDetailViewModel>>(data);
                 // return the result in a "200 OK" response
                 return Ok(result);
             }
@@ -162,7 +196,7 @@ namespace org.cchmc.pho.api.Controllers
 
         //GetWebChartFilters()
         [HttpGet("webchartfilterlookup/{chartId}/{measureId}")]
-        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin,PHO Leader")]
         [SwaggerResponse(200, type: typeof(List<WebChartFiltersViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]

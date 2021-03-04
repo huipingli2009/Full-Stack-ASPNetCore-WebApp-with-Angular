@@ -71,7 +71,7 @@ const routes: Routes = [
       {
         path: 'edreport',
         component: ReportComponent
-      }
+      }     
     ]
   },
   { path: '**', redirectTo: '' }];
