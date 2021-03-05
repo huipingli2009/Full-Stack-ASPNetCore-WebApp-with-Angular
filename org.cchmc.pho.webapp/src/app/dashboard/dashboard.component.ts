@@ -304,16 +304,9 @@ export class DashboardComponent implements OnInit {
      for (counter = 0; counter < n; counter++){
       this.removeData(this.webBarChart);          
       }   
-    }   
+    } 
 
-    if (measureId === WebChartFilterMeasureId.edChartdMeasureId)
-    {
-      this.rest.showViewReportButton = true;
-    }
-    else
-    {
-      this.rest.showViewReportButton = false;
-    }
+    this.rest.showViewReportButton = measureId === WebChartFilterMeasureId.edChartdMeasureId;
 
     this.rest.getWebChartByUser(chartId,measureId,filterId).subscribe((data) => {     
 
