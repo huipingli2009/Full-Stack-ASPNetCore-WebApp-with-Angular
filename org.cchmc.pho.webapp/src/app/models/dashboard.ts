@@ -50,15 +50,20 @@ export class Population {
     opDefLinkExists: boolean;
 }
 
-export class WebChartData {
+export class WebChart {
     practiceId: number;
-    admitDate: Date;
-    chartLabel: string;
-    chartTitle: string;
-    barValue1: number;
-    lineValue1: number;
-    lineValue2: number;
-    chartTopLeftLabel: string
+    headerLabel: string;
+    title: string;
+    dataSets: WebChartDataSet[];
+}
+export class WebChartDataSet {
+    Label: string;
+    Type: string;
+    dataPoints: WebChartDataPoint[];
+}
+export class WebChartDataPoint {
+    DataPoint: string;
+    DataValue: number;
 }
 export class EdChartDetails {
     patientId: number;

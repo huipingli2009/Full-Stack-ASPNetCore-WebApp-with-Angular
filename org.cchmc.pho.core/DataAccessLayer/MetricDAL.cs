@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using System.Data.SqlClient;
 using System.Data;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace org.cchmc.pho.core.DataAccessLayer
 {
@@ -82,10 +83,10 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
-        public async Task<List<WebChartData>> ListWebChart(int userId, int? chartId, int? measureId, int? filterId)
+        public async Task<WebChart> ListWebChart(int userId, int? chartId, int? measureId, int? filterId)
         {
-            DataTable dataTable = new DataTable();
-            List<WebChartData> edCharts = new List<WebChartData>();
+            DataSet dataSet = new DataSet();
+            WebChart chart = new WebChart();
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spGetDashboardChart", sqlConnection))
@@ -100,31 +101,58 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     // Define the data adapter and fill the dataset
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
-                        da.Fill(dataTable);
-                        if (dataTable.Rows.Count > 0)
+                        da.Fill(dataSet);
+                        var headerTable = dataSet?.Tables?[0];
+                        var finalTable = dataSet?.Tables?[1];
+
+                        DataRow hr = headerTable.Rows[0];
+                        chart = (new WebChart()
                         {
-                            edCharts = (from DataRow dr in dataTable.Rows
-                                        select new WebChartData()
-                                        {
-                                            PracticeId = Convert.ToInt32(dr["PracticeId"]),
-                                            AdmitDate = Convert.ToDateTime(dr["AdmitDate"]),
-                                            ChartLabel = dr["ChartLabel"].ToString(),
-                                            ChartTitle = dr["ChartTitle"].ToString(),
-                                            BarValue1 = (dr["BarValue1"] == DBNull.Value ? -1 : Convert.ToInt32(dr["BarValue1"].ToString())),
-                                            LineValue1 = (dr["LineValue1"] == DBNull.Value ? -1 : Convert.ToInt32(dr["LineValue1"].ToString())),
-                                            LineValue2 = (dr["LineValue2"] == DBNull.Value ? -1 : Convert.ToInt32(dr["LineValue2"].ToString())),
-                                            ChartTopLeftLabel = dr["TopLeftLabel"].ToString(),
-                                        }
-                            ).ToList();
-                        }
-                        else
+                            DataSets = new List<WebChartDataSet>(),
+                            PracticeId = Convert.ToInt32(hr["PracticeId"]),
+                            Title = hr["HeaderLabel"].ToString(),
+                            HeaderLabel = hr["HeaderLabel"].ToString()
+                        });
+
+                        int? curDataSetIndex = 0;
+                        WebChartDataSet curDataSet = null;
+                        foreach(DataRow dr in finalTable.Rows)
                         {
-                            edCharts.Add(new WebChartData());
+                            int i = Convert.ToInt32(hr["DataSetIndex"]);
+                            if (curDataSetIndex != i)
+                            {
+                                //new index found
+                                if (curDataSet != null)
+                                {
+                                    //add existing dataset to chart
+                                    chart.DataSets.Add(curDataSet);
+                                    curDataSet = null;
+                                }
+                                if (curDataSet == null)
+                                {
+                                    //start new dataset
+                                    curDataSet = new WebChartDataSet()
+                                    {
+                                        Label = dr["Label"].ToString(),
+                                        Type = dr["Type"].ToString(),
+                                        DataPoints = new List<WebChartDataPoint>()
+                                    };
+                                }
+                            }
+
+                        //add datapoint data to current dataset
+                        curDataSet.DataPoints.Add(
+                            new WebChartDataPoint()
+                            {
+                                DataPoint = dr["DataPoint"].ToString(),
+                                DataValue = Convert.ToInt32(hr["DataValue"])
+                            }
+                            );
                         }
 
 
                     }
-                    return edCharts.OrderBy(c => c.AdmitDate).ToList();
+                    return chart;
                 }
             }
         }

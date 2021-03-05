@@ -1,16 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace org.cchmc.pho.api.ViewModels
 {
-    public class WebChartDataViewModel
+    public class WebChartViewModel
     {
         public int PracticeId { get; set; }
-        public DateTime AdmitDate { get; set; }
-        public string ChartLabel { get; set; }
-        public string ChartTitle { get; set; }
-        public int BarValue1 { get; set; }
-        public int LineValue1 { get; set; }
-        public int LineValue2 { get; set; }
-        public string ChartTopLeftLabel { get; set; }
+        public string Title { get; set; }
+        public string HeaderLabel { get; set; }
+        public List<WebChartDataSetViewModel> DataSets { get; set; }
+    }
+    public class WebChartDataSetViewModel
+    {
+        public string Label { get; set; }
+        public string Type { get; set; }
+        public List<WebChartDataPointViewModel> DataPoints { get; set; }
+    }
+    public class WebChartDataPointViewModel
+    {
+        public string DataPoint { get; set; }
+        public int DataValue { get; set; }
     }
 }

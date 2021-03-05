@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as Chart from 'chart.js';
 import { NGXLogger } from 'ngx-logger';
 import { environment } from 'src/environments/environment';
-import { WebChartData, EdChartDetails, Population, Quicklinks, Spotlight, WebChartFilters, WebChartFilterMeasureId, WebChartId, WebChartFilterId} from '../models/dashboard';
+import { WebChart, WebChartDataSet, WebChartDataPoint, EdChartDetails, Population, Quicklinks, Spotlight, WebChartFilters, WebChartFilterMeasureId, WebChartId, WebChartFilterId} from '../models/dashboard';
 import { RestService } from '../rest.service';
 import { DrilldownService } from '../drilldown/drilldown.service';
 import { AuthenticationService } from '../services/authentication.service';
@@ -27,8 +27,8 @@ export class DashboardComponent implements OnInit {
   spotlight: Spotlight[];
   quickLinks: Quicklinks[];
   population: Population[];
-  webChart: WebChartData[];
-  webChartData: any[];
+  webChart: WebChart;
+  //webChartData: any[];
   webChartDetails: EdChartDetails[];
   webchartfilterList: any[] = [];
   monthlySpotlightTitle: string;
@@ -258,7 +258,7 @@ export class DashboardComponent implements OnInit {
   /* ED Chart =========================================*/
   getWebChart(chartId: number, measureId: number, filterId: number) {    
   
-    this.webChart = [];
+    this.webChart = null;
     let max = 0;
     let counter = 0;    
 
@@ -271,13 +271,13 @@ export class DashboardComponent implements OnInit {
     }   
   }   
 
-    this.rest.getWebChartByUser(chartId,measureId,filterId).subscribe((data) => {     
+    //this.rest.getWebChartByUser(chartId,measureId,filterId).subscribe((data) => {     
 
-      this.webChart = data; 
-      this.webChartTitle = this.webChart[0].chartTitle;   
-      this.webChartTopLeftLabel = this.webChart[0].chartTopLeftLabel;
-
-      this.webChart.forEach(item => {              
+      this.webChart = JSON.parse('{      "practiceId": 1,      "title": "CHART TITLE",      "headerLabel": "HEADER LABEL",      "dataSets": [        {          "label": "Dataset 1",          "type": "line",          "dataPoints": [            {              "dataPoint": "1/1/2020",              "dataValue": 1            },            {              "dataPoint": "2/1/2020",              "dataValue": 2            },            {              "dataPoint": "3/1/2020",              "dataValue": 3            }          ]        },{          "label": "Dataset 2",          "type": "line",          "dataPoints": [            {              "dataPoint": "1/1/2020",              "dataValue": 1            },            {              "dataPoint": "2/1/2020",              "dataValue": 1            },            {              "dataPoint": "3/1/2020",              "dataValue": 1            }          ]        }      ]    }');
+      this.webChartTitle = this.webChart.title;   
+      this.webChartTopLeftLabel = this.webChart.headerLabel;
+      
+      this.webChart.dataSets.forEach(item => {              
 
           this.addData(this.webBarChart,         
           item.chartLabel,
@@ -296,7 +296,7 @@ export class DashboardComponent implements OnInit {
       this.webBarChart.config.options.scales.yAxes[0].ticks.max = this.patientsMax;
       this.webBarChart.update();    
       
-    });
+    //});
   }
 
   //get web chart filters
