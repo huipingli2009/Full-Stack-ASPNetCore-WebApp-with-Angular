@@ -57,10 +57,7 @@ export class DrilldownComponent implements OnInit {
       this.primaryRow = this.table.rows[0];
       this.headerColumns = this.primaryRow.columns; 
       this.isLoading = false;   
-  });
-
-  //reset showViewReportButton
-  this.rest.showViewReportButton = null;
+  }); 
 
   }
 
