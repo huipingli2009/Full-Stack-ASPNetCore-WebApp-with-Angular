@@ -181,7 +181,10 @@ export class DashboardComponent implements OnInit {
          
         }       
       }
-    });     
+    });  
+    
+      //reset showViewReportButton
+      this.rest.showViewReportButton = null;
   }
 
   exportChartData() {
