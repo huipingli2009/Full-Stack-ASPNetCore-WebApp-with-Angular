@@ -297,14 +297,16 @@ export class DashboardComponent implements OnInit {
     let max = 0;
     let counter = 0;    
 
-   if(this.webBarChart !== undefined) {   
+    if(this.webBarChart !== undefined) {   
 
      let n = this.webBarChart.data.labels.length;
 
      for (counter = 0; counter < n; counter++){
       this.removeData(this.webBarChart);          
-    }   
-  }   
+      }   
+    } 
+
+    this.rest.showViewReportButton = measureId === WebChartFilterMeasureId.edChartdMeasureId;
 
     this.rest.getWebChartByUser(chartId,measureId,filterId).subscribe((data) => {     
 
@@ -416,8 +418,8 @@ export class DashboardComponent implements OnInit {
 
     if (this.measureId === WebChartFilterMeasureId.edChartdMeasureId){
       this.logger.log("measure is edchart, loading dialog");
-      this.logger.log("selected bar: " + element[0]._model.label);
-      this.selectedBar = this.transformAdmitDate(element[0]._model.label);      
+      this.logger.log("selected bar: " + element[0]._model.label);      
+      this.selectedBar = element[0]._model.label;     
       
       drillThruMeasureId = DrillThruMeasureId.EDDrillThruMeasureId;
       tempFilterId = element[0]._index + 1;     
@@ -459,15 +461,16 @@ export class DashboardComponent implements OnInit {
     
   }
 
-  openDrilldownDialog(measure,filterId) {    
-    let drillThruText;
+  openDrilldownDialog(measure,filterId) { 
+
+    let drillThruText;   
 
     //Only ED Chart with Date Selected as Filter displays 'ED Details', the rest displays 'Patient Details'
     if (measure == DrillThruMeasureId.EDDrillThruMeasureId && this.filterId == WebChartFilterId.dateFilterId) {
-      drillThruText = 'ED Details'
+      drillThruText = 'ED Details';       
     }
     else {
-      drillThruText = 'Patient Details'
+      drillThruText = 'Patient Details';      
     }
     
     var drilldownOptions = {
