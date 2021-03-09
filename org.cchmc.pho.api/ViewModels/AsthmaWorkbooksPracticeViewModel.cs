@@ -1,6 +1,6 @@
 ﻿
 namespace org.cchmc.pho.api.ViewModels
 {
-    public class AsthmaWorkbooksPracticeViewModel: WorkbooksPractice_Base
+    public class AsthmaWorkbooksPracticeViewModel: WorkbooksPracticeBase
     {}
 }

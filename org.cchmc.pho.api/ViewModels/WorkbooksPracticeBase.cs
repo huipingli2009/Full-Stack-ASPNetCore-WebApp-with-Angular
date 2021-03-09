@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace org.cchmc.pho.api.ViewModels
 {
-    public abstract class WorkbooksPractice_Base
+    public abstract class WorkbooksPracticeBase
     {
         public int FormResponseId { get; set; }
         public string Header { get; set; }

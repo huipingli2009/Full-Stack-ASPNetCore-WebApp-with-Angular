@@ -5,6 +5,6 @@ using System.Threading.Tasks;
 
 namespace org.cchmc.pho.api.ViewModels
 {
-    public class QIWorkbookPracticeViewModel : WorkbooksPractice_Base
+    public class QIWorkbookPracticeViewModel : WorkbooksPracticeBase
     {}
 }
