@@ -56,6 +56,11 @@ export class PatientsComponent implements OnInit {
     return this.rest.selectedPatientName;
   }
 
+  //set 
+  get showViewReportButton(): boolean | null {
+    return this.rest.showViewReportButton;
+  }
+
   expandedElement: any;
   value = '';
 
@@ -273,6 +278,9 @@ export class PatientsComponent implements OnInit {
         tap(() => this.loadPatientsPage())
       )
       .subscribe();
+
+    //reset showViewReportButton
+    this.rest.showViewReportButton = null;
   }
 
   ngOnDestroy() {
@@ -946,6 +954,12 @@ export class PatientsComponent implements OnInit {
   openDrilldownDialog(measure, display) {
     //set default filterId value to -1, to differentiate between a set value and an intentionally null value.
     var filterId = -1;
+
+    //set showViewReportButton value
+    if (this.showViewReportButton === null)
+    {
+      this.rest.showViewReportButton = false;  //to hide the View Report button
+    }
 
     //apply filterId conditionally. 
     if (measure !== DrillthruMeasurementIdEnum.FilteredPatientList.toString()){
