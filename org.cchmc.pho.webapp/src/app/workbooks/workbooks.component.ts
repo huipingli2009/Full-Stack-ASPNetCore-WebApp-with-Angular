@@ -172,9 +172,6 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.onWorkbooksForPatientSearchValueChanges();
     this.getTreatments();
     this.PHQFollowUpQuestionValidators();
-
-    //testing
-    this.getQIWorkbookPractice(1021);
   }
 
   ngOnDestroy(): void {
