@@ -209,6 +209,43 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
             return workbookpractice;
         }
+       
+        public async Task<QIWorkbookPractice> GetPracticeQIWorkbooks(int userId, int formResponseId)
+        {
+            DataTable dataTable = new DataTable();
+            QIWorkbookPractice practiceqiworkbooks;
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetQIWorkbooks_Practice", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@FormResponseId", SqlDbType.Int).Value = formResponseId;
+
+                    await sqlConnection.OpenAsync();
+
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+
+                        practiceqiworkbooks = (from DataRow dr in dataTable.Rows
+                                            select new QIWorkbookPractice()
+                                            {
+                                                FormResponseId = int.Parse(dr["FormResponseId"].ToString()),
+                                                Header = dr["Header"].ToString(),
+                                                Line1 = dr["Line1"].ToString(),
+                                                Line2 = dr["Line2"].ToString(),
+                                                Line3 = dr["Line3"].ToString(),
+                                                JobAidURL = dr["JobAidURL"].ToString()
+                                            }
+                                        ).SingleOrDefault();
+                    }
+                }
+            }
+            return practiceqiworkbooks;
+        }
 
         public async Task<List<WorkbooksProvider>> GetPracticeWorkbooksProviders(int userId, int formResponseId)
         {

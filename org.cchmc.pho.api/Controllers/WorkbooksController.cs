@@ -478,5 +478,30 @@ namespace org.cchmc.pho.api.Controllers
             }
 
         }
+     
+        [HttpGet("practiceqiworkbooks")]
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin, PHO Leader")]
+        [SwaggerResponse(200, type: typeof(QIWorkbookPracticeViewModel))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> GetQIWorkbookPractice(int formResponseId)
+        {
+            try
+            {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+                // call the data method
+                var data = await _workbooks.GetPracticeQIWorkbooks(currentUserId, formResponseId);
+                // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
+                var result = _mapper.Map<QIWorkbookPracticeViewModel>(data);
+                // return the result in a "200 OK" response
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
     }
 }

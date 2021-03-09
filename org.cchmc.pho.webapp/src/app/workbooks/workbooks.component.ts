@@ -8,7 +8,7 @@ import { NGXLogger } from 'ngx-logger';
 import { Subject } from 'rxjs'; 
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { PatientForWorkbook, Providers } from '../models/patients';
-import { Followup, WorkbookDepressionPatient, WorkbookAsthmaPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookFormValueEnum, Treatment, WorkbookConfirmation } from '../models/workbook';
+import { Followup, WorkbookDepressionPatient, WorkbookAsthmaPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookFormValueEnum, Treatment, WorkbookConfirmation, QIWorkbookPractice} from '../models/workbook';
 import { RestService } from '../rest.service';
 import { DateRequiredValidator } from '../shared/customValidators/customValidator';
 import { MatSnackBarComponent } from '../shared/mat-snack-bar/mat-snack-bar.component';
@@ -89,6 +89,11 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   sortedAsthmaData: WorkbookAsthmaPatient[];
   //workbooksInitiative: string;
 
+  //for QI workbook 
+  qiworkbookprctice: QIWorkbookPractice;
+
+
+
   ProvidersForWorkbookForm = this.fb.group({
     ProviderWorkbookArray: this.fb.array([
       this.fb.group({
@@ -167,6 +172,9 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.onWorkbooksForPatientSearchValueChanges();
     this.getTreatments();
     this.PHQFollowUpQuestionValidators();
+
+    //testing
+    this.getQIWorkbookPractice(1021);
   }
 
   ngOnDestroy(): void {
@@ -280,13 +288,10 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
       if (values != "") {
         this.findPatientsForAddingtoWorkbook(values);
       }
-
     });
   }
 
-
 //event handlers - depression specific
-
   
   //for updating the depression provider values
   onDepressionProviderValueChanges(): void {
@@ -371,9 +376,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
         this.getWorkbookReportingMonthsForPatient(values);
       }
     });
-  }
-
-  
+  }  
 
 //helper methods - generic (all workbooks)
 
@@ -382,8 +385,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.rest.getWorkbookPractice(formResponseid).pipe(take(1)).subscribe((data) => {
       this.workbookPractice = data;
     })
-  }
-
+  } 
 
   //for getting workbook providers
   getAllProviders() {
@@ -391,6 +393,15 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
       this.allProviders = data;
     })
   }
+
+  //helper methods - generic (all workbooks)
+
+   //get practice QI workbook 
+   getQIWorkbookPractice(formResponseid: number) {
+    this.rest.getQIWorkbookPractice(formResponseid).pipe(take(1)).subscribe((data) => {
+      this.qiworkbookprctice = data;
+    })
+  }  
 
   //lookup patient to add. Depression and possibly asthma.
   findPatientsForAddingtoWorkbook(searchterm: string) {

@@ -59,7 +59,7 @@ export class Followup {
     phQ9FollowUpNotes: string;
 }
 
-export class WorkbookPractice {
+export abstract class WorkbookPractice_base {
     formResponseId: number;
     header: string;
     line1: string;
@@ -68,6 +68,9 @@ export class WorkbookPractice {
     line3: string;
 }
 
+export class WorkbookPractice extends WorkbookPractice_base {}
+
+export class QIWorkbookPractice extends WorkbookPractice_base {}
 
 export enum WorkbookFormValueEnum {
     asthma = 1,
@@ -78,7 +81,6 @@ export interface Treatment {
     treatmentId: string;
     treatmentLabel: string;
 }
-
 
 export class WorkbookConfirmation {
     formResponseID: number;

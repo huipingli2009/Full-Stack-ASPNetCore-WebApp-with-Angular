@@ -7,7 +7,7 @@ import { environment } from '../environments/environment';
 import { Alerts, EdChart, EdChartDetails, Population, Quicklinks, Spotlight, WebChartFilters } from './models/dashboard';
 import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Patients, NewPatient, Pmca, PopSlices, Providers, States, Outcomes, DuplicatePatient, MergePatientConfirmation } from './models/patients';
 import { PracticeList, Responsibilities, Staff, StaffDetails, StaffAdmin, PracticeCoach } from './models/Staff';
-import { Followup, WorkbookDepressionPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookAsthmaPatient, Treatment, WorkbookConfirmation} from './models/workbook';
+import { Followup, WorkbookDepressionPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookAsthmaPatient, Treatment, WorkbookConfirmation, QIWorkbookPractice} from './models/workbook';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
 import { FileDetails, FileAction, ResourceType, Tag, Initiative, FileType, ContentPlacement } from './models/files';
 import { Location } from '@angular/common';
@@ -638,6 +638,17 @@ export class RestService {
     paramsValue = paramsValue.append("formResponseId", formResponseid.toString());
     return this.http.get<WorkbookPractice>(`${API_URL}/api/Workbooks/asthmaworkbookspractice`, { params: paramsValue }).pipe(
       map((data: WorkbookPractice) => {
+        return data;
+      })
+    );
+  }
+
+  /*getting Practice workbook details for QI (separate API)*/
+  getQIWorkbookPractice(formResponseid: number): Observable<any> {
+    let paramsValue = new HttpParams();
+    paramsValue = paramsValue.append("formResponseId", formResponseid.toString());
+    return this.http.get<QIWorkbookPractice>(`${API_URL}/api/Workbooks/practiceqiworkbooks`, { params: paramsValue }).pipe(
+      map((data: QIWorkbookPractice) => {
         return data;
       })
     );
