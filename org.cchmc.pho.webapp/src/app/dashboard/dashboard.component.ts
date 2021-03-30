@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as Chart from 'chart.js';
 import { NGXLogger } from 'ngx-logger';
 import { environment } from 'src/environments/environment';
-import { WebChart, WebChartDataSet, EdChartDetails, Population, Quicklinks, Spotlight, WebChartFilters, WebChartFilterMeasureId, WebChartId, WebChartFilterId} from '../models/dashboard';
+import { WebChart, WebChartDataSet, EdChartDetails, Population, Quicklinks, Spotlight, WebChartFilters, WebChartFilterMeasureId, WebChartId, WebChartFilterId, DrillThruMeasureId} from '../models/dashboard';
 import { RestService } from '../rest.service';
 import { DrilldownService } from '../drilldown/drilldown.service';
 import { AuthenticationService } from '../services/authentication.service';
@@ -120,82 +120,8 @@ export class DashboardComponent implements OnInit {
   } 
   
   ngAfterViewInit() {  
-    //this.generateChart();    
-  }
-
-  // generateChart(){
-  //   this.logger.log('firing generateChart');
-  //   const $this = this; // This is the only way to get the bar chart to work using functions out of scope.(Fat arrow does not work)
-  //   this.canvas = document.getElementById('webChart');     
-
-  //   this.ctx = this.canvas.getContext('2d'); 
-
-    this.webBarChart = new Chart(this.ctx, {
-      type: 'bar',
-      data: {
-        labels: [],       
-        datasets: [{
-          label: '# Patients',
-          data: [],         
-          maxBarThickness: 22,
-          backgroundColor: '#FABD9E',
-          hoverBackgroundColor: '#F0673C'
-        }]
-      },
-      options: {
-        responsive: true,
-        legend: {
-          position: 'bottom',
-          // labels: {
-          //   verticalAlign: true
-          // }
-          // align: 'end',
-          // labels: {
-          //   fontColor: 'rgb(255, 99, 132)',
-          //   align: 'vertical'
-          // }
-          labels: {
-            //usePointStyle: true,
-            //fontColor: 'rgb(255,99,132)',
-            //boxWidth: 6
-            
-          }
-        },
-        layout: {
-          padding: {
-            left: 42,
-            right: 53,
-            top: 27,
-            bottom: 43
-          }
-        },
-        scales: {
-          xAxes: [{
-            ticks: {
-              callback (value, index, values) {
-                return value;
-              }              
-            }
-          }],
-          yAxes: [{
-            ticks: {   
-              beginAtZero: true,   //force the y-axis to start at 0      
-                max:this.patientsMax              
-            }
-          }]
-
-        },
-        tooltips: {
-          enabled: true
-        },
-        onClick (e) {
-          let element = this.getElementAtEvent(e);
-          
-          $this.Showmodal(e, this, element); // This is the result of a "fake" JQuery this
-        }
-      }
-    });  
-    
+    //NOTE: May require tweaking in this method after testing.   
+    const $this = this;
   }
 
   exportChartData() {
@@ -306,17 +232,17 @@ export class DashboardComponent implements OnInit {
 
   /* ED Chart =========================================*/
   getWebChart(chartId: number, measureId: number, filterId: number) {    
-  
+    const $this = this;
     this.webChart = null;
     let max = 0;
     let counter = 0;    
 
-   if(this.webBarChart !== undefined) {   
+   if(this.webChartObj !== undefined) {   
 
      let n = this.webChartObj.data.labels.length;
 
      for (counter = 0; counter < n; counter++){
-      this.removeData(this.webBarChart);          
+      this.removeData(this.webChartObj);          
     }   
   }   
 
@@ -332,12 +258,11 @@ export class DashboardComponent implements OnInit {
       var chartType = '';
       var i;
 
+      // assign x axis labels
+      this.graphLabelArray = this.webChart.dataSets[0].xAxisLabels;
+
       for (i=0; i < this.webChart.dataSets.length; i++)
       { 
-
-
-        this.logger.log(this.webChart.dataSets[i].values, 'dataset value list');
-        this.logger.log(this.webChart.dataSets[i].xAxisLabels, 'dataset label list');
         var highestValue = Math.max.apply(null, this.webChart.dataSets[i].values);
         if (highestValue > this.patientsMax) { this.patientsMax = (highestValue+1); }
         chartType = this.webChart.dataSets[i].type;
@@ -353,9 +278,8 @@ export class DashboardComponent implements OnInit {
                           borderColor: this.webChart.dataSets[i].borderColor,
                           fill: this.webChart.dataSets[i].fill
                           }
-        this.graphLabelArray = this.webChart.dataSets[i].xAxisLabels;
       }
-      this.logger.log(this.graphDatasetsArray);
+      
       //SET THE GRAPH CONFIGURATION VALUES
       var chartConfig = {
         type: chartType,
@@ -397,7 +321,7 @@ export class DashboardComponent implements OnInit {
           },
           onClick (e) {
             let element = this.getElementAtEvent(e);                  
-            this.Showmodal(e, this, element); // This is the result of a "fake" JQuery this
+            $this.Showmodal(e, this, element);
           }    
         }    
       };
