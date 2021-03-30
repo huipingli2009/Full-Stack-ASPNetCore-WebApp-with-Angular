@@ -1,11 +1,10 @@
 import { Component, OnInit, Inject, HostListener } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatTableDataSource, MatTable, MatTableModule } from '@angular/material/table';
 import { RestService } from '../rest.service';
 import { NGXLogger } from 'ngx-logger';
 import { MetricDrillthruTable, MetricDrillthruRow, MetricDrillthruColumn } from '../models/drillthru';
 import * as XLSX from 'xlsx'; 
-
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-drilldown',
@@ -13,9 +12,11 @@ import * as XLSX from 'xlsx';
   styleUrls: ['./drilldown.component.scss']
 })
 
-
-
 export class DrilldownComponent implements OnInit {
+
+  get showViewReportButton(): boolean | null {
+    return this.rest.showViewReportButton;
+  }
 
   selectedMeasureId: string;
   selectedFilterId: string;
@@ -26,6 +27,9 @@ export class DrilldownComponent implements OnInit {
   headerDisplayText: string;
   fileName= 'Data_Export.xlsx'; 
   isLoading: boolean;
+  defaultUrl = environment.apiURL; 
+  displayViewReport: boolean = false;
+
   
   constructor(public rest: RestService,private logger: NGXLogger, @Inject(MAT_DIALOG_DATA) public data: {
     measureId: string,
@@ -40,11 +44,12 @@ export class DrilldownComponent implements OnInit {
   this.getMeasureDetailsTable();
 }
 
-  ngOnInit(): void {
-    
-  }
+  ngOnInit(): void {} 
 
   getMeasureDetailsTable(){
+
+    this.displayViewReport = this.showViewReportButton;
+
     this.rest.getMeasureDrilldownTable(this.selectedMeasureId, this.selectedFilterId).subscribe((data) => {
       this.logger.log(data, 'metricDrilldownData');
       this.table = data;
@@ -52,8 +57,7 @@ export class DrilldownComponent implements OnInit {
       this.primaryRow = this.table.rows[0];
       this.headerColumns = this.primaryRow.columns; 
       this.isLoading = false;   
-  });
-
+    });    
   }
 
   public cancel() {
@@ -79,4 +83,7 @@ export class DrilldownComponent implements OnInit {
        XLSX.writeFile(wb, this.fileName);
   }
 
+  public OpenReport() {
+    window.open(`${this.defaultUrl}/edreport`, '_blank');       
+  } 
 }

@@ -7,14 +7,11 @@ import { environment } from '../environments/environment';
 import { Alerts, WebChart, EdChartDetails, Population, Quicklinks, Spotlight, WebChartFilters } from './models/dashboard';
 import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Patients, NewPatient, Pmca, PopSlices, Providers, States, Outcomes, DuplicatePatient, MergePatientConfirmation } from './models/patients';
 import { PracticeList, Responsibilities, Staff, StaffDetails, StaffAdmin, PracticeCoach } from './models/Staff';
-import { Followup, WorkbookDepressionPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookAsthmaPatient, Treatment, WorkbookConfirmation} from './models/workbook';
+import { Followup, WorkbookDepressionPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookAsthmaPatient, Treatment, WorkbookConfirmation, QIWorkbookPractice} from './models/workbook';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
 import { FileDetails, FileAction, ResourceType, Tag, Initiative, FileType, ContentPlacement } from './models/files';
 import { Location } from '@angular/common';
 import { MetricDrillthruTable } from './models/drillthru';
-// import { constants } from 'http2';
-
-
 
 // we can now access environment.apiUrl
 const API_URL = environment.apiURL;
@@ -34,6 +31,9 @@ export class RestService {
   //handle selected patient from ED Chart
   selectedPatientId: number | null;
   selectedPatientName: string | null;
+
+  //handle the hide/show of the View Report button
+  showViewReportButton: boolean | null;
 
   constructor(private http: HttpClient, private logger: NGXLogger, private snackBar: MatSnackBarComponent) { }
   private extractData(res: Response) {
@@ -639,6 +639,17 @@ export class RestService {
     paramsValue = paramsValue.append("formResponseId", formResponseid.toString());
     return this.http.get<WorkbookPractice>(`${API_URL}/api/Workbooks/asthmaworkbookspractice`, { params: paramsValue }).pipe(
       map((data: WorkbookPractice) => {
+        return data;
+      })
+    );
+  }
+
+  /*getting Practice workbook details for QI (separate API)*/
+  getQIWorkbookPractice(formResponseid: number): Observable<any> {
+    let paramsValue = new HttpParams();
+    paramsValue = paramsValue.append("formResponseId", formResponseid.toString());
+    return this.http.get<QIWorkbookPractice>(`${API_URL}/api/Workbooks/practiceqiworkbooks`, { params: paramsValue }).pipe(
+      map((data: QIWorkbookPractice) => {
         return data;
       })
     );

@@ -13,6 +13,9 @@ import { DrilldownService } from '../drilldown/drilldown.service';
 import { AuthenticationService } from '../services/authentication.service';
 import { FilterService } from '../services/filter.service';
 import * as XLSX from 'xlsx'; 
+import { UserService } from '../services/user.service';
+import { CurrentUser, Role} from '../models/user';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,7 +26,12 @@ import * as XLSX from 'xlsx';
 export class DashboardComponent implements OnInit {
 
   @ViewChild('callEDDialog') callEDDialog: TemplateRef<any>;
+  @ViewChild('callNonEDPopulationDialog') callNonEDPopulationDialog: TemplateRef<any>;
 
+
+  currentUser: CurrentUser;
+  currentUserId: number;
+  drillThruUser: boolean;
   spotlight: Spotlight[];
   quickLinks: Quicklinks[];
   population: Population[];
@@ -75,10 +83,11 @@ export class DashboardComponent implements OnInit {
   filterId: number;
   chartData: number[] ;
   chartLabel: string[];
+  chartCategorySelected: number;
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
               public fb: FormBuilder, public dialog: MatDialog, private datePipe: DatePipe, private logger: NGXLogger,
-              private authenticationService: AuthenticationService, private filterService: FilterService,
+              private authenticationService: AuthenticationService, private filterService: FilterService,private userService: UserService,
               private drilldownService: DrilldownService) {
     // var id = this.userId.snapshot.paramMap.get('id') TODO: Need User Table;
     this.dataSourceOne = new MatTableDataSource;
@@ -91,6 +100,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.isLoggedIn$ = this.authenticationService.isUserLoggedIn;
+    this.exportChartData();
     this.getSpotlight();
     this.getQuicklinks();
     this.getPopulation();
@@ -99,7 +109,7 @@ export class DashboardComponent implements OnInit {
     this.filterId = WebChartFilterId.dateFilterId;
     this.webchartfilters = this.filterId;
     this.getWebChartFilters(this.chartId, this.measureId); 
-    this.logger.log("ngOnInit: filterid= " + this.filterId.toString());
+    this.logger.log("ngOnInit: filterid= " + this.filterId.toString());    
   }
 
   ngOnChanges() {
@@ -120,61 +130,88 @@ export class DashboardComponent implements OnInit {
 
   //   this.ctx = this.canvas.getContext('2d'); 
 
-  //   this.webChartObj = new Chart(this.ctx, {
-  //     type: 'bar',
-  //     data: {
-  //       labels: this.graphLabelArray,       
-  //       datasets: this.graphDatasetsArray
-  //     },
-  //     options: {
-  //       responsive: true,
-  //       legend: {
-  //         position: 'bottom',          
-  //         labels: {  //leave the coding here for future use
-  //           //usePointStyle: true,
-  //           //fontColor: 'rgb(255,99,132)',
-  //           //boxWidth: 6            
-  //         }
-  //       },
-  //       layout: {
-  //         padding: {
-  //           left: 42,
-  //           right: 53,
-  //           top: 27,
-  //           bottom: 43
-  //         }
-  //       },
-  //       scales: {
-  //         xAxes: [{
-  //           ticks: {
-  //             callback (value, index, values) {
-  //               return value;
-  //             }              
-  //           }
-  //         }],
-  //         yAxes: [{
-  //           ticks: {   
-  //             beginAtZero: true,   //force the y-axis to start at 0      
-  //               max:this.patientsMax              
-  //           }
-  //         }]
+    this.webBarChart = new Chart(this.ctx, {
+      type: 'bar',
+      data: {
+        labels: [],       
+        datasets: [{
+          label: '# Patients',
+          data: [],         
+          maxBarThickness: 22,
+          backgroundColor: '#FABD9E',
+          hoverBackgroundColor: '#F0673C'
+        }]
+      },
+      options: {
+        responsive: true,
+        legend: {
+          position: 'bottom',
+          // labels: {
+          //   verticalAlign: true
+          // }
+          // align: 'end',
+          // labels: {
+          //   fontColor: 'rgb(255, 99, 132)',
+          //   align: 'vertical'
+          // }
+          labels: {
+            //usePointStyle: true,
+            //fontColor: 'rgb(255,99,132)',
+            //boxWidth: 6
+            
+          }
+        },
+        layout: {
+          padding: {
+            left: 42,
+            right: 53,
+            top: 27,
+            bottom: 43
+          }
+        },
+        scales: {
+          xAxes: [{
+            ticks: {
+              callback (value, index, values) {
+                return value;
+              }              
+            }
+          }],
+          yAxes: [{
+            ticks: {   
+              beginAtZero: true,   //force the y-axis to start at 0      
+                max:this.patientsMax              
+            }
+          }]
 
-  //       },
-  //       tooltips: {
-  //         enabled: true,
-  //         mode: 'point'
-  //       },
-  //       onClick (e) {
-  //         let element = this.getElementAtEvent(e);                 
-         
-  //         $this.Showmodal(e, this, element); // This is the result of a "fake" JQuery this    
-         
-  //       }       
-  //     }
-  //   });  
+        },
+        tooltips: {
+          enabled: true
+        },
+        onClick (e) {
+          let element = this.getElementAtEvent(e);
+          
+          $this.Showmodal(e, this, element); // This is the result of a "fake" JQuery this
+        }
+      }
+    });  
+    
+  }
 
-  //   this.logger.log(this.webChartObj.config, 'generateChart');
-  // }
+  exportChartData() {
+    this.userService.getCurrentUser().pipe(take(1)).subscribe((data) => {
+      this.currentUser = data;
+      this.currentUserId = data.id;
+
+      //PHO Member and PHO Leader are excluded from exporting/viewing chart data details
+      if (data.role.id === Role.PHOMember || data.role.id === Role.PHOLeader) {
+        this.drillThruUser = false;
+      } 
+      else { 
+        this.drillThruUser = true; 
+      }
+    });
+  }
 
   
   // Dahsboard Content
@@ -274,14 +311,16 @@ export class DashboardComponent implements OnInit {
     let max = 0;
     let counter = 0;    
 
-   if(this.webChartObj !== undefined) {   
+   if(this.webBarChart !== undefined) {   
 
      let n = this.webChartObj.data.labels.length;
 
      for (counter = 0; counter < n; counter++){
-      this.removeData(this.webChartObj);          
+      this.removeData(this.webBarChart);          
     }   
   }   
+
+    this.rest.showViewReportButton = measureId === WebChartFilterMeasureId.edChartdMeasureId;
 
     this.rest.getWebChartByUser(chartId,measureId,filterId).subscribe((data) => {     
       this.webChart = data;
@@ -451,32 +490,33 @@ export class DashboardComponent implements OnInit {
 
   /* Open Modal (Dialog) on bar click */
   Showmodal(event, chart, element): void {
+    
     this.logger.log("starting ED modal");
+
+    let drillThruMeasureId;
+    let tempFilterId;    
+
     if (this.measureId === WebChartFilterMeasureId.edChartdMeasureId){
       this.logger.log("measure is edchart, loading dialog");
-      this.logger.log("selected bar: " + element[0]._model.label);
-      this.selectedBar = this.transformAdmitDate(element[0]._model.label);
-      this.openDialogWithDetails();
+      this.logger.log("selected bar: " + element[0]._model.label);      
+      this.selectedBar = element[0]._model.label;     
+      
+      drillThruMeasureId = DrillThruMeasureId.EDDrillThruMeasureId;
+      tempFilterId = element[0]._index + 1;     
     }
-
-  }
-  openDialogWithDetails() {
-    this.webChartDetails = [];
-    this.logger.log("selected bar: " + this.selectedBar);
-    this.rest.getWebChartDetails(this.selectedBar).subscribe((data) => {
-      this.webChartDetails = data;
-      const dialogRef = this.dialog.open(this.callEDDialog);
-    });
-
-    // Leaving this here incase we need to handle some things when a modal closes
-    // dialogRef.afterClosed().subscribe(result => {
-
-    // });
-  }
-
-  OpenReport() {
-    window.open(`${this.defaultUrl}/edreport`, '_blank');       
-  }
+    else {   //all the non-ED chart reports 
+      this.logger.log("measure is non edchart, loading dialog");
+      this.logger.log("selected bar: " + element[0]._index);     
+    
+      drillThruMeasureId = DrillThruMeasureId.PatientListDrillThruMeasureId;
+      tempFilterId = element[0]._index + 1;       
+    }
+    
+    if (this.drillThruUser){
+      this.openDrilldownDialog(drillThruMeasureId,tempFilterId);
+    }
+    
+  } 
 
   onSelectedPatient(id: number, name: string){  
 
@@ -499,5 +539,25 @@ export class DashboardComponent implements OnInit {
     /* save to file */
     XLSX.writeFile(wb, this.fileName);  
     
+  }
+
+  openDrilldownDialog(measure,filterId) { 
+
+    let drillThruText;   
+
+    //Only ED Chart with Date Selected as Filter displays 'ED Details', the rest displays 'Patient Details'
+    if (measure == DrillThruMeasureId.EDDrillThruMeasureId && this.filterId == WebChartFilterId.dateFilterId) {
+      drillThruText = 'ED Details';       
+    }
+    else {
+      drillThruText = 'Patient Details';      
+    }
+    
+    var drilldownOptions = {
+      measureId: measure, 
+      filterId: filterId, 
+      displayText: drillThruText     
+    };
+    this.drilldownService.open(drilldownOptions);
   }
 }
