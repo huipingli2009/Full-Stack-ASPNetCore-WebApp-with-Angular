@@ -42,6 +42,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                        PracticeId = Convert.ToInt32(dr["PracticeId"]),
                                        DashboardLabel = dr["DashboardLabel"].ToString(),
                                        MeasureId = (dr["MeasureId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["MeasureId"].ToString())),
+                                       ConditionId = (dr["ConditionId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["ConditionId"].ToString())),
                                        MeasureDesc = dr["MeasureDesc"].ToString(),
                                        MeasureType = dr["MeasureType"].ToString(),
                                        PracticeTotal = Convert.ToInt32(dr["PracticeTotal"]),
@@ -109,7 +110,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                             AdmitDate = Convert.ToDateTime(dr["AdmitDate"]),
                                             ChartLabel = dr["ChartLabel"].ToString(),
                                             ChartTitle = dr["ChartTitle"].ToString(),
-                                            EDVisits = Convert.ToInt32(dr["ChartValue"]),
+                                            EDVisits = Convert.ToInt32(dr["BarValue1"]),
                                             ChartTopLeftLabel = dr["TopLeftLabel"].ToString(),
                                         }
     ).ToList();
@@ -172,6 +173,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
 
         }
+
         public async Task<DrillthruMetricTable> GetDrillthruTable(int userId, int measureId, int filterId)
         {
             DataTable dataTable = new DataTable();

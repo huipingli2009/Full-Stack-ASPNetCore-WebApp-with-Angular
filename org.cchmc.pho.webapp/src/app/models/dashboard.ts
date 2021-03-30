@@ -41,6 +41,7 @@ export class Population {
     practiceId: number;
     dashboardLabel: string;
     measureId: number;
+    conditionId: number;
     measureDesc: string;
     measureType: string;
     practiceTotal: number;
@@ -108,4 +109,9 @@ export enum WebChartFilterId {
     payorTypeFilterId = 5,
     locationFilterId = 6,
     ageFilterId = 7
+}
+
+export enum DrillThruMeasureId {
+    EDDrillThruMeasureId = 8,
+    PatientListDrillThruMeasureId = 6  
 }

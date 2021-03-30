@@ -7,12 +7,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as Chart from 'chart.js';
 import { NGXLogger } from 'ngx-logger';
 import { environment } from 'src/environments/environment';
-import { EdChart, EdChartDetails, Population, Quicklinks, Spotlight, WebChartFilters, WebChartFilterMeasureId, WebChartId, WebChartFilterId} from '../models/dashboard';
+import { EdChart, EdChartDetails, Population, Quicklinks, Spotlight, WebChartFilters, WebChartFilterMeasureId, WebChartId, WebChartFilterId, DrillThruMeasureId} from '../models/dashboard';
 import { RestService } from '../rest.service';
 import { DrilldownService } from '../drilldown/drilldown.service';
 import { AuthenticationService } from '../services/authentication.service';
 import { FilterService } from '../services/filter.service';
 import * as XLSX from 'xlsx'; 
+import { UserService } from '../services/user.service';
+import { CurrentUser, Role} from '../models/user';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,7 +26,12 @@ import * as XLSX from 'xlsx';
 export class DashboardComponent implements OnInit {
 
   @ViewChild('callEDDialog') callEDDialog: TemplateRef<any>;
+  @ViewChild('callNonEDPopulationDialog') callNonEDPopulationDialog: TemplateRef<any>;
 
+
+  currentUser: CurrentUser;
+  currentUserId: number;
+  drillThruUser: boolean;
   spotlight: Spotlight[];
   quickLinks: Quicklinks[];
   population: Population[];
@@ -38,7 +46,7 @@ export class DashboardComponent implements OnInit {
   monthlySpotlightLinkLabel: string;
   monthlySpotlightImageUrl: string;
   webChartTitle: string;
-  webchartfilters: string;
+  webchartfilters: number;
   webChartTopLeftLabel: string;
   defaultUrl = environment.apiURL; 
   popData: any[] = [];
@@ -73,10 +81,11 @@ export class DashboardComponent implements OnInit {
   filterId: number;
   chartData: number[] ;
   chartLabel: string[];
+  chartCategorySelected: number;
 
   constructor(public rest: RestService, private route: ActivatedRoute, private router: Router,
               public fb: FormBuilder, public dialog: MatDialog, private datePipe: DatePipe, private logger: NGXLogger,
-              private authenticationService: AuthenticationService, private filterService: FilterService,
+              private authenticationService: AuthenticationService, private filterService: FilterService,private userService: UserService,
               private drilldownService: DrilldownService) {
     // var id = this.userId.snapshot.paramMap.get('id') TODO: Need User Table;
     this.dataSourceOne = new MatTableDataSource;
@@ -89,14 +98,16 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.isLoggedIn$ = this.authenticationService.isUserLoggedIn;
+    this.exportChartData();
     this.getSpotlight();
     this.getQuicklinks();
     this.getPopulation();
     this.chartId = WebChartId.PopulationChart; 
     this.measureId = WebChartFilterMeasureId.edChartdMeasureId; 
     this.filterId = WebChartFilterId.dateFilterId;
+    this.webchartfilters = this.filterId;
     this.getWebChartFilters(this.chartId, this.measureId); 
-    this.logger.log("ngOnInit: filterid= " + this.filterId.toString());
+    this.logger.log("ngOnInit: filterid= " + this.filterId.toString());    
   }
 
   ngOnChanges() {
@@ -128,20 +139,11 @@ export class DashboardComponent implements OnInit {
       options: {
         responsive: true,
         legend: {
-          position: 'bottom',
-          // labels: {
-          //   verticalAlign: true
-          // }
-          // align: 'end',
-          // labels: {
-          //   fontColor: 'rgb(255, 99, 132)',
-          //   align: 'vertical'
-          // }
-          labels: {
+          position: 'bottom',          
+          labels: {  //leave the coding here for future use
             //usePointStyle: true,
             //fontColor: 'rgb(255,99,132)',
-            //boxWidth: 6
-            
+            //boxWidth: 6            
           }
         },
         layout: {
@@ -169,18 +171,35 @@ export class DashboardComponent implements OnInit {
 
         },
         tooltips: {
-          enabled: true
+          enabled: true,
+          mode: 'point'
         },
         onClick (e) {
-          let element = this.getElementAtEvent(e);
-          if (element.length) {
-            // this.selectedBar = element[0]._model.label;
-          }
-          $this.Showmodal(e, this, element); // This is the result of a "fake" JQuery this
-        }
+          let element = this.getElementAtEvent(e);                 
+         
+          $this.Showmodal(e, this, element); // This is the result of a "fake" JQuery this    
+         
+        }       
       }
     });  
     
+      //reset showViewReportButton
+      this.rest.showViewReportButton = null;
+  }
+
+  exportChartData() {
+    this.userService.getCurrentUser().pipe(take(1)).subscribe((data) => {
+      this.currentUser = data;
+      this.currentUserId = data.id;
+
+      //PHO Member and PHO Leader are excluded from exporting/viewing chart data details
+      if (data.role.id === Role.PHOMember || data.role.id === Role.PHOLeader) {
+        this.drillThruUser = false;
+      } 
+      else { 
+        this.drillThruUser = true; 
+      }
+    });
   }
 
   
@@ -230,7 +249,8 @@ export class DashboardComponent implements OnInit {
             measureDesc: item.measureDesc,
             practiceTotal: item.practiceTotal,
             networkTotal: item.networkTotal,
-            measureId: item.measureId
+            measureId: item.measureId,
+            opDefURL: item.opDefURL
           });
           this.dataSourceTwo.data = this.qiData;
         }
@@ -241,8 +261,8 @@ export class DashboardComponent implements OnInit {
             practiceTotal: item.practiceTotal,
             networkTotal: item.networkTotal,
             measureId: item.measureId,
-            opDefURL: item.opDefURL,
-            opDefURLExists: item.opDefURL === ''? false: true           
+            conditionId: item.conditionId,
+            opDefURL: item.opDefURL   
           });
           
           this.dataSourceThree.data = this.conditionData;          
@@ -268,7 +288,7 @@ export class DashboardComponent implements OnInit {
   toFilteredConditions(element) {
     this.logger.log(element.measureId, "toFilteredConditions: measureId");
     this.filterService.updateIsFilteringConditions(true);
-    this.filterService.updateFilterType(element.measureId);
+    this.filterService.updateFilterType(element.conditionId);
     this.router.navigate(['/patients']);
   }
 
@@ -280,14 +300,16 @@ export class DashboardComponent implements OnInit {
     let max = 0;
     let counter = 0;    
 
-   if(this.webBarChart !== undefined) {   
+    if(this.webBarChart !== undefined) {   
 
      let n = this.webBarChart.data.labels.length;
 
      for (counter = 0; counter < n; counter++){
       this.removeData(this.webBarChart);          
-    }   
-  }   
+      }   
+    } 
+
+    this.rest.showViewReportButton = measureId === WebChartFilterMeasureId.edChartdMeasureId;
 
     this.rest.getWebChartByUser(chartId,measureId,filterId).subscribe((data) => {     
 
@@ -322,8 +344,9 @@ export class DashboardComponent implements OnInit {
     this.rest.getWebChartFilters(chartId, measureId).subscribe((data) => {
       this.webchartfilterList = data;
       this.webchartfilterselectedFilter = data[0];
-      this.filterId = data[0].filterId.toString();
-      this.logger.log("filterlist: " + data[0].toString() + " data: " + data.toString());
+      this.filterId = data[0].filterId;
+      this.webchartfilters = data[0].filterId;
+      this.logger.log("filterlist: " + data[0] + " data: " + data);
       this.logger.log("getWebChartFilters, regenerate measureId: " + measureId.toString() + " filterId: " + this.filterId.toString() + "trying to set to: " + data[0].filterId.toString());
       //New filters NECESSARILY means new chart generation. Trigger it here.
       this.getWebChart(this.chartId, this.measureId, this.filterId);
@@ -335,8 +358,9 @@ export class DashboardComponent implements OnInit {
     
     this.reportFilterSelected = false;
     this.filterId = event.value;
-    this.webchartfilterselectedFilter = this.webchartfilterList.find(f => f.filterId === event.value);
-    
+    this.webchartfilterselectedFilter = this.webchartfilterList.find(f => f.filterId === this.filterId);
+    this.reportFilterSelected = true;
+    this.logger.log("switching report condition to filterId: " + this.webchartfilterselectedFilter);
     //dynamically pass the parameters to getWebChart function to generate the report
     this.getWebChart(this.chartId, this.measureId, this.filterId);
     this.webBarChart.update();
@@ -364,7 +388,9 @@ export class DashboardComponent implements OnInit {
     return this.datePipe.transform(date, 'EE MM/dd');
   }
   transformAdmitDate(date) {
-    return this.datePipe.transform(date, 'yyyyMMdd');
+    let localYear = new Date().getFullYear();
+    this.logger.log("formatteddate " + this.datePipe.transform(date + ' , ' + localYear.toString(), 'yyyyMMdd').toString());
+    return this.datePipe.transform(date + ' , ' + localYear, 'yyyyMMdd').toString();
   }
 
   addData(chart, label, data) {
@@ -387,25 +413,33 @@ export class DashboardComponent implements OnInit {
 
   /* Open Modal (Dialog) on bar click */
   Showmodal(event, chart, element): void {
-    this.selectedBar = this.transformAdmitDate(element[0]._model.label);
-    this.openDialogWithDetails();
-  }
-  openDialogWithDetails() {
-    this.webChartDetails = [];
-    this.rest.getWebChartDetails(this.selectedBar).subscribe((data) => {
-      this.webChartDetails = data;
-      const dialogRef = this.dialog.open(this.callEDDialog);
-    });
+    
+    this.logger.log("starting ED modal");
 
-    // Leaving this here incase we need to handle some things when a modal closes
-    // dialogRef.afterClosed().subscribe(result => {
+    let drillThruMeasureId;
+    let tempFilterId;    
 
-    // });
-  }
-
-  OpenReport() {
-    window.open(`${this.defaultUrl}/edreport`, '_blank');       
-  }
+    if (this.measureId === WebChartFilterMeasureId.edChartdMeasureId){
+      this.logger.log("measure is edchart, loading dialog");
+      this.logger.log("selected bar: " + element[0]._model.label);      
+      this.selectedBar = element[0]._model.label;     
+      
+      drillThruMeasureId = DrillThruMeasureId.EDDrillThruMeasureId;
+      tempFilterId = element[0]._index + 1;     
+    }
+    else {   //all the non-ED chart reports 
+      this.logger.log("measure is non edchart, loading dialog");
+      this.logger.log("selected bar: " + element[0]._index);     
+    
+      drillThruMeasureId = DrillThruMeasureId.PatientListDrillThruMeasureId;
+      tempFilterId = element[0]._index + 1;       
+    }
+    
+    if (this.drillThruUser){
+      this.openDrilldownDialog(drillThruMeasureId,tempFilterId);
+    }
+    
+  } 
 
   onSelectedPatient(id: number, name: string){  
 
@@ -428,5 +462,25 @@ export class DashboardComponent implements OnInit {
     /* save to file */
     XLSX.writeFile(wb, this.fileName);  
     
+  }
+
+  openDrilldownDialog(measure,filterId) { 
+
+    let drillThruText;   
+
+    //Only ED Chart with Date Selected as Filter displays 'ED Details', the rest displays 'Patient Details'
+    if (measure == DrillThruMeasureId.EDDrillThruMeasureId && this.filterId == WebChartFilterId.dateFilterId) {
+      drillThruText = 'ED Details';       
+    }
+    else {
+      drillThruText = 'Patient Details';      
+    }
+    
+    var drilldownOptions = {
+      measureId: measure, 
+      filterId: filterId, 
+      displayText: drillThruText     
+    };
+    this.drilldownService.open(drilldownOptions);
   }
 }

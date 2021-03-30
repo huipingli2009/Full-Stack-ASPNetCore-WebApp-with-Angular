@@ -234,8 +234,6 @@ namespace org.cchmc.pho.unittest.ControllerTests
             Assert.AreEqual(500, result.StatusCode);
         }
 
-
-
         [TestMethod]
         public async Task ListEDDetails_Mapping_Success()
         {
