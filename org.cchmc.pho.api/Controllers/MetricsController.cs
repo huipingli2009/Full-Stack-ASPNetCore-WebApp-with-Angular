@@ -92,7 +92,7 @@ namespace org.cchmc.pho.api.Controllers
                 // call the data method
                 var data = await _metricDal.ListWebChart(currentUserId, chartId, measureId, filterId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
-                var result = _mapper.Map<List<WebChartViewModel>>(data);
+                var result = _mapper.Map<WebChartViewModel>(data);
                 // return the result in a "200 OK" response
                 return Ok(result);
             }

@@ -57,13 +57,14 @@ export class WebChart {
     dataSets: WebChartDataSet[];
 }
 export class WebChartDataSet {
-    Label: string;
-    Type: string;
-    dataPoints: WebChartDataPoint[];
-}
-export class WebChartDataPoint {
-    DataPoint: string;
-    DataValue: number;
+    type: string;
+    xAxisLabels: string[];
+    values: number[];
+    legend: string;
+    backgroundColor: string;
+    backgroundHoverColor: string;
+    borderColor: string;
+    fill: boolean;
 }
 export class EdChartDetails {
     patientId: number;

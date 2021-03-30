@@ -12,13 +12,13 @@ namespace org.cchmc.pho.api.ViewModels
     }
     public class WebChartDataSetViewModel
     {
-        public string Label { get; set; }
         public string Type { get; set; }
-        public List<WebChartDataPointViewModel> DataPoints { get; set; }
-    }
-    public class WebChartDataPointViewModel
-    {
-        public string DataPoint { get; set; }
-        public int DataValue { get; set; }
+        public string[] XAxisLabels { get; set; }
+        public int[] Values { get; set; }
+        public string Legend { get; set; }
+        public string BackgroundColor { get; set; }
+        public string BackgroundHoverColor { get; set; }
+        public string BorderColor { get; set; }
+        public bool Fill { get; set; }
     }
 }

@@ -103,53 +103,52 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     {
                         da.Fill(dataSet);
                         var headerTable = dataSet?.Tables?[0];
-                        var finalTable = dataSet?.Tables?[1];
+                        DataTable finalTable = dataSet?.Tables?[1];
 
                         DataRow hr = headerTable.Rows[0];
-                        chart = (new WebChart()
-                        {
-                            DataSets = new List<WebChartDataSet>(),
-                            PracticeId = Convert.ToInt32(hr["PracticeId"]),
-                            Title = hr["HeaderLabel"].ToString(),
-                            HeaderLabel = hr["HeaderLabel"].ToString()
-                        });
+                        chart = (new WebChart(
+                            Convert.ToInt32(hr["PracticeID"]), 
+                            hr["ChartTitle"].ToString(), 
+                            hr["HeaderText"].ToString()
+                            ));
 
-                        int? curDataSetIndex = 0;
-                        WebChartDataSet curDataSet = null;
-                        foreach(DataRow dr in finalTable.Rows)
-                        {
-                            int i = Convert.ToInt32(hr["DataSetIndex"]);
-                            if (curDataSetIndex != i)
-                            {
-                                //new index found
-                                if (curDataSet != null)
-                                {
-                                    //add existing dataset to chart
-                                    chart.DataSets.Add(curDataSet);
-                                    curDataSet = null;
-                                }
-                                if (curDataSet == null)
-                                {
-                                    //start new dataset
-                                    curDataSet = new WebChartDataSet()
-                                    {
-                                        Label = dr["Label"].ToString(),
-                                        Type = dr["Type"].ToString(),
-                                        DataPoints = new List<WebChartDataPoint>()
-                                    };
-                                }
-                            }
+                        //Split the final table into a list, using the DataSetIndex as the groupby.
+                        List<DataTable> dataSets = finalTable.AsEnumerable()
+                        .GroupBy(row => row.Field<double>("DataSetIndex"))
+                        .Select(g => g.CopyToDataTable())
+                        .ToList();
 
-                        //add datapoint data to current dataset
-                        curDataSet.DataPoints.Add(
-                            new WebChartDataPoint()
+                        foreach(DataTable ds in dataSets)
+                        { 
+                            //create new dataset object
+                            WebChartDataSet curDataSet = new WebChartDataSet()
                             {
-                                DataPoint = dr["DataPoint"].ToString(),
-                                DataValue = Convert.ToInt32(hr["DataValue"])
+                                Type = ds.Rows[0]["ChartType"].ToString(),
+                                Legend = ds.Rows[0]["Legend"].ToString(),
+                                BackgroundColor = ds.Rows[0]["BackgroundColor"].ToString(),
+                                BackgroundHoverColor = ds.Rows[0]["BackgroundHoverColor"].ToString(),
+                                BorderColor = ds.Rows[0]["BorderColor"].ToString(),
+                                Fill = Convert.ToBoolean(ds.Rows[0]["Fill"].ToString())
+                            };
+
+                            DataView dv = ds.DefaultView;
+                            dv.Sort = "YYYYMMDD asc";
+                            DataTable sortedDT = dv.ToTable();
+
+                            //Extract label and value arrays
+                            List<string> xAxisLabels = new List<string>();
+                            List<int> chartValues = new List<int>();
+                            foreach(DataRow row in sortedDT.Rows)
+                            {
+                                xAxisLabels.Add(row["DataPointLabel"].ToString());
+                                chartValues.Add(Convert.ToInt32(row["ChartValue"].ToString()));
                             }
-                            );
+                            curDataSet.XAxisLabels = xAxisLabels.ToArray();
+                            curDataSet.Values = chartValues.ToArray();
+
+                            //Add the set to the parent object
+                            chart.DataSets.Add(curDataSet);
                         }
-
 
                     }
                     return chart;

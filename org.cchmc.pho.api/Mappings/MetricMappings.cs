@@ -11,7 +11,8 @@ namespace org.cchmc.pho.api.Mappings
             CreateMap<DashboardMetric, DashboardMetricViewModel>();
             CreateMap<WebChart, WebChartViewModel>();
             CreateMap<WebChartDataSet, WebChartDataSetViewModel>();
-            CreateMap<WebChartDataPoint, WebChartDataPointViewModel>();
+            CreateMap<WebChartViewModel, WebChart>();
+            CreateMap<WebChartDataSetViewModel, WebChartDataSet>();
             CreateMap<EDDetail, EDDetailViewModel>();
             CreateMap<PopulationMetric, PopulationMetricViewModel>();
             CreateMap<DrillthruMetricTable, DrillthruMetricTableViewModel>();

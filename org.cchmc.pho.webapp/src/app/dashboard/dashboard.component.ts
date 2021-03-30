@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as Chart from 'chart.js';
 import { NGXLogger } from 'ngx-logger';
 import { environment } from 'src/environments/environment';
-import { WebChart, WebChartDataSet, WebChartDataPoint, EdChartDetails, Population, Quicklinks, Spotlight, WebChartFilters, WebChartFilterMeasureId, WebChartId, WebChartFilterId} from '../models/dashboard';
+import { WebChart, WebChartDataSet, EdChartDetails, Population, Quicklinks, Spotlight, WebChartFilters, WebChartFilterMeasureId, WebChartId, WebChartFilterId} from '../models/dashboard';
 import { RestService } from '../rest.service';
 import { DrilldownService } from '../drilldown/drilldown.service';
 import { AuthenticationService } from '../services/authentication.service';
@@ -28,6 +28,8 @@ export class DashboardComponent implements OnInit {
   quickLinks: Quicklinks[];
   population: Population[];
   webChart: WebChart;
+  graphDatasetsArray = [];
+  graphLabelArray = [];
   //webChartData: any[];
   webChartDetails: EdChartDetails[];
   webchartfilterList: any[] = [];
@@ -53,7 +55,7 @@ export class DashboardComponent implements OnInit {
   // Chart Options
   canvas: any;
   ctx: any;
-  webBarChart: any;
+  webChartObj: Chart;
   selectedBar: string;
   isLoggedIn$: boolean;
   patientsMax: number; 
@@ -101,68 +103,78 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnChanges() {
-    if (this.webBarChart != undefined){
+    if (this.webChartObj != undefined){
      
-        this.webBarChart.update();  
+        this.webChartObj.update();  
     }   
   } 
   
   ngAfterViewInit() {  
-
-    const $this = this; // This is the only way to get the bar chart to work using functions out of scope.(Fat arrow does not work)
-    this.canvas = document.getElementById('webChart');     
-
-    this.ctx = this.canvas.getContext('2d'); 
-
-      this.webBarChart = new Chart(this.ctx, {
-        type: 'bar',
-        data: {
-          labels: [],       
-          datasets: []
-        },
-        options: {
-          responsive: true,
-          legend: {
-            position: 'bottom',
-            labels: {
-            }
-          },
-          layout: {
-            padding: {
-              left: 42,
-              right: 53,
-              top: 27,
-              bottom: 43
-            }
-          },
-          scales: {
-            xAxes: [{
-              ticks: {
-                callback (value, index, values) {
-                  return value;
-                }              
-              }
-            }],
-            yAxes: [{
-              ticks: {   
-                beginAtZero: true,   //force the y-axis to start at 0      
-                  max:this.patientsMax              
-              }
-            }]
-  
-          },
-          tooltips: {
-            enabled: true
-          },
-          onClick (e) {
-            let element = this.getElementAtEvent(e);
-            
-            $this.Showmodal(e, this, element); // This is the result of a "fake" JQuery this
-          }
-        }
-      });      
-    
+    //this.generateChart();    
   }
+
+  // generateChart(){
+  //   this.logger.log('firing generateChart');
+  //   const $this = this; // This is the only way to get the bar chart to work using functions out of scope.(Fat arrow does not work)
+  //   this.canvas = document.getElementById('webChart');     
+
+  //   this.ctx = this.canvas.getContext('2d'); 
+
+  //   this.webChartObj = new Chart(this.ctx, {
+  //     type: 'bar',
+  //     data: {
+  //       labels: this.graphLabelArray,       
+  //       datasets: this.graphDatasetsArray
+  //     },
+  //     options: {
+  //       responsive: true,
+  //       legend: {
+  //         position: 'bottom',          
+  //         labels: {  //leave the coding here for future use
+  //           //usePointStyle: true,
+  //           //fontColor: 'rgb(255,99,132)',
+  //           //boxWidth: 6            
+  //         }
+  //       },
+  //       layout: {
+  //         padding: {
+  //           left: 42,
+  //           right: 53,
+  //           top: 27,
+  //           bottom: 43
+  //         }
+  //       },
+  //       scales: {
+  //         xAxes: [{
+  //           ticks: {
+  //             callback (value, index, values) {
+  //               return value;
+  //             }              
+  //           }
+  //         }],
+  //         yAxes: [{
+  //           ticks: {   
+  //             beginAtZero: true,   //force the y-axis to start at 0      
+  //               max:this.patientsMax              
+  //           }
+  //         }]
+
+  //       },
+  //       tooltips: {
+  //         enabled: true,
+  //         mode: 'point'
+  //       },
+  //       onClick (e) {
+  //         let element = this.getElementAtEvent(e);                 
+         
+  //         $this.Showmodal(e, this, element); // This is the result of a "fake" JQuery this    
+         
+  //       }       
+  //     }
+  //   });  
+
+  //   this.logger.log(this.webChartObj.config, 'generateChart');
+  // }
 
   
   // Dahsboard Content
@@ -262,41 +274,104 @@ export class DashboardComponent implements OnInit {
     let max = 0;
     let counter = 0;    
 
-   if(this.webBarChart !== undefined) {   
+   if(this.webChartObj !== undefined) {   
 
-     let n = this.webBarChart.data.labels.length;
+     let n = this.webChartObj.data.labels.length;
 
      for (counter = 0; counter < n; counter++){
-      this.removeData(this.webBarChart);          
+      this.removeData(this.webChartObj);          
     }   
   }   
 
-    //this.rest.getWebChartByUser(chartId,measureId,filterId).subscribe((data) => {     
-
-      this.webChart = JSON.parse('{      "practiceId": 1,      "title": "CHART TITLE",      "headerLabel": "HEADER LABEL",      "dataSets": [        {          "label": "Dataset 1",          "type": "line",          "dataPoints": [            {              "dataPoint": "1/1/2020",              "dataValue": 1            },            {              "dataPoint": "2/1/2020",              "dataValue": 2            },            {              "dataPoint": "3/1/2020",              "dataValue": 3            }          ]        },{          "label": "Dataset 2",          "type": "line",          "dataPoints": [            {              "dataPoint": "1/1/2020",              "dataValue": 1            },            {              "dataPoint": "2/1/2020",              "dataValue": 1            },            {              "dataPoint": "3/1/2020",              "dataValue": 1            }          ]        }      ]    }');
+    this.rest.getWebChartByUser(chartId,measureId,filterId).subscribe((data) => {     
+      this.webChart = data;
       this.webChartTitle = this.webChart.title;   
       this.webChartTopLeftLabel = this.webChart.headerLabel;
-      
-      this.webChart.dataSets.forEach(item => {              
+  
+      this.graphDatasetsArray = [];
+      this.graphLabelArray = [];
+      var chartType = '';
+      var i;
 
-          this.addData(this.webBarChart,         
-          item.chartLabel,
-          item.barValue1,
-          item.lineValue1,
-          item.lineValue2,
-          chartId); // Getting data to the chart, will be easier to update if needed           
-     
-        if (item.barValue1 > max) {
-          max = item.barValue1;          
+      for (i=0; i < this.webChart.dataSets.length; i++)
+      { 
+
+
+        this.logger.log(this.webChart.dataSets[i].values, 'dataset value list');
+        this.logger.log(this.webChart.dataSets[i].xAxisLabels, 'dataset label list');
+        var highestValue = Math.max.apply(null, this.webChart.dataSets[i].values);
+        if (highestValue > this.patientsMax) { this.patientsMax = (highestValue+1); }
+        chartType = this.webChart.dataSets[i].type;
+
+        //Create a chartJS dataset for each dataset we've received from API
+        this.graphDatasetsArray[i] = 
+                          {
+                          label: this.webChart.dataSets[i].legend,
+                          data: this.webChart.dataSets[i].values, 
+                          maxBarThickness: 22,
+                          backgroundColor: this.webChart.dataSets[i].backgroundColor,
+                          hoverBackgroundColor: this.webChart.dataSets[i].backgroundHoverColor,
+                          borderColor: this.webChart.dataSets[i].borderColor,
+                          fill: this.webChart.dataSets[i].fill
+                          }
+        this.graphLabelArray = this.webChart.dataSets[i].xAxisLabels;
+      }
+      this.logger.log(this.graphDatasetsArray);
+      //SET THE GRAPH CONFIGURATION VALUES
+      var chartConfig = {
+        type: chartType,
+        data: {
+        labels: this.graphLabelArray,
+        datasets: this.graphDatasetsArray
+        },
+        options: {
+          responsive: true,
+          legend: {
+            labels: {
+              }
+            },
+          layout: {
+              padding: {
+                left: 42,
+                right: 53,
+                top: 27,
+                bottom: 43
+              }
+            },
+          scales: {
+            xAxes: [{
+            ticks: {
+                 callback (value, index, values) {
+                  return value;
+                }              
+              }
+            }],
+            yAxes: [{
+              ticks: {   
+                beginAtZero: true,   //force the y-axis to start at 0      
+                  max: this.patientsMax      
+              }
+            }]        
+          },
+          tooltips: {
+            enabled: true
+          },
+          onClick (e) {
+            let element = this.getElementAtEvent(e);                  
+            this.Showmodal(e, this, element); // This is the result of a "fake" JQuery this
+          }    
         }    
-        
-      });      
+      };
       
-      this.patientsMax = max + 1; // This is here to add space above each bar in the chart (Max Number of patients, plus one empty tick on the y-axis)
-      this.webBarChart.config.options.scales.yAxes[0].ticks.max = this.patientsMax;
-      this.webBarChart.update();    
-      
-    //});
+
+      this.logger.log(chartConfig, "chartConfig");        
+      this.canvas = document.getElementById('webChart');     
+      this.ctx = this.canvas.getContext('2d'); 
+      this.webChartObj = new Chart(this.ctx, chartConfig);
+
+      //this.patientsMax = max + 1; // This is here to add space above each bar in the chart (Max Number of patients, plus one empty tick on the y-axis)
+
+    });
   }
 
   //get web chart filters
@@ -327,7 +402,7 @@ export class DashboardComponent implements OnInit {
     this.reportFilterSelected = true;
     //dynamically pass the parameters to getWebChart function to generate the report
     this.getWebChart(this.chartId, this.measureId, this.filterId);
-    this.webBarChart.update();
+    //this.webChartObj.update();
   }
 
   updateChartReport(element: any){
@@ -341,6 +416,7 @@ export class DashboardComponent implements OnInit {
       this.chartId = WebChartId.PopulationChart;
     }
     this.getWebChartFilters(this.chartId, this.measureId);
+    //this.generateChart();
     this.logger.log("switching chart object 2 to measureId: " + element.measureId.toString() + " filterId: " + this.filterId.toString());
   }
 
@@ -349,6 +425,7 @@ export class DashboardComponent implements OnInit {
     this.measureId = WebChartFilterMeasureId.edChartdMeasureId;
     this.chartId = WebChartId.PopulationChart;
     this.getWebChartFilters(this.chartId, this.measureId);
+    //this.generateChart();
   }
 
   transformToolTipDate(date) {
@@ -363,27 +440,7 @@ export class DashboardComponent implements OnInit {
     this.logger.log("formatteddate " + this.datePipe.transform(date + ' , ' + localYear.toString(), 'yyyyMMdd').toString());
     return this.datePipe.transform(date + ' , ' + localYear, 'yyyyMMdd').toString();
   }
-
-  addData(chart, label, barValue1, lineValue1, lineValue2, chartId) {
-   
-    chart.data.labels.push(label);
-    if (chartId === WebChartId.PopulationChart){
-      this.logger.log("pushing pop chart data: 1) " + barValue1);
-      chart.data.datasets[0].data.push(barValue1);
-    }
-    if (chartId === WebChartId.OutcomeChart){
-      this.logger.log("pushing outcome chart data: 1) " + lineValue1 + " 2) " + lineValue2);
-      if (lineValue1 >= 0){
-        chart.data.datasets[1].data.push(lineValue1);
-      }
-      if (lineValue2 >=0){
-        chart.data.datasets[2].data.push(lineValue2);
-      }
-    }
-
-    chart.update();
-  }
-
+  
   removeData(chart) {
     chart.data.labels.pop();
     chart.data.datasets.forEach((dataset) => {
