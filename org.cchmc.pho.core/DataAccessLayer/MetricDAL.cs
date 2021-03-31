@@ -86,7 +86,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         public async Task<WebChart> ListWebChart(int userId, int? chartId, int? measureId, int? filterId)
         {
             DataSet dataSet = new DataSet();
-            WebChart chart = new WebChart();
+            WebChart chart;
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spGetDashboardChart", sqlConnection))
