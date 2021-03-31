@@ -273,6 +273,7 @@ export class DashboardComponent implements OnInit {
                           label: this.webChart.dataSets[i].legend,
                           data: this.webChart.dataSets[i].values, 
                           maxBarThickness: 22,
+                          lineTension: 0,
                           backgroundColor: this.webChart.dataSets[i].backgroundColor,
                           hoverBackgroundColor: this.webChart.dataSets[i].backgroundHoverColor,
                           borderColor: this.webChart.dataSets[i].borderColor,
@@ -418,27 +419,33 @@ export class DashboardComponent implements OnInit {
     this.logger.log("starting ED modal");
 
     let drillThruMeasureId;
-    let tempFilterId;    
-
-    if (this.measureId === WebChartFilterMeasureId.edChartdMeasureId){
-      this.logger.log("measure is edchart, loading dialog");
-      this.logger.log("selected bar: " + element[0]._model.label);      
-      this.selectedBar = element[0]._model.label;     
+    let tempFilterId;   
+    //Only drilldown for non outcome charts 
+    if (this.chartId !== WebChartId.OutcomeChart){
       
-      drillThruMeasureId = DrillThruMeasureId.EDDrillThruMeasureId;
-      tempFilterId = element[0]._index + 1;     
+      if (this.measureId === WebChartFilterMeasureId.edChartdMeasureId){
+        this.logger.log("measure is edchart, loading dialog");
+        this.logger.log("selected bar: " + element[0]._model.label);      
+        this.selectedBar = element[0]._model.label;     
+        
+        drillThruMeasureId = DrillThruMeasureId.EDDrillThruMeasureId;
+        tempFilterId = element[0]._index + 1;     
+      }
+      else {   //all the non-ED chart reports 
+        this.logger.log("measure is non edchart, loading dialog");
+        this.logger.log("selected bar: " + element[0]._index);     
+      
+        drillThruMeasureId = DrillThruMeasureId.PatientListDrillThruMeasureId;
+        tempFilterId = element[0]._index + 1;       
+      }
+      //only if security allows
+      if (this.drillThruUser){
+        this.openDrilldownDialog(drillThruMeasureId,tempFilterId);
+      }
     }
-    else {   //all the non-ED chart reports 
-      this.logger.log("measure is non edchart, loading dialog");
-      this.logger.log("selected bar: " + element[0]._index);     
+
     
-      drillThruMeasureId = DrillThruMeasureId.PatientListDrillThruMeasureId;
-      tempFilterId = element[0]._index + 1;       
-    }
-    
-    if (this.drillThruUser){
-      this.openDrilldownDialog(drillThruMeasureId,tempFilterId);
-    }
+
     
   } 
 
