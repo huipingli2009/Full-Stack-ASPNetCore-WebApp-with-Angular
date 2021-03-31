@@ -86,7 +86,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         public async Task<WebChart> ListWebChart(int userId, int? chartId, int? measureId, int? filterId)
         {
             DataSet dataSet = new DataSet();
-            WebChart chart;
+            WebChart chart = new WebChart();
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spGetDashboardChart", sqlConnection))
@@ -151,9 +151,10 @@ namespace org.cchmc.pho.core.DataAccessLayer
                         }
 
                     }
-                    return chart;
                 }
             }
+
+            return chart;
         }
 
         public async Task<List<EDDetail>> ListEDDetails(int userId, DateTime admitDate)
