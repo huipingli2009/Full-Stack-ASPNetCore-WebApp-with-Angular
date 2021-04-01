@@ -629,5 +629,49 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
             return asthmaworkbookpractice;
         }
+
+
+        public async Task<List<QIWorkbookQuestions>> GetQIWorkbookQuestions(int userId, int formResponseId)
+        {
+            DataTable dataTable = new DataTable();
+            List<QIWorkbookQuestions> qiworkbookquestions = new List<QIWorkbookQuestions>();
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetQIWorkbooks_Questions", sqlConnection))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@FormResponseId", SqlDbType.Int).Value = formResponseId;
+
+                    await sqlConnection.OpenAsync();
+
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+                        
+                        qiworkbookquestions = (from DataRow dr in dataTable.Rows
+                                               select new QIWorkbookQuestions()
+                                               {
+                                                   FormResponseId = int.Parse(dr["FormResponseId"].ToString()),
+                                                   SectionHeader = dr["SectionHeader"].ToString(),
+                                                   QuestionId = int.Parse(dr["QuestionId"].ToString()),
+                                                   QuestionDEN = dr["QuestionDEN"].ToString(),
+                                                   QuestionNUM = dr["QuestionNUM"].ToString(),
+                                                   NumeratorLabel = dr["NumeratorLabel"].ToString(),
+                                                   Numerator = int.Parse(dr["Numerator"].ToString()),
+                                                   Denominator = int.Parse(dr["Denominator"].ToString()),
+                                                   DataEntered = dr["DataEntered"].ToString()                 
+
+                                               }
+                                        ).ToList();
+                    }
+               
+                }
+
+                return qiworkbookquestions;
+            }
+        }
     }
 }

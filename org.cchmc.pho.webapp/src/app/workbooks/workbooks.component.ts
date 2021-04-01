@@ -6,9 +6,9 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { NGXLogger } from 'ngx-logger';
 import { Subject } from 'rxjs'; 
-import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, pairwise, take, takeUntil } from 'rxjs/operators';
 import { PatientForWorkbook, Providers } from '../models/patients';
-import { Followup, WorkbookDepressionPatient, WorkbookAsthmaPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookFormValueEnum, Treatment, WorkbookConfirmation, QIWorkbookPractice} from '../models/workbook';
+import { Followup, WorkbookDepressionPatient, WorkbookAsthmaPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookFormValueEnum, Treatment, WorkbookConfirmation, QIWorkbookPractice, QIWorkbookQuestions} from '../models/workbook';
 import { RestService } from '../rest.service';
 import { DateRequiredValidator } from '../shared/customValidators/customValidator';
 import { MatSnackBarComponent } from '../shared/mat-snack-bar/mat-snack-bar.component';
@@ -27,11 +27,16 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     return this.ProvidersForWorkbookForm.get('ProviderWorkbookArray') as FormArray;
   }
 
+  get QIWorkbookQuestionsArray() {
+    return this.QIWorkbookSectionTrackingForm.get('QIWorkbookQuestionsArray') as FormArray;
+  }
+
   @ViewChild('FollowUp') followUp: TemplateRef<any>;
   @ViewChild('DeletePatient') DeletePatient: TemplateRef<any>;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild('table') table: MatTable<WorkbookDepressionPatient>;
   @ViewChild('EditProvidersDialog') editProvidersDialog: TemplateRef<any>;
+  @ViewChild('PracticeQIWorkbook') practiceQIWorkbook: TemplateRef<any>;
 
   //declarations
   //generic
@@ -91,9 +96,12 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
 
   //for QI workbook 
   qiworkbookprctice: QIWorkbookPractice;
+  //qiworkbookquestions: QIWorkbookQuestions;
+  qiworkbookquestions: QIWorkbookQuestions[];
+  btnToggleVisible: boolean = false;
+ 
 
-
-
+//workbook fomrs
   ProvidersForWorkbookForm = this.fb.group({
     ProviderWorkbookArray: this.fb.array([
       this.fb.group({
@@ -132,6 +140,22 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     treatment: [10]
   });
 
+  QIWorkbookSectionTrackingForm = this.fb.group({
+    QIWorkbookQuestionsArray: this.fb.array([
+        this.fb.group({
+          formResponseId: [''],
+          questionId: [''],
+          sectionHeader: [''],
+          questionDEN: [''],
+          questionNUM: [''],
+          numeratorLabel: [''],
+          numerator: [''],
+          denominator: [''],
+          dataEntered: ['']
+        })
+    ])
+  });
+  
   FollowupForm = this.fb.group(
     {
       formResponseId: [''],
@@ -171,7 +195,10 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     this.onPatientSearchValueChanges();
     this.onWorkbooksForPatientSearchValueChanges();
     this.getTreatments();
-    this.PHQFollowUpQuestionValidators();
+    this.PHQFollowUpQuestionValidators();    
+
+    //test for getting current value and prev value from formArray
+    // this.onValueChanges();
   }
 
   ngOnDestroy(): void {
@@ -255,6 +282,11 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     if (this.selectedWorkbookFormId == WorkbookFormValueEnum.asthma){
       this.getAsthmaWorkbookPatients(this.selectedFormResponseID);
       this.getAsthmaWorkbookPractice(this.selectedFormResponseID);      
+    }
+    if (this.selectedWorkbookFormId == WorkbookFormValueEnum.qualityimprovement){
+      
+      this.getQIWorkbookPractice(this.selectedFormResponseID);  
+      this.getQIWorkbookQuestions(this.selectedFormResponseID);     
     }
   }
 
@@ -396,7 +428,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
    //get practice QI workbook 
    getQIWorkbookPractice(formResponseid: number) {
     this.rest.getQIWorkbookPractice(formResponseid).pipe(take(1)).subscribe((data) => {
-      this.qiworkbookprctice = data;
+      this.workbookPractice = data;
     })
   }  
 
@@ -859,6 +891,43 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
           }     
           dateOfOneMonthVisit.updateValueAndValidity();
         })     
+    }    
+    
+    //get QI workbook questions
+    getQIWorkbookQuestions(formResponseid: number) {
+      this.rest.getQIWorkbookQuestions(formResponseid).pipe(take(1)).subscribe((data) => {
+        this.qiworkbookquestions = data;       
+
+        this.AssignQIWorkbookQuestionsArray();       
+      });
+    }
+
+    AssignQIWorkbookQuestionsArray() {
+        const qiWorkbookQuestionsArray = this.QIWorkbookQuestionsArray;
+        let clearArray = this.QIWorkbookSectionTrackingForm.controls['QIWorkbookQuestionsArray'] as FormArray;
+       
+        clearArray.clear();       
+        
+        if (qiWorkbookQuestionsArray.length > 0) {
+          qiWorkbookQuestionsArray.removeAt(0);
+        }
+        this.qiworkbookquestions.forEach(results => {
+         
+          this.btnToggleVisible = results.dataEntered != null;
+         
+          qiWorkbookQuestionsArray.push(this.fb.group(results));         
+        });    
     } 
+    
+    // onValueChanges(): void {
+    //   this.QIWorkbookQuestionsArray.controls['sectionHeader']
+    //   .valueChanges
+    //   .pipe(pairwise())
+    //   .subscribe(([prev, next]: [any, any]) => {
+    //     console.log('PREV1', prev);
+    //     console.log('NEXT1', next);
+    //   });     
+    // }
+   
   }
 

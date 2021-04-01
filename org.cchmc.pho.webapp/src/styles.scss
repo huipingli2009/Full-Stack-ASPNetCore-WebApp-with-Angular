@@ -2212,6 +2212,40 @@ button.toast-close-button {
         border-bottom-width: 2px;
       }
     }
+    .qiQuestionSectionHeader {
+      .mat-form-field-inPut {
+        font-family: "ArcherBold";
+        font-size: 18px;
+        line-height: 44px;
+        letter-spacing: normal;
+        color: var(--primary-darker-color);
+        margin-bottom: 15px;
+      }
+    }
+    .qiQuestionSection {
+      display: flex;
+    }
+    .qiQuestion {     
+      font-family: "ArcherBold";
+      font-size: 14px;
+      letter-spacing: normal;
+      color: #4a4a4a;
+      font-weight: bold;
+      flex-basis: 60%;
+    }
+    .dataEntered {
+      flex-basis: 10%;
+    }
+    #showBtnToggle {
+      .qiQuestion {     
+        font-family: "ArcherBold";
+        font-size: 14px;
+        letter-spacing: normal;
+        color: #4a4a4a;
+        font-weight: bold;
+        flex-basis: 60%;
+      }
+    }    
   }
 
   .select-override {
