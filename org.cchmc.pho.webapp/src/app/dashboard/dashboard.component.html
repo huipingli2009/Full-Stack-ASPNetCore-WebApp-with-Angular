@@ -58,7 +58,7 @@
             <div class="mat-subheading-2 text-secondary">{{webChartTitle}}</div> 
             <div  style="width: 50px;height: 20px;">&nbsp;</div> 
             <div  style="width: 50px;height: 20px;">&nbsp;</div>           
-            <div  fxLayoutAlign="space-around end !important">
+            <div  fxLayoutAlign="space-around end !important" *ngIf="this.filterId !== webChartFilterIdEnum.none">
                 <mat-form-field class="selectFilterFontColor" >
                     <mat-select [(ngModel)]="webchartfilters" (selectionChange)="onWebReportConditionChange($event)" class="mat-subheading-2 text-secondary">
                       <mat-option class="selectFilterFontColor" *ngFor="let webchartfilter of webchartfilterList" [value]="webchartfilter.filterId" >
@@ -110,7 +110,7 @@
                     <table mat-table [dataSource]="dataSourceTwo" class="mat-elevation-z8">
                         <ng-container matColumnDef="dashboardLabelQi">
                             <th mat-header-cell *matHeaderCellDef> Measure </th>                            
-                            <td mat-cell *matCellDef="let element" matTooltip="{{element.measureDesc}}" > 
+                            <td mat-cell *matCellDef="let element" matTooltip="{{element.measureDesc}}" (click)="updateChartReport(element)"> 
                                 <ng-container *ngIf = "element.opDefURL == ''"  >                                  
                                     {{element.dashboardLabel}}                                    
                                 </ng-container>
@@ -119,7 +119,7 @@
                                     <a href="{{element.opDefURL}}" target= "_blank">
                                         <mat-icon  class="fas fa-info-circle alert-icon" style="font-size: 1em;"></mat-icon>
                                     </a>
-                                </ng-container>     
+                                </ng-container>    
                             </td>
                         </ng-container>
 

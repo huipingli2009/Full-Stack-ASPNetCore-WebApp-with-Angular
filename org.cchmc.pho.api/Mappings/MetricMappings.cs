@@ -9,7 +9,10 @@ namespace org.cchmc.pho.api.Mappings
         public MetricMappings()
         {
             CreateMap<DashboardMetric, DashboardMetricViewModel>();
-            CreateMap<EDChart, EDChartViewModel>();
+            CreateMap<WebChart, WebChartViewModel>();
+            CreateMap<WebChartDataSet, WebChartDataSetViewModel>();
+            CreateMap<WebChartViewModel, WebChart>();
+            CreateMap<WebChartDataSetViewModel, WebChartDataSet>();
             CreateMap<EDDetail, EDDetailViewModel>();
             CreateMap<PopulationMetric, PopulationMetricViewModel>();
             CreateMap<DrillthruMetricTable, DrillthruMetricTableViewModel>();
