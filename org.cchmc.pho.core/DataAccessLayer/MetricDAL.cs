@@ -102,8 +102,8 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
                         da.Fill(dataSet);
-                        var headerTable = dataSet?.Tables?[0];
-                        DataTable finalTable = dataSet?.Tables?[1];
+                        var headerTable = dataSet.Tables[0];
+                        DataTable finalTable = dataSet.Tables[1];
 
                         DataRow hr = headerTable.Rows[0];
                         chart = (new WebChart(
