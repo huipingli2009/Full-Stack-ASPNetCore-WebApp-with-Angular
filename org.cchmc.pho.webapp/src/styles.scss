@@ -1976,6 +1976,10 @@ button.toast-close-button {
 .workbook-item {
   width: 20%;
 }
+
+.workbook-qi-item {
+  width: 20%;
+}
 .only-three-patients {
   width: 28% !important;
 }
@@ -1983,6 +1987,9 @@ button.toast-close-button {
 @media only screen and (max-width: 1595px) {
   .workbook-item {
     width: 26%;
+  }
+  .workbook-qi-item {
+    width: 20%;
   }
   .wokbook-col-title-4 {
     display: none !important;
@@ -1999,6 +2006,9 @@ button.toast-close-button {
   .workbook-item {
     width: 40%;
   }
+  .workbook-qi-item {
+    width: 40%;
+  }
   .wokbook-col-title-3 {
     margin-right: 0 !important;
   }
@@ -2009,9 +2019,15 @@ button.toast-close-button {
   .only-three-patients {
     width: 40% !important;
   }
+  .test {
+    width: 100% !important;
+  }
 }
 @media only screen and (max-width: 1164px) {
   .workbook-item {
+    width: 40%;
+  }
+  .workbook-qi-item {
     width: 40%;
   }
   .wokbook-col-title-3 {

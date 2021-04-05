@@ -92,13 +92,22 @@ export class WorkbookConfirmation {
 
 export class QIWorkbookQuestions {
     formResponseId: number;
-    questionId: number;
+    qiSection: Array<Section>
+}
+
+export class Section {
+    sectionId: number; 
     sectionHeader: string;
+    QiQuestion: Array<Question>;  
+    dataEntered: string;
+}
+
+export class Question {    
+    questionId: number;   
     questionDEN: string;
     questionNUM: string;
     numeratorLabel: string;
     numerator: string;
-    denominator: string;
-    dataEntered: string;
+    denominator: string;   
 }
 

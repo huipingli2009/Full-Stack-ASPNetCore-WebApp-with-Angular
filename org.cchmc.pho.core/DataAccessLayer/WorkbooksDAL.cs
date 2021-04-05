@@ -630,11 +630,12 @@ namespace org.cchmc.pho.core.DataAccessLayer
             return asthmaworkbookpractice;
         }
 
-
         public async Task<List<QIWorkbookQuestions>> GetQIWorkbookQuestions(int userId, int formResponseId)
         {
             DataTable dataTable = new DataTable();
             List<QIWorkbookQuestions> qiworkbookquestions = new List<QIWorkbookQuestions>();
+            List<Question> wbquestions = new List<Question>();
+            List<Section> wbsections = new List<Section>();
 
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
@@ -655,23 +656,38 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                                select new QIWorkbookQuestions()
                                                {
                                                    FormResponseId = int.Parse(dr["FormResponseId"].ToString()),
-                                                   SectionHeader = dr["SectionHeader"].ToString(),
-                                                   QuestionId = int.Parse(dr["QuestionId"].ToString()),
-                                                   QuestionDEN = dr["QuestionDEN"].ToString(),
-                                                   QuestionNUM = dr["QuestionNUM"].ToString(),
-                                                   NumeratorLabel = dr["NumeratorLabel"].ToString(),
-                                                   Numerator = int.Parse(dr["Numerator"].ToString()),
-                                                   Denominator = int.Parse(dr["Denominator"].ToString()),
-                                                   DataEntered = dr["DataEntered"].ToString()                 
+                                                   QiSection = new List<Section>()
+                                                   {
+                                                        new Section()
+                                                         {
+                                                            SectionId = int.Parse(dr["SectionId"].ToString()),
+                                                            SectionHeader = dr["SectionHeader"].ToString(),
+                                                            //DataEntered = bool.Parse(dr["DataEntered"].ToString()),
+                                                            DataEntered = dr["DataEntered"].ToString() == "1"? true: false,
 
+
+                                                            QiQuestion = new List<Question>()
+                                                            {
+                                                                new Question()
+                                                                {
+                                                                     QuestionId = int.Parse(dr["QuestionId"].ToString()),
+                                                                     QuestionDEN = dr["QuestionDEN"].ToString(),
+                                                                     QuestionNUM =  dr["QuestionNUM"].ToString(),
+                                                                     NumeratorLabel = dr["NumeratorLabel"].ToString(),
+                                                                     Numerator = int.Parse(dr["Numerator"].ToString()),
+                                                                     Denominator = int.Parse(dr["Denominator"].ToString())
+                                                                }
+                                                            }.ToList()
+                                                         }
+                                                   }.ToList()                
+                                                        
                                                }
-                                        ).ToList();
+                       ).ToList();                        
                     }
+                }         
                
-                }
-
-                return qiworkbookquestions;
             }
+            return qiworkbookquestions;
         }
     }
 }

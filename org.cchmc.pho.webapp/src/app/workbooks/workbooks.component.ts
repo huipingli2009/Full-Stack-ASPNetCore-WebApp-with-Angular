@@ -28,7 +28,16 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   }
 
   get QIWorkbookQuestionsArray() {
+    var data = this.QIWorkbookSectionTrackingForm.get('QIWorkbookQuestionsArray');
     return this.QIWorkbookSectionTrackingForm.get('QIWorkbookQuestionsArray') as FormArray;
+  }
+
+  get QIWorkbookSectionsArray() {   
+    return this.QIWorkbookSectionsArray.get('QIWorkbookSectionsArray') as FormArray;   
+  }
+
+  get QIWorkbookQuestionArray() {
+    return this.QIWorkbookSectionTrackingForm.get('QIWorkbookQuestionArray') as FormArray;
   }
 
   @ViewChild('FollowUp') followUp: TemplateRef<any>;
@@ -144,17 +153,27 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     QIWorkbookQuestionsArray: this.fb.array([
         this.fb.group({
           formResponseId: [''],
-          questionId: [''],
-          sectionHeader: [''],
-          questionDEN: [''],
-          questionNUM: [''],
-          numeratorLabel: [''],
-          numerator: [''],
-          denominator: [''],
-          dataEntered: ['']
+
+          QIWorkbookSectionsArray: this.fb.array([
+            this.fb.group({
+              sectionId: [''], 
+              sectionHeader: [''],                 
+              dataEntered: [''], 
+              QIWorkbookQuestionArray: this.fb.array([
+                this.fb.group({
+                  questionId: [''],                
+                  questionDEN: [''],
+                  questionNUM: [''],
+                  numeratorLabel: [''],
+                  numerator: [''],
+                  denominator: ['']
+                })           
+              ])
+            })
+          ])
         })
-    ])
-  });
+      ])
+    });
   
   FollowupForm = this.fb.group(
     {
@@ -913,9 +932,10 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
         }
         this.qiworkbookquestions.forEach(results => {
          
-          this.btnToggleVisible = results.dataEntered != null;
+          //this.btnToggleVisible = results.dataEntered != null;
          
-          qiWorkbookQuestionsArray.push(this.fb.group(results));         
+          qiWorkbookQuestionsArray.push(this.fb.group(results));  
+          console.log('test') ;      
         });    
     } 
     
