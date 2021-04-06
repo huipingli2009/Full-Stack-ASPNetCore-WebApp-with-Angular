@@ -506,7 +506,7 @@ namespace org.cchmc.pho.api.Controllers
 
         [HttpGet("qiworkbookquestions")]
         [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin, PHO Leader")]
-        [SwaggerResponse(200, type: typeof(List<QIWorkbookQuestionsViewModel>))]
+        [SwaggerResponse(200, type: typeof(QIWorkbookQuestionsViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> GetQIWorkbookQuestions(int formResponseId)
@@ -517,7 +517,7 @@ namespace org.cchmc.pho.api.Controllers
                 // call the data method
                 var data = await _workbooks.GetQIWorkbookQuestions(currentUserId, formResponseId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
-                var result = _mapper.Map<List<QIWorkbookQuestionsViewModel>>(data);
+                var result = _mapper.Map<QIWorkbookQuestionsViewModel>(data);
                 // return the result in a "200 OK" response
                 return Ok(result);
             }

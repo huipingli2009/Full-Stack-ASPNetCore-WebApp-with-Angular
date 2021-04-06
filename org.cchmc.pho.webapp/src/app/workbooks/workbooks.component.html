@@ -886,34 +886,58 @@
                 </div>
             </div>      
 
-            <div fxLayout="row" class="side-border-container provider-list-container">                    
+            <div fxLayout="row" class="side-border-container provider-list-container"> 
+                <!-- <div>
+                    <mat-form-field style="color: var(--primary-darker-color);" >
+                        <input matInput formControlName="formResponseId"  readonly>                                                       
+                    </mat-form-field>
+                </div>                          -->
                     <form [formGroup]="QIWorkbookSectionTrackingForm">
-                        <ng-container *ngIf ="qiworkbookquestions">                                                                       
-                            <div fxLayout="column">
-                                <ng-container formArrayName="QIWorkbookQuestionsArray">
+                        <ng-container >                                                                       
+                            <div fxLayout="column">  
+                                <div>
+                                    <mat-form-field style="color: var(--primary-darker-color);" >
+                                        <input matInput formControlName="formResponseId"  readonly>                                                       
+                                    </mat-form-field>
+                                </div>                                       
+                                <ng-container formArrayName="QIWorkbookSectionsArray">
                                     <div fxLayout="column" >
                                         <div fxLayout="column" fxLayoutAlign="center start"
-                                            *ngFor="let qiWorkbookquestion of QIWorkbookQuestionsArray.controls; index as i"
-                                            [ngClass]="QIWorkbookQuestionsArray">
+                                            *ngFor="let qiWorkbookSection of QIWorkbookSectionsArray.controls; index as i"
+                                            [ngClass]="QIWorkbookSectionsArray">
                                             <ng-container [formGroupName]="i">                                     
-                                                <div fxlayout = "column" fxFlex="5%">
-                                                    <div>
+                                                <div fxLayout="row" fxLayoutGap="64px" fxFlex="5%">
+                                                    <div fxLayout="column">
                                                         <mat-form-field style="color: var(--primary-darker-color);" >
-                                                            <input matInput formControlName="formResponseId"  readonly>                                                       
+                                                            <input matInput formControlName="sectionId"  hidden>                                                       
                                                         </mat-form-field>
+                                                    </div> 
+                                                    <div fxLayout="column" fxFlex="600px" fxLayoutAlign="start center">
+                                                        <mat-form-field style="font-size:large;font-weight: 900;color: var(--primary-darker-color);" >
+                                                            <input matInput formControlName="sectionHeader"  readonly>                                                       
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <div fxLayout="column" fxFlex="100px"> 
+                                                        <mat-button-toggle-group formControlName="dataEntered">
+                                                            <mat-button-toggle [value]="true">Yes</mat-button-toggle>
+                                                            <mat-button-toggle [value]="false">No</mat-button-toggle>
+                                                        </mat-button-toggle-group>                                              
+                                                    </div>    
+                                                    <div fxLayout="column" fxFlex="150px" style="color: var(--primary-darker-color);">                                                       
+                                                        <span>ALL DATA IS ENTERED</span>                                           
                                                     </div>                                                   
-                                                    <div fxLayout="row" >
+                                                </div> 
+                                                <!-- <div fxLayout="row" >
                                                         <div fxLayout="column" fxLayoutAlign="center start"
-                                                        *ngFor="let qiWbSection of qiWorkbookquestion.controls[i].qiSection.controls; ">                                                                                      
+                                                        *ngFor="let qiWbQuestion of QIWorkbookSectionsArray.controls[i]['qiQuestions'].controls; ">                                                                                      
                                                             <div fxlayout = "column" fxFlex="5%">
                                                                 <mat-form-field style="color: var(--primary-darker-color);" >
-                                                                    <input matInput formControlName="sectionId"  readonly>                                                       
+                                                                    <input matInput formControlName="questionId"  readonly>                                                       
                                                                 </mat-form-field>                                                                                                              
                                                             </div>                                                                                            
                                                       
                                                         </div>                                           
-                                                    </div>
-                                                </div>                                                                                                  
+                                                </div>                                                                                                -->
                                                                                                                                      
                                             </ng-container>                                            
                                         </div>
@@ -1168,3 +1192,9 @@
 <ng-template #PracticeQIWorkbook>
 </ng-template>
 <!------------------------------------- Practice QI Workbook Ends --------------------------------------->
+
+
+{{QIWorkbookSectionTrackingForm.value | json}}
+
+
+
