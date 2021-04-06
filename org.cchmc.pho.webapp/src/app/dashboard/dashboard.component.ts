@@ -487,18 +487,13 @@ export class DashboardComponent implements OnInit {
         this.openDrilldownDialog(drillThruMeasureId,tempFilterId);
       }
     }
-
-    
-
     
   } 
 
   onSelectedPatient(id: number, name: string){  
-
     this.rest.selectedPatientId = id;
     this.rest.selectedPatientName = name;
     this.router.navigate(['/patients']);
-
     this.dialog.closeAll();    
    }  
 

@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject, HostListener } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { RestService } from '../rest.service';
 import { NGXLogger } from 'ngx-logger';
 import { MetricDrillthruTable, MetricDrillthruRow, MetricDrillthruColumn } from '../models/drillthru';
@@ -31,7 +32,7 @@ export class DrilldownComponent implements OnInit {
   displayViewReport: boolean = false;
 
   
-  constructor(public rest: RestService,private logger: NGXLogger, @Inject(MAT_DIALOG_DATA) public data: {
+  constructor(public rest: RestService,private router: Router,private logger: NGXLogger, @Inject(MAT_DIALOG_DATA) public data: {
     measureId: string,
     filterId: string,
     displayText: string
@@ -82,6 +83,13 @@ export class DrilldownComponent implements OnInit {
        /* save to file */
        XLSX.writeFile(wb, this.fileName);
   }
+
+  onSelectedPatient(id: number){  
+    this.rest.selectedPatientId = id;
+    //this.rest.selectedPatientName = name;
+    this.router.navigate(['/patients']);
+    //this.closeAll();    
+   } 
 
   public OpenReport() {
     window.open(`${this.defaultUrl}/edreport`, '_blank');       

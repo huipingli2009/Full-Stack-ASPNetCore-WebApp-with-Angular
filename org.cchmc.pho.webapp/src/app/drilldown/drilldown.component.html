@@ -17,7 +17,14 @@
             <tbody>
                <tr *ngFor="let row of rows">
                   <td *ngFor="let column of row.columns">
-                        {{column.value}}
+                        <ng-container *ngIf = "column.clickable() === true"  >                                  
+                            <a (click)="onSelectedPatient(column.value)" target= "_blank">
+                                {{column.value}}
+                            </a>                       
+                        </ng-container>
+                        <ng-container *ngIf = "column.clickable() === false"  >                        
+                            {{column.value}}  
+                        </ng-container>         
                   </td>
                </tr>
             </tbody>
