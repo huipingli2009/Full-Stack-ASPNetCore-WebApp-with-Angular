@@ -119,6 +119,27 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 }
             }
         }
+        public async Task<bool> UpdateQIQuestion(int userId, int formResponseId, Question question)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spUpdateQIWorkbooks", sqlConnection))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@FormResponseId", SqlDbType.Int).Value = formResponseId;
+                    sqlCommand.Parameters.Add("@QuestionID", SqlDbType.Int).Value = question.QuestionId;
+                    sqlCommand.Parameters.Add("@Numerator", SqlDbType.Int).Value = question.Numerator;
+                    sqlCommand.Parameters.Add("@Denominator", SqlDbType.Int).Value = question.Denominator;
+                    //sqlCommand.Parameters.Add("@DataEntered", SqlDbType.Int).Value = question.;
+
+                    await sqlConnection.OpenAsync();
+
+                    //return rows of data affected
+                    return (bool)sqlCommand.ExecuteScalar();
+                }
+            }
+        }
 
         public async Task<List<WorkbooksAsthmaPatient>> GetAsthmaPatientList(int userId, int formResponseId)
         {        

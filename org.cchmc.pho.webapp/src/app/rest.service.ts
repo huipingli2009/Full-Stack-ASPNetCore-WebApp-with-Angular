@@ -6,8 +6,8 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from '../environments/environment';
 import { Alerts, WebChart, EdChartDetails, Population, Quicklinks, Spotlight, WebChartFilters } from './models/dashboard';
 import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Patients, NewPatient, Pmca, PopSlices, Providers, States, Outcomes, DuplicatePatient, MergePatientConfirmation } from './models/patients';
-import { PracticeList, Responsibilities, Staff, StaffDetails, StaffAdmin, PracticeCoach } from './models/Staff';
-import { Followup, WorkbookDepressionPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookAsthmaPatient, Treatment, WorkbookConfirmation, QIWorkbookPractice, QIWorkbookQuestions} from './models/workbook';
+import { PracticeList, Responsibilities, Staff, StaffDetails, StaffAdmin, PracticeCoach, Position } from './models/Staff';
+import { Followup, WorkbookDepressionPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookAsthmaPatient, Treatment, WorkbookConfirmation, QIWorkbookPractice, QIWorkbookQuestions, Question} from './models/workbook';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
 import { FileDetails, FileAction, ResourceType, Tag, Initiative, FileType, ContentPlacement } from './models/files';
 import { Location } from '@angular/common';
@@ -511,6 +511,14 @@ export class RestService {
     this.logger.log(WorkbookConfirmation, 'updateWorkbookConfirmations');
     return this.http.put(`${API_URL}/api/Workbooks/confirmation/`, JSON.stringify(WorkbookConfirmation), httpOptions).pipe(
       catchError(this.handleError<any>('update workbook confirmations'))
+    );
+  }
+
+  /*Update workbook confirmations*/
+  updateQIWorkbookConfirmations(formResponseId: number, question: Question): Observable<any> {
+    this.logger.log(question, 'updateWorkbookConfirmations');
+    return this.http.put(`${API_URL}/api/Workbooks/qiconfirmation/${formResponseId}`, JSON.stringify(question), httpOptions).pipe(
+      catchError(this.handleError<any>('update QI Workbook confirmations'))
     );
   }
 

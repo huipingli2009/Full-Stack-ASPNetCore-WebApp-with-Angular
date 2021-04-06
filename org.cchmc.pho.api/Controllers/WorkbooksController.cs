@@ -478,7 +478,31 @@ namespace org.cchmc.pho.api.Controllers
             }
 
         }
-     
+        [AllowAnonymous]
+        [HttpPut("qiconfirmation")]
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin")]
+        [SwaggerResponse(200, type: typeof(bool))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+
+        public async Task<IActionResult> UpdateWorkbooksQIConfirmation(int formResponseId, [FromBody]QuestionViewModel confirm)
+        {
+            try
+            {
+                int currentUserId = 16;//_userService.GetUserIdFromClaims(User?.Claims);
+                var dataModel = _mapper.Map<Question>(confirm);
+                await _workbooks.UpdateQIQuestion(currentUserId, formResponseId, dataModel);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+
+        }
+
         [HttpGet("practiceqiworkbooks")]
         [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin, PHO Leader")]
         [SwaggerResponse(200, type: typeof(QIWorkbookPracticeViewModel))]
