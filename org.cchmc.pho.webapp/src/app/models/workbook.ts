@@ -95,11 +95,11 @@ export class QIWorkbookQuestions {
     qiSection: Array<Section>
 }
 
-export class Section {
+export class Section {    
     sectionId: number; 
     sectionHeader: string;
     QiQuestion: Array<Question>;  
-    dataEntered: string;
+    dataEntered: boolean;
 }
 
 export class Question {    
