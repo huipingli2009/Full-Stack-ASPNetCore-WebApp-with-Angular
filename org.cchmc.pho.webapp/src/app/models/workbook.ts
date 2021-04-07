@@ -95,7 +95,7 @@ export class QIWorkbookQuestions {
     qiSection: Array<Section>
 }
 
-export class Section {
+export class Section {    
     sectionId: number; 
     sectionHeader: string;
     QiQuestion: Array<Question>;  

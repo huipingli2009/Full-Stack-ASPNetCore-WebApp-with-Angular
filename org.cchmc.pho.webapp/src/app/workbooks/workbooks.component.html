@@ -925,19 +925,24 @@
                                                     </div>    
                                                     <div fxLayout="column" fxFlex="150px" style="color: var(--primary-darker-color);">                                                       
                                                         <span>ALL DATA IS ENTERED</span>                                           
-                                                    </div>                                                   
+                                                    </div>                                                     
+                                                    <!-- <div fxlayout = "column" fxFlex="16px">
+                                                        <mat-form-field style="color: var(--primary-darker-color);" >
+                                                            <input matInput formControlName="i.qiQuestions[0].questionId"  readonly> 
+                                                            <input matInput formControlName="qiQuestion[0].questionId"  readonly>                                                       
+                                                        </mat-form-field>                                                                                                              
+                                                    </div>                                                     -->
                                                 </div> 
-                                                <!-- <div fxLayout="row" >
-                                                        <div fxLayout="column" fxLayoutAlign="center start"
-                                                        *ngFor="let qiWbQuestion of QIWorkbookSectionsArray.controls[i]['qiQuestions'].controls; ">                                                                                      
-                                                            <div fxlayout = "column" fxFlex="5%">
+                                                <div fxLayout="row" formArrayName="QIWorkbookQuestionArray">
+                                                        <div fxLayout="column" fxLayoutAlign="center start"                                                      
+                                                             *ngFor="let qiWbQuestion of QIWorkbookQuestionArray.controls; index as j;">                                                                                                                      
+                                                            <div fxlayout = "column" fxFlex="20px">                                                               
                                                                 <mat-form-field style="color: var(--primary-darker-color);" >
                                                                     <input matInput formControlName="questionId"  readonly>                                                       
                                                                 </mat-form-field>                                                                                                              
-                                                            </div>                                                                                            
-                                                      
+                                                            </div>                                            
                                                         </div>                                           
-                                                </div>                                                                                                -->
+                                                </div>                                                                                               
                                                                                                                                      
                                             </ng-container>                                            
                                         </div>
@@ -1195,6 +1200,10 @@
 
 
 {{QIWorkbookSectionTrackingForm.value | json}}
+
+
+
+
 
 
 
