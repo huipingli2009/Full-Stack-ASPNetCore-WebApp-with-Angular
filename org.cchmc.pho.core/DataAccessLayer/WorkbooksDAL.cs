@@ -654,7 +654,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         public async Task<QIWorkbookQuestions> GetQIWorkbookQuestions(int userId, int formResponseId)
         {
             DataTable dataTable = new DataTable();
-            QIWorkbookQuestions qiworkbookquestions = new QIWorkbookQuestions();
+            QIWorkbookQuestions returnParent = new QIWorkbookQuestions();
 
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
@@ -671,11 +671,10 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     {
                         da.Fill(dataTable);
 
-                        QIWorkbookQuestions returnParent = new QIWorkbookQuestions()
+                        returnParent = new QIWorkbookQuestions()
                         {
                             FormResponseId = int.Parse(dataTable.Rows[0]["FormResponseId"].ToString()),
                             QiSection = new List<Section>()
-
                         };
 
                        // using sectionId as the groupby.
@@ -714,14 +713,13 @@ namespace org.cchmc.pho.core.DataAccessLayer
                             returnParent.QiSection.Add(section);
                         };
 
-                        qiworkbookquestions=returnParent;
 
                     }                    
                     
                 }         
                
             }
-            return qiworkbookquestions;
+            return returnParent;
         }
     }
 }
