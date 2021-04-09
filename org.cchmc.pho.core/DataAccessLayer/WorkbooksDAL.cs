@@ -711,7 +711,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                             //Add the set to the parent object
                             returnParent.QiSection.Add(section);
-                        };
+                        }
 
 
                     }                    
