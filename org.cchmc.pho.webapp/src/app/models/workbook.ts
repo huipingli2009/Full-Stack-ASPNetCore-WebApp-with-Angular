@@ -98,7 +98,7 @@ export class QIWorkbookQuestions {
 export class Section {    
     sectionId: number; 
     sectionHeader: string;
-    QiQuestion: Array<Question>;  
+    qiQuestion: Array<Question>;  
     dataEntered: boolean;
 }
 
@@ -107,7 +107,7 @@ export class Question {
     questionDEN: string;
     questionNUM: string;
     numeratorLabel: string;
-    numerator: string;
-    denominator: string;   
+    numerator: number;
+    denominator: number;   
 }
 

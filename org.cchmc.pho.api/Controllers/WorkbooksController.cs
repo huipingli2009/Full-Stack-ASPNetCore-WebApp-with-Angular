@@ -478,20 +478,25 @@ namespace org.cchmc.pho.api.Controllers
             }
 
         }
-        [AllowAnonymous]
-        [HttpPut("qiconfirmation")]
+
+        [HttpPut("qiconfirmation/{id}/{entered}")]
         [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin")]
-        [SwaggerResponse(200, type: typeof(bool))]
+        [SwaggerResponse(200, type: typeof(string))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-
-        public async Task<IActionResult> UpdateWorkbooksQIConfirmation(int formResponseId, [FromBody]QuestionViewModel confirm)
+        public async Task<IActionResult> UpdateWorkbooksQIConfirmation(string id, string entered, [FromBody]QuestionViewModel confirm)
         {
+            // route parameters are strings and need to be translated (and validated) to their proper data type
+            if (!int.TryParse(id, out var formResponseId))
+                return BadRequest("id is not a valid integer");
+            if (!Boolean.TryParse(entered, out var dataEntered))
+                return BadRequest("dataEntered is not a valid bool");
+
             try
             {
-                int currentUserId = 16;//_userService.GetUserIdFromClaims(User?.Claims);
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
                 var dataModel = _mapper.Map<Question>(confirm);
-                await _workbooks.UpdateQIQuestion(currentUserId, formResponseId, dataModel);
+                await _workbooks.UpdateQIQuestion(currentUserId, formResponseId, dataEntered, dataModel);
                 return Ok();
             }
             catch (Exception ex)

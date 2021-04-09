@@ -119,7 +119,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 }
             }
         }
-        public async Task<bool> UpdateQIQuestion(int userId, int formResponseId, Question question)
+        public async Task<bool> UpdateQIQuestion(int userId, int formResponseId, bool dataEntered, Question question)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
@@ -131,7 +131,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     sqlCommand.Parameters.Add("@QuestionID", SqlDbType.Int).Value = question.QuestionId;
                     sqlCommand.Parameters.Add("@Numerator", SqlDbType.Int).Value = question.Numerator;
                     sqlCommand.Parameters.Add("@Denominator", SqlDbType.Int).Value = question.Denominator;
-                    //sqlCommand.Parameters.Add("@DataEntered", SqlDbType.Int).Value = question.;
+                    sqlCommand.Parameters.Add("@DataEntered", SqlDbType.Int).Value = Convert.ToInt32(dataEntered);
 
                     await sqlConnection.OpenAsync();
 

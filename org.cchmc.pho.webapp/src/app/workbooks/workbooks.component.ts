@@ -8,7 +8,7 @@ import { NGXLogger } from 'ngx-logger';
 import { Subject } from 'rxjs'; 
 import { debounceTime, distinctUntilChanged, pairwise, take, takeUntil } from 'rxjs/operators';
 import { PatientForWorkbook, Providers } from '../models/patients';
-import { Followup, WorkbookDepressionPatient, WorkbookAsthmaPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookFormValueEnum, Treatment, WorkbookConfirmation, QIWorkbookPractice, QIWorkbookQuestions, Section, Question} from '../models/workbook';
+import { Followup, WorkbookDepressionPatient, WorkbookAsthmaPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookFormValueEnum, Treatment, WorkbookConfirmation, QIWorkbookPractice, QIWorkbookQuestions as QIWorkbookParent, Section, Question} from '../models/workbook';
 import { RestService } from '../rest.service';
 import { DateRequiredValidator } from '../shared/customValidators/customValidator';
 import { MatSnackBarComponent } from '../shared/mat-snack-bar/mat-snack-bar.component';
@@ -33,12 +33,12 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   // }
 
   get QIWorkbookSectionsArray() {   
-    return this.QIWorkbookSectionTrackingForm.get('QIWorkbookSectionsArray') as FormArray;   
+    return this.QIWorkbookSectionTrackingForm.get('QIWorkbookSectionsArray') as FormGroup;   
   }
 
-  get QIWorkbookQuestionArray(): FormArray {
-    return this.QIWorkbookSectionTrackingForm.get('QIWorkbookQuestionArray') as FormArray;
-  }
+  // get QIWorkbookQuestionArray(): FormArray {
+  //   return this.QIWorkbookSectionTrackingForm.get('QIWorkbookQuestionArray') as FormArray;
+  // }
 
   @ViewChild('FollowUp') followUp: TemplateRef<any>;
   @ViewChild('DeletePatient') DeletePatient: TemplateRef<any>;
@@ -105,10 +105,15 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
 
   //for QI workbook 
   qiworkbookprctice: QIWorkbookPractice;
+  qiWorkbookParent: QIWorkbookParent;
   qiworkbookquestions: Question[];
   qiworkbooksections: Section[];
   btnToggleVisible: boolean = false;
- 
+  qiSectionHeader: string;
+  qiQuestionNUM: string;
+  qiQuestionDEN: string;
+  qiNumeratorLabel: string;
+  updateQuestion: Question;
 
 //workbook fomrs
   ProvidersForWorkbookForm = this.fb.group({
@@ -150,29 +155,16 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
   });
 
   QIWorkbookSectionTrackingForm = this.fb.group({
-    // QIWorkbookQuestionsArray: this.fb.array([
-    //     this.fb.group({
-          formResponseId: [''],
-
-          QIWorkbookSectionsArray: this.fb.array([
-            this.fb.group({
-              sectionId: [''], 
-              sectionHeader: [''],                 
-              dataEntered: [''], 
-              QIWorkbookQuestionArray: this.fb.array([
-                this.fb.group({
-                  questionId: [''],                
-                  questionDEN: [''],
-                  questionNUM: [''],
-                  numeratorLabel: [''],
-                  numerator: [''],
-                  denominator: ['']
-                })           
-              ])
-            })
-          ])
-        // })
-      // ])
+          formResponseId: '',
+          sectionId: '',
+          sectionHeader: '',
+          dataEntered: '',
+          questionId: '',                
+          questionDEN: '',
+          questionNUM: '',
+          numeratorLabel: '',
+          numerator: '',
+          denominator: ''  
     });
   
   FollowupForm = this.fb.group(
@@ -305,7 +297,7 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     if (this.selectedWorkbookFormId == WorkbookFormValueEnum.qualityimprovement){
       
       this.getQIWorkbookPractice(this.selectedFormResponseID);  
-      this.getQIWorkbookQuestions(this.selectedFormResponseID);     
+      this.getQIWorkbookQuestions(this.selectedFormResponseID);
     }
   }
 
@@ -914,93 +906,63 @@ export class WorkbooksComponent implements OnInit, OnDestroy {
     
     //get QI workbook questions
     getQIWorkbookQuestions(formResponseid: number) {
-      const qiWorkbookQuestionsArray = this.QIWorkbookQuestionArray;  
+      //const qiWorkbookQuestionsArray = this.QIWorkbookQuestionArray;  
       this.rest.getQIWorkbookQuestions(formResponseid).pipe(take(1)).subscribe((data) => {
-        //this.QIWorkbookSectionTrackingForm.get("formResponseId").setValue = data[0].formResponseid;
-        //this.QIWorkbookSectionTrackingForm.setControl['formResponseId'].value = data[0].formResponseId;
         this.qiworkbooksections = data.qiSection;
-        
-        data.qiSection.forEach(element => {
-          console.log(element);          
-        });
-        
-        let n = data.qiSection.length;
-        for (let i=0; i < n; i++ )
-        { 
-          let j = data.qiSection[i].qiQuestion.length;
-          this.qiworkbookquestions = data.qiSection[i].qiQuestion;
-
-
-          console.log('test');
-          // for (let k = 0; k < j; k++)
-          // {
-          //   qiWorkbookQuestionsArray.push(this.fb.group( 
-          //     data.qiSection[i].qiQuestion[j])        
-          //   // data.qiSection[i].forEach(element => {
-          //   //   qiWorkbookQuestionsArray.push(this.fb.group(element.qiQuestions));            
-          //   );       
-          // }
-          // qiWorkbookQuestionsArray.push(this.fb.group( 
-          //   data.qiSection[i].qiQuestions)        
-          // // data.qiSection[i].forEach(element => {
-          // //   qiWorkbookQuestionsArray.push(this.fb.group(element.qiQuestions));            
-          // );          
-        } ;      
-
-        this.AssignQIWorkbookSectionsArray(); 
-        this.AssignQIWorkbookQuestionsArray();       
-      });
+        this.qiWorkbookParent = data;       
+        this.logger.log(this.qiWorkbookParent);
+        this.QIWorkbookSectionTrackingForm.patchValue({
+          formResponseId: this.qiWorkbookParent.formResponseId,
+          sectionId: this.qiWorkbookParent.qiSection[0].sectionId,
+          sectionHeader: this.qiWorkbookParent.qiSection[0].sectionHeader,
+          dataEntered: this.qiWorkbookParent.qiSection[0].dataEntered,
+          questionId: this.qiWorkbookParent.qiSection[0].qiQuestion[0].questionId,                
+          questionDEN: this.qiWorkbookParent.qiSection[0].qiQuestion[0].questionDEN,
+          questionNUM: this.qiWorkbookParent.qiSection[0].qiQuestion[0].questionNUM,
+          numeratorLabel: this.qiWorkbookParent.qiSection[0].qiQuestion[0].numeratorLabel,
+          numerator: this.qiWorkbookParent.qiSection[0].qiQuestion[0].numerator,
+          denominator: this.qiWorkbookParent.qiSection[0].qiQuestion[0].denominator  
+        }); 
+        this.qiSectionHeader =   this.qiWorkbookParent.qiSection[0].sectionHeader;
+        this.qiQuestionNUM = this.qiWorkbookParent.qiSection[0].qiQuestion[0].questionNUM;
+        this.qiQuestionDEN = this.qiWorkbookParent.qiSection[0].qiQuestion[0].questionDEN;
+        this.qiNumeratorLabel = this.qiWorkbookParent.qiSection[0].qiQuestion[0].numeratorLabel;
+        this.updateQuestion = this.qiWorkbookParent.qiSection[0].qiQuestion[0];
+      }); 
     }
 
-    AssignQIWorkbookQuestionsArray() {
+    onQIWorkbookChange() { 
+      this.updateQuestion.numerator = parseInt(this.QIWorkbookSectionTrackingForm.get('numerator').value);
+      this.updateQuestion.denominator = parseInt(this.QIWorkbookSectionTrackingForm.get('denominator').value);
+      var dataEntered = this.QIWorkbookSectionTrackingForm.get('dataEntered').value;
+      this.rest.updateQIWorkbookConfirmations(this.selectedFormResponseID, dataEntered, this.updateQuestion).subscribe(res => {
+        //after we get this data, doublecheck for changed confirmation values
+        //do extra stuff
+        this.logger.log('made it');
+        this.getQIWorkbookQuestions(this.selectedFormResponseID);
+      })
+    }
+
+
+  //   AssignQIWorkbookQuestionsArray() {
       
-      const qiWorkbookQuestionsArray = this.QIWorkbookQuestionArray;     
-      let clearArray = this.QIWorkbookSectionTrackingForm.controls['QIWorkbookQuestionArray'] as FormArray;
+  //     const qiWorkbookQuestionsArray = this.QIWorkbookQuestionArray;     
+  //     let clearArray = this.QIWorkbookSectionTrackingForm.controls['QIWorkbookQuestionArray'] as FormArray;
      
-      clearArray.clear();  
-      // clearArray1.clear();      
+  //     clearArray.clear();  
+  //     // clearArray1.clear();      
       
-      if (qiWorkbookQuestionsArray.length > 0) {
-        qiWorkbookQuestionsArray.removeAt(0);
-      }
+  //     if (qiWorkbookQuestionsArray.length > 0) {
+  //       qiWorkbookQuestionsArray.removeAt(0);
+  //     }
 
-      //var data = this.qiworkbooksections;
-      this.qiworkbookquestions.forEach(results => {
-        qiWorkbookQuestionsArray.push(this.fb.group(results)) ;            
-      }); 
-      console.log('test') ;    
-  } 
+  //     //var data = this.qiworkbooksections;
+  //     this.qiworkbookquestions.forEach(results => {
+  //       qiWorkbookQuestionsArray.push(this.fb.group(results)) ;            
+  //     }); 
+  //     console.log('test') ;    
+  // } 
 
-  AssignQIWorkbookSectionsArray() {
-        const qiWorkbookSectionsArray = this.QIWorkbookSectionsArray;
-        //const qiWorkbookQuestionsArray = this.QIWorkbookQuestionArray;
-        let clearArray = this.QIWorkbookSectionTrackingForm.controls['QIWorkbookSectionsArray'] as FormArray;
-        // let clearArray1 = this.QIWorkbookSectionTrackingForm.controls['QIWorkbookQuestionArray'] as FormArray;
-       
-        clearArray.clear();  
-        // clearArray1.clear();      
-        
-        if (qiWorkbookSectionsArray.length > 0) {
-          qiWorkbookSectionsArray.removeAt(0);
-        }
-
-        // if (qiWorkbookQuestionsArray.length > 0) {
-        //   qiWorkbookQuestionsArray.removeAt(0);
-        // }
-
-        //var data = this.qiworkbooksections;
-        this.qiworkbooksections.forEach(results => {
-         
-          //this.btnToggleVisible = results.dataEntered != null;
-         
-          qiWorkbookSectionsArray.push(this.fb.group(results)); 
-
-          //qiWorkbookQuestionsArray.push(results.map(this.fb.group(results.QiQuestion)) ;     
-          
-          
-          console.log('test') ;      
-        });    
-    } 
     
     // onValueChanges(): void {
     //   this.QIWorkbookQuestionsArray.controls['sectionHeader']

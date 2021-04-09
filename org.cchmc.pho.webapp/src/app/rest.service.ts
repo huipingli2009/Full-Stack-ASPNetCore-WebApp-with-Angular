@@ -515,9 +515,10 @@ export class RestService {
   }
 
   /*Update workbook confirmations*/
-  updateQIWorkbookConfirmations(formResponseId: number, question: Question): Observable<any> {
-    this.logger.log(question, 'updateWorkbookConfirmations');
-    return this.http.put(`${API_URL}/api/Workbooks/qiconfirmation/${formResponseId}`, JSON.stringify(question), httpOptions).pipe(
+  updateQIWorkbookConfirmations(formResponseId: number, dataEntered: number, question: Question): Observable<any> {
+    this.logger.log(question, 'updateQIWorkbookConfirmations');
+    this.logger.log(formResponseId, 'updateQIWorkbookConfirmations');
+    return this.http.put(`${API_URL}/api/Workbooks/qiconfirmation/${formResponseId.toString()}/${dataEntered.toString()}`, JSON.stringify(question), httpOptions).pipe(
       catchError(this.handleError<any>('update QI Workbook confirmations'))
     );
   }
@@ -667,8 +668,8 @@ export class RestService {
   getQIWorkbookQuestions(formResponseid: number): Observable<any> {
     let paramsValue = new HttpParams();
     paramsValue = paramsValue.append("formResponseId", formResponseid.toString());
-    return this.http.get<QIWorkbookQuestions[]>(`${API_URL}/api/Workbooks/qiworkbookquestions`, { params: paramsValue }).pipe(
-      map((data: QIWorkbookQuestions[]) => {
+    return this.http.get<QIWorkbookQuestions>(`${API_URL}/api/Workbooks/qiworkbookquestions`, { params: paramsValue }).pipe(
+      map((data: QIWorkbookQuestions) => {
         return data;
       })
     );

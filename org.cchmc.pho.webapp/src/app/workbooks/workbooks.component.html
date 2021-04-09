@@ -886,71 +886,60 @@
                 </div>
             </div>      
 
-            <div fxLayout="row" class="side-border-container provider-list-container"> 
-                <!-- <div>
-                    <mat-form-field style="color: var(--primary-darker-color);" >
-                        <input matInput formControlName="formResponseId"  readonly>                                                       
-                    </mat-form-field>
-                </div>                          -->
-                    <form [formGroup]="QIWorkbookSectionTrackingForm">
-                        <ng-container >                                                                       
-                            <div fxLayout="column">  
-                                <div>
-                                    <mat-form-field style="color: var(--primary-darker-color);" >
-                                        <input matInput formControlName="formResponseId"  readonly>                                                       
-                                    </mat-form-field>
-                                </div>                                       
-                                <ng-container formArrayName="QIWorkbookSectionsArray">
-                                    <div fxLayout="column" >
-                                        <div fxLayout="column" fxLayoutAlign="center start"
-                                            *ngFor="let qiWorkbookSection of QIWorkbookSectionsArray.controls; index as i"
-                                            [ngClass]="QIWorkbookSectionsArray">
-                                            <ng-container [formGroupName]="i">                                     
-                                                <div fxLayout="row" fxLayoutGap="64px" fxFlex="5%">
-                                                    <div fxLayout="column">
-                                                        <mat-form-field style="color: var(--primary-darker-color);" >
-                                                            <input matInput formControlName="sectionId"  hidden>                                                       
-                                                        </mat-form-field>
-                                                    </div> 
-                                                    <div fxLayout="column" fxFlex="600px" fxLayoutAlign="start center">
-                                                        <mat-form-field style="font-size:large;font-weight: 900;color: var(--primary-darker-color);" >
-                                                            <input matInput formControlName="sectionHeader"  readonly>                                                       
-                                                        </mat-form-field>
-                                                    </div>
-                                                    <div fxLayout="column" fxFlex="100px"> 
-                                                        <mat-button-toggle-group formControlName="dataEntered">
-                                                            <mat-button-toggle [value]="true">Yes</mat-button-toggle>
-                                                            <mat-button-toggle [value]="false">No</mat-button-toggle>
-                                                        </mat-button-toggle-group>                                              
-                                                    </div>    
-                                                    <div fxLayout="column" fxFlex="150px" style="color: var(--primary-darker-color);">                                                       
-                                                        <span>ALL DATA IS ENTERED</span>                                           
-                                                    </div>                                                     
-                                                    <!-- <div fxlayout = "column" fxFlex="16px">
-                                                        <mat-form-field style="color: var(--primary-darker-color);" >
-                                                            <input matInput formControlName="i.qiQuestions[0].questionId"  readonly> 
-                                                            <input matInput formControlName="qiQuestion[0].questionId"  readonly>                                                       
-                                                        </mat-form-field>                                                                                                              
-                                                    </div>                                                     -->
-                                                </div> 
-                                                <div fxLayout="row" formArrayName="QIWorkbookQuestionArray">
-                                                        <div fxLayout="column" fxLayoutAlign="center start"                                                      
-                                                             *ngFor="let qiWbQuestion of QIWorkbookQuestionArray.controls; index as j;">                                                                                                                      
-                                                            <div fxlayout = "column" fxFlex="20px">                                                               
-                                                                <mat-form-field style="color: var(--primary-darker-color);" >
-                                                                    <input matInput formControlName="questionId"  readonly>                                                       
-                                                                </mat-form-field>                                                                                                              
-                                                            </div>                                            
-                                                        </div>                                           
-                                                </div>                                                                                               
-                                                                                                                                     
-                                            </ng-container>                                            
+            <div fxLayout="row" class="side-bottom-border-container qi-list-container">        
+                <form [formGroup]="QIWorkbookSectionTrackingForm">
+                    <div fxLayout="row">
+                        <div fxLayout="column" fxLayoutAlign="start" style="width:700px !important">
+                            <span style="font-size:large;font-weight: 900;color: var(--primary-darker-color); padding: 30px 30px 30px 30px; "> {{ qiSectionHeader }}</span>      
+                        </div>   
+                        <div fxLayout="column" fxLayoutAlign="end">
+                            <mat-slide-toggle labelPosition="after" formControlName="dataEntered" name="qiConfirm" [checked]="QIWorkbookSectionTrackingForm.controls.dataEntered" (change)="onQIWorkbookChange()" ngDefaultControl><span class="whitespace"></span>ALL DATA IS ENTERED
+                            </mat-slide-toggle>    
+                        </div>                                  
+                    </div>  
+                    <div fxLayout="row" class="provider-list-container">         
+                        <ng-container>
+                            <div fxLayout="column" fxFlexAlign="start" style="width:650px !important">
+                                <div fxLayout="row" class="title-col">
+                                    {{ qiQuestionNUM }}                                    
+                                </div>
+                                <div fxLayout="row" class="title-col">
+                                    {{ qiQuestionDEN }}                                 
+                                </div>
+                            </div>
+                            <div fxLayout="column" class="workbook-item" fxFlexAlign="end" style="width:400px" fxFlex>
+                                <div fxLayout="row">
+                                    <div fxLayout="column">
+                                        <div fxLayout="row">
+                                            <div fxLayout="column" fxFlex="60.5px" class="workbook-inputs-col">
+                                                <div class="title-col">{{ qiNumeratorLabel }}</div>
+                                            </div>
+                                            <div fxLayout="column" fxFlex="60.5px">
+                                                <div class="title-col">TOTAL</div>
+                                            </div>
+                                        </div>
+                                        <div fxLayout="row" class="workbook-item workbook-patient-item">
+                                            <div fxLayout="column" fxFlex="60.5px" class="workbook-inputs-col">
+                                                <mat-form-field class="workbook-input">
+                                                    <input matInput (change)="onQIWorkbookChange()"
+                                                        formControlName="numerator">
+                                                        </mat-form-field> 
+                                            </div>
+                                            <div fxLayout="column" fxFlex="60.5px">
+                                                <mat-form-field class="workbook-input">
+                                                    <input matInput (change)="onQIWorkbookChange()"
+                                                        formControlName="denominator">
+                                                </mat-form-field>
+                                            </div>
                                         </div>
                                     </div>
-                                </ng-container>
-                            </div>                        
+                                </div>
+
+                            </div>
                         </ng-container>
-                    </form>                       
+                    </div>                        
+                </form>
+    
             </div>       
        
         </ng-container>
@@ -1142,7 +1131,6 @@
           <div fxLayout="column" fxLayoutAlign="center"  fxFlex="50" >
             <mat-form-field class="multi-select-override" floatLabel="always">
               <mat-label>PCP</mat-label>
-
               <mat-select matNativeControl align-items="center" placeholder="Select a Provider" formControlName="pcpName" (selectionChange)="onEditProviderSelectionChange($event)" required>
                 <mat-select-trigger>
                     {{selectedEditProviderDisplay}}
@@ -1199,7 +1187,6 @@
 <!------------------------------------- Practice QI Workbook Ends --------------------------------------->
 
 
-{{QIWorkbookSectionTrackingForm.value | json}}
 
 
 

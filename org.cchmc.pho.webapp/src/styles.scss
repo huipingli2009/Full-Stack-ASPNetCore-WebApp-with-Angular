@@ -2146,6 +2146,11 @@ button.toast-close-button {
     border-width: 0 1.5px 0 1.5px;
     border-radius: 0px !important;
   }
+  .side-bottom-border-container {
+    border: solid var(--primary-color);
+    border-width: 0 1.5px 1.5px 1.5px;
+    border-radius: 0px !important;
+  }
 
   .text-container {
     background-color: #f2fafa;
@@ -2196,6 +2201,23 @@ button.toast-close-button {
       .title-col {
         display: inline;
       }   
+  }  
+  
+  .qi-list-container {
+    background-color: white;
+    padding: 32px 49px 30px;
+    .title-col {      
+      display: inline;
+      font-size: 11px;
+      line-height: 15px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      color: var(--primary-darker-color);
+      margin-bottom: 12px;
+    }
+    .hidden-name {
+      visibility: hidden;
+    }  
   }
 
     .workbook-provider {
@@ -2392,7 +2414,8 @@ button.toast-close-button {
 
 .patient-addition-row,
 .follow-up-form,
-.provider-list-container {
+.provider-list-container,
+.qi-list-container {
   background-color: white !important;
   border-color: var(--primary-color);
   border-width: 1px 0px 1px 0px;

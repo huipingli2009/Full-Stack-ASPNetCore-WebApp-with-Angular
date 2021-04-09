@@ -10,7 +10,7 @@ namespace org.cchmc.pho.core.Interfaces
         Task<List<WorkbooksDepressionPatient>> GetDepressionPatientList(int userId, int formResponseId);
         Task<WorkbooksDepressionConfirmation> GetDepressionConfirmation(int userId, int formResponseId);
         Task<bool> UpdateDepressionConfirmation(int userId, WorkbooksDepressionConfirmation confirmation);
-        Task<bool> UpdateQIQuestion(int userId, int formResponseId, Question question);
+        Task<bool> UpdateQIQuestion(int userId, int formResponseId, bool dataEntered, Question question);
         Task<List<WorkbooksAsthmaPatient>> GetAsthmaPatientList(int userId, int formResponseId);
         Task<WorkbooksPractice> GetPracticeWorkbooks(int userId, int formResponseId);
         Task<List<WorkbooksProvider>> GetPracticeWorkbooksProviders(int userId, int formResponseId);
