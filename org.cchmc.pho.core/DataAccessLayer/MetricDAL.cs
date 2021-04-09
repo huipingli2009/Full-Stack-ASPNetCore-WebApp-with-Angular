@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using System.Data.SqlClient;
 using System.Data;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace org.cchmc.pho.core.DataAccessLayer
 {
@@ -82,10 +83,10 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
         }
 
-        public async Task<List<EDChart>> ListWebChart(int userId, int? chartId, int? measureId, int? filterId)
+        public async Task<WebChart> ListWebChart(int userId, int? chartId, int? measureId, int? filterId)
         {
-            DataTable dataTable = new DataTable();
-            List<EDChart> edCharts = new List<EDChart>();
+            DataSet dataSet = new DataSet();
+            WebChart chart = new WebChart();
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
                 using (SqlCommand sqlCommand = new SqlCommand("spGetDashboardChart", sqlConnection))
@@ -100,31 +101,60 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     // Define the data adapter and fill the dataset
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
-                        da.Fill(dataTable);
-                        if (dataTable.Rows.Count > 0)
-                        {
-                            edCharts = (from DataRow dr in dataTable.Rows
-                                        select new EDChart()
-                                        {
-                                            PracticeId = Convert.ToInt32(dr["PracticeId"]),
-                                            AdmitDate = Convert.ToDateTime(dr["AdmitDate"]),
-                                            ChartLabel = dr["ChartLabel"].ToString(),
-                                            ChartTitle = dr["ChartTitle"].ToString(),
-                                            EDVisits = Convert.ToInt32(dr["BarValue1"]),
-                                            ChartTopLeftLabel = dr["TopLeftLabel"].ToString(),
-                                        }
-    ).ToList();
-                        }
-                        else
-                        {
-                            edCharts.Add(new EDChart());
-                        }
+                        da.Fill(dataSet);
+                        var headerTable = dataSet.Tables[0];
+                        DataTable finalTable = dataSet.Tables[1];
 
+                        DataRow hr = headerTable.Rows[0];
+                        chart = (new WebChart(
+                            Convert.ToInt32(hr["PracticeID"]), 
+                            hr["ChartTitle"].ToString(), 
+                            hr["HeaderText"].ToString()
+                            ));
+
+                        //Split the final table into a list, using the DataSetIndex as the groupby.
+                        List<DataTable> dataSets = finalTable.AsEnumerable()
+                        .GroupBy(row => row.Field<double>("DataSetIndex"))
+                        .Select(g => g.CopyToDataTable())
+                        .ToList();
+
+                        foreach(DataTable ds in dataSets)
+                        { 
+                            //create new dataset object
+                            WebChartDataSet curDataSet = new WebChartDataSet()
+                            {
+                                Type = ds.Rows[0]["ChartType"].ToString(),
+                                Legend = ds.Rows[0]["Legend"].ToString(),
+                                BackgroundColor = ds.Rows[0]["BackgroundColor"].ToString(),
+                                BackgroundHoverColor = ds.Rows[0]["BackgroundHoverColor"].ToString(),
+                                BorderColor = ds.Rows[0]["BorderColor"].ToString(),
+                                Fill = Convert.ToBoolean(ds.Rows[0]["Fill"].ToString())
+                            };
+
+                            DataView dv = ds.DefaultView;
+                            dv.Sort = "YYYYMMDD asc";
+                            DataTable sortedDT = dv.ToTable();
+
+                            //Extract label and value arrays
+                            List<string> xAxisLabels = new List<string>();
+                            List<int> chartValues = new List<int>();
+                            foreach(DataRow row in sortedDT.Rows)
+                            {
+                                xAxisLabels.Add(row["DataPointLabel"].ToString());
+                                chartValues.Add(Convert.ToInt32(row["ChartValue"].ToString()));
+                            }
+                            curDataSet.XAxisLabels = xAxisLabels.ToArray();
+                            curDataSet.Values = chartValues.ToArray();
+
+                            //Add the set to the parent object
+                            chart.DataSets.Add(curDataSet);
+                        }
 
                     }
-                    return edCharts;
                 }
             }
+
+            return chart;
         }
 
         public async Task<List<EDDetail>> ListEDDetails(int userId, DateTime admitDate)

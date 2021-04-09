@@ -4,7 +4,7 @@ import { NGXLogger } from 'ngx-logger';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from '../environments/environment';
-import { Alerts, EdChart, EdChartDetails, Population, Quicklinks, Spotlight, WebChartFilters } from './models/dashboard';
+import { Alerts, WebChart, EdChartDetails, Population, Quicklinks, Spotlight, WebChartFilters } from './models/dashboard';
 import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Patients, NewPatient, Pmca, PopSlices, Providers, States, Outcomes, DuplicatePatient, MergePatientConfirmation } from './models/patients';
 import { PracticeList, Responsibilities, Staff, StaffDetails, StaffAdmin, PracticeCoach } from './models/Staff';
 import { Followup, WorkbookDepressionPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookAsthmaPatient, Treatment, WorkbookConfirmation, QIWorkbookPractice} from './models/workbook';
@@ -86,13 +86,14 @@ export class RestService {
   }
 
   /*Gets base ED Chart Information */
-  getWebChartByUser(chartId, measureId, filterId): Observable<any> {
+  getWebChartByUser(chartId, measureId, filterId): Observable<WebChart> {
     const endpoint = `${API_URL}/api/Metrics/webcharts/${chartId}/${measureId}/${filterId}`;
     return this.http.get<any>(endpoint).pipe(
-      map((data: EdChart[]) => {
+      map((data: WebChart) => {
         return data;
       })
     );
+    
   }
 
   //getWebChartFilters
