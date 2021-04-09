@@ -654,7 +654,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         public async Task<QIWorkbookQuestions> GetQIWorkbookQuestions(int userId, int formResponseId)
         {
             DataTable dataTable = new DataTable();
-            QIWorkbookQuestions returnParent = new QIWorkbookQuestions();
+            QIWorkbookQuestions returnParent;
 
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
@@ -691,7 +691,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                             {
                                 SectionId = int.Parse(ds.Rows[0]["SectionId"].ToString()),
                                 SectionHeader = ds.Rows[0]["SectionHeader"].ToString(),                               
-                                DataEntered = (ds.Rows[0]["DataEntered"].ToString() == "1" ? true : false),
+                                DataEntered = (ds.Rows[0]["DataEntered"].ToString() == "1"),
                                 QiQuestion = new List<Question>()
                             };
 
