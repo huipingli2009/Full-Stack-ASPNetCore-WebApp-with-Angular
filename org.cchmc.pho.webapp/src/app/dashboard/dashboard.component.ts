@@ -232,7 +232,7 @@ export class DashboardComponent implements OnInit {
 
   /* ED Chart =========================================*/
   getWebChart(chartId: number, measureId: number, filterId: number) {    
-    const $this = this;
+    
     this.webChart = null;
     let max = 0;
     let counter = 0;    
@@ -288,43 +288,7 @@ export class DashboardComponent implements OnInit {
         labels: this.graphLabelArray,
         datasets: this.graphDatasetsArray
         },
-        options: {
-          responsive: true,
-          legend: {
-            labels: {
-              }
-            },
-          layout: {
-              padding: {
-                left: 42,
-                right: 53,
-                top: 27,
-                bottom: 43
-              }
-            },
-          scales: {
-            xAxes: [{
-            ticks: {
-                 callback (value, index, values) {
-                  return value;
-                }              
-              }
-            }],
-            yAxes: [{
-              ticks: {   
-                beginAtZero: true,   //force the y-axis to start at 0      
-                  max: this.patientsMax      
-              }
-            }]        
-          },
-          tooltips: {
-            enabled: true
-          },
-          onClick (e) {
-            let element = this.getElementAtEvent(e);                  
-            $this.Showmodal(e, this, element);
-          }    
-        }    
+        options: this.getChartOptions(this.patientsMax)   
       };
       
 
@@ -332,10 +296,90 @@ export class DashboardComponent implements OnInit {
       this.canvas = document.getElementById('webChart');     
       this.ctx = this.canvas.getContext('2d'); 
       this.webChartObj = new Chart(this.ctx, chartConfig);
+      
 
       //this.patientsMax = max + 1; // This is here to add space above each bar in the chart (Max Number of patients, plus one empty tick on the y-axis)
 
     });
+  }
+
+  getChartOptions(yAxisTickMax: number){
+    const $this = this;
+    if (this.chartId === WebChartId.OutcomeChart){
+      return {
+        responsive: true,
+        legend: {
+          labels: {
+            }
+          },
+        layout: {
+            padding: {
+              left: 42,
+              right: 53,
+              top: 27,
+              bottom: 43
+            }
+          },
+        scales: {
+          xAxes: [{
+          ticks: {
+               callback (value, index, values) {
+                return value;
+              }              
+            }
+          }],
+          yAxes: [{
+            ticks: {   
+              beginAtZero: true,   //force the y-axis to start at 0      
+                max: yAxisTickMax,
+                stepSize: 1
+            }
+          }]        
+        },
+        tooltips: {
+          enabled: true
+        }   
+      };
+    }
+    else{
+      return {
+        responsive: true,
+        legend: {
+          labels: {
+            }
+          },
+        layout: {
+            padding: {
+              left: 42,
+              right: 53,
+              top: 27,
+              bottom: 43
+            }
+          },
+        scales: {
+          xAxes: [{
+          ticks: {
+               callback (value, index, values) {
+                return value;
+              }              
+            }
+          }],
+          yAxes: [{
+            ticks: {   
+              beginAtZero: true,   //force the y-axis to start at 0      
+                max: yAxisTickMax
+            }
+          }]        
+        },
+        tooltips: {
+          enabled: true
+        },
+        onClick (e) {
+          let element = this.getElementAtEvent(e);                  
+          $this.Showmodal(e, this, element);
+        }    
+      };
+    }
   }
 
   //get web chart filters
@@ -422,7 +466,7 @@ export class DashboardComponent implements OnInit {
     let tempFilterId;   
     //Only drilldown for non outcome charts 
     if (this.chartId !== WebChartId.OutcomeChart){
-      
+
       if (this.measureId === WebChartFilterMeasureId.edChartdMeasureId){
         this.logger.log("measure is edchart, loading dialog");
         this.logger.log("selected bar: " + element[0]._model.label);      
