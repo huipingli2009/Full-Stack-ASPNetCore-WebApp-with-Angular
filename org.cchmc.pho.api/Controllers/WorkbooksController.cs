@@ -478,7 +478,36 @@ namespace org.cchmc.pho.api.Controllers
             }
 
         }
-     
+
+        [HttpPut("qiconfirmation/{id}/{entered}")]
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin")]
+        [SwaggerResponse(200, type: typeof(string))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> UpdateWorkbooksQIConfirmation(string id, string entered, [FromBody]QuestionViewModel confirm)
+        {
+            // route parameters are strings and need to be translated (and validated) to their proper data type
+            if (!int.TryParse(id, out var formResponseId))
+                return BadRequest("id is not a valid integer");
+            if (!Boolean.TryParse(entered, out var dataEntered))
+                return BadRequest("dataEntered is not a valid bool");
+
+            try
+            {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+                var dataModel = _mapper.Map<Question>(confirm);
+                await _workbooks.UpdateQIQuestion(currentUserId, formResponseId, dataEntered, dataModel);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+
+        }
+
         [HttpGet("practiceqiworkbooks")]
         [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin, PHO Leader")]
         [SwaggerResponse(200, type: typeof(QIWorkbookPracticeViewModel))]
@@ -493,6 +522,31 @@ namespace org.cchmc.pho.api.Controllers
                 var data = await _workbooks.GetPracticeQIWorkbooks(currentUserId, formResponseId);
                 // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
                 var result = _mapper.Map<QIWorkbookPracticeViewModel>(data);
+                // return the result in a "200 OK" response
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+        [HttpGet("qiworkbookquestions")]
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin, PHO Leader")]
+        [SwaggerResponse(200, type: typeof(QIWorkbookQuestionsViewModel))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> GetQIWorkbookQuestions(int formResponseId)
+        {
+            try
+            {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+                // call the data method
+                var data = await _workbooks.GetQIWorkbookQuestions(currentUserId, formResponseId);
+                // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
+                var result = _mapper.Map<QIWorkbookQuestionsViewModel>(data);
                 // return the result in a "200 OK" response
                 return Ok(result);
             }

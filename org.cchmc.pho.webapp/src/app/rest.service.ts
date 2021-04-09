@@ -6,8 +6,8 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from '../environments/environment';
 import { Alerts, WebChart, EdChartDetails, Population, Quicklinks, Spotlight, WebChartFilters } from './models/dashboard';
 import { Conditions, Gender, Insurance, PatientDetails, PatientForWorkbook, Patients, NewPatient, Pmca, PopSlices, Providers, States, Outcomes, DuplicatePatient, MergePatientConfirmation } from './models/patients';
-import { PracticeList, Responsibilities, Staff, StaffDetails, StaffAdmin, PracticeCoach } from './models/Staff';
-import { Followup, WorkbookDepressionPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookAsthmaPatient, Treatment, WorkbookConfirmation, QIWorkbookPractice} from './models/workbook';
+import { PracticeList, Responsibilities, Staff, StaffDetails, StaffAdmin, PracticeCoach, Position } from './models/Staff';
+import { Followup, WorkbookDepressionPatient, WorkbookProvider, WorkbookReportingPeriod, WorkbookPractice, WorkbookForm, WorkbookAsthmaPatient, Treatment, WorkbookConfirmation, QIWorkbookPractice, QIWorkbookQuestions, Question} from './models/workbook';
 import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.component';
 import { FileDetails, FileAction, ResourceType, Tag, Initiative, FileType, ContentPlacement } from './models/files';
 import { Location } from '@angular/common';
@@ -514,6 +514,15 @@ export class RestService {
     );
   }
 
+  /*Update workbook confirmations*/
+  updateQIWorkbookConfirmations(formResponseId: number, dataEntered: number, question: Question): Observable<any> {
+    this.logger.log(question, 'updateQIWorkbookConfirmations');
+    this.logger.log(formResponseId, 'updateQIWorkbookConfirmations');
+    return this.http.put(`${API_URL}/api/Workbooks/qiconfirmation/${formResponseId.toString()}/${dataEntered.toString()}`, JSON.stringify(question), httpOptions).pipe(
+      catchError(this.handleError<any>('update QI Workbook confirmations'))
+    );
+  }
+
   /* for getting depression confirmations for a form response ID */
   getWorkbookDepressionConfirmations(formResponseid: number): Observable<any> {
     let paramsValue = new HttpParams();
@@ -650,6 +659,17 @@ export class RestService {
     paramsValue = paramsValue.append("formResponseId", formResponseid.toString());
     return this.http.get<QIWorkbookPractice>(`${API_URL}/api/Workbooks/practiceqiworkbooks`, { params: paramsValue }).pipe(
       map((data: QIWorkbookPractice) => {
+        return data;
+      })
+    );
+  }
+
+  /*getting QI workbook questions (separate API)*/
+  getQIWorkbookQuestions(formResponseid: number): Observable<any> {
+    let paramsValue = new HttpParams();
+    paramsValue = paramsValue.append("formResponseId", formResponseid.toString());
+    return this.http.get<QIWorkbookQuestions>(`${API_URL}/api/Workbooks/qiworkbookquestions`, { params: paramsValue }).pipe(
+      map((data: QIWorkbookQuestions) => {
         return data;
       })
     );

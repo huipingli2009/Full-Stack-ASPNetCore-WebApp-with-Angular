@@ -1976,6 +1976,10 @@ button.toast-close-button {
 .workbook-item {
   width: 20%;
 }
+
+.workbook-qi-item {
+  width: 20%;
+}
 .only-three-patients {
   width: 28% !important;
 }
@@ -1983,6 +1987,9 @@ button.toast-close-button {
 @media only screen and (max-width: 1595px) {
   .workbook-item {
     width: 26%;
+  }
+  .workbook-qi-item {
+    width: 20%;
   }
   .wokbook-col-title-4 {
     display: none !important;
@@ -1999,6 +2006,9 @@ button.toast-close-button {
   .workbook-item {
     width: 40%;
   }
+  .workbook-qi-item {
+    width: 40%;
+  }
   .wokbook-col-title-3 {
     margin-right: 0 !important;
   }
@@ -2009,9 +2019,15 @@ button.toast-close-button {
   .only-three-patients {
     width: 40% !important;
   }
+  .test {
+    width: 100% !important;
+  }
 }
 @media only screen and (max-width: 1164px) {
   .workbook-item {
+    width: 40%;
+  }
+  .workbook-qi-item {
     width: 40%;
   }
   .wokbook-col-title-3 {
@@ -2130,6 +2146,11 @@ button.toast-close-button {
     border-width: 0 1.5px 0 1.5px;
     border-radius: 0px !important;
   }
+  .side-bottom-border-container {
+    border: solid var(--primary-color);
+    border-width: 0 1.5px 1.5px 1.5px;
+    border-radius: 0px !important;
+  }
 
   .text-container {
     background-color: #f2fafa;
@@ -2180,6 +2201,23 @@ button.toast-close-button {
       .title-col {
         display: inline;
       }   
+  }  
+  
+  .qi-list-container {
+    background-color: white;
+    padding: 32px 49px 30px;
+    .title-col {      
+      display: inline;
+      font-size: 11px;
+      line-height: 15px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      color: var(--primary-darker-color);
+      margin-bottom: 12px;
+    }
+    .hidden-name {
+      visibility: hidden;
+    }  
   }
 
     .workbook-provider {
@@ -2215,6 +2253,40 @@ button.toast-close-button {
         border-bottom-width: 2px;
       }
     }
+    .qiQuestionSectionHeader {
+      .mat-form-field-inPut {
+        font-family: "ArcherBold";
+        font-size: 18px;
+        line-height: 44px;
+        letter-spacing: normal;
+        color: var(--primary-darker-color);
+        margin-bottom: 15px;
+      }
+    }
+    .qiQuestionSection {
+      display: flex;
+    }
+    .qiQuestion {     
+      font-family: "ArcherBold";
+      font-size: 14px;
+      letter-spacing: normal;
+      color: #4a4a4a;
+      font-weight: bold;
+      flex-basis: 60%;
+    }
+    .dataEntered {
+      flex-basis: 10%;
+    }
+    #showBtnToggle {
+      .qiQuestion {     
+        font-family: "ArcherBold";
+        font-size: 14px;
+        letter-spacing: normal;
+        color: #4a4a4a;
+        font-weight: bold;
+        flex-basis: 60%;
+      }
+    }    
   }
 
   .select-override {
@@ -2342,7 +2414,8 @@ button.toast-close-button {
 
 .patient-addition-row,
 .follow-up-form,
-.provider-list-container {
+.provider-list-container,
+.qi-list-container {
   background-color: white !important;
   border-color: var(--primary-color);
   border-width: 1px 0px 1px 0px;

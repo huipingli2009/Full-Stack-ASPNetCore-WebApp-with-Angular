@@ -119,6 +119,27 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 }
             }
         }
+        public async Task<bool> UpdateQIQuestion(int userId, int formResponseId, bool dataEntered, Question question)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spUpdateQIWorkbooks", sqlConnection))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@FormResponseId", SqlDbType.Int).Value = formResponseId;
+                    sqlCommand.Parameters.Add("@QuestionID", SqlDbType.Int).Value = question.QuestionId;
+                    sqlCommand.Parameters.Add("@Numerator", SqlDbType.Int).Value = question.Numerator;
+                    sqlCommand.Parameters.Add("@Denominator", SqlDbType.Int).Value = question.Denominator;
+                    sqlCommand.Parameters.Add("@DataEntered", SqlDbType.Int).Value = Convert.ToInt32(dataEntered);
+
+                    await sqlConnection.OpenAsync();
+
+                    //return rows of data affected
+                    return (bool)sqlCommand.ExecuteScalar();
+                }
+            }
+        }
 
         public async Task<List<WorkbooksAsthmaPatient>> GetAsthmaPatientList(int userId, int formResponseId)
         {        
@@ -628,6 +649,77 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 }
             }
             return asthmaworkbookpractice;
+        }
+
+        public async Task<QIWorkbookQuestions> GetQIWorkbookQuestions(int userId, int formResponseId)
+        {
+            DataTable dataTable = new DataTable();
+            QIWorkbookQuestions returnParent;
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("spGetQIWorkbooks_Questions", sqlConnection))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@FormResponseId", SqlDbType.Int).Value = formResponseId;
+
+                    await sqlConnection.OpenAsync();
+
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+
+                        returnParent = new QIWorkbookQuestions()
+                        {
+                            FormResponseId = int.Parse(dataTable.Rows[0]["FormResponseId"].ToString()),
+                            QiSection = new List<Section>()
+                        };
+
+                       // using sectionId as the groupby.
+                        List<DataTable> dataSets = dataTable.AsEnumerable()
+                           .GroupBy(row => row.Field<Int32>("SectionId"))
+                            .Select(g => g.CopyToDataTable())
+                            .ToList();
+
+                        foreach (DataTable ds in dataSets)
+                        {
+                            //each dataTable contains data for each section.
+                            //create new dataset object
+                            Section section = new Section()
+                            {
+                                SectionId = int.Parse(ds.Rows[0]["SectionId"].ToString()),
+                                SectionHeader = ds.Rows[0]["SectionHeader"].ToString(),                               
+                                DataEntered = (ds.Rows[0]["DataEntered"].ToString() == "1"),
+                                QiQuestion = new List<Question>()
+                            };
+
+
+                            foreach (DataRow dr in ds.Rows)
+                            {
+                                section.QiQuestion.Add(new Question()
+                                {
+                                    QuestionId = int.Parse(dr["QuestionId"].ToString()),
+                                    QuestionDEN = dr["QuestionDEN"].ToString(),
+                                    QuestionNUM = dr["QuestionNUM"].ToString(),
+                                    NumeratorLabel = dr["NumeratorLabel"].ToString(),
+                                    Numerator = int.Parse(dr["Numerator"].ToString()),
+                                    Denominator = int.Parse(dr["Denominator"].ToString())
+                                });        
+                            }
+
+                            //Add the set to the parent object
+                            returnParent.QiSection.Add(section);
+                        }
+
+
+                    }                    
+                    
+                }         
+               
+            }
+            return returnParent;
         }
     }
 }
