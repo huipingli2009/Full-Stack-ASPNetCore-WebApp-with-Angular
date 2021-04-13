@@ -12,13 +12,6 @@ export class MetricDrillthruColumn{
     order: number;
     value: string;
     columnName: string;
-    get clickable(): boolean { // read-only property with getter function (this is not the same thing as a “function-property”)
-        if (this.columnName.toUpperCase() === "PATIENTID"){
-            return true;
-        }else{
-            return false;
-        }
-    }
 }
 
 export enum DrillthruMeasurementIdEnum {

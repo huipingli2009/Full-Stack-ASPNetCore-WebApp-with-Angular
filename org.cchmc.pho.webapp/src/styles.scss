@@ -1044,7 +1044,12 @@ button.toast-close-button {
     padding: 0.5em;
     border: 1px solid lightgrey;
     font-size: 12px;
+    .routerLink {
+      text-decoration: underline;
+      cursor: pointer;
+    }
   }
+
 }
 .drilldown-heading {
   font-family: "ArcherBold";

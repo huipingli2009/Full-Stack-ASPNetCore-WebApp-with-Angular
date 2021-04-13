@@ -16,15 +16,15 @@
             </thead>
             <tbody>
                <tr *ngFor="let row of rows">
-                  <td *ngFor="let column of row.columns">
-                        <ng-container *ngIf = "column.clickable() === true"  >                                  
-                            <a (click)="onSelectedPatient(column.value)" target= "_blank">
-                                {{column.value}}
-                            </a>                       
+                  <td *ngFor="let column of row.columns">         
+                        <ng-container *ngIf="column.columnName.toUpperCase() == 'PATIENTID'; else elseNo">
+                            <a class="routerLink">
+                                <i (click)="onSelectedPatient(column.value)">{{column.value}}</i>
+                            </a> 
                         </ng-container>
-                        <ng-container *ngIf = "column.clickable() === false"  >                        
-                            {{column.value}}  
-                        </ng-container>         
+                        <ng-template #elseNo>
+                            {{column.value}}
+                        </ng-template>   
                   </td>
                </tr>
             </tbody>

@@ -423,7 +423,7 @@
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple class="element-row"
-      [class.expanded]="expandedElement == row" (click)="getPatientDetails(row.patientId)"
+      [class.expanded]="expandedElement == row" (click)="getPatientDetails(row.patientId, false)"
       (click)="expandedElement === row? expandedElement = null : expandedElement = row"></mat-row>
 
     <tr mat-row *matRowDef="let row; columns: ['expandedDetail'];" class="collapsed-detail">

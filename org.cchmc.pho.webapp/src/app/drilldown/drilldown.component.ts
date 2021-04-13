@@ -88,7 +88,7 @@ export class DrilldownComponent implements OnInit {
     this.rest.selectedPatientId = id;
     //this.rest.selectedPatientName = name;
     this.router.navigate(['/patients']);
-    //this.closeAll();    
+    this.close(false);
    } 
 
   public OpenReport() {
