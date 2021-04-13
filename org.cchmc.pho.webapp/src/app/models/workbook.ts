@@ -73,8 +73,9 @@ export class WorkbookPractice extends WorkbookPracticeBase {}
 export class QIWorkbookPractice extends WorkbookPracticeBase {}
 
 export enum WorkbookFormValueEnum {
-    asthma = 1,
-    depression = 3
+    asthma = 1,    
+    depression = 3,
+    qualityimprovement = 5
 }
 
 export interface Treatment {
@@ -86,5 +87,27 @@ export class WorkbookConfirmation {
     formResponseID: number;
     allProvidersConfirmed: boolean;
     noPatientsConfirmed: boolean;
+}
+
+
+export class QIWorkbookQuestions {
+    formResponseId: number;
+    qiSection: Array<Section>
+}
+
+export class Section {    
+    sectionId: number; 
+    sectionHeader: string;
+    qiQuestion: Array<Question>;  
+    dataEntered: boolean;
+}
+
+export class Question {    
+    questionId: number;   
+    questionDEN: string;
+    questionNUM: string;
+    numeratorLabel: string;
+    numerator: number;
+    denominator: number;   
 }
 

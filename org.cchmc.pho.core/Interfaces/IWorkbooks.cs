@@ -10,6 +10,7 @@ namespace org.cchmc.pho.core.Interfaces
         Task<List<WorkbooksDepressionPatient>> GetDepressionPatientList(int userId, int formResponseId);
         Task<WorkbooksDepressionConfirmation> GetDepressionConfirmation(int userId, int formResponseId);
         Task<bool> UpdateDepressionConfirmation(int userId, WorkbooksDepressionConfirmation confirmation);
+        Task<bool> UpdateQIQuestion(int userId, int formResponseId, bool dataEntered, Question question);
         Task<List<WorkbooksAsthmaPatient>> GetAsthmaPatientList(int userId, int formResponseId);
         Task<WorkbooksPractice> GetPracticeWorkbooks(int userId, int formResponseId);
         Task<List<WorkbooksProvider>> GetPracticeWorkbooksProviders(int userId, int formResponseId);
@@ -26,5 +27,6 @@ namespace org.cchmc.pho.core.Interfaces
         Task<AsthmaWorkbooksPractice> GetAsthmaPracticeWorkbooks(int userId, int formResponseId);
         Task<bool> AddPatientToAsthmaWorkbooks(int userId, int formResponseId, int patientID, int providerstaffID, DateTime? dos, int asthmascore, bool assessmentCompleted, int treatmentplanId, bool actionPlanGiven);
         Task<QIWorkbookPractice> GetPracticeQIWorkbooks(int userId, int formResponseId);
+        Task<QIWorkbookQuestions> GetQIWorkbookQuestions(int userId, int formResponseId);
     }
 }
