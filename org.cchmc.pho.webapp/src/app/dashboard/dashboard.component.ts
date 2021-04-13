@@ -458,10 +458,8 @@ export class DashboardComponent implements OnInit {
 }
 
   /* Open Modal (Dialog) on bar click */
-  Showmodal(event, chart, element): void {
-    
+  Showmodal(event, chart, element): void {    
     this.logger.log("starting ED modal");
-
     let drillThruMeasureId;
     let tempFilterId;   
     //Only drilldown for non outcome charts 
@@ -489,14 +487,6 @@ export class DashboardComponent implements OnInit {
     }
     
   } 
-
-  onSelectedPatient(id: number, name: string){  
-    this.rest.selectedPatientId = id;
-    this.rest.selectedPatientName = name;
-    this.router.navigate(['/patients']);
-    this.dialog.closeAll();    
-   }  
-
    public downloadToExcel() {
     /* table id is passed over here */   
     let element = document.getElementById('EDChartData'); 
@@ -512,9 +502,7 @@ export class DashboardComponent implements OnInit {
   }
 
   openDrilldownDialog(measure,filterId) { 
-
     let drillThruText;   
-
     //Only ED Chart with Date Selected as Filter displays 'ED Details', the rest displays 'Patient Details'
     if (measure == DrillThruMeasureId.EDDrillThruMeasureId && this.filterId == WebChartFilterId.dateFilterId) {
       drillThruText = 'ED Details';       
