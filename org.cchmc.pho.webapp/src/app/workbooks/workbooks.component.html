@@ -63,8 +63,7 @@
                     </div>  
                 </div>
             </div>
-            <div fxLayout="row" class="side-border-container provider-list-container">
-                
+            <div fxLayout="row" class="side-border-container provider-list-container">                
                 <form [formGroup]="ProvidersForWorkbookForm">
                     <ng-container *ngIf="workbookProviders">
                         <div fxLayout="row" class="workbook-detail-heading">
@@ -189,9 +188,7 @@
                             <mat-checkbox formControlName="noPatientsConfirm"   [checked]="PatientConfirmationForm.controls.noPatientsConfirm" (change)="onConfirmationChange()"  class="table-header-checkbox"> 
                                 NO PATIENTS WITH PHQ-9 OF 10 OR ABOVE
                             </mat-checkbox>
-                        </div>
-
-                        
+                        </div>                        
                 </div>
                 </form>
                 <div fxLayout="row" class="patient-workbook-table">
@@ -851,6 +848,101 @@
                 </div>
             </div>
         </ng-container>
+
+        <!-- NOTE: (TH)  Practice QI Workbook SECTION (Header w/ stats) -->
+        <ng-container id="qualityimprovementContainer" *ngIf="selectedWorkbookFormId == workbookFormValueEnum.qualityimprovement">
+            <div class="top-date-container" fxLayout="row">
+                <div fxLayout="column" fxLayoutAlign="start center" class="main-date" [innerHTML]=workbookPractice.header>
+                </div>
+            </div>
+            <div class="side-border-container text-container">
+                <div fxLayout="row" class="italic">   
+                    <div fxLayout="column" fxFlex="90">
+                        <span [innerHTML]=workbookPractice.line1></span> 
+                    </div>
+                </div>
+                <div fxLayout="row">
+                    <div fxLayout="column" fxFlex="90" >
+                        <span [innerHTML]='workbookPractice.line2'></span>
+                    </div>  
+                </div>
+                <div fxLayout="row">
+                    <div fxLayout="column" fxFlex="90" >
+                        <span><br></span>
+                    </div>  
+                </div>
+                <div fxLayout="row">    
+                    <div fxLayout="column" fxFlex="90" >
+                        <span [innerHTML]=workbookPractice.line3></span>
+                    </div>
+                    <div fxLayout="column" fxLayoutAlign="end end" fxFlex>
+                        <a mat-flat-button color="accent"  href='{{workbookPractice?.jobAidURL}}' target="_blank">Job Aid</a>
+                    </div>
+                </div>                
+                <div fxLayout="row">
+                    <div fxLayout="column" fxFlex="90" >
+                        <span><br></span>
+                    </div>  
+                </div>
+            </div>      
+
+            <div fxLayout="row" class="side-bottom-border-container qi-list-container">        
+                <form [formGroup]="QIWorkbookSectionTrackingForm">
+                    <div fxLayout="row">
+                        <div fxLayout="column" fxLayoutAlign="start" style="width:700px !important">
+                            <span style="font-size:large;font-weight: 900;color: var(--primary-darker-color); padding: 30px 30px 30px 30px; "> {{ qiSectionHeader }}</span>      
+                        </div>   
+                        <div fxLayout="column" fxLayoutAlign="end">
+                            <mat-slide-toggle labelPosition="after" formControlName="dataEntered" name="qiConfirm" [checked]="QIWorkbookSectionTrackingForm.controls.dataEntered" (change)="onQIWorkbookChange()" ngDefaultControl><span class="whitespace"></span>ALL DATA IS ENTERED
+                            </mat-slide-toggle>    
+                        </div>                                  
+                    </div>  
+                    <div fxLayout="row" class="provider-list-container">         
+                        <ng-container>
+                            <div fxLayout="column" fxFlexAlign="start" style="width:650px !important">
+                                <div fxLayout="row" class="title-col">
+                                    {{ qiQuestionDEN }}                                        
+                                </div>
+                                <div fxLayout="row" class="title-col">    
+                                    {{ qiQuestionNUM }}                         
+                                </div>
+                            </div>
+                            <div fxLayout="column" class="workbook-item" fxFlexAlign="end" style="width:400px" fxFlex>
+                                <div fxLayout="row">
+                                    <div fxLayout="column">
+                                        <div fxLayout="row">
+                                            <div fxLayout="column" fxFlex="60.5px" class="workbook-inputs-col">
+                                                <div class="title-col">{{ qiNumeratorLabel }}</div>
+                                            </div>
+                                            <div fxLayout="column" fxFlex="60.5px">
+                                                <div class="title-col">TOTAL</div>
+                                            </div>
+                                        </div>
+                                        <div fxLayout="row" class="workbook-item workbook-patient-item">
+                                            <div fxLayout="column" fxFlex="60.5px" class="workbook-inputs-col">
+                                                <mat-form-field class="workbook-input">
+                                                    <input matInput (change)="onQIWorkbookChange()"
+                                                        formControlName="numerator">
+                                                        </mat-form-field> 
+                                            </div>
+                                            <div fxLayout="column" fxFlex="60.5px">
+                                                <mat-form-field class="workbook-input">
+                                                    <input matInput (change)="onQIWorkbookChange()"
+                                                        formControlName="denominator">
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </ng-container>
+                    </div>                        
+                </form>
+    
+            </div>       
+       
+        </ng-container>
     </div>
 </div>
 
@@ -1006,7 +1098,6 @@
                     </mat-form-field>
                 </div>
             </div>
-
         </mat-dialog-content>
         <mat-dialog-actions>
             <button mat-button mat-dialog-close>CANCEL</button>
@@ -1040,7 +1131,6 @@
           <div fxLayout="column" fxLayoutAlign="center"  fxFlex="50" >
             <mat-form-field class="multi-select-override" floatLabel="always">
               <mat-label>PCP</mat-label>
-
               <mat-select matNativeControl align-items="center" placeholder="Select a Provider" formControlName="pcpName" (selectionChange)="onEditProviderSelectionChange($event)" required>
                 <mat-select-trigger>
                     {{selectedEditProviderDisplay}}
@@ -1089,4 +1179,18 @@
 
     <!-- [disabled]="!editProvidersForm.valid" -->
 
-  </ng-template>
+</ng-template>
+
+<!------------------------------------- Practice QI Workbook Starts --------------------------------------->
+<ng-template #PracticeQIWorkbook>
+</ng-template>
+<!------------------------------------- Practice QI Workbook Ends --------------------------------------->
+
+
+
+
+
+
+
+
+
