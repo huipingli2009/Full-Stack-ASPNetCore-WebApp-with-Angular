@@ -971,9 +971,10 @@ export class PatientsComponent implements OnInit {
       filterId = this.currentPatientId;
     }
     var drilldownOptions = {
-      measureId: measure, //'1',
+      drilldownMeasureId: measure, //'1',
       filterId: filterId, //'381886'
-      displayText: display
+      displayText: display,
+      originMeasureId: ''
     };
     this.drilldownService.open(drilldownOptions);
   }
