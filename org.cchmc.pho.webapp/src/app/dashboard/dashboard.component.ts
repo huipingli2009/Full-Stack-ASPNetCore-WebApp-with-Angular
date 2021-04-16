@@ -475,14 +475,14 @@ export class DashboardComponent implements OnInit {
       }
       else {   //all the non-ED chart reports 
         this.logger.log("measure is non edchart, loading dialog");
-        this.logger.log("selected bar: " + element[0]._index);     
-      
+        this.logger.log("selected bar: " + element[0]._index);    
+              
         drillThruMeasureId = DrillThruMeasureId.PatientListDrillThruMeasureId;
         tempFilterId = element[0]._index + 1;       
       }
       //only if security allows
       if (this.drillThruUser){
-        this.openDrilldownDialog(drillThruMeasureId,tempFilterId);
+        this.openDrilldownDialog(drillThruMeasureId,tempFilterId,this.measureId);
       }
     }
     
@@ -501,10 +501,10 @@ export class DashboardComponent implements OnInit {
     
   }
 
-  openDrilldownDialog(measure,filterId) { 
+  openDrilldownDialog(drilldownMeasure,filterId,originMeasure) { 
     let drillThruText;   
     //Only ED Chart with Date Selected as Filter displays 'ED Details', the rest displays 'Patient Details'
-    if (measure == DrillThruMeasureId.EDDrillThruMeasureId && this.filterId == WebChartFilterId.dateFilterId) {
+    if (drilldownMeasure == DrillThruMeasureId.EDDrillThruMeasureId && this.filterId == WebChartFilterId.dateFilterId) {
       drillThruText = 'ED Details';       
     }
     else {
@@ -512,9 +512,10 @@ export class DashboardComponent implements OnInit {
     }
     
     var drilldownOptions = {
-      measureId: measure, 
+      drilldownMeasureId: drilldownMeasure, 
       filterId: filterId, 
-      displayText: drillThruText     
+      displayText: drillThruText,
+      originMeasureId: originMeasure
     };
     this.drilldownService.open(drilldownOptions);
   }

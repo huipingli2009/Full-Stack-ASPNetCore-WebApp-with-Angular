@@ -6,6 +6,8 @@ import { NGXLogger } from 'ngx-logger';
 import { MetricDrillthruTable, MetricDrillthruRow, MetricDrillthruColumn } from '../models/drillthru';
 import * as XLSX from 'xlsx'; 
 import { environment } from 'src/environments/environment';
+import { FilterService } from '../services/filter.service';
+import { WebChartFilterMeasureId } from '../models/dashboard';
 
 @Component({
   selector: 'app-drilldown',
@@ -19,7 +21,8 @@ export class DrilldownComponent implements OnInit {
     return this.rest.showViewReportButton;
   }
 
-  selectedMeasureId: string;
+  drilldownMeasureId: string;
+  originMeasureId: string;
   selectedFilterId: string;
   table: MetricDrillthruTable;
   rows: MetricDrillthruRow[];
@@ -32,26 +35,29 @@ export class DrilldownComponent implements OnInit {
   displayViewReport: boolean = false;
 
   
-  constructor(public rest: RestService,private router: Router,private logger: NGXLogger, @Inject(MAT_DIALOG_DATA) public data: {
-    measureId: string,
+  constructor(public rest: RestService,private router: Router,private logger: NGXLogger, private filterService: FilterService, @Inject(MAT_DIALOG_DATA) public data: {
+    drilldownMeasureId: string,
     filterId: string,
-    displayText: string
+    displayText: string,
+    originMeasureId: string
 }, private mdDialogRef: MatDialogRef<DrilldownComponent>)
 {
   this.isLoading = true;
-  this.selectedMeasureId = data.measureId;
+  this.drilldownMeasureId = data.drilldownMeasureId;
+  this.originMeasureId = data.originMeasureId;
   this.selectedFilterId = data.filterId;
   this.headerDisplayText = data.displayText;
+
   this.getMeasureDetailsTable();
 }
 
   ngOnInit(): void {} 
 
   getMeasureDetailsTable(){
-
+    this.logger.log(this.drilldownMeasureId, 'getMeasureDetailsTable');
     this.displayViewReport = this.showViewReportButton;
 
-    this.rest.getMeasureDrilldownTable(this.selectedMeasureId, this.selectedFilterId).subscribe((data) => {
+    this.rest.getMeasureDrilldownTable(this.drilldownMeasureId, this.selectedFilterId).subscribe((data) => {
       this.logger.log(data, 'metricDrilldownData');
       this.table = data;
       this.rows = this.table.rows;
@@ -86,6 +92,11 @@ export class DrilldownComponent implements OnInit {
 
   onSelectedPatient(id: number){  
     this.rest.selectedPatientId = id;
+
+    if (this.originMeasureId == WebChartFilterMeasureId.potentialActive.toString()){
+      this.filterService.updateIsFilteringPatients(true);
+      this.filterService.updateFilterType(this.originMeasureId);
+    }
     //this.rest.selectedPatientName = name;
     this.router.navigate(['/patients']);
     this.close(false);

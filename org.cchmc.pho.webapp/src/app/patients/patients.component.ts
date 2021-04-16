@@ -333,6 +333,8 @@ export class PatientsComponent implements OnInit {
       this.isFilteringConditions = false;
     }
 
+    this.potentialPatient = +(this.popSlices) == potentialPtStaus.PopSlice ? true : false;
+
     //if patient is coming from ED chart
     if (this.selectedPatientId) {
       this.patientNameSearch = this.selectedPatientId.toString();
@@ -349,7 +351,6 @@ export class PatientsComponent implements OnInit {
       });
     }
 
-    this.potentialPatient = +(this.popSlices) == potentialPtStaus.PopSlice ? true : false;
 
     this.dataSource.loadPatients(this.defaultSortedRow, this.defaultSortDirection, 0, 20, this.chronic, this.watchFlag, this.conditions.toString(),
       this.providers, this.popSlices,  this.outcomes, this.patientNameSearch);
