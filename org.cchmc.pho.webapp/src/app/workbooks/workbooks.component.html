@@ -952,6 +952,23 @@
     <div form [formGroup]="FollowupForm" class="follow-up-form">
         <h2 mat-dialog-title class="workbook-detail-heading">Follow up questions </h2>
         <mat-dialog-content>
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="32px" style="padding-bottom: 16px !important;">
+                <div fxLayout="column" class="question">
+                    Action Plan Given?
+                </div>
+                <div fxLayout="column">
+                    <mat-button-toggle-group formControlName="actionPlanGiven">
+                        <mat-button-toggle value="Yes">Yes</mat-button-toggle>
+                        <mat-button-toggle value="No">No</mat-button-toggle>
+                    </mat-button-toggle-group>
+                    <ng-container
+                        *ngIf="(FollowupForm.get('actionPlanGiven').touched || FollowupForm.get('actionPlanGiven').dirty) && FollowupForm.get('actionPlanGiven').errors">
+                        <mat-error *ngIf="FollowupForm.get('actionPlanGiven').errors.required">
+                            Please select
+                        </mat-error>
+                    </ng-container>
+                </div>
+            </div>
             <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="32px">
                 <div fxLayout="column" class="question">
                     Medication Managed by External Provider?
