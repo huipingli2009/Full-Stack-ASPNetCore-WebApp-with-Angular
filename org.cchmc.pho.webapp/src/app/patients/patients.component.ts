@@ -333,11 +333,13 @@ export class PatientsComponent implements OnInit {
       this.isFilteringConditions = false;
     }
 
+    this.potentialPatient = +(this.popSlices) == potentialPtStaus.PopSlice ? true : false;
+
     //if patient is coming from ED chart
     if (this.selectedPatientId) {
       this.patientNameSearch = this.selectedPatientId.toString();
       this.patientNameSearchValue = this.selectedPatientName;
-      this.getPatientDetails(this.selectedPatientId);
+      this.getPatientDetails(this.selectedPatientId, true);
       this.patientSubscription = this.dataSource.PatientData$.subscribe((patients) => {
         this.logger.log("Patients", patients);
         this.logger.log("selected Patient ID", this.selectedPatientId);
@@ -349,7 +351,6 @@ export class PatientsComponent implements OnInit {
       });
     }
 
-    this.potentialPatient = +(this.popSlices) == potentialPtStaus.PopSlice ? true : false;
 
     this.dataSource.loadPatients(this.defaultSortedRow, this.defaultSortDirection, 0, 20, this.chronic, this.watchFlag, this.conditions.toString(),
       this.providers, this.popSlices,  this.outcomes, this.patientNameSearch);
@@ -596,7 +597,7 @@ export class PatientsComponent implements OnInit {
 
 
   /*Patient Details */
-  getPatientDetails(id) {
+  getPatientDetails(id, updateSearchBar) {
     this.rest.getPatientDetails(id, this.potentialPatient).subscribe((data) => {
       this.currentPatientId = data.id;
       this.isLoading = false;
@@ -608,6 +609,10 @@ export class PatientsComponent implements OnInit {
       this.providerPmcaScoreControl = data.providerPMCAScore;
       this.providerNotesControl = data.providerNotes;
       this.selectedGender = data.gender;
+
+      if (updateSearchBar){
+        this.patientNameSearchValue = `${data.firstName} ${data.lastName}`;
+      }
 
       const selectedValues = {
         firstName: data.firstName,
@@ -721,7 +726,7 @@ export class PatientsComponent implements OnInit {
             this.logger.log("does not contain duplicates", this.duplicateList);
             this.rest.savePatientDetails(this.currentPatientId, this.patientDetails).subscribe(data => {
               this.savedPatientData = data;
-              this.patientNameSearch = '';
+              this.patientNameSearchValue = '';
               this.loadPatientsWithFilters();
             });
           }else{
@@ -966,9 +971,10 @@ export class PatientsComponent implements OnInit {
       filterId = this.currentPatientId;
     }
     var drilldownOptions = {
-      measureId: measure, //'1',
+      drilldownMeasureId: measure, //'1',
       filterId: filterId, //'381886'
-      displayText: display
+      displayText: display,
+      originMeasureId: ''
     };
     this.drilldownService.open(drilldownOptions);
   }
