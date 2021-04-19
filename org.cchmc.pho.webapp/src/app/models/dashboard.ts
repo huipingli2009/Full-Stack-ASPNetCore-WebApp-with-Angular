@@ -106,7 +106,8 @@ export enum WebChartFilterMeasureId {
     zipCodeMeasureId = 30,
     payorTypeMeasureId = 27,
     locationMeasureId = 35,
-    ageMeasureId = 32
+    ageMeasureId = 32,
+    potentialActive = 28
 }
 
 export enum WebChartFilterId {
