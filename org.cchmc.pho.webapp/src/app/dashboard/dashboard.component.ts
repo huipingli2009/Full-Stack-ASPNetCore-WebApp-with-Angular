@@ -305,43 +305,7 @@ export class DashboardComponent implements OnInit {
 
   getChartOptions(yAxisTickMax: number){
     const $this = this;
-    if (this.chartId === WebChartId.OutcomeChart){
-      return {
-        responsive: true,
-        legend: {
-          labels: {
-            }
-          },
-        layout: {
-            padding: {
-              left: 42,
-              right: 53,
-              top: 27,
-              bottom: 43
-            }
-          },
-        scales: {
-          xAxes: [{
-          ticks: {
-               callback (value, index, values) {
-                return value;
-              }              
-            }
-          }],
-          yAxes: [{
-            ticks: {   
-              beginAtZero: true,   //force the y-axis to start at 0      
-                max: yAxisTickMax,
-                stepSize: 1
-            }
-          }]        
-        },
-        tooltips: {
-          enabled: true
-        }   
-      };
-    }
-    else{
+    
       return {
         responsive: true,
         legend: {
@@ -379,7 +343,6 @@ export class DashboardComponent implements OnInit {
           $this.Showmodal(e, this, element);
         }    
       };
-    }
   }
 
   //get web chart filters
@@ -462,8 +425,7 @@ export class DashboardComponent implements OnInit {
     this.logger.log("starting ED modal");
     let drillThruMeasureId;
     let tempFilterId;   
-    //Only drilldown for non outcome charts 
-    if (this.chartId !== WebChartId.OutcomeChart){
+    let openDialog = false;
 
       if (this.measureId === WebChartFilterMeasureId.edChartdMeasureId){
         this.logger.log("measure is edchart, loading dialog");
@@ -471,7 +433,11 @@ export class DashboardComponent implements OnInit {
         this.selectedBar = element[0]._model.label;     
         
         drillThruMeasureId = DrillThruMeasureId.EDDrillThruMeasureId;
-        tempFilterId = element[0]._index + 1;     
+        tempFilterId = element[0]._index + 1;   
+        openDialog = true;  
+      }
+      else if (this.chartId === WebChartId.OutcomeChart){
+        //NOTE: Future code to handle 
       }
       else {   //all the non-ED chart reports 
         this.logger.log("measure is non edchart, loading dialog");
@@ -479,12 +445,12 @@ export class DashboardComponent implements OnInit {
               
         drillThruMeasureId = DrillThruMeasureId.PatientListDrillThruMeasureId;
         tempFilterId = element[0]._index + 1;       
+        openDialog = true;
       }
       //only if security allows
-      if (this.drillThruUser){
+      if (openDialog && this.drillThruUser){
         this.openDrilldownDialog(drillThruMeasureId,tempFilterId,this.measureId);
       }
-    }
     
   } 
    public downloadToExcel() {

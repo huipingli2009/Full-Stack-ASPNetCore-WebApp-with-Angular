@@ -14,7 +14,7 @@ namespace org.cchmc.pho.api.ViewModels
     {
         public string Type { get; set; }
         public string[] XAxisLabels { get; set; }
-        public int[] Values { get; set; }
+        public decimal[] Values { get; set; }
         public string Legend { get; set; }
         public string BackgroundColor { get; set; }
         public string BackgroundHoverColor { get; set; }
