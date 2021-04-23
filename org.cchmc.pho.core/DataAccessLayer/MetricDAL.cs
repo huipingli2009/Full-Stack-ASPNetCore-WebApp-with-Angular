@@ -137,11 +137,11 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                             //Extract label and value arrays
                             List<string> xAxisLabels = new List<string>();
-                            List<int> chartValues = new List<int>();
+                            List<decimal> chartValues = new List<decimal>();
                             foreach(DataRow row in sortedDT.Rows)
                             {
                                 xAxisLabels.Add(row["DataPointLabel"].ToString());
-                                chartValues.Add(Convert.ToInt32(row["ChartValue"].ToString()));
+                                chartValues.Add(Convert.ToDecimal(row["ChartValue"].ToString()));
                             }
                             curDataSet.XAxisLabels = xAxisLabels.ToArray();
                             curDataSet.Values = chartValues.ToArray();
