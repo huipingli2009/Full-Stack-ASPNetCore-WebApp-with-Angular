@@ -128,11 +128,15 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 BackgroundColor = ds.Rows[0]["BackgroundColor"].ToString(),
                                 BackgroundHoverColor = ds.Rows[0]["BackgroundHoverColor"].ToString(),
                                 BorderColor = ds.Rows[0]["BorderColor"].ToString(),
-                                Fill = Convert.ToBoolean(ds.Rows[0]["Fill"].ToString())
+                                Fill = Convert.ToBoolean(ds.Rows[0]["Fill"].ToString()),
+                                ShowLine = (ds.Rows[0]["ShowLine"] == DBNull.Value ? false : Convert.ToBoolean(ds.Rows[0]["ShowLine"].ToString())),
+                                BorderDash = (ds.Rows[0]["BorderDash"] == DBNull.Value ? new int[0] : Array.ConvertAll(ds.Rows[0]["BorderDash"].ToString().Split(','), int.Parse)),
+                                PointStyle = (ds.Rows[0]["PointStyle"] == DBNull.Value ? "" : ds.Rows[0]["PointStyle"].ToString()),
+                                PointRadius = (ds.Rows[0]["PointRadius"] == DBNull.Value ? 3 : Convert.ToInt32(ds.Rows[0]["PointRadius"].ToString()))
                             };
 
                             DataView dv = ds.DefaultView;
-                            dv.Sort = "YYYYMMDD asc";
+                            dv.Sort = "SortOrder asc";
                             DataTable sortedDT = dv.ToTable();
 
                             //Extract label and value arrays

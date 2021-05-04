@@ -3,7 +3,7 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router'; 
 import * as Chart from 'chart.js';
 import { NGXLogger } from 'ngx-logger';
 import { environment } from 'src/environments/environment';
@@ -18,7 +18,7 @@ import { CurrentUser, Role} from '../models/user';
 import { take } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-dashboard', 
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
@@ -268,8 +268,11 @@ export class DashboardComponent implements OnInit {
         chartType = this.webChart.dataSets[i].type;
 
         //Create a chartJS dataset for each dataset we've received from API
-        this.graphDatasetsArray[i] = 
+        if (chartType == 'bar')
+        {          
+          this.graphDatasetsArray[i] = 
                           {
+                          type: this.webChart.dataSets[i].type,
                           label: this.webChart.dataSets[i].legend,
                           data: this.webChart.dataSets[i].values, 
                           maxBarThickness: 22,
@@ -279,7 +282,28 @@ export class DashboardComponent implements OnInit {
                           borderColor: this.webChart.dataSets[i].borderColor,
                           fill: this.webChart.dataSets[i].fill
                           }
+        } else 
+        {
+          this.graphDatasetsArray[i] = 
+          {
+            type: this.webChart.dataSets[i].type,
+            label: this.webChart.dataSets[i].legend,
+            data: this.webChart.dataSets[i].values, 
+            maxBarThickness: 22,
+            lineTension: 0,
+            backgroundColor: this.webChart.dataSets[i].backgroundColor,
+            hoverBackgroundColor: this.webChart.dataSets[i].backgroundHoverColor,
+            borderColor: this.webChart.dataSets[i].borderColor,
+            fill: this.webChart.dataSets[i].fill,
+            showLine: this.webChart.dataSets[i].showLine,
+            borderDash: this.webChart.dataSets[i].borderDash,
+            pointStyle: this.webChart.dataSets[i].pointStyle,
+            pointRadius: this.webChart.dataSets[i].pointRadius
+          }
+        }
+
       }
+    
       
       //SET THE GRAPH CONFIGURATION VALUES
       var chartConfig = {
@@ -325,16 +349,17 @@ export class DashboardComponent implements OnInit {
           ticks: {
                callback (value, index, values) {
                 return value;
-              }              
+              },
+              fontSize: 10
             }
           }],
           yAxes: [{
             ticks: {   
               beginAtZero: true,   //force the y-axis to start at 0      
-                max: yAxisTickMax
+              max: yAxisTickMax
             }
           }]        
-        },
+        },        
         tooltips: {
           enabled: true
         },
