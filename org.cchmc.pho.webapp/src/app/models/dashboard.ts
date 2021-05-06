@@ -55,6 +55,7 @@ export class WebChart {
     headerLabel: string;
     title: string;
     dataSets: WebChartDataSet[];
+    verticalMax: number;
 }
 export class WebChartDataSet {
     type: string;
@@ -123,7 +124,8 @@ export enum WebChartFilterId {
     zipCodeFilterId = 4,
     payorTypeFilterId = 5,
     locationFilterId = 6,
-    ageFilterId = 7
+    ageFilterId = 7,
+    UFunnel = 10
 }
 
 export enum DrillThruMeasureId {

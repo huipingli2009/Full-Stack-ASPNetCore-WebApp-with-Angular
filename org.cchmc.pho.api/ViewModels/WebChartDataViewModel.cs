@@ -8,6 +8,7 @@ namespace org.cchmc.pho.api.ViewModels
         public int PracticeId { get; set; }
         public string Title { get; set; }
         public string HeaderLabel { get; set; }
+        public decimal? VerticalMax { get; set; }
         public List<WebChartDataSetViewModel> DataSets { get; set; }
     }
     public class WebChartDataSetViewModel

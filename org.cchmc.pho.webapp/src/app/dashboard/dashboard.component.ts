@@ -265,6 +265,11 @@ export class DashboardComponent implements OnInit {
       { 
         var highestValue = Math.max.apply(null, this.webChart.dataSets[i].values);
         if (highestValue > this.patientsMax) { this.patientsMax = (highestValue+1); }
+        if (this.webChart.verticalMax){
+          this.patientsMax = this.webChart.verticalMax;
+        }
+        this.logger.log(this.webChart.verticalMax, 'verticalMax');
+        this.logger.log(this.patientsMax, 'patientsMax');
         chartType = this.webChart.dataSets[i].type;
 
         //Create a chartJS dataset for each dataset we've received from API
@@ -306,14 +311,29 @@ export class DashboardComponent implements OnInit {
     
       
       //SET THE GRAPH CONFIGURATION VALUES
-      var chartConfig = {
-        type: chartType,
-        data: {
-        labels: this.graphLabelArray,
-        datasets: this.graphDatasetsArray
-        },
-        options: this.getChartOptions(this.patientsMax)   
-      };
+      var chartConfig;
+
+      if (filterId === WebChartFilterId.UFunnel){
+        chartConfig = {
+          type: chartType,
+          data: {
+          labels: this.graphLabelArray,
+          datasets: this.graphDatasetsArray
+          },
+          options: this.getFunnelChartOptions(this.patientsMax, false, -0.25)   
+        };
+      }else{
+        chartConfig = {
+          type: chartType,
+          data: {
+          labels: this.graphLabelArray,
+          datasets: this.graphDatasetsArray
+          },
+          options: this.getChartOptions(this.patientsMax)   
+        };
+      }
+      
+
       
 
       this.logger.log(chartConfig, "chartConfig");        
@@ -355,7 +375,53 @@ export class DashboardComponent implements OnInit {
           }],
           yAxes: [{
             ticks: {   
-              beginAtZero: true,   //force the y-axis to start at 0      
+              beginAtZero: true,   //force the y-axis to start at 0    
+              max: yAxisTickMax
+            }
+          }]        
+        },        
+        tooltips: {
+          enabled: true
+        },
+        onClick (e) {
+          let element = this.getElementAtEvent(e);                  
+          $this.Showmodal(e, this, element);
+        }    
+      };
+  }
+
+  getFunnelChartOptions(yAxisTickMax: number, yAxisBeginAtZero: boolean, yAxisTickMin: number){
+    const $this = this;
+    
+      return {
+        responsive: true,
+        legend: {
+          display: false
+          },
+        layout: {
+            padding: {
+              left: 42,
+              right: 53,
+              top: 27,
+              bottom: 43
+            }
+          },
+        scales: {
+          xAxes: [{
+          ticks: {
+               callback (value, index, values) {
+                return value;
+              },
+              fontSize: 10
+            },                       
+          gridLines: {
+            drawOnChartArea: false
+          }
+          }],
+          yAxes: [{
+            ticks: {   
+              beginAtZero: yAxisBeginAtZero,   //force the y-axis to start at 0    
+              min: yAxisTickMin,
               max: yAxisTickMax
             }
           }]        

@@ -112,6 +112,11 @@ namespace org.cchmc.pho.core.DataAccessLayer
                             hr["HeaderText"].ToString()
                             ));
 
+                        if (hr["VerticalMax"] != DBNull.Value)
+                        {
+                            chart.VerticalMax = Convert.ToDecimal(hr["VerticalMax"].ToString());
+                        }
+
                         //Split the final table into a list, using the DataSetIndex as the groupby.
                         List<DataTable> dataSets = finalTable.AsEnumerable()
                         .GroupBy(row => row.Field<double>("DataSetIndex"))
@@ -132,7 +137,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 ShowLine = (ds.Rows[0]["ShowLine"] == DBNull.Value ? false : Convert.ToBoolean(ds.Rows[0]["ShowLine"].ToString())),
                                 BorderDash = (ds.Rows[0]["BorderDash"] == DBNull.Value ? new int[0] : Array.ConvertAll(ds.Rows[0]["BorderDash"].ToString().Split(','), int.Parse)),
                                 PointStyle = (ds.Rows[0]["PointStyle"] == DBNull.Value ? "" : ds.Rows[0]["PointStyle"].ToString()),
-                                PointRadius = (ds.Rows[0]["PointRadius"] == DBNull.Value ? 3 : Convert.ToInt32(ds.Rows[0]["PointRadius"].ToString()))
+                                PointRadius = (ds.Rows[0]["PointRadius"] == DBNull.Value ? 3 : Convert.ToInt32(ds.Rows[0]["PointRadius"].ToString())),
                             };
 
                             DataView dv = ds.DefaultView;

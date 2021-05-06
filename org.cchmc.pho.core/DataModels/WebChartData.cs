@@ -19,6 +19,7 @@ namespace org.cchmc.pho.core.DataModels
         public int PracticeId { get; set; }
         public string Title { get; set; }
         public string HeaderLabel { get; set; }
+        public decimal? VerticalMax { get; set; }
         public List<WebChartDataSet> DataSets { get; set; }
     }
     public class WebChartDataSet
