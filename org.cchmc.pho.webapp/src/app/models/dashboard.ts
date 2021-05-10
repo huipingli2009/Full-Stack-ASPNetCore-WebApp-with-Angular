@@ -68,8 +68,8 @@ export class WebChartDataSet {
     fill: boolean;
     showLine: boolean;
     borderDash: number[];
-    pointStyle: string;
-    pointRadius: number;
+    pointStyle: string[];
+    pointRadius: number[];
 }
 export class EdChartDetails {
     patientId: number;

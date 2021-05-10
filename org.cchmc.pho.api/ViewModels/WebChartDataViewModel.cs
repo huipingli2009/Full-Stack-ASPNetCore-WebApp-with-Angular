@@ -23,7 +23,7 @@ namespace org.cchmc.pho.api.ViewModels
         public bool Fill { get; set; }
         public bool ShowLine { get; set; }
         public int[] BorderDash { get; set; }
-        public string PointStyle { get; set; }
-        public int PointRadius { get; set; }
+        public string[] PointStyle { get; set; }
+        public int[] PointRadius { get; set; }
     }
 }

@@ -135,9 +135,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 BorderColor = ds.Rows[0]["BorderColor"].ToString(),
                                 Fill = Convert.ToBoolean(ds.Rows[0]["Fill"].ToString()),
                                 ShowLine = (ds.Rows[0]["ShowLine"] == DBNull.Value ? false : Convert.ToBoolean(ds.Rows[0]["ShowLine"].ToString())),
-                                BorderDash = (ds.Rows[0]["BorderDash"] == DBNull.Value ? new int[0] : Array.ConvertAll(ds.Rows[0]["BorderDash"].ToString().Split(','), int.Parse)),
-                                PointStyle = (ds.Rows[0]["PointStyle"] == DBNull.Value ? "" : ds.Rows[0]["PointStyle"].ToString()),
-                                PointRadius = (ds.Rows[0]["PointRadius"] == DBNull.Value ? 3 : Convert.ToInt32(ds.Rows[0]["PointRadius"].ToString())),
+                                BorderDash = (ds.Rows[0]["BorderDash"] == DBNull.Value ? new int[0] : Array.ConvertAll(ds.Rows[0]["BorderDash"].ToString().Split(','), int.Parse))
                             };
 
                             DataView dv = ds.DefaultView;
@@ -146,14 +144,20 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                             //Extract label and value arrays
                             List<string> xAxisLabels = new List<string>();
+                            List<string> pointStyles = new List<string>();
                             List<decimal> chartValues = new List<decimal>();
-                            foreach(DataRow row in sortedDT.Rows)
+                            List<int> pointRadiuses = new List<int>();
+                            foreach (DataRow row in sortedDT.Rows)
                             {
                                 xAxisLabels.Add(row["DataPointLabel"].ToString());
+                                pointStyles.Add(row["PointStyle"].ToString());
                                 chartValues.Add(Convert.ToDecimal(row["ChartValue"].ToString()));
+                                pointRadiuses.Add(Convert.ToInt32(row["PointRadius"].ToString()));
                             }
                             curDataSet.XAxisLabels = xAxisLabels.ToArray();
                             curDataSet.Values = chartValues.ToArray();
+                            curDataSet.PointStyle = pointStyles.ToArray();
+                            curDataSet.PointRadius = pointRadiuses.ToArray();
 
                             //Add the set to the parent object
                             chart.DataSets.Add(curDataSet);
