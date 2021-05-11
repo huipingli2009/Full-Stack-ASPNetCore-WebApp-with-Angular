@@ -70,6 +70,7 @@ export class WebChartDataSet {
     borderDash: number[];
     pointStyle: string[];
     pointRadius: number[];
+    pointBackgroundColor: string[];
 }
 export class EdChartDetails {
     patientId: number;

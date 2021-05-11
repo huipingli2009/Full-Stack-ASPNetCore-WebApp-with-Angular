@@ -36,5 +36,6 @@ namespace org.cchmc.pho.core.DataModels
         public int[] BorderDash { get; set; }
         public string[] PointStyle { get; set; }
         public int[] PointRadius { get; set; }
+        public string[] PointBackgroundColor { get; set; }
     }
 }

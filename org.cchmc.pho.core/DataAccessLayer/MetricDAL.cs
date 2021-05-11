@@ -147,17 +147,20 @@ namespace org.cchmc.pho.core.DataAccessLayer
                             List<string> pointStyles = new List<string>();
                             List<decimal> chartValues = new List<decimal>();
                             List<int> pointRadiuses = new List<int>();
+                            List<string> pointBackgroundColor = new List<string>();
                             foreach (DataRow row in sortedDT.Rows)
                             {
                                 xAxisLabels.Add(row["DataPointLabel"].ToString());
                                 pointStyles.Add(row["PointStyle"].ToString());
                                 chartValues.Add(Convert.ToDecimal(row["ChartValue"].ToString()));
                                 pointRadiuses.Add(Convert.ToInt32(row["PointRadius"].ToString()));
+                                pointBackgroundColor.Add(row["PointBackgroundColor"].ToString());
                             }
                             curDataSet.XAxisLabels = xAxisLabels.ToArray();
                             curDataSet.Values = chartValues.ToArray();
                             curDataSet.PointStyle = pointStyles.ToArray();
                             curDataSet.PointRadius = pointRadiuses.ToArray();
+                            curDataSet.PointBackgroundColor = pointBackgroundColor.ToArray();
 
                             //Add the set to the parent object
                             chart.DataSets.Add(curDataSet);

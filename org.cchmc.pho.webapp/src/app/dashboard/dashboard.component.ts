@@ -303,7 +303,8 @@ export class DashboardComponent implements OnInit {
             showLine: this.webChart.dataSets[i].showLine,
             borderDash: this.webChart.dataSets[i].borderDash,
             pointStyle: this.webChart.dataSets[i].pointStyle,
-            pointRadius: this.webChart.dataSets[i].pointRadius
+            pointRadius: this.webChart.dataSets[i].pointRadius,
+            pointBackgroundColor: this.webChart.dataSets[i].pointBackgroundColor
           }
         }
 
