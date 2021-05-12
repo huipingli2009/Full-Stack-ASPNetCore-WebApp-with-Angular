@@ -6,7 +6,7 @@ namespace org.cchmc.pho.api.ViewModels
     public class WebChartViewModel
     {
         public int PracticeId { get; set; }
-        public string Title { get; set; }
+        public string[] Title { get; set; }
         public string HeaderLabel { get; set; }
         public decimal? VerticalMax { get; set; }
         public List<WebChartDataSetViewModel> DataSets { get; set; }

@@ -53,7 +53,7 @@ export class Population {
 export class WebChart {
     practiceId: number;
     headerLabel: string;
-    title: string;
+    title: string[];
     dataSets: WebChartDataSet[];
     verticalMax: number;
 }

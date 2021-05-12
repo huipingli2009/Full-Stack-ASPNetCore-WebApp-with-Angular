@@ -106,11 +106,11 @@ namespace org.cchmc.pho.core.DataAccessLayer
                         DataTable finalTable = dataSet.Tables[1];
 
                         DataRow hr = headerTable.Rows[0];
-                        chart = (new WebChart(
+                        chart = new WebChart(
                             Convert.ToInt32(hr["PracticeID"]), 
-                            hr["ChartTitle"].ToString(), 
+                            hr["ChartTitle"].ToString().Split('|'),
                             hr["HeaderText"].ToString()
-                            ));
+                            );
 
                         if (hr["VerticalMax"] != DBNull.Value)
                         {

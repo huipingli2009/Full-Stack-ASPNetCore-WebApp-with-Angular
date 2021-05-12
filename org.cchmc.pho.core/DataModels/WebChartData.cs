@@ -9,7 +9,7 @@ namespace org.cchmc.pho.core.DataModels
     public class WebChart
     {
         public WebChart() { }
-        public WebChart(int practiceId, string title, string headerLabel)
+        public WebChart(int practiceId, string[] title, string headerLabel)
         {
             PracticeId = practiceId;
             Title = title;
@@ -17,7 +17,7 @@ namespace org.cchmc.pho.core.DataModels
             DataSets = new List<WebChartDataSet>();
         }
         public int PracticeId { get; set; }
-        public string Title { get; set; }
+        public string[] Title { get; set; }
         public string HeaderLabel { get; set; }
         public decimal? VerticalMax { get; set; }
         public List<WebChartDataSet> DataSets { get; set; }

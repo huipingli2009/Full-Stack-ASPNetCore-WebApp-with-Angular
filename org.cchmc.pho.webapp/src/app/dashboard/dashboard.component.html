@@ -55,9 +55,10 @@
         </div> 
               
         <div fxLayout="column" fxLayoutAlign="center center">
-            <div class="mat-subheading-2 text-secondary">{{webChartTitle}}</div> 
-            <div  style="width: 50px;height: 20px;">&nbsp;</div> 
-            <div  style="width: 50px;height: 20px;">&nbsp;</div>           
+            <div class="mat-subheading-2" *ngFor="let item of webChartTitle">
+                <div class="chart-title text-secondary">{{item}}</div>
+                <div  style="width: 50px;height: 20px;">&nbsp;</div> 
+            </div>         
             <div  fxLayoutAlign="space-around end !important" *ngIf="this.filterId !== webChartFilterIdEnum.none">
                 <mat-form-field class="selectFilterFontColor" >
                     <mat-select [(ngModel)]="webchartfilters" (selectionChange)="onWebReportConditionChange($event)" class="mat-subheading-2 text-secondary">

@@ -46,7 +46,7 @@ export class DashboardComponent implements OnInit {
   monthlySpotlightLink: string;
   monthlySpotlightLinkLabel: string;
   monthlySpotlightImageUrl: string;
-  webChartTitle: string;
+  webChartTitle: string[];
   webchartfilters: number;
   webChartTopLeftLabel: string; 
   webChartFilterIdEnum = WebChartFilterId;
