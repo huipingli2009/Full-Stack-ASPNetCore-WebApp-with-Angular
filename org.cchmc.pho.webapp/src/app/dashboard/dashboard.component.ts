@@ -66,7 +66,6 @@ export class DashboardComponent implements OnInit {
   webChartObj: Chart;
   selectedBar: string;
   isLoggedIn$: boolean;
-  patientsMax: number; 
   chartXValue: string[]; 
   reportFilterSelected: boolean = true;
 
@@ -258,18 +257,18 @@ export class DashboardComponent implements OnInit {
       var chartType = '';
       var i;
 
+      var yAxisMax = 0;         
+
+
       // assign x axis labels
       this.graphLabelArray = this.webChart.dataSets[0].xAxisLabels;
 
       for (i=0; i < this.webChart.dataSets.length; i++)
       { 
-        var highestValue = Math.max.apply(null, this.webChart.dataSets[i].values);
-        if (highestValue > this.patientsMax) { this.patientsMax = (highestValue+1); }
-        if (this.webChart.verticalMax){
-          this.patientsMax = this.webChart.verticalMax;
-        }
-        this.logger.log(this.webChart.verticalMax, 'verticalMax');
-        this.logger.log(this.patientsMax, 'patientsMax');
+        //Calculate highest y axis value of all datasets, for default yAxis maximum.
+        var highestDataSetValue = Math.max.apply(null, this.webChart.dataSets[i].values);
+        if (highestDataSetValue > yAxisMax){ yAxisMax = highestDataSetValue; }
+
         chartType = this.webChart.dataSets[i].type;
 
         //Create a chartJS dataset for each dataset we've received from API
@@ -294,7 +293,6 @@ export class DashboardComponent implements OnInit {
             type: this.webChart.dataSets[i].type,
             label: this.webChart.dataSets[i].legend,
             data: this.webChart.dataSets[i].values, 
-            maxBarThickness: 22,
             lineTension: 0,
             backgroundColor: this.webChart.dataSets[i].backgroundColor,
             hoverBackgroundColor: this.webChart.dataSets[i].backgroundHoverColor,
@@ -309,8 +307,13 @@ export class DashboardComponent implements OnInit {
         }
 
       }
+
+      //Use Chart Level yAxisMax setting from data
+      if (this.webChart.verticalMax){
+        yAxisMax = this.webChart.verticalMax;
+      }
     
-      
+      this.logger.log(yAxisMax, 'yAxisMax');
       //SET THE GRAPH CONFIGURATION VALUES
       var chartConfig;
 
@@ -321,7 +324,7 @@ export class DashboardComponent implements OnInit {
           labels: this.graphLabelArray,
           datasets: this.graphDatasetsArray
           },
-          options: this.getFunnelChartOptions(this.patientsMax, false, -0.25)   
+          options: this.getFunnelChartOptions(yAxisMax, false, -0.25)   
         };
       }else{
         chartConfig = {
@@ -330,20 +333,19 @@ export class DashboardComponent implements OnInit {
           labels: this.graphLabelArray,
           datasets: this.graphDatasetsArray
           },
-          options: this.getChartOptions(this.patientsMax)   
+          options: this.getChartOptions(yAxisMax)   
         };
       }
       
 
       
 
-      this.logger.log(chartConfig, "chartConfig");        
+      //this.logger.log(chartConfig, "chartConfig");        
       this.canvas = document.getElementById('webChart');     
       this.ctx = this.canvas.getContext('2d'); 
       this.webChartObj = new Chart(this.ctx, chartConfig);
       
 
-      //this.patientsMax = max + 1; // This is here to add space above each bar in the chart (Max Number of patients, plus one empty tick on the y-axis)
 
     });
   }
