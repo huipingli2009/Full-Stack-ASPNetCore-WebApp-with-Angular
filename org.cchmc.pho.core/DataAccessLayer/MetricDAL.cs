@@ -134,7 +134,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 BackgroundHoverColor = ds.Rows[0]["BackgroundHoverColor"].ToString(),
                                 BorderColor = ds.Rows[0]["BorderColor"].ToString(),
                                 Fill = Convert.ToBoolean(ds.Rows[0]["Fill"].ToString()),
-                                ShowLine = (ds.Rows[0]["ShowLine"] == DBNull.Value ? false : Convert.ToBoolean(ds.Rows[0]["ShowLine"].ToString())),
+                                ShowLine = Convert.ToBoolean(ds.Rows[0]["ShowLine"] == DBNull.Value ? "false" : ds.Rows[0]["ShowLine"].ToString()),
                                 BorderDash = (ds.Rows[0]["BorderDash"] == DBNull.Value ? new int[0] : Array.ConvertAll(ds.Rows[0]["BorderDash"].ToString().Split(','), int.Parse))
                             };
 
