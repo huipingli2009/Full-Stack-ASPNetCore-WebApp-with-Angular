@@ -3,7 +3,7 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router'; 
 import * as Chart from 'chart.js';
 import { NGXLogger } from 'ngx-logger';
 import { environment } from 'src/environments/environment';
@@ -18,7 +18,7 @@ import { CurrentUser, Role} from '../models/user';
 import { take } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-dashboard', 
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
@@ -46,7 +46,7 @@ export class DashboardComponent implements OnInit {
   monthlySpotlightLink: string;
   monthlySpotlightLinkLabel: string;
   monthlySpotlightImageUrl: string;
-  webChartTitle: string;
+  webChartTitle: string[];
   webchartfilters: number;
   webChartTopLeftLabel: string; 
   webChartFilterIdEnum = WebChartFilterId;
@@ -66,7 +66,6 @@ export class DashboardComponent implements OnInit {
   webChartObj: Chart;
   selectedBar: string;
   isLoggedIn$: boolean;
-  patientsMax: number; 
   chartXValue: string[]; 
   reportFilterSelected: boolean = true;
 
@@ -258,18 +257,26 @@ export class DashboardComponent implements OnInit {
       var chartType = '';
       var i;
 
+      var yAxisMax = 0;         
+
+
       // assign x axis labels
       this.graphLabelArray = this.webChart.dataSets[0].xAxisLabels;
 
       for (i=0; i < this.webChart.dataSets.length; i++)
       { 
-        var highestValue = Math.max.apply(null, this.webChart.dataSets[i].values);
-        if (highestValue > this.patientsMax) { this.patientsMax = (highestValue+1); }
+        //Calculate highest y axis value of all datasets, for default yAxis maximum.
+        var highestDataSetValue = Math.max.apply(null, this.webChart.dataSets[i].values);
+        if (highestDataSetValue > yAxisMax){ yAxisMax = highestDataSetValue; }
+
         chartType = this.webChart.dataSets[i].type;
 
         //Create a chartJS dataset for each dataset we've received from API
-        this.graphDatasetsArray[i] = 
+        if (chartType == 'bar')
+        {          
+          this.graphDatasetsArray[i] = 
                           {
+                          type: this.webChart.dataSets[i].type,
                           label: this.webChart.dataSets[i].legend,
                           data: this.webChart.dataSets[i].values, 
                           maxBarThickness: 22,
@@ -279,26 +286,66 @@ export class DashboardComponent implements OnInit {
                           borderColor: this.webChart.dataSets[i].borderColor,
                           fill: this.webChart.dataSets[i].fill
                           }
+        } else 
+        {
+          this.graphDatasetsArray[i] = 
+          {
+            type: this.webChart.dataSets[i].type,
+            label: this.webChart.dataSets[i].legend,
+            data: this.webChart.dataSets[i].values, 
+            lineTension: 0,
+            backgroundColor: this.webChart.dataSets[i].backgroundColor,
+            hoverBackgroundColor: this.webChart.dataSets[i].backgroundHoverColor,
+            borderColor: this.webChart.dataSets[i].borderColor,
+            fill: this.webChart.dataSets[i].fill,
+            showLine: this.webChart.dataSets[i].showLine,
+            borderDash: this.webChart.dataSets[i].borderDash,
+            pointStyle: this.webChart.dataSets[i].pointStyle,
+            pointRadius: this.webChart.dataSets[i].pointRadius,
+            pointBackgroundColor: this.webChart.dataSets[i].pointBackgroundColor
+          }
+        }
+
+      }
+
+      //Use Chart Level yAxisMax setting from data
+      if (this.webChart.verticalMax){
+        yAxisMax = this.webChart.verticalMax;
+      }
+    
+      this.logger.log(yAxisMax, 'yAxisMax');
+      //SET THE GRAPH CONFIGURATION VALUES
+      var chartConfig;
+
+      if (filterId === WebChartFilterId.UFunnel){
+        chartConfig = {
+          type: chartType,
+          data: {
+          labels: this.graphLabelArray,
+          datasets: this.graphDatasetsArray
+          },
+          options: this.getFunnelChartOptions(yAxisMax, false, -0.25)   
+        };
+      }else{
+        chartConfig = {
+          type: chartType,
+          data: {
+          labels: this.graphLabelArray,
+          datasets: this.graphDatasetsArray
+          },
+          options: this.getChartOptions(yAxisMax)   
+        };
       }
       
-      //SET THE GRAPH CONFIGURATION VALUES
-      var chartConfig = {
-        type: chartType,
-        data: {
-        labels: this.graphLabelArray,
-        datasets: this.graphDatasetsArray
-        },
-        options: this.getChartOptions(this.patientsMax)   
-      };
+
       
 
-      this.logger.log(chartConfig, "chartConfig");        
+      //this.logger.log(chartConfig, "chartConfig");        
       this.canvas = document.getElementById('webChart');     
       this.ctx = this.canvas.getContext('2d'); 
       this.webChartObj = new Chart(this.ctx, chartConfig);
       
 
-      //this.patientsMax = max + 1; // This is here to add space above each bar in the chart (Max Number of patients, plus one empty tick on the y-axis)
 
     });
   }
@@ -325,16 +372,63 @@ export class DashboardComponent implements OnInit {
           ticks: {
                callback (value, index, values) {
                 return value;
-              }              
+              },
+              fontSize: 10
             }
           }],
           yAxes: [{
             ticks: {   
-              beginAtZero: true,   //force the y-axis to start at 0      
-                max: yAxisTickMax
+              beginAtZero: true,   //force the y-axis to start at 0    
+              max: yAxisTickMax
             }
           }]        
+        },        
+        tooltips: {
+          enabled: true
         },
+        onClick (e) {
+          let element = this.getElementAtEvent(e);                  
+          $this.Showmodal(e, this, element);
+        }    
+      };
+  }
+
+  getFunnelChartOptions(yAxisTickMax: number, yAxisBeginAtZero: boolean, yAxisTickMin: number){
+    const $this = this;
+    
+      return {
+        responsive: true,
+        legend: {
+          display: false
+          },
+        layout: {
+            padding: {
+              left: 42,
+              right: 53,
+              top: 27,
+              bottom: 43
+            }
+          },
+        scales: {
+          xAxes: [{
+          ticks: {
+               callback (value, index, values) {
+                return value;
+              },
+              fontSize: 10
+            },                       
+          gridLines: {
+            drawOnChartArea: false
+          }
+          }],
+          yAxes: [{
+            ticks: {   
+              beginAtZero: yAxisBeginAtZero,   //force the y-axis to start at 0    
+              min: yAxisTickMin,
+              max: yAxisTickMax
+            }
+          }]        
+        },        
         tooltips: {
           enabled: true
         },

@@ -53,8 +53,9 @@ export class Population {
 export class WebChart {
     practiceId: number;
     headerLabel: string;
-    title: string;
+    title: string[];
     dataSets: WebChartDataSet[];
+    verticalMax: number;
 }
 export class WebChartDataSet {
     type: string;
@@ -65,6 +66,11 @@ export class WebChartDataSet {
     backgroundHoverColor: string;
     borderColor: string;
     fill: boolean;
+    showLine: boolean;
+    borderDash: number[];
+    pointStyle: string[];
+    pointRadius: number[];
+    pointBackgroundColor: string[];
 }
 export class EdChartDetails {
     patientId: number;
@@ -119,7 +125,8 @@ export enum WebChartFilterId {
     zipCodeFilterId = 4,
     payorTypeFilterId = 5,
     locationFilterId = 6,
-    ageFilterId = 7
+    ageFilterId = 7,
+    UFunnel = 10
 }
 
 export enum DrillThruMeasureId {

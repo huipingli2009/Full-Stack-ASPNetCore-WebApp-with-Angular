@@ -106,11 +106,16 @@ namespace org.cchmc.pho.core.DataAccessLayer
                         DataTable finalTable = dataSet.Tables[1];
 
                         DataRow hr = headerTable.Rows[0];
-                        chart = (new WebChart(
+                        chart = new WebChart(
                             Convert.ToInt32(hr["PracticeID"]), 
-                            hr["ChartTitle"].ToString(), 
+                            hr["ChartTitle"].ToString().Split('|'),
                             hr["HeaderText"].ToString()
-                            ));
+                            );
+
+                        if (hr["VerticalMax"] != DBNull.Value)
+                        {
+                            chart.VerticalMax = Convert.ToDecimal(hr["VerticalMax"].ToString());
+                        }
 
                         //Split the final table into a list, using the DataSetIndex as the groupby.
                         List<DataTable> dataSets = finalTable.AsEnumerable()
@@ -128,23 +133,34 @@ namespace org.cchmc.pho.core.DataAccessLayer
                                 BackgroundColor = ds.Rows[0]["BackgroundColor"].ToString(),
                                 BackgroundHoverColor = ds.Rows[0]["BackgroundHoverColor"].ToString(),
                                 BorderColor = ds.Rows[0]["BorderColor"].ToString(),
-                                Fill = Convert.ToBoolean(ds.Rows[0]["Fill"].ToString())
+                                Fill = Convert.ToBoolean(ds.Rows[0]["Fill"].ToString()),
+                                ShowLine = Convert.ToBoolean(ds.Rows[0]["ShowLine"] == DBNull.Value ? "false" : ds.Rows[0]["ShowLine"].ToString()),
+                                BorderDash = (ds.Rows[0]["BorderDash"] == DBNull.Value ? new int[0] : Array.ConvertAll(ds.Rows[0]["BorderDash"].ToString().Split(','), int.Parse))
                             };
 
                             DataView dv = ds.DefaultView;
-                            dv.Sort = "YYYYMMDD asc";
+                            dv.Sort = "SortOrder asc";
                             DataTable sortedDT = dv.ToTable();
 
                             //Extract label and value arrays
                             List<string> xAxisLabels = new List<string>();
+                            List<string> pointStyles = new List<string>();
                             List<decimal> chartValues = new List<decimal>();
-                            foreach(DataRow row in sortedDT.Rows)
+                            List<int> pointRadiuses = new List<int>();
+                            List<string> pointBackgroundColor = new List<string>();
+                            foreach (DataRow row in sortedDT.Rows)
                             {
                                 xAxisLabels.Add(row["DataPointLabel"].ToString());
+                                pointStyles.Add(row["PointStyle"].ToString());
                                 chartValues.Add(Convert.ToDecimal(row["ChartValue"].ToString()));
+                                pointRadiuses.Add(Convert.ToInt32(row["PointRadius"].ToString()));
+                                pointBackgroundColor.Add(row["PointBackgroundColor"].ToString());
                             }
                             curDataSet.XAxisLabels = xAxisLabels.ToArray();
                             curDataSet.Values = chartValues.ToArray();
+                            curDataSet.PointStyle = pointStyles.ToArray();
+                            curDataSet.PointRadius = pointRadiuses.ToArray();
+                            curDataSet.PointBackgroundColor = pointBackgroundColor.ToArray();
 
                             //Add the set to the parent object
                             chart.DataSets.Add(curDataSet);
