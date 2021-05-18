@@ -1,0 +1,89 @@
+<p>Contacts</p>
+<div class="content-main"> 
+    <div fxLayout="row" class="contacts-header">
+        <div fxLayout="column" class="header-filter filter-btn">
+            <button mat-button>All PHO</button>
+        </div>
+        <div fxLayout="column" class="header-filter filter-btn">
+            <button mat-button>QPLs and PAs</button>
+        </div>
+        <div fxLayout="column" class="header-filter filter-btn">
+            <button mat-button>Specialty</button>
+        </div>
+        <!-- <div fxLayout="row wrap">            
+            <mat-form-field>
+                <mat-label>Specialty</mat-label>
+                <mat-select>
+                  <mat-option *ngFor="let provider of providersList" [value]="provider.id">
+                    {{provider.name}}
+                  </mat-option>
+                  <mat-option>None</mat-option>
+                  <mat-option>All</mat-option>
+                </mat-select>
+              </mat-form-field>
+        </div> -->
+        <div fxLayout="column" class="header-filter filter-btn">
+            <button mat-button>PHO Membership</button>
+        </div>
+        <div fxLayout="column" class="header-filter filter-btn">
+            <button mat-button>Board Members</button>
+        </div>
+        
+        <div fxLayout="column" class="header-filter search-input" fxFlex fxLayoutAlign="center end">
+            <mat-form-field>
+                <input matInput [formControl]="" 
+                    placeholder="search contacts or practices">
+                <button mat-button matSuffix mat-icon-button aria-label="Search">
+                    <mat-icon>search</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+    </div>
+    <div>
+    </div>
+    <table id="contact" mat-table [dataSource]="dataSourceContact" class="mat-elevation-z8" multiTemplateDataRows>
+        <ng-container matColumnDef="arrow">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <i class="material-icons rotate-icon">
+                    keyboard_arrow_right
+                </i>
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="practiceName">
+            <th mat-header-cell *matHeaderCellDef> NAME </th>
+            <td mat-cell *matCellDef="let element"> {{element.practiceName}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="practiceType">
+            <th mat-header-cell *matHeaderCellDef> PRACTICE TYPE </th>
+            <td mat-cell *matCellDef="let element"> {{element.practiceType}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="emr">
+            <th mat-header-cell *matHeaderCellDef> EMR </th>
+            <td mat-cell *matCellDef="let element"> {{element.emr}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="phone">
+            <th mat-header-cell *matHeaderCellDef> PHONE </th>
+            <td mat-cell *matCellDef="let element"> {{element.phone}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fax">
+            <th mat-header-cell *matHeaderCellDef> FAX </th>
+            <td mat-cell *matCellDef="let element"> {{element.fax}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="websiteURL">
+            <th mat-header-cell *matHeaderCellDef> WEBSITE </th>
+            <td mat-cell *matCellDef="let element"> {{element.websiteURL}} </td>
+        </ng-container>  
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let element; columns: displayedColumns"></tr>
+
+    </table>
+</div>
+
+

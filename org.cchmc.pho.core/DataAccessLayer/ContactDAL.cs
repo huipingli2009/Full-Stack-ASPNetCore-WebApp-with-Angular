@@ -11,8 +11,7 @@ using System.Threading.Tasks;
 namespace org.cchmc.pho.core.DataAccessLayer
 {
     public class ContactDAL : IContact
-    {
-        //private IConfiguration _config;
+    {       
         private readonly ConnectionStrings _connectionStrings;
 
         public ContactDAL(IOptions<ConnectionStrings> options)

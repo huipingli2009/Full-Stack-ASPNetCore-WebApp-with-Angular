@@ -5,9 +5,11 @@
   </div>
   <div fxLayout="row" fxLayoutAlign="start end" fxFlex>
     <div fxLayout="column" fxLayoutAlign="start end" fxFlex="10%">
-      <button mat-button routerLink="dashboard">Home</button>
+      <button mat-button routerLink="dashboard" routerLinkActive="activebutton">Home</button>
     </div> 
-   
+    <div fxLayout="column" fxLayoutAlign="start end" fxFlex="10%">
+      <button mat-button routerLink="contacts" routerLinkActive="activebutton">Contacts</button>
+    </div> 
     <div fxLayout="column" fxLayoutAlign="end end" fxFlex class="logout-col">
       <div ><span> Contact your practice improvement coach <a [href]="'mailto:'+ email "  target="_top">
         <span class="coachName">{{coachName}}<span class="email-icon"><mat-icon class="material-icons-round">email</mat-icon></span></span>
