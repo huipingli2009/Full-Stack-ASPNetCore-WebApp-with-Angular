@@ -9,6 +9,7 @@ namespace org.cchmc.pho.api.Mappings
         public ContactMappings()
         {
             CreateMap<Contact, ContactViewModel>();
+            CreateMap<ContactPracticeDetails, ContactPracticeDetailsVidewModel>();
         }
     }
 }

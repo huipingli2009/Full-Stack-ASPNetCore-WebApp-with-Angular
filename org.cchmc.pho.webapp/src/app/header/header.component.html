@@ -2,10 +2,10 @@
 <div fxLayout="row" class="main-menu">
   <div class="logo-col" fxLayout="row" fxFlex="188px" fxLayoutAlign="start end">
     <img class="logo" src="assets/img/TSCHS_LOGO_PMS-SPOT-COLOR.png">
-  </div>
+  </div>  
   <div fxLayout="row" fxLayoutAlign="start end" fxFlex>
     <div fxLayout="column" fxLayoutAlign="start end" fxFlex="10%">
-      <button mat-button routerLink="dashboard" routerLinkActive="activebutton">Home</button>
+      <button mat-button routerLink="dashboards" routerLinkActive="activebutton">Home</button>
     </div> 
     <div fxLayout="column" fxLayoutAlign="start end" fxFlex="10%">
       <button mat-button routerLink="contacts" routerLinkActive="activebutton">Contacts</button>
@@ -38,7 +38,7 @@
     <button mat-button routerLink="/patients" routerLinkActive="active-submenu" [style.display]="displayPatientsTab ? 'block' : 'none'">Patients</button>   
     <button mat-button routerLink="/staff" routerLinkActive="active-submenu" [style.display]="!displayStaffAndWorkbookTab? 'block' : 'none'">Staff</button>
     <button mat-button routerLink="/files" routerLinkActive="active-submenu">Files and Resources</button>
-    <button mat-button routerLink="/workbooks" routerLinkActive="active-submenu" [style.display]="!displayStaffAndWorkbookTab? 'block' : 'none'">Workbooks</button>
+    <button mat-button routerLink="/workbooks" routerLinkActive="active-submenu" [style.display]="!displayStaffAndWorkbookTab? 'block' : 'none'">Workbooks</button>   
   </div>
 </div>
 <div toastContainer class="alert-container"><span></span></div>

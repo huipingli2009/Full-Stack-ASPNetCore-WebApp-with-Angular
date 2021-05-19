@@ -3031,6 +3031,15 @@ display: block !important;
       font-size: 18px !important;
     }    
   }
+  .contact-expanded-row .rotate-icon {
+    -moz-transition: 0.5s;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    -ms-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+  }
 }
 
 
