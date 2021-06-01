@@ -1,14 +1,15 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
-import { ok } from 'assert';
 import { NGXLogger } from 'ngx-logger';
 import { take } from 'rxjs/operators';
 import { Contact, ContactPracticeDetails } from '../models/contacts';
 import { RestService } from '../rest.service';
+import { formatDate } from '@angular/common' ;
 
 @Component({
-  selector: 'app-contacts',
+  //selector: 'app-contacts',
   templateUrl: './contacts.component.html',
   styleUrls: ['./contacts.component.scss'],
   animations: [
@@ -28,7 +29,18 @@ export class ContactsComponent implements OnInit {
   
   displayedColumns: string[] = ['arrow', 'practiceName', 'practiceType', 'emr', 'phone', 'fax', 'websiteURL'];
 
-  constructor(private rest: RestService, private logger: NGXLogger) {
+  ContactDetailsForm = this.fb.group({
+    practiceId: [''],
+    practiceName: [''],
+    memberSince: [''],
+    practiceManager: [''],
+    pmEmail: ['', [Validators.required, Validators.email]],
+    pic: [''],
+    picEmail: ['', [Validators.required, Validators.email]]  
+  });
+
+
+  constructor(private rest: RestService, private logger: NGXLogger, private fb: FormBuilder) {
     this.dataSourceContact = new MatTableDataSource;
    }
 
@@ -36,7 +48,7 @@ export class ContactsComponent implements OnInit {
     this.getAllContacts();
 
     //for testing
-    this.getContactPracticeDetails(7);
+    //this.getContactPracticeDetails(7);
   }
 
   getAllContacts() {
@@ -50,11 +62,22 @@ export class ContactsComponent implements OnInit {
   }
 
   getContactPracticeDetails(id: number){
-    return this.rest.getContactPracticeDetails(id).pipe(take(1)).subscribe((data) =>
+    this.rest.getContactPracticeDetails(id).pipe(take(1)).subscribe((data) =>
     {
       this.contactPracticeDetails = data;
-      this.logger.log(this.contactPracticeDetails, 'ContactPracticeDetails');
+
+      this.ContactDetailsForm.get('practiceId').setValue(this.contactPracticeDetails.practiceId);
+      this.ContactDetailsForm.get('practiceName').setValue(this.contactPracticeDetails.practiceName);
+      
+      //use formatDate function to change the format
+      this.ContactDetailsForm.get('memberSince').setValue(formatDate(this.contactPracticeDetails.memberSince,'yyyy-MM-dd','en'));
+      
+      this.ContactDetailsForm.get('practiceManager').setValue(this.contactPracticeDetails.practiceManager);
+      this.ContactDetailsForm.get('pmEmail').setValue(this.contactPracticeDetails.pmEmail);
+      this.ContactDetailsForm.get('pic').setValue(this.contactPracticeDetails.pic);
+      this.ContactDetailsForm.get('picEmail').setValue(this.contactPracticeDetails.picEmail);
+      //this.logger.log(this.contactPracticeDetails, 'ContactPracticeDetails');
     });
-  }
+  } 
 }
 

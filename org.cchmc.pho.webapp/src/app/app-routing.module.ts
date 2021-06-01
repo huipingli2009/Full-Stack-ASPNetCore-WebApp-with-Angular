@@ -59,12 +59,12 @@ const routes: Routes = [
         data: {         
           role: ['Practice Member','Practice Coordinator','Practice Admin','PHO Admin']
         }    
-      },
-      {
-        path: 'contacts',
-        component: ContactsComponent,    
-      },
+      },     
     ]
+  },
+  {
+    path: 'contacts',
+    component: ContactsComponent,    
   },
  
   {
