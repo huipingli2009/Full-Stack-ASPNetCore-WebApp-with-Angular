@@ -61,8 +61,8 @@ namespace org.cchmc.pho.api.Controllers
         public async Task<IActionResult> GetContactPracticeDetails(string contact)
         {
             if (!int.TryParse(contact, out var contactId))
-            {               
-                _logger.LogInformation($"Failed to parse contactId - {contact}");
+            {                 
+                _logger.LogError($"Failed to parse contactId - {contact}");
                 return BadRequest("contact is not a valid integer");
             }
 
