@@ -48,20 +48,21 @@ namespace org.cchmc.pho.api.Controllers
             catch (Exception ex)
             {
                 // log any exceptions that happen and return the error to the user
-                _logger.LogError(ex, "An error occurred");
-                return StatusCode(500, "An error occurred");
+                _logger.LogError(ex, $"An error occurred: {ex.Message}");
+                return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }        
         
         [HttpGet("{contact}")]
-        [Authorize(Roles = "Practice Member,Practice Coordinator,Practice Admin,PHO Member,PHO Admin, PHO Leader")]
+        [AllowAnonymous]
+        //[Authorize(Roles = "Practice Member,Practice Coordinator,Practice Admin,PHO Member,PHO Admin, PHO Leader")]
         [SwaggerResponse(200, type: typeof(ContactPracticeDetailsVidewModel))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> GetContactPracticeDetails(string contact)
         {
             if (!int.TryParse(contact, out var contactId))
-            {
+            {               
                 _logger.LogInformation($"Failed to parse contactId - {contact}");
                 return BadRequest("contact is not a valid integer");
             }
@@ -79,13 +80,14 @@ namespace org.cchmc.pho.api.Controllers
             catch (Exception ex)
             {
                 // log any exceptions that happen and return the error to the user
-                _logger.LogError(ex, "An error occurred");
-                return StatusCode(500, "An error occurred");
+                _logger.LogError(ex, $"An error occurred: {ex.Message}");                
+                return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
 
         [HttpGet("practicelocations")]
-        [Authorize(Roles = "Practice Member,Practice Coordinator,Practice Admin,PHO Member,PHO Admin, PHO Leader")]
+        [AllowAnonymous]
+        //[Authorize(Roles = "Practice Member,Practice Coordinator,Practice Admin,PHO Member,PHO Admin, PHO Leader")]
         [SwaggerResponse(200, type: typeof(List<ContactPracticeLocationViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -103,10 +105,10 @@ namespace org.cchmc.pho.api.Controllers
 
             }
             catch(Exception ex)
-            {
+            {               
                 // log any exceptions that happen and return the error to the user
-                _logger.LogError(ex, "An error occurred");
-                return StatusCode(500, "An error occurred");
+                _logger.LogError(ex, $"An error occurred: {ex.Message}");
+                return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
 
