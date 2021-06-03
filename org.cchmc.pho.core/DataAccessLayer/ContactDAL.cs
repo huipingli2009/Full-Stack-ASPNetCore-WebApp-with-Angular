@@ -97,7 +97,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                             ContactPracticeLocations = await GetContactPracticeLocations(userId, practiceId)
                         };
                     }
-                };
+                }
             }
             return contactPracticeDetail;
         }
