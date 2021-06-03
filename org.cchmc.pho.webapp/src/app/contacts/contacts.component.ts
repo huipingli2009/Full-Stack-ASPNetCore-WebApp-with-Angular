@@ -46,11 +46,7 @@ export class ContactsComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    this.getAllContacts();
-
-    //for testing
-    this.getContactPracticeDetails(7);
-    //this.getContactPracticeLocations(7);
+    this.getAllContacts();   
   }
 
   getAllContacts() {
@@ -78,7 +74,7 @@ export class ContactsComponent implements OnInit {
       this.ContactDetailsForm.get('pmEmail').setValue(this.contactPracticeDetails.pmEmail);
       this.ContactDetailsForm.get('pic').setValue(this.contactPracticeDetails.pic);
       this.ContactDetailsForm.get('picEmail').setValue(this.contactPracticeDetails.picEmail);
-      //this.logger.log(this.contactPracticeDetails, 'ContactPracticeDetails');
+     
     });   
   } 
 
