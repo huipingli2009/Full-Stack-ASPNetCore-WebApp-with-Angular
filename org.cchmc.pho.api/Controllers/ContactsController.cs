@@ -51,10 +51,10 @@ namespace org.cchmc.pho.api.Controllers
                 _logger.LogError(ex, "An error occurred");
                 return StatusCode(500, "An error occurred");
             }
-        }
+        }        
         
-        [Authorize(Roles = "Practice Member,Practice Coordinator,Practice Admin,PHO Member,PHO Admin, PHO Leader")]
         [HttpGet("{contact}")]
+        [Authorize(Roles = "Practice Member,Practice Coordinator,Practice Admin,PHO Member,PHO Admin, PHO Leader")]
         [SwaggerResponse(200, type: typeof(ContactPracticeDetailsVidewModel))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -77,6 +77,32 @@ namespace org.cchmc.pho.api.Controllers
                 return Ok(result);
             }
             catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, "An error occurred");
+                return StatusCode(500, "An error occurred");
+            }
+        }
+
+        [HttpGet("practicelocations")]
+        [Authorize(Roles = "Practice Member,Practice Coordinator,Practice Admin,PHO Member,PHO Admin, PHO Leader")]
+        [SwaggerResponse(200, type: typeof(List<ContactPracticeLocationViewModel>))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> GetContactPracticeLocations(int practiceId)
+        {
+            try
+            {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+
+                var data = await _contact.GetContactPracticeLocations(currentUserId, practiceId);
+                var result = _mapper.Map<List<ContactPracticeLocationViewModel>>(data);
+
+                // return the result in a "200 OK" response
+                return Ok(result);
+
+            }
+            catch(Exception ex)
             {
                 // log any exceptions that happen and return the error to the user
                 _logger.LogError(ex, "An error occurred");

@@ -4,7 +4,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { NGXLogger } from 'ngx-logger';
 import { take } from 'rxjs/operators';
-import { Contact, ContactPracticeDetails } from '../models/contacts';
+import { Contact, ContactPracticeDetails, ContactPracticeLocations } from '../models/contacts';
 import { RestService } from '../rest.service';
 import { formatDate } from '@angular/common' ;
 
@@ -24,6 +24,7 @@ export class ContactsComponent implements OnInit {
 
   contactList: Contact[];
   contactPracticeDetails: ContactPracticeDetails;
+  contactPracticeLocations: ContactPracticeLocations;
   expandedElement: Contact | null;
   dataSourceContact: MatTableDataSource<any>;
   
@@ -48,7 +49,8 @@ export class ContactsComponent implements OnInit {
     this.getAllContacts();
 
     //for testing
-    //this.getContactPracticeDetails(7);
+    this.getContactPracticeDetails(7);
+    //this.getContactPracticeLocations(7);
   }
 
   getAllContacts() {
@@ -77,7 +79,14 @@ export class ContactsComponent implements OnInit {
       this.ContactDetailsForm.get('pic').setValue(this.contactPracticeDetails.pic);
       this.ContactDetailsForm.get('picEmail').setValue(this.contactPracticeDetails.picEmail);
       //this.logger.log(this.contactPracticeDetails, 'ContactPracticeDetails');
-    });
+    });   
   } 
+
+  getContactPracticeLocations(id: number){
+    return this.rest.getContactPracticeLocations(id).pipe(take(1)).subscribe((data)=>
+      this.contactPracticeLocations = data
+    );
+    console.log(this.contactPracticeLocations);
+  }
 }
 

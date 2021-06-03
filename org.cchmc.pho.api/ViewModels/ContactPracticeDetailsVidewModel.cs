@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace org.cchmc.pho.api.ViewModels
 {
@@ -11,5 +12,6 @@ namespace org.cchmc.pho.api.ViewModels
         public string PMEmail { get; set; }
         public string PIC { get; set; }
         public string PICEmail { get; set; }
+        public List<ContactPracticeLocationViewModel> ContactPracticeLocations { get; set; }
     }
 }

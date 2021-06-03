@@ -68,7 +68,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         {
             DataTable dataTable = new DataTable();
             ContactPracticeDetails contactPracticeDetail = null;
-
+          
             using(SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
                 SqlCommand sqlCommand = new SqlCommand("spGetContactPracticeDet", sqlConnection);
@@ -86,19 +86,60 @@ namespace org.cchmc.pho.core.DataAccessLayer
                     foreach( DataRow dr in dataTable.Rows)
                     {
                         contactPracticeDetail = new ContactPracticeDetails()
-                        {                            
+                        {
                             PracticeId = dr["PracticeID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PracticeId"].ToString()),
                             PracticeName = dr["PracticeName"].ToString(),
-                            MemberSince = dr["MemberSince"] == DBNull.Value? (DateTime?)null: DateTime.Parse(dr["MemberSince"].ToString()),
+                            MemberSince = dr["MemberSince"] == DBNull.Value ? (DateTime?)null : DateTime.Parse(dr["MemberSince"].ToString()),
                             PracticeManager = dr["PracticeManager"].ToString(),
                             PMEmail = dr["PMEmail"].ToString(),
                             PIC = dr["PIC"].ToString(),
-                            PICEmail = dr["PICEmail"].ToString()
+                            PICEmail = dr["PICEmail"].ToString(),
+                            ContactPracticeLocations = await GetContactPracticeLocations(userId, practiceId)
                         };
                     }
                 };
             }
             return contactPracticeDetail;
+        }
+        public async Task<List<ContactPracticeLocation>> GetContactPracticeLocations(int userId, int practiceId)
+        {
+            DataTable dataTable = new DataTable();
+            List<ContactPracticeLocation> locations = new List<ContactPracticeLocation>();
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                SqlCommand sqlCommand = new SqlCommand("spGetContactPracticeLocations", sqlConnection);
+
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                sqlCommand.Parameters.Add("@PracticeID", SqlDbType.Int).Value = practiceId;
+
+                await sqlConnection.OpenAsync();
+
+                using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                {
+                    da.Fill(dataTable);
+
+                    foreach(DataRow dr in dataTable.Rows)
+                    {
+                        ContactPracticeLocation location = new ContactPracticeLocation()
+                        {
+                            LocationId = dr["LocationID"] == DBNull.Value ? 0: Convert.ToInt32(dr["LocationID"].ToString()),
+                            PracticeId = dr["PracticeID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PracticeID"].ToString()),
+                            LocationName = dr["LocationName"].ToString(),
+                            OfficePhone = dr["OfficePhone"].ToString(),
+                            Fax = dr["Fax"].ToString(),
+                            County = dr["County"].ToString(),
+                            Address = dr["Address"].ToString(),
+                            City = dr["City"].ToString(),
+                            Zip = dr["Zip"].ToString()
+                        };
+
+                        locations.Add(location);
+                    }
+                }
+            }
+            return locations;
         }
     }
 }

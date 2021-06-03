@@ -12,7 +12,7 @@ import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.compo
 import { FileDetails, FileAction, ResourceType, Tag, Initiative, FileType, ContentPlacement } from './models/files';
 import { Location } from '@angular/common';
 import { MetricDrillthruTable } from './models/drillthru';
-import { Contact, ContactPracticeDetails } from './models/contacts';
+import { Contact, ContactPracticeDetails, ContactPracticeLocations } from './models/contacts';
 
 // we can now access environment.apiUrl
 const API_URL = environment.apiURL;
@@ -912,11 +912,22 @@ export class RestService {
   }
 
   /* Get contact details */
-  getContactPracticeDetails(id: number): Observable<ContactPracticeDetails>{
+  getContactPracticeDetails(id: number): Observable<ContactPracticeDetails>{ 
     return this.http.get<ContactPracticeDetails>(`${API_URL}/api/Contacts/${id}`).pipe(
       map((data: ContactPracticeDetails) =>{
         return data;
       })     
+    );
+  }
+
+  /*Get contact practice locations. This is part of the practice details */
+  getContactPracticeLocations(id: number): Observable<ContactPracticeLocations>{
+    let paramValue = new HttpParams();
+    paramValue = paramValue.append("practiceId", id.toString());
+    return this.http.get<ContactPracticeLocations>(`${API_URL}/api/Contacts/practicelocations`, {params: paramValue}).pipe(
+      map((data: ContactPracticeLocations) => {
+        return data;
+      })
     );
   }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace org.cchmc.pho.core.DataModels
 {
@@ -11,6 +12,6 @@ namespace org.cchmc.pho.core.DataModels
         public string PMEmail { get; set; }
         public string PIC { get; set; }
         public string PICEmail { get; set; }
-
+        public List<ContactPracticeLocation> ContactPracticeLocations { get; set; }
     }
 }

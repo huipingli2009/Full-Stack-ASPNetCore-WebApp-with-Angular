@@ -1,4 +1,6 @@
-﻿namespace org.cchmc.pho.api.ViewModels
+﻿using System.Collections.Generic;
+
+namespace org.cchmc.pho.api.ViewModels
 {
     public class ContactPracticeLocationViewModel
     {
@@ -10,6 +12,6 @@
         public string County { get; set; }
         public string Address { get; set; }
         public string City { get; set; }
-        public string Zip { get; set; }
+        public string Zip { get; set; }       
     }
 }
