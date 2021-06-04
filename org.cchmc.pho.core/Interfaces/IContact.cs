@@ -7,5 +7,7 @@ namespace org.cchmc.pho.core.Interfaces
     public interface IContact
     {
         Task<List<Contact>> GetContacts(int userId, bool? qpl, string specialty, string membership, string board, string namesearch);
+        Task<ContactPracticeDetails> GetContactPracticeDetails(int userId, int practiceId);
+        Task<List<ContactPracticeLocation>> GetContactPracticeLocations(int userId, int practiceId);
     }
 }

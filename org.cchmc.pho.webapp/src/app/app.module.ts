@@ -64,6 +64,7 @@ import { WorkbooksComponent } from './workbooks/workbooks.component';
 import { DrilldownComponent } from './drilldown/drilldown.component';
 import { DrilldownService } from './drilldown/drilldown.service';
 import { AuthGuard } from './guards/auth.guard';
+import { ContactsComponent } from './contacts/contacts.component';
 //import { JwtModule } from '@auth0/angular-jwt';
 
 @NgModule({
@@ -83,7 +84,8 @@ import { AuthGuard } from './guards/auth.guard';
     ReportComponent,
     FooterComponent,
     LegalDisclaimerComponent,
-    DrilldownComponent
+    DrilldownComponent,
+    ContactsComponent
   ],
   imports: [
     BrowserModule,

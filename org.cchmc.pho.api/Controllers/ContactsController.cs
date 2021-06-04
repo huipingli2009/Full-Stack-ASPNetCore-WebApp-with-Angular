@@ -48,10 +48,68 @@ namespace org.cchmc.pho.api.Controllers
             catch (Exception ex)
             {
                 // log any exceptions that happen and return the error to the user
-                _logger.LogError(ex, "An error occurred");
-                return StatusCode(500, "An error occurred");
+                _logger.LogError(ex, $"An error occurred: {ex.Message}");
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }        
+        
+        [HttpGet("{contact}")]        
+        [Authorize(Roles = "Practice Member,Practice Coordinator,Practice Admin,PHO Member,PHO Admin, PHO Leader")]
+        [SwaggerResponse(200, type: typeof(ContactPracticeDetailsVidewModel))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> GetContactPracticeDetails(string contact)
+        {
+            if (!int.TryParse(contact, out var contactId))
+            {                 
+                _logger.LogError($"Failed to parse contactId - {contact}");
+                return BadRequest("contact is not a valid integer");
+            }
+
+            try
+            {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+                // call the data method
+                var data = await _contact.GetContactPracticeDetails(currentUserId, contactId);
+                // perform the mapping from the data layer to the view model (if you want to expose/hide/transform certain properties)
+                var result = _mapper.Map<ContactPracticeDetailsVidewModel>(data);
+                // return the result in a "200 OK" response
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, $"An error occurred: {ex.Message}");                
+                return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
+
+        [HttpGet("practicelocations")]
+        [Authorize(Roles = "Practice Member,Practice Coordinator,Practice Admin,PHO Member,PHO Admin, PHO Leader")]
+        [SwaggerResponse(200, type: typeof(List<ContactPracticeLocationViewModel>))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> GetContactPracticeLocations(int practiceId)
+        {
+            try
+            {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+
+                var data = await _contact.GetContactPracticeLocations(currentUserId, practiceId);
+                var result = _mapper.Map<List<ContactPracticeLocationViewModel>>(data);
+
+                // return the result in a "200 OK" response
+                return Ok(result);
+
+            }
+            catch(Exception ex)
+            {               
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, $"An error occurred: {ex.Message}");
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
+
 
         //leave the coding below for future use
         // GET api/<ContactsController>/5

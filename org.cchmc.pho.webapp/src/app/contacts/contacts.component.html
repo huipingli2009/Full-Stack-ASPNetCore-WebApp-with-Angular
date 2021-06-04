@@ -1,0 +1,199 @@
+<p>Contacts</p>
+<div id="contactPage" class="content-main"> 
+    <div fxLayout="row" class="contacts-header">
+        <div fxLayout="column" class="header-filter filter-btn">
+            <button mat-button>All PHO</button>
+        </div>
+        <div fxLayout="column" class="header-filter filter-btn">
+            <button mat-button>QPLs and PAs</button>
+        </div>
+        <div fxLayout="column" class="header-filter filter-btn">
+            <button mat-button>Specialty</button>
+        </div>        
+        <div fxLayout="column" class="header-filter filter-btn">
+            <button mat-button>PHO Membership</button>
+        </div>
+        <div fxLayout="column" class="header-filter filter-btn">
+            <button mat-button>Board Members</button>
+        </div>
+        
+        <div fxLayout="column" class="header-filter search-input" fxFlex fxLayoutAlign="center end">
+            <mat-form-field>
+                <input matInput [formControl]="" 
+                    placeholder="search contacts or practices">
+                <button mat-button matSuffix mat-icon-button aria-label="Search">
+                    <mat-icon>search</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+    </div>
+    <div>
+    </div>
+    <mat-table id="contact" mat-table [dataSource]="dataSourceContact" class="mat-elevation-z8" multiTemplateDataRows>
+        <ng-container matColumnDef="arrow">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <i class="material-icons rotate-icon">
+                    keyboard_arrow_right
+                </i>
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="practiceName">
+            <mat-header-cell *matHeaderCellDef> NAME </mat-header-cell>
+            <mat-cell *matCellDef="let element" class="practice-name"> {{element.practiceName}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="practiceType">
+            <mat-header-cell *matHeaderCellDef> PRACTICE TYPE </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.practiceType}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="emr">
+            <mat-header-cell *matHeaderCellDef> EMR </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.emr}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="phone">
+            <mat-header-cell *matHeaderCellDef> PHONE </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.phone}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fax">
+            <mat-header-cell *matHeaderCellDef> FAX </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.fax}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="websiteURL" >
+            <mat-header-cell *matHeaderCellDef> WEBSITE </mat-header-cell>
+            <mat-cell *matCellDef="let element" class="practicewebsitelink"> 
+                <a href='{{element.websiteURL}}' target="_blank">GO TO WEBSITE</a>                
+            </mat-cell>
+        </ng-container>  
+
+        <!-- Hidden Column===============================================================-->
+        <!-- contact practiceId Column -->
+        <ng-container matColumnDef="practiceId">
+            <mat-header-cell *matHeaderCellDef> PracticeId </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.practiceId}} </mat-cell>
+        </ng-container>  
+
+        <ng-container matColumnDef="expandedDetail" >
+            <mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length"
+                [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                <div id="contact-details" fxFlex>
+                    <div fxLayout="row" class="detail-heading" fxLayoutAlign="flex-start center">
+                        CONTACT DETAILS
+                    </div>
+                    <form [formGroup]="ContactDetailsForm">
+                        <div class="contact-element-detail">
+                            <div fxLayout="row" fxLayoutGap="34px">
+                                
+                                <div fxLayout="column" fxFlex>
+                                    <mat-form-field floatLabel="always">
+                                        <mat-label>Practice Name </mat-label>
+                                        <input matInput formControlName="practiceName" class="practice-name">
+                                    </mat-form-field>
+                                    <ng-container
+                                        *ngIf="(ContactDetailsForm.get('practiceName').touched || ContactDetailsForm.get('practiceName').dirty) && (ContactDetailsForm.get('practiceName').errors)">
+                                        <mat-error *ngIf="ContactDetailsForm.get('practiceName').errors.required">
+                                            Required
+                                        </mat-error>
+                                    </ng-container>
+                                </div>
+                                <div fxLayout="column" fxFlex>
+                                    <mat-form-field floatLabel="always">
+                                        <mat-label>Member Since</mat-label>
+                                        <input matInput formControlName="memberSince">
+                                    </mat-form-field>
+                                    <ng-container
+                                        *ngIf="(ContactDetailsForm.get('memberSince').touched || ContactDetailsForm.get('memberSince').dirty) && (ContactDetailsForm.get('memberSince').errors)">
+                                        <mat-error *ngIf="ContactDetailsForm.get('memberSince').errors.required">
+                                            Required
+                                        </mat-error>
+                                    </ng-container>
+                                </div>
+                                <div fxLayout="column" fxFlex>
+                                    <mat-form-field floatLabel="always">
+                                        <mat-label>PRACTICE MANAGER</mat-label>
+                                        <input matInput formControlName="practiceManager" required>
+                                        <mat-icon matSuffix>
+                                            email
+                                        </mat-icon>
+                                    </mat-form-field>
+                                    <ng-container
+                                        *ngIf="(ContactDetailsForm.get('practiceManager').touched || ContactDetailsForm.get('practiceManager').dirty) && (ContactDetailsForm.get('practiceManager').errors)">
+                                        <mat-error *ngIf="ContactDetailsForm.get('practiceManager').errors.required">
+                                            Required
+                                        </mat-error>
+                                    </ng-container>
+                                </div>
+                                <div fxLayout="column" fxFlex [fxShow]=false>
+                                    <mat-form-field floatLabel="always">
+                                        <mat-label>PRACTICE MANAGER'S EMAIL</mat-label>
+                                        <input matInput formControlName="pmEmail" required>
+                                    </mat-form-field>
+                                    <ng-container
+                                        *ngIf="(ContactDetailsForm.get('pmEmail').touched || ContactDetailsForm.get('pmEmail').dirty) && (ContactDetailsForm.get('pmEmail').errors)">
+                                        <mat-error *ngIf="ContactDetailsForm.get('pmEmail').errors.required">
+                                            Required
+                                        </mat-error>
+                                    </ng-container>
+                                </div>
+                                <div fxLayout="column" fxFlex>
+                                    <mat-form-field floatLabel="always">
+                                        <mat-label>PIC</mat-label>
+                                        <input matInput formControlName="pic" required>
+                                        <mat-icon matSuffix>
+                                            email
+                                        </mat-icon>
+                                    </mat-form-field>
+                                    <ng-container
+                                        *ngIf="(ContactDetailsForm.get('pic').touched || ContactDetailsForm.get('pic').dirty) && (ContactDetailsForm.get('pic').errors)">
+                                        <mat-error *ngIf="ContactDetailsForm.get('pic').errors.required">
+                                            Required
+                                        </mat-error>
+                                    </ng-container>
+                                </div>
+                                <div fxLayout="column"  [fxShow]=false>
+                                    <mat-form-field floatLabel="always">
+                                        <mat-label>PIC'S EMAIL</mat-label>
+                                        <input matInput formControlName="picEmail" required>                                        
+                                    </mat-form-field>
+                                    <ng-container
+                                        *ngIf="(ContactDetailsForm.get('picEmail').touched || ContactDetailsForm.get('picEmail').dirty) && (ContactDetailsForm.get('picEmail').errors)">
+                                        <mat-error *ngIf="ContactDetailsForm.get('picEmail').errors.required">
+                                            Required
+                                        </mat-error>
+                                    </ng-container>
+                                </div>   
+                                
+                                <div fxLayout="column" fxFlex [fxShow]=false>
+                                    <mat-form-field floatLabel="always">
+                                        <mat-label>Practice Id</mat-label>
+                                        <input matInput formControlName="practiceId" required>
+                                    </mat-form-field>
+                                    <ng-container
+                                        *ngIf="(ContactDetailsForm.get('practiceId').touched || ContactDetailsForm.get('practiceId').dirty) && (ContactDetailsForm.get('practiceId').errors)">
+                                        <mat-error *ngIf="ContactDetailsForm.get('practiceId').errors.required">
+                                            Required
+                                        </mat-error>
+                                    </ng-container>
+                                </div>     
+                            </div>                                               
+                        </div>
+                    </form>
+                </div>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let element; columns: displayedColumns" 
+            class="contact-element-row"
+            [class.contact-expanded-row]="expandedElement === element" (click)="getContactPracticeDetails(element.practiceId)"
+            (click)="expandedElement=expandedElement===element ? null : element">
+        </mat-row>
+        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="contact-detail-row"></tr>
+    </mat-table>
+</div>
+
+

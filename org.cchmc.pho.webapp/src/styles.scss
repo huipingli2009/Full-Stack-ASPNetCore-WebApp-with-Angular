@@ -1157,7 +1157,8 @@ button.toast-close-button {
 #asthmaPatients,
 #staff,
 #workbook,
-#files {
+#files,
+#contact {
   width: 100%;
   border: solid 1px var(--primary-color);
   box-shadow: none;
@@ -1311,9 +1312,9 @@ button.toast-close-button {
 
 #patient-details,
 .pmca-dialog,
-#staff-details {
-  padding: 25px 51px;  
-
+#staff-details,
+#contact-details {
+  padding: 25px 51px; 
  
 
   .detail-heading {
@@ -1747,6 +1748,80 @@ button.toast-close-button {
   
 }
 #staff {
+  width: 100%;
+  border: solid 1px var(--primary-color);    
+
+  table {
+    width: 100%;
+    border-bottom-right-radius: 7px;
+    border-bottom-left-radius: 7px;  
+    //display:flex;   
+  }
+
+  .mat-row:nth-child(even) {
+    background-color: rgba(229, 238, 245, 0.41);
+  }
+  .mat-column-name {
+    color: #4a4a4a;
+    font-size: 13px;
+    line-height: 18px;
+    font-weight: bold;
+  }  
+
+  .mat-header-row {
+    background-color: rgba(0, 168, 150, 0.16);
+    height: 47px;
+    .mat-header-cell,
+    button {
+      font-size: 13px;
+      font-weight: bold;
+      line-height: 19px;
+      letter-spacing: 1px;
+      color: var(--primary-darker-color);
+      text-align: left;
+      text-transform: uppercase !important;          
+
+      button {
+        text-transform: uppercase;
+        height: 36px;                                            
+      } 
+      
+    } 
+    .staffButtonAlign {        
+      justify-content: flex-end;          
+    }   
+   
+  }
+
+  .mat-cell {
+    color: #4a4a4a;
+    font-size: 13px;
+    line-height: 18px;
+  }
+  .mat-column-credentials,
+  .mat-column-isRegistry {
+    max-width: 128px;
+  }
+
+  .mat-column-phone,
+  .mat-column-position {
+    max-width: 156px;
+  }
+  .mat-column-isRegistry {
+    font-weight: bold;
+    text-align: center !important;
+  }
+
+  .mat-column-email {
+    max-width: 86px;
+  }
+
+  tr.mat-row {
+    height: 0 !important;
+  }
+}
+
+#contact {
   width: 100%;
   border: solid 1px var(--primary-color);    
 
@@ -2879,6 +2954,236 @@ display: block !important;
 }
   }
 }
+
+/* Contacts =========================================================================== */
+#contactPage {
+  .contacts-header {
+    border-top-right-radius: 7px;
+    border-top-left-radius: 7px;
+    background-color: var(--primary-color);
+    font-size: 15px;
+    line-height: 20px;
+    color: white;
+    padding: 21px 35px 0;
+    font-weight: Bold;
+    text-align: left;
+    letter-spacing: normal;
+  
+    .header-filter {
+      margin-right: 36px;
+    }
+    .header-filter:last-of-type {
+      margin-right: 0;
+    }
+    .mat-form-field-appearance-legacy .mat-form-field-label,
+    .mat-select-value-text {
+      font-size: 15px;
+      line-height: 20px;
+      color: white;
+      font-weight: Bold;
+      letter-spacing: normal;
+    }
+    .mat-select-arrow {
+      color: white;
+    }
+    .mat-form-field-appearance-legacy .mat-form-field-underline {
+      background-color: white;
+    }
+    .search-input {
+      input {
+        background-color: rgba(209, 236, 233, 0.92);
+        color: var(--primary-darker-color);
+        font-size: 14px;
+        line-height: 15px;
+        letter-spacing: normal;
+        height: 31px;
+        border-radius: 18px;
+        border-bottom: none;
+        padding-left: 23px;
+      }
+      .mat-form-field-appearance-legacy .mat-form-field-label {
+        color: var(--primary-darker-color);
+        font-size: 10.5px;
+        line-height: 15px;
+        letter-spacing: normal;
+        top: 53%;
+        padding-left: 23px;
+      }
+      .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+        color: white;
+        display: none;
+      }
+      .mat-form-field-infix {
+        border: none;
+        padding: 0.875em 0 0.4375em;
+        width: 267px;
+      }
+      .mat-form-field-underline {
+        display: none;
+      }
+      .mat-form-field-suffix {
+        // Container with the Search Icon
+        left: -5px;
+      }
+      .mat-icon {
+        height: 39px;
+        color: var(--primary-darker-color);
+        padding-right: 13px;
+        font-size: 18px !important;
+      }    
+    }
+    .contact-expanded-row .rotate-icon {
+      -moz-transition: 0.5s;
+      -webkit-transition: 0.5s;
+      transition: 0.5s;
+      -ms-transform: rotate(90deg);
+      -moz-transform: rotate(90deg);
+      -webkit-transform: rotate(90deg);
+      transform: rotate(90deg);
+    }
+  }
+  .contact-element-detail {
+    .mat-icon {
+      color: var(--accent-color);
+      width: 14px;
+      margin-right: 10px;
+    }
+    .input-w-icon .mat-form-field-label-wrapper {
+      margin-left: -23px;
+    }  
+    
+    label {
+      font-size: 14px;
+    }
+    .mat-form-field-empty {
+      margin-left: 23px;
+    }
+    .mat-form-field-underline {
+      background-color: #ddecea;
+    }
+    .mat-select {
+      margin-top: 3px;
+    }
+    .date-picker-input {
+      .mat-form-field-label-wrapper {
+        margin-left: -18px;
+      }
+      .mat-icon {
+        font-size: 17px;
+      }
+      input {
+        padding-bottom: 0;
+        margin-top: 4px;
+        padding-left: 2px;
+      }
+    }
+    .check-row {
+      padding-bottom: 1.25em;
+      padding-top: 1.25em;
+    }
+    .check-subrow {
+      margin-bottom: 9px;
+      label {
+        font-size: 11px;
+      }
+    }
+  }
+  .contact-expanded-row .rotate-icon {
+    -moz-transition: 0.5s;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    -ms-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+  }
+  tr.contact-element-row:not(.staff-expanded-row):hover {
+    background: whitesmoke;
+  }
+
+  tr.contact-element-row:not(.contact-expanded-row):active {
+    background: #efefef;
+  }
+
+  .contact-element-row td {
+    border-bottom-width: 0;
+  }
+
+  .contact-element-diagram {
+    min-width: 80px;
+    border: 2px solid black;
+    padding: 8px;
+    font-weight: lighter;
+    margin: 8px 0;
+    height: 104px;
+  }
+
+  .contact-element-symbol {
+    font-weight: bold;
+    font-size: 40px;
+    line-height: normal;
+  }
+  
+  .contactDetailDivider {
+    height: 200px;
+    width: 2px;
+    background-color: black;
+  }
+  .practice-name {
+    color: black;
+    text-decoration: solid; 
+    font-weight: bold
+  }
+  .contact-detail-row {
+    display: contents;
+  }
+
+  tr.contact-detail-row {
+    height: 0;
+  } 
+
+  .contact-element-symbol {
+    font-weight: bold;
+    font-size: 40px;
+    line-height: normal;
+  }
+
+  .contact-element-description {
+    padding: 16px;
+  }
+
+  .contact-element-description-attribution {
+    opacity: 0.5;
+  } 
+
+  .mat-cell {
+    //color: #4a4a4a;
+    font-size: 13px;
+    line-height: 18px;  
+    border-radius: 10px;  
+  }
+
+  .practicewebsitelink.mat-cell {
+    background-color: #f0673c;   
+    font-size: 14px !important;   
+    color: white !important;
+    line-height: 15px !important;
+    letter-spacing: normal;
+    height: 15px !important;
+    // border-radius: 10px;
+    // border-bottom: none;
+    padding-left: 23px;
+       
+    a:link {
+      font-family: ArcherSemiBold;      
+      color: var(--purple-dark);      
+    }
+    
+  }
+  
+
+}
+
 
 
 

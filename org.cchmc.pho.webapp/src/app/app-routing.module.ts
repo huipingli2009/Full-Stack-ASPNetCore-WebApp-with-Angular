@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ContactsComponent } from './contacts/contacts.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FilesComponent } from './files/files.component';
 import { AuthGuard } from './guards/auth.guard';
@@ -14,7 +15,7 @@ import { WorkbooksComponent } from './workbooks/workbooks.component';
 const routes: Routes = [
   {
     path: '',
-    component: MainLayoutComponent,
+    component: MainLayoutComponent,   
     canActivate: [AuthGuard],
     children: [
       {
@@ -25,7 +26,7 @@ const routes: Routes = [
       {
         path: 'dashboard',
         component: DashboardComponent,
-        // canActivate: [AuthGuard],       
+             
         data: {
           title: 'Dashboard' // Keeping this as ex. in case we need to use Dynamic switching for menu titles etc.       
         },
@@ -38,7 +39,8 @@ const routes: Routes = [
           role: ['Practice Member','Practice Coordinator','Practice Admin','PHO Admin']
         },      
       },
-      {path: 'staff',
+      {
+        path: 'staff',
         component: StaffComponent,
         // canActivate: [AuthGuard],
         data: {         
@@ -57,9 +59,14 @@ const routes: Routes = [
         data: {         
           role: ['Practice Member','Practice Coordinator','Practice Admin','PHO Admin']
         }    
-      },
+      },     
     ]
   },
+  {
+    path: 'contacts',
+    component: ContactsComponent,    
+  },
+ 
   {
     path: '',
     component: LoginLayoutComponent,
@@ -74,7 +81,7 @@ const routes: Routes = [
       }     
     ]
   },
-  { path: '**', redirectTo: '' }];
+  { path: '**', redirectTo: 'home', pathMatch:'full' }];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
