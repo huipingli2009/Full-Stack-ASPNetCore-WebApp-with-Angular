@@ -16,10 +16,10 @@ export interface ContactPracticeDetails {
     pmEmail: string;
     pic: string;
     picEmail: string;
-    contactPracticeLocations: Array<ContactPracticeLocations>
+    contactPracticeLocations: Array<ContactPracticeLocation>
 }
 
-export class ContactPracticeLocations {
+export class ContactPracticeLocation {
     practiceId: number;
     locationId: number;    
     locationName: string;

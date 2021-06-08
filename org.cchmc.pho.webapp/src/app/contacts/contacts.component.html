@@ -86,8 +86,7 @@
                     </div>
                     <form [formGroup]="ContactDetailsForm">
                         <div class="contact-element-detail">
-                            <div fxLayout="row" fxLayoutGap="34px">
-                                
+                            <div fxLayout="row" fxLayoutGap="34px">                                
                                 <div fxLayout="column" fxFlex>
                                     <mat-form-field floatLabel="always">
                                         <mat-label>Practice Name </mat-label>
@@ -165,8 +164,7 @@
                                             Required
                                         </mat-error>
                                     </ng-container>
-                                </div>   
-                                
+                                </div>                                
                                 <div fxLayout="column" fxFlex [fxShow]=false>
                                     <mat-form-field floatLabel="always">
                                         <mat-label>Practice Id</mat-label>
@@ -178,7 +176,53 @@
                                             Required
                                         </mat-error>
                                     </ng-container>
-                                </div>     
+                                </div>
+                            <div fxLayout="row" fxLayoutGap="34px">
+                                <div fxLayout="row" fxFlex>
+                                    <div fxLayout="column" formArrayName="locations"
+                                          *ngFor="let item of ContactDetailsForm.get('locations')['controls']; let i = index;">
+                                          <div [formGroupName]="i">
+                                            <mat-form-field floatLabel="always">
+                                                <mat-label>Practice Id</mat-label>
+                                                <input matInput formControlName="practiceId">
+                                            </mat-form-field>
+                                            <mat-form-field floatLabel="always">
+                                                <mat-label>Location Id</mat-label>
+                                                <input matInput formControlName="locationId">
+                                            </mat-form-field>
+                                            <mat-form-field floatLabel="always">
+                                                <mat-label>location Name</mat-label>
+                                                <input matInput formControlName="locationName">
+                                            </mat-form-field>
+                                            <mat-form-field floatLabel="always">
+                                                <mat-label>Office Phone</mat-label>
+                                                <input matInput formControlName="officePhone">
+                                            </mat-form-field>
+                                            <mat-form-field floatLabel="always">
+                                                <mat-label>Fax</mat-label>
+                                                <input matInput formControlName="fax">
+                                            </mat-form-field>
+                                            <mat-form-field floatLabel="always">
+                                                <mat-label>County</mat-label>
+                                                <input matInput formControlName="county">
+                                            </mat-form-field>
+                                            <mat-form-field floatLabel="always">
+                                                <mat-label>Address</mat-label>
+                                                <input matInput formControlName="address">
+                                            </mat-form-field>
+                                            <mat-form-field floatLabel="always">
+                                                <mat-label>City</mat-label>
+                                                <input matInput formControlName="city">
+                                            </mat-form-field>
+                                            <mat-form-field floatLabel="always">
+                                                <mat-label>Zip</mat-label>
+                                                <input matInput formControlName="zip">
+                                            </mat-form-field>                                                                               
+                                          </div>
+                                    </div>                                   
+                                </div>
+                            </div>                                  
+                                
                             </div>                                               
                         </div>
                     </form>
