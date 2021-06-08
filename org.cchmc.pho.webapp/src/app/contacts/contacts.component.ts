@@ -21,6 +21,15 @@ import { formatDate } from '@angular/common' ;
   ],
 })
 export class ContactsComponent implements OnInit {
+
+  constructor(private rest: RestService, private logger: NGXLogger, private fb: FormBuilder) {
+    this.dataSourceContact = new MatTableDataSource;
+  }
+
+  get locations() {
+    return this.ContactDetailsForm.get('locations') as FormArray;
+  }
+
   contactList: Contact[];
   contactPracticeDetails: ContactPracticeDetails;
   contactPracticeLocations: ContactPracticeLocation[] = [];
@@ -37,22 +46,21 @@ export class ContactsComponent implements OnInit {
     pmEmail: ['', [Validators.required, Validators.email]],
     pic: [''],
     picEmail: ['', [Validators.required, Validators.email]],
-    contactPracticeLocations: this.fb.group({
-      practiceId: [''],
-      locationId: [''],    
-      locationName: [''],
-      officePhone: [''],
-      fax: [''],
-      county: [''], 
-      address: [''],
-      city: [''],  
-      zip: ['']  
-    })
+    locations: this.fb.array([
+      this.fb.group({
+        practiceId: [''],
+        locationId: [''],    
+        locationName: [''],
+        officePhone: [''],
+        fax: [''],
+        county: [''], 
+        address: [''],
+        city: [''],
+        state: [''],  
+        zip: ['']  
+      })
+    ]) 
   });
-
-  constructor(private rest: RestService, private logger: NGXLogger, private fb: FormBuilder) {
-    this.dataSourceContact = new MatTableDataSource;
-   }
 
   ngOnInit(): void {
     this.getAllContacts();     
@@ -101,6 +109,7 @@ export class ContactsComponent implements OnInit {
         county: element.county, 
         address: element.address,
         city: element.city, 
+        state: element.state,
         zip: element.zip 
       }));      
     });

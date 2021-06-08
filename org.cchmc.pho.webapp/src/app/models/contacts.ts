@@ -27,6 +27,7 @@ export class ContactPracticeLocation {
     fax: string;
     county: string; 
     address: string;
-    city: string;  
+    city: string; 
+    state: string; 
     zip: string  
 }
