@@ -84,7 +84,7 @@ import { ContactsComponent } from './contacts/contacts.component';
     FooterComponent,
     LegalDisclaimerComponent,
     DrilldownComponent,
-    ContactsComponent  
+    ContactsComponent    
   ],
   imports: [
     BrowserModule,

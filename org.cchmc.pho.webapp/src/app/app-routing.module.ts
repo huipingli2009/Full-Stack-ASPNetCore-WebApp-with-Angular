@@ -65,13 +65,10 @@ const routes: Routes = [
   
   {
     path: '',
-    component: MainLayoutComponent,    
+    component: MainLayoutComponent,   
     canActivate: [AuthGuard],
     children: [
-      {
-        path: 'contacts',
-        component: ContactsComponent, 
-      }
+      {path: 'contacts', component: ContactsComponent}
     ] 
   },
  
