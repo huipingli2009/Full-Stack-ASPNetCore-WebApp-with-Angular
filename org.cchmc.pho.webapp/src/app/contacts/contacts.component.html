@@ -1,4 +1,3 @@
-<p>Contacts</p>
 <div id="contactPage" class="content-main"> 
     <div fxLayout="row" class="contacts-header">
         <div fxLayout="column" class="header-filter filter-btn">
@@ -66,7 +65,7 @@
         <ng-container matColumnDef="websiteURL" >
             <mat-header-cell *matHeaderCellDef> WEBSITE </mat-header-cell>
             <mat-cell *matCellDef="let element" class="practicewebsitelink"> 
-                <a href='{{element.websiteURL}}' target="_blank">GO TO WEBSITE</a>                
+                <a href='{{element.websiteURL}}' target="_blank" (click)="$event.stopPropagation();"  style="color: #efefef">GO TO WEBSITE</a>                
             </mat-cell>
         </ng-container>  
 
@@ -91,25 +90,13 @@
                                     <mat-form-field floatLabel="always">
                                         <mat-label>Practice Name </mat-label>
                                         <input matInput formControlName="practiceName" class="practice-name" readonly>
-                                    </mat-form-field>
-                                    <ng-container
-                                        *ngIf="(ContactDetailsForm.get('practiceName').touched || ContactDetailsForm.get('practiceName').dirty) && (ContactDetailsForm.get('practiceName').errors)">
-                                        <mat-error *ngIf="ContactDetailsForm.get('practiceName').errors.required">
-                                            Required
-                                        </mat-error>
-                                    </ng-container>
+                                    </mat-form-field>                             
                                 </div>
                                 <div fxLayout="column" fxFlex>
                                     <mat-form-field floatLabel="always">
                                         <mat-label>Member Since</mat-label>
                                         <input matInput formControlName="memberSince" readonly> 
-                                    </mat-form-field>
-                                    <ng-container
-                                        *ngIf="(ContactDetailsForm.get('memberSince').touched || ContactDetailsForm.get('memberSince').dirty) && (ContactDetailsForm.get('memberSince').errors)">
-                                        <mat-error *ngIf="ContactDetailsForm.get('memberSince').errors.required">
-                                            Required
-                                        </mat-error>
-                                    </ng-container>
+                                    </mat-form-field>                                   
                                 </div>
                                 <div fxLayout="column" fxFlex>
                                     <mat-form-field floatLabel="always">
@@ -118,62 +105,32 @@
                                         <mat-icon matSuffix>
                                             email
                                         </mat-icon>
-                                    </mat-form-field>
-                                    <ng-container
-                                        *ngIf="(ContactDetailsForm.get('practiceManager').touched || ContactDetailsForm.get('practiceManager').dirty) && (ContactDetailsForm.get('practiceManager').errors)">
-                                        <mat-error *ngIf="ContactDetailsForm.get('practiceManager').errors.required">
-                                            Required
-                                        </mat-error>
-                                    </ng-container>
+                                    </mat-form-field>                                   
                                 </div>
                                 <div fxLayout="column" fxFlex [fxShow]=false>
                                     <mat-form-field floatLabel="always">
                                         <mat-label>PRACTICE MANAGER'S EMAIL</mat-label>
                                         <input matInput formControlName="pmEmail" readonly>
-                                    </mat-form-field>
-                                    <ng-container
-                                        *ngIf="(ContactDetailsForm.get('pmEmail').touched || ContactDetailsForm.get('pmEmail').dirty) && (ContactDetailsForm.get('pmEmail').errors)">
-                                        <mat-error *ngIf="ContactDetailsForm.get('pmEmail').errors.required">
-                                            Required
-                                        </mat-error>
-                                    </ng-container>
+                                    </mat-form-field>                                    
                                 </div>
                                 <div fxLayout="column" fxFlex>
                                     <mat-form-field floatLabel="always">
                                         <mat-label>PIC</mat-label>
                                         <input matInput formControlName="pic" readonly>
                                         <mat-icon matSuffix>email</mat-icon>
-                                    </mat-form-field>
-                                    <ng-container
-                                        *ngIf="(ContactDetailsForm.get('pic').touched || ContactDetailsForm.get('pic').dirty) && (ContactDetailsForm.get('pic').errors)">
-                                        <mat-error *ngIf="ContactDetailsForm.get('pic').errors.required">
-                                            Required
-                                        </mat-error>
-                                    </ng-container>
+                                    </mat-form-field>                                    
                                 </div>
                                 <div fxLayout="column"  [fxShow]=false>
                                     <mat-form-field floatLabel="always">
                                         <mat-label>PIC'S EMAIL</mat-label>
                                         <input matInput formControlName="picEmail" readonly>                                        
-                                    </mat-form-field>
-                                    <ng-container
-                                        *ngIf="(ContactDetailsForm.get('picEmail').touched || ContactDetailsForm.get('picEmail').dirty) && (ContactDetailsForm.get('picEmail').errors)">
-                                        <mat-error *ngIf="ContactDetailsForm.get('picEmail').errors.required">
-                                            Required
-                                        </mat-error>
-                                    </ng-container>
+                                    </mat-form-field>                                   
                                 </div>                                
                                 <div fxLayout="column" fxFlex [fxShow]=false>
                                     <mat-form-field floatLabel="always">
                                         <mat-label>Practice Id</mat-label>
                                         <input matInput formControlName="practiceId" readonly>
-                                    </mat-form-field>
-                                    <ng-container
-                                        *ngIf="(ContactDetailsForm.get('practiceId').touched || ContactDetailsForm.get('practiceId').dirty) && (ContactDetailsForm.get('practiceId').errors)">
-                                        <mat-error *ngIf="ContactDetailsForm.get('practiceId').errors.required">
-                                            Required
-                                        </mat-error>
-                                    </ng-container>
+                                    </mat-form-field>                                    
                                 </div>                           
                             </div>  
                             <div fxLayout="row" fxLayoutGap="34px" class="form-row">                                                           

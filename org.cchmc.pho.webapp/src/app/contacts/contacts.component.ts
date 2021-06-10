@@ -8,8 +8,7 @@ import { Contact, ContactPracticeDetails, ContactPracticeLocation} from '../mode
 import { RestService } from '../rest.service';
 import { formatDate } from '@angular/common' ;
 
-@Component({
-  //selector: 'app-contacts',
+@Component({ 
   templateUrl: './contacts.component.html',
   styleUrls: ['./contacts.component.scss'],
   animations: [
@@ -22,10 +21,7 @@ import { formatDate } from '@angular/common' ;
 })
 export class ContactsComponent implements OnInit {
 
-  constructor(private rest: RestService, private logger: NGXLogger, private fb: FormBuilder) {
-    this.dataSourceContact = new MatTableDataSource;
-  }
-
+  //location getter
   get locations() {
     return this.ContactDetailsForm.get('locations') as FormArray;
   }
@@ -35,6 +31,10 @@ export class ContactsComponent implements OnInit {
   contactPracticeLocations: ContactPracticeLocation[] = [];
   expandedElement: Contact | null;
   dataSourceContact: MatTableDataSource<any>;
+
+  constructor(private rest: RestService, private logger: NGXLogger, private fb: FormBuilder) {
+    this.dataSourceContact = new MatTableDataSource;
+  }
   
   displayedColumns: string[] = ['arrow', 'practiceName', 'practiceType', 'emr', 'phone', 'fax', 'websiteURL'];
 
@@ -118,12 +118,12 @@ export class ContactsComponent implements OnInit {
 
   getContactPracticeLocations(id: number){
     return this.rest.getContactPracticeLocations(id).pipe(take(1)).subscribe((data)=>{
-     //loop thru contact practice locations and push to contactPracticeLocations 
+     //loop thru practice locations and push to contactPracticeLocations 
      for (let i = 0; i < data.length; i++){
         this.contactPracticeLocations.push(data[i]);
      }
       this.logger.log(this.contactPracticeLocations,'Practice locations');
     });   
-  }
+  } 
 }
 
