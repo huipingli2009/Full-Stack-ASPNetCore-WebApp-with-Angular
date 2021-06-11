@@ -24,8 +24,6 @@ import { FilterService } from '../services/filter.service';
 export class HeaderComponent {  
   isLoggedIn$: boolean;
 
-  // test: string="huiping.li@cchmc.org";
-
   @ViewChild(ToastContainerDirective, { static: false }) toastContainer: ToastContainerDirective;
   @ViewChild('passwordDialog') passwordDialog: TemplateRef<any>;
   @ViewChild('updatePassConfirmDialog') updatePassConfirmDialog: TemplateRef<any>;

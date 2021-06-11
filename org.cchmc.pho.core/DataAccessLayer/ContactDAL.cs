@@ -132,6 +132,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                             County = dr["County"].ToString(),
                             Address = dr["Address"].ToString(),
                             City = dr["City"].ToString(),
+                            State = dr["State"].ToString(),
                             Zip = dr["Zip"].ToString()
                         };
 

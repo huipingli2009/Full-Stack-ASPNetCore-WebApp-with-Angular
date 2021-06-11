@@ -3163,29 +3163,25 @@ display: block !important;
     border-radius: 10px;  
   }
 
-  .practicewebsitelink.mat-cell {
-    background-color: #f0673c;   
-    font-size: 14px !important;   
-    color: white !important;
+  .practicewebsitelink.mat-cell {   
+    font-size: 14px !important;       
     line-height: 15px !important;
     letter-spacing: normal;
-    height: 15px !important;
-    // border-radius: 10px;
-    // border-bottom: none;
-    padding-left: 23px;
+    height: 15px !important;       
+    padding-left: 23px;  
        
     a:link {
       font-family: ArcherSemiBold;      
-      color: var(--purple-dark);      
-    }
-    
+      background-color:#f0673c;      
+      border-radius: 5pt; 
+      padding-left: 23px; 
+      padding-right: 24px; 
+      padding-top: 5px;
+      padding-bottom: 5px;
+      text-decoration: none;     
+    }    
   }
-  
-
 }
-
-
-
 
 
 

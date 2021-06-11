@@ -62,9 +62,14 @@ const routes: Routes = [
       },     
     ]
   },
+  
   {
-    path: 'contacts',
-    component: ContactsComponent,    
+    path: '',
+    component: MainLayoutComponent,   
+    canActivate: [AuthGuard],
+    children: [
+      {path: 'contacts', component: ContactsComponent}
+    ] 
   },
  
   {

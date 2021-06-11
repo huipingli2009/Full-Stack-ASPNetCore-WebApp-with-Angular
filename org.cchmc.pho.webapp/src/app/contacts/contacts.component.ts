@@ -1,15 +1,14 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { NGXLogger } from 'ngx-logger';
 import { take } from 'rxjs/operators';
-import { Contact, ContactPracticeDetails, ContactPracticeLocations } from '../models/contacts';
+import { Contact, ContactPracticeDetails, ContactPracticeLocation} from '../models/contacts';
 import { RestService } from '../rest.service';
 import { formatDate } from '@angular/common' ;
 
-@Component({
-  //selector: 'app-contacts',
+@Component({ 
   templateUrl: './contacts.component.html',
   styleUrls: ['./contacts.component.scss'],
   animations: [
@@ -22,11 +21,20 @@ import { formatDate } from '@angular/common' ;
 })
 export class ContactsComponent implements OnInit {
 
+  //location getter
+  get locations() {
+    return this.ContactDetailsForm.get('locations') as FormArray;
+  }
+
   contactList: Contact[];
   contactPracticeDetails: ContactPracticeDetails;
-  contactPracticeLocations: ContactPracticeLocations;
+  contactPracticeLocations: ContactPracticeLocation[] = [];
   expandedElement: Contact | null;
   dataSourceContact: MatTableDataSource<any>;
+
+  constructor(private rest: RestService, private logger: NGXLogger, private fb: FormBuilder) {
+    this.dataSourceContact = new MatTableDataSource;
+  }
   
   displayedColumns: string[] = ['arrow', 'practiceName', 'practiceType', 'emr', 'phone', 'fax', 'websiteURL'];
 
@@ -37,16 +45,25 @@ export class ContactsComponent implements OnInit {
     practiceManager: [''],
     pmEmail: ['', [Validators.required, Validators.email]],
     pic: [''],
-    picEmail: ['', [Validators.required, Validators.email]]  
+    picEmail: ['', [Validators.required, Validators.email]],
+    locations: this.fb.array([
+      this.fb.group({
+        practiceId: [''],
+        locationId: [''],    
+        locationName: [''],
+        officePhone: [''],
+        fax: [''],
+        county: [''], 
+        address: [''],
+        city: [''],
+        state: [''],  
+        zip: ['']  
+      })
+    ]) 
   });
 
-
-  constructor(private rest: RestService, private logger: NGXLogger, private fb: FormBuilder) {
-    this.dataSourceContact = new MatTableDataSource;
-   }
-
   ngOnInit(): void {
-    this.getAllContacts();   
+    this.getAllContacts();     
   }
 
   getAllContacts() {
@@ -74,15 +91,39 @@ export class ContactsComponent implements OnInit {
       this.ContactDetailsForm.get('pmEmail').setValue(this.contactPracticeDetails.pmEmail);
       this.ContactDetailsForm.get('pic').setValue(this.contactPracticeDetails.pic);
       this.ContactDetailsForm.get('picEmail').setValue(this.contactPracticeDetails.picEmail);
-     
+
+      //Practice locations
+      this.ContactDetailsForm.setControl('locations', this.populateExistingLocations(this.contactPracticeDetails.contactPracticeLocations));     
     });   
-  } 
+  }
+  
+  populateExistingLocations(locations: Array<ContactPracticeLocation>): FormArray {
+    const locationFormArray = new FormArray([]);
+    locations.forEach(element => {
+      locationFormArray.push(this.fb.group({
+        practiceId: element.practiceId,
+        locationId: element.locationId,
+        locationName: element.locationName,
+        officePhone: element.officePhone,
+        fax: element.fax,
+        county: element.county, 
+        address: element.address,
+        city: element.city, 
+        state: element.state,
+        zip: element.zip 
+      }));      
+    });
+    return locationFormArray;
+  }
 
   getContactPracticeLocations(id: number){
-    return this.rest.getContactPracticeLocations(id).pipe(take(1)).subscribe((data)=>
-      this.contactPracticeLocations = data
-    );
-    console.log(this.contactPracticeLocations);
-  }
+    return this.rest.getContactPracticeLocations(id).pipe(take(1)).subscribe((data)=>{
+     //loop thru practice locations and push to contactPracticeLocations 
+     for (let i = 0; i < data.length; i++){
+        this.contactPracticeLocations.push(data[i]);
+     }
+      this.logger.log(this.contactPracticeLocations,'Practice locations');
+    });   
+  } 
 }
 
