@@ -110,6 +110,54 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
+        [HttpGet("contactstafflist")]
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin, PHO Leader")]
+        [SwaggerResponse(200, type: typeof(List<ContactPracticeStaffViewModel>))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> GetContactPracticeStaffList(int practiceId)
+        {
+            try
+            {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+
+                var data = await _contact.GetContactPracticeStaffList(currentUserId, practiceId);
+                var result = _mapper.Map<List<ContactPracticeStaffViewModel>>(data);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // log any exceptions that happen and return the error to the user
+                _logger.LogError(ex, $"An error occurred: {ex.Message}");
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
+
+        [HttpGet("contactstaffdetails")]
+        [AllowAnonymous]
+        [SwaggerResponse(200, type: typeof(ContactPracticeStaffDetailsViewModel))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(200, type: typeof(string))]
+
+        public async Task<IActionResult> GetContactStaffDetails(int staffId)
+        {
+            try
+            {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+
+                var data = await _contact.GetContactStaffDetails(currentUserId, staffId);
+                var result = _mapper.Map<ContactPracticeStaffDetailsViewModel>(data);
+
+                return Ok(result);
+            }
+
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, $"An error occured: {ex.Message}");
+                return StatusCode(500, $"An error occured: {ex.Message}");
+            }
+        }
 
         //leave the coding below for future use
         // GET api/<ContactsController>/5
