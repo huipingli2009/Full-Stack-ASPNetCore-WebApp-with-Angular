@@ -65,7 +65,6 @@ import { DrilldownComponent } from './drilldown/drilldown.component';
 import { DrilldownService } from './drilldown/drilldown.service';
 import { AuthGuard } from './guards/auth.guard';
 import { ContactsComponent } from './contacts/contacts.component';
-//import { JwtModule } from '@auth0/angular-jwt';
 
 @NgModule({
   declarations: [
@@ -85,7 +84,7 @@ import { ContactsComponent } from './contacts/contacts.component';
     FooterComponent,
     LegalDisclaimerComponent,
     DrilldownComponent,
-    ContactsComponent
+    ContactsComponent    
   ],
   imports: [
     BrowserModule,
@@ -109,8 +108,7 @@ import { ContactsComponent } from './contacts/contacts.component';
       serverLogLevel: environment.serverLogLevel,
       disableConsoleLogging: environment.disableConsoleLogging
     }),
-    ToastContainerModule,
-    //JwtModule.forRoot({}),
+    ToastContainerModule,    
     ChartsModule,
     MatSliderModule,
     MatMenuModule,
