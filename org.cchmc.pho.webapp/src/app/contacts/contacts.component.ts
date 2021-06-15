@@ -118,11 +118,8 @@ export class ContactsComponent implements OnInit {
 
   getContactPracticeLocations(id: number){
     return this.rest.getContactPracticeLocations(id).pipe(take(1)).subscribe((data)=>{
-     //loop thru practice locations and push to contactPracticeLocations 
-     for (let i = 0; i < data.length; i++){
-        this.contactPracticeLocations.push(data[i]);
-     }
-      this.logger.log(this.contactPracticeLocations,'Practice locations');
+      this.contactPracticeLocations = data;
+      this.logger.log(this.contactPracticeLocations,'Practice locations');   
     });   
   } 
 }

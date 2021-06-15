@@ -49,7 +49,7 @@ namespace org.cchmc.pho.api.Controllers
             {
                 // log any exceptions that happen and return the error to the user
                 _logger.LogError(ex, $"An error occurred: {ex.Message}");
-                return StatusCode(500, $"An error occurred: {ex.Message}");
+                return StatusCode(500, $"An error occurred");
             }
         }        
         
@@ -80,7 +80,7 @@ namespace org.cchmc.pho.api.Controllers
             {
                 // log any exceptions that happen and return the error to the user
                 _logger.LogError(ex, $"An error occurred: {ex.Message}");                
-                return StatusCode(500, $"An error occurred: {ex.Message}");
+                return StatusCode(500, $"An error occurred");
             }
         }
 
@@ -106,7 +106,7 @@ namespace org.cchmc.pho.api.Controllers
             {               
                 // log any exceptions that happen and return the error to the user
                 _logger.LogError(ex, $"An error occurred: {ex.Message}");
-                return StatusCode(500, $"An error occurred: {ex.Message}");
+                return StatusCode(500, $"An error occurred");
             }
         }
 
@@ -130,12 +130,12 @@ namespace org.cchmc.pho.api.Controllers
             {
                 // log any exceptions that happen and return the error to the user
                 _logger.LogError(ex, $"An error occurred: {ex.Message}");
-                return StatusCode(500, $"An error occurred: {ex.Message}");
+                return StatusCode(500, $"An error occurred");
             }
         }
 
         [HttpGet("contactstaffdetails")]
-        [AllowAnonymous]
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin, PHO Leader")]
         [SwaggerResponse(200, type: typeof(ContactPracticeStaffDetailsViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(200, type: typeof(string))]
@@ -155,7 +155,7 @@ namespace org.cchmc.pho.api.Controllers
             catch(Exception ex)
             {
                 _logger.LogError(ex, $"An error occured: {ex.Message}");
-                return StatusCode(500, $"An error occured: {ex.Message}");
+                return StatusCode(500, $"An error occured");
             }
         }
 
