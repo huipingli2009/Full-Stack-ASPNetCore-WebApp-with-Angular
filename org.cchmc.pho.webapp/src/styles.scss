@@ -78,6 +78,14 @@ body {
 body {
   margin: 0;
   background-color: #fafafa;
+
+  .mat-checkbox-inner-container {
+    height: 8px;
+    width: 8px;      
+  }
+  .mat-checkbox-label{
+    font-size: 8px;   
+  }
 }
 h1 {
   font-family: "ArcherSemiBold" !important;
@@ -1413,8 +1421,14 @@ button.toast-close-button {
     color: #4a4a4a;
     font-size: 13px;
     line-height: 18px;
-    letter-spacing: normal;
-    
+    letter-spacing: normal;    
+  }
+
+  .location-details {    
+    font-size: 13px;
+    line-height: 18px;
+    letter-spacing: normal;      
+    background-color: #f5f5f5;    
   }
   #addressLine1 {
     min-width: 288px;
@@ -3087,6 +3101,15 @@ display: block !important;
         font-size: 11px;
       }
     }
+    .mat-checkbox {
+      ::ng-deep .mat-checkbox-inner-container {
+          width: 10px;
+          height: 100px;
+          label {
+            font-size: 5px;
+          }
+        }
+    }
   }
   .contact-expanded-row .rotate-icon {
     -moz-transition: 0.5s;
@@ -3136,6 +3159,13 @@ display: block !important;
   }
   .contact-detail-row {
     display: contents;
+
+    .rectangle-4 {
+      box-sizing: border-box;
+      height: 600px;
+      width: 1238px;
+      border: 1px solid rgba(0,109,99,0.57);
+    }
   }
 
   tr.contact-detail-row {
