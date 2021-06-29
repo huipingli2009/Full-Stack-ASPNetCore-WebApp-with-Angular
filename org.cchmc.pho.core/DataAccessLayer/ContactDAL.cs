@@ -200,7 +200,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                         {
                             Id = Convert.ToInt32(dr["StaffID"].ToString()),
                             StaffName = dr["StaffName"].ToString(),
-                            Email = dr["StaffName"].ToString(),
+                            Email = dr["EmailAddress"].ToString(),
                             Phone = dr["Phone"].ToString(),
                             Position = dr["Position"].ToString(),
                             NPI = (dr["NPI"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["NPI"].ToString())),
