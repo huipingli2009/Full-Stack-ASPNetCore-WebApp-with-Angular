@@ -76,124 +76,224 @@
             <mat-cell *matCellDef="let element"> {{element.practiceId}} </mat-cell>
         </ng-container>  
 
-        <ng-container matColumnDef="expandedDetail" >
+        <ng-container matColumnDef="expandedDetail">
             <mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length"
                 [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-                <div id="contact-details" fxFlex>
-                    <div fxLayout="row" class="detail-heading">
-                        PRACTICE DETAILS
-                    </div>
-                    <form [formGroup]="ContactDetailsForm">
-                        <div class="contact-element-detail">
-                            <div fxLayout="row" fxLayoutGap="34px" class="form-row">                                
-                                <div fxLayout="column" fxFlex>
-                                    <mat-form-field floatLabel="always">
-                                        <mat-label>Practice Name </mat-label>
-                                        <input matInput formControlName="practiceName" class="practice-name" readonly>
-                                    </mat-form-field>                             
-                                </div>
-                                <div fxLayout="column" fxFlex>
-                                    <mat-form-field floatLabel="always">
-                                        <mat-label>Member Since</mat-label>
-                                        <input matInput formControlName="memberSince" readonly> 
-                                    </mat-form-field>                                   
-                                </div>
-                                <div fxLayout="column" fxFlex>
-                                    <mat-form-field floatLabel="always">
-                                        <mat-label>PRACTICE MANAGER</mat-label>
-                                        <input matInput formControlName="practiceManager" readonly>
-                                        <mat-icon matSuffix>
-                                            email
-                                        </mat-icon>
-                                    </mat-form-field>                                   
-                                </div>
-                                <div fxLayout="column" fxFlex [fxShow]=false>
-                                    <mat-form-field floatLabel="always">
-                                        <mat-label>PRACTICE MANAGER'S EMAIL</mat-label>
-                                        <input matInput formControlName="pmEmail" readonly>
-                                    </mat-form-field>                                    
-                                </div>
-                                <div fxLayout="column" fxFlex>
-                                    <mat-form-field floatLabel="always">
-                                        <mat-label>PIC</mat-label>
-                                        <input matInput formControlName="pic" readonly>
-                                        <mat-icon matSuffix>email</mat-icon>
-                                    </mat-form-field>                                    
-                                </div>
-                                <div fxLayout="column"  [fxShow]=false>
-                                    <mat-form-field floatLabel="always">
-                                        <mat-label>PIC'S EMAIL</mat-label>
-                                        <input matInput formControlName="picEmail" readonly>                                        
-                                    </mat-form-field>                                   
-                                </div>                                
-                                <div fxLayout="column" fxFlex [fxShow]=false>
-                                    <mat-form-field floatLabel="always">
-                                        <mat-label>Practice Id</mat-label>
-                                        <input matInput formControlName="practiceId" readonly>
-                                    </mat-form-field>                                    
-                                </div>                           
-                            </div>  
-                            <div fxLayout="row" fxLayoutGap="34px" class="form-row">                                                           
-                                <div fxLayout="column" fxLayoutGap="34px" class="form-row">
-                                    <div fxLayout="column" class="detail-heading">
-                                        LOCATION DETAILS
-                                    </div>  
-                                    <div fxLayout="column">
-                                        <div fxLayout="column" formArrayName="locations"
-                                              *ngFor="let item of ContactDetailsForm.get('locations')['controls']; let i = index;">
-                                              <div [formGroupName]="i">
-                                                <div fxLayout="row" fxLayoutGap="34px" class="form-row">
-                                                    <mat-form-field floatLabel="always" [fxShow]=false>
-                                                        <mat-label>Practice Id</mat-label>
-                                                        <input matInput formControlName="practiceId">
-                                                    </mat-form-field>
-                                                    <mat-form-field floatLabel="always" [fxShow]=false>
-                                                        <mat-label>Location Id</mat-label>
-                                                        <input matInput formControlName="locationId">
-                                                    </mat-form-field>
-                                                    <mat-form-field floatLabel="always">
-                                                        <mat-label>location Name</mat-label>
-                                                        <input matInput formControlName="locationName">
-                                                    </mat-form-field>
-                                                    <mat-form-field floatLabel="always" class="input-w-icon">                                                        
-                                                        <mat-label>Office Phone</mat-label>                                                       
-                                                        <mat-icon matPrefix>phone</mat-icon>
-                                                        <input matInput formControlName="officePhone">
-                                                    </mat-form-field>
-                                                    <mat-form-field floatLabel="always">
-                                                        <mat-label>Fax</mat-label>
-                                                        <input matInput formControlName="fax">
-                                                    </mat-form-field>
-                                                    <mat-form-field floatLabel="always">
-                                                        <mat-label>County</mat-label>
-                                                        <input matInput formControlName="county">
-                                                    </mat-form-field>
-                                                </div>
-                                                <div fxLayout="row" fxLayoutGap="34px" class="form-row">                                                   
-                                                    <mat-form-field floatLabel="always">
-                                                        <mat-label>Address</mat-label>
-                                                        <input matInput formControlName="address">
-                                                    </mat-form-field>
-                                                    <mat-form-field floatLabel="always" fxFlex>
-                                                        <mat-label>City</mat-label>
-                                                        <input matInput formControlName="city">
-                                                    </mat-form-field>
-                                                    <mat-form-field floatLabel="always">
-                                                        <mat-label>State</mat-label>
-                                                        <input matInput formControlName="state">
-                                                    </mat-form-field> 
-                                                    <mat-form-field floatLabel="always">
-                                                        <mat-label>Zip</mat-label>
-                                                        <input matInput formControlName="zip">
-                                                    </mat-form-field>      
-                                                </div>                                                                                                                
-                                              </div>                                             
-                                        </div>                                   
-                                    </div>
-                                </div>                                
-                            </div>                                           
+                <div fxLayout="row">
+                    <div id="contact-details" fxLayout="column" fxFlex="55">
+                        <div fxLayout="row" class="detail-heading">
+                            PRACTICE DETAILS
                         </div>
-                    </form>
+                        <div fxLayout="row">           
+                            <form [formGroup]="ContactDetailsForm">
+                                <div class="contact-element-detail" fxFlex="90">
+                                    <div fxLayout="row" fxLayoutGap="34px" class="form-row">                                
+                                        <div fxLayout="column" fxFlex="20">
+                                            <mat-form-field floatLabel="always">
+                                                <mat-label>Practice Name </mat-label>
+                                                <input matInput formControlName="practiceName" class="practice-name" readonly>
+                                            </mat-form-field>                             
+                                        </div>
+                                        <div fxLayout="column" fxFlex="20">
+                                            <mat-form-field floatLabel="always">
+                                                <mat-label>Member Since</mat-label>
+                                                <input matInput formControlName="memberSince" readonly> 
+                                            </mat-form-field>                                   
+                                        </div>
+                                        <div fxLayout="column" fxFlex="23">
+                                            <mat-form-field floatLabel="always">
+                                                <mat-label>PRACTICE MANAGER</mat-label>
+                                                <input matInput formControlName="practiceManager" readonly>
+                                                <mat-icon matSuffix>
+                                                    email
+                                                </mat-icon>
+                                            </mat-form-field>                                   
+                                        </div>
+                                        <div fxLayout="column" [fxShow]=false>
+                                            <mat-form-field floatLabel="always">
+                                                <mat-label>PRACTICE MANAGER'S EMAIL</mat-label>
+                                                <input matInput formControlName="pmEmail" readonly>
+                                            </mat-form-field>                                    
+                                        </div>
+                                        <div fxLayout="column" fxFlex="23">
+                                            <mat-form-field floatLabel="always">
+                                                <mat-label>PIC</mat-label>
+                                                <input matInput formControlName="pic" readonly>
+                                                <mat-icon matSuffix>email</mat-icon>
+                                            </mat-form-field>                                    
+                                        </div>
+                                        <div fxLayout="column"  [fxShow]=false>
+                                            <mat-form-field floatLabel="always">
+                                                <mat-label>PIC'S EMAIL</mat-label>
+                                                <input matInput formControlName="picEmail" readonly>                                        
+                                            </mat-form-field>                                   
+                                        </div>                                
+                                        <div fxLayout="column" fxFlex [fxShow]=false>
+                                            <mat-form-field floatLabel="always">
+                                                <mat-label>Practice Id</mat-label>
+                                                <input matInput formControlName="practiceId" readonly>
+                                            </mat-form-field>                                    
+                                        </div>                           
+                                    </div>  
+                                    <div fxLayout="row" fxLayoutGap="34px" class="location-details">                                                           
+                                        <div fxLayout="column" fxLayoutGap="34px" class="form-row">
+                                            <div fxLayout="column" class="detail-heading">
+                                                LOCATION DETAILS
+                                            </div>  
+                                            <div fxLayout="column">
+                                                <div fxLayout="column" formArrayName="locations"
+                                                    *ngFor="let item of ContactDetailsForm.get('locations')['controls']; let i = index;">
+                                                    <div [formGroupName]="i">
+                                                        <div fxLayout="row" fxLayoutGap="34px" class="form-row">
+                                                            <mat-form-field floatLabel="always" [fxShow]=false>
+                                                                <mat-label>Practice Id</mat-label>
+                                                                <input matInput formControlName="practiceId" readonly>
+                                                            </mat-form-field>
+                                                            <mat-form-field floatLabel="always" [fxShow]=false>
+                                                                <mat-label>Location Id</mat-label>
+                                                                <input matInput formControlName="locationId" readonly>
+                                                            </mat-form-field>
+                                                            <mat-form-field floatLabel="always">
+                                                                <mat-label>location Name</mat-label>
+                                                                <input matInput formControlName="locationName" readonly>
+                                                            </mat-form-field>
+                                                            <mat-form-field floatLabel="always" class="input-w-icon">                                                        
+                                                                <mat-label>Office Phone</mat-label>                                                       
+                                                                <mat-icon matPrefix>phone</mat-icon>
+                                                                <input matInput formControlName="officePhone" readonly>
+                                                            </mat-form-field>
+                                                            <mat-form-field floatLabel="always">
+                                                                <mat-label>Fax</mat-label>
+                                                                <input matInput formControlName="fax" readonly>
+                                                            </mat-form-field>
+                                                            <mat-form-field floatLabel="always">
+                                                                <mat-label>County</mat-label>
+                                                                <input matInput formControlName="county" readonly>
+                                                            </mat-form-field>
+                                                        </div>
+                                                        <div fxLayout="row" fxLayoutGap="34px" class="form-row">                                                   
+                                                            <mat-form-field floatLabel="always">
+                                                                <mat-label>Address</mat-label>
+                                                                <input matInput formControlName="address" readonly>
+                                                            </mat-form-field>
+                                                            <mat-form-field floatLabel="always" fxFlex>
+                                                                <mat-label>City</mat-label>
+                                                                <input matInput formControlName="city" readonly>
+                                                            </mat-form-field>
+                                                            <mat-form-field floatLabel="always">
+                                                                <mat-label>State</mat-label>
+                                                                <input matInput formControlName="state" readonly>
+                                                            </mat-form-field> 
+                                                            <mat-form-field floatLabel="always">
+                                                                <mat-label>Zip</mat-label>
+                                                                <input matInput formControlName="zip" readonly>
+                                                            </mat-form-field>      
+                                                        </div>                                                                                                                                                                      
+                                                    </div>                                             
+                                                </div>                                   
+                                            </div>                                   
+                                        </div>                                                           
+                                    </div>                                           
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div id="contact-details" fxLayout="column">
+                        <div fxLayout="row" class="detail-heading">
+                            PROVIDER LOOKUP
+                        </div>
+                        <div fxLayout="row" fxLayoutGap="34px" class="form-row">  
+                            <div fxLayout="column" fxFlex="70">
+                                <mat-form-field>
+                                    <mat-label>SELECT PROVIDER OR STAFF</mat-label>
+                                    <mat-select [(ngModel)]="selectedContactStaff" (selectionChange)="contactStaffSelected($event)">
+                                    <mat-option *ngFor="let contactstaff of contactPracticeStaffList" [value]="contactstaff.staffId">
+                                        {{contactstaff.staffName}}
+                                    </mat-option>                                 
+                                    </mat-select>
+                                </mat-form-field>                                                               
+                            </div>                                                                       
+                        </div>  
+                        <form [formGroup]="ContactProvidersForm">
+                            <div class="contact-element-detail">                            
+                                <div fxLayout="row" fxLayoutGap="34px" class="form-row">                     
+                                    <div fxLayout="column" fxFlex>
+                                        <mat-form-field floatLabel="always">
+                                            <mat-label>EMAIL</mat-label>
+                                            <input matInput formControlName="email" readonly>
+                                        </mat-form-field>                             
+                                    </div>
+                                    <div fxLayout="column" fxFlex>
+                                        <mat-form-field floatLabel="always">
+                                            <mat-label>PHONE</mat-label>
+                                            <input matInput formControlName="phone" readonly> 
+                                        </mat-form-field>                                   
+                                    </div>                                                                                        
+                                </div>
+                                <div fxLayout="row" fxLayoutGap="34px" class="form-row">                     
+                                    <div fxLayout="column" fxFlex>
+                                        <mat-form-field floatLabel="always">
+                                            <mat-label>POSITION</mat-label>
+                                            <input matInput formControlName="position" readonly>
+                                        </mat-form-field>                             
+                                    </div>
+                                    <div fxLayout="column" fxFlex>
+                                        <mat-form-field floatLabel="always">
+                                            <mat-label>NPI</mat-label>
+                                            <input matInput formControlName="npi" readonly> 
+                                        </mat-form-field>                                   
+                                    </div>                                                                                        
+                                </div>
+                                <div fxLayout="row" fxLayoutGap="34px" class="form-row">                     
+                                    <div fxLayout="column" fxFlex>
+                                        <mat-form-field floatLabel="always">
+                                            <mat-label>LOCATIONS</mat-label>
+                                            <input matInput formControlName="locations" readonly>
+                                        </mat-form-field>                             
+                                    </div>
+                                    <div fxLayout="column" fxFlex>
+                                        <mat-form-field floatLabel="always">
+                                            <mat-label>SPECIALTY</mat-label>
+                                            <input matInput formControlName="specialty" readonly> 
+                                        </mat-form-field>                                   
+                                    </div>                                                                                        
+                                </div>
+                                <div fxLayout="row" fxLayoutGap="80px" class="form-row">                         
+                                    <div fxLayout="column" fxFlex="62px" class="form-row">
+                                        <mat-checkbox formControlName="specialty" disabled>Comm Specialist</mat-checkbox>                                                            
+                                    </div> 
+                                    <div fxLayout="column" fxFlex="62px" class="form-row">
+                                        <mat-checkbox formControlName="ovpcaPhysician" disabled>OVPCA Physician</mat-checkbox>                                                            
+                                    </div> 
+                                    <div fxLayout="column" fxFlex="62px" class="form-row">
+                                        <mat-checkbox formControlName="ovpcaMidLevel" disabled>OVPCA Mid Level</mat-checkbox>                                                            
+                                    </div>                                                                                                                                      
+                                </div>                         
+                                <div fxLayout="row" fxLayoutGap="34px" class="form-row">                     
+                                    <div fxLayout="column" fxFlex>
+                                        <mat-form-field floatLabel="always">
+                                            <mat-label>RESPONSIBILITIES</mat-label>
+                                            <input matInput formControlName="responsibilities" readonly>
+                                        </mat-form-field>                             
+                                    </div>
+                                    <div fxLayout="column" fxFlex>
+                                        <mat-form-field floatLabel="always">
+                                            <mat-label>BOARD MEMBERSHIP</mat-label>
+                                            <input matInput formControlName="boardMembership" readonly> 
+                                        </mat-form-field>                                   
+                                    </div>                                                                                        
+                                </div>  
+                                <div fxLayout="row" fxLayoutGap="34px" class="form-row">                      
+                                    <div fxLayout="column" fxFlex>
+                                        <mat-form-field floatLabel="always">
+                                            <mat-label>NOTES ABOUT THIS PROVIDER</mat-label>
+                                            <input matInput formControlName="notesAboutProvider" readonly> 
+                                        </mat-form-field>                                   
+                                    </div>                                                                                        
+                                </div>                                                                               
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </mat-cell>
         </ng-container>
@@ -201,8 +301,8 @@
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let element; columns: displayedColumns" 
             class="contact-element-row"
-            [class.contact-expanded-row]="expandedElement === element" (click)="getContactPracticeDetails(element.practiceId)"
-            (click)="expandedElement=expandedElement===element ? null : element">
+            [class.contact-expanded-row]="expandedElement === element" 
+            (click)="expandedElement=expandedElement===element ? null : element; getContactPracticeDetailWithProviders(element.practiceId);">
         </mat-row>
         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="contact-detail-row"></tr>
     </mat-table>

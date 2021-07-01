@@ -31,3 +31,25 @@ export class ContactPracticeLocation {
     state: string; 
     zip: string  
 }
+
+export interface ContactPracticeStaff {
+    staffId: number;
+    staffName: string
+}
+
+export interface ContactPracticeStaffDetails {
+    id: number;
+    staffName: string;      
+    email: string;
+    phone: string;      
+    position: string;      
+    npi: number;
+    locations: string;
+    specialty: string;
+    commSpecialist: boolean;
+    ovpcaPhysician: boolean;
+    ovpcaMidLevel: boolean;
+    responsibilities: string;
+    boardMembership: string;     
+    notesAboutProvider: string      
+}

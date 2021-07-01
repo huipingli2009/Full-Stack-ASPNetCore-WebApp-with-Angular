@@ -28,7 +28,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             {
                 using (SqlCommand sqlCommand = new SqlCommand("[spGetContactList]", sqlConnection))
                 {
-                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
                     sqlCommand.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
                     sqlCommand.Parameters.Add("@QPL", SqlDbType.Bit).Value = qpl;
                     sqlCommand.Parameters.Add("@Specialty", SqlDbType.VarChar, 50).Value = specialty;
@@ -141,6 +141,82 @@ namespace org.cchmc.pho.core.DataAccessLayer
                 }
             }
             return locations;
+        }
+        public async Task<List<ContactPracticeStaff>> GetContactPracticeStaffList(int userId, int practiceId)
+        {
+            List<ContactPracticeStaff> practiceStaffList = new List<ContactPracticeStaff>();
+            DataTable dataTable = new DataTable();
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            { 
+                using (SqlCommand sqlCommand = new SqlCommand("spGetContactStaffList", sqlConnection))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                    sqlCommand.Parameters.Add("@PracticeID", SqlDbType.Int).Value = practiceId;
+
+                    await sqlConnection.OpenAsync();
+
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                    {
+                        da.Fill(dataTable);
+
+                        foreach(DataRow dr in dataTable.Rows)
+                        {
+                            var staff = new ContactPracticeStaff()
+                            {
+                                StaffId = (dr["StaffId"] == DBNull.Value ? 0: Convert.ToInt32(dr["StaffId"].ToString())),
+                                StaffName = dr["StaffName"].ToString()
+                            };
+
+                            practiceStaffList.Add(staff);
+                        }
+                    }
+                }            
+            }
+            return practiceStaffList;
+        }
+        public async Task<ContactPracticeStaffDetails> GetContactStaffDetails(int userId, int staffId)
+        {
+            DataTable dataTable = new DataTable();
+            ContactPracticeStaffDetails staffDetails  = null;
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                SqlCommand sqlCommand = new SqlCommand("spGetContactStaffDetail", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+
+                sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                sqlCommand.Parameters.Add("@StaffID", SqlDbType.Int).Value = staffId;
+                await sqlConnection.OpenAsync();
+
+                using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                {
+                    da.Fill(dataTable);
+
+                    foreach (DataRow dr in dataTable.Rows)
+                    {
+                        staffDetails = new ContactPracticeStaffDetails()
+                        {
+                            Id = Convert.ToInt32(dr["StaffID"].ToString()),
+                            StaffName = dr["StaffName"].ToString(),
+                            Email = dr["EmailAddress"].ToString(),
+                            Phone = dr["Phone"].ToString(),
+                            Position = dr["Position"].ToString(),
+                            NPI = (dr["NPI"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["NPI"].ToString())),
+                            Locations = dr["Locations"].ToString(),
+                            Specialty = dr["Specialty"].ToString(),
+                            CommSpecialist = (dr["CommSpecialist"] != DBNull.Value && Convert.ToBoolean(dr["CommSpecialist"])),
+                            OVPCAPhysician = (dr["OVPCAPhysician"] != DBNull.Value && Convert.ToBoolean(dr["OVPCAPhysician"])),
+                            OVPCAMidLevel = (dr["OVPCAMidLevel"] != DBNull.Value && Convert.ToBoolean(dr["OVPCAMidLevel"])),
+                            Responsibilities = dr["Responsibilities"].ToString(),
+                            BoardMembership = dr["BoardMembership"].ToString(),
+                            NotesAboutProvider = dr["NotesAboutProvider"].ToString()
+                        };                            
+                    }
+                }
+            }
+            return staffDetails;
         }
     }
 }

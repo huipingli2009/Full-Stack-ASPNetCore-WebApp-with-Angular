@@ -12,7 +12,7 @@ import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.compo
 import { FileDetails, FileAction, ResourceType, Tag, Initiative, FileType, ContentPlacement } from './models/files';
 import { Location } from '@angular/common';
 import { MetricDrillthruTable } from './models/drillthru';
-import { Contact, ContactPracticeDetails, ContactPracticeLocation } from './models/contacts';
+import { Contact, ContactPracticeDetails, ContactPracticeLocation, ContactPracticeStaff, ContactPracticeStaffDetails} from './models/contacts';
 
 // we can now access environment.apiUrl
 const API_URL = environment.apiURL;
@@ -929,6 +929,28 @@ export class RestService {
         return data;
       })
     );
+  }
+
+  /*Get contact staff list. This is the source for provider/staff dropdown*/
+  getContactPracticeStaffList(practiceId: number): Observable<ContactPracticeStaff[]>{
+    let paramValue = new HttpParams();
+    paramValue = paramValue.append("practiceId", practiceId.toString());
+    return this.http.get<ContactPracticeStaff[]>(`${API_URL}/api/Contacts/contactstafflist`, {params: paramValue}).pipe(
+      map((data: ContactPracticeStaff[]) => {
+        return data;
+      })
+    );
+  }
+
+  /*Get contact staff details for provider/staff section*/
+  getContactStaffDetails(staffId: number): Observable<ContactPracticeStaffDetails>{
+    let paramsValue = new HttpParams();
+    paramsValue = paramsValue.append("staffId", staffId.toString());
+    return this.http.get<ContactPracticeStaffDetails>(`${API_URL}/api/Contacts/contactstaffdetails`,{params: paramsValue}).pipe(
+      map((data:ContactPracticeStaffDetails) => {
+        return data;
+      })
+    );    
   }
 
   private handleError<T>(operation = 'operation', result?: T) {    

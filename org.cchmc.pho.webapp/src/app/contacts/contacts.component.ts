@@ -4,7 +4,7 @@ import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { NGXLogger } from 'ngx-logger';
 import { take } from 'rxjs/operators';
-import { Contact, ContactPracticeDetails, ContactPracticeLocation} from '../models/contacts';
+import { Contact, ContactPracticeDetails, ContactPracticeLocation, ContactPracticeStaff, ContactPracticeStaffDetails} from '../models/contacts';
 import { RestService } from '../rest.service';
 import { formatDate } from '@angular/common' ;
 
@@ -29,6 +29,9 @@ export class ContactsComponent implements OnInit {
   contactList: Contact[];
   contactPracticeDetails: ContactPracticeDetails;
   contactPracticeLocations: ContactPracticeLocation[] = [];
+  contactPracticeStaffList: ContactPracticeStaff[] = [];
+  selectedContactStaff: ContactPracticeStaff;
+  contactPracticeStaffDetails: ContactPracticeStaffDetails;
   expandedElement: Contact | null;
   dataSourceContact: MatTableDataSource<any>;
 
@@ -62,8 +65,25 @@ export class ContactsComponent implements OnInit {
     ]) 
   });
 
-  ngOnInit(): void {
-    this.getAllContacts();     
+  ContactProvidersForm = this.fb.group({
+    id: [''],
+    staffName: [''],      
+    email: [''],
+    phone: [''],      
+    position: [''],      
+    npi: [''],
+    locations: [''],
+    specialty: [''],
+    commSpecialist: [''],
+    ovpcaPhysician: [''],
+    ovpcaMidLevel: [''],
+    responsibilities: [''],
+    boardMembership: [''],     
+    notesAboutProvider: ['']     
+  });
+
+  ngOnInit(): void {   
+    this.getAllContacts();    
   }
 
   getAllContacts() {
@@ -76,6 +96,11 @@ export class ContactsComponent implements OnInit {
     });
   }
 
+  getContactPracticeDetailWithProviders(practiceId: number){
+    this.getContactPracticeDetails(practiceId);
+    this.getContactPracticeStaffList(practiceId);
+  }
+  
   getContactPracticeDetails(id: number){
     this.rest.getContactPracticeDetails(id).pipe(take(1)).subscribe((data) =>
     {
@@ -118,12 +143,43 @@ export class ContactsComponent implements OnInit {
 
   getContactPracticeLocations(id: number){
     return this.rest.getContactPracticeLocations(id).pipe(take(1)).subscribe((data)=>{
-     //loop thru practice locations and push to contactPracticeLocations 
-     for (let i = 0; i < data.length; i++){
-        this.contactPracticeLocations.push(data[i]);
-     }
-      this.logger.log(this.contactPracticeLocations,'Practice locations');
+      this.contactPracticeLocations = data;
+      this.logger.log(this.contactPracticeLocations,'Practice locations');   
     });   
   } 
+
+  //the provider dropdown list
+  getContactPracticeStaffList(practiceId: number){
+    this.ContactProvidersForm.reset();
+    return this.rest.getContactPracticeStaffList(practiceId).pipe(take(1)).subscribe((data: ContactPracticeStaff[])=>{
+      this.contactPracticeStaffList = data;
+      this.logger.log(this.contactPracticeStaffList,'Practice staff list'); 
+    });
+  } 
+   
+  //get selected provider/staff's details
+  contactStaffSelected(event){
+    const staffId = event.value;
+    return this.rest.getContactStaffDetails(staffId).pipe(take(1)).subscribe((data: ContactPracticeStaffDetails)=>{
+      this.contactPracticeStaffDetails = data;
+
+      this.ContactProvidersForm.get('id').setValue(this.contactPracticeStaffDetails.id);
+      this.ContactProvidersForm.get('staffName').setValue(this.contactPracticeStaffDetails.staffName);
+      this.ContactProvidersForm.get('email').setValue(this.contactPracticeStaffDetails.email);
+      this.ContactProvidersForm.get('phone').setValue(this.contactPracticeStaffDetails.phone);
+      this.ContactProvidersForm.get('position').setValue(this.contactPracticeStaffDetails.position);
+      this.ContactProvidersForm.get('npi').setValue(this.contactPracticeStaffDetails.npi);
+      this.ContactProvidersForm.get('locations').setValue(this.contactPracticeStaffDetails.locations);
+      this.ContactProvidersForm.get('specialty').setValue(this.contactPracticeStaffDetails.specialty);
+      this.ContactProvidersForm.get('commSpecialist').setValue(this.contactPracticeStaffDetails.commSpecialist);
+      this.ContactProvidersForm.get('ovpcaPhysician').setValue(this.contactPracticeStaffDetails.ovpcaPhysician);
+      this.ContactProvidersForm.get('ovpcaMidLevel').setValue(this.contactPracticeStaffDetails.ovpcaMidLevel);
+      this.ContactProvidersForm.get('responsibilities').setValue(this.contactPracticeStaffDetails.responsibilities);
+      this.ContactProvidersForm.get('boardMembership').setValue(this.contactPracticeStaffDetails.boardMembership);
+      this.ContactProvidersForm.get('notesAboutProvider').setValue(this.contactPracticeStaffDetails.notesAboutProvider);
+
+      this.logger.log(this.contactPracticeStaffDetails,'Contact practice staff details'); 
+    });
+  }  
 }
 
