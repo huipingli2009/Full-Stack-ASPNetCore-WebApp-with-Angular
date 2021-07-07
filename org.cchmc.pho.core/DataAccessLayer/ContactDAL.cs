@@ -299,14 +299,14 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                     foreach(DataRow dr in dt.Rows)
                     {
-                        var boardship = new BoardMembership()
+                        var boardmembership = new BoardMembership()
                         {
                             Id = Convert.ToInt32(dr["Id"].ToString()),
                             BoardName = dr["BoardName"].ToString(),
                             Description = dr["Description"].ToString(),
                             Hyperlink = dr["Hyperlink"].ToString()
                         };
-                        boardMemberships.Add(boardship);
+                        boardMemberships.Add(boardmembership);
                     }
                 }
 
