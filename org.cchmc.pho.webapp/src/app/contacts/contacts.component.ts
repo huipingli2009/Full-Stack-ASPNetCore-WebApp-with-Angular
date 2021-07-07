@@ -4,7 +4,7 @@ import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { NGXLogger } from 'ngx-logger';
 import { take } from 'rxjs/operators';
-import { Boardship, Contact, ContactPracticeDetails, ContactPracticeLocation, ContactPracticeStaff, ContactPracticeStaffDetails, PHOMembership, Specialty} from '../models/contacts';
+import { BoardMembership, Contact, ContactPracticeDetails, ContactPracticeLocation, ContactPracticeStaff, ContactPracticeStaffDetails, PHOMembership, Specialty} from '../models/contacts';
 import { RestService } from '../rest.service';
 import { formatDate } from '@angular/common' ;
 
@@ -38,7 +38,7 @@ export class ContactsComponent implements OnInit {
   //dropdowns for contact header filters
   phomembershipList: PHOMembership[] = [];
   contactPracticeSpecialties: Specialty[] = [];
-  contactPracticeBoardship: Boardship[] = [];  
+  contactPracticeBoardMembership: BoardMembership[] = [];  
 
   constructor(private rest: RestService, private logger: NGXLogger, private fb: FormBuilder) {
     this.dataSourceContact = new MatTableDataSource;
@@ -206,9 +206,9 @@ export class ContactsComponent implements OnInit {
 
   //get Contact boardship list
   getContactPracticeBoardship(){
-    return this.rest.getContactPracticeBoardship().pipe(take(1)).subscribe((data: Boardship[]) =>{
-      this.contactPracticeBoardship = data;
-      this.logger.log(this.contactPracticeBoardship, 'Contact practice boardship');
+    return this.rest.getContactPracticeBoardMembership().pipe(take(1)).subscribe((data: BoardMembership[]) =>{
+      this.contactPracticeBoardMembership = data;
+      this.logger.log(this.contactPracticeBoardMembership, 'Contact practice board membership');
     });
   }
 }

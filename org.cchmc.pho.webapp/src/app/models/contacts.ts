@@ -53,7 +53,7 @@ export interface ContactPracticeStaffDetails {
     boardMembership: string;     
     notesAboutProvider: string      
 }
-export interface Boardship {
+export interface BoardMembership {
     id: number;
     boardName: string;
     description: string;
@@ -62,7 +62,7 @@ export interface Boardship {
 
 export interface Specialty {
     id: number;
-    specialtyArea: string;
+    specialtyName: string;
 }
 
 export interface PHOMembership {

@@ -12,7 +12,7 @@ import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.compo
 import { FileDetails, FileAction, ResourceType, Tag, Initiative, FileType, ContentPlacement } from './models/files';
 import { Location } from '@angular/common';
 import { MetricDrillthruTable } from './models/drillthru';
-import { Boardship, Contact, ContactPracticeDetails, ContactPracticeLocation, ContactPracticeStaff, ContactPracticeStaffDetails, PHOMembership, Specialty} from './models/contacts';
+import { BoardMembership, Contact, ContactPracticeDetails, ContactPracticeLocation, ContactPracticeStaff, ContactPracticeStaffDetails, PHOMembership, Specialty} from './models/contacts';
 
 // we can now access environment.apiUrl
 const API_URL = environment.apiURL;
@@ -971,10 +971,10 @@ export class RestService {
     );
   }
 
-  /*Get Boardship for Contact Page header*/
-  getContactPracticeBoardship(): Observable<Boardship[]>{
-    return this.http.get<Boardship[]>(`${API_URL}/api/Contacts/boardship`).pipe(
-      map((data: Boardship[])=>{
+  /*Get BoardMembership for Contact Page header*/
+  getContactPracticeBoardMembership(): Observable<BoardMembership[]>{
+    return this.http.get<BoardMembership[]>(`${API_URL}/api/Contacts/boardmembership`).pipe(
+      map((data: BoardMembership[])=>{
         return data;
       })
     );

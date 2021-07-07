@@ -1,6 +1,6 @@
 ﻿namespace org.cchmc.pho.core.DataModels
 {
-    public class Boardship
+    public class BoardMembership
     {
         public int Id { get; set; }
         public string BoardName { get; set; }

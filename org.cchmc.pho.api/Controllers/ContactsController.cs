@@ -177,7 +177,7 @@ namespace org.cchmc.pho.api.Controllers
             catch(Exception ex)
             {
                 _logger.LogError(ex, $"An error occured: {ex.Message}");
-                return StatusCode(500, "Error occurred when fetching contacts");
+                return StatusCode(500, "Error occurred when fetching specialty");
             }
         }
         
@@ -199,29 +199,29 @@ namespace org.cchmc.pho.api.Controllers
             catch(Exception ex)
             {
                 _logger.LogError(ex, $"An error occured: {ex.Message}");
-                return StatusCode(500, "Error occurred when fetching contacts");
+                return StatusCode(500, "Error occurred when fetching PHO membership");
             }
         }
 
         //dropdown list for boardship
-        [HttpGet("boardship")]       
+        [HttpGet("boardmembership")]       
         [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin, PHO Leader")]
-        [SwaggerResponse(200, type: typeof(List<BoardshipViewModel>))]
+        [SwaggerResponse(200, type: typeof(List<BoardMembershipViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> GetContactPracticeBoardship()
+        public async Task<IActionResult> GetContactPracticeBoardMembership()
         {
             try
             {
-                var data = await _contact.GetContactPracticeBoardship();
-                var result = _mapper.Map<List<BoardshipViewModel>>(data);
+                var data = await _contact.GetContactPracticeBoardMembership();
+                var result = _mapper.Map<List<BoardMembershipViewModel>>(data);
 
                 return Ok(result);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"An error occured: {ex.Message}");
-                return StatusCode(500, "Error occurred when fetching contacts");
+                return StatusCode(500, "Error occurred when fetching board membership");
             }
         }
         //leave the coding below for future use

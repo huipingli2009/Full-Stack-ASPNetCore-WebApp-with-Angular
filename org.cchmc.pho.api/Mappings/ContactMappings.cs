@@ -13,7 +13,7 @@ namespace org.cchmc.pho.api.Mappings
             CreateMap<ContactPracticeLocation, ContactPracticeLocationViewModel>();
             CreateMap<ContactPracticeStaff, ContactPracticeStaffViewModel>();
             CreateMap<ContactPracticeStaffDetails, ContactPracticeStaffDetailsViewModel>();
-            CreateMap<Boardship, BoardshipViewModel>();
+            CreateMap<BoardMembership, BoardMembershipViewModel>();
             CreateMap<Specialty, SpecialtyViewModel>();
             CreateMap<PHOMembership, PHOMembershipViewModel>();
         }

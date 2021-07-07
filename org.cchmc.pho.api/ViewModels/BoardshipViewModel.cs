@@ -1,6 +1,6 @@
 ﻿namespace org.cchmc.pho.api.ViewModels
 {
-    public class BoardshipViewModel
+    public class BoardMembershipViewModel
     {
         public int Id { get; set; }
         public string BoardName { get; set; }

@@ -271,7 +271,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
                         var specialty = new Specialty()
                         {
                             Id = Convert.ToInt32(dr["Id"].ToString()),
-                            SpecialtyArea = dr["Specialty"].ToString()
+                            SpecialtyName = dr["Specialty"].ToString()
                         };
                         practiceSpecialties.Add(specialty);
                     }
@@ -280,9 +280,9 @@ namespace org.cchmc.pho.core.DataAccessLayer
             return practiceSpecialties;
         }
 
-        public async Task<List<Boardship>> GetContactPracticeBoardship()
+        public async Task<List<BoardMembership>> GetContactPracticeBoardMembership()
         {
-            var boardships = new List<Boardship>();
+            var boardMemberships = new List<BoardMembership>();
 
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
@@ -299,19 +299,19 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                     foreach(DataRow dr in dt.Rows)
                     {
-                        var boardship = new Boardship()
+                        var boardship = new BoardMembership()
                         {
                             Id = Convert.ToInt32(dr["Id"].ToString()),
                             BoardName = dr["BoardName"].ToString(),
                             Description = dr["Description"].ToString(),
                             Hyperlink = dr["Hyperlink"].ToString()
                         };
-                        boardships.Add(boardship);
+                        boardMemberships.Add(boardship);
                     }
                 }
 
             }
-            return boardships;
+            return boardMemberships;
         }
     }
 }
