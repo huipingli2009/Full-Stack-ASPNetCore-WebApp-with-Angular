@@ -4,7 +4,7 @@ import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { NGXLogger } from 'ngx-logger';
 import { take } from 'rxjs/operators';
-import { Contact, ContactPracticeDetails, ContactPracticeLocation, ContactPracticeStaff, ContactPracticeStaffDetails} from '../models/contacts';
+import { Boardship, Contact, ContactPracticeDetails, ContactPracticeLocation, ContactPracticeStaff, ContactPracticeStaffDetails, PHOMembership, Specialty} from '../models/contacts';
 import { RestService } from '../rest.service';
 import { formatDate } from '@angular/common' ;
 
@@ -34,6 +34,11 @@ export class ContactsComponent implements OnInit {
   contactPracticeStaffDetails: ContactPracticeStaffDetails;
   expandedElement: Contact | null;
   dataSourceContact: MatTableDataSource<any>;
+
+  //dropdowns for contact header filters
+  phomembershipList: PHOMembership[] = [];
+  contactPracticeSpecialties: Specialty[] = [];
+  contactPracticeBoardship: Boardship[] = [];  
 
   constructor(private rest: RestService, private logger: NGXLogger, private fb: FormBuilder) {
     this.dataSourceContact = new MatTableDataSource;
@@ -82,7 +87,7 @@ export class ContactsComponent implements OnInit {
     notesAboutProvider: ['']     
   });
 
-  ngOnInit(): void {   
+  ngOnInit(): void { 
     this.getAllContacts();    
   }
 
@@ -92,6 +97,7 @@ export class ContactsComponent implements OnInit {
       this.contactList = data;
       this.dataSourceContact = new MatTableDataSource(this.contactList);
       this.dataSourceContact.data = this.contactList;
+      
       this.logger.log(this.contactList, 'Contacts');
     });
   }
@@ -181,5 +187,29 @@ export class ContactsComponent implements OnInit {
       this.logger.log(this.contactPracticeStaffDetails,'Contact practice staff details'); 
     });
   }  
+
+  //get PHO membership
+  getContactPracticePHOMembership(){
+    return this.rest.getContactPracticePHOMembership().pipe(take(1)).subscribe((data: PHOMembership[]) => {
+      this.phomembershipList = data;
+      this.logger.log(this.phomembershipList,'PHO membership list'); 
+    })
+  }
+
+  //get contact practice specialties
+  getContactPracticeSpecialties(){
+    return this.rest.getContactPracticeSpecialties().pipe(take(1)).subscribe((data: Specialty[])=>{
+      this.contactPracticeSpecialties = data;
+      this.logger.log(this.contactPracticeSpecialties, 'Contact practice specialties');
+    });
+  }
+
+  //get Contact boardship list
+  getContactPracticeBoardship(){
+    return this.rest.getContactPracticeBoardship().pipe(take(1)).subscribe((data: Boardship[]) =>{
+      this.contactPracticeBoardship = data;
+      this.logger.log(this.contactPracticeBoardship, 'Contact practice boardship');
+    });
+  }
 }
 

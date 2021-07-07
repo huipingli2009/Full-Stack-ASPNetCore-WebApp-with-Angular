@@ -53,3 +53,19 @@ export interface ContactPracticeStaffDetails {
     boardMembership: string;     
     notesAboutProvider: string      
 }
+export interface Boardship {
+    id: number;
+    boardName: string;
+    description: string;
+    hyperlink: string
+}
+
+export interface Specialty {
+    id: number;
+    specialtyArea: string;
+}
+
+export interface PHOMembership {
+    id: number;
+    membership: string;
+}

@@ -11,5 +11,8 @@ namespace org.cchmc.pho.core.Interfaces
         Task<List<ContactPracticeLocation>> GetContactPracticeLocations(int userId, int practiceId);
         Task<List<ContactPracticeStaff>>GetContactPracticeStaffList(int userId, int practiceId);
         Task<ContactPracticeStaffDetails> GetContactStaffDetails(int userId, int staffId);
+        Task<List<PHOMembership>> GetContactPracticePHOMembership();
+        Task<List<Specialty>> GetContactPracticeSpecialties();
+        Task<List<Boardship>> GetContactPracticeBoardship();
     }
 }
