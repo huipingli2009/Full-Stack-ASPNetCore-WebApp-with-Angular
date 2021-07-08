@@ -12,7 +12,7 @@ import { MatSnackBarComponent } from './shared/mat-snack-bar/mat-snack-bar.compo
 import { FileDetails, FileAction, ResourceType, Tag, Initiative, FileType, ContentPlacement } from './models/files';
 import { Location } from '@angular/common';
 import { MetricDrillthruTable } from './models/drillthru';
-import { Contact, ContactPracticeDetails, ContactPracticeLocation, ContactPracticeStaff, ContactPracticeStaffDetails} from './models/contacts';
+import { BoardMembership, Contact, ContactPracticeDetails, ContactPracticeLocation, ContactPracticeStaff, ContactPracticeStaffDetails, PHOMembership, Specialty} from './models/contacts';
 
 // we can now access environment.apiUrl
 const API_URL = environment.apiURL;
@@ -951,6 +951,33 @@ export class RestService {
         return data;
       })
     );    
+  }
+
+  /*Get PHO membership for Contact Page header*/
+  getContactPracticePHOMembership(): Observable<PHOMembership[]>{
+    return this.http.get<PHOMembership[]>(`${API_URL}/api/Contacts/phomembership`).pipe(
+      map((data: PHOMembership[])=>{
+        return data;
+      })
+    );  
+  }
+
+  /*Get Specialty for Contact Page header*/
+  getContactPracticeSpecialties(): Observable<Specialty[]>{
+    return this.http.get<Specialty[]>(`${API_URL}/api/Contacts/contactspecialtylist`).pipe(
+      map((data: Specialty[])=>{
+        return data;
+      })
+    );
+  }
+
+  /*Get BoardMembership for Contact Page header*/
+  getContactPracticeBoardMembership(): Observable<BoardMembership[]>{
+    return this.http.get<BoardMembership[]>(`${API_URL}/api/Contacts/boardmembership`).pipe(
+      map((data: BoardMembership[])=>{
+        return data;
+      })
+    );
   }
 
   private handleError<T>(operation = 'operation', result?: T) {    

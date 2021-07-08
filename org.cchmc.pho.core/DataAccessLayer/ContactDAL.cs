@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace org.cchmc.pho.core.DataAccessLayer
 {
     public class ContactDAL : IContact
-    {       
+    {
         private readonly ConnectionStrings _connectionStrings;
 
         public ContactDAL(IOptions<ConnectionStrings> options)
@@ -20,8 +20,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
         }
 
         public async Task<List<Contact>> GetContacts(int userId, bool? qpl, string specialty, string membership, string board, string namesearch)
-        {
-            DataTable dataTable = new DataTable();
+        {           
             List<Contact> contactList = new List<Contact>();
 
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
@@ -40,6 +39,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
+                        DataTable dataTable = new DataTable();
                         da.Fill(dataTable);
 
                         foreach (DataRow dr in dataTable.Rows)
@@ -65,11 +65,10 @@ namespace org.cchmc.pho.core.DataAccessLayer
         }
 
         public async Task<ContactPracticeDetails> GetContactPracticeDetails(int userId, int practiceId)
-        {
-            DataTable dataTable = new DataTable();
+        {          
             ContactPracticeDetails contactPracticeDetail = null;
-          
-            using(SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
                 SqlCommand sqlCommand = new SqlCommand("spGetContactPracticeDet", sqlConnection);
 
@@ -81,9 +80,10 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                 using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                 {
+                    DataTable dataTable = new DataTable();
                     da.Fill(dataTable);
 
-                    foreach( DataRow dr in dataTable.Rows)
+                    foreach (DataRow dr in dataTable.Rows)
                     {
                         contactPracticeDetail = new ContactPracticeDetails()
                         {
@@ -102,8 +102,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             return contactPracticeDetail;
         }
         public async Task<List<ContactPracticeLocation>> GetContactPracticeLocations(int userId, int practiceId)
-        {
-            DataTable dataTable = new DataTable();
+        {           
             List<ContactPracticeLocation> locations = new List<ContactPracticeLocation>();
 
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
@@ -118,13 +117,14 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                 using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                 {
+                    DataTable dataTable = new DataTable();
                     da.Fill(dataTable);
 
-                    foreach(DataRow dr in dataTable.Rows)
+                    foreach (DataRow dr in dataTable.Rows)
                     {
                         ContactPracticeLocation location = new ContactPracticeLocation()
                         {
-                            LocationId = dr["LocationID"] == DBNull.Value ? 0: Convert.ToInt32(dr["LocationID"].ToString()),
+                            LocationId = dr["LocationID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["LocationID"].ToString()),
                             PracticeId = dr["PracticeID"] == DBNull.Value ? 0 : Convert.ToInt32(dr["PracticeID"].ToString()),
                             LocationName = dr["LocationName"].ToString(),
                             OfficePhone = dr["OfficePhone"].ToString(),
@@ -144,11 +144,10 @@ namespace org.cchmc.pho.core.DataAccessLayer
         }
         public async Task<List<ContactPracticeStaff>> GetContactPracticeStaffList(int userId, int practiceId)
         {
-            List<ContactPracticeStaff> practiceStaffList = new List<ContactPracticeStaff>();
-            DataTable dataTable = new DataTable();
+            List<ContactPracticeStaff> practiceStaffList = new List<ContactPracticeStaff>();          
 
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
-            { 
+            {
                 using (SqlCommand sqlCommand = new SqlCommand("spGetContactStaffList", sqlConnection))
                 {
                     sqlCommand.CommandType = CommandType.StoredProcedure;
@@ -159,27 +158,27 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                     using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                     {
+                        DataTable dataTable = new DataTable();
                         da.Fill(dataTable);
 
-                        foreach(DataRow dr in dataTable.Rows)
+                        foreach (DataRow dr in dataTable.Rows)
                         {
                             var staff = new ContactPracticeStaff()
                             {
-                                StaffId = (dr["StaffId"] == DBNull.Value ? 0: Convert.ToInt32(dr["StaffId"].ToString())),
+                                StaffId = (dr["StaffId"] == DBNull.Value ? 0 : Convert.ToInt32(dr["StaffId"].ToString())),
                                 StaffName = dr["StaffName"].ToString()
                             };
 
                             practiceStaffList.Add(staff);
                         }
                     }
-                }            
+                }
             }
             return practiceStaffList;
         }
         public async Task<ContactPracticeStaffDetails> GetContactStaffDetails(int userId, int staffId)
-        {
-            DataTable dataTable = new DataTable();
-            ContactPracticeStaffDetails staffDetails  = null;
+        {           
+            ContactPracticeStaffDetails staffDetails = null;
 
             using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
             {
@@ -192,6 +191,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                 using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
                 {
+                    DataTable dataTable = new DataTable();
                     da.Fill(dataTable);
 
                     foreach (DataRow dr in dataTable.Rows)
@@ -212,11 +212,106 @@ namespace org.cchmc.pho.core.DataAccessLayer
                             Responsibilities = dr["Responsibilities"].ToString(),
                             BoardMembership = dr["BoardMembership"].ToString(),
                             NotesAboutProvider = dr["NotesAboutProvider"].ToString()
-                        };                            
+                        };
                     }
                 }
             }
             return staffDetails;
+        }
+        public async Task<List<PHOMembership>> GetContactPracticePHOMembership()
+        {
+            var phoMembership = new List<PHOMembership>();
+
+            using (SqlConnection sqlConn = new SqlConnection(_connectionStrings.PHODB))
+            {
+                SqlCommand sqlCommand = new SqlCommand("spGetPHOMembership", sqlConn);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+
+                await sqlConn.OpenAsync();
+
+                using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                {
+                    DataTable dt = new DataTable();
+
+                    da.Fill(dt);
+
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        var membership = new PHOMembership()
+                        {
+                            Id = Convert.ToInt32(dr["Id"].ToString()),
+                            Membership = dr["Membership"].ToString()
+                        };
+                        phoMembership.Add(membership);
+                    }
+                }
+            }
+            return phoMembership;
+        }
+
+        public async Task<List<Specialty>> GetContactPracticeSpecialties()
+        {
+            var practiceSpecialties = new List<Specialty>();
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                SqlCommand sqlCommand = new SqlCommand("spGetSpecialtyList", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+
+                await sqlConnection.OpenAsync();
+
+                using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                {
+                    DataTable dt = new DataTable();
+
+                    da.Fill(dt);
+
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        var specialty = new Specialty()
+                        {
+                            Id = Convert.ToInt32(dr["Id"].ToString()),
+                            SpecialtyName = dr["Specialty"].ToString()
+                        };
+                        practiceSpecialties.Add(specialty);
+                    }
+                }
+            }
+            return practiceSpecialties;
+        }
+
+        public async Task<List<BoardMembership>> GetContactPracticeBoardMembership()
+        {
+            var boardMemberships = new List<BoardMembership>();
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                SqlCommand sqlCommand = new SqlCommand("spGetBoards", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+
+                await sqlConnection.OpenAsync();
+
+                using(SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                {
+                    DataTable dt = new DataTable();
+
+                    da.Fill(dt);
+
+                    foreach(DataRow dr in dt.Rows)
+                    {
+                        var boardmembership = new BoardMembership()
+                        {
+                            Id = Convert.ToInt32(dr["Id"].ToString()),
+                            BoardName = dr["BoardName"].ToString(),
+                            Description = dr["Description"].ToString(),
+                            Hyperlink = dr["Hyperlink"].ToString()
+                        };
+                        boardMemberships.Add(boardmembership);
+                    }
+                }
+
+            }
+            return boardMemberships;
         }
     }
 }

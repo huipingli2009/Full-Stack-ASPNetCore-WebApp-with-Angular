@@ -159,6 +159,71 @@ namespace org.cchmc.pho.api.Controllers
             }
         }
 
+        //dropdown list for specialty
+        [HttpGet("contactspecialtylist")]        
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin, PHO Leader")]
+        [SwaggerResponse(200, type: typeof(List<SpecialtyViewModel>))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(200, type: typeof(string))]
+        public async Task<IActionResult> GetContactPracticeSpecialties()
+        {
+            try
+            {
+                var data = await _contact.GetContactPracticeSpecialties();
+                var result = _mapper.Map<List<SpecialtyViewModel>>(data);
+
+                return Ok(result);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, $"An error occured: {ex.Message}");
+                return StatusCode(500, "Error occurred when fetching specialty");
+            }
+        }
+        
+        //dropdown list for PHO membership
+        [HttpGet("phomembership")]
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin, PHO Leader")]
+        [SwaggerResponse(200, type: typeof(List<PHOMembershipViewModel>))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> GetContactPracticePHOMembership()
+        {
+            try
+            {
+                var data = await _contact.GetContactPracticePHOMembership();
+                var result = _mapper.Map<List<PHOMembershipViewModel>>(data);
+
+                return Ok(result);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, $"An error occured: {ex.Message}");
+                return StatusCode(500, "Error occurred when fetching PHO membership");
+            }
+        }
+
+        //dropdown list for boardship
+        [HttpGet("boardmembership")]       
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin, PHO Leader")]
+        [SwaggerResponse(200, type: typeof(List<BoardMembershipViewModel>))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> GetContactPracticeBoardMembership()
+        {
+            try
+            {
+                var data = await _contact.GetContactPracticeBoardMembership();
+                var result = _mapper.Map<List<BoardMembershipViewModel>>(data);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"An error occured: {ex.Message}");
+                return StatusCode(500, "Error occurred when fetching board membership");
+            }
+        }
         //leave the coding below for future use
         // GET api/<ContactsController>/5
         //[HttpGet("{id}")]
