@@ -36,9 +36,12 @@ export class ContactsComponent implements OnInit {
   dataSourceContact: MatTableDataSource<any>;
 
   //dropdowns for contact header filters
-  phomembershipList: PHOMembership[] = [];
+  phoMembershipList: PHOMembership[] = [];
   contactPracticeSpecialties: Specialty[] = [];
   contactPracticeBoardMembership: BoardMembership[] = [];  
+
+  //filters for contact header section
+  //specialtyFilter: 
 
   constructor(private rest: RestService, private logger: NGXLogger, private fb: FormBuilder) {
     this.dataSourceContact = new MatTableDataSource;
@@ -88,7 +91,10 @@ export class ContactsComponent implements OnInit {
   });
 
   ngOnInit(): void { 
-    this.getAllContacts();    
+    this.getAllContacts();
+    this.getContactPracticeSpecialties();   
+    this.getContactPracticePHOMembership(); 
+    this.getContactPracticeBoardship();
   }
 
   getAllContacts() {
@@ -191,8 +197,8 @@ export class ContactsComponent implements OnInit {
   //get PHO membership
   getContactPracticePHOMembership(){
     return this.rest.getContactPracticePHOMembership().pipe(take(1)).subscribe((data: PHOMembership[]) => {
-      this.phomembershipList = data;
-      this.logger.log(this.phomembershipList,'PHO membership list'); 
+      this.phoMembershipList = data;
+      this.logger.log(this.phoMembershipList,'PHO membership list'); 
     })
   }
 

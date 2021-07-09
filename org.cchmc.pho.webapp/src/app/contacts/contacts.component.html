@@ -8,16 +8,39 @@
              -->
              <button mat-button>QPLs and PAs</button>
         </div>
-        <div fxLayout="column" class="header-filter filter-btn">
-            <button mat-button>Specialty</button>
+        <div fxLayout="column" class="header-filter">
+            <mat-form-field>
+                <mat-label>Specialty</mat-label>
+                <mat-select> [formControl]="specialtyFilter"
+                    <mat-option>All</mat-option>
+                    <mat-option *ngFor="let specialty of contactPracticeSpecialties" [value]="specialty.specialtyName">
+                        {{specialty.specialtyName}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>            
         </div>        
         <div fxLayout="column" class="header-filter filter-btn">
-            <button mat-button>PHO Membership</button>
+            <mat-form-field>
+                <mat-label>PHO Membership</mat-label>
+                <mat-select>
+                    <mat-option>All</mat-option>
+                    <mat-option *ngFor="let phoMembership of phoMembershipList" [value]="phoMembership.membership">
+                        {{phoMembership.membership}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>            
         </div>
         <div fxLayout="column" class="header-filter filter-btn">
-            <button mat-button>Board Members</button>
-        </div>
-        
+            <mat-form-field>
+                <mat-label>Board Members</mat-label>
+                <mat-select>
+                    <mat-option>All</mat-option>
+                    <mat-option *ngFor="let boardMembership of contactPracticeBoardMembership" [value]="boardMembership.boardName">
+                        {{boardMembership.boardName}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>            
+        </div>        
         <div fxLayout="column" class="header-filter search-input" fxFlex fxLayoutAlign="center end">
             <mat-form-field>
                 <input matInput [formControl]="" 
@@ -106,7 +129,7 @@
                                             <mat-form-field floatLabel="always">
                                                 <mat-label>PRACTICE MANAGER</mat-label>
                                                 <input matInput formControlName="practiceManager" readonly>
-                                                <mat-icon matSuffix>
+                                                <mat-icon matSuffix style="padding-left: 0em;">
                                                     email
                                                 </mat-icon>
                                             </mat-form-field>                                   
@@ -206,12 +229,18 @@
                         </div>
                         <div fxLayout="row" fxLayoutGap="34px" class="form-row">  
                             <div fxLayout="column" fxFlex="70">
-                                <mat-form-field>
-                                    <mat-label>SELECT PROVIDER OR STAFF</mat-label>
-                                    <mat-select [(ngModel)]="selectedContactStaff" (selectionChange)="contactStaffSelected($event)">
-                                    <mat-option *ngFor="let contactstaff of contactPracticeStaffList" [value]="contactstaff.staffId">
-                                        {{contactstaff.staffName}}
-                                    </mat-option>                                 
+                                <mat-form-field>                                   
+                                    <mat-label>SELECT PROVIDER OR STAFF</mat-label>                                                                      
+                                    <mat-select [(ngModel)]="selectedContactStaff" (selectionChange)="contactStaffSelected($event)">                                       
+                                        <mat-select-trigger *ngIf="selectedContactStaff">
+                                            <mat-icon matPreffix>
+                                                person
+                                            </mat-icon>   
+                                            <span>{{selectedContactStaff.staffName}}</span>
+                                        </mat-select-trigger>
+                                        <mat-option *ngFor="let contactstaff of contactPracticeStaffList" [value]="contactstaff.staffId">
+                                            {{contactstaff.staffName}}
+                                    </mat-option>                                                                  
                                     </mat-select>
                                 </mat-form-field>                                                               
                             </div>                                                                       
@@ -223,6 +252,9 @@
                                         <mat-form-field floatLabel="always">
                                             <mat-label>EMAIL</mat-label>
                                             <input matInput formControlName="email" readonly>
+                                            <mat-icon matSuffix>
+                                                email
+                                            </mat-icon> 
                                         </mat-form-field>                             
                                     </div>
                                     <div fxLayout="column" fxFlex>
@@ -247,7 +279,7 @@
                                     </div>                                                                                        
                                 </div>
                                 <div fxLayout="row" fxLayoutGap="34px" class="form-row">                     
-                                    <div fxLayout="column" fxFlex>
+                                    <div fxLayout="column" fxFlex="48">
                                         <mat-form-field floatLabel="always">
                                             <mat-label>LOCATIONS</mat-label>
                                             <input matInput formControlName="locations" readonly>
@@ -260,7 +292,7 @@
                                         </mat-form-field>                                   
                                     </div>                                                                                        
                                 </div>
-                                <div fxLayout="row" fxLayoutGap="80px" class="form-row">                         
+                                <div fxLayout="row" fxLayoutGap="78px" class="form-row">                         
                                     <div fxLayout="column" fxFlex="62px" class="form-row">
                                         <mat-checkbox formControlName="specialty" disabled>Comm Specialist</mat-checkbox>                                                            
                                     </div> 
