@@ -1,19 +1,16 @@
 <div id="contactPage" class="content-main"> 
     <div fxLayout="row" class="contacts-header">
-        <div fxLayout="column" class="header-filter filter-btn">
+        <div fxLayout="column" class="header-filter filter-btn">           
             <button mat-button>All PHO</button>
+        </div>       
+        <div fxLayout="column" [ngStyle]="{'color': textColor}" class="header-filter filter-btn">           
+            <button mat-button #qpl (click)="hasQPLFilter($event)">QPLs and PAs</button>
         </div>
         <div fxLayout="column" class="header-filter filter-btn">
-            <!-- <button mat-button (click)="applySelectedFilter('column','QPLs')">QPLs and PAs</button>
-             -->
-             <button mat-button>QPLs and PAs</button>
-        </div>
-        <div fxLayout="column" class="header-filter">
             <mat-form-field>
                 <mat-label>Specialty</mat-label>
-                <mat-select> [formControl]="specialtyFilter"
-                    <mat-option>All</mat-option>
-                    <mat-option *ngFor="let specialty of contactPracticeSpecialties" [value]="specialty.specialtyName">
+                <mat-select [(ngModel)]="specialties" (ngModelChange)="specialties" multiple (selectionChange)="contactHasSpecialties($event)">                   
+                    <mat-option *ngFor="let specialty of contactPracticeSpecialties" [value]="specialty.id">
                         {{specialty.specialtyName}}
                     </mat-option>
                 </mat-select>
@@ -21,30 +18,29 @@
         </div>        
         <div fxLayout="column" class="header-filter filter-btn">
             <mat-form-field>
-                <mat-label>PHO Membership</mat-label>
-                <mat-select>
-                    <mat-option>All</mat-option>
-                    <mat-option *ngFor="let phoMembership of phoMembershipList" [value]="phoMembership.membership">
+                <mat-label>PHO Membership</mat-label>              
+                    <mat-select [(ngModel)]="membership" (selectionChange)="contactHasMembership()">                   
+                    <mat-option *ngFor="let phoMembership of phoMembershipList" [value]="phoMembership.id">
                         {{phoMembership.membership}}
                     </mat-option>
+                    <mat-option>All</mat-option>
                 </mat-select>
             </mat-form-field>            
         </div>
         <div fxLayout="column" class="header-filter filter-btn">
             <mat-form-field>
                 <mat-label>Board Members</mat-label>
-                <mat-select>
-                    <mat-option>All</mat-option>
-                    <mat-option *ngFor="let boardMembership of contactPracticeBoardMembership" [value]="boardMembership.boardName">
+                <mat-select [(ngModel)]="board" (selectionChange)="contactHasBoardMembership()">
+                    <mat-option *ngFor="let boardMembership of contactPracticeBoardMembership" [value]="boardMembership.id">
                         {{boardMembership.boardName}}
                     </mat-option>
+                    <mat-option>All</mat-option>
                 </mat-select>
             </mat-form-field>            
         </div>        
         <div fxLayout="column" class="header-filter search-input" fxFlex fxLayoutAlign="center end">
             <mat-form-field>
-                <input matInput [formControl]="" 
-                    placeholder="search contacts or practices">
+                <input matInput placeholder="search contacts or practices" [(ngModel)]="contactNameSearch" (change)="searchContacts($event)">                   
                 <button mat-button matSuffix mat-icon-button aria-label="Search">
                     <mat-icon>search</mat-icon>
                 </button>
@@ -231,16 +227,10 @@
                             <div fxLayout="column" fxFlex="70">
                                 <mat-form-field>                                   
                                     <mat-label>SELECT PROVIDER OR STAFF</mat-label>                                                                      
-                                    <mat-select [(ngModel)]="selectedContactStaff" (selectionChange)="contactStaffSelected($event)">                                       
-                                        <mat-select-trigger *ngIf="selectedContactStaff">
-                                            <mat-icon matPreffix>
-                                                person
-                                            </mat-icon>   
-                                            <span>{{selectedContactStaff.staffName}}</span>
-                                        </mat-select-trigger>
+                                    <mat-select [(ngModel)]="selectedContactStaff" (selectionChange)="contactStaffSelected($event)">                                     
                                         <mat-option *ngFor="let contactstaff of contactPracticeStaffList" [value]="contactstaff.staffId">
                                             {{contactstaff.staffName}}
-                                    </mat-option>                                                                  
+                                        </mat-option>                                                                  
                                     </mat-select>
                                 </mat-form-field>                                                               
                             </div>                                                                       

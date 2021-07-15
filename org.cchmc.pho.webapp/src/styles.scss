@@ -2975,11 +2975,27 @@ display: block !important;
     text-align: left;
     letter-spacing: normal;
   
+    .mat-button-toggle {      
+      color: white;
+      background-color: transparent;
+      border-style: none;
+    }
+    .mat-button-toggle-checked {     
+      color:#F0673C;
+    }
     .header-filter {
       margin-right: 36px;
     }
     .header-filter:last-of-type {
       margin-right: 0;
+    }
+    .filter-btn button {
+      padding: 0.4375em 0;
+      font-family: "Lato";
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 20px;
+      border-top: 0.84375em solid transparent;
     }
     .mat-form-field-appearance-legacy .mat-form-field-label,
     .mat-select-value-text {

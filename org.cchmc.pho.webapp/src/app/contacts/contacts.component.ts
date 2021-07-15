@@ -1,12 +1,13 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material/table';
 import { NGXLogger } from 'ngx-logger';
 import { take } from 'rxjs/operators';
 import { BoardMembership, Contact, ContactPracticeDetails, ContactPracticeLocation, ContactPracticeStaff, ContactPracticeStaffDetails, PHOMembership, Specialty} from '../models/contacts';
 import { RestService } from '../rest.service';
 import { formatDate } from '@angular/common' ;
+import { ContactsDatasource} from './contacts.datasource';
+import { FilterService } from '../services/filter.service';
 
 @Component({ 
   templateUrl: './contacts.component.html',
@@ -32,8 +33,8 @@ export class ContactsComponent implements OnInit {
   contactPracticeStaffList: ContactPracticeStaff[] = [];
   selectedContactStaff: ContactPracticeStaff;
   contactPracticeStaffDetails: ContactPracticeStaffDetails;
-  expandedElement: Contact | null;
-  dataSourceContact: MatTableDataSource<any>;
+  expandedElement: Contact | null;  
+  dataSourceContact: ContactsDatasource;  
 
   //dropdowns for contact header filters
   phoMembershipList: PHOMembership[] = [];
@@ -41,11 +42,17 @@ export class ContactsComponent implements OnInit {
   contactPracticeBoardMembership: BoardMembership[] = [];  
 
   //filters for contact header section
-  //specialtyFilter: 
+  selectedMembership: string = ""; 
+  qplChecked: boolean = false;
+  qpl: string;
+  specialties: Array<string> = [];   
+  filterType: string;
+  membership: string;
+  board: string;
+  contactNameSearch: string;
+  textColor : string = 'white';
 
-  constructor(private rest: RestService, private logger: NGXLogger, private fb: FormBuilder) {
-    this.dataSourceContact = new MatTableDataSource;
-  }
+  constructor(private rest: RestService, private logger: NGXLogger, private fb: FormBuilder, private filterService: FilterService) {} 
   
   displayedColumns: string[] = ['arrow', 'practiceName', 'practiceType', 'emr', 'phone', 'fax', 'websiteURL'];
 
@@ -91,21 +98,18 @@ export class ContactsComponent implements OnInit {
   });
 
   ngOnInit(): void { 
-    this.getAllContacts();
+    this.dataSourceContact = new ContactsDatasource(this.rest);    
+    this.getContactsWithFilters();   
     this.getContactPracticeSpecialties();   
     this.getContactPracticePHOMembership(); 
     this.getContactPracticeBoardship();
   }
 
-  getAllContacts() {
-    return this.rest.getAllContacts().pipe(take(1)).subscribe((data) =>
-    {
-      this.contactList = data;
-      this.dataSourceContact = new MatTableDataSource(this.contactList);
-      this.dataSourceContact.data = this.contactList;
-      
-      this.logger.log(this.contactList, 'Contacts');
-    });
+  getContactsWithFilters() {    
+    this.dataSourceContact.loadContacts(this.qpl, this.specialties.toString(), this.membership, this.board, this.contactNameSearch);
+    this.rest.findContacts(this.qpl, this.specialties.toString(), this.membership, this.board, this.contactNameSearch).subscribe((data) => {
+    this.contactList = data;
+    });        
   }
 
   getContactPracticeDetailWithProviders(practiceId: number){
@@ -210,12 +214,47 @@ export class ContactsComponent implements OnInit {
     });
   }
 
-  //get Contact boardship list
+  //get Contact board membership list
   getContactPracticeBoardship(){
     return this.rest.getContactPracticeBoardMembership().pipe(take(1)).subscribe((data: BoardMembership[]) =>{
       this.contactPracticeBoardMembership = data;
       this.logger.log(this.contactPracticeBoardMembership, 'Contact practice board membership');
     });
+  } 
+  
+  //filter for Quality Physician Leader
+  hasQPLFilter(event){
+    this.qplChecked = !this.qplChecked;
+    
+    if(this.qplChecked){
+      this.textColor = 'yellow';
+      this.qpl = 'true';
+    }
+    else{
+      this.textColor = 'white';
+      this.qpl = '';
+    }    
+    
+    this.getContactsWithFilters();
   }
+
+  contactHasMembership(){
+    this.getContactsWithFilters();
+  }
+
+  contactHasSpecialties(event){
+    this.specialties = event.value;
+    this.getContactsWithFilters();
+  }
+  
+  contactHasBoardMembership(){
+    this.getContactsWithFilters();
+  }  
+ 
+  //contact search
+  searchContacts(event){
+    this.contactNameSearch = event.target.value;
+    this.getContactsWithFilters();
+  } 
 }
 

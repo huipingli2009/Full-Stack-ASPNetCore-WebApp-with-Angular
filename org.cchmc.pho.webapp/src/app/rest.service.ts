@@ -902,15 +902,6 @@ export class RestService {
   }
 
   /* Contacts Content =======================================================*/
-  /* Get contacts */
-  getAllContacts(): Observable<Contact[]> {
-    return this.http.get<any>(`${API_URL}/api/Contacts/`).pipe(
-      map((data: Contact[]) => {
-        return data;
-      })
-    );
-  }
-
   /* Get contact details */
   getContactPracticeDetails(id: number): Observable<ContactPracticeDetails>{ 
     return this.http.get<ContactPracticeDetails>(`${API_URL}/api/Contacts/${id}`).pipe(
@@ -975,6 +966,22 @@ export class RestService {
   getContactPracticeBoardMembership(): Observable<BoardMembership[]>{
     return this.http.get<BoardMembership[]>(`${API_URL}/api/Contacts/boardmembership`).pipe(
       map((data: BoardMembership[])=>{
+        return data;
+      })
+    );
+  } 
+
+  /*Find Contacts by Query*/
+  findContacts(qpl = '', specialties = '', membership = '', board = '', namesearch = ''): Observable<Contact[]> {
+    return this.http.get<any>(`${API_URL}/api/Contacts`, {
+      params: new HttpParams()       
+        .set('qpl', qpl.toString())
+        .set('specialty', specialties)
+        .set('membership', membership.toString())
+        .set('board', board.toString())        
+        .set('namesearch', namesearch)
+    }).pipe(
+      map((data: Contact[]) => {
         return data;
       })
     );
