@@ -1,27 +1,46 @@
 <div id="contactPage" class="content-main"> 
     <div fxLayout="row" class="contacts-header">
-        <div fxLayout="column" class="header-filter filter-btn">
+        <div fxLayout="column" class="header-filter filter-btn">           
             <button mat-button>All PHO</button>
+        </div>       
+        <div fxLayout="column" [ngStyle]="{'color': textColor}" class="header-filter filter-btn">           
+            <button mat-button #qpl (click)="hasQPLFilter($event)">QPLs and PAs</button>
         </div>
         <div fxLayout="column" class="header-filter filter-btn">
-            <!-- <button mat-button (click)="applySelectedFilter('column','QPLs')">QPLs and PAs</button>
-             -->
-             <button mat-button>QPLs and PAs</button>
-        </div>
-        <div fxLayout="column" class="header-filter filter-btn">
-            <button mat-button>Specialty</button>
+            <mat-form-field>
+                <mat-label>Specialty</mat-label>
+                <mat-select [(ngModel)]="specialties" (ngModelChange)="specialties" multiple (selectionChange)="contactHasSpecialties($event)">                   
+                    <mat-option *ngFor="let specialty of contactPracticeSpecialties" [value]="specialty.id">
+                        {{specialty.specialtyName}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>            
         </div>        
         <div fxLayout="column" class="header-filter filter-btn">
-            <button mat-button>PHO Membership</button>
+            <mat-form-field>
+                <mat-label>PHO Membership</mat-label>              
+                    <mat-select [(ngModel)]="membership" (selectionChange)="contactHasMembership()">                   
+                    <mat-option *ngFor="let phoMembership of phoMembershipList" [value]="phoMembership.id">
+                        {{phoMembership.membership}}
+                    </mat-option>
+                    <mat-option>All</mat-option>
+                </mat-select>
+            </mat-form-field>            
         </div>
         <div fxLayout="column" class="header-filter filter-btn">
-            <button mat-button>Board Members</button>
-        </div>
-        
+            <mat-form-field>
+                <mat-label>Board Members</mat-label>
+                <mat-select [(ngModel)]="board" (selectionChange)="contactHasBoardMembership()">
+                    <mat-option *ngFor="let boardMembership of contactPracticeBoardMembership" [value]="boardMembership.id">
+                        {{boardMembership.boardName}}
+                    </mat-option>
+                    <mat-option>All</mat-option>
+                </mat-select>
+            </mat-form-field>            
+        </div>        
         <div fxLayout="column" class="header-filter search-input" fxFlex fxLayoutAlign="center end">
             <mat-form-field>
-                <input matInput [formControl]="" 
-                    placeholder="search contacts or practices">
+                <input matInput placeholder="search contacts or practices" [(ngModel)]="contactNameSearch" (change)="searchContacts($event)">                   
                 <button mat-button matSuffix mat-icon-button aria-label="Search">
                     <mat-icon>search</mat-icon>
                 </button>
@@ -106,7 +125,7 @@
                                             <mat-form-field floatLabel="always">
                                                 <mat-label>PRACTICE MANAGER</mat-label>
                                                 <input matInput formControlName="practiceManager" readonly>
-                                                <mat-icon matSuffix>
+                                                <mat-icon matSuffix style="padding-left: 0em;">
                                                     email
                                                 </mat-icon>
                                             </mat-form-field>                                   
@@ -206,12 +225,12 @@
                         </div>
                         <div fxLayout="row" fxLayoutGap="34px" class="form-row">  
                             <div fxLayout="column" fxFlex="70">
-                                <mat-form-field>
-                                    <mat-label>SELECT PROVIDER OR STAFF</mat-label>
-                                    <mat-select [(ngModel)]="selectedContactStaff" (selectionChange)="contactStaffSelected($event)">
-                                    <mat-option *ngFor="let contactstaff of contactPracticeStaffList" [value]="contactstaff.staffId">
-                                        {{contactstaff.staffName}}
-                                    </mat-option>                                 
+                                <mat-form-field>                                   
+                                    <mat-label>SELECT PROVIDER OR STAFF</mat-label>                                                                      
+                                    <mat-select [(ngModel)]="selectedContactStaff" (selectionChange)="contactStaffSelected($event)">                                     
+                                        <mat-option *ngFor="let contactstaff of contactPracticeStaffList" [value]="contactstaff.staffId">
+                                            {{contactstaff.staffName}}
+                                        </mat-option>                                                                  
                                     </mat-select>
                                 </mat-form-field>                                                               
                             </div>                                                                       
@@ -223,6 +242,9 @@
                                         <mat-form-field floatLabel="always">
                                             <mat-label>EMAIL</mat-label>
                                             <input matInput formControlName="email" readonly>
+                                            <mat-icon matSuffix>
+                                                email
+                                            </mat-icon> 
                                         </mat-form-field>                             
                                     </div>
                                     <div fxLayout="column" fxFlex>
@@ -247,7 +269,7 @@
                                     </div>                                                                                        
                                 </div>
                                 <div fxLayout="row" fxLayoutGap="34px" class="form-row">                     
-                                    <div fxLayout="column" fxFlex>
+                                    <div fxLayout="column" fxFlex="48">
                                         <mat-form-field floatLabel="always">
                                             <mat-label>LOCATIONS</mat-label>
                                             <input matInput formControlName="locations" readonly>
@@ -260,7 +282,7 @@
                                         </mat-form-field>                                   
                                     </div>                                                                                        
                                 </div>
-                                <div fxLayout="row" fxLayoutGap="80px" class="form-row">                         
+                                <div fxLayout="row" fxLayoutGap="78px" class="form-row">                         
                                     <div fxLayout="column" fxFlex="62px" class="form-row">
                                         <mat-checkbox formControlName="specialty" disabled>Comm Specialist</mat-checkbox>                                                            
                                     </div> 
