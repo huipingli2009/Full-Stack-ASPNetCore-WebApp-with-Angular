@@ -34,7 +34,10 @@ export class ContactsComponent implements OnInit {
   selectedContactStaff: ContactPracticeStaff;
   contactPracticeStaffDetails: ContactPracticeStaffDetails;
   expandedElement: Contact | null;  
-  dataSourceContact: ContactsDatasource;  
+  dataSourceContact: ContactsDatasource;
+  pmEmail: string; 
+  picEmail: string; 
+  providerEmail: string; 
 
   //dropdowns for contact header filters
   phoMembershipList: PHOMembership[] = [];
@@ -126,21 +129,25 @@ export class ContactsComponent implements OnInit {
       this.ContactDetailsForm.get('practiceName').setValue(this.contactPracticeDetails.practiceName);
       
       //use formatDate function to change the format
-      this.ContactDetailsForm.get('memberSince').setValue(formatDate(this.contactPracticeDetails.memberSince,'yyyy-MM-dd','en'));
+      this.ContactDetailsForm.get('memberSince').setValue(formatDate(this.contactPracticeDetails.memberSince,'MM/dd/yyyy','en'));
       
       this.ContactDetailsForm.get('practiceManager').setValue(this.contactPracticeDetails.practiceManager);
       this.ContactDetailsForm.get('pmEmail').setValue(this.contactPracticeDetails.pmEmail);
       this.ContactDetailsForm.get('pic').setValue(this.contactPracticeDetails.pic);
       this.ContactDetailsForm.get('picEmail').setValue(this.contactPracticeDetails.picEmail);
 
+      this.pmEmail = this.contactPracticeDetails.pmEmail;  
+      this.picEmail = this.contactPracticeDetails.picEmail;
       //Practice locations
       this.ContactDetailsForm.setControl('locations', this.populateExistingLocations(this.contactPracticeDetails.contactPracticeLocations));     
-    });   
+    });     
   }
   
   populateExistingLocations(locations: Array<ContactPracticeLocation>): FormArray {
+    let counter = 0;
     const locationFormArray = new FormArray([]);
     locations.forEach(element => {
+      counter += 1;
       locationFormArray.push(this.fb.group({
         practiceId: element.practiceId,
         locationId: element.locationId,
@@ -154,6 +161,7 @@ export class ContactsComponent implements OnInit {
         zip: element.zip 
       }));      
     });
+   
     return locationFormArray;
   }
 
@@ -194,6 +202,7 @@ export class ContactsComponent implements OnInit {
       this.ContactProvidersForm.get('boardMembership').setValue(this.contactPracticeStaffDetails.boardMembership);
       this.ContactProvidersForm.get('notesAboutProvider').setValue(this.contactPracticeStaffDetails.notesAboutProvider);
 
+      this.providerEmail = this.contactPracticeStaffDetails.email;
       this.logger.log(this.contactPracticeStaffDetails,'Contact practice staff details'); 
     });
   }  
