@@ -1,7 +1,7 @@
 <div id="contactPage" class="content-main"> 
     <div fxLayout="row" class="contacts-header">
         <div fxLayout="column" class="header-filter filter-btn">           
-            <button mat-button>All PHO</button>
+            <button mat-button (click)="refreshContactPage()">All PHO</button>
         </div>       
         <div fxLayout="column" [ngStyle]="{'color': textColor}" class="header-filter filter-btn">           
             <button mat-button #qpl (click)="hasQPLFilter($event)">QPLs and PAs</button>

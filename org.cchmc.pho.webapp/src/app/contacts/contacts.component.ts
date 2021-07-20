@@ -264,6 +264,10 @@ export class ContactsComponent implements OnInit {
   searchContacts(event){
     this.contactNameSearch = event.target.value;
     this.getContactsWithFilters();
-  } 
+  }
+  
+  refreshContactPage(){
+    window.location.reload();
+  }
 }
 
