@@ -1,12 +1,12 @@
 <div id="contactPage" class="content-main"> 
     <div fxLayout="row" class="contacts-header">
-        <div fxLayout="column" class="header-filter filter-btn">           
+        <div fxLayout="column" class="header-filter filter-btn" fxFlex="5">           
             <button mat-button (click)="refreshContactPage()">All PHO</button>
         </div>       
-        <div fxLayout="column" [ngStyle]="{'color': textColor}" class="header-filter filter-btn">           
+        <div fxLayout="column" [ngStyle]="{'color': textColor}" class="header-filter filter-btn" fxFlex="10">           
             <button mat-button #qpl (click)="hasQPLFilter($event)">QPLs and PAs</button>
         </div>
-        <div fxLayout="column" class="header-filter filter-btn">
+        <div fxLayout="column" class="header-filter filter-btn" fxFlex="20">
             <mat-form-field>
                 <mat-label>Specialty</mat-label>
                 <mat-select [(ngModel)]="specialties" (ngModelChange)="specialties" multiple (selectionChange)="contactHasSpecialties($event)">                   
@@ -16,7 +16,7 @@
                 </mat-select>
             </mat-form-field>            
         </div>        
-        <div fxLayout="column" class="header-filter filter-btn">
+        <div fxLayout="column" class="header-filter filter-btn" fxFlex="15">
             <mat-form-field>
                 <mat-label>PHO Membership</mat-label>              
                     <mat-select [(ngModel)]="membership" (selectionChange)="contactHasMembership()">                   
@@ -27,7 +27,7 @@
                 </mat-select>
             </mat-form-field>            
         </div>
-        <div fxLayout="column" class="header-filter filter-btn">
+        <div fxLayout="column" class="header-filter filter-btn" fxFlex="15">
             <mat-form-field>
                 <mat-label>Board Members</mat-label>
                 <mat-select [(ngModel)]="board" (selectionChange)="contactHasBoardMembership()">
