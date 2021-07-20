@@ -38,7 +38,7 @@
                 </mat-select>
             </mat-form-field>            
         </div>        
-        <div fxLayout="column" class="header-filter search-input" fxFlex fxLayoutAlign="center end">
+        <div fxLayout="column" class="header-filter search-input" fxFlex="25" fxLayoutAlign="center end">
             <mat-form-field>
                 <input matInput placeholder="search contacts or practices" [(ngModel)]="contactNameSearch" (change)="searchContacts($event)">                   
                 <button mat-button matSuffix mat-icon-button aria-label="Search">
