@@ -19,6 +19,6 @@ namespace org.cchmc.pho.core.DataModels
         public DateTime? LegalDisclaimerSigned { get; set; }
         public Practice MyPractice { get; set; }       
         public int? PositionId { get; set; }
-
+        public string EmailFilters { get; set; }
     }
 }

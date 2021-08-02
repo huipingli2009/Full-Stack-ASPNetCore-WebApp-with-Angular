@@ -224,6 +224,31 @@ namespace org.cchmc.pho.api.Controllers
                 return StatusCode(500, "Error occurred when fetching board membership");
             }
         }
+
+        //get contact staff email list
+        [HttpGet("contactemaillist")]     
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin, PHO Leader")]
+        [SwaggerResponse(200, type: typeof(List<StaffViewModel>))]
+        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(500, type: typeof(string))]
+        public async Task<IActionResult> GetContactEmailList(bool? managers, bool? admins, bool? all)
+        {  
+            try
+            {
+                int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
+                var data = await _contact.GetContactEmailList(currentUserId, managers, admins, all);
+
+                var result = _mapper.Map<List<StaffViewModel>>(data);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"An error occured: {ex.Message}");
+                return StatusCode(500, "Error occurred when fetching contact staff email list");
+            }
+          
+        }
         //leave the coding below for future use
         // GET api/<ContactsController>/5
         //[HttpGet("{id}")]

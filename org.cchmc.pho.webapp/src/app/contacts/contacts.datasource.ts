@@ -30,5 +30,4 @@ export class ContactsDatasource implements DataSource<Contact>{
             )
             .subscribe(contact => this.contactSubject.next(contact));
     }
-
 }
