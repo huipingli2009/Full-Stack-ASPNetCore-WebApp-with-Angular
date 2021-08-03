@@ -313,5 +313,54 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
             return boardMemberships;
         }
-    }
+        public async Task<List<Staff>> GetContactEmailList(int userId, bool? managers, bool? admins, bool? all)
+        {
+            var staffEmailList = new List<Staff>();           
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionStrings.PHODB))
+            {
+                SqlCommand sqlCommand = new SqlCommand("spGetContactEmailList", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+
+                sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+                sqlCommand.Parameters.Add("@Managers", SqlDbType.Bit).Value = managers;
+                sqlCommand.Parameters.Add("@Admins", SqlDbType.Bit).Value = admins;
+                sqlCommand.Parameters.Add("@All", SqlDbType.Bit).Value = all;
+               
+                await sqlConnection.OpenAsync();
+
+                using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
+                {
+                    DataTable dt = new DataTable();
+
+                    da.Fill(dt);
+
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        var staff = new Staff()
+                        {
+                            Id = Convert.ToInt32(dr["StaffID"].ToString()),
+                            FirstName = dr["FirstName"].ToString(),
+                            LastName = dr["LastName"].ToString(),
+                            Email = dr["EmailAddress"].ToString(),
+                            MyPractice = new Practice()
+                            {
+                                Id = Convert.ToInt32(dr["PracticeId"].ToString()),
+                                Name = dr["PracticeName"].ToString() 
+                            },
+                            Position = new Position()
+                            {
+                                Id = Convert.ToInt32(dr["StaffPositionId"].ToString()),
+                                Name = dr["StaffPosition"].ToString()
+                            },
+                            EmailFilters = dr["EmailFilters"].ToString()                           
+                        };
+                        staffEmailList.Add(staff);
+                    }
+                }
+
+            }
+            return staffEmailList;
+        }
+    }   
 }

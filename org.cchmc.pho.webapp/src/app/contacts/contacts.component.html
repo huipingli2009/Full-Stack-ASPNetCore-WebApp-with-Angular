@@ -49,7 +49,7 @@
     </div>
     <div>
     </div>
-    <mat-table id="contact" mat-table [dataSource]="dataSourceContact" class="mat-elevation-z8" multiTemplateDataRows>
+    <mat-table id="contact" [dataSource]="dataSourceContact" class="mat-elevation-z8" multiTemplateDataRows>
         <ng-container matColumnDef="arrow">
             <mat-header-cell *matHeaderCellDef></mat-header-cell>
             <mat-cell *matCellDef="let element">
@@ -86,7 +86,7 @@
         <ng-container matColumnDef="websiteURL" >
             <mat-header-cell *matHeaderCellDef> WEBSITE </mat-header-cell>
             <mat-cell *matCellDef="let element" class="practicewebsitelink"> 
-                <a href='{{element.websiteURL}}' target="_blank" (click)="$event.stopPropagation();"  style="color: #efefef">GO TO WEBSITE</a>                
+                <a href='{{element.websiteURL}}' target="_blank" (click)="$event.stopPropagation();">GO TO WEBSITE</a>                
             </mat-cell>
         </ng-container>  
 
@@ -109,13 +109,13 @@
                             <form [formGroup]="ContactDetailsForm">
                                 <div class="contact-element-detail" fxFlex="85">
                                     <div fxLayout="row" fxLayoutGap="34px" class="form-row">                                
-                                        <div fxLayout="column" fxFlex="20">
+                                        <div fxLayout="column" fxFlex="25">
                                             <mat-form-field floatLabel="always">
                                                 <mat-label>Practice Name </mat-label>
                                                 <input matInput formControlName="practiceName" class="practice-name" readonly>
                                             </mat-form-field>                             
                                         </div>
-                                        <div fxLayout="column" fxFlex="15">
+                                        <div fxLayout="column" fxFlex="10">
                                             <mat-form-field floatLabel="always">
                                                 <mat-label>Member Since</mat-label>
                                                 <input matInput formControlName="memberSince" readonly> 
@@ -158,15 +158,15 @@
                                             </mat-form-field>                                    
                                         </div>                           
                                     </div>  
-                                    <div fxLayout="row" fxLayoutGap="34px" class="location-details">                                                           
-                                        <div fxLayout="column" fxLayoutGap="33px" class="form-row" fxFlex>
+                                    <div fxLayout="row" fxLayoutGap="34px">                                                           
+                                        <div fxLayout="column" fxLayoutGap="33px" class="form-row" fxFlex="95">
                                             <div fxLayout="column" class="detail-heading">
                                                 LOCATION DETAILS
                                             </div>  
-                                            <div fxLayout="column">
+                                            <div fxLayout="column" fxLayoutGap="33px">
                                                 <div fxLayout="column" formArrayName="locations"
                                                     *ngFor="let item of ContactDetailsForm.get('locations')['controls']; let i = index;">
-                                                    <div [formGroupName]="i">
+                                                    <div [formGroupName]="i" class="location-details">
                                                         <div fxLayout="row" fxLayoutGap="34px" class="form-row">
                                                             <mat-form-field floatLabel="always" [fxShow]=false>
                                                                 <mat-label>Practice Id</mat-label>
@@ -212,7 +212,7 @@
                                                                 <input matInput formControlName="zip" readonly>
                                                             </mat-form-field>                                                                 
                                                         </div>                                                                                                                                                                                                                                                                                  
-                                                    </div>                                             
+                                                    </div>                                                                                       
                                                 </div>                                   
                                             </div>                                   
                                         </div>                                                           
@@ -221,19 +221,21 @@
                             </form>
                         </div>
                     </div>
+                    <mat-divider [vertical]="true"></mat-divider>
                     <div id="contact-details" style="padding-left: 1em;" fxLayout="column" fxFlex>
                         <div fxLayout="row" class="detail-heading">
                             PROVIDER LOOKUP
                         </div>
                         <div fxLayout="row" fxLayoutGap="34px" class="form-row">  
-                            <div fxLayout="column" fxFlex="70">
+                            <div fxLayout="column" fxFlex="70" class="contact-element-detail">
                                 <mat-form-field>                                   
                                     <mat-label>SELECT PROVIDER OR STAFF</mat-label>                                                                      
-                                    <mat-select [(ngModel)]="selectedContactStaff" (selectionChange)="contactStaffSelected($event)">                                     
+                                    <mat-select [(value)]="selectedStaffId" (selectionChange)="getSelectedContactStaff($event.value)">                                     
                                         <mat-option *ngFor="let contactstaff of contactPracticeStaffList" [value]="contactstaff.staffId">
                                             {{contactstaff.staffName}}
-                                        </mat-option>                                                                  
+                                        </mat-option>                                                                                                       
                                     </mat-select>
+                                    <mat-icon matPrefix>person</mat-icon> 
                                 </mat-form-field>                                                               
                             </div>                                                                       
                         </div>
@@ -333,7 +335,68 @@
             (click)="expandedElement=expandedElement===element ? null : element; getContactPracticeDetailWithProviders(element.practiceId);">
         </mat-row>
         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="contact-detail-row"></tr>
-    </mat-table>
+    </mat-table>   
+    <div fxLayout="row" fxLayoutGap="34px" class="contactEmailButtonAlign">
+        <div><button mat-flat-button class="contactEmail" (click)="openEmailToManagersDialog()">E-MAIL MANAGERS</button></div>
+        <div><button mat-flat-button class="contactEmail" (click)="openEmailToAdminsDialog()">E-MAIL ADMINS</button></div>
+        <div><button mat-flat-button class="contactEmail" (click)="openEmailToAllDialog()" matTooltip="The maximum number of recipients is 500.">E-MAIL ALL</button></div>
+    </div>  
 </div>
 
+ <!------------------- Contact Email Dialogs ------------>
+ <ng-template #contactEmailDialog let-dialogRef="dialogRef"> 
+    <div mat-dialog-content class="mat-typography" id="contactEmailDialog">
+        <div class="detail-heading">
+            Select Recipients
+        </div>
+        <div>
+            <div>
+                <h2 mat-dialog-title class="emailFilter">{{ emailReceiversRole }}</h2>
+                <div fxLayout="row" fxLayoutGap="34px">
+                    <mat-table id="emailDialog" [dataSource]="contactEmailList">
+                        <!-- checkbox Column -->
+                        <ng-container matColumnDef="emailCheckbox">
+                            <th mat-header-cell *matHeaderCellDef></th>                  
+                            <td mat-cell *matCellDef="let element">
+                                <mat-checkbox [(ngModel)]="element.email"></mat-checkbox>
+                            </td>
+                        </ng-container>
+                      
+                        <!-- Staff Name Column -->
+                        <ng-container matColumnDef="name">
+                          <th mat-header-cell *matHeaderCellDef> Staff Name </th>
+                          <td mat-cell *matCellDef="let element"> {{element.firstName + ' ' + element.lastName}} </td>
+                        </ng-container>
+                      
+                        <!-- Email Column -->
+                        <ng-container matColumnDef="email">
+                          <th mat-header-cell *matHeaderCellDef> Email </th>
+                          <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+                        </ng-container>
+                      
+                        <!-- Practice Name Column -->
+                        <ng-container matColumnDef="practice">
+                          <th mat-header-cell *matHeaderCellDef> Practice Name </th>
+                          <td mat-cell *matCellDef="let element"> {{element.myPractice.name}} </td>
+                        </ng-container>
+                      
+                        <!-- Staff Role Column -->
+                        <ng-container matColumnDef="staffRole">
+                          <th mat-header-cell *matHeaderCellDef> Staff Role </th>
+                          <td mat-cell *matCellDef="let element"> {{element.position.name}} </td>
+                        </ng-container>               
+                      
+                        <tr mat-header-row *matHeaderRowDef="displayedEmailDialogColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedEmailDialogColumns;"></tr>
+                    </mat-table>
+                </div>
+                
+            </div>
+            <div mat-dialog-actions fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="end end">
+                <div><button mat-flat-button class="contactEmailDialog" (click)="updateEmailReceivers($event)">SEND E-MAIL</button></div>              
+               <div><button mat-flat-button class="contactEmailDialog" mat-dialog-close>CANCEL</button></div>           
+            </div>                        
+        </div>                       
+    </div>
+ </ng-template>
 

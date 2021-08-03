@@ -13,7 +13,7 @@ export interface Staff {
         id: number;
         name: string;
     }
-
+    emailFilters: string;
 }
 
 export class StaffDetails {
@@ -49,7 +49,6 @@ export class Position {
 export class Location {
     id: number;
     name: string;
-
 }
 export class Credentials {
     id: number;

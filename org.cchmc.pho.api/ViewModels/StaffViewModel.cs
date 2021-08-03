@@ -20,5 +20,6 @@ namespace org.cchmc.pho.api.ViewModels
         public DateTime? LegalDisclaimerSigned { get; set; }
         public Practice MyPractice { get; set; }
         public int? PositionId { get; set; }
+        public string EmailFilters { get; set; }
     }
 }

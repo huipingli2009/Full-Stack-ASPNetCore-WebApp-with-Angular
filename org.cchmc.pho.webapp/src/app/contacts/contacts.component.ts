@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
 import { take } from 'rxjs/operators';
@@ -8,6 +8,8 @@ import { RestService } from '../rest.service';
 import { formatDate } from '@angular/common' ;
 import { ContactsDatasource} from './contacts.datasource';
 import { FilterService } from '../services/filter.service';
+import { Staff } from '../models/Staff';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({ 
   templateUrl: './contacts.component.html',
@@ -22,6 +24,8 @@ import { FilterService } from '../services/filter.service';
 })
 export class ContactsComponent implements OnInit {
 
+  @ViewChild('contactEmailDialog') contactEmailDialog: TemplateRef<any>;
+
   //location getter
   get locations() {
     return this.ContactDetailsForm.get('locations') as FormArray;
@@ -31,13 +35,15 @@ export class ContactsComponent implements OnInit {
   contactPracticeDetails: ContactPracticeDetails;
   contactPracticeLocations: ContactPracticeLocation[] = [];
   contactPracticeStaffList: ContactPracticeStaff[] = [];
-  selectedContactStaff: ContactPracticeStaff;
   contactPracticeStaffDetails: ContactPracticeStaffDetails;
   expandedElement: Contact | null;  
   dataSourceContact: ContactsDatasource;
   pmEmail: string; 
   picEmail: string; 
   providerEmail: string; 
+  contactEmailList: Staff[] = []; 
+  emailReceiversRole:  string; 
+  emailReceivers: string[] = [];  
 
   //dropdowns for contact header filters
   phoMembershipList: PHOMembership[] = [];
@@ -54,8 +60,15 @@ export class ContactsComponent implements OnInit {
   board: string;
   contactNameSearch: string;
   textColor : string = 'white';
+  selectedStaffId: number;
 
-  constructor(private rest: RestService, private logger: NGXLogger, private fb: FormBuilder, private filterService: FilterService) {} 
+  //contact email dialog 
+  displayedEmailDialogColumns: string[] = ['emailCheckbox', 'name', 'email', 'practice', 'staffRole'];
+  dialogRef: MatDialogRef<any>;
+
+  constructor(private rest: RestService, private logger: NGXLogger, 
+    private fb: FormBuilder, private filterService: FilterService, 
+    public dialog: MatDialog) {}     
   
   displayedColumns: string[] = ['arrow', 'practiceName', 'practiceType', 'emr', 'phone', 'fax', 'websiteURL'];
 
@@ -100,7 +113,7 @@ export class ContactsComponent implements OnInit {
     notesAboutProvider: ['']     
   });
 
-  ngOnInit(): void { 
+  ngOnInit(): void {    
     this.dataSourceContact = new ContactsDatasource(this.rest);    
     this.getContactsWithFilters();   
     this.getContactPracticeSpecialties();   
@@ -109,9 +122,9 @@ export class ContactsComponent implements OnInit {
   }
 
   getContactsWithFilters() {    
-    this.dataSourceContact.loadContacts(this.qpl, this.specialties.toString(), this.membership, this.board, this.contactNameSearch);
-    this.rest.findContacts(this.qpl, this.specialties.toString(), this.membership, this.board, this.contactNameSearch).subscribe((data) => {
-    this.contactList = data;
+      this.dataSourceContact.loadContacts(this.qpl, this.specialties.toString(), this.membership, this.board, this.contactNameSearch);
+      this.rest.findContacts(this.qpl, this.specialties.toString(), this.membership, this.board, this.contactNameSearch).subscribe((data) => {
+      this.contactList = data;   
     });        
   }
 
@@ -177,13 +190,17 @@ export class ContactsComponent implements OnInit {
     this.ContactProvidersForm.reset();
     return this.rest.getContactPracticeStaffList(practiceId).pipe(take(1)).subscribe((data: ContactPracticeStaff[])=>{
       this.contactPracticeStaffList = data;
+
+      //default selected staff      
+      this.selectedStaffId = this.contactPracticeStaffList[0].staffId;
+    
+      this.getSelectedContactStaff(this.selectedStaffId);
       this.logger.log(this.contactPracticeStaffList,'Practice staff list'); 
     });
   } 
    
   //get selected provider/staff's details
-  contactStaffSelected(event){
-    const staffId = event.value;
+  getSelectedContactStaff(staffId: number){
     return this.rest.getContactStaffDetails(staffId).pipe(take(1)).subscribe((data: ContactPracticeStaffDetails)=>{
       this.contactPracticeStaffDetails = data;
 
@@ -206,7 +223,7 @@ export class ContactsComponent implements OnInit {
       this.logger.log(this.contactPracticeStaffDetails,'Contact practice staff details'); 
     });
   }  
-
+  
   //get PHO membership
   getContactPracticePHOMembership(){
     return this.rest.getContactPracticePHOMembership().pipe(take(1)).subscribe((data: PHOMembership[]) => {
@@ -269,5 +286,62 @@ export class ContactsComponent implements OnInit {
   refreshContactPage(){
     window.location.reload();
   }
+
+  getContactEmailList(managers: boolean, admins: boolean, all: boolean){
+    return this.rest.getContactEmailList(managers, admins, all).pipe(take(1)).subscribe((data: Staff[]) =>{
+      this.contactEmailList = data;  
+      this.emailReceiversRole = this.contactEmailList[0].emailFilters;    
+      this.logger.log(this.contactEmailList, 'Contact email list');
+
+      //get the original email receiver list based on the email button clicked
+      data.forEach(item => this.emailReceivers.push(item.email));      
+    });
+  }
+
+  openEmailToManagersDialog(){
+    this.getContactEmailList(true, false, false);
+    this.dialogConfiguration();
+  } 
+
+  openEmailToAdminsDialog(){
+    this.getContactEmailList(false, true, false);
+    this.dialogConfiguration();
+  }
+
+  openEmailToAllDialog(){
+    this.getContactEmailList(false, false, true);
+    this.dialogConfiguration();
+  }
+
+  dialogConfiguration(){
+    this.dialogRef = this.dialog.open(this.contactEmailDialog, {
+      width: '800px',
+      height: '600px',
+      autoFocus: true,
+      disableClose: true,     
+      data: { 
+        name: this.contactEmailList      
+      }
+    }); 
+  }
+
+  updateEmailReceivers(event){         
+     //reset emailReceiver list
+     this.emailReceivers = [];     
+
+     //get the updated email receivers from dialog
+     this.dialogRef.close(this.contactEmailList.forEach(
+       (item) => {
+         //exclude those removed and push those only selected to email receiver list
+         if (item.email)
+         {
+           this.emailReceivers.push(item.email);
+         }         
+       })
+     );
+   
+     //bcc to the updated email receivers
+     window.location.href = "mailto:?bcc=" + this.emailReceivers;    
+  }  
 }
 

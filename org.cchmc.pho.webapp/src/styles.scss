@@ -1421,7 +1421,8 @@ button.toast-close-button {
     letter-spacing: normal;      
     background-color: #f5f5f5; 
     padding: 1em;   
-  }
+  }  
+ 
   #addressLine1 {
     min-width: 288px;
   }
@@ -1901,7 +1902,8 @@ button.toast-close-button {
   }
 }
 
-#admin-dialog, #patient-admin-dialog,#patientAdminDialog, #passwordChangeForm ,#Staff-admin-dialog, #addstaff-dialog, #edit-providers-dialog {
+#admin-dialog, #patient-admin-dialog,#patientAdminDialog, #passwordChangeForm ,#Staff-admin-dialog, 
+#addstaff-dialog, #edit-providers-dialog, #contactEmailDialog {
   overflow: visible;
   .detail-heading {
     font-family: "ArcherBold";
@@ -1912,6 +1914,11 @@ button.toast-close-button {
     margin-bottom: 13px;
   }  
   
+  .emailFilter {
+    font-family: "ArcherBold";
+    font-weight: bold;
+  } 
+
   .potentialPatientDialog {
     button {
       .patientAdminDialogtooltip {
@@ -1996,6 +2003,14 @@ button.toast-close-button {
       font-size: 18px;
       color: primary;
     }
+  }
+
+  .contactEmailDialog {
+    font-family: ArcherSemiBold; 
+    background-color:#f0673c;         
+    border-radius: 5pt; 
+    margin-top: 5px;;   
+    padding: 10px, 0.1px, 10px, 0.1px;     
   }
 
   .dialogLabel {
@@ -3145,6 +3160,17 @@ display: block !important;
     background: #efefef;
   }
 
+  .contactEmailButtonAlign {
+    justify-content: flex-end; 
+  }
+  .contactEmail {
+    font-family: ArcherSemiBold; 
+    background-color:#f0673c;         
+    border-radius: 5pt; 
+    margin-top: 5px;;   
+    padding: 10px, 0.1px, 10px, 0.1px;   
+  }
+
   .contact-element-row td {
     border-bottom-width: 0;
   }
@@ -3203,8 +3229,7 @@ display: block !important;
     opacity: 0.5;
   } 
 
-  .mat-cell {
-    //color: #4a4a4a;
+  .mat-cell {  
     font-size: 13px;
     line-height: 18px;  
     border-radius: 10px;  
@@ -3217,8 +3242,9 @@ display: block !important;
     height: 15px !important;       
     padding-left: 23px;  
        
-    a:link {
-      font-family: ArcherSemiBold;      
+    a, a:link, button {
+      font-family: ArcherSemiBold;
+      color: #efefef !important;      
       background-color:#f0673c;      
       border-radius: 5pt; 
       padding-left: 23px; 

@@ -987,6 +987,20 @@ export class RestService {
     );
   }
 
+  /*Get Contact Email List*/
+  getContactEmailList(managers: boolean, admins: boolean, all: boolean): Observable<Staff[]> {
+    let paramsValue = new HttpParams();
+    paramsValue = paramsValue.append("managers", managers.toString());
+    paramsValue = paramsValue.append("admins", admins.toString());
+    paramsValue = paramsValue.append("all", all.toString());
+
+    return this.http.get<Staff[]>(`${API_URL}/api/Contacts/contactemaillist`, {params: paramsValue}).pipe(
+      map((data: Staff[]) => {
+        return data;
+      })
+    );
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {    
     return (error: any): Observable<T> => {
 

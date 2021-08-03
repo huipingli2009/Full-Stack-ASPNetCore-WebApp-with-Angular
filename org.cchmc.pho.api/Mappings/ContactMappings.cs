@@ -16,6 +16,7 @@ namespace org.cchmc.pho.api.Mappings
             CreateMap<BoardMembership, BoardMembershipViewModel>();
             CreateMap<Specialty, SpecialtyViewModel>();
             CreateMap<PHOMembership, PHOMembershipViewModel>();
+            CreateMap<Staff, StaffViewModel>();
         }
     }
 }
