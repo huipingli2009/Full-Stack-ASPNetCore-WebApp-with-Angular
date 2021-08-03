@@ -31,8 +31,7 @@ namespace org.cchmc.pho.api.Controllers
 
         [HttpGet()]
         [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin, PHO Leader")]
-        [SwaggerResponse(200, type: typeof(List<ContactViewModel>))]
-        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(200, type: typeof(List<ContactViewModel>))]      
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> GetContacts(bool? qpl, string specialty, string membership, string board, string namesearch)
         {
@@ -55,8 +54,7 @@ namespace org.cchmc.pho.api.Controllers
         
         [HttpGet("{contact}")]        
         [Authorize(Roles = "Practice Member,Practice Coordinator,Practice Admin,PHO Member,PHO Admin, PHO Leader")]
-        [SwaggerResponse(200, type: typeof(ContactPracticeDetailsVidewModel))]
-        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(200, type: typeof(ContactPracticeDetailsVidewModel))]     
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> GetContactPracticeDetails(string contact)
         {
@@ -86,8 +84,7 @@ namespace org.cchmc.pho.api.Controllers
 
         [HttpGet("practicelocations")]
         [Authorize(Roles = "Practice Member,Practice Coordinator,Practice Admin,PHO Member,PHO Admin, PHO Leader")]
-        [SwaggerResponse(200, type: typeof(List<ContactPracticeLocationViewModel>))]
-        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(200, type: typeof(List<ContactPracticeLocationViewModel>))]     
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> GetContactPracticeLocations(int practiceId)
         {
@@ -112,8 +109,7 @@ namespace org.cchmc.pho.api.Controllers
 
         [HttpGet("contactstafflist")]
         [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin, PHO Leader")]
-        [SwaggerResponse(200, type: typeof(List<ContactPracticeStaffViewModel>))]
-        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(200, type: typeof(List<ContactPracticeStaffViewModel>))]      
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> GetContactPracticeStaffList(int practiceId)
         {
@@ -136,9 +132,8 @@ namespace org.cchmc.pho.api.Controllers
 
         [HttpGet("contactstaffdetails")]
         [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin, PHO Leader")]
-        [SwaggerResponse(200, type: typeof(ContactPracticeStaffDetailsViewModel))]
-        [SwaggerResponse(400, type: typeof(string))]
-        [SwaggerResponse(200, type: typeof(string))]
+        [SwaggerResponse(200, type: typeof(ContactPracticeStaffDetailsViewModel))]     
+        [SwaggerResponse(500, type: typeof(string))]
 
         public async Task<IActionResult> GetContactStaffDetails(int staffId)
         {
@@ -162,9 +157,8 @@ namespace org.cchmc.pho.api.Controllers
         //dropdown list for specialty
         [HttpGet("contactspecialtylist")]        
         [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin, PHO Leader")]
-        [SwaggerResponse(200, type: typeof(List<SpecialtyViewModel>))]
-        [SwaggerResponse(400, type: typeof(string))]
-        [SwaggerResponse(200, type: typeof(string))]
+        [SwaggerResponse(200, type: typeof(List<SpecialtyViewModel>))]       
+        [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> GetContactPracticeSpecialties()
         {
             try
@@ -184,8 +178,7 @@ namespace org.cchmc.pho.api.Controllers
         //dropdown list for PHO membership
         [HttpGet("phomembership")]
         [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin, PHO Leader")]
-        [SwaggerResponse(200, type: typeof(List<PHOMembershipViewModel>))]
-        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(200, type: typeof(List<PHOMembershipViewModel>))]      
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> GetContactPracticePHOMembership()
         {
@@ -206,8 +199,7 @@ namespace org.cchmc.pho.api.Controllers
         //dropdown list for boardship
         [HttpGet("boardmembership")]       
         [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin, PHO Leader")]
-        [SwaggerResponse(200, type: typeof(List<BoardMembershipViewModel>))]
-        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(200, type: typeof(List<BoardMembershipViewModel>))]       
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> GetContactPracticeBoardMembership()
         {
@@ -228,8 +220,7 @@ namespace org.cchmc.pho.api.Controllers
         //get contact staff email list
         [HttpGet("contactemaillist")]     
         [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin, PHO Leader")]
-        [SwaggerResponse(200, type: typeof(List<StaffViewModel>))]
-        [SwaggerResponse(400, type: typeof(string))]
+        [SwaggerResponse(200, type: typeof(List<StaffViewModel>))]    
         [SwaggerResponse(500, type: typeof(string))]
         public async Task<IActionResult> GetContactEmailList(bool? managers, bool? admins, bool? all)
         {  
