@@ -335,10 +335,10 @@ export class ContactsComponent implements OnInit {
          //exclude those removed and push those only selected to email receiver list
          if (item.email)
          {
-           this.emailReceivers.push(item.email);
+           this.emailReceivers.push(item.email + ';');
          }         
        })
-     );
+     );    
    
      //bcc to the updated email receivers
      window.location.href = "mailto:?bcc=" + this.emailReceivers;    
