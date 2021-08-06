@@ -10,7 +10,6 @@ import { ContactsDatasource} from './contacts.datasource';
 import { FilterService } from '../services/filter.service';
 import { Staff } from '../models/Staff';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { BehaviorSubject } from 'rxjs';
 
 @Component({ 
   templateUrl: './contacts.component.html',
@@ -179,7 +178,7 @@ export class ContactsComponent implements OnInit {
   }
 
   trackContact(index: number, item: Contact): string {
-    return '${item.id}';
+    return '${item.practiceId}';
   }
 
   getContactPracticeLocations(id: number){
