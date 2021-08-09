@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
 import { take } from 'rxjs/operators';
@@ -14,6 +14,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 @Component({ 
   templateUrl: './contacts.component.html',
   styleUrls: ['./contacts.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({ height: '0px', minHeight: '0' })),
@@ -121,10 +122,7 @@ export class ContactsComponent implements OnInit {
   }  
 
   getContactsWithFilters() {    
-      this.dataSourceContact.loadContacts(this.qpl, this.specialties.toString(), this.membership, this.board, this.contactNameSearch);
-      this.rest.findContacts(this.qpl, this.specialties.toString(), this.membership, this.board, this.contactNameSearch).subscribe((data) => {
-      this.contactList = data;   
-    });        
+      this.dataSourceContact.loadContacts(this.qpl, this.specialties.toString(), this.membership, this.board, this.contactNameSearch);       
   }
 
   getContactPracticeDetailWithProviders(practiceId: number){
@@ -178,6 +176,7 @@ export class ContactsComponent implements OnInit {
   }
 
   trackContact(index: number, item: Contact): string {
+    if (!item) return null;
     return '${item.practiceId}';
   }
 
