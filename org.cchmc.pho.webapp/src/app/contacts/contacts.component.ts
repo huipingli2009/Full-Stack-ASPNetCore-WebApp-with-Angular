@@ -22,8 +22,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
     ]),
   ],
 })
-export class ContactsComponent implements OnInit {
-
+export class ContactsComponent implements OnInit {  
   @ViewChild('contactEmailDialog') contactEmailDialog: TemplateRef<any>;
 
   //location getter
@@ -119,7 +118,7 @@ export class ContactsComponent implements OnInit {
     this.getContactPracticeSpecialties();   
     this.getContactPracticePHOMembership(); 
     this.getContactPracticeBoardship();
-  }
+  }  
 
   getContactsWithFilters() {    
       this.dataSourceContact.loadContacts(this.qpl, this.specialties.toString(), this.membership, this.board, this.contactNameSearch);
@@ -176,6 +175,10 @@ export class ContactsComponent implements OnInit {
     });
    
     return locationFormArray;
+  }
+
+  trackContact(index: number, item: Contact): string {
+    return '${item.practiceId}';
   }
 
   getContactPracticeLocations(id: number){

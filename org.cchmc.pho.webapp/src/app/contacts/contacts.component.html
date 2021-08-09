@@ -49,7 +49,7 @@
     </div>
     <div>
     </div>
-    <mat-table id="contact" [dataSource]="dataSourceContact" class="mat-elevation-z8" multiTemplateDataRows>
+    <mat-table id="contact" [dataSource]="dataSourceContact" [trackBy]="trackContact" class="mat-elevation-z8" multiTemplateDataRows>
         <ng-container matColumnDef="arrow">
             <mat-header-cell *matHeaderCellDef></mat-header-cell>
             <mat-cell *matCellDef="let element">
@@ -230,11 +230,11 @@
                         </div>
                     </div>
                     <mat-divider [vertical]="true"></mat-divider>
-                    <div id="contact-details" style="padding-left: 1em;" fxLayout="column" fxFlex>
+                    <div id="contact-details" style="padding-left: 1em;padding-right: 1em;" fxLayout="column" fxFlex>
                         <div fxLayout="row" class="detail-heading">
                             PROVIDER LOOKUP
                         </div>
-                        <div fxLayout="row" fxLayoutGap="34px" class="form-row">  
+                        <div fxLayout="column" fxLayoutGap="34px" class="form-row">  
                             <div fxLayout="column" fxFlex="70" class="contact-element-detail">
                                 <mat-form-field>                                   
                                     <mat-label>SELECT PROVIDER OR STAFF</mat-label>                                                                      
@@ -247,12 +247,12 @@
                                 </mat-form-field>                                                               
                             </div>                                                                       
                         </div>
-                        <div fxLayout="row" fxLayoutGap="34px" class="form-row">  
+                        <div fxLayout="column" fxLayoutGap="34px" class="form-row">  
                             <form [formGroup]="ContactProvidersForm">
-                                <div class="contact-element-detail" fxFlex="80">                            
+                                <div class="contact-element-detail" fxFlex>                            
                                     <div fxLayout="row" fxLayoutGap="34px" class="form-row"> 
-                                        <a [href]="'mailto:'+ providerEmail">                      
-                                            <div fxLayout="column" fxFlex="90">
+                                        <a [href]="'mailto:'+ providerEmail" fxFlex="80">                      
+                                            <div fxLayout="column" fxFlex="100">
                                                 <mat-form-field floatLabel="always">
                                                     <mat-label>EMAIL</mat-label>
                                                     <input matInput formControlName="email" readonly>
@@ -260,8 +260,8 @@
                                                 </mat-form-field>                             
                                             </div>
                                         </a>
-                                        <div fxLayout="column" fxFlex="100">
-                                            <mat-form-field floatLabel="always" style="margin-left: -23px;">
+                                        <div fxLayout="column" fxFlex="100">                                           
+                                            <mat-form-field floatLabel="always">
                                                 <mat-label>PHONE</mat-label>
                                                 <input matInput formControlName="phone" readonly> 
                                             </mat-form-field>                                   
