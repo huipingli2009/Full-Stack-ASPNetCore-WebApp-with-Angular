@@ -13,17 +13,19 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({ 
   templateUrl: './contacts.component.html',
-  styleUrls: ['./contacts.component.scss'],
+  styleUrls: ['./contacts.component.scss'], 
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({ height: '0px', minHeight: '0' })),
       state('expanded', style({ height: '*' })),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-  ],
+    ]),   
+  ]
 })
 export class ContactsComponent implements OnInit {  
   @ViewChild('contactEmailDialog') contactEmailDialog: TemplateRef<any>;
+ 
+  isDisabled: boolean = false;
 
   //location getter
   get locations() {
@@ -118,18 +120,16 @@ export class ContactsComponent implements OnInit {
     this.getContactPracticeSpecialties();   
     this.getContactPracticePHOMembership(); 
     this.getContactPracticeBoardship();
-  }  
-
-  getContactsWithFilters() {    
-      this.dataSourceContact.loadContacts(this.qpl, this.specialties.toString(), this.membership, this.board, this.contactNameSearch);
-      this.rest.findContacts(this.qpl, this.specialties.toString(), this.membership, this.board, this.contactNameSearch).subscribe((data) => {
-      this.contactList = data;   
-    });        
+  } 
+  
+  getContactsWithFilters() {      
+    this.dataSourceContact.loadContacts(this.qpl, this.specialties.toString(), this.membership, this.board, this.contactNameSearch);       
   }
 
   getContactPracticeDetailWithProviders(practiceId: number){
+    this.isDisabled = true; 
     this.getContactPracticeDetails(practiceId);
-    this.getContactPracticeStaffList(practiceId);
+    this.getContactPracticeStaffList(practiceId);        
   }
   
   getContactPracticeDetails(id: number){
@@ -178,6 +178,7 @@ export class ContactsComponent implements OnInit {
   }
 
   trackContact(index: number, item: Contact): string {
+    if (!item) return null;
     return '${item.practiceId}';
   }
 
@@ -338,7 +339,7 @@ export class ContactsComponent implements OnInit {
          //exclude those removed and push those only selected to email receiver list
          if (item.email)
          {
-           this.emailReceivers.push(item.email + ';');
+           this.emailReceivers.push(item.email);
          }         
        })
      );    

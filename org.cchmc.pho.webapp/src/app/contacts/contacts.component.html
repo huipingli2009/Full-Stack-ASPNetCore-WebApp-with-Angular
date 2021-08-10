@@ -46,9 +46,7 @@
                 </button>
             </mat-form-field>
         </div>
-    </div>
-    <div>
-    </div>
+    </div>   
     <mat-table id="contact" [dataSource]="dataSourceContact" [trackBy]="trackContact" class="mat-elevation-z8" multiTemplateDataRows>
         <ng-container matColumnDef="arrow">
             <mat-header-cell *matHeaderCellDef></mat-header-cell>
@@ -93,7 +91,7 @@
         </ng-container>  
 
         <!-- Hidden Column===============================================================-->
-        <!-- contact practiceId Column -->
+       
         <ng-container matColumnDef="practiceId">
             <mat-header-cell *matHeaderCellDef> PracticeId </mat-header-cell>
             <mat-cell *matCellDef="let element"> {{element.practiceId}} </mat-cell>
@@ -106,8 +104,8 @@
                     <div id="contact-details" fxLayout="column" fxFlex="55">
                         <div fxLayout="row" class="detail-heading">
                             PRACTICE DETAILS
-                        </div>
-                        <div fxLayout="row">           
+                        </div>                        
+                        <div fxLayout="row" *ngIf="isDisabled">           
                             <form [formGroup]="ContactDetailsForm">
                                 <div class="contact-element-detail" fxFlex="85">
                                     <div fxLayout="row" fxLayoutGap="34px" class="form-row">                                
@@ -218,8 +216,7 @@
                                                                 <input matInput formControlName="zip" readonly>
                                                             </mat-form-field>                                                                 
                                                         </div>                                                                                                                                                                                                                                                                                  
-                                                    </div>  
-                                                    <!-- use material divider to separate locations based on conditions -->                                             
+                                                    </div>                                                   
                                                     <mat-divider class="locationDivider" *ngIf = "!isLast"></mat-divider>                                                                                                                                    
                                                 </div>                                   
                                             </div>                                   
@@ -234,7 +231,7 @@
                         <div fxLayout="row" class="detail-heading">
                             PROVIDER LOOKUP
                         </div>
-                        <div fxLayout="column" fxLayoutGap="34px" class="form-row">  
+                        <div fxLayout="column" fxLayoutGap="34px" *ngIf="isDisabled" class="form-row">  
                             <div fxLayout="column" fxFlex="70" class="contact-element-detail">
                                 <mat-form-field>                                   
                                     <mat-label>SELECT PROVIDER OR STAFF</mat-label>                                                                      
@@ -247,7 +244,7 @@
                                 </mat-form-field>                                                               
                             </div>                                                                       
                         </div>
-                        <div fxLayout="column" fxLayoutGap="34px" class="form-row">  
+                        <div fxLayout="column" fxLayoutGap="34px" *ngIf="isDisabled" class="form-row">  
                             <form [formGroup]="ContactProvidersForm">
                                 <div class="contact-element-detail" fxFlex>                            
                                     <div fxLayout="row" fxLayoutGap="34px" class="form-row"> 
