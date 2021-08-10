@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectionStrategy, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
 import { take } from 'rxjs/operators';
@@ -13,18 +13,19 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({ 
   templateUrl: './contacts.component.html',
-  styleUrls: ['./contacts.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrls: ['./contacts.component.scss'], 
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({ height: '0px', minHeight: '0' })),
       state('expanded', style({ height: '*' })),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-  ],
+    ]),   
+  ]
 })
 export class ContactsComponent implements OnInit {  
   @ViewChild('contactEmailDialog') contactEmailDialog: TemplateRef<any>;
+ 
+  isDisabled: boolean = false;
 
   //location getter
   get locations() {
@@ -119,15 +120,16 @@ export class ContactsComponent implements OnInit {
     this.getContactPracticeSpecialties();   
     this.getContactPracticePHOMembership(); 
     this.getContactPracticeBoardship();
-  }  
-
-  getContactsWithFilters() {    
-      this.dataSourceContact.loadContacts(this.qpl, this.specialties.toString(), this.membership, this.board, this.contactNameSearch);       
+  } 
+  
+  getContactsWithFilters() {      
+    this.dataSourceContact.loadContacts(this.qpl, this.specialties.toString(), this.membership, this.board, this.contactNameSearch);       
   }
 
   getContactPracticeDetailWithProviders(practiceId: number){
+    this.isDisabled = true; 
     this.getContactPracticeDetails(practiceId);
-    this.getContactPracticeStaffList(practiceId);
+    this.getContactPracticeStaffList(practiceId);        
   }
   
   getContactPracticeDetails(id: number){
