@@ -10,7 +10,7 @@ import { ContactsDatasource} from './contacts.datasource';
 import { FilterService } from '../services/filter.service';
 import { Staff } from '../models/Staff';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { CurrentUser, Role } from '../models/user';
+import { Role } from '../models/user';
 import { UserService } from '../services/user.service';
 
 @Component({ 
@@ -44,9 +44,7 @@ export class ContactsComponent implements OnInit {
   pmEmail: string; 
   picEmail: string; 
   providerEmail: string; 
-  userCanSendEmail: boolean;
-  currentUser: CurrentUser;
-  currentUserId: number;  
+  userCanSendEmail: boolean; 
 
   //dropdowns for contact header filters
   phoMembershipList: PHOMembership[] = [];
@@ -133,16 +131,10 @@ export class ContactsComponent implements OnInit {
 
   getCurrentUser() {
     this.userService.getCurrentUser().pipe(take(1)).subscribe((data) => {
-      this.currentUser = data;
-      this.currentUserId = data.id;
-
       //modify here if additional user roles need to be added for group email functionality
       if (data.role.id === Role.PHOAdmin) {
         this.userCanSendEmail = true;
-      } 
-      else { 
-        this.userCanSendEmail = false; 
-      }
+      }      
     });
   }
   

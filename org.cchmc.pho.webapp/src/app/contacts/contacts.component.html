@@ -232,7 +232,7 @@
                         </div>
                         <div fxLayout="column" fxLayoutGap="34px" *ngIf="isDisabled" class="form-row">  
                             <div fxLayout="column" fxFlex="70" class="contact-element-detail">
-                                <mat-form-field>                                   
+                                <mat-form-field class="providerDropdown">                                   
                                     <mat-label>SELECT PROVIDER OR STAFF</mat-label>                                                                      
                                     <mat-select [(value)]="selectedStaffId" (selectionChange)="getSelectedContactStaff($event.value)">                                     
                                         <mat-option *ngFor="let contactstaff of contactPracticeStaffList" [value]="contactstaff.staffId">
@@ -340,10 +340,10 @@
         </mat-row>
         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="contact-detail-row"></tr>
     </mat-table>   
-    <div fxLayout="row" fxLayoutGap="34px" class="contactEmailButtonAlign">
-        <div><button mat-flat-button class="contactEmail" *ngIf="userCanSendEmail" (click)="openEmailToManagersDialog()">E-MAIL MANAGERS</button></div>
-        <div><button mat-flat-button class="contactEmail" *ngIf="userCanSendEmail" (click)="openEmailToAdminsDialog()">E-MAIL ADMINS</button></div>
-        <div><button mat-flat-button class="contactEmail" *ngIf="userCanSendEmail" (click)="openEmailToAllDialog()" matTooltip="The maximum number of recipients is 500.">E-MAIL ALL</button></div>
+    <div fxLayout="row" fxLayoutGap="34px" *ngIf="userCanSendEmail" class="contactEmailButtonAlign">
+        <div><button mat-flat-button class="contactEmail" (click)="openEmailToManagersDialog()">E-MAIL MANAGERS</button></div>
+        <div><button mat-flat-button class="contactEmail" (click)="openEmailToAdminsDialog()">E-MAIL ADMINS</button></div>
+        <div><button mat-flat-button class="contactEmail" (click)="openEmailToAllDialog()" matTooltip="The maximum number of recipients is 500.">E-MAIL ALL</button></div>
     </div>  
 </div>
 
