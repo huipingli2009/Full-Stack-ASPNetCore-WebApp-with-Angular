@@ -10,6 +10,8 @@ import { ContactsDatasource} from './contacts.datasource';
 import { FilterService } from '../services/filter.service';
 import { Staff } from '../models/Staff';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Role } from '../models/user';
+import { UserService } from '../services/user.service';
 
 @Component({ 
   templateUrl: './contacts.component.html',
@@ -23,16 +25,16 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
   ]
 })
 export class ContactsComponent implements OnInit {  
-  @ViewChild('contactEmailDialog') contactEmailDialog: TemplateRef<any>;
- 
-  isDisabled: boolean = false;
+  @ViewChild('contactEmailDialog') contactEmailDialog: TemplateRef<any>; 
 
   //location getter
   get locations() {
     return this.ContactDetailsForm.get('locations') as FormArray;
   }
 
+  //Contact list/details/locations and providers/details
   contactList: Contact[];
+  isDisabled: boolean = false;
   contactPracticeDetails: ContactPracticeDetails;
   contactPracticeLocations: ContactPracticeLocation[] = [];
   contactPracticeStaffList: ContactPracticeStaff[] = [];
@@ -42,9 +44,7 @@ export class ContactsComponent implements OnInit {
   pmEmail: string; 
   picEmail: string; 
   providerEmail: string; 
-  contactEmailList: Staff[] = []; 
-  emailReceiversRole:  string; 
-  emailReceivers: string[] = [];  
+  userCanSendEmail: boolean; 
 
   //dropdowns for contact header filters
   phoMembershipList: PHOMembership[] = [];
@@ -61,18 +61,24 @@ export class ContactsComponent implements OnInit {
   board: string;
   contactNameSearch: string;
   textColor : string = 'white';
-  selectedStaffId: number;
+  selectedStaffId: number;  
 
   //contact email dialog 
-  displayedEmailDialogColumns: string[] = ['emailCheckbox', 'name', 'email', 'practice', 'staffRole'];
-  dialogRef: MatDialogRef<any>;
+  contactEmailList: Staff[] = []; 
+  emailReceiversRole:  string; 
+  emailReceivers: string[] = []; 
+  dialogRef: MatDialogRef<any>;    
 
   constructor(private rest: RestService, private logger: NGXLogger, 
     private fb: FormBuilder, private filterService: FilterService, 
-    public dialog: MatDialog) {}     
+    private userService: UserService, public dialog: MatDialog) {}     
   
+  //contact practice's data table
   displayedColumns: string[] = ['arrow', 'practiceName', 'practiceType', 'emr', 'phone', 'fax', 'websiteURL'];
 
+  //contact email dialog table
+  displayedEmailDialogColumns: string[] = ['emailCheckbox', 'name', 'email', 'practice', 'staffRole'];
+  
   ContactDetailsForm = this.fb.group({
     practiceId: [''],
     practiceName: [''],
@@ -120,7 +126,17 @@ export class ContactsComponent implements OnInit {
     this.getContactPracticeSpecialties();   
     this.getContactPracticePHOMembership(); 
     this.getContactPracticeBoardship();
+    this.getCurrentUser();
   } 
+
+  getCurrentUser() {
+    this.userService.getCurrentUser().pipe(take(1)).subscribe((data) => {
+      //modify here if additional user roles need to be added for group email functionality
+      if (data.role.id === Role.PHOAdmin) {
+        this.userCanSendEmail = true;
+      }      
+    });
+  }
   
   getContactsWithFilters() {      
     this.dataSourceContact.loadContacts(this.qpl, this.specialties.toString(), this.membership, this.board, this.contactNameSearch);       
@@ -329,23 +345,23 @@ export class ContactsComponent implements OnInit {
     }); 
   }
 
-  updateEmailReceivers(event){         
-     //reset emailReceiver list
-     this.emailReceivers = [];     
+  updateEmailReceivers(event){ 
+    //reset emailReceiver list
+    this.emailReceivers = [];     
 
-     //get the updated email receivers from dialog
-     this.dialogRef.close(this.contactEmailList.forEach(
-       (item) => {
-         //exclude those removed and push those only selected to email receiver list
-         if (item.email)
-         {
-           this.emailReceivers.push(item.email);
-         }         
-       })
-     );    
+    //get the updated email receivers from dialog
+    this.dialogRef.close(this.contactEmailList.forEach(
+      (item) => {
+        //exclude those removed and push those only selected to email receiver list
+        if (item.email)
+        {
+          this.emailReceivers.push(item.email);
+        }         
+      })
+    );    
    
      //bcc to the updated email receivers
-     window.location.href = "mailto:?bcc=" + this.emailReceivers;    
+     window.location.href = "mailto:?bcc=" + this.emailReceivers; 
   }  
 }
 
