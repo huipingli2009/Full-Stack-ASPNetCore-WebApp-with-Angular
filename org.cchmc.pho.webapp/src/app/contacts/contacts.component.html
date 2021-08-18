@@ -93,6 +93,8 @@
         <ng-container matColumnDef="expandedDetail">
             <mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length"
                 [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                <!-- <ng-template #practicedetails [selectedPracticeId] = "element.practiceId">
+                </ng-template> -->
                 <app-practice-detail  [selectedPracticeId] = "element.practiceId"></app-practice-detail>
                 <!-- <div fxLayout="row">
                     <div id="contact-details" fxLayout="column" fxFlex="55">
@@ -331,7 +333,7 @@
         <mat-row *matRowDef="let element; columns: displayedColumns" 
             class="contact-element-row"
             [class.contact-expanded-row]="expandedElement === element"            
-            (click)="expandedElement=expandedElement===element ? null : element;loadPracticeDetail()">
+            (click)="expandedElement=expandedElement===element ? null : element;">
         </mat-row>
         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="contact-detail-row"></tr>
     </mat-table>   
@@ -402,4 +404,3 @@
         </div>                       
     </div>
  </ng-template>
-

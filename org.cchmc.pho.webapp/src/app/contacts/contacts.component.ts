@@ -24,6 +24,8 @@ import { UserService } from '../services/user.service';
 })
 export class ContactsComponent implements OnInit {  
   @ViewChild('contactEmailDialog') contactEmailDialog: TemplateRef<any>;  
+  @ViewChild('practicedetails', {read: ViewContainerRef})
+  private practiceDetailsVCR: ViewContainerRef;
 
   //Contact list/details/locations and providers/details
   contactList: Contact[];
@@ -96,14 +98,14 @@ export class ContactsComponent implements OnInit {
     this.dataSourceContact.loadContacts(this.qpl, this.specialties.toString(), this.membership, this.board, this.contactNameSearch);       
   }
 
-  async loadPracticeDetail() {
-    this.vcref.clear();
-    const {PracticeDetailComponent} = await import('../shared/practice-detail/practice-detail.component');
+  // async loadPracticeDetail() {
+  //   this.vcref.clear();
+  //   const {PracticeDetailComponent} = await import('../shared/practice-detail/practice-detail.component');
 
-    let practiceDetailComp = this.vcref.createComponent(
-      this.cfr.resolveComponentFactory(PracticeDetailComponent)
-    );
-  }  
+  //   let practiceDetailComp = this.vcref.createComponent(
+  //     this.cfr.resolveComponentFactory(PracticeDetailComponent)
+  //   );
+  // }  
 
   trackContact(index: number, item: Contact): string {
     if (!item) return null;
@@ -230,4 +232,5 @@ export class ContactsComponent implements OnInit {
      window.location.href = "mailto:?bcc=" + this.emailReceivers; 
   }  
 }
+
 

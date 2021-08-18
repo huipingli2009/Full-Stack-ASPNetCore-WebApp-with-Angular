@@ -72,6 +72,7 @@ export class PracticeDetailComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    // this.selectedPracticeId = 1;
     this.getContactPracticeDetailWithProviders(this.selectedPracticeId);    
   }
 
