@@ -52,8 +52,9 @@ namespace org.cchmc.pho.api.Controllers
             }
         }        
         
-        [HttpGet("{contact}")]        
-        [Authorize(Roles = "Practice Member,Practice Coordinator,Practice Admin,PHO Member,PHO Admin, PHO Leader")]
+        [HttpGet("{contact}")]    
+        [AllowAnonymous]
+        //[Authorize(Roles = "Practice Member,Practice Coordinator,Practice Admin,PHO Member,PHO Admin, PHO Leader")]
         [SwaggerResponse(200, type: typeof(ContactPracticeDetailsVidewModel))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]

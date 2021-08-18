@@ -60,27 +60,22 @@
             <mat-header-cell *matHeaderCellDef> NAME </mat-header-cell>
             <mat-cell *matCellDef="let element" class="practice-name"> {{element.practiceName}} </mat-cell>
         </ng-container>
-
         <ng-container matColumnDef="practiceType">
             <mat-header-cell *matHeaderCellDef> PRACTICE TYPE </mat-header-cell>
             <mat-cell *matCellDef="let element"> {{element.practiceType}} </mat-cell>
         </ng-container>
-
         <ng-container matColumnDef="emr">
             <mat-header-cell *matHeaderCellDef> EMR </mat-header-cell>
             <mat-cell *matCellDef="let element"> {{element.emr}} </mat-cell>
         </ng-container>
-
         <ng-container matColumnDef="phone">
             <mat-header-cell *matHeaderCellDef> PHONE </mat-header-cell>
             <mat-cell *matCellDef="let element"> {{element.phone}} </mat-cell>
         </ng-container>
-
         <ng-container matColumnDef="fax">
             <mat-header-cell *matHeaderCellDef> FAX </mat-header-cell>
             <mat-cell *matCellDef="let element"> {{element.fax}} </mat-cell>
         </ng-container>
-
         <ng-container matColumnDef="websiteURL" >
             <mat-header-cell *matHeaderCellDef> WEBSITE </mat-header-cell>
             <mat-cell *matCellDef="let element" class="practicewebsitelink">               
@@ -94,17 +89,17 @@
         <ng-container matColumnDef="practiceId">
             <mat-header-cell *matHeaderCellDef> PracticeId </mat-header-cell>
             <mat-cell *matCellDef="let element"> {{element.practiceId}} </mat-cell>
-        </ng-container>  
-
+        </ng-container> 
         <ng-container matColumnDef="expandedDetail">
             <mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length"
                 [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-                <div fxLayout="row">
+                <!-- <app-practice-detail  [selectedPracticeId] = "element.practiceId"></app-practice-detail> -->
+                <!-- <div fxLayout="row">
                     <div id="contact-details" fxLayout="column" fxFlex="55">
                         <div fxLayout="row" class="detail-heading">
                             PRACTICE DETAILS
-                        </div>                        
-                        <div fxLayout="row" *ngIf="isDisabled">           
+                        </div>                                               
+                        <div fxLayout="row">           
                             <form [formGroup]="ContactDetailsForm">
                                 <div class="contact-element-detail" fxFlex="85">
                                     <div fxLayout="row" fxLayoutGap="34px" class="form-row">                                
@@ -230,7 +225,7 @@
                         <div fxLayout="row" class="detail-heading">
                             PROVIDER LOOKUP
                         </div>
-                        <div fxLayout="column" fxLayoutGap="34px" *ngIf="isDisabled" class="form-row">  
+                        <div fxLayout="column" fxLayoutGap="34px" class="form-row">  
                             <div fxLayout="column" fxFlex="70" class="contact-element-detail">
                                 <mat-form-field class="providerDropdown">                                   
                                     <mat-label>SELECT PROVIDER OR STAFF</mat-label>                                                                      
@@ -243,7 +238,7 @@
                                 </mat-form-field>                                                               
                             </div>                                                                       
                         </div>
-                        <div fxLayout="column" fxLayoutGap="34px" *ngIf="isDisabled" class="form-row">  
+                        <div fxLayout="column" fxLayoutGap="34px" class="form-row">  
                             <form [formGroup]="ContactProvidersForm">
                                 <div class="contact-element-detail" fxFlex>                            
                                     <div fxLayout="row" fxLayoutGap="34px" class="form-row"> 
@@ -329,15 +324,14 @@
                             </form>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </mat-cell>
         </ng-container>
-
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let element; columns: displayedColumns" 
             class="contact-element-row"
-            [class.contact-expanded-row]="expandedElement === element" 
-            (click)="expandedElement=expandedElement===element ? null : element; getContactPracticeDetailWithProviders(element.practiceId);">
+            [class.contact-expanded-row]="expandedElement === element"            
+            (click)="expandedElement=expandedElement===element ? null : element;loadPracticeDetail()">
         </mat-row>
         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="contact-detail-row"></tr>
     </mat-table>   

@@ -1,13 +1,11 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, Validators } from '@angular/forms';
+import { Component, ComponentFactoryResolver, OnInit, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
 import { take } from 'rxjs/operators';
 import { BoardMembership, Contact, ContactPracticeDetails, ContactPracticeLocation, ContactPracticeStaff, ContactPracticeStaffDetails, PHOMembership, Specialty} from '../models/contacts';
 import { RestService } from '../rest.service';
-import { formatDate } from '@angular/common' ;
 import { ContactsDatasource} from './contacts.datasource';
-import { FilterService } from '../services/filter.service';
 import { Staff } from '../models/Staff';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Role } from '../models/user';
@@ -25,12 +23,7 @@ import { UserService } from '../services/user.service';
   ]
 })
 export class ContactsComponent implements OnInit {  
-  @ViewChild('contactEmailDialog') contactEmailDialog: TemplateRef<any>; 
-
-  //location getter
-  get locations() {
-    return this.ContactDetailsForm.get('locations') as FormArray;
-  }
+  @ViewChild('contactEmailDialog') contactEmailDialog: TemplateRef<any>;  
 
   //Contact list/details/locations and providers/details
   contactList: Contact[];
@@ -63,15 +56,16 @@ export class ContactsComponent implements OnInit {
   textColor : string = 'white';
   selectedStaffId: number;  
 
-  //contact email dialog 
+  //contact email dialog   
   contactEmailList: Staff[] = []; 
   emailReceiversRole:  string; 
   emailReceivers: string[] = []; 
   dialogRef: MatDialogRef<any>;    
 
   constructor(private rest: RestService, private logger: NGXLogger, 
-    private fb: FormBuilder, private filterService: FilterService, 
-    private userService: UserService, public dialog: MatDialog) {}     
+    private fb: FormBuilder, private userService: UserService, 
+    public dialog: MatDialog, private vcref: ViewContainerRef, 
+    private cfr: ComponentFactoryResolver) {}     
   
   //contact practice's data table
   displayedColumns: string[] = ['arrow', 'practiceName', 'practiceType', 'emr', 'phone', 'fax', 'websiteURL'];
@@ -79,55 +73,15 @@ export class ContactsComponent implements OnInit {
   //contact email dialog table
   displayedEmailDialogColumns: string[] = ['emailCheckbox', 'name', 'email', 'practice', 'staffRole'];
   
-  ContactDetailsForm = this.fb.group({
-    practiceId: [''],
-    practiceName: [''],
-    memberSince: [''],
-    practiceManager: [''],
-    pmEmail: ['', [Validators.required, Validators.email]],
-    pic: [''],
-    picEmail: ['', [Validators.required, Validators.email]],
-    locations: this.fb.array([
-      this.fb.group({
-        practiceId: [''],
-        locationId: [''],    
-        locationName: [''],
-        officePhone: [''],
-        fax: [''],
-        county: [''], 
-        address: [''],
-        city: [''],
-        state: [''],  
-        zip: ['']  
-      })
-    ]) 
-  });
-
-  ContactProvidersForm = this.fb.group({
-    id: [''],
-    staffName: [''],      
-    email: [''],
-    phone: [''],      
-    position: [''],      
-    npi: [''],
-    locations: [''],
-    specialty: [''],
-    commSpecialist: [''],
-    ovpcaPhysician: [''],
-    ovpcaMidLevel: [''],
-    responsibilities: [''],
-    boardMembership: [''],     
-    notesAboutProvider: ['']     
-  });
-
-  ngOnInit(): void {    
+  ngOnInit(): void {      
     this.dataSourceContact = new ContactsDatasource(this.rest);    
-    this.getContactsWithFilters();   
+    this.getContactsWithFilters();
+    //this.loadPracticeDetail();
     this.getContactPracticeSpecialties();   
     this.getContactPracticePHOMembership(); 
     this.getContactPracticeBoardship();
-    this.getCurrentUser();
-  } 
+    this.getCurrentUser();  
+  }  
 
   getCurrentUser() {
     this.userService.getCurrentUser().pipe(take(1)).subscribe((data) => {
@@ -142,106 +96,18 @@ export class ContactsComponent implements OnInit {
     this.dataSourceContact.loadContacts(this.qpl, this.specialties.toString(), this.membership, this.board, this.contactNameSearch);       
   }
 
-  getContactPracticeDetailWithProviders(practiceId: number){
-    this.isDisabled = true; 
-    this.getContactPracticeDetails(practiceId);
-    this.getContactPracticeStaffList(practiceId);        
-  }
-  
-  getContactPracticeDetails(id: number){
-    this.rest.getContactPracticeDetails(id).pipe(take(1)).subscribe((data) =>
-    {
-      this.contactPracticeDetails = data;
+  async loadPracticeDetail() {
+    this.vcref.clear();
+    const {PracticeDetailComponent} = await import('../shared/practice-detail/practice-detail.component');
 
-      this.ContactDetailsForm.get('practiceId').setValue(this.contactPracticeDetails.practiceId);
-      this.ContactDetailsForm.get('practiceName').setValue(this.contactPracticeDetails.practiceName);
-      
-      //use formatDate function to change the format
-      this.ContactDetailsForm.get('memberSince').setValue(formatDate(this.contactPracticeDetails.memberSince,'MM/dd/yyyy','en'));
-      
-      this.ContactDetailsForm.get('practiceManager').setValue(this.contactPracticeDetails.practiceManager);
-      this.ContactDetailsForm.get('pmEmail').setValue(this.contactPracticeDetails.pmEmail);
-      this.ContactDetailsForm.get('pic').setValue(this.contactPracticeDetails.pic);
-      this.ContactDetailsForm.get('picEmail').setValue(this.contactPracticeDetails.picEmail);
-
-      this.pmEmail = this.contactPracticeDetails.pmEmail;  
-      this.picEmail = this.contactPracticeDetails.picEmail;
-      //Practice locations
-      this.ContactDetailsForm.setControl('locations', this.populateExistingLocations(this.contactPracticeDetails.contactPracticeLocations));     
-    });     
-  }
-  
-  populateExistingLocations(locations: Array<ContactPracticeLocation>): FormArray {
-    let counter = 0;
-    const locationFormArray = new FormArray([]);
-    locations.forEach(element => {
-      counter += 1;
-      locationFormArray.push(this.fb.group({
-        practiceId: element.practiceId,
-        locationId: element.locationId,
-        locationName: element.locationName,
-        officePhone: element.officePhone,
-        fax: element.fax,
-        county: element.county, 
-        address: element.address,
-        city: element.city, 
-        state: element.state,
-        zip: element.zip 
-      }));      
-    });
-   
-    return locationFormArray;
-  }
+    let practiceDetailComp = this.vcref.createComponent(
+      this.cfr.resolveComponentFactory(PracticeDetailComponent)
+    );
+  }  
 
   trackContact(index: number, item: Contact): string {
     if (!item) return null;
     return '${item.practiceId}';
-  }
-
-  getContactPracticeLocations(id: number){
-    return this.rest.getContactPracticeLocations(id).pipe(take(1)).subscribe((data)=>{
-      this.contactPracticeLocations = data;
-      this.logger.log(this.contactPracticeLocations,'Practice locations');   
-    });   
-  } 
-
-  //the provider dropdown list
-  getContactPracticeStaffList(practiceId: number){
-    this.ContactProvidersForm.reset();
-    return this.rest.getContactPracticeStaffList(practiceId).pipe(take(1)).subscribe((data: ContactPracticeStaff[])=>{
-      this.contactPracticeStaffList = data;
-
-      //default selected staff      
-      this.selectedStaffId = this.contactPracticeStaffList[0].staffId;
-    
-      this.getSelectedContactStaff(this.selectedStaffId);
-      this.logger.log(this.contactPracticeStaffList,'Practice staff list'); 
-    });
-  } 
-   
-  //get selected provider/staff's details
-  getSelectedContactStaff(staffId: number){
-    return this.rest.getContactStaffDetails(staffId).pipe(take(1)).subscribe((data: ContactPracticeStaffDetails)=>{
-      this.contactPracticeStaffDetails = data;
-
-      this.ContactProvidersForm.get('id').setValue(this.contactPracticeStaffDetails.id);
-      this.ContactProvidersForm.get('staffName').setValue(this.contactPracticeStaffDetails.staffName);
-      this.ContactProvidersForm.get('email').setValue(this.contactPracticeStaffDetails.email);
-      this.ContactProvidersForm.get('phone').setValue(this.contactPracticeStaffDetails.phone);
-      this.ContactProvidersForm.get('position').setValue(this.contactPracticeStaffDetails.position);
-      this.ContactProvidersForm.get('npi').setValue(this.contactPracticeStaffDetails.npi);
-      this.ContactProvidersForm.get('locations').setValue(this.contactPracticeStaffDetails.locations);
-      this.ContactProvidersForm.get('specialty').setValue(this.contactPracticeStaffDetails.specialty);
-      this.ContactProvidersForm.get('commSpecialist').setValue(this.contactPracticeStaffDetails.commSpecialist);
-      this.ContactProvidersForm.get('ovpcaPhysician').setValue(this.contactPracticeStaffDetails.ovpcaPhysician);
-      this.ContactProvidersForm.get('ovpcaMidLevel').setValue(this.contactPracticeStaffDetails.ovpcaMidLevel);
-      this.ContactProvidersForm.get('responsibilities').setValue(this.contactPracticeStaffDetails.responsibilities);
-      this.ContactProvidersForm.get('boardMembership').setValue(this.contactPracticeStaffDetails.boardMembership);
-      this.ContactProvidersForm.get('notesAboutProvider').setValue(this.contactPracticeStaffDetails.notesAboutProvider);
-
-      this.providerEmail = this.contactPracticeStaffDetails.email;
-      this.logger.log(this.contactPracticeStaffDetails,'Contact practice staff details'); 
-    });
   }  
   
   //get PHO membership

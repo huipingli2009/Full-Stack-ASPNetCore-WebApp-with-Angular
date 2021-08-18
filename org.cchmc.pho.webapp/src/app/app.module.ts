@@ -65,6 +65,7 @@ import { DrilldownComponent } from './drilldown/drilldown.component';
 import { DrilldownService } from './drilldown/drilldown.service';
 import { AuthGuard } from './guards/auth.guard';
 import { ContactsComponent } from './contacts/contacts.component';
+import { PracticeDetailComponent } from './shared/practice-detail/practice-detail.component';
 
 @NgModule({
   declarations: [
@@ -84,7 +85,8 @@ import { ContactsComponent } from './contacts/contacts.component';
     FooterComponent,
     LegalDisclaimerComponent,
     DrilldownComponent,
-    ContactsComponent    
+    ContactsComponent,
+    PracticeDetailComponent    
   ],
   imports: [
     BrowserModule,
@@ -148,7 +150,6 @@ import { ContactsComponent } from './contacts/contacts.component';
     MatTooltipModule,
     MatTreeModule,
     MatLineModule
-
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
   { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }, MatSnackBarComponent, ErrorInterceptor, DrilldownService, AuthGuard],

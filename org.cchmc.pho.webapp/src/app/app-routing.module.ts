@@ -68,7 +68,11 @@ const routes: Routes = [
     component: MainLayoutComponent,   
     canActivate: [AuthGuard],
     children: [
-      {path: 'contacts', component: ContactsComponent}
+      { 
+        path: 'contacts', 
+        component: ContactsComponent
+        // loadChildren: () => import().then()
+      }
     ] 
   },
  
