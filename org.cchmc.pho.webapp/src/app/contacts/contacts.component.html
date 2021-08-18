@@ -93,7 +93,7 @@
         <ng-container matColumnDef="expandedDetail">
             <mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length"
                 [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-                <!-- <app-practice-detail  [selectedPracticeId] = "element.practiceId"></app-practice-detail> -->
+                <app-practice-detail  [selectedPracticeId] = "element.practiceId"></app-practice-detail>
                 <!-- <div fxLayout="row">
                     <div id="contact-details" fxLayout="column" fxFlex="55">
                         <div fxLayout="row" class="detail-heading">
