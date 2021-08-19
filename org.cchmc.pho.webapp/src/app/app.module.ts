@@ -64,8 +64,6 @@ import { WorkbooksComponent } from './workbooks/workbooks.component';
 import { DrilldownComponent } from './drilldown/drilldown.component';
 import { DrilldownService } from './drilldown/drilldown.service';
 import { AuthGuard } from './guards/auth.guard';
-//import { ContactsComponent } from './contacts/contacts.component';
-//import { PracticeDetailComponent } from './shared/practice-detail/practice-detail.component';
 
 @NgModule({
   declarations: [
@@ -84,9 +82,7 @@ import { AuthGuard } from './guards/auth.guard';
     ReportComponent,
     FooterComponent,
     LegalDisclaimerComponent,
-    DrilldownComponent
-    //ContactsComponent,
-    //PracticeDetailComponent    
+    DrilldownComponent     
   ],
   imports: [
     BrowserModule,
