@@ -72,8 +72,7 @@ export class PracticeDetailComponent implements OnInit {
     notesAboutProvider: ['']     
   });
 
-  ngOnInit(): void {
-    // this.selectedPracticeId = 1;
+  ngOnInit(): void {   
     this.getContactPracticeDetailWithProviders(this.selectedPracticeId);    
   }
 
@@ -130,9 +129,11 @@ export class PracticeDetailComponent implements OnInit {
     this.ContactProvidersForm.reset();
     return this.rest.getContactPracticeStaffList(practiceId).pipe(take(1)).subscribe((data: ContactPracticeStaff[])=>{
       this.contactPracticeStaffList = data;
-      //default selected staff      
+      
+      //default selected staff and display his/her info    
       this.selectedStaffId = this.contactPracticeStaffList[0].staffId;
-    
+      this.getSelectedContactStaff(this.selectedStaffId);
+
       //this.getSelectedContactStaff(this.selectedStaffId);
       this.logger.log(this.contactPracticeStaffList,'Practice staff list'); 
     });
