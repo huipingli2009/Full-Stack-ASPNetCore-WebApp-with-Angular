@@ -19,6 +19,7 @@ export class PracticeDetailComponent implements OnInit {
   }
   
   @Input() selectedPracticeId: number;
+  
   contactPracticeDetails: ContactPracticeDetails;
   contactPracticeLocations: ContactPracticeLocation[] = [];
   contactPracticeStaffList: ContactPracticeStaff[] = [];

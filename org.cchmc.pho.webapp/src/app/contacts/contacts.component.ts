@@ -11,9 +11,10 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Role } from '../models/user';
 import { UserService } from '../services/user.service';
 
-@Component({ 
+@Component({
+  selector: 'app-contacts',
   templateUrl: './contacts.component.html',
-  styleUrls: ['./contacts.component.scss'], 
+  styleUrls: ['./contacts.component.scss'],
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({ height: '0px', minHeight: '0' })),
@@ -24,12 +25,9 @@ import { UserService } from '../services/user.service';
 })
 export class ContactsComponent implements OnInit {  
   @ViewChild('contactEmailDialog') contactEmailDialog: TemplateRef<any>;  
-  @ViewChild('practicedetails', {read: ViewContainerRef})
-  private practiceDetailsVCR: ViewContainerRef;
-
+  
   //Contact list/details/locations and providers/details
-  contactList: Contact[];
-  isDisabled: boolean = false;
+  contactList: Contact[];  
   contactPracticeDetails: ContactPracticeDetails;
   contactPracticeLocations: ContactPracticeLocation[] = [];
   contactPracticeStaffList: ContactPracticeStaff[] = [];
@@ -66,8 +64,7 @@ export class ContactsComponent implements OnInit {
 
   constructor(private rest: RestService, private logger: NGXLogger, 
     private fb: FormBuilder, private userService: UserService, 
-    public dialog: MatDialog, private vcref: ViewContainerRef, 
-    private cfr: ComponentFactoryResolver) {}     
+    public dialog: MatDialog) {}     
   
   //contact practice's data table
   displayedColumns: string[] = ['arrow', 'practiceName', 'practiceType', 'emr', 'phone', 'fax', 'websiteURL'];
@@ -96,16 +93,7 @@ export class ContactsComponent implements OnInit {
   
   getContactsWithFilters() {      
     this.dataSourceContact.loadContacts(this.qpl, this.specialties.toString(), this.membership, this.board, this.contactNameSearch);       
-  }
-
-  // async loadPracticeDetail() {
-  //   this.vcref.clear();
-  //   const {PracticeDetailComponent} = await import('../shared/practice-detail/practice-detail.component');
-
-  //   let practiceDetailComp = this.vcref.createComponent(
-  //     this.cfr.resolveComponentFactory(PracticeDetailComponent)
-  //   );
-  // }  
+  } 
 
   trackContact(index: number, item: Contact): string {
     if (!item) return null;

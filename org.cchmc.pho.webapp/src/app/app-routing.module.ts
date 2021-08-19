@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ContactsComponent } from './contacts/contacts.component';
+//import { ContactsComponent } from './contacts/contacts.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FilesComponent } from './files/files.component';
 import { AuthGuard } from './guards/auth.guard';
@@ -70,9 +70,8 @@ const routes: Routes = [
     children: [
       { 
         path: 'contacts', 
-        component: ContactsComponent
-        // loadChildren: () => import().then()
-      }
+        loadChildren: () => import('./contacts/contacts.module').then(m => m.ContactsModule)
+      },
     ] 
   },
  
@@ -90,6 +89,7 @@ const routes: Routes = [
       }     
     ]
   },
+
   { path: '**', redirectTo: 'home', pathMatch:'full' }];
 
 @NgModule({
