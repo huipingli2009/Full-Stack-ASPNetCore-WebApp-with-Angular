@@ -313,7 +313,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
             }
             return boardMemberships;
         }
-        public async Task<List<Staff>> GetContactEmailList(int userId, bool? managers, bool? admins, bool? all)
+        public async Task<List<Staff>> GetContactEmailList(int userId, bool? managers, bool? physicians, bool? all)
         {
             var staffEmailList = new List<Staff>();           
 
@@ -324,7 +324,7 @@ namespace org.cchmc.pho.core.DataAccessLayer
 
                 sqlCommand.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
                 sqlCommand.Parameters.Add("@Managers", SqlDbType.Bit).Value = managers;
-                sqlCommand.Parameters.Add("@Admins", SqlDbType.Bit).Value = admins;
+                sqlCommand.Parameters.Add("@Physicians", SqlDbType.Bit).Value = physicians;
                 sqlCommand.Parameters.Add("@All", SqlDbType.Bit).Value = all;
                
                 await sqlConnection.OpenAsync();

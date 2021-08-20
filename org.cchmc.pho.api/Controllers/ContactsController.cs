@@ -223,12 +223,12 @@ namespace org.cchmc.pho.api.Controllers
         [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin, PHO Leader")]
         [SwaggerResponse(200, type: typeof(List<StaffViewModel>))]    
         [SwaggerResponse(500, type: typeof(string))]
-        public async Task<IActionResult> GetContactEmailList(bool? managers, bool? admins, bool? all)
+        public async Task<IActionResult> GetContactEmailList(bool? managers, bool? physicians, bool? all)
         {  
             try
             {
                 int currentUserId = _userService.GetUserIdFromClaims(User?.Claims);
-                var data = await _contact.GetContactEmailList(currentUserId, managers, admins, all);
+                var data = await _contact.GetContactEmailList(currentUserId, managers, physicians, all);
 
                 var result = _mapper.Map<List<StaffViewModel>>(data);
 

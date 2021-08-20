@@ -163,8 +163,8 @@ export class ContactsComponent implements OnInit {
     window.location.reload();
   }
 
-  getContactEmailList(managers: boolean, admins: boolean, all: boolean){
-    return this.rest.getContactEmailList(managers, admins, all).pipe(take(1)).subscribe((data: Staff[]) =>{
+  getContactEmailList(managers: boolean, physicians: boolean, all: boolean){
+    return this.rest.getContactEmailList(managers, physicians, all).pipe(take(1)).subscribe((data: Staff[]) =>{
       this.contactEmailList = data;  
       this.emailReceiversRole = this.contactEmailList[0].emailFilters;    
       this.logger.log(this.contactEmailList, 'Contact email list');
@@ -179,7 +179,7 @@ export class ContactsComponent implements OnInit {
     this.dialogConfiguration();
   } 
 
-  openEmailToAdminsDialog(){
+  openEmailToPhysiciansDialog(){
     this.getContactEmailList(false, true, false);
     this.dialogConfiguration();
   }

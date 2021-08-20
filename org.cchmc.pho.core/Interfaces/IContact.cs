@@ -14,6 +14,6 @@ namespace org.cchmc.pho.core.Interfaces
         Task<List<PHOMembership>> GetContactPracticePHOMembership();
         Task<List<Specialty>> GetContactPracticeSpecialties();
         Task<List<BoardMembership>> GetContactPracticeBoardMembership();
-        Task<List<Staff>> GetContactEmailList(int userId, bool? managers, bool? admins, bool? all);
+        Task<List<Staff>> GetContactEmailList(int userId, bool? managers, bool? physicians, bool? all);
     }
 }
