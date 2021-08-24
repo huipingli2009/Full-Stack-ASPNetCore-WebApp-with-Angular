@@ -1,0 +1,245 @@
+<div class="content-main"> 
+  <div fxLayout="row" class="patients-header">
+      <div fxLayout="column" class="header-filter filter-btn">
+          <button mat-button (click)="applySelectedFilter('all')">All Files</button>
+      </div>
+      <div fxLayout="column" class="header-filter filter-btn">
+          <button mat-button (click)="applySelectedFilter('requested')">Requested Files</button>
+      </div>
+      <div fxLayout="column" class="patientButtonAlign">
+        <button mat-flat-button color="accent" class="add-patient-button"
+        (click)="openJobAid()">JOB AID</button>
+      </div>
+        
+  </div>
+
+  <mat-table [dataSource]="dataSource" id="submissions" multiTemplateDataRows matSort matSortDisableClear
+    (matSortChange)="sortChange($event)">
+    <div class="spinner-container" *ngIf="isLoading">
+      <mat-spinner></mat-spinner> 
+    </div>
+    <!-- DropDown Column -->
+    <ng-container matColumnDef="arrow">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <i class="material-icons rotate-icon">
+          keyboard_arrow_right
+        </i>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="fileName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> File Name </mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.fileName | titlecase}}</mat-cell>
+    </ng-container>
+ 
+    <!-- DOB Column -->
+    <ng-container matColumnDef="templateDisplayName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Template </mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.templateDisplayName | titlecase}}</mat-cell>
+    </ng-container>
+
+    <!-- Last ED Visit Column -->
+    <ng-container matColumnDef="uploadedOn">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Uploaded On </mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.uploadedOn | date:'MM/dd/yyyy'}}  </mat-cell>
+    </ng-container>
+
+    <!-- Chronic Column -->
+    <ng-container matColumnDef="stateName">
+      <mat-header-cell *matHeaderCellDef> State </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+          {{element.stateName | titlecase}}
+      </mat-cell>
+    </ng-container>
+
+    <!-- Watch List Column -->
+    <ng-container matColumnDef="rows">
+      <mat-header-cell *matHeaderCellDef> Rows </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+          {{element.rows}}
+      </mat-cell>
+    </ng-container>
+
+    <!-- Conditions Column -->
+    <ng-container matColumnDef="patients">
+      <mat-header-cell *matHeaderCellDef> Patients </mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.patients}}
+      </mat-cell>
+    </ng-container>
+    
+    <!-- Conditions Column -->
+    <ng-container matColumnDef="providers">
+      <mat-header-cell *matHeaderCellDef> Providers </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+          {{element.providers}}
+      </mat-cell>
+    </ng-container>
+    <!-- Conditions Column -->
+    <ng-container matColumnDef="errors">
+      <mat-header-cell *matHeaderCellDef> Errors </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+          {{element.errors}}
+      </mat-cell>
+    </ng-container>
+
+    
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <a mat-icon-button>
+          <i class="material-icons text-secondary" (click)="$event.stopPropagation()" (click)="openUploadDataDialog(row.id)">
+              add_circle
+          </i>
+        </a>
+        <a mat-icon-button>
+          <i class="material-icons text-secondary" (click)="$event.stopPropagation()" (click)="openPreviewDialog(row.id)">
+            visibility
+          </i>
+        </a>
+        <a mat-icon-button class="action-dl-btn" target="_blank" (click)="$event.stopPropagation()" (click)="downloadSubmission(row.id)"
+          href="{{row.fileURL}}" download>
+          <i class="material-icons text-secondary">
+            get_app
+          </i>
+        </a>
+        <a mat-icon-button>
+          <i class="material-icons text-secondary" (click)="$event.stopPropagation()" (click)="removeSubmission(row.id)">
+            delete
+          </i>
+        </a>
+      </mat-cell>
+      </ng-container>
+
+
+    <ng-container matColumnDef="expandedDetail">
+      <mat-cell *matCellDef="let detail" [attr.colspan]="displayedColumns.length"
+        [@detailExpand]="detail == expandedElement ? 'expanded' : 'collapsed'">
+        <div id="submission-details" fxFlex >
+          <div fxLayout="row" class="detail-heading">TEMPLATE DETAILS</div>
+          <div fxLayout="row" *ngIf="isLoading">
+            <mat-progress-spinner color="primary" mode="indeterminate">
+            </mat-progress-spinner>
+          </div>
+          <div fxLayout="row">
+              <div fxLayout="column" fxFlex>           
+                <div fxLayout="row" *ngIf="expandedSubmission" class="column-row" ngDefaultControl>
+                  <div fxLayout="column" *ngFor="let item of columnList" class="collection-data" fxLayoutAlign="top center">
+                    <span class="column-heading">{{item.name}}</span>
+                    <div class="detail-text">{{item.type}}</div>
+                    <div class="detail-text">{{item.description}}</div>
+                  </div>
+                </div>            
+              </div>
+              <div fxLayout="column" fxFlex fxLayoutAlign="right end">
+                <button mat-flat-button color="accent" class="add-patient-button"
+                (click)="openJobAid()">DOWNLOAD TEMPLATE</button>
+              </div>
+          </div>
+          <div fxLayout="row" class="border-row-top">
+            <div fxLayout="column" fxFlex>
+              <div fxLayout="row" class="detail-heading">ACTIVE COLLECTION PERIOD</div>              
+                <div fxLayout="row" *ngIf="expandedSubmission"
+                ngDefaultControl>
+                <div fxLayout="column" class="collection-data" fxLayoutAlign="top center">
+                  <span class="collection-heading">{{selectedTimePeriodStart}}</span>
+                  <span class="detail-text">START DATE</span>
+                </div>
+                <div fxLayout="column" class="collection-data" fxLayoutAlign="top center">
+                  <span class="collection-heading">TO</span>
+                </div>
+                <div fxLayout="column" class="collection-data" fxLayoutAlign="top center">
+                  <span class="collection-heading">{{selectedTimePeriodEnd}}</span>
+                  <span class="detail-text">END DATE</span>
+                </div>
+              </div>            
+            </div>
+            <mat-divider [vertical]="true"></mat-divider>
+            <div fxLayout="column" class="visit-details-box" *ngIf="expandedSubmission" [(ngModel)]="expandedSubmission"
+              ngDefaultControl fxFlex>
+              <div fxLayout="row" class="detail-heading">MESSAGES</div>
+            </div>
+          </div>
+          <!--This ends the not form section-->
+        </div>
+        <!--End Patient Details-->
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple class="element-row"
+      [class.expanded]="expandedElement == row" (click)="getSubmissionDetails(row.id)"
+      (click)="expandedElement === row? expandedElement = null : expandedElement = row"></mat-row>
+
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail'];" class="collapsed-detail">
+    </tr>
+  </mat-table>
+
+
+  
+    <!--Dialogs ===========================-->
+    <ng-template #submitDataDialog>
+      <div mat-dialog-content class="mat-typography" id="submitDataDialog" class="submission">
+          <form [formGroup]="submitDataForm" class="default-input-override">
+            <div fxLayout="row" class="detail-heading">UPLOAD DATA</div>
+            <div fxLayout="row" class="detail-heading" fxLayoutAlign="center end">{{uploadDialogSubtitle}}</div>
+            <br>
+            <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start center" class="input-w-icon">   
+              <div fxLayout="column" class="input-w-icon">
+                <mat-form-field floatLabel="always">
+                  <mat-label class="dialogLabel" >Start Date</mat-label>
+                    <input matInput placeholder="MM/DD/YYYY" formControlName="startDate" name="startDate"                            
+                      [matDatepicker]="pickerStart">                           
+                    <mat-datepicker-toggle matPrefix [for]="pickerStart" >
+                      <mat-icon matDatepickerToggleIcon>
+                        calendar_today
+                      </mat-icon>
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #pickerStart></mat-datepicker>
+                </mat-form-field>
+              </div> 
+              <div fxLayout="column" class="input-w-icon">
+                <mat-form-field floatLabel="always">
+                  <mat-label class="dialogLabel" >End Date</mat-label>
+                    <input matInput placeholder="MM/DD/YYYY" formControlName="endDate" name="endDate"                            
+                      [matDatepicker]="pickerEnd">                           
+                    <mat-datepicker-toggle matPrefix [for]="pickerEnd" >
+                      <mat-icon matDatepickerToggleIcon>
+                                calendar_today
+                       </mat-icon>
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #pickerEnd></mat-datepicker>
+                </mat-form-field>
+              </div>   
+              <div fxLayout="column">
+                  <mat-label class="dialogLabel" >Data Checks</mat-label>
+                  <mat-checkbox formControlName="overwriteData">Overwrite Data</mat-checkbox>
+              </div>                                    
+            </div>
+            <div fxLayout="row" *ngIf="isUploading" fxLayoutAlign="center end">
+              <mat-progress-spinner color="primary" mode="indeterminate">
+              </mat-progress-spinner>
+            </div>
+            <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="end end">
+              <div fxLayout="column">
+                <input type="file" id="fileInput" class="add-patient-button" color="accent" (change)="onFileChange($event)" placeholder=" upload file" #fileInput>
+              </div>
+              <div mat-dialog-actions class="select-row">
+                  <button mat-flat-button [disabled]="!submitDataForm.valid || isUploading" color="accent" (click)="submitData()">UPLOAD</button>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="end end">
+              <div mat-dialog-actions align="end" class="select-row">  
+                  <button mat-button (click)="cancelUploadDataDialog()">Cancel</button>
+              </div>
+            </div>
+          </form>
+
+    </div>
+
+  </ng-template>
+
+</div>
+

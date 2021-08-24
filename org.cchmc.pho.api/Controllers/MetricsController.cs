@@ -79,7 +79,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpGet("webcharts/{chartId}/{measureId}/{filterId}")]
-        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin,PHO Leader")]
         [SwaggerResponse(200, type: typeof(WebChartViewModel))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -106,7 +106,7 @@ namespace org.cchmc.pho.api.Controllers
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpGet("edcharts/{admitdate}")]
-        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin, PHO Leader")]
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin,PHO Leader")]
         [SwaggerResponse(200, type: typeof(List<EDDetailViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
@@ -197,7 +197,7 @@ namespace org.cchmc.pho.api.Controllers
 
         //GetWebChartFilters()
         [HttpGet("webchartfilterlookup/{chartId}/{measureId}")]
-        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin")]
+        [Authorize(Roles = "Practice Member,Practice Admin,Practice Coordinator,PHO Member,PHO Admin,PHO Leader")]
         [SwaggerResponse(200, type: typeof(List<WebChartFiltersViewModel>))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
