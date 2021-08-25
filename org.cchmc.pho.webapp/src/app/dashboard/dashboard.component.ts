@@ -129,7 +129,7 @@ export class DashboardComponent implements OnInit {
       this.currentUserId = data.id;
 
       //PHO Member and PHO Leader are excluded from exporting/viewing chart data details
-      if (data.role.id === Role.PHOMember || data.role.id === Role.PHOLeader) {
+      if (data.role.id === Role.PHOMember) {
         this.drillThruUser = false;
       } 
       else { 
@@ -516,7 +516,7 @@ export class DashboardComponent implements OnInit {
 
   /* Open Modal (Dialog) on bar click */
   Showmodal(event, chart, element): void {    
-    this.logger.log("starting ED modal");
+    this.logger.log("starting ED modal. element: " + element);
     let drillThruMeasureId;
     let tempFilterId;   
     let openDialog = false;
@@ -543,6 +543,7 @@ export class DashboardComponent implements OnInit {
       }
       //only if security allows
       if (openDialog && this.drillThruUser){
+        this.logger.log("opening dialog!!!");
         this.openDrilldownDialog(drillThruMeasureId,tempFilterId,this.measureId);
       }
     
@@ -562,6 +563,7 @@ export class DashboardComponent implements OnInit {
   }
 
   openDrilldownDialog(drilldownMeasure,filterId,originMeasure) { 
+    this.logger.log("openDrillDownDialog measure: " + drilldownMeasure + " filter: " + filterId + " originMeasure: " + originMeasure);
     let drillThruText;   
     //Only ED Chart with Date Selected as Filter displays 'ED Details', the rest displays 'Patient Details'
     if (drilldownMeasure == DrillThruMeasureId.EDDrillThruMeasureId && this.filterId == WebChartFilterId.dateFilterId) {
