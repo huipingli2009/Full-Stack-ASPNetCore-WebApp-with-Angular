@@ -105,12 +105,10 @@ export class HeaderComponent {
       else { 
         this.displayStaffAndWorkbookTab = false;        
       }
-      if ((data.role.id === Role.PHOAdmin) || (data.role.id === Role.PHOLeader)) {
-        this.canSwitchPractice = true;
-      } 
-      else { 
-        this.canSwitchPractice = false;        
-      }      
+
+      //TH - No longer conditional. Options controlled via data.
+      this.canSwitchPractice = true;
+  
     });
   }
 
