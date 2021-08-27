@@ -367,7 +367,7 @@ namespace org.cchmc.pho.api.Controllers
         }
 
         [HttpPut("switchpractice")]
-        [Authorize(Roles = "PHO Admin, PHO Leader")]
+        [Authorize(Roles = "PHO Admin,PHO Leader,Practice Admin")]
         [SwaggerResponse(200, type: typeof(bool))]
         [SwaggerResponse(400, type: typeof(string))]
         [SwaggerResponse(500, type: typeof(string))]
