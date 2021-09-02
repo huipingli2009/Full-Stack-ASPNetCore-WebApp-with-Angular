@@ -473,7 +473,7 @@ export class DashboardComponent implements OnInit {
   updateChartReport(element: any){
     this.logger.log("switching chart object to measureId: " + element.measureId.toString() + " filterId: " + this.filterId.toString());
     this.measureId = element.measureId;
-    if([26,14,15,16,25,20,21,22,3].includes(this.measureId)){
+    if([26,14,15,16,25,20,21,22,3,55].includes(this.measureId)){
       this.chartId = WebChartId.OutcomeChart;
     }
     else
