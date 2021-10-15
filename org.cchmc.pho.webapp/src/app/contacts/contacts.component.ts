@@ -10,6 +10,7 @@ import { Staff } from '../models/Staff';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Role } from '../models/user';
 import { UserService } from '../services/user.service';
+import { DrilldownService } from '../drilldown/drilldown.service';
 
 @Component({
   selector: 'app-contacts',
@@ -38,6 +39,7 @@ export class ContactsComponent implements OnInit {
   picEmail: string; 
   providerEmail: string; 
   userCanSendEmail: boolean; 
+  userCanExportList: boolean;
 
   //dropdowns for contact header filters
   phoMembershipList: PHOMembership[] = [];
@@ -60,11 +62,11 @@ export class ContactsComponent implements OnInit {
   contactEmailList: Staff[] = []; 
   emailReceiversRole:  string; 
   emailReceivers: string[] = []; 
-  dialogRef: MatDialogRef<any>;    
+  dialogRef: MatDialogRef<any>;
 
   constructor(private rest: RestService, private logger: NGXLogger, 
     private fb: FormBuilder, private userService: UserService, 
-    public dialog: MatDialog) {}     
+    public dialog: MatDialog, private drilldownService: DrilldownService) {}     
   
   //contact practice's data table
   displayedColumns: string[] = ['arrow', 'practiceName', 'practiceType', 'emr', 'phone', 'fax', 'websiteURL'];
@@ -87,6 +89,7 @@ export class ContactsComponent implements OnInit {
       //modify here if additional user roles need to be added for group email functionality
       if (data.role.id === Role.PHOAdmin) {
         this.userCanSendEmail = true;
+        this.userCanExportList = true;
       }      
     });
   }
@@ -199,6 +202,21 @@ export class ContactsComponent implements OnInit {
         name: this.contactEmailList      
       }
     }); 
+  }
+
+  openDrilldownDialog() {
+    //set default filterId value to -1, to differentiate between a set value and an intentionally null value.
+    var filterId = -1;
+
+    this.rest.showViewReportButton = false;  //to hide the View Report button
+    var drilldownOptions = {
+      drilldownMeasureId: '9',
+      filterId: filterId,
+      displayText: 'Contact List',
+      originMeasureId: ''
+    };
+    this.drilldownService.open(drilldownOptions);
+
   }
 
   updateEmailReceivers(event){ 
