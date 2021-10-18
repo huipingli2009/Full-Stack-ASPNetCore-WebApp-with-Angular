@@ -205,13 +205,10 @@ export class ContactsComponent implements OnInit {
   }
 
   openDrilldownDialog() {
-    //set default filterId value to -1, to differentiate between a set value and an intentionally null value.
-    var filterId = -1;
-
     this.rest.showViewReportButton = false;  //to hide the View Report button
     var drilldownOptions = {
       drilldownMeasureId: '9',
-      filterId: filterId,
+      filterId: -1,
       displayText: 'Contact List',
       originMeasureId: ''
     };
