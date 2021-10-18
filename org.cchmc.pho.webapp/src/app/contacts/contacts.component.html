@@ -19,7 +19,7 @@
         <div fxLayout="column" class="header-filter filter-btn" fxFlex="15">
             <mat-form-field>
                 <mat-label>PHO Membership</mat-label>              
-                    <mat-select [(ngModel)]="membership" (selectionChange)="contactHasMembership()">                   
+                    <mat-select [(ngModel)]="membership" (selectionChange)="contactHasMembership()" multiple>                   
                     <mat-option *ngFor="let phoMembership of phoMembershipList" [value]="phoMembership.id">
                         {{phoMembership.membership}}
                     </mat-option>
@@ -30,7 +30,7 @@
         <div fxLayout="column" class="header-filter filter-btn" fxFlex="15">
             <mat-form-field>
                 <mat-label>Board Members</mat-label>
-                <mat-select [(ngModel)]="board" (selectionChange)="contactHasBoardMembership()">
+                <mat-select [(ngModel)]="board" (selectionChange)="contactHasBoardMembership()" multiple>
                     <mat-option *ngFor="let boardMembership of contactPracticeBoardMembership" [value]="boardMembership.id">
                         {{boardMembership.boardName}}
                     </mat-option>
@@ -105,6 +105,7 @@
         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="contact-detail-row"></tr>
     </mat-table>   
     <div fxLayout="row" fxLayoutGap="34px" *ngIf="userCanSendEmail" class="contactEmailButtonAlign">
+        <div><button mat-flat-button class="contactEmail" *ngIf ="userCanExportList" (click)="openDrilldownDialog()">EXPORT</button></div>
         <div><button mat-flat-button class="contactEmail" (click)="openEmailToManagersDialog()">E-MAIL MANAGERS</button></div>
         <div><button mat-flat-button class="contactEmail" (click)="openEmailToPhysiciansDialog()">E-MAIL PHYSICIANS</button></div>
         <div><button mat-flat-button class="contactEmail" (click)="openEmailToAllDialog()" matTooltip="The maximum number of recipients is 500.">E-MAIL ALL</button></div>
