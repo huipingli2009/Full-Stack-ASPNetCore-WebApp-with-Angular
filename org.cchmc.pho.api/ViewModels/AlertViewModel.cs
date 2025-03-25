@@ -2,6 +2,7 @@
 {
     public class AlertViewModel
     {
+        //reviewed
         public int AlertId { get; set; }
         public int AlertScheduleId { get; set; }
         public string Message { get; set; }
